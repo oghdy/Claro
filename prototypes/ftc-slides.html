@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claro — 같은 물건, 다른 가격</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ---------------------------------------------------------
+     TOKENS
+     브랜드 기본값은 다크(잉크) 톤. 시스템이 라이트면 종이 톤으로 전환.
+     --------------------------------------------------------- */
+  :root{
+    --bg: #14171B;
+    --surface: #1C2025;
+    --surface-raised: #242A31;
+    --ink: #F2EEE3;
+    --ink-dim: #9BA1A8;
+    --ink-faint: #6A6F76;
+    --rule: rgba(242,238,227,0.14);
+    --rule-strong: rgba(242,238,227,0.28);
+    --accent-gold: #D3A83C;
+    --accent-gold-ink: #14171B;
+    --accent-teal: #6FA394;
+    --shadow: rgba(0,0,0,0.35);
+
+    --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+    --font-sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+  }
+
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg: #F3EEE2;
+      --surface: #FFFFFF;
+      --surface-raised: #FBF8F1;
+      --ink: #1B1F24;
+      --ink-dim: #5C6167;
+      --ink-faint: #8B9096;
+      --rule: rgba(27,31,36,0.12);
+      --rule-strong: rgba(27,31,36,0.22);
+      --accent-gold: #9C6F16;
+      --accent-gold-ink: #FBF8F1;
+      --accent-teal: #3E7566;
+      --shadow: rgba(20,20,15,0.10);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #14171B; --surface: #1C2025; --surface-raised: #242A31;
+    --ink: #F2EEE3; --ink-dim: #9BA1A8; --ink-faint: #6A6F76;
+    --rule: rgba(242,238,227,0.14); --rule-strong: rgba(242,238,227,0.28);
+    --accent-gold: #D3A83C; --accent-gold-ink: #14171B; --accent-teal: #6FA394;
+    --shadow: rgba(0,0,0,0.35);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-sans);
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
+  }
+  ::selection{ background:var(--accent-gold); color:var(--accent-gold-ink); }
+
+  button{ font-family:inherit; color:inherit; }
+  button:focus-visible, .teaser:focus-visible{
+    outline:2px solid var(--accent-gold);
+    outline-offset:3px;
+  }
+
+  /* ---------------------------------------------------------
+     SHELL
+     --------------------------------------------------------- */
+  .stage{
+    max-width:460px;
+    margin:0 auto;
+    height:100dvh;
+    height:100vh;
+    position:relative;
+    background:var(--surface);
+    box-shadow:0 0 60px var(--shadow);
+  }
+  @media (min-width:461px){
+    body{ background:
+      radial-gradient(120% 100% at 50% 0%, rgba(211,168,60,0.06), transparent 55%),
+      var(--bg); }
+    .stage{ margin-top:0; }
+  }
+
+  /* progress: 7 segments, top */
+  .topbar{
+    position:absolute; top:0; left:0; right:0; z-index:20;
+    padding:14px 18px 10px;
+    display:flex; align-items:center; gap:14px;
+    background:linear-gradient(to bottom, var(--surface) 55%, transparent);
+  }
+  .brand{
+    font-family:var(--font-serif);
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.01em;
+    color:var(--ink);
+    flex:0 0 auto;
+  }
+  .segs{
+    flex:1 1 auto;
+    display:flex;
+    gap:5px;
+  }
+  .seg{
+    height:3px;
+    flex:1 1 0;
+    border-radius:3px;
+    background:var(--rule);
+    overflow:hidden;
+  }
+  .seg > i{
+    display:block; height:100%; width:0%;
+    background:var(--accent-gold);
+    transition:width .35s ease;
+  }
+  .seg.done > i{ width:100%; }
+  .seg.active > i{ width:100%; }
+  .count{
+    flex:0 0 auto;
+    font-variant-numeric:tabular-nums;
+    font-size:12px;
+    color:var(--ink-faint);
+    min-width:32px;
+    text-align:right;
+  }
+
+  /* ---------------------------------------------------------
+     SLIDES
+     --------------------------------------------------------- */
+  .slides{
+    height:100%;
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    scrollbar-width:none;
+  }
+  .slides::-webkit-scrollbar{ display:none; }
+
+  .slide{
+    height:100dvh;
+    height:100vh;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:88px 26px 30px;
+    position:relative;
+  }
+
+  .kicker{
+    font-size:12px;
+    color:var(--accent-gold);
+    letter-spacing:0.02em;
+    margin:0 0 14px;
+    font-weight:500;
+  }
+
+  h1{
+    font-family:var(--font-serif);
+    font-weight:700;
+    font-size:clamp(24px, 6.4vw, 30px);
+    line-height:1.32;
+    letter-spacing:-0.01em;
+    margin:0 0 20px;
+    white-space:pre-line;
+  }
+
+  .body-text{
+    font-size:16px;
+    line-height:1.72;
+    color:var(--ink);
+    max-width:34ch;
+  }
+  .body-text p{ margin:0 0 16px; }
+  .body-text p:last-child{ margin-bottom:0; }
+  .dim{ color:var(--ink-dim); }
+
+  .examples{
+    display:flex; flex-direction:column; gap:10px;
+    margin:18px 0 4px;
+  }
+  .ex{
+    display:flex; gap:10px; align-items:baseline;
+    padding:12px 14px;
+    background:var(--surface-raised);
+    border-radius:10px;
+    border:1px solid var(--rule);
+    font-size:14.5px; line-height:1.55;
+  }
+  .ex.punch{
+    border-color:var(--accent-gold);
+    background:linear-gradient(180deg, var(--surface-raised), var(--surface-raised));
+  }
+  .ex .dot{
+    flex:0 0 auto;
+    width:5px; height:5px; border-radius:50%;
+    background:var(--ink-faint);
+    margin-top:8px;
+  }
+  .ex.punch .dot{ background:var(--accent-gold); }
+
+  .quote{
+    margin:18px 0 6px;
+    padding:18px 18px 16px;
+    background:var(--surface-raised);
+    border-radius:12px;
+    position:relative;
+    border-left:3px solid var(--accent-gold);
+  }
+  .quote .tag{
+    display:inline-block;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.03em;
+    color:var(--accent-gold-ink);
+    background:var(--accent-gold);
+    padding:2px 8px;
+    border-radius:5px;
+    margin-bottom:10px;
+  }
+  .quote p{
+    font-family:var(--font-serif);
+    font-size:16.5px;
+    line-height:1.6;
+    margin:0;
+    color:var(--ink);
+  }
+
+  .rule-line{
+    display:flex; align-items:center; gap:8px;
+    margin:16px 0;
+    color:var(--ink-faint);
+    font-size:13px;
+  }
+  .rule-line b{ color:var(--ink); font-weight:700; }
+  .rule-line .no{ color: #C77B6B; }
+  .rule-line .yes{ color: var(--accent-teal); }
+
+  .steps{
+    display:flex; flex-direction:column; gap:8px;
+    margin:16px 0 6px;
+    counter-reset:step;
+  }
+  .step{
+    display:flex; gap:12px; align-items:flex-start;
+    padding:11px 12px;
+    background:var(--surface-raised);
+    border-radius:10px;
+    font-size:14.5px; line-height:1.5;
+  }
+  .step .n{
+    flex:0 0 auto;
+    width:20px; height:20px;
+    border-radius:50%;
+    background:var(--accent-gold);
+    color:var(--accent-gold-ink);
+    font-size:12px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .tags-inline{
+    display:flex; gap:8px; margin:14px 0 4px; flex-wrap:wrap;
+  }
+  .tagpill{
+    font-size:11.5px; font-weight:700; letter-spacing:0.01em;
+    padding:5px 10px; border-radius:999px;
+    border:1px solid var(--rule-strong);
+  }
+  .tagpill.fed{ color:var(--accent-gold); border-color:var(--accent-gold); }
+  .tagpill.state{ color:var(--accent-teal); border-color:var(--accent-teal); }
+
+  .closing{
+    font-family:var(--font-serif);
+    font-size:19px;
+    line-height:1.6;
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid var(--rule);
+  }
+
+  /* ---------------------------------------------------------
+     TEASER — 다음 질문으로 넘어가는 유일한 장치
+     --------------------------------------------------------- */
+  .teaser-wrap{
+    position:absolute; left:0; right:0; bottom:0;
+    padding:0 26px 26px;
+  }
+  .tear{
+    height:1px;
+    background-image:linear-gradient(to right, var(--rule-strong) 60%, transparent 0%);
+    background-size:9px 1px;
+    background-repeat:repeat-x;
+    margin-bottom:14px;
+  }
+  .teaser{
+    display:flex; align-items:center; gap:10px;
+    width:100%;
+    background:none; border:none; padding:0;
+    cursor:pointer;
+    text-align:left;
+  }
+  .teaser .qmark{
+    flex:0 0 auto;
+    color:var(--ink-faint);
+    font-size:13px;
+  }
+  .teaser .qtext{
+    flex:1 1 auto;
+    font-size:15px;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .teaser .chev{
+    flex:0 0 auto;
+    color:var(--accent-gold);
+    font-size:18px;
+    transform:translateY(0);
+    animation:nudge 2.2s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .teaser .chev{ animation:none; }
+  }
+  @keyframes nudge{
+    0%,100%{ transform:translateY(0); opacity:.75; }
+    50%{ transform:translateY(4px); opacity:1; }
+  }
+
+  /* last slide */
+  .end-actions{
+    display:flex; flex-direction:column; gap:10px;
+    margin-top:22px;
+  }
+  .end-btn{
+    background:none; border:1px solid var(--rule-strong);
+    padding:11px 14px; border-radius:10px;
+    font-size:13.5px; color:var(--ink-dim);
+    text-align:left; cursor:pointer;
+  }
+  .end-btn:hover{ border-color:var(--accent-gold); color:var(--ink); }
+  .check{
+    font-size:12px; color:var(--accent-teal); font-weight:700;
+    letter-spacing:0.02em; margin-bottom:6px;
+  }
+
+  @media (max-height:700px){
+    .slide{ padding-top:76px; }
+    h1{ margin-bottom:14px; }
+    .body-text{ font-size:15px; line-height:1.62; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="topbar">
+    <div class="brand">Claro</div>
+    <div class="segs" id="segs"></div>
+    <div class="count" id="count">1/7</div>
+  </div>
+
+  <div class="slides" id="slides">
+
+    <!-- 1 -->
+    <section class="slide" data-index="0">
+      <p class="kicker">오늘의 뉴스</p>
+      <h1>같은 물건인데,
+나한테만 비싸게 보인다면</h1>
+      <div class="body-text">
+        <p>지난달 미국 정부가 낸 문서에 이런 예시들이 있었어요.</p>
+      </div>
+      <div class="examples">
+        <div class="ex"><span class="dot"></span><span>집에 아이가 여럿이라는 데이터로, 우유값을 더 받는 것</span></div>
+        <div class="ex"><span class="dot"></span><span>경쟁사 앱이 없는 사람에게, 택시비를 더 받는 것</span></div>
+        <div class="ex punch"><span class="dot"></span><span>지금 그 가게 <b>주차장 안</b>에서 사이트를 보고 있다는 걸 알고, 그 사람에게만 가격을 올려 보여주는 것</span></div>
+      </div>
+      <div class="teaser-wrap">
+        <div class="tear"></div>
+        <button class="teaser" data-goto="1">
+          <span class="qmark">Q</span>
+          <span class="qtext">이거, 불법 아닌가요?</span>
+          <span class="chev">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide" data-index="1">
+      <p class="kicker">그래서, 금지됐나요?</p>
+      <h1>미국 정부가 나섰습니다.
+그런데 금지하지 않았어요.</h1>
+      <div class="body-text">
+        <p>연방거래위원회(FTC)가 지난 8월, 이 문제를 다룬 방침을 내놨습니다. 그런데 문서에 이렇게 적혀 있었어요.</p>
+      </div>
+      <div class="quote">
+        <span class="tag">FTC 원문</span>
+        <p>"의회는 위원회에 모든 상황에서 개인화 가격을 금지할 권한을 주지 않았다."</p>
+      </div>
+      <div class="teaser-wrap">
+        <div class="tear"></div>
+        <button class="teaser" data-goto="2">
+          <span class="qmark">Q</span>
+          <span class="qtext">왜 권한이 없을까요?</span>
+          <span class="chev">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide" data-index="2">
+      <p class="kicker">권한의 구조</p>
+      <h1>정부 기관도
+법이 준 만큼만 할 수 있어요</h1>
+      <div class="body-text">
+        <p>아무리 문제라고 판단해도, 기관은 그 권한을 준 법이 있어야 움직일 수 있습니다.</p>
+        <p>FTC가 가진 법은 <b>FTC법 5조</b>예요. 이 법이 막는 건 개인화 가격 자체가 아니라 "기만적이거나 불공정한 행위"입니다.</p>
+      </div>
+      <div class="rule-line">
+        <span class="no">✕</span><span>"금지하라"</span>
+      </div>
+      <div class="rule-line">
+        <span class="yes">✓</span><span><b>"숨기지 마라"</b></span>
+      </div>
+      <div class="teaser-wrap">
+        <div class="tear"></div>
+        <button class="teaser" data-goto="3">
+          <span class="qmark">Q</span>
+          <span class="qtext">그럼 뭘 하라는 거예요?</span>
+          <span class="chev">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" data-index="3">
+      <p class="kicker">요구 사항</p>
+      <h1>요구하는 건
+딱 세 가지입니다</h1>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><span>이 가격이 <b>개인화됐다는 사실</b></span></div>
+        <div class="step"><span class="n">2</span><span><b>무엇을 근거</b>로 그랬는지</span></div>
+        <div class="step"><span class="n">3</span><span><b>어떤 데이터</b>를 썼는지</span></div>
+      </div>
+      <div class="body-text" style="margin-top:16px">
+        <p class="dim">이걸 알리지 않으면 법 위반일 가능성이 높다고 봤어요. 그냥 "고객님만을 위한 가격"이라고만 하는 것도 안 됩니다.</p>
+      </div>
+      <div class="teaser-wrap">
+        <div class="tear"></div>
+        <button class="teaser" data-goto="4">
+          <span class="qmark">Q</span>
+          <span class="qtext">그럼 우버 할증도 이제 안 되나요?</span>
+          <span class="chev">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" data-index="4">
+      <p class="kicker">경계선</p>
+      <h1>아니요.
+여기엔 경계선이 있어요</h1>
+      <div class="body-text">
+        <p>수요와 공급 때문에 값이 바뀌는 건 해당하지 않습니다. 같은 시간, 같은 동네의 모든 사람에게 똑같이 적용되니까요.</p>
+        <p>지역 세금 차이, 보험료처럼 개인 위험이 가격의 본질인 경우도 마찬가지예요.</p>
+      </div>
+      <div class="quote" style="border-left-color:var(--accent-teal)">
+        <p style="font-size:15px">시장 상황 때문에 <b>모두에게</b> 달라지는 가격 — 해당 없음<br>나에 대한 추정 때문에 <b>나에게만</b> 달라지는 가격 — 이번 사안</p>
+      </div>
+      <div class="teaser-wrap">
+        <div class="tear"></div>
+        <button class="teaser" data-goto="5">
+          <span class="qmark">·</span>
+          <span class="qtext">그런데, 반전이 하나 있어요</span>
+          <span class="chev">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" data-index="5">
+      <p class="kicker">반전</p>
+      <h1>메릴랜드는
+이미 금지했습니다</h1>
+      <div class="body-text">
+        <p>FTC는 "금지할 권한이 없다"고 했죠.</p>
+        <p>지난 4월 서명된 메릴랜드 법은 다릅니다. 대형 식품매장과 배달업체가 개인 데이터로 값을 올리는 걸 <b>아예 금지</b>해요. 10월 1일부터 시행됩니다.</p>
+      </div>
+      <div class="tags-inline">
+        <span class="tagpill fed">연방·FTC — 공개 의무</span>
+        <span class="tagpill state">주·메릴랜드 — 금지</span>
+      </div>
+      <div class="body-text" style="margin-top:14px">
+        <p class="dim">뉴욕은 이미 작년 7월부터 표시를 의무화했어요. 연방보다 1년 넘게 빠릅니다.</p>
+      </div>
+      <div class="teaser-wrap">
+        <div class="tear"></div>
+        <button class="teaser" data-goto="6">
+          <span class="qmark">Q</span>
+          <span class="qtext">그럼 이제 시행되는 건가요?</span>
+          <span class="chev">↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide" data-index="6">
+      <p class="kicker">지금 상태</p>
+      <h1>아직,
+확정도 아니에요</h1>
+      <div class="body-text">
+        <p>이번에 나온 건 '정책안'입니다. FTC 스스로도 "이건 누구에게도 권리를 주지 않고, 우리를 구속하지도 않는다"고 써놨어요.</p>
+        <p class="dim">지금은 의견을 받는 중이고, 마감은 9월 25일입니다.</p>
+      </div>
+      <p class="closing">그래서 이 이야기의 다음 장은<br>워싱턴이 아니라<br><b>각 주</b>에서 쓰일 가능성이 높습니다.</p>
+      <div class="end-actions">
+        <p class="check">✓ 다 읽었어요</p>
+        <button class="end-btn" data-goto="0">처음부터 다시 보기</button>
+        <button class="end-btn">이 설명, 헷갈리는 부분이 있었나요?</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const slidesEl = document.getElementById('slides');
+  const slides = Array.from(slidesEl.querySelectorAll('.slide'));
+  const segsEl = document.getElementById('segs');
+  const countEl = document.getElementById('count');
+  const total = slides.length;
+
+  for(let i=0;i<total;i++){
+    const s = document.createElement('div');
+    s.className = 'seg';
+    s.innerHTML = '<i></i>';
+    segsEl.appendChild(s);
+  }
+  const segEls = Array.from(segsEl.children);
+
+  function setActive(idx){
+    countEl.textContent = (idx+1) + '/' + total;
+    segEls.forEach((el,i)=>{
+      el.classList.toggle('done', i < idx);
+      el.classList.toggle('active', i === idx);
+      if(i > idx){ el.classList.remove('done','active'); }
+    });
+  }
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && e.intersectionRatio > 0.55){
+        const idx = parseInt(e.target.dataset.index,10);
+        setActive(idx);
+      }
+    });
+  }, { root: slidesEl, threshold: [0.55] });
+  slides.forEach(s=>io.observe(s));
+
+  document.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const idx = parseInt(btn.dataset.goto,10);
+      slides[idx].scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  });
+
+  window.addEventListener('keydown', (e)=>{
+    const current = segEls.findIndex(el=>el.classList.contains('active'));
+    if(['ArrowDown','ArrowRight',' '].includes(e.key)){
+      e.preventDefault();
+      const next = Math.min(current+1, total-1);
+      slides[next].scrollIntoView({ behavior:'smooth', block:'start' });
+    } else if(['ArrowUp','ArrowLeft'].includes(e.key)){
+      e.preventDefault();
+      const prev = Math.max(current-1, 0);
+      slides[prev].scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+  });
+
+  setActive(0);
+})();
+</script>
+
+</body>
+</html>

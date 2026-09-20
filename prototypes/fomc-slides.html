@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claro — 3년 만의 금리 인상</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14171B; --surface:#1C2025; --surface-raised:#242A31;
+    --ink:#F2EEE3; --ink-dim:#9BA1A8; --ink-faint:#6A6F76;
+    --rule:rgba(242,238,227,0.14); --rule-strong:rgba(242,238,227,0.28);
+    --accent-gold:#D3A83C; --accent-gold-ink:#14171B;
+    --accent-teal:#6FA394; --accent-red:#C77B6B;
+    --shadow:rgba(0,0,0,0.35);
+    --font-serif:'Noto Serif KR','Nanum Myeongjo',serif;
+    --font-sans:'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F3EEE2; --surface:#FFFFFF; --surface-raised:#FBF8F1;
+      --ink:#1B1F24; --ink-dim:#5C6167; --ink-faint:#8B9096;
+      --rule:rgba(27,31,36,0.12); --rule-strong:rgba(27,31,36,0.22);
+      --accent-gold:#9C6F16; --accent-gold-ink:#FBF8F1;
+      --accent-teal:#3E7566; --accent-red:#A8503C;
+      --shadow:rgba(20,20,15,0.10);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14171B; --surface:#1C2025; --surface-raised:#242A31;
+    --ink:#F2EEE3; --ink-dim:#9BA1A8; --ink-faint:#6A6F76;
+    --rule:rgba(242,238,227,0.14); --rule-strong:rgba(242,238,227,0.28);
+    --accent-gold:#D3A83C; --accent-gold-ink:#14171B;
+    --accent-teal:#6FA394; --accent-red:#C77B6B; --shadow:rgba(0,0,0,0.35);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font-sans); -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
+  }
+  ::selection{ background:var(--accent-gold); color:var(--accent-gold-ink); }
+  button{ font-family:inherit; color:inherit; }
+  button:focus-visible{ outline:2px solid var(--accent-gold); outline-offset:3px; }
+
+  .stage{
+    max-width:460px; margin:0 auto;
+    height:100dvh; height:100vh;
+    position:relative; background:var(--surface);
+    box-shadow:0 0 60px var(--shadow);
+  }
+  @media (min-width:461px){
+    body{ background:radial-gradient(120% 100% at 50% 0%, rgba(211,168,60,0.06), transparent 55%), var(--bg); }
+  }
+
+  /* topbar */
+  .topbar{
+    position:absolute; top:0; left:0; right:0; z-index:20;
+    padding:12px 18px 10px;
+    background:linear-gradient(to bottom, var(--surface) 62%, transparent);
+  }
+  .topbar-row{ display:flex; align-items:center; gap:12px; }
+  .brand{
+    font-family:var(--font-serif); font-weight:700; font-size:15px;
+    flex:0 0 auto;
+  }
+  .levels{
+    margin-left:auto; display:flex; gap:2px;
+    background:var(--surface-raised); padding:2px; border-radius:7px;
+  }
+  .lv{
+    border:none; background:none; cursor:pointer;
+    font-size:11.5px; font-weight:700; padding:5px 10px;
+    border-radius:5px; color:var(--ink-faint);
+  }
+  .lv[aria-pressed="true"]{ background:var(--accent-gold); color:var(--accent-gold-ink); }
+  .segs{ display:flex; gap:5px; margin-top:10px; align-items:center; }
+  .seg{ height:3px; flex:1 1 0; border-radius:3px; background:var(--rule); overflow:hidden; }
+  .seg > i{ display:block; height:100%; width:0%; background:var(--accent-gold); transition:width .3s ease; }
+  .seg.done > i, .seg.active > i{ width:100%; }
+  .count{
+    font-variant-numeric:tabular-nums; font-size:12px;
+    color:var(--ink-faint); min-width:32px; text-align:right; flex:0 0 auto;
+  }
+
+  /* slides */
+  .deck{ height:100%; overflow-y:auto; scroll-snap-type:y mandatory; scrollbar-width:none; }
+  .deck::-webkit-scrollbar{ display:none; }
+  .deck[hidden]{ display:none; }
+
+  .slide{
+    height:100dvh; height:100vh;
+    scroll-snap-align:start; scroll-snap-stop:always;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:100px 26px 30px; position:relative;
+  }
+
+  .kicker{ font-size:12px; color:var(--accent-gold); margin:0 0 14px; font-weight:500; }
+  h1{
+    font-family:var(--font-serif); font-weight:700;
+    font-size:clamp(23px, 6.2vw, 29px); line-height:1.34;
+    letter-spacing:-0.01em; margin:0 0 20px; white-space:pre-line;
+  }
+  .body-text{ font-size:16px; line-height:1.72; max-width:34ch; }
+  .body-text p{ margin:0 0 16px; }
+  .body-text p:last-child{ margin-bottom:0; }
+  .dim{ color:var(--ink-dim); }
+  .small{ font-size:14.5px; line-height:1.62; }
+
+  .quote{
+    margin:18px 0 6px; padding:17px 18px 15px;
+    background:var(--surface-raised); border-radius:12px;
+    border-left:3px solid var(--accent-gold);
+  }
+  .quote .tag{
+    display:inline-block; font-size:11px; font-weight:700;
+    color:var(--accent-gold-ink); background:var(--accent-gold);
+    padding:2px 8px; border-radius:5px; margin-bottom:10px;
+  }
+  .quote p{ font-family:var(--font-serif); font-size:16px; line-height:1.62; margin:0; }
+
+  /* gauge — 속도계 */
+  .gauge{ margin:20px 0 8px; }
+  .gauge-scale{
+    position:relative; height:8px; border-radius:8px;
+    background:linear-gradient(to right, var(--accent-teal) 0%, var(--accent-gold) 55%, var(--accent-red) 100%);
+    opacity:.85;
+  }
+  .gauge-mark{
+    position:absolute; top:-6px; width:2px; height:20px; background:var(--ink);
+  }
+  .gauge-labels{ position:relative; height:44px; margin-top:8px; font-size:12px; }
+  .gauge-lab{ position:absolute; transform:translateX(-50%); text-align:center; line-height:1.4; }
+  .gauge-lab b{ display:block; font-size:14px; }
+  .gauge-lab.target{ color:var(--accent-teal); }
+  .gauge-lab.now{ color:var(--accent-gold); }
+
+  /* vote compare */
+  .votes{ display:flex; gap:10px; margin:18px 0 6px; }
+  .vcard{
+    flex:1 1 0; padding:14px 12px; border-radius:11px;
+    background:var(--surface-raised); border:1px solid var(--rule);
+    text-align:center;
+  }
+  .vcard.hit{ border-color:var(--accent-gold); }
+  .vcard .when{ font-size:11.5px; color:var(--ink-faint); margin-bottom:6px; }
+  .vcard .tally{ font-family:var(--font-serif); font-size:25px; font-weight:700; line-height:1; }
+  .vcard .what{ font-size:12px; color:var(--ink-dim); margin-top:7px; line-height:1.4; }
+
+  /* timeline */
+  .tl{ margin:16px 0 4px; display:flex; flex-direction:column; gap:0; }
+  .tl-item{ display:flex; gap:12px; }
+  .tl-rail{ flex:0 0 auto; width:11px; display:flex; flex-direction:column; align-items:center; }
+  .tl-dot{ width:9px; height:9px; border-radius:50%; background:var(--ink-faint); margin-top:5px; flex:0 0 auto; }
+  .tl-item.last .tl-dot{ background:var(--accent-gold); width:11px; height:11px; margin-top:4px; }
+  .tl-line{ width:1px; flex:1 1 auto; background:var(--rule-strong); min-height:14px; }
+  .tl-body{ padding-bottom:14px; font-size:14.5px; line-height:1.5; }
+  .tl-item.last .tl-body{ padding-bottom:0; }
+  .tl-when{ font-size:11.5px; color:var(--ink-faint); display:block; margin-bottom:2px; }
+
+  /* stat rows (advanced) */
+  .stats{ display:flex; flex-direction:column; gap:1px; margin:16px 0 4px; background:var(--rule); border-radius:10px; overflow:hidden; }
+  .srow{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:11px 13px; background:var(--surface-raised); font-size:14px; }
+  .srow .k{ color:var(--ink-dim); }
+  .srow .v{ font-variant-numeric:tabular-nums; font-weight:700; }
+  .srow .v.up{ color:var(--accent-red); }
+  .srow .v.flat{ color:var(--ink); }
+
+  .callout{
+    margin:16px 0 4px; padding:14px 16px;
+    border:1px solid var(--rule-strong); border-radius:11px;
+    font-size:14.5px; line-height:1.6;
+  }
+  .callout.warn{ border-color:var(--accent-red); }
+
+  .closing{
+    font-family:var(--font-serif); font-size:19px; line-height:1.6;
+    margin-top:20px; padding-top:18px; border-top:1px solid var(--rule);
+  }
+
+  /* teaser */
+  .teaser-wrap{ position:absolute; left:0; right:0; bottom:0; padding:0 26px 26px; }
+  .tear{
+    height:1px; margin-bottom:14px;
+    background-image:linear-gradient(to right, var(--rule-strong) 60%, transparent 0%);
+    background-size:9px 1px; background-repeat:repeat-x;
+  }
+  .teaser{
+    display:flex; align-items:center; gap:10px; width:100%;
+    background:none; border:none; padding:0; cursor:pointer; text-align:left;
+  }
+  .teaser .qmark{ flex:0 0 auto; color:var(--ink-faint); font-size:13px; }
+  .teaser .qtext{ flex:1 1 auto; font-size:15px; font-weight:500; }
+  .teaser .chev{ flex:0 0 auto; color:var(--accent-gold); font-size:18px; animation:nudge 2.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce){ .teaser .chev{ animation:none; } }
+  @keyframes nudge{ 0%,100%{ transform:translateY(0); opacity:.75; } 50%{ transform:translateY(4px); opacity:1; } }
+
+  .end-actions{ display:flex; flex-direction:column; gap:10px; margin-top:20px; }
+  .end-btn{
+    background:none; border:1px solid var(--rule-strong);
+    padding:11px 14px; border-radius:10px; font-size:13.5px;
+    color:var(--ink-dim); text-align:left; cursor:pointer;
+  }
+  .end-btn:hover{ border-color:var(--accent-gold); color:var(--ink); }
+  .check{ font-size:12px; color:var(--accent-teal); font-weight:700; margin-bottom:4px; }
+
+  @media (max-height:720px){
+    .slide{ padding-top:92px; }
+    h1{ margin-bottom:14px; }
+    .body-text{ font-size:15px; line-height:1.62; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div class="brand">Claro</div>
+      <div class="levels" role="group" aria-label="설명 수준">
+        <button class="lv" id="lvBasic" aria-pressed="true">입문</button>
+        <button class="lv" id="lvAdv" aria-pressed="false">숙련</button>
+      </div>
+    </div>
+    <div class="segs"><span class="segs-inner" id="segsInner" style="display:flex;gap:5px;flex:1 1 auto"></span><span class="count" id="count">1/8</span></div>
+  </div>
+
+  <!-- ============ 입문 : 8장 ============ -->
+  <div class="deck" id="deckBasic">
+
+    <section class="slide" data-index="0">
+      <p class="kicker">오늘의 뉴스</p>
+      <h1>미국이 3년 만에
+금리를 올렸어요</h1>
+      <div class="body-text">
+        <p>미국 중앙은행인 연준이 9월 16일 기준금리를 0.25%포인트 올렸습니다. 이제 <b>3.75~4.00%</b>예요.</p>
+        <p class="dim">금리를 <b>올린</b> 건 2023년 7월 이후 처음입니다. 3년 넘게 연준은 금리를 그대로 두거나 내리기만 했어요.</p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="1"><span class="qmark">Q</span><span class="qtext">물가가 갑자기 나빠졌나요?</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="1">
+      <p class="kicker">첫 번째 반전</p>
+      <h1>아니요.
+오히려 나은 편이었어요</h1>
+      <div class="body-text">
+        <p>여름 동안 나온 물가 지표는 시장이 걱정하던 것보다 좋았습니다.</p>
+        <p><b>그런데도 연준은 올렸어요.</b></p>
+      </div>
+      <div class="callout">이상하죠. 물가가 나빠져서 올리는 거라면, 나빠지지 않았는데 왜 올렸을까요?</div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="2"><span class="qmark">Q</span><span class="qtext">연준은 뭘 보고 있는 걸까요?</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="2">
+      <p class="kicker">이것만 알고 가면 돼요 ①</p>
+      <h1>연준이 보는 건
+물가가 아니라 속도예요</h1>
+      <div class="body-text small">
+        <p>자동차 속도계를 떠올려보세요. 연준이 보는 숫자는 물건이 얼마나 비싼가가 아니라 <b>1년에 몇 퍼센트씩 오르고 있는가</b>입니다.</p>
+      </div>
+      <div class="gauge">
+        <div class="gauge-scale">
+          <div class="gauge-mark" style="left:33%"></div>
+          <div class="gauge-mark" style="left:62%"></div>
+        </div>
+        <div class="gauge-labels">
+          <div class="gauge-lab target" style="left:33%"><b>2%</b>연준이 원하는 속도</div>
+          <div class="gauge-lab now" style="left:62%"><b>3%대</b>지금 미국</div>
+        </div>
+      </div>
+      <div class="body-text small" style="margin-top:4px">
+        <p class="dim">그리고 이 속도는 여름 내내 크게 줄지 않았어요.</p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="3"><span class="qmark">Q</span><span class="qtext">그럼 금리는 뭔가요?</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="3">
+      <p class="kicker">이것만 알고 가면 돼요 ②</p>
+      <h1>금리는
+그 차의 브레이크예요</h1>
+      <div class="body-text">
+        <p>금리가 올라가면 돈을 빌리는 일이 비싸집니다. 집을 사려고 대출을 받거나, 기업이 새 사업에 투자하기가 부담스러워져요.</p>
+        <p>사람들이 지갑을 덜 열면 경제가 달리는 속도가 느려지고, <b>물가가 오르는 속도도 따라서 느려집니다.</b></p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="4"><span class="qmark">Q</span><span class="qtext">그래서 왜 지금 밟은 거죠?</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="4">
+      <p class="kicker">핵심</p>
+      <h1>기준이
+우리 생각과 달랐어요</h1>
+      <div class="body-text">
+        <p>연준이 던진 질문은 “물가가 나빠졌는가”가 아니었습니다.</p>
+      </div>
+      <div class="quote">
+        <span class="tag">8월 말 · 의장 연설</span>
+        <p>기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다. 그렇지 않다면 아직 할 일이 남아 있는 것이다.</p>
+      </div>
+      <div class="body-text small" style="margin-top:14px">
+        <p>속도가 3에서 2로 내려오고는 있는데 <b>너무 느리게</b> 내려온다면? 그것도 브레이크를 더 밟을 이유가 됩니다.</p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="5"><span class="qmark">Q</span><span class="qtext">두 달 전엔 왜 안 올렸죠?</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="5">
+      <p class="kicker">두 달 사이</p>
+      <h1>7월엔 셋만 그렇게 봤어요.
+이번엔 전원이었고요.</h1>
+      <div class="votes">
+        <div class="vcard"><div class="when">7월 29일</div><div class="tally">9 : 3</div><div class="what">동결. 세 명만<br>“올리자”고 반대</div></div>
+        <div class="vcard hit"><div class="when">9월 16일</div><div class="tally">12 : 0</div><div class="what">인상.<br>반대 없음</div></div>
+      </div>
+      <div class="body-text small" style="margin-top:14px">
+        <p>그 사이 8월 말 의장이 앞의 기준을 밝혔고, 시장은 인상 가능성을 90% 넘게 반영하기 시작했어요.</p>
+        <p class="dim">다만 그 세 사람이 나머지를 설득한 건지, 새로 들어온 정보 때문에 판단이 같아진 건지는 <b>아직 알 수 없습니다.</b> 회의 내부 기록은 3주 뒤에 공개돼요.</p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="6"><span class="qmark">Q</span><span class="qtext">물가는 왜 안 내려오고 있죠?</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="6">
+      <p class="kicker">가장 큰 변수</p>
+      <h1>이란 전쟁이
+어디로 갈지 모릅니다</h1>
+      <div class="body-text small">
+        <p>2월 말에 시작돼 반년 넘게 이어지고 있어요. 4월에 휴전 합의가 한 번 있었지만 이후 공격이 반복되면서 기름값은 크게 올랐다 내렸다를 되풀이했습니다.</p>
+        <p>회의가 열린 날에는 트럭과 기차에 쓰는 경유 가격이 사상 최고치를 기록했어요.</p>
+      </div>
+      <div class="callout warn">
+        여기서 중요한 건 기름값이 비싸다는 게 아닙니다.<br><b>이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요.</b> 연준이 “확신이 없다”고 말한 이유의 상당 부분이 여기 있습니다.
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="7"><span class="qmark">Q</span><span class="qtext">이제 계속 오르나요?</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="7">
+      <p class="kicker">앞으로</p>
+      <h1>한 번은 더.
+그런데 긴 흐름은 아니에요</h1>
+      <div class="body-text small">
+        <p>위원들 대부분이 올해 안에 한 번 더 올릴 수 있다고 봤습니다.</p>
+        <p>다만 연준이 함께 내놓은 전망에서 <b>올해 말 금리와 내년 말 금리는 같은 수준</b>이에요. 올해 한 번쯤 더 올리고, 내년에는 대체로 그 자리.</p>
+        <p class="dim">참고로 연준 자신도 물가가 2% 근처로 돌아오는 건 내년 말쯤으로 보고 있어요. 생각보다 긴 길입니다.</p>
+      </div>
+      <p class="closing">물가가 튀어서 올린 게 아닙니다.<br><b>내려오고는 있는데<br>충분히 빠르지 않다</b>고 본 거예요.</p>
+      <div class="end-actions">
+        <p class="check">✓ 다 읽었어요</p>
+        <button class="end-btn" data-goto="0">처음부터 다시 보기</button>
+        <button class="end-btn">이 설명, 헷갈리는 부분이 있었나요?</button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============ 숙련 : 5장 ============ -->
+  <div class="deck" id="deckAdv" hidden>
+
+    <section class="slide" data-index="0">
+      <p class="kicker">9월 FOMC</p>
+      <h1>동결에서 인상으로,
+그것도 만장일치</h1>
+      <div class="votes">
+        <div class="vcard"><div class="when">7월 29일</div><div class="tally">9 : 3</div><div class="what">동결<br>3명 +25bp 주장</div></div>
+        <div class="vcard hit"><div class="when">9월 16일</div><div class="tally">12 : 0</div><div class="what">+25bp<br>3.75~4.00%</div></div>
+      </div>
+      <div class="body-text small" style="margin-top:14px">
+        <p>2023년 7월 이후 첫 인상. 7주 만에 소수의견이 전원 합의가 됐습니다.</p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="1"><span class="qmark">·</span><span class="qtext">무엇이 기준이었나</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="1">
+      <p class="kicker">판단 기준</p>
+      <h1>악화가 아니라
+개선 속도가 기준이었습니다</h1>
+      <div class="body-text small">
+        <p>여름 물가 지표는 예상보다 나았습니다. 7월 근원 PCE는 전년 대비 3.3%로, 6월 전망치와 사실상 같았고요.</p>
+      </div>
+      <div class="quote">
+        <span class="tag">8/28 잭슨홀</span>
+        <p>기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다.</p>
+      </div>
+      <div class="body-text small" style="margin-top:12px">
+        <p>의장은 여름 지표가 기저 흐름의 의미 있는 개선을 보여주지는 않는다고 평가했습니다. 9월 전망에서 올해 근원 PCE는 오히려 <b>3.3% → 3.4%</b>로 올라갔고요.</p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="2"><span class="qmark">·</span><span class="qtext">7주 사이의 경로</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="2">
+      <p class="kicker">7월 → 9월</p>
+      <h1>무엇이 그 사이에
+있었나</h1>
+      <div class="tl">
+        <div class="tl-item"><div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+          <div class="tl-body"><span class="tl-when">7/29</span>9-3 동결. Hammack · Kashkari · Logan 반대</div></div>
+        <div class="tl-item"><div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+          <div class="tl-body"><span class="tl-when">8/7</span>7월 고용 발표 — 취업자 <b>23,000명 감소</b>, 실업률 4.1%</div></div>
+        <div class="tl-item"><div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+          <div class="tl-body"><span class="tl-when">8/28</span>잭슨홀 — 의장이 인상 기준을 명시</div></div>
+        <div class="tl-item"><div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+          <div class="tl-body"><span class="tl-when">9월 초</span>시장, 인상 확률 90% 이상 반영. 10년물 4.6% 돌파</div></div>
+        <div class="tl-item last"><div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-body"><span class="tl-when">9/16</span>12-0 인상</div></div>
+      </div>
+      <div class="body-text small" style="margin-top:14px">
+        <p class="dim">내부 역학은 3주 뒤 회의록 전까지 확인 불가. 현재 확실한 것은 순서뿐입니다.</p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="3"><span class="qmark">·</span><span class="qtext">점도표가 말하는 것</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="3">
+      <p class="kicker">9월 SEP</p>
+      <h1>한 번 더.
+그리고 내년은 제자리</h1>
+      <div class="stats">
+        <div class="srow"><span class="k">2026년 말 정책금리 중앙값</span><span class="v">4.1%</span></div>
+        <div class="srow"><span class="k">2027년 말 정책금리 중앙값</span><span class="v flat">4.1%</span></div>
+        <div class="srow"><span class="k">연내 추가 인상 예상</span><span class="v">18명 중 16명</span></div>
+        <div class="srow"><span class="k">두 번 더 예상</span><span class="v">4명</span></div>
+        <div class="srow"><span class="k">2026년 PCE 전망 (3월 2.7%)</span><span class="v up">3.7%</span></div>
+        <div class="srow"><span class="k">2026년 실업률 전망 (3월 4.4%)</span><span class="v">4.1%</span></div>
+      </div>
+      <div class="body-text small" style="margin-top:14px">
+        <p>2026년과 2027년 중앙값이 같다는 것이 핵심입니다. 인상 사이클의 시작이 아니라 <b>짧은 조정</b>으로 보고 있다는 뜻이에요.</p>
+        <p class="dim">2027년에 추가 인상을 찍은 dot은 8개뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.</p>
+      </div>
+      <div class="teaser-wrap"><div class="tear"></div>
+        <button class="teaser" data-goto="4"><span class="qmark">·</span><span class="qtext">남는 두 가지 긴장</span><span class="chev">↓</span></button>
+      </div>
+    </section>
+
+    <section class="slide" data-index="4">
+      <p class="kicker">남는 문제</p>
+      <h1>이 결정에 걸려 있는
+두 가지 불확실성</h1>
+      <div class="body-text small">
+        <p><b>1. 물가의 큰 부분이 전쟁에 달려 있습니다.</b><br>이란 전쟁은 201일째. 4월 휴전 이후에도 공격이 반복되며 유가는 크게 등락했고, 회의 당일 경유 가격은 사상 최고였습니다. 성명문도 지정학적 전개로 인한 불확실성을 명시했어요.</p>
+        <p><b>2. 고용은 겉보기만큼 단단하지 않습니다.</b><br>7월 취업자는 오히려 23,000명 줄었습니다. 그런데 실업률은 4.2%에서 4.1%로 내려갔죠. 의장은 이를 노동공급 감소로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다.</p>
+      </div>
+      <p class="closing">따라서 이번 회의의 변화는<br>금리 숫자가 아니라<br><b>인상을 둘러싼 내부 긴장이<br>전망에서 실제 행동으로 옮겨왔다는 점</b>입니다.</p>
+      <div class="end-actions">
+        <p class="check">✓ 다 읽었어요</p>
+        <button class="end-btn" data-goto="0">처음부터 다시 보기</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  const decks = { basic: document.getElementById('deckBasic'), adv: document.getElementById('deckAdv') };
+  const btns  = { basic: document.getElementById('lvBasic'),  adv: document.getElementById('lvAdv')  };
+  const segsInner = document.getElementById('segsInner');
+  const countEl = document.getElementById('count');
+  let mode = 'basic';
+  let io = null;
+
+  function slidesOf(m){ return Array.from(decks[m].querySelectorAll('.slide')); }
+
+  function buildSegs(total){
+    segsInner.innerHTML = '';
+    for(let i=0;i<total;i++){
+      const s = document.createElement('div');
+      s.className='seg'; s.innerHTML='<i></i>';
+      segsInner.appendChild(s);
+    }
+  }
+
+  function setActive(idx, total){
+    countEl.textContent = (idx+1)+'/'+total;
+    Array.from(segsInner.children).forEach((el,i)=>{
+      el.classList.toggle('done', i<idx);
+      el.classList.toggle('active', i===idx);
+    });
+  }
+
+  function mount(m){
+    mode = m;
+    Object.keys(decks).forEach(k=>{
+      decks[k].hidden = (k!==m);
+      btns[k].setAttribute('aria-pressed', String(k===m));
+    });
+    const slides = slidesOf(m);
+    buildSegs(slides.length);
+    decks[m].scrollTop = 0;
+    setActive(0, slides.length);
+
+    if(io) io.disconnect();
+    io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting && e.intersectionRatio > 0.55){
+          setActive(parseInt(e.target.dataset.index,10), slides.length);
+        }
+      });
+    }, { root: decks[m], threshold:[0.55] });
+    slides.forEach(s=>io.observe(s));
+  }
+
+  btns.basic.addEventListener('click', ()=> mount('basic'));
+  btns.adv.addEventListener('click', ()=> mount('adv'));
+
+  document.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const slides = slidesOf(mode);
+      const idx = parseInt(btn.dataset.goto,10);
+      if(slides[idx]) slides[idx].scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  });
+
+  window.addEventListener('keydown', (e)=>{
+    const slides = slidesOf(mode);
+    const cur = Array.from(segsInner.children).findIndex(el=>el.classList.contains('active'));
+    if(['ArrowDown','ArrowRight',' '].includes(e.key)){
+      e.preventDefault();
+      slides[Math.min(cur+1, slides.length-1)].scrollIntoView({behavior:'smooth',block:'start'});
+    } else if(['ArrowUp','ArrowLeft'].includes(e.key)){
+      e.preventDefault();
+      slides[Math.max(cur-1,0)].scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+
+  mount('basic');
+})();
+</script>
+
+</body>
+</html>
