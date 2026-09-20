@@ -1,0 +1,860 @@
+{
+  "_source": {
+    "file": "prototypes/fomc-slides.html",
+    "document_title": "Claro — 3년 만의 금리 인상",
+    "lang": "ko",
+    "transcribed_on": "2026-09-20",
+    "task": "B-0.0a",
+    "rule": "HTML에 있는 것만 옮긴다. 발견한 오류도 고치지 않고 그대로 옮기고 _findings 에 적는다."
+  },
+  "_findings": [
+    {
+      "question": "슬라이드가 블록인가, 슬라이드가 블록을 담는가?",
+      "observed": "FINDINGS §8.2는 '각 블록: content / open_question / resolves'라고 쓰고 §8.3은 '슬라이드가 블록이면'이라고 쓴다. HTML에서 open_question(teaser)을 갖는 단위는 슬라이드이고 정확히 슬라이드당 하나다. 그보다 작은 표시 단위(body-text, quote, gauge, steps 등)가 슬라이드 안에 1~3개씩 따로 있다. 이 작은 단위에는 open_question이 없다.",
+      "why_it_matters": "block을 어느 층으로 정의하느냐에 따라 open_question의 소유자와 §8.2 QA의 검사 대상이 통째로 달라진다."
+    },
+    {
+      "question": "resolves는 어디에 있나?",
+      "observed": "teaser에는 이동 대상(data-goto)이 있고 20장 중 17장에 teaser가 있다. data-goto 값은 예외 없이 현재 index+1이다. 반면 '이 슬라이드가 어떤 질문에 답한다'는 표시는 두 프로토타입 어디에도 없다.",
+      "why_it_matters": "§8.2의 QA('모든 open_question이 이후에 resolves 되는가')를 기계적으로 검사하려면 resolves가 데이터여야 한다. 지금은 '다음 장이 답한다'는 암묵 규칙뿐이라 검사할 것이 없다."
+    },
+    {
+      "question": "open_question은 반드시 질문이어야 하나?",
+      "observed": "FOMC 입문 8장과 FTC 6장은 qmark='Q'이고 물음표로 끝난다. FOMC 숙련 5장은 전부 qmark='·'이고 명사구다('무엇이 기준이었나', '7주 사이의 경로', '점도표가 말하는 것', '남는 두 가지 긴장' — 물음표 없음). FTC 5장째 teaser도 qmark='·'에 '그런데, 반전이 하나 있어요'라는 평서문이다.",
+      "why_it_matters": "§8.2는 넘기는 장치가 '미해결 질문 하나'라고 못박는데, 숙련 레벨과 긴장 완화 슬라이드에서는 목차 라벨/예고로 바뀌어 있다. 계약이 질문형만 허용할지 두 종류를 허용할지 결정이 필요하다."
+    },
+    {
+      "question": "kicker 한 필드가 두 가지 일을 하고 있는데 나눠야 하나?",
+      "observed": "서사 기능 라벨('첫 번째 반전', '핵심', '반전', '경계선', '남는 문제', '두 달 사이')과 자료 출처 라벨('9월 SEP', '9월 FOMC', '7월 → 9월', '오늘의 뉴스')이 같은 kicker 필드에 섞여 있다. 또 '이것만 알고 가면 돼요 ①/②'는 세 번째 용도(개념 슬라이드 표시)다.",
+      "why_it_matters": "kicker는 장식이 아니라 서사 기능 라벨인데, 실제로는 서사 역할·출처·개념 표시 세 가지가 한 문자열에 들어 있다."
+    },
+    {
+      "question": "블록 타입은 닫힌 enum인가 기사마다 여는가?",
+      "observed": "두 기사가 공유하는 블록 타입은 body_text · quote · closing · end_actions 4종뿐이다. FOMC 전용 5종(gauge, votes, timeline, stats, callout), FTC 전용 4종(examples, rule_line, steps, tags_inline). 사실을 보여주는 블록의 기사 간 재사용률이 0%다.",
+      "why_it_matters": "concept-library에서 도메인 간 concept 재사용률이 0%였던 것과 같은 모양이다. 블록 타입을 닫힌 enum으로 두면 세 번째 기사에서 바로 깨지고, 열어두면 렌더러가 미리 만들 수 없다."
+    },
+    {
+      "question": "인용부호는 내용인가 표시인가?",
+      "observed": "FOMC의 quote 블록 본문에는 인용부호가 없다. FTC의 quote 블록 본문에는 곧은 따옴표가 들어 있다(\"의회는 위원회에 … 주지 않았다.\"). 본문 속 인용도 FOMC는 굽은 따옴표(“물가가 나빠졌는가”), FTC는 곧은 따옴표(\"기만적이거나 불공정한 행위\")로 서로 다르다.",
+      "why_it_matters": "§5.5 원문 대조를 하려면 저장된 문자열이 원문과 일치해야 한다. 인용부호를 렌더러가 붙일지 데이터에 넣을지 정해두지 않으면 같은 인용이 파일마다 다른 문자열이 된다."
+    },
+    {
+      "question": "발행 시점에 고정된 시간 표현을 어떻게 표시하나?",
+      "observed": "FOMC: '회의 내부 기록은 3주 뒤에 공개돼요', '내부 역학은 3주 뒤 회의록 전까지 확인 불가', '이란 전쟁은 201일째', '2월 말에 시작돼 반년 넘게'. FTC: '지난달', '지난 8월', '지난 4월 서명된', '작년 7월부터', '10월 1일부터 시행됩니다', '마감은 9월 25일입니다'. 전부 일반 본문 텍스트다.",
+      "why_it_matters": "§5.4 volatility가 필요한 이유가 실물로 나온다. 특히 '201일째'는 날짜 차이 계산 결과가 정적 문자열로 굳은 경우이고, '지난달'·'작년 7월'은 읽는 시점이 바뀌면 틀린 문장이 된다. 지금 구조로는 언제 썩는지 알 수 없다."
+    },
+    {
+      "question": "개념을 쓴 슬라이드를 어떻게 식별하나?",
+      "observed": "concept_id에 해당하는 식별자가 HTML에 전혀 없다. FOMC는 kicker '이것만 알고 가면 돼요 ①/②'로 개념 슬라이드를 따로 세웠고(입문 3·4장), FTC는 개념을 서사 슬라이드 안에 녹여 그런 표시조차 없다(3장=기관 권한 한계, 5장=개념 경계선, 6장=연방/주, 7장=정책안 vs 규칙).",
+      "why_it_matters": "concept atom의 버전 pin(§4.3)과 재사용 추적을 하려면 '이 슬라이드가 어느 concept을 쓰는가'가 데이터여야 한다. 두 프로토타입이 개념을 배치하는 방식 자체가 달라서(전용 슬라이드 vs 서사 내 용해) 한 가지로 가정할 수 없다."
+    },
+    {
+      "question": "표시 변형 중 무엇이 의미이고 무엇이 순수 표시인가?",
+      "observed": "class와 inline style로만 존재한다: body-text의 small 변형(FOMC만 사용), margin-top:4px/12px/14px/16px 간격 지정, FTC quote의 border-left-color·font-size 덮어쓰기, stats 값의 up(빨강)/flat, vcard의 hit(금색 테두리), ex의 punch, timeline의 last, tagpill의 fed/state.",
+      "why_it_matters": "stats의 up은 '올랐다'는 의미를 색으로만 전달하고, margin-top은 아무 의미도 없다. HTML만으로는 구분되지 않는다. 계약이 의미 쪽만 데이터로 가져가고 나머지는 렌더러에 맡길 수 있으려면 지금 여기서 선을 그어야 한다."
+    },
+    {
+      "question": "장수(slide_count)는 데이터인가 파생값인가?",
+      "observed": "topbar의 장수 표시가 HTML에 정적 문자열로 박혀 있고(FOMC '1/8', FTC '1/7'), 스크립트가 mount 시 slides.length로 다시 계산해 덮어쓴다. 진행바 세그먼트도 slides.length만큼 동적 생성된다.",
+      "why_it_matters": "장수는 레벨별 fact 선택의 결과다. 계약이 slide_count를 갖게 할지, 슬라이드 배열에서 파생시킬지에 따라 완독 측정(§8.3 '몇 장에서 이탈했는가')의 기준값이 어디서 오는지가 달라진다."
+    },
+    {
+      "question": "같은 fact가 레벨마다 다른 문장으로 나타난다 — fact 하나에 레벨별 표현을 다는가, 레벨별로 다른 fact를 고르는가?",
+      "observed": "잭슨홀 인용이 두 레벨에 다 있는데 서로 다르다. 입문: tag '8월 말 · 의장 연설' + '…확신이 있어야 한다. 그렇지 않다면 아직 할 일이 남아 있는 것이다.' / 숙련: tag '8/28 잭슨홀' + '…확신이 있어야 한다.'(뒷 문장 없음). 이란 전쟁도 입문은 '2월 말에 시작돼 반년 넘게', 숙련은 '201일째'다. 7월 회의 결과도 입문 '동결. 세 명만 “올리자”고 반대' / 숙련 '동결 / 3명 +25bp 주장'으로 같은 vcard에 다른 문자열이 들어 있다.",
+      "why_it_matters": "출처 표기의 정밀도와 인용을 어디서 자르는지까지 레벨별로 다르다. 즉 레벨 차이가 '문장 고르기'가 아니라 '같은 원문을 다르게 자르기'까지 포함한다. Article Package가 이걸 표현할 수 있어야 한다."
+    },
+    {
+      "question": "숙련은 입문의 부분집합이 아니다 — 레벨별 fact 선택을 계약이 어떻게 담나?",
+      "observed": "입문에만 있는 것: '연준 자신도 물가가 2% 근처로 돌아오는 건 내년 말쯤'. 숙련에만 있는 것: 7월 근원 PCE 3.3%, 8/7 고용(취업자 23,000명 감소), 10년물 4.6% 돌파, SEP 중앙값 6행, '의장은 자기 전망치를 제출하지 않았다', 성명문 문구 2건. 블록 타입도 다르다(입문 gauge·callout / 숙련 timeline·stats).",
+      "why_it_matters": "§8.3의 '숙련 뷰는 입문의 부분집합이 아니다'가 실물로 확인된다. 다만 '개념만 빠진 것'도 아니다 — 양쪽 다 상대에 없는 사실을 갖는다. 레벨은 필터가 아니라 별도 선택이다."
+    },
+    {
+      "question": "한 슬라이드에 질문이 두 개 있어도 되나?",
+      "observed": "입문 2장은 callout '이상하죠. 물가가 나빠져서 올리는 거라면, 나빠지지 않았는데 왜 올렸을까요?'와 teaser '연준은 뭘 보고 있는 걸까요?'를 함께 갖는다. 입문 5장도 본문에 '…너무 느리게 내려온다면?'이라는 질문이 있고 teaser에 '두 달 전엔 왜 안 올렸죠?'가 또 있다.",
+      "why_it_matters": "§8.2는 '답이 안 난 질문이 정확히 하나'라고 쓴다. 본문 속 수사의문문은 그 하나에 포함되는지, 별개인지가 정해져 있지 않다. 포함이라면 위 두 슬라이드는 규칙 위반이고, 아니라면 QA가 무엇을 세는지 정의해야 한다."
+    },
+    {
+      "question": "gauge는 값을 받나 위치를 받나? 축 기준은 어디에 두나?",
+      "observed": "gauge-mark 두 개가 HTML inline style에 left:33%, left:62%로 손으로 박혀 있고 축의 최소·최대값은 어디에도 선언돼 있지 않다. 라벨은 '2%'와 '3%대'다. 선형이라고 가정하면 33%↔2%에서 상한은 약 6%가 되고 62%는 약 3.7%를 가리킨다 — 본문은 '3%대'라고만 쓰는데 막대는 숙련 SEP 표의 3.7%와 같은 위치를 가리킨다.",
+      "why_it_matters": "수치가 위치로 바뀌는 유일한 곳인데 변환 규칙이 데이터에 없다. 지금 픽스처에는 위치만 있고 값이 없다. 또 '3%대'라는 구간값이 점 하나로 그려져 있어, 값의 정밀도가 본문과 그림에서 다르다."
+    },
+    {
+      "question": "12명과 18명을 설명 없이 나란히 써도 되나? (concept-library가 이미 금지한 패턴)",
+      "observed": "숙련 1장은 '12 : 0'(표결), 숙련 4장 stats는 '연내 추가 인상 예상 — 18명 중 16명'(전망 제출)을 보여준다. 두 숫자가 왜 다른지에 대한 설명은 숙련 어디에도 없다. 입문에는 18이 나오지 않는다.",
+      "why_it_matters": "concept-library C-0005에 '이 개념을 설명하지 않고 12와 18을 나란히 쓰면 독자가 반드시 멈춘다(2026-07 초안에서 실제 발생)'고 적혀 있고, 권장 대안은 '중앙값 비교로 대체'다. 숙련 덱은 그 경고를 그대로 위반한 상태다. 고치지 않고 옮겼다. 이 파일을 골든 픽스처로 쓸지 판단이 필요하다."
+    },
+    {
+      "question": "속도계 비유가 4단계 전개 없이 먼저 나온다 — 이 슬라이드를 골든으로 둬도 되나?",
+      "observed": "입문 3장 첫 문장이 '자동차 속도계를 떠올려보세요. 연준이 보는 숫자는 물건이 얼마나 비싼가가 아니라 1년에 몇 퍼센트씩 오르고 있는가입니다.'이고, 바로 아래 gauge가 2%(목표)와 3%대(현재)를 나란히 보여준다. 한 화면에 수준/속도 구분 + 자동차 비유 + 목표/현재 비교 세 가지가 동시에 있다.",
+      "why_it_matters": "concept-library C-0002가 '이 비유는 4단계를 먼저 제시한 뒤에만 쓴다'고 못박고, 근거로 2026-09-18 독자 검증에서 바로 이 압축이 이해되지 않았다고 적어뒀다. 프로토타입은 그 수정 이전 상태다. 고치지 않고 옮겼다."
+    },
+    {
+      "question": "비유 한계선은 비유와 같은 슬라이드에 있어야 하나?",
+      "observed": "브레이크 비유(입문 4장)에 시차 한계선이 없다. 속도계 비유의 한계선 ①('현재 전망상 목표 복귀 시점을 한 문장으로 붙일 것')에 해당하는 문장은 입문 8장 '연준 자신도 물가가 2% 근처로 돌아오는 건 내년 말쯤'으로, 비유가 나온 3장에서 다섯 장 뒤에 있다.",
+      "why_it_matters": "concept-library는 비유와 한계선을 한 세트로 저장한다. 렌더 단계에서 둘을 붙일지 떨어뜨려도 되는지가 데이터로 표현돼야 하고, QA가 '한계선이 붙었는가'를 검사하려면 거리 기준이 필요하다."
+    },
+    {
+      "question": "같은 것을 세는 단위가 한 문장 안에서 dot과 명으로 섞여 있다",
+      "observed": "숙련 4장: '2027년에 추가 인상을 찍은 dot은 8개뿐, 4명은 오히려 인하를 봤습니다.'",
+      "why_it_matters": "dot = 참가자 1명임을 이미 아는 독자만 읽힌다. §4.5(한 문장에 개념 하나) 위반 후보다. 고치지 않고 옮겼다."
+    },
+    {
+      "question": "PCE 숫자 두 개가 같은 지표인지 알 수 없다",
+      "observed": "숙련 2장: '9월 전망에서 올해 근원 PCE는 오히려 3.3% → 3.4%로 올라갔고요.' 숙련 4장 stats: '2026년 PCE 전망 (3월 2.7%) — 3.7%'. 앞은 '근원' 표기, 뒤는 표기 없음. 같은 해(2026) 전망인데 3.4%와 3.7%다. 또 '3.3% → 3.4%'에서 앞의 3.3%가 같은 문단 첫 문장의 '7월 근원 PCE 3.3%'(실적)인지 '6월 전망치'인지 문장에서 구분되지 않는다.",
+      "why_it_matters": "헤드라인/근원 구분과 전망 기준 시점이 데이터에 없으면 한 기사 안에서 숫자 둘이 충돌하는 것처럼 보인다. 고치지 않고 그대로 옮겼다."
+    },
+    {
+      "question": "마지막 슬라이드의 버튼 구성이 레벨마다 다른 게 의도인가?",
+      "observed": "입문 마지막: ['처음부터 다시 보기', '이 설명, 헷갈리는 부분이 있었나요?'] 2개. 숙련 마지막: ['처음부터 다시 보기'] 1개. FTC 마지막: 2개.",
+      "why_it_matters": "'이 설명, 헷갈리는 부분이 있었나요?'는 §9.4 관찰 인프라(probe)의 진입점으로 보이는데 숙련 덱에서만 빠져 있다. 의도인지 누락인지 HTML만으로는 알 수 없다. 레벨별로 probe를 다르게 둘 것인지 결정이 필요하다."
+    },
+    {
+      "question": "두 레벨이 한 문서에 동시에 들어 있고, 전환하면 읽던 위치가 사라진다",
+      "observed": "입문 8장과 숙련 5장이 모두 DOM에 있고 전환은 deckAdv의 hidden 속성만 바꾼다. mount()가 전환 시 해당 덱을 scrollTop=0으로 되돌리고 진행바를 다시 만든다.",
+      "why_it_matters": "Article Package가 레벨 전부를 담은 하나인지 레벨별로 따로 내려가는지(§9.2)와 맞물린다. 또 전환 시 위치 초기화는 '몇 장에서 이탈했는가'(§8.3) 측정과 충돌한다 — 레벨 전환이 이탈로 기록될 수 있다."
+    },
+    {
+      "question": "timeline의 when이 정확한 날짜와 모호한 기간 라벨을 섞는다",
+      "observed": "숙련 3장 timeline: '7/29', '8/7', '8/28', '9월 초', '9/16'. 네 개는 날짜이고 하나는 기간 라벨이다.",
+      "why_it_matters": "이 필드를 날짜 타입으로 두면 '9월 초'가 들어가지 않고, 문자열로 두면 어떤 날짜 계산도 할 수 없다. 지금 프로토타입은 날짜 간격을 시각적으로 쓰지 않으므로 문제가 드러나지 않았을 뿐이다."
+    }
+  ],
+  "_render_time_computation": {
+    "answer": "없다. 데이터를 시각적 길이나 위치로 바꾸는 렌더 시점 계산은 이 프로토타입에 없다.",
+    "script_computes_only": [
+      "(idx+1)+'/'+total — 현재 장수 표시",
+      "진행바 세그먼트 개수 = slides.length",
+      "parseInt(dataset.index) / parseInt(dataset.goto) — 정수 파싱",
+      "Math.min(cur+1, total-1) / Math.max(cur-1, 0) — 키보드 이동 인덱스 클램프",
+      "IntersectionObserver intersectionRatio > 0.55 — 현재 장 판정",
+      "decks[m].scrollTop = 0 — 레벨 전환 시 스크롤 초기화"
+    ],
+    "script_never_writes_style": "스크립트에 style 대입이 한 군데도 없다. classList.toggle과 textContent만 쓴다. (grep 확인: 472행 이후 script 블록에 style./width/left/% 문자열 없음)",
+    "where_a_number_becomes_a_position": [
+      {
+        "where": "입문 3장 gauge (.gauge-mark, .gauge-lab)",
+        "what": "left:33% (라벨 '2%'), left:62% (라벨 '3%대')",
+        "how": "HTML inline style에 손으로 박은 상수. 축의 최소·최대가 선언돼 있지 않고 값→위치 변환식도 파일에 없다. 선형 가정 시 33%↔2%에서 상한 약 6%, 62%는 약 3.7%에 해당한다."
+      }
+    ],
+    "where_it_explicitly_does_not": [
+      {
+        "where": "숙련 3장 timeline (.tl)",
+        "observed": "항목 간 실제 날짜 간격은 7/29→8/7 9일, 8/7→8/28 21일, 8/28→'9월 초' 미상, '9월 초'→9/16 미상으로 전부 다르다. 그런데 연결선(.tl-line)은 flex:1 1 auto; min-height:14px 이라 길이가 옆 텍스트 높이를 따른다. 날짜 간격은 시각적 길이로 전혀 표현되지 않는다."
+      },
+      {
+        "where": "숙련 4장 stats (.srow)",
+        "observed": "4.1% / 3.7% / '18명 중 16명' 등이 모두 텍스트. 막대도 비율도 없다."
+      },
+      {
+        "where": "votes (.vcard)",
+        "observed": "'9 : 3', '12 : 0'이 텍스트. 표결 비율을 도형으로 그리지 않는다."
+      },
+      {
+        "where": "진행바 (.seg)",
+        "observed": "flex:1 1 0 으로 장수만큼 균등 분할되고, 채움은 width 0% 또는 100% 이분법이다. 슬라이드 안에서 얼마나 읽었는지는 반영하지 않는다."
+      }
+    ],
+    "value_to_color_but_hand_authored": [
+      ".srow .v.up — 빨강. '올랐다'는 방향을 색으로만 전달하는데 클래스가 HTML에 손으로 박혀 있다",
+      ".srow .v.flat — 기본색. '같다'는 의미",
+      ".vcard.hit — 금색 테두리. 이번 회의 쪽 강조",
+      ".tl-item.last .tl-dot — 금색·확대. 마지막 항목 강조"
+    ],
+    "viewport_derived_not_data": [
+      "h1 font-size: clamp(23px, 6.2vw, 29px)",
+      ".slide height: 100dvh",
+      ".body-text max-width: 34ch"
+    ]
+  },
+  "_dom_inventory": {
+    "method": "section.slide 의 직계 자식 요소를 (태그 + class 문자열) 그대로 세었다. 기계 추출.",
+    "slide_direct_child_signatures": {
+      "div.body-text": {
+        "count": 4,
+        "transcribed_as": "block type=body_text, variant 없음"
+      },
+      "div.body-text small": {
+        "count": 12,
+        "transcribed_as": "block type=body_text, variant='small' — 별개 signature이므로 variant 필드로 구분해 남겼다"
+      },
+      "div.callout": {
+        "count": 1,
+        "transcribed_as": "block type=callout, modifier=null"
+      },
+      "div.callout warn": {
+        "count": 1,
+        "transcribed_as": "block type=callout, modifier='warn'"
+      },
+      "div.end-actions": {
+        "count": 2,
+        "transcribed_as": "block type=end_actions (check + buttons[])"
+      },
+      "div.gauge": {
+        "count": 1,
+        "transcribed_as": "block type=gauge (marks/labels의 left_percent 보존)"
+      },
+      "div.quote": {
+        "count": 2,
+        "transcribed_as": "block type=quote (tag 필드 보유)"
+      },
+      "div.stats": {
+        "count": 1,
+        "transcribed_as": "block type=stats (rows[], v.up/v.flat은 v_modifier)"
+      },
+      "div.teaser-wrap": {
+        "count": 11,
+        "transcribed_as": "슬라이드 필드 teaser (qmark/qtext/goto_index). div.tear는 has_tear_divider=true 로만 기록"
+      },
+      "div.tl": {
+        "count": 1,
+        "transcribed_as": "block type=timeline (items[], tl-item.last는 is_last)"
+      },
+      "div.votes": {
+        "count": 2,
+        "transcribed_as": "block type=votes (cards[], vcard.hit는 modifier)"
+      },
+      "h1": {
+        "count": 13,
+        "transcribed_as": "슬라이드 필드 h1 (줄바꿈 \\n 보존)"
+      },
+      "p.closing": {
+        "count": 2,
+        "transcribed_as": "block type=closing"
+      },
+      "p.kicker": {
+        "count": 13,
+        "transcribed_as": "슬라이드 필드 kicker (문자열)"
+      }
+    },
+    "distinct_signature_count": 14
+  },
+  "_transcription_notes": [
+    "kicker · h1 · teaser-wrap 은 HTML에서 다른 블록들과 같은 층(section.slide의 직계 자식)에 있다. 이 전사에서는 슬라이드 필드로 올렸다. 블록 배열에 넣을 수도 있었다 — 어느 쪽이 맞는지는 _findings 첫 항목의 질문이다.",
+    "class의 수식어(small · warn · hit · punch · last · up · flat · fed · state)는 블록 타입을 나누지 않고 variant/modifier 필드로 남겼다. 정보는 버리지 않았다. 다만 div.body-text 와 div.body-text small 은 DOM signature가 서로 다르므로, 이를 한 타입으로 볼지 두 타입으로 볼지는 계약이 정할 문제다.",
+    "inline style 은 값 그대로 style_attr 에 남겼다(margin-top 간격, gauge의 left, FTC quote의 border-left-color 등).",
+    "본문의 <b> 와 <br> 는 문자열 안에 그대로 두었다. 텍스트만 뽑아 비교하는 검증에서 원본과 문자 단위로 일치함을 확인했다.",
+    "div.tear(teaser 위 구분선)는 내용이 없으므로 has_tear_divider 불리언으로만 기록했다.",
+    "슬라이드 순서와 data-index 는 HTML 그대로다. teaser의 data-goto 도 원본 값 그대로다(전부 index+1).",
+    "두 덱(deckBasic 8장 · deckAdv 5장)을 levels 배열로 옮겼다. HTML에도 덱이 둘이고 버튼 라벨이 '입문'/'숙련'이므로 이름은 원본에서 왔다."
+  ],
+  "event_hint": "FOMC-20260916",
+  "chrome": {
+    "brand": "Claro",
+    "level_switch": {
+      "present": true,
+      "aria_label": "설명 수준",
+      "buttons": [
+        {
+          "id": "lvBasic",
+          "label": "입문",
+          "aria_pressed_initial": true
+        },
+        {
+          "id": "lvAdv",
+          "label": "숙련",
+          "aria_pressed_initial": false
+        }
+      ],
+      "on_switch": "해당 deck을 scrollTop=0 으로 되돌리고 진행바를 다시 만든다 (읽던 위치는 보존되지 않는다)"
+    },
+    "progress": {
+      "segments": "슬라이드 수만큼 동적 생성",
+      "fill": "0% 또는 100% 이분법, 비례 채움 없음"
+    },
+    "counter_initial_static_text": "1/8",
+    "layout": "topbar-row(brand+levels) 위, segs+count 아래 — 2단"
+  },
+  "levels": [
+    {
+      "id": "basic",
+      "label": "입문",
+      "deck_element_id": "deckBasic",
+      "initially_visible": true,
+      "slide_count": 8,
+      "slides": [
+        {
+          "index": 0,
+          "kicker": "오늘의 뉴스",
+          "h1": "미국이 3년 만에\n금리를 올렸어요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "미국 중앙은행인 연준이 9월 16일 기준금리를 0.25%포인트 올렸습니다. 이제 <b>3.75~4.00%</b>예요."
+                },
+                {
+                  "html": "금리를 <b>올린</b> 건 2023년 7월 이후 처음입니다. 3년 넘게 연준은 금리를 그대로 두거나 내리기만 했어요.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ]
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "물가가 갑자기 나빠졌나요?",
+            "goto_index": 1,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 1,
+          "kicker": "첫 번째 반전",
+          "h1": "아니요.\n오히려 나은 편이었어요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "여름 동안 나온 물가 지표는 시장이 걱정하던 것보다 좋았습니다."
+                },
+                {
+                  "html": "<b>그런데도 연준은 올렸어요.</b>"
+                }
+              ]
+            },
+            {
+              "type": "callout",
+              "modifier": null,
+              "html": "이상하죠. 물가가 나빠져서 올리는 거라면, 나빠지지 않았는데 왜 올렸을까요?"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "연준은 뭘 보고 있는 걸까요?",
+            "goto_index": 2,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 2,
+          "kicker": "이것만 알고 가면 돼요 ①",
+          "h1": "연준이 보는 건\n물가가 아니라 속도예요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "자동차 속도계를 떠올려보세요. 연준이 보는 숫자는 물건이 얼마나 비싼가가 아니라 <b>1년에 몇 퍼센트씩 오르고 있는가</b>입니다."
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "gauge",
+              "comment_in_html": "gauge — 속도계",
+              "scale": {
+                "declared_min": null,
+                "declared_max": null,
+                "unit_shown": false,
+                "background": "linear-gradient(to right, var(--accent-teal) 0%, var(--accent-gold) 55%, var(--accent-red) 100%)"
+              },
+              "marks": [
+                {
+                  "left_percent": 33
+                },
+                {
+                  "left_percent": 62
+                }
+              ],
+              "labels": [
+                {
+                  "role": "target",
+                  "left_percent": 33,
+                  "value_html": "<b>2%</b>",
+                  "value_text": "2%",
+                  "caption": "연준이 원하는 속도"
+                },
+                {
+                  "role": "now",
+                  "left_percent": 62,
+                  "value_html": "<b>3%대</b>",
+                  "value_text": "3%대",
+                  "caption": "지금 미국"
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "그리고 이 속도는 여름 내내 크게 줄지 않았어요.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:4px"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "그럼 금리는 뭔가요?",
+            "goto_index": 3,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 3,
+          "kicker": "이것만 알고 가면 돼요 ②",
+          "h1": "금리는\n그 차의 브레이크예요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "금리가 올라가면 돈을 빌리는 일이 비싸집니다. 집을 사려고 대출을 받거나, 기업이 새 사업에 투자하기가 부담스러워져요."
+                },
+                {
+                  "html": "사람들이 지갑을 덜 열면 경제가 달리는 속도가 느려지고, <b>물가가 오르는 속도도 따라서 느려집니다.</b>"
+                }
+              ]
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "그래서 왜 지금 밟은 거죠?",
+            "goto_index": 4,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 4,
+          "kicker": "핵심",
+          "h1": "기준이\n우리 생각과 달랐어요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "연준이 던진 질문은 “물가가 나빠졌는가”가 아니었습니다."
+                }
+              ]
+            },
+            {
+              "type": "quote",
+              "tag": "8월 말 · 의장 연설",
+              "html": "기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다. 그렇지 않다면 아직 할 일이 남아 있는 것이다.",
+              "quotation_marks_in_text": false
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "속도가 3에서 2로 내려오고는 있는데 <b>너무 느리게</b> 내려온다면? 그것도 브레이크를 더 밟을 이유가 됩니다."
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "두 달 전엔 왜 안 올렸죠?",
+            "goto_index": 5,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 5,
+          "kicker": "두 달 사이",
+          "h1": "7월엔 셋만 그렇게 봤어요.\n이번엔 전원이었고요.",
+          "blocks": [
+            {
+              "type": "votes",
+              "cards": [
+                {
+                  "modifier": null,
+                  "when": "7월 29일",
+                  "tally": "9 : 3",
+                  "what_html": "동결. 세 명만<br>“올리자”고 반대"
+                },
+                {
+                  "modifier": "hit",
+                  "when": "9월 16일",
+                  "tally": "12 : 0",
+                  "what_html": "인상.<br>반대 없음"
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "그 사이 8월 말 의장이 앞의 기준을 밝혔고, 시장은 인상 가능성을 90% 넘게 반영하기 시작했어요."
+                },
+                {
+                  "html": "다만 그 세 사람이 나머지를 설득한 건지, 새로 들어온 정보 때문에 판단이 같아진 건지는 <b>아직 알 수 없습니다.</b> 회의 내부 기록은 3주 뒤에 공개돼요.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "물가는 왜 안 내려오고 있죠?",
+            "goto_index": 6,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 6,
+          "kicker": "가장 큰 변수",
+          "h1": "이란 전쟁이\n어디로 갈지 모릅니다",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "2월 말에 시작돼 반년 넘게 이어지고 있어요. 4월에 휴전 합의가 한 번 있었지만 이후 공격이 반복되면서 기름값은 크게 올랐다 내렸다를 되풀이했습니다."
+                },
+                {
+                  "html": "회의가 열린 날에는 트럭과 기차에 쓰는 경유 가격이 사상 최고치를 기록했어요."
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "callout",
+              "modifier": "warn",
+              "html": "여기서 중요한 건 기름값이 비싸다는 게 아닙니다.<br><b>이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요.</b> 연준이 “확신이 없다”고 말한 이유의 상당 부분이 여기 있습니다."
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "이제 계속 오르나요?",
+            "goto_index": 7,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 7,
+          "kicker": "앞으로",
+          "h1": "한 번은 더.\n그런데 긴 흐름은 아니에요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "위원들 대부분이 올해 안에 한 번 더 올릴 수 있다고 봤습니다."
+                },
+                {
+                  "html": "다만 연준이 함께 내놓은 전망에서 <b>올해 말 금리와 내년 말 금리는 같은 수준</b>이에요. 올해 한 번쯤 더 올리고, 내년에는 대체로 그 자리."
+                },
+                {
+                  "html": "참고로 연준 자신도 물가가 2% 근처로 돌아오는 건 내년 말쯤으로 보고 있어요. 생각보다 긴 길입니다.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "closing",
+              "html": "물가가 튀어서 올린 게 아닙니다.<br><b>내려오고는 있는데<br>충분히 빠르지 않다</b>고 본 거예요."
+            },
+            {
+              "type": "end_actions",
+              "check": "✓ 다 읽었어요",
+              "buttons": [
+                {
+                  "label": "처음부터 다시 보기",
+                  "goto_index": 0
+                },
+                {
+                  "label": "이 설명, 헷갈리는 부분이 있었나요?",
+                  "goto_index": null
+                }
+              ]
+            }
+          ],
+          "teaser": null
+        }
+      ]
+    },
+    {
+      "id": "adv",
+      "label": "숙련",
+      "deck_element_id": "deckAdv",
+      "initially_visible": false,
+      "hidden_attr": true,
+      "slide_count": 5,
+      "slides": [
+        {
+          "index": 0,
+          "kicker": "9월 FOMC",
+          "h1": "동결에서 인상으로,\n그것도 만장일치",
+          "blocks": [
+            {
+              "type": "votes",
+              "cards": [
+                {
+                  "modifier": null,
+                  "when": "7월 29일",
+                  "tally": "9 : 3",
+                  "what_html": "동결<br>3명 +25bp 주장"
+                },
+                {
+                  "modifier": "hit",
+                  "when": "9월 16일",
+                  "tally": "12 : 0",
+                  "what_html": "+25bp<br>3.75~4.00%"
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "2023년 7월 이후 첫 인상. 7주 만에 소수의견이 전원 합의가 됐습니다."
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "무엇이 기준이었나",
+            "goto_index": 1,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 1,
+          "kicker": "판단 기준",
+          "h1": "악화가 아니라\n개선 속도가 기준이었습니다",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "여름 물가 지표는 예상보다 나았습니다. 7월 근원 PCE는 전년 대비 3.3%로, 6월 전망치와 사실상 같았고요."
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "quote",
+              "tag": "8/28 잭슨홀",
+              "html": "기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다.",
+              "quotation_marks_in_text": false
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "의장은 여름 지표가 기저 흐름의 의미 있는 개선을 보여주지는 않는다고 평가했습니다. 9월 전망에서 올해 근원 PCE는 오히려 <b>3.3% → 3.4%</b>로 올라갔고요."
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:12px"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "7주 사이의 경로",
+            "goto_index": 2,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 2,
+          "kicker": "7월 → 9월",
+          "h1": "무엇이 그 사이에\n있었나",
+          "blocks": [
+            {
+              "type": "timeline",
+              "html_class": "tl",
+              "items": [
+                {
+                  "when": "7/29",
+                  "html": "9-3 동결. Hammack · Kashkari · Logan 반대",
+                  "is_last": false,
+                  "has_connector_line": true
+                },
+                {
+                  "when": "8/7",
+                  "html": "7월 고용 발표 — 취업자 <b>23,000명 감소</b>, 실업률 4.1%",
+                  "is_last": false,
+                  "has_connector_line": true
+                },
+                {
+                  "when": "8/28",
+                  "html": "잭슨홀 — 의장이 인상 기준을 명시",
+                  "is_last": false,
+                  "has_connector_line": true
+                },
+                {
+                  "when": "9월 초",
+                  "html": "시장, 인상 확률 90% 이상 반영. 10년물 4.6% 돌파",
+                  "is_last": false,
+                  "has_connector_line": true
+                },
+                {
+                  "when": "9/16",
+                  "html": "12-0 인상",
+                  "is_last": true,
+                  "has_connector_line": false
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "내부 역학은 3주 뒤 회의록 전까지 확인 불가. 현재 확실한 것은 순서뿐입니다.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "점도표가 말하는 것",
+            "goto_index": 3,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 3,
+          "kicker": "9월 SEP",
+          "h1": "한 번 더.\n그리고 내년은 제자리",
+          "blocks": [
+            {
+              "type": "stats",
+              "rows": [
+                {
+                  "k": "2026년 말 정책금리 중앙값",
+                  "v": "4.1%",
+                  "v_modifier": null
+                },
+                {
+                  "k": "2027년 말 정책금리 중앙값",
+                  "v": "4.1%",
+                  "v_modifier": "flat"
+                },
+                {
+                  "k": "연내 추가 인상 예상",
+                  "v": "18명 중 16명",
+                  "v_modifier": null
+                },
+                {
+                  "k": "두 번 더 예상",
+                  "v": "4명",
+                  "v_modifier": null
+                },
+                {
+                  "k": "2026년 PCE 전망 (3월 2.7%)",
+                  "v": "3.7%",
+                  "v_modifier": "up"
+                },
+                {
+                  "k": "2026년 실업률 전망 (3월 4.4%)",
+                  "v": "4.1%",
+                  "v_modifier": null
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "2026년과 2027년 중앙값이 같다는 것이 핵심입니다. 인상 사이클의 시작이 아니라 <b>짧은 조정</b>으로 보고 있다는 뜻이에요."
+                },
+                {
+                  "html": "2027년에 추가 인상을 찍은 dot은 8개뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "남는 두 가지 긴장",
+            "goto_index": 4,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 4,
+          "kicker": "남는 문제",
+          "h1": "이 결정에 걸려 있는\n두 가지 불확실성",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "<b>1. 물가의 큰 부분이 전쟁에 달려 있습니다.</b><br>이란 전쟁은 201일째. 4월 휴전 이후에도 공격이 반복되며 유가는 크게 등락했고, 회의 당일 경유 가격은 사상 최고였습니다. 성명문도 지정학적 전개로 인한 불확실성을 명시했어요."
+                },
+                {
+                  "html": "<b>2. 고용은 겉보기만큼 단단하지 않습니다.</b><br>7월 취업자는 오히려 23,000명 줄었습니다. 그런데 실업률은 4.2%에서 4.1%로 내려갔죠. 의장은 이를 노동공급 감소로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다."
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "closing",
+              "html": "따라서 이번 회의의 변화는<br>금리 숫자가 아니라<br><b>인상을 둘러싼 내부 긴장이<br>전망에서 실제 행동으로 옮겨왔다는 점</b>입니다."
+            },
+            {
+              "type": "end_actions",
+              "check": "✓ 다 읽었어요",
+              "buttons": [
+                {
+                  "label": "처음부터 다시 보기",
+                  "goto_index": 0
+                }
+              ]
+            }
+          ],
+          "teaser": null
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "scroll": "세로 스크롤 스냅 (scroll-snap-type:y mandatory, scroll-snap-stop:always), 슬라이드 = 100dvh",
+    "active_slide_detection": "IntersectionObserver, threshold 0.55",
+    "keyboard": {
+      "next": [
+        "ArrowDown",
+        "ArrowRight",
+        "Space"
+      ],
+      "prev": [
+        "ArrowUp",
+        "ArrowLeft"
+      ]
+    },
+    "teaser_click": "data-goto 인덱스로 scrollIntoView(smooth)"
+  }
+}

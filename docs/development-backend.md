@@ -1,14 +1,14 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.0a — S1 세션 대기**
+**Phase 0 / Step 0.0a 완료 (2026-09-20) — Step 0.0b(S2) 대기**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
 
 | Step | 내용 | 산출 | 세션 | 상태 |
 |---|---|---|---|---|
-| 0.0a | 프로토타입 역산 (있는 그대로) | `fixtures/*.observed.json` | S1 | ☐ |
+| 0.0a | 프로토타입 역산 (있는 그대로) | `fixtures/*.observed.json` | S1 | ☑ 2026-09-20 |
 | 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ☐ 미작성 |
 | 0.1 | ARTICLE_PACKAGE.md 도출 | 계약 1 | S3 | ☐ 미작성 ⚠️D11 |
 | 0.2 | DATA_MODEL + CONCEPT_IDENTITY | 계약 2·3 | S4 | ☐ 미작성 |
@@ -77,16 +77,32 @@ prototypes/ 의 슬라이드 프로토타입 2개를 JSON으로 역산해라.
 ```
 
 ### 완료 조건
-- [ ] FOMC 입문 8장 / 숙련 5장, FTC 7장이 전부 표현됨
-- [ ] 블록 타입이 18종 이상 등장 (FOMC 13 + FTC 5 — 통합되면 덜 나온다)
-- [ ] `_findings` 가 비어 있지 않다
-- [ ] 검증: `observed.json` 의 슬라이드 수·순서가 원본 HTML과 일치
-- [ ] 로그 작성 / 커밋
-- [ ] 완료일:
+- [x] FOMC 입문 8장 / 숙련 5장, FTC 7장이 전부 표현됨 — 13 + 7 = 20장
+- [x] 블록 타입이 18종 이상 등장 (FOMC 13 + FTC 5 — 통합되면 덜 나온다)
+      → DOM signature 기준 **18종** (FOMC 14 + FTC 11 − 공통 7). 각 파일 `_dom_inventory` 에 기계 추출값.
+      → JSON block type 기준으로는 13종. kicker·h1·teaser를 슬라이드 필드로 올리고 `small`·`warn` 같은
+         수식어를 variant/modifier 필드로 뒀기 때문이다. **통합이 아니라 층 선택이다 — 정보는 안 버렸다.**
+         내가 한 선택은 `_transcription_notes` 에, 그 선택이 왜 내 몫이 아닌지는 `_findings` 첫 항목에 있다.
+- [x] `_findings` 가 비어 있지 않다 — FOMC 22건 · FTC 17건
+- [x] 검증: `observed.json` 의 슬라이드 수·순서가 원본 HTML과 일치 — 공백 제거 후 **문자 단위 대조 20장 전부 일치**
+- [x] 로그 작성 / 커밋 — `logs/backend/phase-0-step-0a.md` (검증 출력 + 스크립트 전문 포함)
+- [x] 완료일: 2026-09-20
 
 ### PM 확인 사항 (S1 종료 후)
 - `_findings` 를 DECISIONS.md 로 승격할 것과 S3로 넘길 것 분류
 - 블록 타입 통합이 일어났는지 확인 (일어났으면 정보 손실)
+
+**S1이 먼저 봐달라고 올리는 것** (자세한 내용은 `logs/backend/phase-0-step-0a.md`)
+- 프로토타입이 concept-library를 이미 위반한 건 2개. **0.0b 골든에 그대로 들어가면 안 된다.**
+  ① 속도계 비유가 C-0002의 4단계 없이 먼저 나온다 (입문 3장) —
+     C-0002에 "2026-09-18 독자 검증에서 이해되지 않았다"고 적힌 바로 그 압축 형태다.
+  ② 12명(표결)과 18명(전망)이 설명 없이 나란히 나온다 (숙련 1장 · 4장) — C-0005가 금지한 패턴.
+- `resolves` 가 HTML에 아예 없다. `data-goto` 는 20장 전부 `index+1`.
+  §8.2 QA를 기계로 돌리려면 이 필드가 어디서 오는지 정해야 한다.
+- 사실 표시 블록의 기사 간 재사용률이 **0%** (공통 4종은 전부 문서 골격).
+  concept 재사용률 0%와 같은 모양이라 블록 타입 enum 결정에 영향이 크다.
+- FTC 픽스처의 `levels[0].id = "only"` 는 **원본에 없는 이름**이다. 전사 과정에서 생겼다.
+  FTC 프로토타입에는 레벨 개념 자체가 없다.
 
 ---
 

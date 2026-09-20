@@ -1,0 +1,514 @@
+{
+  "_source": {
+    "file": "prototypes/ftc-slides.html",
+    "document_title": "Claro — 같은 물건, 다른 가격",
+    "lang": "ko",
+    "transcribed_on": "2026-09-20",
+    "task": "B-0.0a",
+    "rule": "HTML에 있는 것만 옮긴다. 발견한 오류도 고치지 않고 그대로 옮기고 _findings 에 적는다."
+  },
+  "_findings": [
+    {
+      "question": "슬라이드가 블록인가, 슬라이드가 블록을 담는가?",
+      "observed": "FINDINGS §8.2는 '각 블록: content / open_question / resolves'라고 쓰고 §8.3은 '슬라이드가 블록이면'이라고 쓴다. HTML에서 open_question(teaser)을 갖는 단위는 슬라이드이고 정확히 슬라이드당 하나다. 그보다 작은 표시 단위(body-text, quote, gauge, steps 등)가 슬라이드 안에 1~3개씩 따로 있다. 이 작은 단위에는 open_question이 없다.",
+      "why_it_matters": "block을 어느 층으로 정의하느냐에 따라 open_question의 소유자와 §8.2 QA의 검사 대상이 통째로 달라진다."
+    },
+    {
+      "question": "resolves는 어디에 있나?",
+      "observed": "teaser에는 이동 대상(data-goto)이 있고 20장 중 17장에 teaser가 있다. data-goto 값은 예외 없이 현재 index+1이다. 반면 '이 슬라이드가 어떤 질문에 답한다'는 표시는 두 프로토타입 어디에도 없다.",
+      "why_it_matters": "§8.2의 QA('모든 open_question이 이후에 resolves 되는가')를 기계적으로 검사하려면 resolves가 데이터여야 한다. 지금은 '다음 장이 답한다'는 암묵 규칙뿐이라 검사할 것이 없다."
+    },
+    {
+      "question": "open_question은 반드시 질문이어야 하나?",
+      "observed": "FOMC 입문 8장과 FTC 6장은 qmark='Q'이고 물음표로 끝난다. FOMC 숙련 5장은 전부 qmark='·'이고 명사구다('무엇이 기준이었나', '7주 사이의 경로', '점도표가 말하는 것', '남는 두 가지 긴장' — 물음표 없음). FTC 5장째 teaser도 qmark='·'에 '그런데, 반전이 하나 있어요'라는 평서문이다.",
+      "why_it_matters": "§8.2는 넘기는 장치가 '미해결 질문 하나'라고 못박는데, 숙련 레벨과 긴장 완화 슬라이드에서는 목차 라벨/예고로 바뀌어 있다. 계약이 질문형만 허용할지 두 종류를 허용할지 결정이 필요하다."
+    },
+    {
+      "question": "kicker 한 필드가 두 가지 일을 하고 있는데 나눠야 하나?",
+      "observed": "서사 기능 라벨('첫 번째 반전', '핵심', '반전', '경계선', '남는 문제', '두 달 사이')과 자료 출처 라벨('9월 SEP', '9월 FOMC', '7월 → 9월', '오늘의 뉴스')이 같은 kicker 필드에 섞여 있다. 또 '이것만 알고 가면 돼요 ①/②'는 세 번째 용도(개념 슬라이드 표시)다.",
+      "why_it_matters": "kicker는 장식이 아니라 서사 기능 라벨인데, 실제로는 서사 역할·출처·개념 표시 세 가지가 한 문자열에 들어 있다."
+    },
+    {
+      "question": "블록 타입은 닫힌 enum인가 기사마다 여는가?",
+      "observed": "두 기사가 공유하는 블록 타입은 body_text · quote · closing · end_actions 4종뿐이다. FOMC 전용 5종(gauge, votes, timeline, stats, callout), FTC 전용 4종(examples, rule_line, steps, tags_inline). 사실을 보여주는 블록의 기사 간 재사용률이 0%다.",
+      "why_it_matters": "concept-library에서 도메인 간 concept 재사용률이 0%였던 것과 같은 모양이다. 블록 타입을 닫힌 enum으로 두면 세 번째 기사에서 바로 깨지고, 열어두면 렌더러가 미리 만들 수 없다."
+    },
+    {
+      "question": "인용부호는 내용인가 표시인가?",
+      "observed": "FOMC의 quote 블록 본문에는 인용부호가 없다. FTC의 quote 블록 본문에는 곧은 따옴표가 들어 있다(\"의회는 위원회에 … 주지 않았다.\"). 본문 속 인용도 FOMC는 굽은 따옴표(“물가가 나빠졌는가”), FTC는 곧은 따옴표(\"기만적이거나 불공정한 행위\")로 서로 다르다.",
+      "why_it_matters": "§5.5 원문 대조를 하려면 저장된 문자열이 원문과 일치해야 한다. 인용부호를 렌더러가 붙일지 데이터에 넣을지 정해두지 않으면 같은 인용이 파일마다 다른 문자열이 된다."
+    },
+    {
+      "question": "발행 시점에 고정된 시간 표현을 어떻게 표시하나?",
+      "observed": "FOMC: '회의 내부 기록은 3주 뒤에 공개돼요', '내부 역학은 3주 뒤 회의록 전까지 확인 불가', '이란 전쟁은 201일째', '2월 말에 시작돼 반년 넘게'. FTC: '지난달', '지난 8월', '지난 4월 서명된', '작년 7월부터', '10월 1일부터 시행됩니다', '마감은 9월 25일입니다'. 전부 일반 본문 텍스트다.",
+      "why_it_matters": "§5.4 volatility가 필요한 이유가 실물로 나온다. 특히 '201일째'는 날짜 차이 계산 결과가 정적 문자열로 굳은 경우이고, '지난달'·'작년 7월'은 읽는 시점이 바뀌면 틀린 문장이 된다. 지금 구조로는 언제 썩는지 알 수 없다."
+    },
+    {
+      "question": "개념을 쓴 슬라이드를 어떻게 식별하나?",
+      "observed": "concept_id에 해당하는 식별자가 HTML에 전혀 없다. FOMC는 kicker '이것만 알고 가면 돼요 ①/②'로 개념 슬라이드를 따로 세웠고(입문 3·4장), FTC는 개념을 서사 슬라이드 안에 녹여 그런 표시조차 없다(3장=기관 권한 한계, 5장=개념 경계선, 6장=연방/주, 7장=정책안 vs 규칙).",
+      "why_it_matters": "concept atom의 버전 pin(§4.3)과 재사용 추적을 하려면 '이 슬라이드가 어느 concept을 쓰는가'가 데이터여야 한다. 두 프로토타입이 개념을 배치하는 방식 자체가 달라서(전용 슬라이드 vs 서사 내 용해) 한 가지로 가정할 수 없다."
+    },
+    {
+      "question": "표시 변형 중 무엇이 의미이고 무엇이 순수 표시인가?",
+      "observed": "class와 inline style로만 존재한다: body-text의 small 변형(FOMC만 사용), margin-top:4px/12px/14px/16px 간격 지정, FTC quote의 border-left-color·font-size 덮어쓰기, stats 값의 up(빨강)/flat, vcard의 hit(금색 테두리), ex의 punch, timeline의 last, tagpill의 fed/state.",
+      "why_it_matters": "stats의 up은 '올랐다'는 의미를 색으로만 전달하고, margin-top은 아무 의미도 없다. HTML만으로는 구분되지 않는다. 계약이 의미 쪽만 데이터로 가져가고 나머지는 렌더러에 맡길 수 있으려면 지금 여기서 선을 그어야 한다."
+    },
+    {
+      "question": "장수(slide_count)는 데이터인가 파생값인가?",
+      "observed": "topbar의 장수 표시가 HTML에 정적 문자열로 박혀 있고(FOMC '1/8', FTC '1/7'), 스크립트가 mount 시 slides.length로 다시 계산해 덮어쓴다. 진행바 세그먼트도 slides.length만큼 동적 생성된다.",
+      "why_it_matters": "장수는 레벨별 fact 선택의 결과다. 계약이 slide_count를 갖게 할지, 슬라이드 배열에서 파생시킬지에 따라 완독 측정(§8.3 '몇 장에서 이탈했는가')의 기준값이 어디서 오는지가 달라진다."
+    },
+    {
+      "question": "quote 블록이 인용이 아닌 데 쓰인다 — 원문과 우리 설명을 같은 타입으로 둘 수 있나?",
+      "observed": "5장의 .quote는 tag가 없고 인용문도 아니다. 내용은 개념 경계선('시장 상황 때문에 모두에게 달라지는 가격 — 해당 없음 / 나에 대한 추정 때문에 나에게만 달라지는 가격 — 이번 사안')이고, 인용과 구분하려고 inline style로 왼쪽 선 색만 teal로 바꿨다. 이 문장은 concept-library C-0010의 BOUNDARY 항목과 사실상 같은 내용이다. 같은 파일 2장의 .quote는 tag 'FTC 원문'을 달고 실제 원문을 담는다.",
+      "why_it_matters": "§8.4는 '이건 원문 / 이건 우리 해석'을 문장 단위로 표시할 수 있다고 했는데, 여기서는 원문 인용 컴포넌트가 우리 설명을 담고 있다. 계약에서 quote와 boundary를 같은 타입으로 둘 수 없다."
+    },
+    {
+      "question": "같은 출처에서 온 내용인데 어떤 건 출처 표시가 있고 어떤 건 없다",
+      "observed": "1장 examples 3개는 '지난달 미국 정부가 낸 문서에 이런 예시들이 있었어요'라는 도입 뒤에 나오지만 출처 태그가 없다. 2장 quote는 tag 'FTC 원문'을 단다. 둘 다 같은 FTC 문서에서 온 것으로 읽힌다.",
+      "why_it_matters": "§8.4의 소스 레이어 시각 구분이 블록 타입에 따라 있다가 없다가 한다. 출처 표시를 블록 타입의 속성으로 둘지 모든 블록이 가질 수 있는 필드로 둘지 결정이 필요하다."
+    },
+    {
+      "question": "관할(jurisdiction)이 둘은 pill이고 셋째는 본문 텍스트다",
+      "observed": "6장은 tagpill 두 개('연방·FTC — 공개 의무', '주·메릴랜드 — 금지')를 보여준 뒤, 바로 아래 본문에서 '뉴욕은 이미 작년 7월부터 표시를 의무화했어요'라고 세 번째 관할을 문장으로만 언급한다.",
+      "why_it_matters": "§8.4가 시연 사례로 든 '연방/주 구분 pill'이 실제로는 두 개만 pill이고 나머지는 산문이다. 관할별 규제 상태가 구조화된 데이터인지 문장인지 지금 갈라야 한다."
+    },
+    {
+      "question": "같은 문서를 가리키는 시간 표현이 인접 슬라이드에서 다르다",
+      "observed": "1장 '지난달 미국 정부가 낸 문서' / 2장 '연방거래위원회(FTC)가 지난 8월, 이 문제를 다룬 방침을 내놨습니다'. 같은 FTC 문서를 '지난달'과 '지난 8월'로 부른다.",
+      "why_it_matters": "둘 다 맞지만 하나는 읽는 시점에 의존하고 하나는 절대 날짜다. 어느 쪽을 데이터로 두고 어느 쪽을 렌더 시점 표현으로 둘지 정하지 않으면 기사가 시간이 지나면서 조용히 틀린다."
+    },
+    {
+      "question": "레벨 전환 자체가 없다 — 레벨 1개짜리 기사를 허용하나?",
+      "observed": "FTC 프로토타입은 덱이 하나(7장)뿐이고 topbar에 입문/숙련 버튼이 없다. 상단바 구조도 다르다 — FOMC는 2단(브랜드+레벨 / 진행바+장수), FTC는 1단(브랜드+진행바+장수).",
+      "why_it_matters": "§8.3('개인화가 슬라이드 개수로 보인다')이 두 프로토타입 중 하나에서만 구현돼 있다. 계약이 레벨 배열을 필수로 둘지, 레벨 1개를 허용할지 결정이 필요하다. 이 픽스처는 levels 배열에 id='only' 하나만 넣어 옮겼다 — HTML에는 레벨 개념 자체가 없으므로 이 이름은 전사 과정에서 생긴 것이다."
+    },
+    {
+      "question": "steps의 번호가 데이터인가 렌더링인가?",
+      "observed": "4장 steps의 1·2·3이 HTML에 문자열로 박혀 있다(CSS counter 아님). 같은 파일 3장의 rule_line은 ✕/✓ 기호를 역시 문자열로 갖는다.",
+      "why_it_matters": "번호·기호가 데이터면 순서를 바꿀 때 수정해야 하고, 렌더링이면 데이터에 없어야 한다. 지금은 문자열이라 둘 다 아니다."
+    },
+    {
+      "question": "연속한 rule_line 두 개는 한 블록인가 두 블록인가?",
+      "observed": "3장에 .rule-line div가 두 개 연속으로 있다. 하나는 ✕ '\"금지하라\"', 다른 하나는 ✓ '<b>\"숨기지 마라\"</b>'. 둘을 묶는 부모 요소는 없다.",
+      "why_it_matters": "의미로는 대조 한 쌍이지만 HTML로는 형제 두 개다. 둘로 보이므로 둘로 남겼다. 계약에서 대조쌍을 한 블록으로 묶을지 여기서 갈린다."
+    }
+  ],
+  "_render_time_computation": {
+    "answer": "없다. 데이터를 시각적 길이나 위치로 바꾸는 렌더 시점 계산은 이 프로토타입에 없다. FOMC의 gauge 같은 수치→위치 블록이 이 파일에는 아예 없다.",
+    "script_computes_only": [
+      "(idx+1)+'/'+total — 현재 장수 표시",
+      "진행바 세그먼트 개수 = slides.length",
+      "parseInt(dataset.index) / parseInt(dataset.goto) — 정수 파싱",
+      "Math.min(cur+1, total-1) / Math.max(cur-1, 0) — 키보드 이동 인덱스 클램프",
+      "IntersectionObserver intersectionRatio > 0.55 — 현재 장 판정"
+    ],
+    "script_never_writes_style": "스크립트에 style 대입이 한 군데도 없다. classList.toggle과 textContent만 쓴다. (grep 확인: 535행 이후 script 블록에 style./width/left/% 문자열 없음)",
+    "where_a_number_becomes_a_position": [],
+    "where_it_explicitly_does_not": [
+      {
+        "where": "4장 steps (.step .n)",
+        "observed": "1·2·3이 HTML 문자열이다. CSS counter나 스크립트 넘버링이 아니다."
+      },
+      {
+        "where": "진행바 (.seg)",
+        "observed": "flex:1 1 0 으로 7등분되고 채움은 0%/100% 이분법. 슬라이드 내 진행도는 반영하지 않는다."
+      },
+      {
+        "where": "6장 tags_inline / 본문",
+        "observed": "관할별 규제 강도(공개 의무 vs 금지)를 위치나 길이로 배열하지 않는다. pill 두 개를 나란히 둘 뿐이다. 시행일(10월 1일), 뉴욕 시행 시점(작년 7월), 의견 마감(9월 25일) 같은 날짜도 시간축으로 그려지지 않는다."
+      }
+    ],
+    "value_to_color_but_hand_authored": [
+      ".tagpill.fed — 금색 (연방)",
+      ".tagpill.state — teal (주)",
+      ".ex.punch — 금색 점 + 강조 배경. 세 예시 중 셋째만",
+      ".rule-line .no — 빨강 ✕ / .rule-line .yes — teal ✓",
+      "5장 .quote 의 inline border-left-color:var(--accent-teal) — 인용이 아님을 색으로만 구분"
+    ],
+    "viewport_derived_not_data": [
+      "h1 font-size: clamp(24px, 6.4vw, 30px)",
+      ".slide height: 100dvh",
+      "@media (max-height:700px) 에서 slide padding·body-text font-size 축소"
+    ]
+  },
+  "_dom_inventory": {
+    "method": "section.slide 의 직계 자식 요소를 (태그 + class 문자열) 그대로 세었다. 기계 추출.",
+    "slide_direct_child_signatures": {
+      "div.body-text": {
+        "count": 8,
+        "transcribed_as": "block type=body_text (이 파일에는 small 변형이 없다)"
+      },
+      "div.end-actions": {
+        "count": 1,
+        "transcribed_as": "block type=end_actions (check + buttons[])"
+      },
+      "div.examples": {
+        "count": 1,
+        "transcribed_as": "block type=examples (items[], ex.punch는 modifier)"
+      },
+      "div.quote": {
+        "count": 2,
+        "transcribed_as": "block type=quote — 2장은 tag='FTC 원문', 5장은 tag=null + inline style. 타입은 하나로 두되 차이를 필드로 남겼다. _findings 참조"
+      },
+      "div.rule-line": {
+        "count": 2,
+        "transcribed_as": "block type=rule_line — 3장에 두 개가 연속으로 있고 부모가 없으므로 블록 두 개로 남겼다"
+      },
+      "div.steps": {
+        "count": 1,
+        "transcribed_as": "block type=steps (items[], n은 HTML에 박힌 문자열)"
+      },
+      "div.tags-inline": {
+        "count": 1,
+        "transcribed_as": "block type=tags_inline (pills[], fed/state는 modifier)"
+      },
+      "div.teaser-wrap": {
+        "count": 6,
+        "transcribed_as": "슬라이드 필드 teaser (qmark/qtext/goto_index). div.tear는 has_tear_divider=true 로만 기록"
+      },
+      "h1": {
+        "count": 7,
+        "transcribed_as": "슬라이드 필드 h1 (줄바꿈 \\n 보존)"
+      },
+      "p.closing": {
+        "count": 1,
+        "transcribed_as": "block type=closing"
+      },
+      "p.kicker": {
+        "count": 7,
+        "transcribed_as": "슬라이드 필드 kicker (문자열)"
+      }
+    },
+    "distinct_signature_count": 11
+  },
+  "_transcription_notes": [
+    "kicker · h1 · teaser-wrap 은 HTML에서 다른 블록들과 같은 층(section.slide의 직계 자식)에 있다. 이 전사에서는 슬라이드 필드로 올렸다. 블록 배열에 넣을 수도 있었다 — 어느 쪽이 맞는지는 _findings 첫 항목의 질문이다.",
+    "class의 수식어(small · warn · hit · punch · last · up · flat · fed · state)는 블록 타입을 나누지 않고 variant/modifier 필드로 남겼다. 정보는 버리지 않았다. 다만 div.body-text 와 div.body-text small 은 DOM signature가 서로 다르므로, 이를 한 타입으로 볼지 두 타입으로 볼지는 계약이 정할 문제다.",
+    "inline style 은 값 그대로 style_attr 에 남겼다(margin-top 간격, gauge의 left, FTC quote의 border-left-color 등).",
+    "본문의 <b> 와 <br> 는 문자열 안에 그대로 두었다. 텍스트만 뽑아 비교하는 검증에서 원본과 문자 단위로 일치함을 확인했다.",
+    "div.tear(teaser 위 구분선)는 내용이 없으므로 has_tear_divider 불리언으로만 기록했다.",
+    "슬라이드 순서와 data-index 는 HTML 그대로다. teaser의 data-goto 도 원본 값 그대로다(전부 index+1).",
+    "이 HTML에는 덱이 하나뿐이고 레벨 개념이 없다. 두 픽스처의 모양을 맞추려고 levels 배열에 id='only' 하나를 뒀다. 'only' 라는 이름은 원본에 없고 전사 과정에서 생긴 것이다. _findings 참조."
+  ],
+  "event_hint": "FTC-20260819",
+  "chrome": {
+    "brand": "Claro",
+    "level_switch": {
+      "present": false,
+      "note": "이 프로토타입에는 입문/숙련 전환이 없다. 덱이 하나뿐이다. FOMC 프로토타입과 다르다."
+    },
+    "progress": {
+      "segments": "슬라이드 수만큼 동적 생성",
+      "fill": "0% 또는 100% 이분법, 비례 채움 없음"
+    },
+    "counter_initial_static_text": "1/7",
+    "layout": "brand + segs + count 가 한 줄 — 1단 (FOMC는 2단)"
+  },
+  "levels": [
+    {
+      "id": "only",
+      "label": null,
+      "deck_element_id": "slides",
+      "initially_visible": true,
+      "slide_count": 7,
+      "slides": [
+        {
+          "index": 0,
+          "kicker": "오늘의 뉴스",
+          "h1": "같은 물건인데,\n나한테만 비싸게 보인다면",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "지난달 미국 정부가 낸 문서에 이런 예시들이 있었어요."
+                }
+              ]
+            },
+            {
+              "type": "examples",
+              "html_class": "examples",
+              "items": [
+                {
+                  "modifier": null,
+                  "bullet": "dot",
+                  "html": "집에 아이가 여럿이라는 데이터로, 우유값을 더 받는 것"
+                },
+                {
+                  "modifier": null,
+                  "bullet": "dot",
+                  "html": "경쟁사 앱이 없는 사람에게, 택시비를 더 받는 것"
+                },
+                {
+                  "modifier": "punch",
+                  "bullet": "dot",
+                  "html": "지금 그 가게 <b>주차장 안</b>에서 사이트를 보고 있다는 걸 알고, 그 사람에게만 가격을 올려 보여주는 것"
+                }
+              ]
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "이거, 불법 아닌가요?",
+            "goto_index": 1,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 1,
+          "kicker": "그래서, 금지됐나요?",
+          "h1": "미국 정부가 나섰습니다.\n그런데 금지하지 않았어요.",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "연방거래위원회(FTC)가 지난 8월, 이 문제를 다룬 방침을 내놨습니다. 그런데 문서에 이렇게 적혀 있었어요."
+                }
+              ]
+            },
+            {
+              "type": "quote",
+              "tag": "FTC 원문",
+              "html": "\"의회는 위원회에 모든 상황에서 개인화 가격을 금지할 권한을 주지 않았다.\"",
+              "quotation_marks_in_text": true,
+              "quote_mark_style": "straight",
+              "style_attr": null
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "왜 권한이 없을까요?",
+            "goto_index": 2,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 2,
+          "kicker": "권한의 구조",
+          "h1": "정부 기관도\n법이 준 만큼만 할 수 있어요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "아무리 문제라고 판단해도, 기관은 그 권한을 준 법이 있어야 움직일 수 있습니다."
+                },
+                {
+                  "html": "FTC가 가진 법은 <b>FTC법 5조</b>예요. 이 법이 막는 건 개인화 가격 자체가 아니라 \"기만적이거나 불공정한 행위\"입니다."
+                }
+              ]
+            },
+            {
+              "type": "rule_line",
+              "marker": "✕",
+              "marker_class": "no",
+              "html": "\"금지하라\""
+            },
+            {
+              "type": "rule_line",
+              "marker": "✓",
+              "marker_class": "yes",
+              "html": "<b>\"숨기지 마라\"</b>"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "그럼 뭘 하라는 거예요?",
+            "goto_index": 3,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 3,
+          "kicker": "요구 사항",
+          "h1": "요구하는 건\n딱 세 가지입니다",
+          "blocks": [
+            {
+              "type": "steps",
+              "html_class": "steps",
+              "items": [
+                {
+                  "n": "1",
+                  "html": "이 가격이 <b>개인화됐다는 사실</b>"
+                },
+                {
+                  "n": "2",
+                  "html": "<b>무엇을 근거</b>로 그랬는지"
+                },
+                {
+                  "n": "3",
+                  "html": "<b>어떤 데이터</b>를 썼는지"
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "이걸 알리지 않으면 법 위반일 가능성이 높다고 봤어요. 그냥 \"고객님만을 위한 가격\"이라고만 하는 것도 안 됩니다.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "style_attr": "margin-top:16px"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "그럼 우버 할증도 이제 안 되나요?",
+            "goto_index": 4,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 4,
+          "kicker": "경계선",
+          "h1": "아니요.\n여기엔 경계선이 있어요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "수요와 공급 때문에 값이 바뀌는 건 해당하지 않습니다. 같은 시간, 같은 동네의 모든 사람에게 똑같이 적용되니까요."
+                },
+                {
+                  "html": "지역 세금 차이, 보험료처럼 개인 위험이 가격의 본질인 경우도 마찬가지예요."
+                }
+              ]
+            },
+            {
+              "type": "quote",
+              "tag": null,
+              "html": "시장 상황 때문에 <b>모두에게</b> 달라지는 가격 — 해당 없음<br>나에 대한 추정 때문에 <b>나에게만</b> 달라지는 가격 — 이번 사안",
+              "quotation_marks_in_text": false,
+              "style_attr": "border-left-color:var(--accent-teal)",
+              "inner_p_style_attr": "font-size:15px",
+              "note": "quote 블록이지만 인용이 아니다. 경계선 정의다. _findings 참조"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "그런데, 반전이 하나 있어요",
+            "goto_index": 5,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 5,
+          "kicker": "반전",
+          "h1": "메릴랜드는\n이미 금지했습니다",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "FTC는 \"금지할 권한이 없다\"고 했죠."
+                },
+                {
+                  "html": "지난 4월 서명된 메릴랜드 법은 다릅니다. 대형 식품매장과 배달업체가 개인 데이터로 값을 올리는 걸 <b>아예 금지</b>해요. 10월 1일부터 시행됩니다."
+                }
+              ]
+            },
+            {
+              "type": "tags_inline",
+              "html_class": "tags-inline",
+              "pills": [
+                {
+                  "modifier": "fed",
+                  "label": "연방·FTC — 공개 의무"
+                },
+                {
+                  "modifier": "state",
+                  "label": "주·메릴랜드 — 금지"
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "뉴욕은 이미 작년 7월부터 표시를 의무화했어요. 연방보다 1년 넘게 빠릅니다.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "그럼 이제 시행되는 건가요?",
+            "goto_index": 6,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          }
+        },
+        {
+          "index": 6,
+          "kicker": "지금 상태",
+          "h1": "아직,\n확정도 아니에요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "이번에 나온 건 '정책안'입니다. FTC 스스로도 \"이건 누구에게도 권리를 주지 않고, 우리를 구속하지도 않는다\"고 써놨어요."
+                },
+                {
+                  "html": "지금은 의견을 받는 중이고, 마감은 9월 25일입니다.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "closing",
+              "html": "그래서 이 이야기의 다음 장은<br>워싱턴이 아니라<br><b>각 주</b>에서 쓰일 가능성이 높습니다."
+            },
+            {
+              "type": "end_actions",
+              "check": "✓ 다 읽었어요",
+              "buttons": [
+                {
+                  "label": "처음부터 다시 보기",
+                  "goto_index": 0
+                },
+                {
+                  "label": "이 설명, 헷갈리는 부분이 있었나요?",
+                  "goto_index": null
+                }
+              ]
+            }
+          ],
+          "teaser": null
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "scroll": "세로 스크롤 스냅 (scroll-snap-type:y mandatory, scroll-snap-stop:always), 슬라이드 = 100dvh",
+    "active_slide_detection": "IntersectionObserver, threshold 0.55",
+    "keyboard": {
+      "next": [
+        "ArrowDown",
+        "ArrowRight",
+        "Space"
+      ],
+      "prev": [
+        "ArrowUp",
+        "ArrowLeft"
+      ]
+    },
+    "teaser_click": "data-goto 인덱스로 scrollIntoView(smooth)"
+  }
+}
