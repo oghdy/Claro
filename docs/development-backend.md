@@ -1,0 +1,87 @@
+# development · backend
+
+## 현재 위치
+**Phase 0 / Step 0.0a — S1 세션 대기**
+
+## Phase 0 — 계약 확정
+계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
+
+| Step | 내용 | 산출 | 세션 | 상태 |
+|---|---|---|---|---|
+| 0.0a | 프로토타입 역산 (있는 그대로) | `fixtures/*.observed.json` | S1 | ☐ |
+| 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ☐ 미작성 |
+| 0.1 | ARTICLE_PACKAGE.md 도출 | 계약 1 | S3 | ☐ 미작성 |
+| 0.2 | DATA_MODEL + CONCEPT_IDENTITY | 계약 2·3 | S4 | ☐ 미작성 |
+| 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ☐ |
+| 0.4~ | 스키마 구현 | 마이그레이션 | Step당 세션 | ☐ |
+
+> **S2~S4 프롬프트는 아직 쓰지 않는다.** 지금 쓰면 아직 모르는 스키마를 가정하게 된다.
+> S1 산출물을 보고 쓴다.
+
+---
+
+## Step 0.0a — 프로토타입 역산
+
+### 세션 개시 프롬프트 (복붙)
+
+```
+prototypes/ 의 슬라이드 프로토타입 2개를 JSON으로 역산해라.
+
+읽을 것 (이것만):
+  CLAUDE.md
+  docs/FINDINGS.md  §4(콘텐츠 모델) §8(UI/UX)
+  docs/content/concept-library.md
+  prototypes/fomc-slides.html
+  prototypes/ftc-slides.html
+
+산출:
+  fixtures/fomc-2026-09.observed.json
+  fixtures/ftc-2026-08.observed.json
+
+이 작업의 정의:
+  HTML에 실제로 있는 구조를 JSON으로 옮기는 것. 그 이상도 이하도 아니다.
+
+하지 말 것:
+  - 고치지 마라. 오류가 보여도 그대로 옮겨라. 교정은 Step 0.0b의 일이다
+  - 스키마를 설계하지 마라. 계약은 Step 0.1에서 이 산출물을 보고 쓴다
+  - docs/contract/ 를 열지 마라. 비어 있는 게 정상이다
+  - 블록 타입을 통합하거나 정리하지 마라. 둘로 보이면 둘로 남겨라
+
+반드시 보존할 것:
+  - h1의 줄바꿈 (작가가 리듬을 지정한 것이다)
+  - <b> 등 인라인 강조
+  - 슬라이드 순서와 장수
+  - kicker 텍스트 (서사 기능 라벨이다. 장식이 아니다)
+  - teaser(open_question)와 그 이동 대상
+  - 입문/숙련이 각각 무엇을 담고 있는지 (부분집합이 아니다)
+
+판단이 필요하면:
+  멈추고 결정하지 마라. 출력 JSON 최상단 "_findings" 배열에 적어라.
+  형식: { "question": "...", "observed": "...", "why_it_matters": "..." }
+  예상되는 것 — 슬라이드와 블록의 층 관계, 비텍스트 블록(게이지/타임라인/
+  표결카드/예시/단계) 표현, 같은 fact가 레벨마다 다른 문장인 경우,
+  인용문이 레벨마다 다르게 잘리는 경우.
+  이 배열이 비어 있으면 대충 한 것이다.
+
+완료하면:
+  logs/backend/phase-0-step-0a.md 에 엔트리 작성
+  커밋: B-0.0a
+```
+
+### 완료 조건
+- [ ] FOMC 입문 8장 / 숙련 5장, FTC 7장이 전부 표현됨
+- [ ] 블록 타입이 18종 이상 등장 (FOMC 13 + FTC 5 — 통합되면 덜 나온다)
+- [ ] `_findings` 가 비어 있지 않다
+- [ ] 검증: `observed.json` 의 슬라이드 수·순서가 원본 HTML과 일치
+- [ ] 로그 작성 / 커밋
+- [ ] 완료일:
+
+### PM 확인 사항 (S1 종료 후)
+- `_findings` 를 DECISIONS.md 로 승격할 것과 S3로 넘길 것 분류
+- 블록 타입 통합이 일어났는지 확인 (일어났으면 정보 손실)
+
+---
+
+## 계약 변경 요청 (프론트 → 백엔드)
+<!-- 프론트 세션은 계약 파일을 직접 고치지 않고 여기에 적는다 -->
+없음
