@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.0b — S2 산출 커밋 (2026-09-21) · 도윤 에디토리얼 게이트 대기**
+**Phase 0 / Step 0.0b — 게이트 결과 반영 (2026-09-21) · Q3·Q4 미답, 최종 승인 대기**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -9,7 +9,7 @@
 | Step | 내용 | 산출 | 세션 | 상태 |
 |---|---|---|---|---|
 | 0.0a | 프로토타입 역산 (있는 그대로) | `fixtures/*.observed.json` | S1 | ☑ 2026-09-20 |
-| 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ◐ S2 산출 커밋 · 게이트 대기 |
+| 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ◐ 게이트 결과 반영 · 승인 대기 |
 | 0.1 | ARTICLE_PACKAGE.md 도출 | 계약 1 | S3 | ☐ 미작성 ⚠️D11 |
 | 0.2 | DATA_MODEL + CONCEPT_IDENTITY | 계약 2·3 | S4 | ☐ 미작성 |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ☐ |

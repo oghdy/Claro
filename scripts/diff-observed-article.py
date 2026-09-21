@@ -3,7 +3,8 @@
     python3 scripts/diff-observed-article.py
 
 독자에게 보이는 단위(kicker · h1 · 블록 안 문장/행/카드 · teaser)와 블록 속성(variant, style, modifier)을
-비교한다. "_" 로 시작하는 주석 필드는 비교하지 않는다. 슬라이드는 kicker+h1 로 정렬하고,
+비교한다. "_" 로 시작하는 주석 필드는 비교하지 않는다. 슬라이드는 h1 으로 정렬하고
+(kicker 는 바뀔 수 있다 — 게이트에서 ①①②→①②③), 덱 안에서 h1 이 겹치면 멈춘다.
 index / goto_index 가 밀리기만 한 것은 따로 "기계적" 으로 표시한다.
 """
 import difflib, json, os, sys
@@ -54,7 +55,7 @@ def units(s):
 
 
 def key(s):
-    return (s['kicker'], s['h1'])
+    return s['h1']
 
 
 def main():
@@ -64,6 +65,10 @@ def main():
     total = {'changed': 0, 'added': 0, 'removed': 0}
     for lo, la in zip(obs['levels'], art['levels']):
         so, sa = lo['slides'], la['slides']
+        for deck in (so, sa):
+            hs = [key(s) for s in deck]
+            if len(hs) != len(set(hs)):
+                sys.exit(f"{la['id']}: h1 이 겹쳐 슬라이드를 정렬할 수 없다")
         print(f"\n=== {la['id']} ({la.get('label')})  observed {len(so)}장 → article {len(sa)}장 ===")
         sm = difflib.SequenceMatcher(a=[key(s) for s in so], b=[key(s) for s in sa], autojunk=False)
         for op, i1, i2, j1, j2 in sm.get_opcodes():

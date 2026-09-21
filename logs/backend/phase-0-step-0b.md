@@ -341,3 +341,284 @@ S3 가 볼 만한 관찰:
 - [x] invalid 2건, 각각 위반 정확히 1개 — `verify-article.py` (골든과 1군데 차이 + 선언 code 로만 거부)
 - [ ] **게이트: 도윤 승인**
 - [ ] 완료일
+
+
+---
+
+## B-0.0b · 2026-09-21 · 게이트 결과 반영
+
+### 게이트 결과 (도윤)
+| 질문 | 결과 | 반영 |
+|---|---|---|
+| Q5 D15 QA② (teaser → 다음 장이 답하나) | **통과** | 흐름·슬라이드 순서·teaser 변경 없음 |
+| Q1 kicker | **①②③** | 입문 4장 ①→②, 입문 5장 ②→③ |
+| Q2 #2 대안 | REFRESHER 유지, **문안은 라이브러리에서 교체** | C-0005 v2 REFRESHER 를 골든에 반영 |
+| (추가) C-0002 FULL ④ | "지금 미국은 3%대입니다" **삭제** — 시점 종속, Concept Atom 규칙 위반 | 라이브러리에서만 삭제. 골든 본문엔 그대로 두고 concept 출처 표시만 뗌 |
+| (추가) "그 차의 브레이크" | 그대로 | 변경 없음 |
+| Q3 "201일째" · Q4 `_published_at` | **답 없음** | 현 상태 유지 (UNVERIFIABLE 표시 / 2026-09-16) |
+
+### 바뀐 것
+- `docs/content/concept-library.md`
+  - 파일 상단 `## CHANGELOG` 신설, 한 줄
+  - C-0002 FULL ④ 에서 "그런데 지금 미국은 3%대입니다." 삭제 → ④ = "목표보다 빠르게 오르고 있어요."
+  - C-0005 REFRESHER → "표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다. 그래서 두 숫자가 다릅니다."
+  - 두 항목 `version` v1 → **v2 (2026-09-21)**. 지시에는 없었지만 라이브러리 운영 규칙 4("설명 문구가 바뀌면 version 을 올린다")를 따랐다.
+    v1 문안은 CHANGELOG 줄에 인용해 두었다
+- `fixtures/fomc-2026-09.article.json`
+  - kicker ①①② → ①②③
+  - 숙련 4장 dim 문단 첫 문장 → C-0005 v2 REFRESHER (한 문장 → 두 문장)
+  - 입문 4장 "그런데 지금 미국은 3%대입니다." — **본문 그대로**. `_fact_refs` 에서 `concept: C-0002` 를 뗐다. refs `F31` · kind `fact` 는 유지
+  - `_source.gate` 갱신
+- `fixtures/invalid/*.json` — 새 골든에서 다시 만들었다. 주입한 위반은 전과 같다
+- `scripts/diff-observed-article.py` — 슬라이드 정렬 키를 kicker+h1 → **h1** 로. kicker 가 바뀌자 브레이크 장(obs[3])이
+  신규 장(art[3])과 짝지어지는 오정렬이 났다. 덱 안에서 h1 이 겹치면 멈추게 했다
+- `logs/correction-log.csv` — **건드리지 않았다.** #1·#2 행의 what_i_changed 는 게이트 전 상태다(kicker ①①, REFRESHER v1).
+  게이트 결과를 CSV 에 반영하는 건 dev 문서에 PM 확인 사항으로 올라 있다
+
+### 검증 — 출력 그대로
+
+```
+$ python3 scripts/verify-article.py
+PASS  fixtures/fomc-2026-09.article.json
+   WARN  basic[7] blocks/0/paragraphs/0 "반년 넘게": DERIVED 출처 ['war_start'] 가 브리프 밖
+   WARN  adv[4] blocks/0/paragraphs/0 "201일째": DERIVED 불변식 검증 불가 — 개전일이 브리프에 없고 기사 안 출처("2월 말")는 기간이다. 2/28 이면 201, 2/21 이면 208
+   WARN  adv[4] blocks/0/paragraphs/0 "201일째": DERIVED 출처 ['war_start'] 가 브리프 밖
+PASS  fixtures/invalid/derived-from-volatile.json  — 거부 기대 DERIVED_FROM_VOLATILE
+   검출: ['DERIVED_FROM_VOLATILE']
+   DERIVED_FROM_VOLATILE: basic[6] blocks/1/paragraphs/1 "3주 뒤에": 출처 ['minutes'] 가 STABLE 이 아니다 — D8 규칙 4: VOLATILE 로 강등해야 한다
+   골든과 다른 곳 1군데: ['/levels/0/slides/6/_volatility/2/derived_from/0/volatility']
+PASS  fixtures/invalid/volatile-missing-asof.json  — 거부 기대 VOLATILE_MISSING_AS_OF
+   검출: ['VOLATILE_MISSING_AS_OF']
+   VOLATILE_MISSING_AS_OF: basic[3] blocks/0/paragraphs/1 "지금 미국은 3%대": VOLATILE 인데 as_of 가 없다 (D8)
+   골든과 다른 곳 1군데: ['/levels/0/slides/3/_volatility/0/as_of']
+
+OK
+exit=0
+```
+
+```
+$ python3 scripts/verify-observed.py
+fixtures/fomc-2026-09.observed.json
+  슬라이드 수  HTML 13 / JSON 13  -> 일치
+  레벨별 장수  basic=8, adv=5
+  텍스트 대조  불일치 0장 
+  h1 줄바꿈    전부 1개
+  teaser       11장 보유 / goto는 전부 index+1: True / teaser 없는 장: [7, 4]
+  블록 타입    9종 ['body_text', 'callout', 'closing', 'end_actions', 'gauge', 'quote', 'stats', 'timeline', 'votes']
+  DOM signature 14종
+  _findings    22건
+fixtures/ftc-2026-08.observed.json
+  슬라이드 수  HTML 7 / JSON 7  -> 일치
+  레벨별 장수  only=7
+  텍스트 대조  불일치 0장 
+  h1 줄바꿈    전부 1개
+  teaser       6장 보유 / goto는 전부 index+1: True / teaser 없는 장: [6]
+  블록 타입    8종 ['body_text', 'closing', 'end_actions', 'examples', 'quote', 'rule_line', 'steps', 'tags_inline']
+  DOM signature 11종
+  _findings    17건
+
+두 파일 블록 타입 합집합: 13종
+PASS — 슬라이드 수·순서·본문 텍스트가 원본 HTML과 일치
+exit=0
+```
+
+```
+$ python3 scripts/diff-observed-article.py
+
+=== basic (입문)  observed 8장 → article 9장 ===
+
+ obs[0] → art[0]  본문 변경 없음
+
+ obs[1] → art[1]  본문 변경 없음
+
+ obs[2] → art[2]  ■ 변경
+    - b0 body_text[small] p0             자동차 속도계를 떠올려보세요. 연준이 보는 숫자는 물건이 얼마나 비싼가가 아니라 <b>1년에 몇 퍼센트씩 오르고 있는가</b>입니다.
+    - b1 gauge marks                     33 62
+    - b1 gauge l0.target@33              <b>2%</b> 연준이 원하는 속도
+    - b1 gauge l1.now@62                 <b>3%대</b> 지금 미국
+    - b2 body_text[small][margin-top:4px] p0.dim 그리고 이 속도는 여름 내내 크게 줄지 않았어요.
+    - teaser                             Q 그럼 금리는 뭔가요?
+    + b0 body_text[small] p0             라면이 2000원이라고 해봅시다. 작년엔 1900원이었어요. “라면이 2000원이다”는 그냥 가격입니다. “라면값이 작년보다 5% 올랐다”는 오르는 속도예요.
+    + b0 body_text[small] p1             연준이 보는 건 첫 번째가 아니라 두 번째입니다. 라면이 얼마인지는 보지 않아요. <b>얼마나 빠르게 비싸지고 있는지</b>를 봅니다.
+    + teaser                             Q 그럼 어느 속도가 적당한 거죠?
+
+ (없음) → art[3]  ■ 새 슬라이드
+    + kicker                             이것만 알고 가면 돼요 ②
+    + h1                                 연준이 원하는 속도는⏎1년에 2%예요
+    + b0 body_text[small] p0             연준은 이 속도가 1년에 <b>2%</b> 정도면 적당하다고 봅니다. 아예 안 오르는 것도 원하지 않고, 딱 2%예요.
+    + b0 body_text[small] p1             그런데 지금 미국은 3%대입니다. 목표보다 빠르게 오르고 있어요.
+    + b0 body_text[small] p2             자동차 속도계에 빗댈 수 있습니다. 계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.
+    + b1 gauge marks                     33 62
+    + b1 gauge l0.target@33              <b>2%</b> 연준이 원하는 속도
+    + b1 gauge l1.now@62                 <b>3%대</b> 지금 미국
+    + b2 body_text[small][margin-top:4px] p0.dim 그리고 이 속도는 여름 내내 크게 줄지 않았어요.
+    + teaser                             Q 그럼 금리는 뭔가요?
+
+ obs[3] → art[4]  ■ 변경  (기계적: index 3→4, goto 4→5)
+    - kicker                             이것만 알고 가면 돼요 ②
+    + kicker                             이것만 알고 가면 돼요 ③
+
+ obs[4] → art[5]  본문 변경 없음  (기계적: index 4→5, goto 5→6)
+
+ obs[5] → art[6]  본문 변경 없음  (기계적: index 5→6, goto 6→7)
+
+ obs[6] → art[7]  본문 변경 없음  (기계적: index 6→7, goto 7→8)
+
+ obs[7] → art[8]  본문 변경 없음  (기계적: index 7→8)
+
+=== adv (숙련)  observed 5장 → article 5장 ===
+
+ obs[0] → art[0]  본문 변경 없음
+
+ obs[1] → art[1]  본문 변경 없음
+
+ obs[2] → art[2]  본문 변경 없음
+
+ obs[3] → art[3]  ■ 변경
+    - b0 stats r4.up                     2026년 PCE 전망 (3월 2.7%) | 3.7%
+    + b0 stats r4.up                     2026년 헤드라인 PCE 전망 (3월 2.7%) | 3.7%
+    - b1 body_text[small][margin-top:14px] p1.dim 2027년에 추가 인상을 찍은 dot은 8개뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.
+    + b1 body_text[small][margin-top:14px] p1.dim 표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다. 그래서 두 숫자가 다릅니다. 2027년에 추가 인상을 찍은 참가자는 8명뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.
+
+ obs[4] → art[4]  본문 변경 없음
+
+요약: 본문이 바뀐 슬라이드 [('basic', 2), ('basic', 3), ('basic', 4), ('adv', 3)]
+      - 단위 9개 / + 단위 16개 (슬라이드 삭제 0)
+exit=0
+```
+
+diff 요약: 본문이 바뀐 슬라이드는 입문 3장(#1) · 입문 4장 신규(#1 + kicker) · 입문 5장(kicker 만) · 숙련 4장(#2 #3 #4).
+입문 5장 "금리는 그 차의 브레이크예요"는 kicker 외 변경 없음.
+
+### 추가 확인 — 일회성 (스크립트 아님, 커밋 안 함)
+
+[1] 은 게이트 전 골든(b59bc1a)과의 leaf diff 다. 숙련 4장 `_fact_refs/10~12` 는 주석 하나가 앞에 끼면서 **밀린 것**이고
+F13 · F20 주석 자체는 바뀌지 않았다. [2] 는 `concept` 가 붙은 span 이 라이브러리 v2 인용 블록 안에 글자 그대로 있는지 본 것이다
+(굽은/곧은 따옴표·`<b>`·`**`·공백은 무시).
+
+```
+[1] 골든 게이트 전(b59bc1a) ↔ 후 — 바뀐 leaf
+  /_source/gate
+    - PENDING — 도윤 에디토리얼 게이트 통과 전
+    + 게이트 결과 반영 2026-09-21 (Q5 통과 · kicker ①②③ · C-0002/C-0005 v2). 최종 승인 대기
+  /levels/0/slides/3/_fact_refs/3/concept
+    - C-0002
+    + ∅
+  /levels/0/slides/3/_fact_refs/3/note
+    - FULL ④ 문안. 개념 문안이 현재 상태를 말한다 — §4.3 기준으로는 Bridge
+    + C-0002 v2 에서 삭제된 문장(시점 종속 — Concept Atom 규칙 위반). 본문엔 그대로 두지만 더는 Concept Atom 출처가 아니다. 소속(Bridge)을 표시할 필드가 없다 — 로그 "SPEC과 어긋난 것"
+  /levels/0/slides/3/_fact_refs/4/note
+    - FULL ④
+    + FULL ④ — v2 에 남은 문장
+  /levels/0/slides/3/kicker
+    - 이것만 알고 가면 돼요 ①
+    + 이것만 알고 가면 돼요 ②
+  /levels/0/slides/4/kicker
+    - 이것만 알고 가면 돼요 ②
+    + 이것만 알고 가면 돼요 ③
+  /levels/1/slides/3/_fact_refs/9/note
+    - 교정 #2 — C-0005 REFRESHER. "참가자 전원"은 규칙 서술이고 이번엔 의장이 내지 않았다(F20, 두 문장 뒤). §1.2 기준 확장 가능 단순화
+    + 교정 #2 — C-0005 v2 REFRESHER (게이트)
+  /levels/1/slides/3/_fact_refs/9/span
+    - 표결은 12명, 전망 제출은 참가자 전원이라 인원이 다릅니다.
+    + 표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다.
+  /levels/1/slides/3/_fact_refs/10/concept
+    - ∅
+    + C-0005
+  /levels/1/slides/3/_fact_refs/10/kind
+    - fact
+    + concept
+  /levels/1/slides/3/_fact_refs/10/note
+    - 교정 #4 — dot/명 → 참가자/명
+    + C-0005 v2 REFRESHER. "두 숫자"의 다른 하나(18)는 같은 슬라이드 표에 있다
+  /levels/1/slides/3/_fact_refs/10/refs/0
+    - F13
+    + ∅
+  /levels/1/slides/3/_fact_refs/10/span
+    - 2027년에 추가 인상을 찍은 참가자는 8명뿐, 4명은 오히려 인하를 봤습니다.
+    + 그래서 두 숫자가 다릅니다.
+  /levels/1/slides/3/_fact_refs/11/note
+    - ∅
+    + 교정 #4 — dot/명 → 참가자/명
+  /levels/1/slides/3/_fact_refs/11/refs/0
+    - F20
+    + F13
+  /levels/1/slides/3/_fact_refs/11/span
+    - 의장은 이번에도 자기 전망치를 제출하지 않았고요.
+    + 2027년에 추가 인상을 찍은 참가자는 8명뿐, 4명은 오히려 인하를 봤습니다.
+  /levels/1/slides/3/_fact_refs/12/kind
+    - ∅
+    + fact
+  /levels/1/slides/3/_fact_refs/12/refs/0
+    - ∅
+    + F20
+  /levels/1/slides/3/_fact_refs/12/span
+    - ∅
+    + 의장은 이번에도 자기 전망치를 제출하지 않았고요.
+  /levels/1/slides/3/_fact_refs/12/where
+    - ∅
+    + blocks/1/paragraphs/1
+  /levels/1/slides/3/blocks/1/paragraphs/1/html
+    - 표결은 12명, 전망 제출은 참가자 전원이라 인원이 다릅니다. 2027년에 추가 인상을 찍은 참가자는 8명뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.
+    + 표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다. 그래서 두 숫자가 다릅니다. 2027년에 추가 인상을 찍은 참가자는 8명뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.
+
+[2] concept 으로 표시된 span 이 concept-library(v2) 문안에 그대로 있는가
+  문안 아님  basic[2] C-0002 h1                     연준이 보는 건 물가가 아니라 속도예요  ← h1/라벨: 라이브러리 문안을 조합·요약한 것
+  문안 일치  basic[2] C-0002 blocks/0/paragraphs/0  라면이 2000원이라고 해봅시다.
+  문안 일치  basic[2] C-0002 blocks/0/paragraphs/0  작년엔 1900원이었어요.
+  문안 일치  basic[2] C-0002 blocks/0/paragraphs/0  “라면이 2000원이다”는 그냥 가격입니다.
+  문안 일치  basic[2] C-0002 blocks/0/paragraphs/0  “라면값이 작년보다 5% 올랐다”는 오르는 속도예요.
+  문안 일치  basic[2] C-0002 blocks/0/paragraphs/1  연준이 보는 건 첫 번째가 아니라 두 번째입니다.
+  문안 일치  basic[2] C-0002 blocks/0/paragraphs/1  라면이 얼마인지는 보지 않아요.
+  문안 일치  basic[2] C-0002 blocks/0/paragraphs/1  얼마나 빠르게 비싸지고 있는지를 봅니다.
+  문안 아님  basic[3] C-0002 h1                     연준이 원하는 속도는 1년에 2%예요  ← h1/라벨: 라이브러리 문안을 조합·요약한 것
+  문안 일치  basic[3] C-0002 blocks/0/paragraphs/0  연준은 이 속도가 1년에 2% 정도면 적당하다고 봅니다.
+  문안 일치  basic[3] C-0002 blocks/0/paragraphs/0  아예 안 오르는 것도 원하지 않고, 딱 2%예요.
+  문안 일치  basic[3] C-0002 blocks/0/paragraphs/1  목표보다 빠르게 오르고 있어요.
+  문안 일치  basic[3] C-0002 blocks/0/paragraphs/2  자동차 속도계에 빗댈 수 있습니다.
+  문안 일치  basic[3] C-0002 blocks/0/paragraphs/2  계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.
+  문안 아님  basic[3] C-0003 blocks/1/labels/0      2% 연준이 원하는 속도  ← h1/라벨: 라이브러리 문안을 조합·요약한 것
+  문안 아님  basic[4] C-0001 h1                     금리는 그 차의 브레이크예요  ← h1/라벨: 라이브러리 문안을 조합·요약한 것
+  문안 일치  basic[4] C-0001 blocks/0/paragraphs/0  금리가 올라가면 돈을 빌리는 일이 비싸집니다.
+  문안 일치  basic[4] C-0001 blocks/0/paragraphs/0  집을 사려고 대출을 받거나, 기업이 새 사업에 투자하기가 부담스러워져요.
+  문안 일치  basic[4] C-0001 blocks/0/paragraphs/1  사람들이 지갑을 덜 열면 경제가 달리는 속도가 느려지고, 물가가 오르는 속도도 따라서 
+  문안 일치  adv[3] C-0005 blocks/1/paragraphs/1  표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다.
+  문안 일치  adv[3] C-0005 blocks/1/paragraphs/1  그래서 두 숫자가 다릅니다.
+
+  삭제된 C-0002 문장 "그런데 지금 미국은 3%대입니다." — 골든 주석의 concept: [('basic', 3, None)]  / v2 문안에 있나: False
+```
+
+- 본문 문장 17개는 v2 문안과 일치한다. **삭제된 C-0002 문장은 더 이상 concept 출처로 표시돼 있지 않다.**
+- "문안 아님" 4개는 전부 h1·게이지 라벨이다 — 라이브러리 문안을 조합·요약한 것이라 원래부터 글자 그대로가 아니었다
+- 이 검사를 `verify-article.py` 에 넣으면 다음 라이브러리 수정 때 골든과의 어긋남이 자동으로 잡힌다. 이번엔 재실행만 지시받아 넣지 않았다
+
+### ⚠️ 레이아웃 — 숙련 4장이 teaser 와 겹친다
+
+C-0005 v2 REFRESHER 는 두 문장이라 S2 의 한 문장보다 길다. 같은 방식(프로토타입 CSS, 글자 영역 기준)으로 다시 쟀다.
+teaser 점선까지 남는 여백(px):
+
+| 뷰포트 | observed | S2 (REFRESHER v1) | **게이트 후 (v2)** |
+|---|---|---|---|
+| 375×812 | 23 | 0 | **−12 (겹침)** |
+| 390×844 | 38 | 14 | **3** |
+
+S2 가 "375×812 에서 겹친다"는 이유로 기각했던 FULL 두 문장과 **같은 수치**다. 다른 슬라이드는 변화 없음(입문 전부 ≥ 49).
+"흐름은 바꾸지 말 것"이라 분할·삭제는 하지 않았다. §8.5(시각 요소 크기)가 미정이라 프론트에서 풀 수도 있다.
+
+### SPEC과 어긋난 것
+
+1. **"지금 미국은 3%대" 의 소속을 표시할 곳이 없다.** FINDINGS §4.1 에는 `CONCEPT_BRIDGE`(개념 → 오늘 사건)가 있고,
+   이 문장이 정확히 그것이다(C-0002 의 속도 개념을 오늘 미국 수치에 잇는다). 그런데 `_fact_refs.kind` 어휘
+   (fact · partial · derived_claim · concept · writing · brief_text · unsupported)에 Bridge 가 없다.
+   지시대로 필드를 만들지 않았다. 지금은 `kind: fact`, `refs: [F31]`, `concept` 없음, note 로만 적혀 있다
+2. **concept 버전 pin 이 없다.** §4.3 / 라이브러리 규칙 4: "기사는 발행 당시 버전을 pin 한다". 골든의 `concept`·`_concept_ref` 는
+   ID 만 갖는다. 이번 게이트로 C-0002·C-0005 가 v2 가 됐고 골든 문안도 v2 와 맞지만, 파일만 봐서는 어느 버전을 썼는지 알 수 없다.
+   필드는 만들지 않았다
+3. **C-0002 v2 ④ 에 남은 문장도 시점 종속이다.** "목표보다 빠르게 오르고 있어요." 는 지금 상태에 대한 서술이고,
+   단계 제목도 "④ 지금 상태"다. 삭제 이유(Concept Atom 은 시간에 독립적)가 그대로 적용된다.
+   또 FULL 머리의 "반드시 4단계로 나눠 제시한다"와 🚨 노트("4단계를 먼저 제시한 뒤에만")는 이제 주어 없는 한 문장짜리 ④ 를 가리킨다.
+   지시받은 문장만 지웠다. 골든은 이 문장을 여전히 C-0002 출처로 표시한다
+4. `concept` 표시가 "글자 그대로 옮김"과 "조합·요약"을 구분하지 않는다(위 [2] 의 h1·라벨 4개). 원문 대조(§5.5)를 concept 문안에도 적용하려면 구분이 필요하다
+
+### 상태
+Q3 · Q4 가 미답이라 dev 문서의 **게이트 승인 · 완료일 체크는 하지 않았다.** 도윤이 한다.
