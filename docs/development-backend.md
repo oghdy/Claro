@@ -9,7 +9,7 @@
 | Step | 내용 | 산출 | 세션 | 상태 |
 |---|---|---|---|---|
 | 0.0a | 프로토타입 역산 (있는 그대로) | `fixtures/*.observed.json` | S1 | ☑ 2026-09-20 |
-| 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | 🔒 D15 대기 |
+| 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ☐ 프롬프트 준비됨 · 게이트 필수 |
 | 0.1 | ARTICLE_PACKAGE.md 도출 | 계약 1 | S3 | ☐ 미작성 ⚠️D11 |
 | 0.2 | DATA_MODEL + CONCEPT_IDENTITY | 계약 2·3 | S4 | ☐ 미작성 |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ☐ |
@@ -97,6 +97,99 @@ S1 이 PM.md 를 읽지 않고도 속도계 오류(FOMC-16)를 독립적으로 �
 
 ---
 
+## Step 0.0b — 오류 교정 → 골든 픽스처
+
+### 세션 개시 프롬프트 (복붙)
+
+```
+fixtures/fomc-2026-09.observed.json 을 교정해 골든 픽스처를 만들어라.
+
+읽을 것 (이것만):
+  CLAUDE.md
+  docs/DECISIONS.md                      D8 · D9 · D13 · D15 · D16
+  docs/FINDINGS.md                       §4.5(한 문장에 개념 하나) §7.7(편집 규칙)
+  docs/content/concept-library.md        C-0002 · C-0005
+  docs/findings/fomc-2026-09-brief.md    사실 ID(F01~)와 출처
+  fixtures/fomc-2026-09.observed.json
+
+산출:
+  fixtures/fomc-2026-09.article.json            골든
+  fixtures/invalid/volatile-missing-asof.json
+  fixtures/invalid/derived-from-volatile.json
+  logs/correction-log.csv                       교정 1건당 1줄 append
+  logs/backend/phase-0-step-0b.md
+
+교정 대상 — 이 다섯 개만 고친다:
+  1. 입문 3장 속도계.
+     C-0002 는 "4단계를 먼저 제시한 뒤에만 비유를 쓴다"고 못박았다.
+     observed 는 4단계 없이 비유가 먼저 나온다. 실제 독자가 이해하지 못한 그 형태다.
+  2. 숙련 1장 "12 : 0" 과 숙련 4장 "18명 중 16명"이 설명 없이 나란히 나온다.
+     C-0005 가 "독자가 반드시 멈춘다"고 금지한 패턴이다.
+  3. 숙련 4장 "2026년 PCE 전망 3.7%" 에 헤드라인/근원 표기가 없다.
+     브리프 F15(헤드라인 3.7%) / F16(근원 3.4%). 사실 충돌이 아니라 라벨 누락이다.
+  4. 숙련 4장 "dot 은 8개뿐, 4명은 오히려" — 같은 것을 세는 단위가 한 문장에 둘이다.
+  5. 발행 시점에 고정된 시간 표현 ("201일째", "3주 뒤" 등). D8 을 적용한다.
+
+교정 원칙:
+  - 최소 변경. 교정이지 재집필이 아니다. 위 다섯 개와 무관한 문장은 건드리지 마라
+  - 새 사실을 만들지 마라. 브리프에 있는 사실만 쓴다
+  - 새 문장이 필요하면 concept-library 의 FULL / REFRESHER 문안을 먼저 가져다 쓴다
+  - 고치는 방법이 둘 이상이면 (예: 2번 — 개념 설명 추가 vs 인원수 행을 빼고
+    §7.7 대로 중앙값 비교만 남기기) 가장 작은 변경을 적용하고,
+    대안을 correction-log 에 같이 적어라. 최종 선택은 도윤이 게이트에서 한다
+  - 장수가 늘어나도 된다. 늘어난 슬라이드도 D15 를 지켜야 한다:
+    마지막 제외 모든 슬라이드에 teaser 가 있고, 다음 슬라이드가 그 질문에 답한다
+
+구조에 대해:
+  - observed 의 구조를 그대로 쓴다. 스키마를 새로 설계하지 마라
+  - 교정하면서 필요해진 정보(사실 출처, volatility, 개념 참조)는
+    "_" 로 시작하는 주석 필드로 붙여라. 예: "_fact_refs", "_volatility", "_concept_ref"
+    무엇을 정식 필드로 올릴지는 다음 Step 이 정한다
+  - 슬라이드 문장이 브리프의 어느 사실에도 대응하지 않으면
+    "_fact_refs" 를 비우고 로그에 적어라. 그게 이 작업의 부산물 중 가장 중요하다
+  - observed 의 _findings / _dom_inventory / _transcription_notes 는 가져오지 마라.
+    골든은 깨끗해야 한다 (D9)
+
+invalid fixture:
+  골든을 복사하고 위반을 딱 하나만 주입해라. 무엇을 위반했는지 "_violation" 에 적어라.
+    volatile-missing-asof   VOLATILE 인 값에서 as_of 를 뺀다
+    derived-from-volatile   DERIVED 값의 출처 중 하나를 VOLATILE 로 바꾼다
+  FOMC 에 자연스러운 VOLATILE 사례가 없으면 만들어도 된다. invalid 는 원래 인공적이다.
+
+correction-log.csv:
+  error_type 은 기존 5종(팩트 누락 / Goal 왜곡 / 오독 미방어 / 스토리라인 stale / 압축)
+  중에서 고르되, 맞는 게 없으면 억지로 넣지 말고 새 이름을 쓰고 로그에 이유를 적어라.
+  time_spent_min 은 비워라. 도윤의 게이트 시간을 적는 칸이다.
+
+하지 말 것:
+  - 다섯 개 외의 교정. 다른 문제가 보이면 로그에 적고 넘어가라
+  - resolves 필드 만들기 (D15)
+  - docs/contract/ 열기
+  - FTC 건드리기. 골든은 FOMC 만이다
+
+완료하면:
+  observed ↔ article 의 슬라이드별 diff 를 로그에 붙여라
+  scripts/ 에 검증 스크립트를 남겨라 (최소: D15 QA① + 골든에 _findings 가 없는지)
+  커밋: B-0.0b [GATE]
+  → 도윤 에디토리얼 게이트를 통과해야 완료다. 세션이 완료를 선언하지 마라
+```
+
+### 완료 조건
+- [ ] 교정 5건 전부 반영, 각각 correction-log 1줄
+- [ ] 다섯 개 외 문장 변경 없음 (diff 로 확인)
+- [ ] 마지막 제외 모든 슬라이드에 teaser (D15 QA①) — 스크립트로
+- [ ] 골든에 `_findings` · `_dom_inventory` · `_transcription_notes` 없음 — 스크립트로
+- [ ] invalid 2건, 각각 위반 정확히 1개
+- [ ] **게이트: 도윤 승인** — 교정 vs 재집필 경계, 2번 대안 선택
+- [ ] 완료일:
+
+### PM 확인 사항 (S2 종료 후)
+- `_fact_refs` 가 빈 문장 목록 — 사실 누락인지 작가가 지어낸 건지 분류
+- `_` 주석 필드 목록 → S3 입력으로 정리
+- 게이트 결과를 correction-log 에 반영
+
+---
+
 ## Step 0.1 이 답해야 할 findings (S3)
 프롬프트는 S2 종료 후 작성. 지금은 배정만 기록한다.
 
@@ -108,8 +201,8 @@ S1 이 PM.md 를 읽지 않고도 속도계 오류(FOMC-16)를 독립적으로 �
 | FOMC-10 | `slide_count` 는 데이터인가 파생값인가 (완독 측정 기준값) |
 | FOMC-11 | 같은 인용이 레벨마다 다르게 잘린다. fact 하나에 레벨별 표현인가 |
 | FOMC-12 | 레벨은 필터가 아니라 별도 선택이다. 계약이 어떻게 담나 |
-| FOMC-13 | 한 슬라이드에 질문이 둘일 때 (본문 수사의문문 + teaser) §8.2 를 어떻게 세나 |
 | FOMC-14 | gauge 는 값을 받나 위치를 받나. 축 기준은 어디에 |
+| FOMC-17 | 비유와 한계선이 데이터상 한 단위인가. 속도계 한계선이 5장 뒤에 있다 (S2 에서 이관) |
 | FOMC-20 | 마지막 슬라이드 probe 진입점이 입문에만 있다. 레벨별로 다르게 두나 |
 | FOMC-22 | timeline `when` 이 날짜와 기간 라벨("9월 초")을 섞는다 |
 | FTC-11 | `quote` 가 인용이 아닌 데 쓰인다. §8.4 소스 레이어 구분이 깨진다 |
@@ -134,7 +227,8 @@ S1 이 PM.md 를 읽지 않고도 속도계 오류(FOMC-16)를 독립적으로 �
 | FOMC-21 | 레벨 전환 시 `scrollTop=0`. "몇 장에서 이탈"(§8.3) 측정과 충돌 | 프론트 레인 + 관찰 인프라 |
 | FOMC-5 | 블록 타입 재사용률 0% | **D14** |
 | FOMC-1 | 슬라이드/블록 2층 | **D13 확정** |
-| FOMC-2 | `resolves` 부재 | **D15** |
+| FOMC-2 | `resolves` 부재 | **D15 확정** — 필드 없음, 선형 불변식 |
+| FOMC-13 | 한 슬라이드에 질문 둘 | **D16 확정** — teaser 만 센다 |
 
 **S1이 먼저 봐달라고 올리는 것** (자세한 내용은 `logs/backend/phase-0-step-0a.md`)
 - 프로토타입이 concept-library를 이미 위반한 건 2개. **0.0b 골든에 그대로 들어가면 안 된다.**
