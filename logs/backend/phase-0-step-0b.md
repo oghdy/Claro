@@ -622,3 +622,112 @@ S2 가 "375×812 에서 겹친다"는 이유로 기각했던 FULL 두 문장과 
 
 ### 상태
 Q3 · Q4 가 미답이라 dev 문서의 **게이트 승인 · 완료일 체크는 하지 않았다.** 도윤이 한다.
+
+
+---
+
+## B-0.0b · 2026-09-21 · 게이트 반영 (PM 추가 지시)
+
+게이트 3 통과, 판정자 도윤, 2026-09-21
+
+### 지시별 처리
+| # | 지시 | 처리 |
+|---|---|---|
+| 1 | kicker 입문 3·4·5장 ①②③ | **이미 반영돼 있었다** (0ca16ee). 다시 확인만 함 |
+| 2 | C-0002 ④ 가 번지는 곳 | 골든 입문 4장 문장은 **본문 그대로**, concept 출처 표시만 뗀 상태(0ca16ee, 직전 지시 "본문에 그대로 둔다")를 유지. ANALOGY "계기판 숫자가 지금 오르는 속도"는 0.0b 생성 이후 변경 이력 없음. 이번 커밋에서 골든 `_source.gate` 를 바꿨으므로 invalid 2건을 새 골든에서 다시 만들었다 — 아래 검증에서 각각 골든과 1군데 차이 |
+| 3 | correction-log 2행 | C-0005: 지시 문안 그대로, what_was_wrong 앞에만 "C-0005" 를 붙였다(행만 봐서는 어느 REFRESHER 인지 알 수 없어서). C-0002 ④: 아래 |
+| 4 | 로그 한 줄 | 위 |
+| 5 | 스크립트 재실행 · dev 문서 체크 · 커밋 · push | 아래 |
+
+### C-0002 ④ 의 error_type — "레이어 혼입" (7종에 없음)
+가장 가까운 건 **시점 앵커 누락**이다. 증상은 같다 — 기준 시각 없이 현재 상태를 말하고, 지금은 틀리지 않았다.
+그런데 **처방이 다르다.** 시점 앵커 누락은 앵커를 달면 고쳐진다(S2 #5 가 그렇게 했다).
+이 문장은 앵커를 달아도 안 된다 — Concept Atom 은 기사마다 재사용되므로 어떤 앵커를 달든 낡은 사실이 이후 기사로 번진다.
+§4.3 대로 Concept 층에서 빼야 하는 오류다. 같은 유형으로 묶으면 "앵커를 달면 된다"는 처방이 따라오므로 새 이름을 썼다.
+`docs/development-content.md` 의 유형 표에는 추가하지 않았다(콘텐츠 레인 문서).
+
+### 검증 — 출력 그대로
+
+```
+$ python3 scripts/verify-article.py
+PASS  fixtures/fomc-2026-09.article.json
+   WARN  basic[7] blocks/0/paragraphs/0 "반년 넘게": DERIVED 출처 ['war_start'] 가 브리프 밖
+   WARN  adv[4] blocks/0/paragraphs/0 "201일째": DERIVED 불변식 검증 불가 — 개전일이 브리프에 없고 기사 안 출처("2월 말")는 기간이다. 2/28 이면 201, 2/21 이면 208
+   WARN  adv[4] blocks/0/paragraphs/0 "201일째": DERIVED 출처 ['war_start'] 가 브리프 밖
+PASS  fixtures/invalid/derived-from-volatile.json  — 거부 기대 DERIVED_FROM_VOLATILE
+   검출: ['DERIVED_FROM_VOLATILE']
+   DERIVED_FROM_VOLATILE: basic[6] blocks/1/paragraphs/1 "3주 뒤에": 출처 ['minutes'] 가 STABLE 이 아니다 — D8 규칙 4: VOLATILE 로 강등해야 한다
+   골든과 다른 곳 1군데: ['/levels/0/slides/6/_volatility/2/derived_from/0/volatility']
+PASS  fixtures/invalid/volatile-missing-asof.json  — 거부 기대 VOLATILE_MISSING_AS_OF
+   검출: ['VOLATILE_MISSING_AS_OF']
+   VOLATILE_MISSING_AS_OF: basic[3] blocks/0/paragraphs/1 "지금 미국은 3%대": VOLATILE 인데 as_of 가 없다 (D8)
+   골든과 다른 곳 1군데: ['/levels/0/slides/3/_volatility/0/as_of']
+
+OK
+exit=0
+```
+
+```
+$ python3 scripts/diff-observed-article.py
+
+=== basic (입문)  observed 8장 → article 9장 ===
+
+ obs[0] → art[0]  본문 변경 없음
+
+ obs[1] → art[1]  본문 변경 없음
+
+ obs[2] → art[2]  ■ 변경
+    - b0 body_text[small] p0             자동차 속도계를 떠올려보세요. 연준이 보는 숫자는 물건이 얼마나 비싼가가 아니라 <b>1년에 몇 퍼센트씩 오르고 있는가</b>입니다.
+    - b1 gauge marks                     33 62
+    - b1 gauge l0.target@33              <b>2%</b> 연준이 원하는 속도
+    - b1 gauge l1.now@62                 <b>3%대</b> 지금 미국
+    - b2 body_text[small][margin-top:4px] p0.dim 그리고 이 속도는 여름 내내 크게 줄지 않았어요.
+    - teaser                             Q 그럼 금리는 뭔가요?
+    + b0 body_text[small] p0             라면이 2000원이라고 해봅시다. 작년엔 1900원이었어요. “라면이 2000원이다”는 그냥 가격입니다. “라면값이 작년보다 5% 올랐다”는 오르는 속도예요.
+    + b0 body_text[small] p1             연준이 보는 건 첫 번째가 아니라 두 번째입니다. 라면이 얼마인지는 보지 않아요. <b>얼마나 빠르게 비싸지고 있는지</b>를 봅니다.
+    + teaser                             Q 그럼 어느 속도가 적당한 거죠?
+
+ (없음) → art[3]  ■ 새 슬라이드
+    + kicker                             이것만 알고 가면 돼요 ②
+    + h1                                 연준이 원하는 속도는⏎1년에 2%예요
+    + b0 body_text[small] p0             연준은 이 속도가 1년에 <b>2%</b> 정도면 적당하다고 봅니다. 아예 안 오르는 것도 원하지 않고, 딱 2%예요.
+    + b0 body_text[small] p1             그런데 지금 미국은 3%대입니다. 목표보다 빠르게 오르고 있어요.
+    + b0 body_text[small] p2             자동차 속도계에 빗댈 수 있습니다. 계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.
+    + b1 gauge marks                     33 62
+    + b1 gauge l0.target@33              <b>2%</b> 연준이 원하는 속도
+    + b1 gauge l1.now@62                 <b>3%대</b> 지금 미국
+    + b2 body_text[small][margin-top:4px] p0.dim 그리고 이 속도는 여름 내내 크게 줄지 않았어요.
+    + teaser                             Q 그럼 금리는 뭔가요?
+
+ obs[3] → art[4]  ■ 변경  (기계적: index 3→4, goto 4→5)
+    - kicker                             이것만 알고 가면 돼요 ②
+    + kicker                             이것만 알고 가면 돼요 ③
+
+ obs[4] → art[5]  본문 변경 없음  (기계적: index 4→5, goto 5→6)
+
+ obs[5] → art[6]  본문 변경 없음  (기계적: index 5→6, goto 6→7)
+
+ obs[6] → art[7]  본문 변경 없음  (기계적: index 6→7, goto 7→8)
+
+ obs[7] → art[8]  본문 변경 없음  (기계적: index 7→8)
+
+=== adv (숙련)  observed 5장 → article 5장 ===
+
+ obs[0] → art[0]  본문 변경 없음
+
+ obs[1] → art[1]  본문 변경 없음
+
+ obs[2] → art[2]  본문 변경 없음
+
+ obs[3] → art[3]  ■ 변경
+    - b0 stats r4.up                     2026년 PCE 전망 (3월 2.7%) | 3.7%
+    + b0 stats r4.up                     2026년 헤드라인 PCE 전망 (3월 2.7%) | 3.7%
+    - b1 body_text[small][margin-top:14px] p1.dim 2027년에 추가 인상을 찍은 dot은 8개뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.
+    + b1 body_text[small][margin-top:14px] p1.dim 표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다. 그래서 두 숫자가 다릅니다. 2027년에 추가 인상을 찍은 참가자는 8명뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.
+
+ obs[4] → art[4]  본문 변경 없음
+
+요약: 본문이 바뀐 슬라이드 [('basic', 2), ('basic', 3), ('basic', 4), ('adv', 3)]
+      - 단위 9개 / + 단위 16개 (슬라이드 삭제 0)
+exit=0
+```

@@ -7,7 +7,7 @@
     "task": "B-0.0b",
     "corrected_on": "2026-09-21",
     "corrections": "logs/correction-log.csv — 2026-09-21 · FOMC-20260916 · 5행",
-    "gate": "게이트 결과 반영 2026-09-21 (Q5 통과 · kicker ①②③ · C-0002/C-0005 v2). 최종 승인 대기"
+    "gate": "게이트 3 통과 — 판정자 도윤, 2026-09-21"
   },
   "_published_at": "2026-09-16",
   "_published_at_basis": "observed 에 발행 시각이 없다. D8 DERIVED 는 published_at 기준으로만 계산하므로 값이 필요하다. 본문이 회의 당일(T0)을 \"지금\"으로 쓰고 있어(예: \"회의 내부 기록은 3주 뒤\" = 회의록 T+21 까지 정확히 21일) T0 로 두었다. 발행 시각 정책은 D6(OPEN). 이 값을 바꾸면 scripts/verify-article.py 가 모든 DERIVED 를 다시 계산한다.",
