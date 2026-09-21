@@ -1,0 +1,2171 @@
+{
+  "_violation": {
+    "code": "DERIVED_FROM_VOLATILE",
+    "rule": "D8 규칙 4 — 출처 중 하나라도 VOLATILE 이면 DERIVED 를 쓸 수 없다. VOLATILE 로 강등",
+    "where": "levels/0/slides/6/_volatility/2/derived_from/0/volatility",
+    "what": "입문 7장 \"3주 뒤에\"(DERIVED)의 출처인 회의록 공개일을 VOLATILE 로 바꿨다(일정이 바뀔 수 있다고 본 경우). 값은 DERIVED 로 남아 있어 규칙 4 위반",
+    "golden": "fixtures/fomc-2026-09.article.json"
+  },
+  "_source": {
+    "derived_from": "fixtures/fomc-2026-09.observed.json",
+    "prototype": "prototypes/fomc-slides.html",
+    "document_title": "Claro — 3년 만의 금리 인상",
+    "lang": "ko",
+    "task": "B-0.0b",
+    "corrected_on": "2026-09-21",
+    "corrections": "logs/correction-log.csv — 2026-09-21 · FOMC-20260916 · 5행",
+    "gate": "PENDING — 도윤 에디토리얼 게이트 통과 전"
+  },
+  "_published_at": "2026-09-16",
+  "_published_at_basis": "observed 에 발행 시각이 없다. D8 DERIVED 는 published_at 기준으로만 계산하므로 값이 필요하다. 본문이 회의 당일(T0)을 \"지금\"으로 쓰고 있어(예: \"회의 내부 기록은 3주 뒤\" = 회의록 T+21 까지 정확히 21일) T0 로 두었다. 발행 시각 정책은 D6(OPEN). 이 값을 바꾸면 scripts/verify-article.py 가 모든 DERIVED 를 다시 계산한다.",
+  "event_hint": "FOMC-20260916",
+  "chrome": {
+    "brand": "Claro",
+    "level_switch": {
+      "present": true,
+      "aria_label": "설명 수준",
+      "buttons": [
+        {
+          "id": "lvBasic",
+          "label": "입문",
+          "aria_pressed_initial": true
+        },
+        {
+          "id": "lvAdv",
+          "label": "숙련",
+          "aria_pressed_initial": false
+        }
+      ],
+      "on_switch": "해당 deck을 scrollTop=0 으로 되돌리고 진행바를 다시 만든다 (읽던 위치는 보존되지 않는다)"
+    },
+    "progress": {
+      "segments": "슬라이드 수만큼 동적 생성",
+      "fill": "0% 또는 100% 이분법, 비례 채움 없음"
+    },
+    "counter_initial_static_text": "1/9",
+    "layout": "topbar-row(brand+levels) 위, segs+count 아래 — 2단"
+  },
+  "levels": [
+    {
+      "id": "basic",
+      "label": "입문",
+      "deck_element_id": "deckBasic",
+      "initially_visible": true,
+      "slide_count": 9,
+      "slides": [
+        {
+          "index": 0,
+          "kicker": "오늘의 뉴스",
+          "h1": "미국이 3년 만에\n금리를 올렸어요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "미국 중앙은행인 연준이 9월 16일 기준금리를 0.25%포인트 올렸습니다. 이제 <b>3.75~4.00%</b>예요."
+                },
+                {
+                  "html": "금리를 <b>올린</b> 건 2023년 7월 이후 처음입니다. 3년 넘게 연준은 금리를 그대로 두거나 내리기만 했어요.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ]
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "물가가 갑자기 나빠졌나요?",
+            "goto_index": 1,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "미국이 3년 만에 금리를 올렸어요",
+              "refs": [
+                "F01",
+                "F03"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "미국 중앙은행인 연준이 9월 16일 기준금리를 0.25%포인트 올렸습니다.",
+              "refs": [
+                "F01"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "이제 3.75~4.00%예요.",
+              "refs": [
+                "F01"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "금리를 올린 건 2023년 7월 이후 처음입니다.",
+              "refs": [
+                "F03"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "3년 넘게 연준은 금리를 그대로 두거나 내리기만 했어요.",
+              "refs": [
+                "F03"
+              ],
+              "kind": "partial",
+              "note": "F03 은 \"2023년 7월 이후 첫 인상\" — 인상이 없었다는 데까지만. \"내리기만 했어요\"가 말하는 인하는 브리프에 없다"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "h1",
+              "span": "3년 만에",
+              "class": "DERIVED",
+              "value_at_authoring": 3,
+              "check": "==",
+              "formula": {
+                "op": "years_floor",
+                "from": "hike_prev",
+                "to": "published_at"
+              },
+              "derived_from": [
+                {
+                  "key": "hike_prev",
+                  "what": "직전 인상 시점",
+                  "value": "2023-07",
+                  "refs": [
+                    "F03"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "3년 넘게",
+              "class": "DERIVED",
+              "value_at_authoring": 3,
+              "check": ">",
+              "formula": {
+                "op": "years",
+                "from": "hike_prev",
+                "to": "published_at"
+              },
+              "derived_from": [
+                {
+                  "key": "hike_prev",
+                  "what": "직전 인상 시점",
+                  "value": "2023-07",
+                  "refs": [
+                    "F03"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "kicker": "첫 번째 반전",
+          "h1": "아니요.\n오히려 나은 편이었어요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "여름 동안 나온 물가 지표는 시장이 걱정하던 것보다 좋았습니다."
+                },
+                {
+                  "html": "<b>그런데도 연준은 올렸어요.</b>"
+                }
+              ]
+            },
+            {
+              "type": "callout",
+              "modifier": null,
+              "html": "이상하죠. 물가가 나빠져서 올리는 거라면, 나빠지지 않았는데 왜 올렸을까요?"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "연준은 뭘 보고 있는 걸까요?",
+            "goto_index": 2,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "아니요. 오히려 나은 편이었어요",
+              "refs": [
+                "F32",
+                "DC-C"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "여름 동안 나온 물가 지표는 시장이 걱정하던 것보다 좋았습니다.",
+              "refs": [
+                "F32",
+                "DC-C"
+              ],
+              "kind": "partial",
+              "note": "브리프는 \"예상보다 나았다\"(DC-C). \"시장이 걱정하던\"이라는 비교 대상은 브리프에 없다"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "그런데도 연준은 올렸어요.",
+              "refs": [
+                "F01"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/1",
+              "span": "이상하죠.",
+              "refs": [],
+              "kind": "writing"
+            },
+            {
+              "where": "blocks/1",
+              "span": "물가가 나빠져서 올리는 거라면, 나빠지지 않았는데 왜 올렸을까요?",
+              "refs": [],
+              "kind": "writing",
+              "note": "본문 수사의문문 (D16)"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "kicker": "이것만 알고 가면 돼요 ①",
+          "h1": "연준이 보는 건\n물가가 아니라 속도예요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "라면이 2000원이라고 해봅시다. 작년엔 1900원이었어요. “라면이 2000원이다”는 그냥 가격입니다. “라면값이 작년보다 5% 올랐다”는 오르는 속도예요."
+                },
+                {
+                  "html": "연준이 보는 건 첫 번째가 아니라 두 번째입니다. 라면이 얼마인지는 보지 않아요. <b>얼마나 빠르게 비싸지고 있는지</b>를 봅니다."
+                }
+              ],
+              "variant": "small"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "그럼 어느 속도가 적당한 거죠?",
+            "goto_index": 3,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "연준이 보는 건 물가가 아니라 속도예요",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "observed 그대로. C-0002 명제의 요약"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "라면이 2000원이라고 해봅시다.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ①"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "작년엔 1900원이었어요.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ①"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "“라면이 2000원이다”는 그냥 가격입니다.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ①"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "“라면값이 작년보다 5% 올랐다”는 오르는 속도예요.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ①"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "연준이 보는 건 첫 번째가 아니라 두 번째입니다.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ②"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "라면이 얼마인지는 보지 않아요.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ②"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "얼마나 빠르게 비싸지고 있는지를 봅니다.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ②"
+            }
+          ],
+          "_concept_ref": [
+            "C-0002"
+          ]
+        },
+        {
+          "index": 3,
+          "kicker": "이것만 알고 가면 돼요 ①",
+          "h1": "연준이 원하는 속도는\n1년에 2%예요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "연준은 이 속도가 1년에 <b>2%</b> 정도면 적당하다고 봅니다. 아예 안 오르는 것도 원하지 않고, 딱 2%예요."
+                },
+                {
+                  "html": "그런데 지금 미국은 3%대입니다. 목표보다 빠르게 오르고 있어요."
+                },
+                {
+                  "html": "자동차 속도계에 빗댈 수 있습니다. 계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요."
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "gauge",
+              "comment_in_html": "gauge — 속도계",
+              "scale": {
+                "declared_min": null,
+                "declared_max": null,
+                "unit_shown": false,
+                "background": "linear-gradient(to right, var(--accent-teal) 0%, var(--accent-gold) 55%, var(--accent-red) 100%)"
+              },
+              "marks": [
+                {
+                  "left_percent": 33
+                },
+                {
+                  "left_percent": 62
+                }
+              ],
+              "labels": [
+                {
+                  "role": "target",
+                  "left_percent": 33,
+                  "value_html": "<b>2%</b>",
+                  "value_text": "2%",
+                  "caption": "연준이 원하는 속도"
+                },
+                {
+                  "role": "now",
+                  "left_percent": 62,
+                  "value_html": "<b>3%대</b>",
+                  "value_text": "3%대",
+                  "caption": "지금 미국"
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "그리고 이 속도는 여름 내내 크게 줄지 않았어요.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:4px"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "그럼 금리는 뭔가요?",
+            "goto_index": 4,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "연준이 원하는 속도는 1년에 2%예요",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "교정 #1 로 새로 쓴 문장. 게이지 라벨 \"연준이 원하는 속도\" + FULL ③ \"1년에 2%\". 명제는 C-0003"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "연준은 이 속도가 1년에 2% 정도면 적당하다고 봅니다.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ③"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "아예 안 오르는 것도 원하지 않고, 딱 2%예요.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "FULL ③"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "그런데 지금 미국은 3%대입니다.",
+              "refs": [
+                "F31"
+              ],
+              "kind": "fact",
+              "concept": "C-0002",
+              "note": "FULL ④ 문안. 개념 문안이 현재 상태를 말한다 — §4.3 기준으로는 Bridge"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "목표보다 빠르게 오르고 있어요.",
+              "refs": [
+                "F10",
+                "F31"
+              ],
+              "kind": "fact",
+              "concept": "C-0002",
+              "note": "FULL ④"
+            },
+            {
+              "where": "blocks/0/paragraphs/2",
+              "span": "자동차 속도계에 빗댈 수 있습니다.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "ANALOGY"
+            },
+            {
+              "where": "blocks/0/paragraphs/2",
+              "span": "계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0002",
+              "note": "ANALOGY"
+            },
+            {
+              "where": "blocks/1/labels/0",
+              "span": "2% 연준이 원하는 속도",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0003",
+              "note": "observed 그대로"
+            },
+            {
+              "where": "blocks/1/labels/1",
+              "span": "3%대 지금 미국",
+              "refs": [
+                "F31"
+              ],
+              "kind": "fact",
+              "note": "observed 그대로. 눈금 위치 left:62% 는 3.3%(F31)보다 약 3.7% 자리에 가깝다 — FOMC-14(S3)"
+            },
+            {
+              "where": "blocks/2/paragraphs/0",
+              "span": "그리고 이 속도는 여름 내내 크게 줄지 않았어요.",
+              "refs": [
+                "F24",
+                "F32"
+              ],
+              "kind": "partial",
+              "note": "의장 평가(F24·F32)를 사실 서술로 옮겼다. 여름 동안의 실측 추이는 브리프에 없다(F31 은 7월 한 점)"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "지금 미국은 3%대",
+              "class": "VOLATILE",
+              "refs": [
+                "F31"
+              ],
+              "as_of": "2026-08-30",
+              "as_of_basis": "브리프 F31 시점 T-17",
+              "note": "가장 최근 물가 지표를 \"지금\"으로 말한다. 8월 CPI(9/11)는 브리프에서 NOT_EXTRACTED"
+            },
+            {
+              "where": "blocks/1/labels/1",
+              "span": "3%대",
+              "class": "VOLATILE",
+              "refs": [
+                "F31"
+              ],
+              "as_of": "2026-08-30",
+              "as_of_basis": "브리프 F31 시점 T-17"
+            }
+          ],
+          "_concept_ref": [
+            "C-0002",
+            "C-0003"
+          ]
+        },
+        {
+          "index": 4,
+          "kicker": "이것만 알고 가면 돼요 ②",
+          "h1": "금리는\n그 차의 브레이크예요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "금리가 올라가면 돈을 빌리는 일이 비싸집니다. 집을 사려고 대출을 받거나, 기업이 새 사업에 투자하기가 부담스러워져요."
+                },
+                {
+                  "html": "사람들이 지갑을 덜 열면 경제가 달리는 속도가 느려지고, <b>물가가 오르는 속도도 따라서 느려집니다.</b>"
+                }
+              ]
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "그래서 왜 지금 밟은 거죠?",
+            "goto_index": 5,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "금리는 그 차의 브레이크예요",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0001",
+              "note": "ANALOGY(브레이크 페달)"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "금리가 올라가면 돈을 빌리는 일이 비싸집니다.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0001",
+              "note": "FULL"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "집을 사려고 대출을 받거나, 기업이 새 사업에 투자하기가 부담스러워져요.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0001",
+              "note": "FULL"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "사람들이 지갑을 덜 열면 경제가 달리는 속도가 느려지고, 물가가 오르는 속도도 따라서 느려집니다.",
+              "refs": [],
+              "kind": "concept",
+              "concept": "C-0001",
+              "note": "FULL"
+            }
+          ],
+          "_concept_ref": [
+            "C-0001"
+          ]
+        },
+        {
+          "index": 5,
+          "kicker": "핵심",
+          "h1": "기준이\n우리 생각과 달랐어요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "연준이 던진 질문은 “물가가 나빠졌는가”가 아니었습니다."
+                }
+              ]
+            },
+            {
+              "type": "quote",
+              "tag": "8월 말 · 의장 연설",
+              "html": "기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다. 그렇지 않다면 아직 할 일이 남아 있는 것이다.",
+              "quotation_marks_in_text": false
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "속도가 3에서 2로 내려오고는 있는데 <b>너무 느리게</b> 내려온다면? 그것도 브레이크를 더 밟을 이유가 됩니다."
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "두 달 전엔 왜 안 올렸죠?",
+            "goto_index": 6,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "기준이 우리 생각과 달랐어요",
+              "refs": [
+                "DC-C"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "연준이 던진 질문은 “물가가 나빠졌는가”가 아니었습니다.",
+              "refs": [
+                "DC-C",
+                "F33"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/1/tag",
+              "span": "8월 말 · 의장 연설",
+              "refs": [
+                "F32",
+                "F33"
+              ],
+              "kind": "fact",
+              "note": "8/28 잭슨홀 연설(P3)"
+            },
+            {
+              "where": "blocks/1",
+              "span": "기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다.",
+              "refs": [
+                "F33"
+              ],
+              "kind": "fact",
+              "note": "직접 인용 형식이지만 브리프 F33 은 요약 서술이다. 원문(P3) 문장이 브리프에 없어 §5.5 원문 대조를 할 수 없다"
+            },
+            {
+              "where": "blocks/1",
+              "span": "그렇지 않다면 아직 할 일이 남아 있는 것이다.",
+              "refs": [
+                "F33"
+              ],
+              "kind": "fact",
+              "note": "직접 인용 형식이지만 브리프 F33 은 요약 서술이다. 원문(P3) 문장이 브리프에 없어 §5.5 원문 대조를 할 수 없다"
+            },
+            {
+              "where": "blocks/2/paragraphs/0",
+              "span": "속도가 3에서 2로 내려오고는 있는데 너무 느리게 내려온다면?",
+              "refs": [
+                "DC-C"
+              ],
+              "kind": "derived_claim",
+              "note": "본문 수사의문문 (D16)"
+            },
+            {
+              "where": "blocks/2/paragraphs/0",
+              "span": "그것도 브레이크를 더 밟을 이유가 됩니다.",
+              "refs": [
+                "DC-C",
+                "F33"
+              ],
+              "kind": "derived_claim"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "teaser",
+              "span": "두 달 전",
+              "class": "DERIVED",
+              "value_at_authoring": 2,
+              "check": "==",
+              "formula": {
+                "op": "months_round",
+                "from": "july_meeting",
+                "to": "published_at"
+              },
+              "derived_from": [
+                {
+                  "key": "july_meeting",
+                  "what": "7월 FOMC 결정일",
+                  "value": "2026-07-29",
+                  "refs": [
+                    "F28"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "kicker": "두 달 사이",
+          "h1": "7월엔 셋만 그렇게 봤어요.\n이번엔 전원이었고요.",
+          "blocks": [
+            {
+              "type": "votes",
+              "cards": [
+                {
+                  "modifier": null,
+                  "when": "7월 29일",
+                  "tally": "9 : 3",
+                  "what_html": "동결. 세 명만<br>“올리자”고 반대"
+                },
+                {
+                  "modifier": "hit",
+                  "when": "9월 16일",
+                  "tally": "12 : 0",
+                  "what_html": "인상.<br>반대 없음"
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "그 사이 8월 말 의장이 앞의 기준을 밝혔고, 시장은 인상 가능성을 90% 넘게 반영하기 시작했어요."
+                },
+                {
+                  "html": "다만 그 세 사람이 나머지를 설득한 건지, 새로 들어온 정보 때문에 판단이 같아진 건지는 <b>아직 알 수 없습니다.</b> 회의 내부 기록은 3주 뒤에 공개돼요.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "물가는 왜 안 내려오고 있죠?",
+            "goto_index": 7,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "7월엔 셋만 그렇게 봤어요. 이번엔 전원이었고요.",
+              "refs": [
+                "F28",
+                "F02",
+                "DC-A"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/0/cards/0",
+              "span": "7월 29일 9 : 3 동결. 세 명만 “올리자”고 반대",
+              "refs": [
+                "F28"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/cards/1",
+              "span": "9월 16일 12 : 0 인상. 반대 없음",
+              "refs": [
+                "F01",
+                "F02"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "그 사이 8월 말 의장이 앞의 기준을 밝혔고, 시장은 인상 가능성을 90% 넘게 반영하기 시작했어요.",
+              "refs": [
+                "F33",
+                "F36"
+              ],
+              "kind": "partial",
+              "note": "F36 은 회의 직전(T-1)에 \"반영하고 있었음\". 언제부터 \"반영하기 시작\"했는지는 브리프에 없다"
+            },
+            {
+              "where": "blocks/1/paragraphs/1",
+              "span": "다만 그 세 사람이 나머지를 설득한 건지, 새로 들어온 정보 때문에 판단이 같아진 건지는 아직 알 수 없습니다.",
+              "refs": [
+                "DC-B"
+              ],
+              "kind": "derived_claim",
+              "note": "방어용 DC — 오독 차단"
+            },
+            {
+              "where": "blocks/1/paragraphs/1",
+              "span": "회의 내부 기록은 3주 뒤에 공개돼요.",
+              "refs": [],
+              "kind": "brief_text",
+              "note": "브리프 §1 \"아직 없는 것\": 9월 회의록 = 10월 초, T+21. F-ID 가 없다"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "kicker",
+              "span": "두 달 사이",
+              "class": "DERIVED",
+              "value_at_authoring": 2,
+              "check": "==",
+              "formula": {
+                "op": "months_round",
+                "from": "july_meeting",
+                "to": "sept_meeting"
+              },
+              "derived_from": [
+                {
+                  "key": "july_meeting",
+                  "what": "7월 FOMC 결정일",
+                  "value": "2026-07-29",
+                  "refs": [
+                    "F28"
+                  ],
+                  "volatility": "STABLE"
+                },
+                {
+                  "key": "sept_meeting",
+                  "what": "9월 FOMC 결정일",
+                  "value": "2026-09-16",
+                  "refs": [
+                    "F01"
+                  ],
+                  "note": "F01 의 출처 S1 공개일",
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "90% 넘게",
+              "class": "VOLATILE",
+              "refs": [
+                "F36"
+              ],
+              "as_of": "2026-09-15",
+              "as_of_basis": "브리프 F36 시점 T-1"
+            },
+            {
+              "where": "blocks/1/paragraphs/1",
+              "span": "3주 뒤에",
+              "class": "DERIVED",
+              "value_at_authoring": 3,
+              "check": "==",
+              "formula": {
+                "op": "weeks",
+                "from": "published_at",
+                "to": "minutes"
+              },
+              "derived_from": [
+                {
+                  "key": "minutes",
+                  "what": "9월 회의록 공개",
+                  "value": "2026-10-07",
+                  "refs": [],
+                  "brief_loc": "§1 아직 없는 것 — \"10월 초\", \"T+21\"",
+                  "note": "T0+21일로 계산. F-ID 없음",
+                  "volatility": "VOLATILE"
+                }
+              ],
+              "invariant": "PASS"
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "kicker": "가장 큰 변수",
+          "h1": "이란 전쟁이\n어디로 갈지 모릅니다",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "2월 말에 시작돼 반년 넘게 이어지고 있어요. 4월에 휴전 합의가 한 번 있었지만 이후 공격이 반복되면서 기름값은 크게 올랐다 내렸다를 되풀이했습니다."
+                },
+                {
+                  "html": "회의가 열린 날에는 트럭과 기차에 쓰는 경유 가격이 사상 최고치를 기록했어요."
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "callout",
+              "modifier": "warn",
+              "html": "여기서 중요한 건 기름값이 비싸다는 게 아닙니다.<br><b>이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요.</b> 연준이 “확신이 없다”고 말한 이유의 상당 부분이 여기 있습니다."
+            }
+          ],
+          "teaser": {
+            "qmark": "Q",
+            "qtext": "이제 계속 오르나요?",
+            "goto_index": 8,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "이란 전쟁이 어디로 갈지 모릅니다",
+              "refs": [
+                "F07",
+                "F37"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "2월 말에 시작돼 반년 넘게 이어지고 있어요.",
+              "refs": [],
+              "kind": "unsupported",
+              "note": "개전 시점(2월 말)과 지속 기간은 브리프에 없다"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "4월에 휴전 합의가 한 번 있었지만 이후 공격이 반복되면서 기름값은 크게 올랐다 내렸다를 되풀이했습니다.",
+              "refs": [],
+              "kind": "unsupported",
+              "note": "4월 휴전 합의·공격 반복·유가 등락은 브리프에 없다. F37(\"연료 가격 급등\")과는 방향만 겹친다"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "회의가 열린 날에는 트럭과 기차에 쓰는 경유 가격이 사상 최고치를 기록했어요.",
+              "refs": [
+                "F37"
+              ],
+              "kind": "fact",
+              "note": "\"트럭과 기차에 쓰는\"은 경유를 풀어 쓴 것(Writing)"
+            },
+            {
+              "where": "blocks/1",
+              "span": "여기서 중요한 건 기름값이 비싸다는 게 아닙니다.",
+              "refs": [],
+              "kind": "writing"
+            },
+            {
+              "where": "blocks/1",
+              "span": "이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요.",
+              "refs": [],
+              "kind": "unsupported",
+              "note": "시나리오 해석. 대응하는 DC 가 없다"
+            },
+            {
+              "where": "blocks/1",
+              "span": "연준이 “확신이 없다”고 말한 이유의 상당 부분이 여기 있습니다.",
+              "refs": [
+                "F07",
+                "F33"
+              ],
+              "kind": "partial",
+              "note": "“확신이 없다”에 인용 부호가 붙어 있지만 그런 발언은 브리프에 없다(F33 은 확신 \"기준\"). 원인 비중(\"상당 부분\")도 브리프에 없는 해석"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "반년 넘게",
+              "class": "DERIVED",
+              "value_at_authoring": 6,
+              "check": ">",
+              "formula": {
+                "op": "months",
+                "from": "war_start",
+                "to": "published_at"
+              },
+              "derived_from": [
+                {
+                  "key": "war_start",
+                  "what": "이란 전쟁 개시",
+                  "value": "2026-02",
+                  "refs": [],
+                  "note": "브리프에 없다. 입문 8장 본문 \"2월 말에 시작돼\"가 기사 안 유일한 출처이고, 날짜가 아니라 기간이다",
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS",
+              "note": "계산은 통과하지만 출처(개전일)가 브리프 밖이다"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "경유 가격이 사상 최고치",
+              "class": "VOLATILE",
+              "refs": [
+                "F37"
+              ],
+              "as_of": "2026-09-16",
+              "as_of_basis": "브리프 F37 시점 T0"
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "kicker": "앞으로",
+          "h1": "한 번은 더.\n그런데 긴 흐름은 아니에요",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "위원들 대부분이 올해 안에 한 번 더 올릴 수 있다고 봤습니다."
+                },
+                {
+                  "html": "다만 연준이 함께 내놓은 전망에서 <b>올해 말 금리와 내년 말 금리는 같은 수준</b>이에요. 올해 한 번쯤 더 올리고, 내년에는 대체로 그 자리."
+                },
+                {
+                  "html": "참고로 연준 자신도 물가가 2% 근처로 돌아오는 건 내년 말쯤으로 보고 있어요. 생각보다 긴 길입니다.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "closing",
+              "html": "물가가 튀어서 올린 게 아닙니다.<br><b>내려오고는 있는데<br>충분히 빠르지 않다</b>고 본 거예요."
+            },
+            {
+              "type": "end_actions",
+              "check": "✓ 다 읽었어요",
+              "buttons": [
+                {
+                  "label": "처음부터 다시 보기",
+                  "goto_index": 0
+                },
+                {
+                  "label": "이 설명, 헷갈리는 부분이 있었나요?",
+                  "goto_index": null
+                }
+              ]
+            }
+          ],
+          "teaser": null,
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "한 번은 더. 그런데 긴 흐름은 아니에요",
+              "refs": [
+                "F11",
+                "F12",
+                "DC-D"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "위원들 대부분이 올해 안에 한 번 더 올릴 수 있다고 봤습니다.",
+              "refs": [
+                "F12"
+              ],
+              "kind": "fact",
+              "note": "\"위원들\" — SEP 제출자에는 투표권 없는 참가자도 있다(C-0005). 교정 범위 밖"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "다만 연준이 함께 내놓은 전망에서 올해 말 금리와 내년 말 금리는 같은 수준이에요.",
+              "refs": [
+                "F11"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "올해 한 번쯤 더 올리고, 내년에는 대체로 그 자리.",
+              "refs": [
+                "F11",
+                "F12",
+                "DC-D"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/0/paragraphs/2",
+              "span": "참고로 연준 자신도 물가가 2% 근처로 돌아오는 건 내년 말쯤으로 보고 있어요.",
+              "refs": [
+                "F19"
+              ],
+              "kind": "partial",
+              "note": "F19 는 2027년 말 PCE 2.3%. \"2% 근처\"는 2.3% 를 느슨하게 옮긴 것"
+            },
+            {
+              "where": "blocks/0/paragraphs/2",
+              "span": "생각보다 긴 길입니다.",
+              "refs": [],
+              "kind": "writing"
+            },
+            {
+              "where": "blocks/1",
+              "span": "물가가 튀어서 올린 게 아닙니다.",
+              "refs": [
+                "DC-C"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/1",
+              "span": "내려오고는 있는데 충분히 빠르지 않다고 본 거예요.",
+              "refs": [
+                "DC-C",
+                "F33"
+              ],
+              "kind": "derived_claim"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "올해 안에",
+              "class": "DERIVED",
+              "value_at_authoring": 2026,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 0
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F12 가 가리키는 연도",
+                  "value": "2026",
+                  "refs": [
+                    "F12"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "올해 말 금리",
+              "class": "DERIVED",
+              "value_at_authoring": 2026,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 0
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F11 가 가리키는 연도",
+                  "value": "2026",
+                  "refs": [
+                    "F11"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "내년 말 금리",
+              "class": "DERIVED",
+              "value_at_authoring": 2027,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 1
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F11 가 가리키는 연도",
+                  "value": "2027",
+                  "refs": [
+                    "F11"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "올해 한 번쯤",
+              "class": "DERIVED",
+              "value_at_authoring": 2026,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 0
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F12 가 가리키는 연도",
+                  "value": "2026",
+                  "refs": [
+                    "F12"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "내년에는",
+              "class": "DERIVED",
+              "value_at_authoring": 2027,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 1
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F11 가 가리키는 연도",
+                  "value": "2027",
+                  "refs": [
+                    "F11"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            },
+            {
+              "where": "blocks/0/paragraphs/2",
+              "span": "내년 말쯤",
+              "class": "DERIVED",
+              "value_at_authoring": 2027,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 1
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F19 가 가리키는 연도",
+                  "value": "2027",
+                  "refs": [
+                    "F19"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "adv",
+      "label": "숙련",
+      "deck_element_id": "deckAdv",
+      "initially_visible": false,
+      "hidden_attr": true,
+      "slide_count": 5,
+      "slides": [
+        {
+          "index": 0,
+          "kicker": "9월 FOMC",
+          "h1": "동결에서 인상으로,\n그것도 만장일치",
+          "blocks": [
+            {
+              "type": "votes",
+              "cards": [
+                {
+                  "modifier": null,
+                  "when": "7월 29일",
+                  "tally": "9 : 3",
+                  "what_html": "동결<br>3명 +25bp 주장"
+                },
+                {
+                  "modifier": "hit",
+                  "when": "9월 16일",
+                  "tally": "12 : 0",
+                  "what_html": "+25bp<br>3.75~4.00%"
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "2023년 7월 이후 첫 인상. 7주 만에 소수의견이 전원 합의가 됐습니다."
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "무엇이 기준이었나",
+            "goto_index": 1,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "동결에서 인상으로, 그것도 만장일치",
+              "refs": [
+                "F28",
+                "F01",
+                "F02"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/cards/0",
+              "span": "7월 29일 9 : 3 동결 3명 +25bp 주장",
+              "refs": [
+                "F28"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/cards/1",
+              "span": "9월 16일 12 : 0 +25bp 3.75~4.00%",
+              "refs": [
+                "F01",
+                "F02"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "2023년 7월 이후 첫 인상.",
+              "refs": [
+                "F03"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "7주 만에 소수의견이 전원 합의가 됐습니다.",
+              "refs": [
+                "F28",
+                "F02",
+                "DC-A"
+              ],
+              "kind": "derived_claim"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "7주 만에",
+              "class": "DERIVED",
+              "value_at_authoring": 7,
+              "check": "==",
+              "formula": {
+                "op": "weeks",
+                "from": "july_meeting",
+                "to": "sept_meeting"
+              },
+              "derived_from": [
+                {
+                  "key": "july_meeting",
+                  "what": "7월 FOMC 결정일",
+                  "value": "2026-07-29",
+                  "refs": [
+                    "F28"
+                  ],
+                  "volatility": "STABLE"
+                },
+                {
+                  "key": "sept_meeting",
+                  "what": "9월 FOMC 결정일",
+                  "value": "2026-09-16",
+                  "refs": [
+                    "F01"
+                  ],
+                  "note": "F01 의 출처 S1 공개일",
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "kicker": "판단 기준",
+          "h1": "악화가 아니라\n개선 속도가 기준이었습니다",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "여름 물가 지표는 예상보다 나았습니다. 7월 근원 PCE는 전년 대비 3.3%로, 6월 전망치와 사실상 같았고요."
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "quote",
+              "tag": "8/28 잭슨홀",
+              "html": "기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다.",
+              "quotation_marks_in_text": false
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "의장은 여름 지표가 기저 흐름의 의미 있는 개선을 보여주지는 않는다고 평가했습니다. 9월 전망에서 올해 근원 PCE는 오히려 <b>3.3% → 3.4%</b>로 올라갔고요."
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:12px"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "7주 사이의 경로",
+            "goto_index": 2,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "악화가 아니라 개선 속도가 기준이었습니다",
+              "refs": [
+                "DC-C",
+                "F33"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "여름 물가 지표는 예상보다 나았습니다.",
+              "refs": [
+                "F32",
+                "DC-C"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "7월 근원 PCE는 전년 대비 3.3%로, 6월 전망치와 사실상 같았고요.",
+              "refs": [
+                "F31",
+                "F16",
+                "DC-C"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/1/tag",
+              "span": "8/28 잭슨홀",
+              "refs": [
+                "F32",
+                "F33"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/1",
+              "span": "기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다.",
+              "refs": [
+                "F33"
+              ],
+              "kind": "fact",
+              "note": "직접 인용 형식이지만 브리프 F33 은 요약 서술이다. 원문(P3) 문장이 브리프에 없어 §5.5 원문 대조를 할 수 없다"
+            },
+            {
+              "where": "blocks/2/paragraphs/0",
+              "span": "의장은 여름 지표가 기저 흐름의 의미 있는 개선을 보여주지는 않는다고 평가했습니다.",
+              "refs": [
+                "F24",
+                "F32"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/2/paragraphs/0",
+              "span": "9월 전망에서 올해 근원 PCE는 오히려 3.3% → 3.4%로 올라갔고요.",
+              "refs": [
+                "F16"
+              ],
+              "kind": "fact",
+              "note": "앞의 3.3% 는 6월 전망치(F16). 같은 슬라이드 첫 문단의 7월 실적 3.3%(F31)와 표기가 구분되지 않는다 — 교정 범위 밖"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "7월 근원 PCE는 전년 대비 3.3%",
+              "class": "VOLATILE",
+              "refs": [
+                "F31"
+              ],
+              "as_of": "2026-08-30",
+              "as_of_basis": "브리프 F31 시점 T-17"
+            },
+            {
+              "where": "blocks/2/paragraphs/0",
+              "span": "올해 근원 PCE",
+              "class": "DERIVED",
+              "value_at_authoring": 2026,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 0
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F16 가 가리키는 연도",
+                  "value": "2026",
+                  "refs": [
+                    "F16"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "kicker": "7월 → 9월",
+          "h1": "무엇이 그 사이에\n있었나",
+          "blocks": [
+            {
+              "type": "timeline",
+              "html_class": "tl",
+              "items": [
+                {
+                  "when": "7/29",
+                  "html": "9-3 동결. Hammack · Kashkari · Logan 반대",
+                  "is_last": false,
+                  "has_connector_line": true
+                },
+                {
+                  "when": "8/7",
+                  "html": "7월 고용 발표 — 취업자 <b>23,000명 감소</b>, 실업률 4.1%",
+                  "is_last": false,
+                  "has_connector_line": true
+                },
+                {
+                  "when": "8/28",
+                  "html": "잭슨홀 — 의장이 인상 기준을 명시",
+                  "is_last": false,
+                  "has_connector_line": true
+                },
+                {
+                  "when": "9월 초",
+                  "html": "시장, 인상 확률 90% 이상 반영. 10년물 4.6% 돌파",
+                  "is_last": false,
+                  "has_connector_line": true
+                },
+                {
+                  "when": "9/16",
+                  "html": "12-0 인상",
+                  "is_last": true,
+                  "has_connector_line": false
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "내부 역학은 3주 뒤 회의록 전까지 확인 불가. 현재 확실한 것은 순서뿐입니다.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "점도표가 말하는 것",
+            "goto_index": 3,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "무엇이 그 사이에 있었나",
+              "refs": [],
+              "kind": "writing"
+            },
+            {
+              "where": "blocks/0/items/0",
+              "span": "7/29 9-3 동결. Hammack · Kashkari · Logan 반대",
+              "refs": [
+                "F28"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/items/1",
+              "span": "8/7 7월 고용 발표 — 취업자 23,000명 감소, 실업률 4.1%",
+              "refs": [
+                "F30"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/items/2",
+              "span": "8/28 잭슨홀 — 의장이 인상 기준을 명시",
+              "refs": [
+                "F32",
+                "F33"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/items/3",
+              "span": "9월 초 시장, 인상 확률 90% 이상 반영. 10년물 4.6% 돌파",
+              "refs": [
+                "F35",
+                "F36"
+              ],
+              "kind": "partial",
+              "note": "브리프 시점은 둘 다 T-1(9/15). \"9월 초\"는 브리프와 다르다 — FOMC-22(S3)"
+            },
+            {
+              "where": "blocks/0/items/4",
+              "span": "9/16 12-0 인상",
+              "refs": [
+                "F01",
+                "F02"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "내부 역학은 3주 뒤 회의록 전까지 확인 불가.",
+              "refs": [
+                "DC-B"
+              ],
+              "kind": "derived_claim",
+              "note": "회의록 시점은 브리프 §1(F-ID 없음)"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "현재 확실한 것은 순서뿐입니다.",
+              "refs": [
+                "DC-B"
+              ],
+              "kind": "derived_claim"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "blocks/0/items/1",
+              "span": "취업자 23,000명 감소, 실업률 4.1%",
+              "class": "VOLATILE",
+              "refs": [
+                "F30"
+              ],
+              "as_of": "2026-08-07",
+              "as_of_basis": "브리프 F30 시점 T-40 (8/7 발표)"
+            },
+            {
+              "where": "blocks/0/items/3",
+              "span": "인상 확률 90% 이상",
+              "class": "VOLATILE",
+              "refs": [
+                "F36"
+              ],
+              "as_of": "2026-09-15",
+              "as_of_basis": "브리프 F36 시점 T-1"
+            },
+            {
+              "where": "blocks/0/items/3",
+              "span": "10년물 4.6% 돌파",
+              "class": "VOLATILE",
+              "refs": [
+                "F35"
+              ],
+              "as_of": "2026-09-15",
+              "as_of_basis": "브리프 F35 시점 T-1"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "3주 뒤",
+              "class": "DERIVED",
+              "value_at_authoring": 3,
+              "check": "==",
+              "formula": {
+                "op": "weeks",
+                "from": "published_at",
+                "to": "minutes"
+              },
+              "derived_from": [
+                {
+                  "key": "minutes",
+                  "what": "9월 회의록 공개",
+                  "value": "2026-10-07",
+                  "refs": [],
+                  "brief_loc": "§1 아직 없는 것 — \"10월 초\", \"T+21\"",
+                  "note": "T0+21일로 계산. F-ID 없음",
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "kicker": "9월 SEP",
+          "h1": "한 번 더.\n그리고 내년은 제자리",
+          "blocks": [
+            {
+              "type": "stats",
+              "rows": [
+                {
+                  "k": "2026년 말 정책금리 중앙값",
+                  "v": "4.1%",
+                  "v_modifier": null
+                },
+                {
+                  "k": "2027년 말 정책금리 중앙값",
+                  "v": "4.1%",
+                  "v_modifier": "flat"
+                },
+                {
+                  "k": "연내 추가 인상 예상",
+                  "v": "18명 중 16명",
+                  "v_modifier": null
+                },
+                {
+                  "k": "두 번 더 예상",
+                  "v": "4명",
+                  "v_modifier": null
+                },
+                {
+                  "k": "2026년 헤드라인 PCE 전망 (3월 2.7%)",
+                  "v": "3.7%",
+                  "v_modifier": "up"
+                },
+                {
+                  "k": "2026년 실업률 전망 (3월 4.4%)",
+                  "v": "4.1%",
+                  "v_modifier": null
+                }
+              ]
+            },
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "2026년과 2027년 중앙값이 같다는 것이 핵심입니다. 인상 사이클의 시작이 아니라 <b>짧은 조정</b>으로 보고 있다는 뜻이에요."
+                },
+                {
+                  "html": "표결은 12명, 전망 제출은 참가자 전원이라 인원이 다릅니다. 2027년에 추가 인상을 찍은 참가자는 8명뿐, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.",
+                  "classes": [
+                    "dim"
+                  ]
+                }
+              ],
+              "variant": "small",
+              "style_attr": "margin-top:14px"
+            }
+          ],
+          "teaser": {
+            "qmark": "·",
+            "qtext": "남는 두 가지 긴장",
+            "goto_index": 4,
+            "wrapper": "teaser-wrap",
+            "has_tear_divider": true
+          },
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "한 번 더. 그리고 내년은 제자리",
+              "refs": [
+                "F11",
+                "F12",
+                "DC-D"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/0/rows/0",
+              "span": "2026년 말 정책금리 중앙값 4.1%",
+              "refs": [
+                "F11"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/rows/1",
+              "span": "2027년 말 정책금리 중앙값 4.1%",
+              "refs": [
+                "F11"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/rows/2",
+              "span": "연내 추가 인상 예상 18명 중 16명",
+              "refs": [
+                "F12"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/rows/3",
+              "span": "두 번 더 예상 4명",
+              "refs": [
+                "F12"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/rows/4",
+              "span": "2026년 헤드라인 PCE 전망 (3월 2.7%) 3.7%",
+              "refs": [
+                "F15"
+              ],
+              "kind": "fact",
+              "note": "교정 #3 — \"헤드라인\" 표기 추가"
+            },
+            {
+              "where": "blocks/0/rows/5",
+              "span": "2026년 실업률 전망 (3월 4.4%) 4.1%",
+              "refs": [
+                "F17"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "2026년과 2027년 중앙값이 같다는 것이 핵심입니다.",
+              "refs": [
+                "F11",
+                "DC-D"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/1/paragraphs/0",
+              "span": "인상 사이클의 시작이 아니라 짧은 조정으로 보고 있다는 뜻이에요.",
+              "refs": [
+                "DC-D"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/1/paragraphs/1",
+              "span": "표결은 12명, 전망 제출은 참가자 전원이라 인원이 다릅니다.",
+              "refs": [
+                "F02"
+              ],
+              "kind": "concept",
+              "concept": "C-0005",
+              "note": "교정 #2 — C-0005 REFRESHER. \"참가자 전원\"은 규칙 서술이고 이번엔 의장이 내지 않았다(F20, 두 문장 뒤). §1.2 기준 확장 가능 단순화"
+            },
+            {
+              "where": "blocks/1/paragraphs/1",
+              "span": "2027년에 추가 인상을 찍은 참가자는 8명뿐, 4명은 오히려 인하를 봤습니다.",
+              "refs": [
+                "F13"
+              ],
+              "kind": "fact",
+              "note": "교정 #4 — dot/명 → 참가자/명"
+            },
+            {
+              "where": "blocks/1/paragraphs/1",
+              "span": "의장은 이번에도 자기 전망치를 제출하지 않았고요.",
+              "refs": [
+                "F20"
+              ],
+              "kind": "fact"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "h1",
+              "span": "내년은 제자리",
+              "class": "DERIVED",
+              "value_at_authoring": 2027,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 1
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F11 가 가리키는 연도",
+                  "value": "2027",
+                  "refs": [
+                    "F11"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            },
+            {
+              "where": "blocks/0/rows/2",
+              "span": "연내",
+              "class": "DERIVED",
+              "value_at_authoring": 2026,
+              "check": "==",
+              "formula": {
+                "op": "year_of",
+                "of": "published_at",
+                "offset": 0
+              },
+              "derived_from": [
+                {
+                  "key": "target_year",
+                  "what": "F12 가 가리키는 연도",
+                  "value": "2026",
+                  "refs": [
+                    "F12"
+                  ],
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "PASS"
+            }
+          ],
+          "_concept_ref": [
+            "C-0005"
+          ]
+        },
+        {
+          "index": 4,
+          "kicker": "남는 문제",
+          "h1": "이 결정에 걸려 있는\n두 가지 불확실성",
+          "blocks": [
+            {
+              "type": "body_text",
+              "paragraphs": [
+                {
+                  "html": "<b>1. 물가의 큰 부분이 전쟁에 달려 있습니다.</b><br>이란 전쟁은 201일째. 4월 휴전 이후에도 공격이 반복되며 유가는 크게 등락했고, 회의 당일 경유 가격은 사상 최고였습니다. 성명문도 지정학적 전개로 인한 불확실성을 명시했어요."
+                },
+                {
+                  "html": "<b>2. 고용은 겉보기만큼 단단하지 않습니다.</b><br>7월 취업자는 오히려 23,000명 줄었습니다. 그런데 실업률은 4.2%에서 4.1%로 내려갔죠. 의장은 이를 노동공급 감소로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다."
+                }
+              ],
+              "variant": "small"
+            },
+            {
+              "type": "closing",
+              "html": "따라서 이번 회의의 변화는<br>금리 숫자가 아니라<br><b>인상을 둘러싼 내부 긴장이<br>전망에서 실제 행동으로 옮겨왔다는 점</b>입니다."
+            },
+            {
+              "type": "end_actions",
+              "check": "✓ 다 읽었어요",
+              "buttons": [
+                {
+                  "label": "처음부터 다시 보기",
+                  "goto_index": 0
+                }
+              ]
+            }
+          ],
+          "teaser": null,
+          "_fact_refs": [
+            {
+              "where": "h1",
+              "span": "이 결정에 걸려 있는 두 가지 불확실성",
+              "refs": [],
+              "kind": "writing"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "1. 물가의 큰 부분이 전쟁에 달려 있습니다.",
+              "refs": [
+                "F07",
+                "F37"
+              ],
+              "kind": "partial",
+              "note": "비중(\"큰 부분\")은 브리프에 없는 해석"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "이란 전쟁은 201일째.",
+              "refs": [],
+              "kind": "unsupported",
+              "note": "개전일이 브리프에 없다. D8 DERIVED 불변식을 검증할 수 없다"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "4월 휴전 이후에도 공격이 반복되며 유가는 크게 등락했고, 회의 당일 경유 가격은 사상 최고였습니다.",
+              "refs": [
+                "F37"
+              ],
+              "kind": "partial",
+              "note": "회의 당일 경유 최고치만 F37. 4월 휴전·공격 반복·유가 등락은 브리프에 없다"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "성명문도 지정학적 전개로 인한 불확실성을 명시했어요.",
+              "refs": [
+                "F07"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "2. 고용은 겉보기만큼 단단하지 않습니다.",
+              "refs": [
+                "DC-E"
+              ],
+              "kind": "derived_claim"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "7월 취업자는 오히려 23,000명 줄었습니다.",
+              "refs": [
+                "F30"
+              ],
+              "kind": "fact"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "그런데 실업률은 4.2%에서 4.1%로 내려갔죠.",
+              "refs": [
+                "F30",
+                "DC-E"
+              ],
+              "kind": "partial",
+              "note": "6월 실업률 4.2% 는 DC-E 본문에만 있고 F-ID 가 없다"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "의장은 이를 노동공급 감소로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다.",
+              "refs": [
+                "DC-E",
+                "F09"
+              ],
+              "kind": "partial",
+              "note": "\"의장=노동공급 감소\" 설명은 DC-E 가 P3 출처로 언급만 한다 — F-ID 없음"
+            },
+            {
+              "where": "blocks/1",
+              "span": "따라서 이번 회의의 변화는 금리 숫자가 아니라 인상을 둘러싼 내부 긴장이 전망에서 실제 행동으로 옮겨왔다는 점입니다.",
+              "refs": [
+                "F28",
+                "F02",
+                "DC-A"
+              ],
+              "kind": "partial",
+              "note": "\"전망에서 실제 행동으로\"는 6월 SEP 분열(F29)을 전제하는데 F29 는 숙련 본문 어디에도 없다"
+            }
+          ],
+          "_volatility": [
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "201일째",
+              "class": "DERIVED",
+              "value_at_authoring": 201,
+              "check": "==",
+              "formula": {
+                "op": "days_inclusive",
+                "from": "war_start",
+                "to": "published_at"
+              },
+              "derived_from": [
+                {
+                  "key": "war_start",
+                  "what": "이란 전쟁 개시",
+                  "value": "2026-02",
+                  "refs": [],
+                  "note": "브리프에 없다. 입문 8장 본문 \"2월 말에 시작돼\"가 기사 안 유일한 출처이고, 날짜가 아니라 기간이다",
+                  "volatility": "STABLE"
+                }
+              ],
+              "invariant": "UNVERIFIABLE",
+              "note": "개전일이 브리프에 없고 기사 안 출처(\"2월 말\")는 기간이다. 2/28 이면 201, 2/21 이면 208"
+            },
+            {
+              "where": "blocks/0/paragraphs/0",
+              "span": "경유 가격은 사상 최고",
+              "class": "VOLATILE",
+              "refs": [
+                "F37"
+              ],
+              "as_of": "2026-09-16",
+              "as_of_basis": "브리프 F37 시점 T0"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "23,000명 줄었습니다",
+              "class": "VOLATILE",
+              "refs": [
+                "F30"
+              ],
+              "as_of": "2026-08-07",
+              "as_of_basis": "브리프 F30 시점 T-40 (8/7 발표)"
+            },
+            {
+              "where": "blocks/0/paragraphs/1",
+              "span": "4.2%에서 4.1%로",
+              "class": "VOLATILE",
+              "refs": [
+                "F30"
+              ],
+              "as_of": "2026-08-07",
+              "as_of_basis": "브리프 F30 시점 T-40 (8/7 발표)",
+              "note": "4.2%(6월)는 DC-E 본문"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "scroll": "세로 스크롤 스냅 (scroll-snap-type:y mandatory, scroll-snap-stop:always), 슬라이드 = 100dvh",
+    "active_slide_detection": "IntersectionObserver, threshold 0.55",
+    "keyboard": {
+      "next": [
+        "ArrowDown",
+        "ArrowRight",
+        "Space"
+      ],
+      "prev": [
+        "ArrowUp",
+        "ArrowLeft"
+      ]
+    },
+    "teaser_click": "data-goto 인덱스로 scrollIntoView(smooth)"
+  }
+}

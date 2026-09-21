@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.0a 완료 (2026-09-20) — Step 0.0b(S2) 대기**
+**Phase 0 / Step 0.0b — S2 산출 커밋 (2026-09-21) · 도윤 에디토리얼 게이트 대기**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -9,7 +9,7 @@
 | Step | 내용 | 산출 | 세션 | 상태 |
 |---|---|---|---|---|
 | 0.0a | 프로토타입 역산 (있는 그대로) | `fixtures/*.observed.json` | S1 | ☑ 2026-09-20 |
-| 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ☐ 프롬프트 준비됨 · 게이트 필수 |
+| 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ◐ S2 산출 커밋 · 게이트 대기 |
 | 0.1 | ARTICLE_PACKAGE.md 도출 | 계약 1 | S3 | ☐ 미작성 ⚠️D11 |
 | 0.2 | DATA_MODEL + CONCEPT_IDENTITY | 계약 2·3 | S4 | ☐ 미작성 |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ☐ |
@@ -175,11 +175,11 @@ correction-log.csv:
 ```
 
 ### 완료 조건
-- [ ] 교정 5건 전부 반영, 각각 correction-log 1줄
-- [ ] 다섯 개 외 문장 변경 없음 (diff 로 확인)
-- [ ] 마지막 제외 모든 슬라이드에 teaser (D15 QA①) — 스크립트로
-- [ ] 골든에 `_findings` · `_dom_inventory` · `_transcription_notes` 없음 — 스크립트로
-- [ ] invalid 2건, 각각 위반 정확히 1개
+- [x] 교정 5건 전부 반영, 각각 correction-log 1줄
+- [x] 다섯 개 외 문장 변경 없음 (diff 로 확인) — `scripts/diff-observed-article.py`, 로그에 전문
+- [x] 마지막 제외 모든 슬라이드에 teaser (D15 QA①) — 스크립트로 (`scripts/verify-article.py`)
+- [x] 골든에 `_findings` · `_dom_inventory` · `_transcription_notes` 없음 — 스크립트로
+- [x] invalid 2건, 각각 위반 정확히 1개 — 스크립트가 골든과 1군데 차이 + 선언 code 로만 거부를 확인
 - [ ] **게이트: 도윤 승인** — 교정 vs 재집필 경계, 2번 대안 선택
 - [ ] 완료일:
 
