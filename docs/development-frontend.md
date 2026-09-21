@@ -10,6 +10,14 @@
 `fixtures/fomc-2026-09.article.json` 하나로 슬라이드 UI 렌더.
 상세는 픽스처를 보고 쓴다.
 
+## 미리 알아둘 것
+- **D17**: teaser(open_question)가 별도 슬라이드로 빠질 수 있다. 계약은 이걸 "슬라이드 사이의
+  독립 데이터"로 정의한다. 하단 문구로 하드코딩하지 마라
+- 세부 UI(kicker·teaser 글자 크기, 시각 요소 크기, 라이트/다크 기본값)는
+  레인이 열릴 때 도윤이 전달한다
+- S2 가 측정한 화면 여유: 숙련 4장이 375×812 에서 teaser 와 **0px**.
+  375×667 에서는 observed 도 여러 장이 넘친다(§8.5 "더 큼지막하게"와 충돌)
+
 ## 이 레인의 규칙
 - `docs/contract/ARTICLE_PACKAGE.md` 는 **읽기 전용**
 - 바꿔야 할 게 보이면 `docs/development-backend.md` 하단 "계약 변경 요청"에 적는다
