@@ -279,3 +279,108 @@ library sentences not in golden: 0
 - [x] C-0002: 골든 입문 3·4장 본문 불변 확인
 - [ ] **게이트: 도윤 문안 선택**
 - [ ] 선택안 라이브러리 반영 · version · 변경 이력
+
+---
+
+## C-1b 반영 · 2026-09-29 · 보조 세션 — 도윤 선택: 권장안 네 개 전부 (PM 추천)
+
+### 반영한 것
+| 개념 | 채택 | version |
+|---|---|---|
+| C-0010 REFRESHER + BOUNDARY 둘째 줄 | 안 B + BOUNDARY 수정안 | v1 → v2 (2026-09-29) |
+| C-0008 REFRESHER | 안 A | v1 → v2 (2026-09-29) |
+| C-0005 FULL | 안 B | v2 → v3 (2026-09-29) |
+| C-0002 FULL ④ 브리지 이관 + 규칙 문구 | 안 A | v2 → v3 (2026-09-29) |
+
+- CHANGELOG: 위 초안 그대로 한 줄 (날짜 2026-09-29).
+- 문안은 게이트에 올린 것과 한 글자도 다르지 않다. 게이트용 사본을 만든 `apply.py` 의 문안 상수를 그대로 가져다 썼다.
+- 골든은 건드리지 않았다. 입문 4장 "목표보다 빠르게 오르고 있어요"의 C-0002 주석은 0.1b 가 브리지 층으로 바꾸며 정리한다(D20).
+
+### 린트 ② — 반영한 라이브러리
+```bash
+python3 scripts/lint-concepts.py
+```
+```
+lint-concepts  docs/content/concept-library.md
+terms  지금 현재 올해 이번   fields  FULL REFRESHER ANALOGY
+
+coverage
+  C-0001 RATE_TO_SPENDING           FULL REFRESHER ANALOGY
+  C-0002 INFLATION_LEVEL_VS_RATE    FULL REFRESHER ANALOGY
+  C-0003 CB_INFLATION_TARGET        FULL REFRESHER
+  C-0004 FOMC_ROLE                  FULL REFRESHER
+  C-0005 VOTERS_VS_PARTICIPANTS     FULL REFRESHER
+  C-0006 SEP_ROLE                   FULL REFRESHER
+  C-0007 AGENCY_AUTHORITY_LIMIT     FULL REFRESHER
+  C-0008 POLICY_STATEMENT_VS_RULE   FULL REFRESHER
+  C-0009 FEDERAL_VS_STATE           FULL REFRESHER
+  C-0010 PERSONALIZED_PRICING       FULL REFRESHER
+  10 concepts · 22 fields
+
+hits
+  C-0002 ANALOGY   L73   지금  계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.
+  1 hits
+exit=1
+```
+→ 기대값과 같다. C-0002 ANALOGY 오탐 1건만 남는다(C-1 판정: "그 순간"으로 바꿔도 뜻이 같다).
+
+### 린트 ① — 명제 ∪ FULL 기준, 반영한 라이브러리 10개
+| 개념 | 결과 | 근거 |
+|---|---|---|
+| C-0001 | ✅ | C-1 과 같다 |
+| C-0002 | ✅ | "여기서 말하는 물가는 값 자체가 아니라 오르는 속도" ← 명제 "물가 이야기에서 중앙은행이 보는 숫자는 가격의 절대 수준이 아니라 상승률". FULL ①②③ 은 안 바뀌었고, ④ 는 이 REFRESHER 와 관련이 없다. C-1 에서 걸었던 주어 차이는 D19 가 오탐으로 판정했다 |
+| C-0003 | ✅ | "목표"는 명제에 있다("미국 연준의 목표는 2%다"). C-1 의 경계가 풀렸다 |
+| C-0004 | ✅ | C-1 과 같다 |
+| C-0005 | ✅ | REFRESHER v2 ← FULL v3: R1 12명 (2문장) · R2 투표권과 관계없이 참가자들이 (1문장 + 3문장 "도") · R3 두 숫자가 다르다 (4문장 · 명제) · R4 그래서 (4문장) |
+| C-0006 | ✅ | C-1 과 같다 |
+| C-0007 | ❌ S — **D19 "둔다"** | 기준을 명제 ∪ FULL 로 넓혀도 명제는 "규제할 수 있다", FULL 은 "금지"라서 "움직이다"를 덮지 못한다. 그림은 맞다는 D19 판정대로 둔다 |
+| C-0008 | ✅ | REFRESHER v2: 구속력 있는 규칙이 있다 (명제 + F1) · 방침 문서가 있다 (명제 · F2) · 그 자체로 누구도 구속하지 않는다 (F2) |
+| C-0009 | ✅ | C-1 과 같다 |
+| C-0010 | ✅ | REFRESHER v2: 개인 데이터로 추정 (FULL · 명제) · 추정 대상 = 내가 얼마까지 낼지 (FULL "이 사람은 얼마까지 낼까" · 명제 "지불 의향") · 그렇게 매기는 가격 (FULL). BOUNDARY 도 같은 기준으로 ✅ |
+
+→ **조치할 걸림 0 — 기대값과 같다.** 다만 엄밀히 도출되지 않는 곳이 C-0007 한 곳 남아 있다. D19 에서 이미 "둔다"로 판정한 건이라, 기대값 "걸림 0"은 이것을 뺀 수치로 읽었다.
+
+### 골든 · verify-article
+```bash
+python3 $SCRATCH/c1b/golden_check.py docs/content/concept-library.md
+```
+```
+library C-0002 FULL steps: ['ANALOGY', 'FULL ①', 'FULL ②', 'FULL ③']
+   … (입문 3·4장 14문장 — 게이트 때 사본 출력과 한 줄도 다르지 않음)
+   blocks[0].paragraphs[1]  [— 라이브러리 밖 (브리지/기사)]  목표보다 빠르게 오르고 있어요.
+library sentences not in golden: 0
+```
+```bash
+python3 scripts/verify-article.py
+```
+exit 0. 반영 전 출력과 `diff` 해서 같았다. 이 스크립트는 라이브러리에서 concept ID 만 읽고, ID 는 바뀌지 않았다.
+
+### correction_log — 5행 추가 (`time_spent_min` 비움)
+| 개념 | 유형 | 발견 |
+|---|---|---|
+| C-0010 REFRESHER | 축약 변질 | 린트 ① (C-1) |
+| C-0010 BOUNDARY | 축약 변질 | C-1b 판정 (린트 ① 대상 밖) |
+| C-0008 REFRESHER | **레이어 혼입** (지시는 축약 변질) | 린트 ① (C-1) |
+| C-0005 FULL | 레이어 혼입 | C-1 판정 (브리프 대조, 린트 밖) |
+| C-0002 FULL ④ | 레이어 혼입 | 린트 ② (머리말) + S2 |
+
+**C-0008 을 레이어 혼입으로 바꾼 이유**
+- 원본에 없는 주장이 생긴 것은 맞다. 증상만 보면 축약 변질이다.
+- 그런데 생긴 주장이 "이 사건의 문서(FTC-20260819)는 방침 문서다"이다. 게다가 "확정된 규칙이 아니다"는 의견 기간이 끝나면 바뀔 수 있는 **현재 상태**다.
+- 처방도 FULL 로 되돌리기가 아니었다. 사건 내용을 층에서 빼는 것이었다. 어느 쪽 문서인지는 이제 기사가 말한다.
+- 레이어 혼입의 뜻("Concept 에 Bridge 내용(현재 상태)이 섞임")과 처방("층에서 빼기")에 둘 다 맞는다. C-0005 의 "한 회의의 값"을 레이어 혼입으로 본 지시와도 같은 기준이다.
+
+**나머지는 지시대로 두었다**
+- C-0010 BOUNDARY: FULL 의 "'이 사람은 얼마까지 낼까'를 추정해서"를 "나에 대한 추정"으로 줄이면서 추정 대상이 빠졌다. 줄이다가 넓어진 것이라 축약 변질이 맞다.
+- C-0005: "각자"를 국면 가정으로 본 것은 지시를 따랐다. F20 이 제도인지 그 회의만의 사정인지는 읽기 범위 밖이라 확인하지 못했다. "9명"(출처 없음)은 따로 유형을 만들지 않고 "한 회의의 값"에 넣었다.
+
+**칸 채움**
+- stage: `concept_library`. 기존 값(writing · data_model · 게이트 3) 중에 맞는 게 없어서, 오류가 있던 층의 이름을 썼다. writing · data_model 도 오류가 있던 곳을 적은 값이다.
+- event_id: 개념의 `used_in` 을 따랐다(C-0010 · C-0008 → FTC-20260819, C-0005 · C-0002 → FOMC-20260916).
+
+### 완료 조건
+- [x] 4개 개념 수정안 + D19 통과 이유 + 린트 결과
+- [x] C-0010 BOUNDARY 확인 결과
+- [x] C-0002: 골든 입문 3·4장 본문 불변 확인
+- [x] 게이트: 도윤 문안 선택 — 2026-09-29, 권장안 네 개 전부 (PM 추천)
+- [x] 선택안 라이브러리 반영 · version · 변경 이력
