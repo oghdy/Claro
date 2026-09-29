@@ -1,0 +1,56 @@
+/* 읽을 수 있는 최소한만. 디자인은 F-2 (토큰 · 타이포 · 전환).
+   색은 회색 하나뿐이다 — 판단 색 없음 (D20). 층(data-layer)은 아직 보이지 않게 둔다 (F-2). */
+:root {
+  --fg: #1a1a1a;
+  --muted: #666;
+  --line: #ddd;
+  --bg: #fff;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); }
+body { font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; line-height: 1.6; word-break: keep-all; }
+
+.reader { height: 100dvh; display: flex; flex-direction: column; }
+.bar { flex: none; padding: 8px 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.levels { display: flex; gap: 4px; }
+.levels button { font: inherit; font-size: 14px; padding: 2px 10px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); border-radius: 4px; cursor: pointer; }
+.levels button[aria-pressed="true"] { color: var(--fg); border-color: var(--fg); }
+.progress { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.segs { flex: 1; display: flex; gap: 3px; }
+.segs span { flex: 1; height: 2px; background: var(--line); }
+.segs span[data-done] { background: var(--muted); }
+
+.deck { position: relative; flex: 1; overflow-y: auto; scroll-snap-type: y mandatory; }
+.page { min-height: 100%; scroll-snap-align: start; padding: 28px 20px 24px; display: flex; flex-direction: column; max-width: 40rem; margin: 0 auto; }
+
+.kicker { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+.headline { margin: 0 0 20px; font-size: 24px; line-height: 1.35; }
+.blocks { display: flex; flex-direction: column; gap: 16px; }
+.para { margin: 0; }
+.b-prose { display: flex; flex-direction: column; gap: 10px; }
+.para[data-weight="secondary"] { font-size: 14px; color: var(--muted); }
+.para[data-weight="callout"] { border: 1px solid var(--line); padding: 10px 12px; border-radius: 4px; }
+.para[data-weight="conclusion"] { font-size: 20px; line-height: 1.45; }
+
+.b-quote { margin: 0; border-left: 2px solid var(--line); padding-left: 12px; }
+.b-quote figcaption { font-size: 12px; color: var(--muted); }
+.b-quote blockquote { margin: 2px 0 0; }
+
+.b-list { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 8px; }
+.item-label { font-size: 13px; color: var(--muted); }
+
+.b-contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.c-item { border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; }
+.c-label { font-size: 13px; color: var(--muted); }
+.c-value { font-size: 18px; }
+[data-emphasized] .c-value, [data-emphasized] .c-body, li[data-emphasized] > div { font-weight: 700; }
+
+.b-sheet { margin: 0; }
+.s-row { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; border-bottom: 1px solid var(--line); }
+.s-row dt { color: var(--muted); }
+.s-row dd { margin: 0; text-align: right; }
+
+.between { margin-top: auto; padding-top: 24px; font-size: 15px; color: var(--muted); }
+.between p { margin: 0; border-top: 1px dashed var(--line); padding-top: 12px; }
+.end { margin-top: auto; padding-top: 24px; }
+.end button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--fg); background: var(--bg); border-radius: 4px; cursor: pointer; }
