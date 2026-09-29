@@ -320,16 +320,35 @@ docs/development-backend.md 0.1a 게이트 항목 체크 + 완료일
 
 ---
 
+## Step 0.1a 후속 (D22) — S3 세션에 보낼 것
+
+```
+D22 (docs/DECISIONS.md) 를 읽고 계약에 반영해라. 네가 올린 두 건의 판정이다.
+
+  1. §12-6 이란 시나리오 문장("이 전쟁이 끝나면 … 훨씬 나빠질 수도 있어요")은 claim.
+     refs 는 _refs_pending { until: "0.2", need: "DerivedClaim" }.
+     이란 규칙("fact, refs 대기")은 사실을 서술한 문장에만 적용한다고 §12-6 에 적어라
+  2. Level.label 을 뺀다. 표시 이름은 프론트가 id 에서 가져온다.
+     레벨이 하나인 기사는 levels.length == 1 로 안다. §1 · §3 · 부록 A 를 맞춰라
+  3. verify-contract-coverage.py 를 맞게 고치고, 돌린 결과를 로그에 붙여라
+  4. CHANGELOG 한 줄
+
+목록 밖에서 한 세 가지(body 선택 · id 순서 · _refs_pending 모양)는 수용됐다 (D22).
+커밋: B-0.1a D22 반영 → push
+```
+
+---
+
 ## Step 0.1b — 골든을 계약에 맞춰 다시 쓴다
 
-### 세션 개시 프롬프트 (복붙) — 위 게이트 반영 커밋이 올라온 뒤에
+### 세션 개시 프롬프트 (복붙) — 위 D22 반영 커밋이 올라온 뒤에
 
 ```
 골든 픽스처를 ARTICLE_PACKAGE 계약 모양으로 다시 써라.
 
 읽을 것 (이것만):
   CLAUDE.md
-  docs/DECISIONS.md                   D8 · D9 · D14 · D15 · D17 · D20
+  docs/DECISIONS.md                   D8 · D9 · D14 · D15 · D17 · D20 · D22
   docs/contract/ARTICLE_PACKAGE.md    전부. 특히 §6 · §9 · §12 작업 목록 · 부록 A
   fixtures/fomc-2026-09.article.json  지금 골든
   fixtures/invalid/*.json
@@ -352,7 +371,8 @@ docs/development-backend.md 0.1a 게이트 항목 체크 + 완료일
   - F · DC 섞인 span: 추론이 하나라도 있으면 claim, refs 는 DC 만.
     끊긴 F 연결은 _ 주석에 남긴다 (0.2 가 쓴다)
   - partial: 브리프 사실이 그 문장을 다 말하면 fact, 넘어서면 claim
-  - 이란 전쟁 unsupported 4: 글은 그대로. layer fact, refs 는 0.2 대기 표시
+  - 이란 전쟁 unsupported 4: 글은 그대로. 사실을 서술한 문장은 fact, refs 0.2 대기.
+    단 시나리오·전망 문장("이 전쟁이 끝나면 … 나빠질 수도 있어요")은 claim, refs 0.2 대기 (D22)
   - 브리프 산문 1 ("회의 내부 기록은 3주 뒤에 공개돼요"): fact, refs 0.2 대기
   - 브리지 후보 2: bridge, refs 0.2 대기
   - 0.2 대기 표시는 계약 §6 의 방식대로. 검증 스크립트는 WARN 으로 세고 개수를 로그에 적는다
