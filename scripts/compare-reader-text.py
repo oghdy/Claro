@@ -7,6 +7,7 @@
   대조하는 것  kicker · headline · 본문 문단 · 인용(출처 표시 + 글) · 목록(라벨 + 글) ·
               대조(라벨 + 값 + 글) · 표(라벨 + 값) · open_question
   허용하는 변환  `<br>` → `\\n` (계약 §6). 그 밖에는 한 글자라도 다르면 실패다.
+  허용된 차이  ALLOWED 에 적힌 승인된 수정만 (지금 1건, D23 #16). 위치 · 바꾼 부분이 정확히 맞아야 한다
               `<b>` 는 글의 일부로 대조한다 — 굵기 위치도 바뀌면 안 된다
   대조하지 않는 것 (계약이 버린다)  teaser 기호(Q · ·) · end_actions · 눈금 · 색 · modifier · style
   모양 대응도 본다  블록 종류 · 문단 무게(dim → secondary …) · 강조(hit → emphasized) · 장수 · 문단 수 · 항목 수
@@ -21,6 +22,13 @@ OLD_REV = 'c46871d'                        # 옛 모양의 마지막 골든 (B-0
 OLD_REL = 'fixtures/fomc-2026-09.article.json'
 NEW_DEFAULT = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
 LEVEL_MAP = {'basic': 'basic', 'adv': 'advanced'}       # D20
+
+# 허용된 차이 — 도윤이 승인한 독자 글 수정. 여기 적힌 한 건 말고는 한 글자도 달라선 안 된다.
+# 위치가 같고, 옛 글에서 `old` 를 정확히 한 번 `new` 로 바꾼 결과가 새 글과 같아야 한다(다른 글자가 더 바뀌면 실패)
+ALLOWED = [
+    {'where': 'basic[7] blocks/1 p0', 'old': '연준이 “확신이 없다”고 말한', 'new': '연준이 확신이 없다고 본',
+     'why': 'D23 · 0.1b PM 검수 #16 — 해석에 원문 표시(따옴표)를 단 것. 도윤 승인 2026-09-29'},
+]
 
 
 def br(h):
@@ -136,13 +144,17 @@ def show_diff(a, b):
 
 
 def compare(old, new):
-    fails, n_units, n_chars = [], 0, 0
+    fails, n_units, n_chars, allowed_hit = [], 0, 0, []
 
     def eq(where, a, b):
         nonlocal n_units, n_chars
         n_units += 1
         n_chars += len(a)
         if a != b:
+            for al in ALLOWED:
+                if al['where'] == where and a.count(al['old']) == 1 and a.replace(al['old'], al['new']) == b:
+                    allowed_hit.append(al)
+                    return
             fails.append(f'{where}: 글자가 다르다 — {show_diff(a, b)}')
 
     def same(where, a, b, what):
@@ -172,7 +184,7 @@ def compare(old, new):
                 same(wb, [l for l, _ in ba[2]], [l for l, _ in bb[2]], '글 단위 목록이')
                 for (la, ta), (lb, tb) in zip(ba[2], bb[2]):
                     eq(f'{wb} {la}', ta, tb)
-    return fails, n_units, n_chars, ou
+    return fails, n_units, n_chars, ou, allowed_hit
 
 
 def load(arg, rel_default=None):
@@ -194,10 +206,13 @@ def main(argv):
             raise SystemExit(__doc__)
     old = load(old_p)
     new = json.load(open(new_p or NEW_DEFAULT, encoding='utf-8'))
-    fails, n_units, n_chars, ou = compare(old, new)
+    fails, n_units, n_chars, ou, allowed_hit = compare(old, new)
     dropped = sum(1 for lv in old['levels'] for s in lv['slides'] for b in s['blocks'] if b['type'] == 'end_actions')
     print(f'옛 골든 {old_p or OLD_REV} → 새 골든 {new_p or os.path.relpath(NEW_DEFAULT, ROOT)}')
     print(f'  레벨 {len(ou)} · 슬라이드 {sum(len(v) for v in ou.values())} · 독자 글 단위 {n_units}개 · {n_chars}자 대조')
+    print(f'  허용된 차이 {len(allowed_hit)}/{len(ALLOWED)}건 (그 밖의 차이는 전부 실패):')
+    for al in allowed_hit:
+        print(f"    {al['where']}: {al['old']!r} → {al['new']!r}  ({al['why']})")
     print(f'  계약이 버리는 것 (대조 밖): end_actions {dropped}개 · teaser 기호 · 눈금 · modifier · style')
     for f in fails:
         print('  FAIL', f)

@@ -18,7 +18,8 @@
       "date": "2026-09-29",
       "from": "c46871d:fixtures/fomc-2026-09.article.json",
       "contract": "docs/contract/ARTICLE_PACKAGE.md §12",
-      "gate": "PM 검수 (D20) — 독자 글 불변이라 도윤 게이트 없음"
+      "gate": "PM 검수 (D20) — 독자 글 불변이라 도윤 게이트 없음",
+      "pm_review": "D23 (2026-09-29) — 층 판정 #1 #19 #25 #31 뒤집음, #16 독자 글 1건 수정(도윤 승인)"
     }
   },
   "event_ref": "FOMC-20260916",
@@ -77,13 +78,8 @@
                     },
                     {
                       "text": "3년 넘게 연준은 금리를 그대로 두거나 내리기만 했어요.",
-                      "layer": "claim",
-                      "refs": [],
-                      "_refs_pending": {
-                        "until": "0.2",
-                        "need": "DerivedClaim"
-                      },
-                      "_fact_refs_dropped": [
+                      "layer": "fact",
+                      "refs": [
                         "F03"
                       ]
                     }
@@ -871,7 +867,7 @@
             },
             {
               "type": "prose",
-              "text": "여기서 중요한 건 기름값이 비싸다는 게 아닙니다.\n<b>이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요.</b> 연준이 “확신이 없다”고 말한 이유의 상당 부분이 여기 있습니다.",
+              "text": "여기서 중요한 건 기름값이 비싸다는 게 아닙니다.\n<b>이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요.</b> 연준이 확신이 없다고 본 이유의 상당 부분이 여기 있습니다.",
               "paragraphs": [
                 {
                   "body": [
@@ -890,7 +886,7 @@
                       }
                     },
                     {
-                      "text": "연준이 “확신이 없다”고 말한 이유의 상당 부분이 여기 있습니다.",
+                      "text": "연준이 확신이 없다고 본 이유의 상당 부분이 여기 있습니다.",
                       "layer": "claim",
                       "refs": [],
                       "_refs_pending": {
@@ -1004,13 +1000,8 @@
                   "body": [
                     {
                       "text": "참고로 연준 자신도 물가가 2% 근처로 돌아오는 건 내년 말쯤으로 보고 있어요. ",
-                      "layer": "claim",
-                      "refs": [],
-                      "_refs_pending": {
-                        "until": "0.2",
-                        "need": "DerivedClaim"
-                      },
-                      "_fact_refs_dropped": [
+                      "layer": "fact",
+                      "refs": [
                         "F19"
                       ]
                     },
@@ -1616,11 +1607,11 @@
                   "label": [
                     {
                       "text": "9월 초",
-                      "layer": "claim",
+                      "layer": "fact",
                       "refs": [],
                       "_refs_pending": {
                         "until": "0.2",
-                        "need": "DerivedClaim"
+                        "need": "Fact 출처"
                       }
                     }
                   ],
@@ -2039,14 +2030,18 @@
                       }
                     },
                     {
-                      "text": "4월 휴전 이후에도 공격이 반복되며 유가는 크게 등락했고, 회의 당일 경유 가격은 사상 최고였습니다. ",
-                      "layer": "claim",
+                      "text": "4월 휴전 이후에도 공격이 반복되며 유가는 크게 등락했고, ",
+                      "layer": "fact",
                       "refs": [],
                       "_refs_pending": {
                         "until": "0.2",
-                        "need": "DerivedClaim"
-                      },
-                      "_fact_refs_dropped": [
+                        "need": "Fact 출처"
+                      }
+                    },
+                    {
+                      "text": "회의 당일 경유 가격은 사상 최고였습니다. ",
+                      "layer": "fact",
+                      "refs": [
                         "F37"
                       ]
                     },

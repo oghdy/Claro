@@ -268,7 +268,7 @@ def run_verify():
 
 def run_compare():
     rows, bad = [], 0
-    fails, n, ch, _ = C.compare(OLD, GOLD)
+    fails, n, ch, _, _ = C.compare(OLD, GOLD)
     ok = not fails
     rows.append(('PASS' if ok else 'FAIL', '망가뜨리지 않은 새 골든은 옛 골든과 글이 같다', f'{n}단위 {ch}자', 'OK' if ok else fails[:2]))
     bad += not ok
@@ -277,7 +277,7 @@ def run_compare():
         nonlocal bad
         d = copy.deepcopy(GOLD)
         fn(d)
-        f, _, _, _ = C.compare(OLD, d)
+        f, _, _, _, _ = C.compare(OLD, d)
         ok = bool(f) == expect_fail
         rows.append(('PASS' if ok else 'FAIL', name, '실패해야 함' if expect_fail else '통과해야 함', f'{len(f)}건' + (f' — {f[0][:90]}' if f else '')))
         bad += not ok
@@ -304,6 +304,17 @@ def run_compare():
     case('문단 무게 secondary → normal (dim 소실)', lambda d: block_of(d, 0, 0, 'prose')['paragraphs'][1].update(weight='normal'))
     case('강조 제거 (hit 소실)', lambda d: block_of(d, 0, 6, 'contrast')['items'][1].pop('emphasized'))
     case('목록 ordered 뒤집음', lambda d: block_of(d, 1, 2, 'list').update(ordered=False))
+    def s16(d): return d['levels'][0]['slides'][7]['blocks'][1]['paragraphs'][0]['body'][2]
+    def ed16(d, fn):
+        sp = s16(d); sp['text'] = fn(sp['text']); b = d['levels'][0]['slides'][7]['blocks'][1]; b['text'] = fn(b['text'])
+    case('허용된 차이 #16 을 되돌리면(옛 글 그대로) 통과 — 허용은 승인된 새 글만 강제하지 않는다',
+         lambda d: ed16(d, lambda t: t.replace('연준이 확신이 없다고 본', '연준이 “확신이 없다”고 말한')), expect_fail=False)
+    case('허용된 위치에서 승인된 것과 다르게 고침 (본 → 봤다)', lambda d: ed16(d, lambda t: t.replace('없다고 본 이유', '없다고 봤던 이유')))
+    case('허용된 위치에서 승인된 수정 + 글자 하나 더', lambda d: ed16(d, lambda t: t.replace('상당 부분이', '상당한 부분이')))
+    case('승인된 수정을 다른 문장에 적용 (허용은 위치 한 곳만)',
+         lambda d: d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'].__setitem__(
+             0, {**d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'][0],
+                 'text': d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'][0]['text'].replace('연준이', '연준이 확신이 없다고 본', 1)}))
     case('span 을 쪼개도 이음이 같으면 통과 (경계는 새 데이터)',
          lambda d: (lambda sp: (d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'].__setitem__(0, {**sp, 'text': sp['text'][:5]}),
                                 d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'].insert(1, {**sp, 'text': sp['text'][5:]})))(
