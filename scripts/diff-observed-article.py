@@ -1,76 +1,46 @@
-"""observed ↔ article 슬라이드별 diff (B-0.0b).
+"""observed ↔ article 슬라이드별 독자 글 diff (B-0.0b → B-0.1b 에서 새 골든 모양에 맞춤).
 
     python3 scripts/diff-observed-article.py
 
-독자에게 보이는 단위(kicker · h1 · 블록 안 문장/행/카드 · teaser)와 블록 속성(variant, style, modifier)을
-비교한다. "_" 로 시작하는 주석 필드는 비교하지 않는다. 슬라이드는 h1 으로 정렬하고
-(kicker 는 바뀔 수 있다 — 게이트에서 ①①②→①②③), 덱 안에서 h1 이 겹치면 멈춘다.
-index / goto_index 가 밀리기만 한 것은 따로 "기계적" 으로 표시한다.
+observed(프로토타입 옮겨 적기)와 골든(계약 모양)이 **독자에게 보이는 글**에서 어디가 다른지 본다 —
+0.0b 게이트가 고친 곳이 여기 나온다. 비교 단위는 compare-reader-text.py 와 같다:
+kicker · headline · 블록 안 글(문단 · 인용 · 목록 · 대조 · 표) · open_question.
+관측 전용 표시(variant · modifier · style · 눈금 · teaser 기호 · end_actions)는 계약이 버려서 비교하지 않는다.
+슬라이드는 headline 으로 정렬하고(kicker 는 바뀔 수 있다 — 게이트에서 ①①②→①②③), 덱 안에서 headline 이 겹치면 멈춘다.
 """
-import difflib, json, os, sys
+import difflib, importlib.util, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OBS = os.path.join(ROOT, 'fixtures/fomc-2026-09.observed.json')
 ART = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
 
+_spec = importlib.util.spec_from_file_location('compare_reader_text', os.path.join(ROOT, 'scripts/compare-reader-text.py'))
+CRT = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(CRT)
+
 
 def units(s):
-    out = [('kicker', s['kicker']), ('h1', s['h1'].replace('\n', '⏎'))]
-    for i, b in enumerate(s['blocks']):
-        t = b['type']
-        attrs = ''.join(f'[{b[k]}]' for k in ('variant', 'modifier', 'style_attr') if b.get(k))
-        head = f'b{i} {t}{attrs}'
-        if t == 'body_text':
-            for j, p in enumerate(b['paragraphs']):
-                cls = ''.join('.' + c for c in p.get('classes', []))
-                out.append((f'{head} p{j}{cls}', p['html']))
-        elif t in ('callout', 'closing'):
-            out.append((head, b['html']))
-        elif t == 'quote':
-            out.append((f'{head} tag', b.get('tag') or ''))
-            out.append((head, b['html']))
-        elif t == 'votes':
-            for j, c in enumerate(b['cards']):
-                out.append((f'{head} c{j}' + (f'.{c["modifier"]}' if c.get('modifier') else ''),
-                            f"{c['when']} | {c['tally']} | {c['what_html']}"))
-        elif t == 'timeline':
-            for j, x in enumerate(b['items']):
-                out.append((f'{head} i{j}', f"{x['when']} | {x['html']}"))
-        elif t == 'stats':
-            for j, r in enumerate(b['rows']):
-                out.append((f'{head} r{j}' + (f'.{r["v_modifier"]}' if r.get('v_modifier') else ''), f"{r['k']} | {r['v']}"))
-        elif t == 'gauge':
-            out.append((f'{head} marks', ' '.join(str(m['left_percent']) for m in b['marks'])))
-            for j, l in enumerate(b['labels']):
-                out.append((f'{head} l{j}.{l["role"]}@{l["left_percent"]}', f"{l['value_html']} {l['caption']}"))
-        elif t == 'end_actions':
-            out.append((f'{head} check', b['check']))
-            for j, x in enumerate(b['buttons']):
-                out.append((f'{head} btn{j}→{x["goto_index"]}', x['label']))
-        else:
-            out.append((head, json.dumps(b, ensure_ascii=False)))
-    if s.get('teaser'):
-        out.append(('teaser', f"{s['teaser']['qmark']} {s['teaser']['qtext']}"))
+    out = [('kicker', s['kicker']), ('headline', s['headline'].replace('\n', '⏎'))]
+    for j, (kind, _shape, us) in enumerate(s['blocks']):
+        out += [(f'b{j} {kind} {lab}', txt.replace('\n', '⏎')) for lab, txt in us]
+    if s['oq'] is not None:
+        out.append(('open_question', s['oq']))
     return out
 
 
-def key(s):
-    return s['h1']
-
-
 def main():
-    obs = json.load(open(OBS, encoding='utf-8'))
-    art = json.load(open(ART, encoding='utf-8'))
+    obs = CRT.old_units(json.load(open(OBS, encoding='utf-8')))
+    art = CRT.new_units(json.load(open(ART, encoding='utf-8')))
     changed_slides = []
     total = {'changed': 0, 'added': 0, 'removed': 0}
-    for lo, la in zip(obs['levels'], art['levels']):
-        so, sa = lo['slides'], la['slides']
+    for lid in art:
+        so, sa = obs[lid], art[lid]
         for deck in (so, sa):
-            hs = [key(s) for s in deck]
+            hs = [s['headline'] for s in deck]
             if len(hs) != len(set(hs)):
-                sys.exit(f"{la['id']}: h1 이 겹쳐 슬라이드를 정렬할 수 없다")
-        print(f"\n=== {la['id']} ({la.get('label')})  observed {len(so)}장 → article {len(sa)}장 ===")
-        sm = difflib.SequenceMatcher(a=[key(s) for s in so], b=[key(s) for s in sa], autojunk=False)
+                sys.exit(f"{lid}: headline 이 겹쳐 슬라이드를 정렬할 수 없다")
+        print(f"\n=== {lid}  observed {len(so)}장 → article {len(sa)}장 ===")
+        sm = difflib.SequenceMatcher(a=[s['headline'] for s in so], b=[s['headline'] for s in sa], autojunk=False)
         for op, i1, i2, j1, j2 in sm.get_opcodes():
             pairs = []
             if op in ('equal', 'replace'):
@@ -83,29 +53,21 @@ def main():
                 if j is None:
                     print(f'\n obs[{i}] → (삭제)')
                     total['removed'] += 1
-                    changed_slides.append((la['id'], f'obs{i}'))
+                    changed_slides.append((lid, f'obs{i}'))
                     continue
                 if i is None:
                     print(f'\n (없음) → art[{j}]  ■ 새 슬라이드')
                     for lab, txt in units(sa[j]):
                         print(f'    + {lab:<34} {txt}')
                         total['added'] += 1
-                    changed_slides.append((la['id'], j))
+                    changed_slides.append((lid, j))
                     continue
-                a, b = so[i], sa[j]
-                mech = []
-                if a['index'] != b['index']:
-                    mech.append(f"index {a['index']}→{b['index']}")
-                ga = (a.get('teaser') or {}).get('goto_index')
-                gb = (b.get('teaser') or {}).get('goto_index')
-                if ga != gb:
-                    mech.append(f'goto {ga}→{gb}')
-                ua, ub = units(a), units(b)
+                ua, ub = units(so[i]), units(sa[j])
                 if ua == ub:
-                    print(f"\n obs[{i}] → art[{j}]  본문 변경 없음" + (f"  (기계적: {', '.join(mech)})" if mech else ''))
+                    print(f"\n obs[{i}] → art[{j}]  본문 변경 없음")
                     continue
-                print(f"\n obs[{i}] → art[{j}]  ■ 변경" + (f"  (기계적: {', '.join(mech)})" if mech else ''))
-                changed_slides.append((la['id'], j))
+                print(f"\n obs[{i}] → art[{j}]  ■ 변경")
+                changed_slides.append((lid, j))
                 um = difflib.SequenceMatcher(a=ua, b=ub, autojunk=False)
                 for uop, x1, x2, y1, y2 in um.get_opcodes():
                     if uop == 'equal':

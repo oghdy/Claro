@@ -15,11 +15,14 @@
  10. D22 — Level 에 label 이 없고 단일 레벨은 levels.length == 1 로 안다.
      이란 전망 문장은 claim · need "DerivedClaim", 이란 규칙은 사실 서술 문장에만
 """
-import json, os, re, sys
+import json, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, 'docs/contract/ARTICLE_PACKAGE.md')
-GOLDEN = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
+# 부록 A 는 **옛 모양** 골든의 경로를 계약으로 대응시킨 표다. 골든은 B-0.1b 에서 계약 모양으로 바뀌었으므로
+# 옛 모양은 그 직전 커밋(B-0.1a D22 반영)에서 읽는다. 새 골든의 모양은 verify-article.py 가 본다
+GOLDEN_REV = 'c46871d'
+GOLDEN_REL = 'fixtures/fomc-2026-09.article.json'
 FTC = os.path.join(ROOT, 'fixtures/ftc-2026-08.observed.json')
 DEVDOC = os.path.join(ROOT, 'docs/development-backend.md')
 
@@ -43,7 +46,11 @@ def leaf_paths(o, p=''):
 
 
 def observed_paths(path, blocks_only=False):
-    d = json.load(open(path, encoding='utf-8'))
+    if path is None:                                     # 옛 모양 골든 (git)
+        d = json.loads(subprocess.run(['git', 'show', f'{GOLDEN_REV}:{GOLDEN_REL}'], cwd=ROOT,
+                                      capture_output=True, check=True).stdout.decode('utf-8'))
+    else:
+        d = json.load(open(path, encoding='utf-8'))
     out = set()
     for lv in d['levels']:
         for s in lv['slides']:
@@ -88,7 +95,7 @@ def main():
     prefixes = [e[:-2] for e in entries if e.endswith('.*')]
     def covered(p):
         return p in exact or any(p == x or p.startswith(x + '.') or p.startswith(x + '[') for x in prefixes)
-    obs = observed_paths(GOLDEN) | observed_paths(FTC, blocks_only=True)
+    obs = observed_paths(None) | observed_paths(FTC, blocks_only=True)
     miss = sorted(p for p in obs if not covered(p))
     unused = sorted(e for e in exact if e not in obs)
     report(not miss, f'1. 관측 경로 {len(obs)}개가 부록 A({len(entries)}행)에 있다',
