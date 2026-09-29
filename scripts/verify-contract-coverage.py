@@ -1,10 +1,10 @@
-"""ARTICLE_PACKAGE.md 가 실물과 결정을 빠짐없이 다뤘는지 본다 (B-0.1a, D20 반영).
+"""ARTICLE_PACKAGE.md 가 실물과 결정을 빠짐없이 다뤘는지 본다 (B-0.1a, D20 · D22 반영).
 
     python3 scripts/verify-contract-coverage.py
 
 계약의 옳고 그름이 아니라 **빠짐**을 잡는다.
   1. 골든의 모든 경로, FTC observed 의 블록 경로가 부록 A 에 있다
-  2. 계약이 D8 · D11 ~ D17 · D20 을 언급한다
+  2. 계약이 D8 · D11 ~ D17 · D20 · D22 를 언급한다
   3. 원형은 정확히 5개(D20 — scale 없음), Block 유니언도 같고, 근거 기사 하나뿐인 원형에 "근거 1건"
   4. 원형마다 절이 있고 그 절에 "정규 텍스트"가 있다 (D14 규칙 1)
   5. §11 의 _open 5개가 전부 "판정됨 → D20" 이고, §11 밖에 남은 _open-N 이 없다
@@ -12,6 +12,8 @@
   7. 0.2 소관 타입(Fact · Claim · Concept · Bridge · Storyline · Event · Source)을 정의하지 않았다
   8. development-backend.md 의 "Step 0.1a 가 답해야 할 것" 표 항목마다 처리 표시가 있다
   9. D20 이 정한 나머지가 계약에 있다 — 레벨 어휘 3단계, 층 판정 규칙, 0.2 대기 표시(§6 · §9), 척도 미확인(§10)
+ 10. D22 — Level 에 label 이 없고 단일 레벨은 levels.length == 1 로 안다.
+     이란 전망 문장은 claim · need "DerivedClaim", 이란 규칙은 사실 서술 문장에만
 """
 import json, os, re, sys
 
@@ -22,7 +24,8 @@ FTC = os.path.join(ROOT, 'fixtures/ftc-2026-08.observed.json')
 DEVDOC = os.path.join(ROOT, 'docs/development-backend.md')
 
 MARKS = ('계약 반영', '_open', '0.2 로', '범위 밖')
-REQUIRED_D = ('D8', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17', 'D20')
+REQUIRED_D = ('D8', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17', 'D20', 'D22')
+IRAN_FORECAST = '이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요'
 PROTOTYPES = ('prose', 'quote', 'list', 'contrast', 'sheet')          # D20 — 5개
 LEVEL_IDS = ('basic', 'intermediate', 'advanced')                    # D20
 FORBIDDEN_TYPES = ('Fact', 'Claim', 'Concept', 'Bridge', 'Storyline', 'Event', 'Source')
@@ -166,6 +169,24 @@ def main():
     miss9 = [k for k, v in checks.items() if not v]
     report(not miss9, '9. D20 — 레벨 어휘 · 층 판정 규칙 · 0.2 대기 표시(§6 · §9) · 척도 미확인',
            f'없음: {miss9}' if miss9 else '')
+
+    # 10. D22
+    level_block = re.search(r'^Level \{(.*?)^\}', code, re.M | re.S)
+    s3 = section(c, r'^## 3\. ')
+    s12 = section(c, r'^## 12\. ')
+    forecast = next((l for l in s12.splitlines() if '전망 1' in l), '')
+    forecast_next = s12.split(forecast, 1)[1].split('\n', 2)[1] if forecast else ''
+    checks22 = {
+        'Level 에 label 없음': bool(level_block) and 'label' not in level_block.group(1),
+        '§3 단일 레벨 = levels.length == 1': 'levels.length == 1' in s3,
+        '§12-6 이란 전망 문장 = claim · need "DerivedClaim"':
+            IRAN_FORECAST in forecast and '`claim`' in forecast_next and '"DerivedClaim"' in forecast_next,
+        '§12-6 이란 규칙은 사실 서술 문장에만': '사실을 서술한 문장에만' in s12,
+        '§6.2 need 예에 "DerivedClaim"': '"DerivedClaim"' in section(c, r'^### 6\.2 '),
+    }
+    miss10 = [k for k, v in checks22.items() if not v]
+    report(not miss10, '10. D22 — Level.label 제거 · 이란 전망 문장 claim · 이란 규칙 범위',
+           f'없음: {miss10}' if miss10 else '')
 
     print('\n'.join(lines))
     print('\nOK' if not fails else f'\n{fails}개 실패')

@@ -6,8 +6,9 @@
 | 2026-09-20 | 생성 (빈 껍데기) | PM |
 | 2026-09-28 | 초안 — 골든(FOMC)과 FTC observed 에서 도출. **도윤 게이트 전** | S3 · B-0.1a |
 | 2026-09-29 | 게이트 반영 (D20) — `scale` 제거(원형 5) · 판단 색 금지 · 순서 목록 간격 · open_question 형태 자유 · 레벨 어휘 3단계 · 층 판정 규칙 · 픽스처의 0.2 대기 표시 | S3 · B-0.1a |
+| 2026-09-29 | D22 반영 — 이란 규칙은 사실 서술 문장에만(전망 문장은 `claim`, `need: "DerivedClaim"`) · `Level.label` 제거 | S3 · B-0.1a |
 
-> **상태: 게이트 통과 (D20, 2026-09-29).**
+> **상태: 게이트 통과 (D20 · D22, 2026-09-29).**
 > 근거는 두 실물뿐이다 — `fixtures/fomc-2026-09.article.json`(골든, 주 입력), `fixtures/ftc-2026-08.observed.json`(블록 모양만).
 > 둘에 없는 것은 넣지 않았다. **미확인** = 두 실물에 근거가 없다. 편집 판단이 걸렸던 _open 5개는 D20 이 판정했다(§11).
 > 골든은 아직 이 모양이 아니다. 맞추는 일은 Step 0.1b 다(§12).
@@ -43,7 +44,6 @@ ArticlePackage {
 
 Level {
   id:             "basic" | "intermediate" | "advanced"   // D20. 기사마다 1~3개, 겹치지 않는다
-  label:          string | null  // 관측값 "입문" "숙련". 레벨이 하나면 null
   slides:         Slide[]        // 1개 이상. 배열 순서 = 읽는 순서
   open_questions: OpenQuestion[] // 길이 = slides.length − 1
 }
@@ -92,9 +92,11 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
   원문의 어느 구간인지는 Fact 의 일 → 0.2
 - **`id` 는 `basic` · `intermediate` · `advanced` 셋 중 하나다 (D20).** FINDINGS §9.3 의 3단계(입문 · 중급 · 숙련)와 같은 말이다 —
   독자가 고르는 단계와 기사의 단계가 같은 어휘를 쓴다. 골든의 `adv` 는 `advanced` 가 된다
+- **레벨의 표시 이름(입문 · 중급 · 숙련)은 패키지에 없다 (D22).** 프론트가 `id` 에서 한 곳에서 정한다.
+  발행된 패키지는 바뀌지 않아서(§0) 이름을 넣어 두면, 나중에 이름을 바꿀 때 옛 기사만 옛 이름을 영원히 갖는다
 - 기사는 레벨 1~3개. 한 기사 안에서 `id` 는 겹치지 않고, 배열은 basic → intermediate → advanced 순서다. 배열 순서 = 전환 UI 에 놓는 순서
 - **레벨이 하나인 기사를 허용한다** — FTC 가 실제로 그랬다 (FTC-15). 그 레벨의 `id` 는 **그 기사가 쓰인 레벨**이다(FTC = `basic`).
-  `"only"` 같은 별도 값은 쓰지 않는다. 이때 `label` 은 null 이고 프론트는 전환 UI 를 그리지 않는다
+  `"only"` 같은 별도 값은 쓰지 않는다. 레벨이 하나인지는 `levels.length == 1` 로 안다 — 이때 프론트는 전환 UI 를 그리지 않는다
 - 기사마다 레벨을 몇 개 만들지는 D21 (OPEN) 이 정한다. 계약은 1~3개를 모두 받는다
 - 어느 레벨을 먼저 보여줄지는 개인화 — 범위 밖
 
@@ -171,7 +173,7 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
 
 ### 6.2 0.2 대기 표시 — 픽스처에서만 (D20)
 
-0.2 가 ID 체계를 정하기 전에는 refs 를 채울 수 없는 span 이 있다(골든: 브리지 2, 브리프 산문 1, 이란 전쟁 4).
+0.2 가 ID 체계를 정하기 전에는 refs 를 채울 수 없는 span 이 있다(골든: 브리지 2, 브리프 산문 1, 이란 전쟁 4 — 사실 3 · 전망 1).
 0.1b 를 0.2 보다 먼저 하기 위해 그런 span 은 **픽스처에서만** 이렇게 표시한다.
 
 ```json
@@ -180,7 +182,8 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
 ```
 
 - `refs` 는 빈 배열로 둔다. 가짜 ID 를 넣지 않는다 — `refs` 에는 언제나 실제 Ref 만 들어간다
-- `need` 는 0.2 가 무엇을 만들어야 채워지는지 한 마디로 적는다 (예: `"Bridge"` · `"Fact 승격"` · `"Fact 출처"`)
+- `need` 는 0.2 가 무엇을 만들어야 채워지는지 한 마디로 적는다 (예: `"Bridge"` · `"Fact 승격"` · `"Fact 출처"` · `"DerivedClaim"`)
+  - `"DerivedClaim"` 은 근거 없는 **해석**이다. 근거 없는 사실은 출처를 채우면 되지만, 해석은 Derived Claim 도출과 반증 검사(FINDINGS §7.2)를 거쳐야 채워진다 (D22)
 - `_` 로 시작하므로 계약 필드가 아니라 픽스처 주석이다. 프론트는 읽지 않는다 — 층(`layer`)만 있으면 그릴 수 있다
 - **발행 불변식은 그대로다.** 대기 span 은 refs 가 비어 있어 §9-6 에 걸리고, 발행물에는 `_` 필드가 없다(§9-10). 대기 표시가 있으면 발행하지 않는다
 - 픽스처 검증은 대기 span 을 **실패가 아니라 WARN 으로 세고 개수를 보고한다.** 조용히 두면 썩는다 — 0 이 될 때까지 보이게 둔다
@@ -461,22 +464,23 @@ D20 은 이 밖에 두 가지를 더 정했다 — 층 판정 규칙(§6.1), 0.1
 
 1. **최상단** — `event_hint` → `event_ref`, `_published_at` → `published_at`, `_source.document_title` 에서 "Claro — " 를 뗀 것 → `title`,
    `_source.lang` → `lang`. `chrome` · `interaction` · `_source` 의 나머지는 패키지 밖
-2. **레벨** — `slide_count` · `deck_element_id` · `hidden_attr` · `initially_visible` 을 뺀다. `open_questions` 배열을 새로 만든다. `id` `adv` → `advanced` (D20)
+2. **레벨** — `slide_count` · `deck_element_id` · `hidden_attr` · `initially_visible` · `label`(D22) 을 뺀다. `open_questions` 배열을 새로 만든다. `id` `adv` → `advanced` (D20)
 3. **teaser → `open_questions`** — `qtext` 만 옮긴다. `qmark` · `goto_index` · `wrapper` · `has_tear_divider` 는 버린다
 4. **슬라이드** — `index` 를 뺀다. `h1` → `headline`(RichText)
 5. **본문 글 → RichText** — 모든 글 필드를 span 배열로. `_fact_refs` 를 span 에 흡수한다. `<br>` → `\n`
-6. **kind → layer** — D20 규칙대로(§6.1 · §6.2). 판정이 애매했던 span 은 목록으로 남겨 PM 이 검수한다
+6. **kind → layer** — D20 · D22 규칙대로(§6.1 · §6.2). 판정이 애매했던 span 은 목록으로 남겨 PM 이 검수한다
    - 그대로 넘어가는 것: fact → `fact`, derived_claim → `claim`, concept → `concept`, writing → `writing`
    - **F · DC 를 섞은 17 span** — 추론이 하나라도 있으면 `claim`, refs 는 DC 만. 끊긴 F 연결은 `_` 주석으로 남긴다(0.2 가 Claim → Fact 로 옮긴다)
    - `partial` 12 — 브리프 사실이 그 문장을 다 말하면 `fact`, 넘어서면 `claim`. note 는 QA 기록이지 패키지 값이 아니다
    - **0.2 대기 7** — 글은 그대로 두고 refs 는 §6.2 대기 표시
-     - 이란 전쟁 `unsupported` 4 (입문 8장 둘 · 입문 8장 callout 하나 · 숙련 5장 "201일째") — `fact`, `need: "Fact 출처"`.
+     - 이란 전쟁 사실 3 (입문 8장 둘 · 숙련 5장 "201일째") — `fact`, `need: "Fact 출처"`.
        도윤의 배경지식에서 온 사실이고 출처가 비어 있을 뿐이다. 보강은 C-2 · C-3 · 0.2
+     - 이란 전쟁 전망 1 (입문 8장 callout "이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요") —
+       **`claim`**, `need: "DerivedClaim"` (D22). 사실이 아니라 우리가 한 전망이다. 브리프 DC-A~E 어디에도 없다
      - 브리프 산문 1 (입문 7장 "회의 내부 기록은 3주 뒤에 공개돼요") — `fact`, `need: "Fact 승격"`
      - 브리지 2 — "그런데 지금 미국은 3%대입니다", "목표보다 빠르게 오르고 있어요"(지금은 concept 과 fact 를 함께 달고 있다) — `bridge`, `need: "Bridge"`
-   - ⚠️ **애매 — PM 검수 목록에 넣을 것**: 이란 `unsupported` 4 중 입문 8장 callout 의
-     "이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요" 는 사실이 아니라 시나리오 해석이다.
-     D20 의 이란 규칙(`fact`)과 층 판정 규칙(애매하면 `claim`)이 이 문장에서 갈린다. 층 판정 규칙을 따르면 `claim`, `need: "Claim"`
+   - **이란 규칙("글 그대로, `fact`, refs 대기")은 사실을 서술한 문장에만 적용한다 (D22).**
+     해석 · 전망 문장은 §6.1 일반 규칙을 따른다 — `fact` 로 달면 독자가 우리 전망을 원문 사실로 읽는다
 7. **블록 변환**
    - body_text → `prose` (`dim` → `secondary`, `small` · `style_attr` 버림)
    - callout → `prose` `weight: callout` (`warn` 은 버린다 — 판단 색, D20)
@@ -520,7 +524,7 @@ FTC observed 는 골든이 아니라 0.1b 대상이 아니다. 어휘 대응만 
 | `top.chrome.*` | FOMC | 패키지 밖 — 프론트 UI |
 | `top.interaction.*` | FOMC | 패키지 밖 — 프론트 UI |
 | `level.id` | FOMC | `levels[].id` — `adv` → `advanced` (D20) |
-| `level.label` | FOMC | `levels[].label` |
+| `level.label` | FOMC | 버린다 — 표시 이름은 프론트가 `id` 에서 (D22) |
 | `level.slide_count` | FOMC | 버린다 — `slides.length` |
 | `level.deck_element_id` | FOMC | 버린다 — 프론트 |
 | `level.hidden_attr` | FOMC | 버린다 — 프론트 |

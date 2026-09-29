@@ -242,3 +242,52 @@ exit=0
    대기 표시를 닫으려고 §9-10 "발행물에 `_` 필드 없음"을 넣었다
 5. `docs/development-backend.md` 의 0.1a 표 "처리 (S3)" 열에 남은 `_open` 표시는 S3 당시 처리 기록이라 그대로 두었다 — 전부 D20 으로 판정됨
 6. 계약 상단 상태 줄을 "게이트 통과 (D20)"로 바꿨다 ("게이트 전에는 구현하지 않는다"가 남아 있으면 0.1b 가 막힌다)
+
+
+---
+
+## B-0.1a · 2026-09-29 · D22 반영
+
+D22 — S3 가 올린 두 건의 판정. 목록 밖에서 한 세 가지(`contrast` body 선택 · 레벨 id 순서 · `_refs_pending` 모양)는 수용됨.
+
+### 반영한 것 — `docs/contract/ARTICLE_PACKAGE.md`
+| D22 | 계약 |
+|---|---|
+| ① 이란 규칙("글 그대로, `fact`, refs 대기")은 **사실을 서술한 문장에만** | §12-6 — 이란 4 를 사실 3(`fact`, `need: "Fact 출처"`) · 전망 1 로 가르고 범위 문장을 넣었다. PM 검수 요청 줄은 판정됐으니 뺐다 |
+| ① 전망 문장 "이 전쟁이 끝나면 … 훨씬 나빠질 수도 있어요" → `claim`, `need: "DerivedClaim"` | §12-6 · §6.2 (`need` 예에 `"DerivedClaim"` + 근거 없는 해석은 FINDINGS §7.2 를 거쳐야 채워진다) |
+| ② `Level.label` 제거, 표시 이름은 프론트가 `id` 에서 | §1 `Level` · §3 (이유: 발행물은 안 바뀐다) · §12-2 · 부록 A `level.label` → 버린다 |
+| ② 단일 레벨은 `levels.length == 1` | §3 |
+| CHANGELOG | 2026-09-29 D22 행 |
+
+`scripts/verify-contract-coverage.py` — 필수 결정에 D22, 검사 10(D22) 추가.
+
+### 검증 — 출력 그대로
+
+```
+$ python3 scripts/verify-contract-coverage.py
+PASS  1. 관측 경로 137개가 부록 A(91행)에 있다
+PASS  2. D8 · D11 · D12 · D13 · D14 · D15 · D16 · D17 · D20 · D22 언급
+PASS  3. 원형 5개 = prose · quote · list · contrast · sheet (scale 없음), Block 유니언 일치, 근거 1건 표시
+      [('prose', '둘 다'), ('quote', '둘 다'), ('list', '둘 다'), ('contrast', '둘 다'), ('sheet', '근거 1건')]
+PASS  4. 원형마다 절이 있고 "정규 텍스트"가 정의돼 있다
+PASS  5. §11 의 _open 5개가 전부 "판정됨 → D20", §11 밖에 남은 _open 없음
+PASS  6. §12 에 "게이지 → contrast 두 항목. 글자는 그대로" + 버리는 눈금 [33, 62]
+PASS  7. 0.2 소관 타입을 정의하지 않음
+PASS  8. 0.1a 표 20행 전부 처리 표시 (계약 반영 / _open / 0.2 로 / 범위 밖)
+PASS  9. D20 — 레벨 어휘 · 층 판정 규칙 · 0.2 대기 표시(§6 · §9) · 척도 미확인
+PASS  10. D22 — Level.label 제거 · 이란 전망 문장 claim · 이란 규칙 범위
+
+OK
+exit=0
+```
+
+검사 10 이 실제로 실패하는지 — 계약 사본 4개, 전부 검사 10 만 실패했다(사본 커밋 안 함).
+| 주입 | 실패한 검사 |
+|---|---|
+| `Level` 에 `label` 되돌림 | 10 |
+| §3 `levels.length == 1` 문장 삭제 | 10 |
+| 전망 문장을 `fact` · `"Fact 출처"` 로 | 10 |
+| 이란 규칙 범위 문장 삭제 | 10 |
+
+`need` 값의 표기가 섞여 있다 — `"Bridge"` · `"DerivedClaim"` 은 영문 식별자, `"Fact 승격"` · `"Fact 출처"` 는 한국어 구. 자유 문자열이라 계약 위반은 아니다.
+0.1b 가 WARN 을 사유별로 셀 때 걸리면 그때 한쪽으로 맞추면 된다.
