@@ -1,16 +1,17 @@
-"""ARTICLE_PACKAGE.md 가 실물과 결정을 빠짐없이 다뤘는지 본다 (B-0.1a).
+"""ARTICLE_PACKAGE.md 가 실물과 결정을 빠짐없이 다뤘는지 본다 (B-0.1a, D20 반영).
 
     python3 scripts/verify-contract-coverage.py
 
 계약의 옳고 그름이 아니라 **빠짐**을 잡는다.
   1. 골든의 모든 경로, FTC observed 의 블록 경로가 부록 A 에 있다
-  2. 계약이 D8 · D11 ~ D17 을 언급한다
-  3. 근거 기사가 하나뿐인 원형에 "근거 1건"이 적혀 있다 (§7.2)
+  2. 계약이 D8 · D11 ~ D17 · D20 을 언급한다
+  3. 원형은 정확히 5개(D20 — scale 없음), Block 유니언도 같고, 근거 기사 하나뿐인 원형에 "근거 1건"
   4. 원형마다 절이 있고 그 절에 "정규 텍스트"가 있다 (D14 규칙 1)
-  5. 본문에서 쓴 _open-N 이 전부 §11 에 정의돼 있다
-  6. §12 "골든과 다른 점"에 게이지 눈금 [33, 62] 이 있다
+  5. §11 의 _open 5개가 전부 "판정됨 → D20" 이고, §11 밖에 남은 _open-N 이 없다
+  6. §12 에 "게이지 → contrast 두 항목. 글자는 그대로" 와 버리는 눈금 [33, 62] 이 있다
   7. 0.2 소관 타입(Fact · Claim · Concept · Bridge · Storyline · Event · Source)을 정의하지 않았다
   8. development-backend.md 의 "Step 0.1a 가 답해야 할 것" 표 항목마다 처리 표시가 있다
+  9. D20 이 정한 나머지가 계약에 있다 — 레벨 어휘 3단계, 층 판정 규칙, 0.2 대기 표시(§6 · §9), 척도 미확인(§10)
 """
 import json, os, re, sys
 
@@ -21,7 +22,9 @@ FTC = os.path.join(ROOT, 'fixtures/ftc-2026-08.observed.json')
 DEVDOC = os.path.join(ROOT, 'docs/development-backend.md')
 
 MARKS = ('계약 반영', '_open', '0.2 로', '범위 밖')
-REQUIRED_D = ('D8', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17')
+REQUIRED_D = ('D8', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17', 'D20')
+PROTOTYPES = ('prose', 'quote', 'list', 'contrast', 'sheet')          # D20 — 5개
+LEVEL_IDS = ('basic', 'intermediate', 'advanced')                    # D20
 FORBIDDEN_TYPES = ('Fact', 'Claim', 'Concept', 'Bridge', 'Storyline', 'Event', 'Source')
 
 
@@ -94,12 +97,18 @@ def main():
     absent = [d for d in REQUIRED_D if not re.search(rf'\b{d}\b', c)]
     report(not absent, f'2. {" · ".join(REQUIRED_D)} 언급', f'없음: {absent}' if absent else '')
 
-    # 3. 근거 1건 표시
+    # 3. 원형 5개 + 유니언 + 근거 1건 표시
     tbl = section(c, r'^### 7\.2 ')
     rows = re.findall(r'^\| `(\w+)` [^|]*\|[^|]*\|[^|]*\| ([^|]+) \|', tbl, re.M)
+    names = [t for t, _ in rows]
+    union = re.search(r'^Block = ([^/\n]+)', c, re.M)
+    union_names = [x.strip() for x in union.group(1).split('|')] if union else []
     bad = [t for t, ev in rows if '둘 다' not in ev and '근거 1건' not in ev]
-    report(rows and not bad, f'3. 원형 {len(rows)}개 — 근거 기사 하나뿐인 원형에 "근거 1건"',
-           f'표시 없음: {bad}' if bad else f'{[(t, "둘 다" if "둘 다" in ev else "근거 1건") for t, ev in rows]}')
+    ok = (sorted(names) == sorted(PROTOTYPES)
+          and sorted(n.lower() for n in union_names) == sorted(PROTOTYPES) and not bad)
+    detail = (f'표 {names} / 유니언 {union_names} / 근거 표시 없음 {bad}' if not ok
+              else f'{[(t, "둘 다" if "둘 다" in ev else "근거 1건") for t, ev in rows]}')
+    report(ok, f'3. 원형 {len(rows)}개 = {" · ".join(PROTOTYPES)} (scale 없음), Block 유니언 일치, 근거 1건 표시', detail)
 
     # 4. 원형마다 절 + 정규 텍스트
     no_sec = []
@@ -110,15 +119,21 @@ def main():
     report(rows and not no_sec, '4. 원형마다 절이 있고 "정규 텍스트"가 정의돼 있다',
            f'없음: {no_sec}' if no_sec else '')
 
-    # 5. _open 정의
-    used = set(re.findall(r'_open-(\d+)', c))
-    defined = set(re.findall(r'^\| _open-(\d+) \|', section(c, r'^## 11\. '), re.M))
-    report(used and used <= defined, f'5. 쓰인 _open {sorted(used, key=int)} 이 §11 에 정의됨',
-           f'정의 없음: {sorted(used - defined)}' if used - defined else '')
+    # 5. _open 판정됨
+    s11 = section(c, r'^## 11\. ')
+    open_rows = re.findall(r'^\| _open-(\d+) \|(.*)$', s11, re.M)
+    undecided = [n for n, rest in open_rows if '판정됨 → D20' not in rest]
+    outside = sorted(set(re.findall(r'_open-(\d+)', c.replace(s11, ''))), key=int)
+    ok = sorted(n for n, _ in open_rows) == ['1', '2', '3', '4', '5'] and not undecided and not outside
+    report(ok, f'5. §11 의 _open {len(open_rows)}개가 전부 "판정됨 → D20", §11 밖에 남은 _open 없음',
+           '' if ok else f'판정 표시 없음 {undecided} / §11 밖 참조 {outside}')
 
-    # 6. 게이지 위반이 골든과 다른 점에
+    # 6. 게이지 항목
     diff = section(c, r'^## 12\. ')
-    report('[33, 62]' in diff, '6. §12 에 게이지 눈금 [33, 62]')
+    need = ('게이지 → `contrast` 두 항목', '글자는 그대로', '[33, 62]')
+    lacking = [x for x in need if x not in diff]
+    report(not lacking, '6. §12 에 "게이지 → contrast 두 항목. 글자는 그대로" + 버리는 눈금 [33, 62]',
+           f'없음: {lacking}' if lacking else '')
 
     # 7. 0.2 타입 정의 금지
     code = '\n'.join(re.findall(r'```ts\n(.*?)```', c, re.S))
@@ -134,6 +149,23 @@ def main():
                 if not any(m in r.split('|')[-1] for m in MARKS)]
     report(body_rows and not unmarked, f'8. 0.1a 표 {len(body_rows)}행 전부 처리 표시 ({" / ".join(MARKS)})',
            f'표시 없음: {unmarked}' if unmarked else '')
+
+    # 9. D20 의 나머지
+    lvl = re.search(r'^\s*id:\s*(.+?)\s*//', code, re.M)
+    lvl_ids = re.findall(r'"(\w+)"', lvl.group(1)) if lvl else []
+    s6 = section(c, r'^## 6\. ')
+    s9 = section(c, r'^## 9\. ')
+    s10 = section(c, r'^## 10\. ')
+    checks = {
+        f'Level.id = {" | ".join(LEVEL_IDS)}': lvl_ids == list(LEVEL_IDS),
+        '§6 층 판정 규칙 "애매하면 claim"': bool(re.search(r'애매하면 `claim`', s6)),
+        '§6 대기 표시 _refs_pending 정의': '_refs_pending' in s6 and '픽스처에서만' in s6,
+        '§9 발행 불변식이 대기 표시를 막음': '_refs_pending' in s9 and '발행되지 않는다' in s9,
+        '§10 척도 미확인 (D20)': bool(re.search(r'척도.*미확인.*D20', s10)),
+    }
+    miss9 = [k for k, v in checks.items() if not v]
+    report(not miss9, '9. D20 — 레벨 어휘 · 층 판정 규칙 · 0.2 대기 표시(§6 · §9) · 척도 미확인',
+           f'없음: {miss9}' if miss9 else '')
 
     print('\n'.join(lines))
     print('\nOK' if not fails else f'\n{fails}개 실패')

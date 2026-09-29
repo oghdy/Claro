@@ -5,10 +5,11 @@
 |---|---|---|
 | 2026-09-20 | 생성 (빈 껍데기) | PM |
 | 2026-09-28 | 초안 — 골든(FOMC)과 FTC observed 에서 도출. **도윤 게이트 전** | S3 · B-0.1a |
+| 2026-09-29 | 게이트 반영 (D20) — `scale` 제거(원형 5) · 판단 색 금지 · 순서 목록 간격 · open_question 형태 자유 · 레벨 어휘 3단계 · 층 판정 규칙 · 픽스처의 0.2 대기 표시 | S3 · B-0.1a |
 
-> **상태: 초안 · 게이트 전.** 게이트를 통과하기 전에는 이 문서로 구현하지 않는다.
+> **상태: 게이트 통과 (D20, 2026-09-29).**
 > 근거는 두 실물뿐이다 — `fixtures/fomc-2026-09.article.json`(골든, 주 입력), `fixtures/ftc-2026-08.observed.json`(블록 모양만).
-> 둘에 없는 것은 넣지 않았다. **미확인** = 두 실물에 근거가 없다. **_open-N** = 편집 판단이 걸려 도윤이 고른다(§11).
+> 둘에 없는 것은 넣지 않았다. **미확인** = 두 실물에 근거가 없다. 편집 판단이 걸렸던 _open 5개는 D20 이 판정했다(§11).
 > 골든은 아직 이 모양이 아니다. 맞추는 일은 Step 0.1b 다(§12).
 
 ---
@@ -41,7 +42,7 @@ ArticlePackage {
 }
 
 Level {
-  id:             string         // 관측값 "basic" "adv" — 어휘는 _open-5
+  id:             "basic" | "intermediate" | "advanced"   // D20. 기사마다 1~3개, 겹치지 않는다
   label:          string | null  // 관측값 "입문" "숙련". 레벨이 하나면 null
   slides:         Slide[]        // 1개 이상. 배열 순서 = 읽는 순서
   open_questions: OpenQuestion[] // 길이 = slides.length − 1
@@ -60,9 +61,9 @@ Span {
   text:  string                  // 인라인 서식은 <b>…</b> 와 \n 둘뿐
   layer: "fact" | "claim" | "concept" | "bridge" | "writing"
   refs:  Ref[]                   // writing 이면 [], 나머지는 1개 이상. Ref 의 모양은 0.2
-}
+}                                // 픽스처에서만: _refs_pending { until: "0.2", need } — §6.2. 발행물엔 없다
 
-Block = Prose | Quote | List | Contrast | Sheet     // Scale 은 _open-1 에 따라
+Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
 // 모든 블록 공통: { type: string, text: string }   text = 정규 텍스트 = linearize(block)
 ```
 
@@ -76,7 +77,7 @@ Block = Prose | Quote | List | Contrast | Sheet     // Scale 은 _open-1 에 따
 | `title` | 기사 제목. 브랜드("Claro — ")는 빼고 프론트가 붙인다 | 두 프로토타입의 `<title>` |
 | `lang` | `"ko"` | 두 프로토타입 `lang="ko"` |
 | `published_at` | DERIVED 값("201일째", "올해")이 계산된 기준 시각 (§8) | 골든 `_published_at` · D8 |
-| `levels` | 레벨 배열 (§3) | 골든 2개, FTC 1개 |
+| `levels` | 레벨 배열 (§3). 1~3개 (D20) | 골든 2개, FTC 1개 |
 
 패키지 자체의 ID·버전은 실물에 없다 — 미확인.
 
@@ -89,9 +90,12 @@ Block = Prose | Quote | List | Contrast | Sheet     // Scale 은 _open-1 에 따
 - 레벨끼리 공유하는 것은 Fact Graph 뿐이다 — 같은 사실은 같은 `Ref` 로 가리킨다 (§3.3)
 - 같은 사실·같은 원문을 레벨마다 다른 글로 쓸 수 있다. 인용도 레벨마다 다르게 자를 수 있다 (FOMC-11).
   원문의 어느 구간인지는 Fact 의 일 → 0.2
-- **레벨이 하나인 기사를 허용한다** — FTC 가 실제로 그랬다 (FTC-15). 이때 `label` 은 null 이고 프론트는 전환 UI 를 그리지 않는다
-- 배열 순서 = 전환 UI 에 놓는 순서 (관측: 입문 → 숙련)
-- `id` 어휘 → _open-5
+- **`id` 는 `basic` · `intermediate` · `advanced` 셋 중 하나다 (D20).** FINDINGS §9.3 의 3단계(입문 · 중급 · 숙련)와 같은 말이다 —
+  독자가 고르는 단계와 기사의 단계가 같은 어휘를 쓴다. 골든의 `adv` 는 `advanced` 가 된다
+- 기사는 레벨 1~3개. 한 기사 안에서 `id` 는 겹치지 않고, 배열은 basic → intermediate → advanced 순서다. 배열 순서 = 전환 UI 에 놓는 순서
+- **레벨이 하나인 기사를 허용한다** — FTC 가 실제로 그랬다 (FTC-15). 그 레벨의 `id` 는 **그 기사가 쓰인 레벨**이다(FTC = `basic`).
+  `"only"` 같은 별도 값은 쓰지 않는다. 이때 `label` 은 null 이고 프론트는 전환 UI 를 그리지 않는다
+- 기사마다 레벨을 몇 개 만들지는 D21 (OPEN) 이 정한다. 계약은 1~3개를 모두 받는다
 - 어느 레벨을 먼저 보여줄지는 개인화 — 범위 밖
 
 ---
@@ -122,8 +126,9 @@ Block = Prose | Quote | List | Contrast | Sheet     // Scale 은 _open-1 에 따
   - 길이는 정확히 `slides.length − 1`, 모든 `text` 는 비어 있지 않다 = D15 QA① (기계 검사)
   - 다음 슬라이드가 실제로 답했는가 = QA② — 의미 판정, 게이트 3
 - `text` 만 둔다. 프로토타입의 `Q` / `·` 기호, 구분선, 이동 인덱스는 데이터가 아니다
-- 반드시 질문형이어야 하나 → _open-4
-  (관측: 입문은 전부 "…?", 숙련은 전부 명사구, FTC 에 평서 예고 1건 "그런데, 반전이 하나 있어요")
+- **형태는 자유다 (D20).** 질문형("…?"), 목차형(숙련의 명사구), 평서 예고("그런데, 반전이 하나 있어요") 모두 된다.
+  **단 답이 안 난 물음이 담겨 있어야 한다** — 물음이 없는 평서문은 넘길 힘이 없다(§8.2). 레벨에 묶지 않는다. 형태 필드는 없다
+  - 물음이 담겼는지는 기계로 못 본다 — 게이트 3 (D15 QA② 와 같은 판정)
 
 ---
 
@@ -151,9 +156,35 @@ Block = Prose | Quote | List | Contrast | Sheet     // Scale 은 _open-1 에 따
 
 - **span 하나에 layer 하나.** `refs` 는 그 층의 atom 만 가리킨다 — Claim span 에 Fact ID 를 섞지 않는다
   (0.0b 관찰: 골든 17 span 이 `F-*` 와 `DC-*` 를 섞었다). Claim 이 어떤 Fact 에 기대는지는 Claim 이 안다 → 0.2
-- `fact` · `claim` · `concept` · `bridge` 는 refs 가 1개 이상이다. 층이 맞게 붙었는지(사실을 말하는 글을 `writing` 으로 달지 않았는지)는 기계로 못 본다 — 게이트
+- `fact` · `claim` · `concept` · `bridge` 는 refs 가 1개 이상이다 (픽스처의 0.2 대기만 예외 — §6.2). 층이 맞게 붙었는지(사실을 말하는 글을 `writing` 으로 달지 않았는지)는 기계로 못 본다 — 게이트
 - **원문(인용)은 층이 아니라 블록이다** → §7.4. 원문도 결국 어떤 Fact 의 원문 구간이라 span 층은 `fact` 다
 - 층을 어떻게 보여줄지(색, 밑줄, 탭하면 근거)는 프론트가 정한다. 근거 내용을 펼치려면 Ref 를 풀어야 하고, 그 경로는 0.2 이후다
+
+### 6.1 층 판정 규칙 — 사실인지 해석인지 애매하면 `claim` 으로 단다 (D20)
+
+독자는 span 마다 "이건 사실 / 이건 Claro 의 해석" 표시를 본다(§8.4). 판정이 갈리면 `claim` 이다.
+- 해석을 `fact` 로 달면 → 독자가 우리 추론을 1차 자료처럼 믿는다. FINDINGS §5.2 가 가장 경계한 실수다
+- 사실을 `claim` 으로 달면 → 조금 보수적일 뿐 독자를 속이지 않는다
+
+두 실수의 비용이 같지 않아서 애매하면 `claim` 이다. 골든만이 아니라 파이프라인이 모든 기사에 쓰는 규칙이다.
+- 한 문장에 사실과 추론이 섞였으면 — 추론이 하나라도 있으면 `claim`. refs 는 Claim 만(§6 "span 하나에 layer 하나")
+
+### 6.2 0.2 대기 표시 — 픽스처에서만 (D20)
+
+0.2 가 ID 체계를 정하기 전에는 refs 를 채울 수 없는 span 이 있다(골든: 브리지 2, 브리프 산문 1, 이란 전쟁 4).
+0.1b 를 0.2 보다 먼저 하기 위해 그런 span 은 **픽스처에서만** 이렇게 표시한다.
+
+```json
+{ "text": "그런데 지금 미국은 3%대입니다.", "layer": "bridge", "refs": [],
+  "_refs_pending": { "until": "0.2", "need": "Bridge" } }
+```
+
+- `refs` 는 빈 배열로 둔다. 가짜 ID 를 넣지 않는다 — `refs` 에는 언제나 실제 Ref 만 들어간다
+- `need` 는 0.2 가 무엇을 만들어야 채워지는지 한 마디로 적는다 (예: `"Bridge"` · `"Fact 승격"` · `"Fact 출처"`)
+- `_` 로 시작하므로 계약 필드가 아니라 픽스처 주석이다. 프론트는 읽지 않는다 — 층(`layer`)만 있으면 그릴 수 있다
+- **발행 불변식은 그대로다.** 대기 span 은 refs 가 비어 있어 §9-6 에 걸리고, 발행물에는 `_` 필드가 없다(§9-10). 대기 표시가 있으면 발행하지 않는다
+- 픽스처 검증은 대기 span 을 **실패가 아니라 WARN 으로 세고 개수를 보고한다.** 조용히 두면 썩는다 — 0 이 될 때까지 보이게 둔다
+- 대기 표시 없이 refs 가 비어 있으면 픽스처에서도 실패다
 
 ---
 
@@ -176,19 +207,21 @@ Block = Prose | Quote | List | Contrast | Sheet     // Scale 은 _open-1 에 따
 5. **시각은 선형화에 들어가는 필드만 쓴다** (D14 규칙 3). 예외는 명제를 더하지 않는 두 가지뿐이다
    - 문단 `weight` (§7.3)
    - 대조 항목을 **위치로** 구분하는 것 (첫째와 둘째에 다른 색). 항목의 뜻으로 색을 고르지 않는다
-6. **렌더 시점 계산 없음** (D8 · D12). 프론트는 값을 계산하지 않고 받은 글을 그린다 (_open-1 (a) 를 고르면 예외 하나가 생긴다)
+
+   **판단을 싣는 색은 없다 (D20).** "나쁘게 올랐다", "경고" 같은 판단이 필요하면 글로 쓴다 — 그 글은 `claim` 층이다.
+   Claro 는 해석을 해석이라고 보여주는 서비스라서 겉모양 속에 해석을 숨기지 않는다
+6. **렌더 시점 계산 없음** (D8 · D12). 프론트는 값을 계산하지 않고 받은 글을 그린다
 7. 선형화에서 항목 안의 `\n` 은 공백으로 바꾼다 — 항목 하나가 한 줄이 되게
 
-### 7.2 원형 목록
+### 7.2 원형 목록 — 5개 (D20)
 
 | 원형 `type` | 뜻 | 관측 타입 | 근거 기사 |
 |---|---|---|---|
 | `prose` 문단 | 서식 있는 글 문단 | body_text · callout · closing | **둘 다** |
 | `quote` 인용 | 출처가 있는 남의 말 그대로 | quote (출처가 있는 것만) | **둘 다** |
 | `list` 목록 | 짧은 항목을 늘어놓는다. 순서가 뜻일 수 있다 | timeline · steps · examples | **둘 다** |
-| `contrast` 대조 | 두 항목을 맞대어 읽게 한다 | votes · tags_inline · rule_line · (quote 를 빌린 경계선) | **둘 다** |
+| `contrast` 대조 | 두 항목을 맞대어 읽게 한다 | votes · gauge · tags_inline · rule_line · (quote 를 빌린 경계선) | **둘 다** |
 | `sheet` 이름-값 표 | 이름 붙은 값 여러 개 | stats | FOMC — **근거 1건** |
-| `scale` 척도 | 축 위의 값 | gauge | FOMC — **근거 1건 · _open-1 에 따라 존폐** |
 
 D14 참고안과 다른 곳 (이유는 로그 맨 앞)
 - 극성 목록(rule_line)을 따로 두지 않았다 → `contrast`. 극성은 라벨 글자("✕", "해당 없음")에 들어 있다.
@@ -196,6 +229,7 @@ D14 참고안과 다른 곳 (이유는 로그 맨 앞)
 - 강조 문단(callout) · 마무리(closing) → `prose` 의 `weight`. 모양이 같고 무게만 다르다
 - 순서 목록 · 순서 없는 목록 → `list` 하나에 `ordered`
 - `end_actions` 는 블록이 아니다 → 프론트 UI (§0)
+- 척도(gauge) → `contrast` 두 항목 (D20). 척도 원형은 두 번째 사례 전까지 두지 않는다 (§10.1)
 
 **상태축 블록 어휘는 미확인이다 (D11).** 위 목록은 시간축(FOMC) · 경계축(FTC) 두 기사에서만 나왔다.
 스크루웜(상태축)은 슬라이드가 없어 대보지 못했다. 브리프로 보면 지도(확산 경로)가 새로 필요할 수 있다 — 검증 안 됨.
@@ -216,7 +250,7 @@ Weight = "normal" | "secondary" | "callout" | "conclusion"
 | `conclusion` | closing — 마지막 장의 결론 | 둘 다 |
 
 - **정규 텍스트**: 문단 글을 `\n\n` 으로 잇는다. weight 는 넣지 않는다
-- weight 는 명제를 더하지 않는 무게라 시각 규칙의 예외다(§7.1-5). callout 의 `warn`(빨간 테두리)은 무게가 아니라 판단이다 → _open-2
+- weight 는 명제를 더하지 않는 무게라 시각 규칙의 예외다(§7.1-5). callout 의 `warn`(빨간 테두리)은 무게가 아니라 판단 색이라 패키지에 없다 (D20). 경고가 필요하면 글로 쓴다
 - 관측: `conclusion` 은 세 덱 모두 마지막 장에 정확히 하나 있었다. 규칙으로 두지는 않는다
 
 ### 7.4 `quote` — 인용
@@ -252,18 +286,21 @@ List { type: "list", text, ordered: boolean,
   - `ordered`: `{n}. {label} — {body}` (label 이 없으면 `{n}. {body}`)
   - 아니면: `- {label} — {body}` (label 이 없으면 `- {body}`)
   - `emphasized` 항목은 번호·기호 뒤를 `<b>…</b>` 로 감싼다
-- 시각: 항목 간격은 순서만 뜻한다. 날짜 간격을 길이로 그리지 않는다. 등간격이 같은 간격을 암시하는가 → _open-3
+- **순서 목록의 간격은 순서만 뜻한다. 간격이 의미를 가지면 작가가 글로 쓴다 (D20).** 날짜 간격을 길이로 그리지 않는다 — 등간격으로 그려도 된다.
+  "점점 빨라졌다"처럼 간격이 요점이면 그 말을 본문에 쓴다
 
 ### 7.6 `contrast` — 대조
 
 ```ts
 Contrast { type: "contrast", text,
-           items: { label: RichText, value?: RichText, body: RichText, emphasized?: true }[] }
+           items: { label: RichText, value?: RichText, body?: RichText, emphasized?: true }[] }
+           // value 와 body 중 하나 이상
 ```
 
 | 관측 | `label` | `value` | `body` | 근거 |
 |---|---|---|---|---|
 | votes | 7월 29일 / 9월 16일 | 9 : 3 / 12 : 0 | 동결… / 인상… | FOMC |
+| gauge (D20 — 척도 대신) | 연준이 원하는 속도 / 지금 미국 | 2% / 3%대 | — | FOMC |
 | tags_inline | 연방·FTC / 주·메릴랜드 | — | 공개 의무 / 금지 | FTC |
 | rule_line 두 줄 | ✕ / ✓ | — | 금지하라 / 숨기지 마라 | FTC |
 | quote 를 빌린 경계선 | 해당 없음 / 이번 사안 | — | 시장 상황 때문에 모두에게… / 나에 대한 추정 때문에 나에게만… | FTC |
@@ -272,12 +309,14 @@ Contrast { type: "contrast", text,
 - **극성은 라벨 글자다** (D14 규칙 2). ✕/✓ 를 빼면 어느 쪽이 되고 안 되는지 사라진다 → 라벨에 글자로 둔다.
   극성을 따로 enum 으로 두지 않는다 — 라벨과 enum 이 어긋날 수 있다
   - 기호 라벨("✕")도 글자지만 스크린리더에서는 뜻이 흐려진다. 말("해당 없음")로 쓸지는 작가 판단
-- **관측된 대조는 네 건 모두 두 항목이다.** 세 항목 이상은 미확인
+- **게이지는 두 값 대조다 (D20).** 독자가 알아야 할 것 — 원하는 속도 2% / 지금 3%대 — 만 말한다. 글자는 그대로이고 속도계 비유는 본문 글에 남는다.
+  눈금 · 축 · 그라데이션은 없다. 축 범위("0~6%")는 입문 독자에게 설명이 필요한 숫자라 쓰지 않는다(FINDINGS §7.7)
+- **관측된 대조는 다섯 건 모두 두 항목이다.** 세 항목 이상은 미확인
   (FTC-13: 셋째 관할 뉴욕은 산문에 있었다. 구조에 넣을지 산문에 둘지는 작가 판단이고 계약은 둘 다 허용한다)
 - 연속한 rule_line 두 줄은 대조 블록 하나다 (FTC-17)
 - `emphasized` — 초점 항목 (votes 의 hit, rule_line 둘째 줄의 통째 굵게)
 - 범주 색(tags 의 fed/state)은 두지 않는다. 범주는 이미 라벨 글자에 있다. 항목 구분은 위치로 (§7.1-5)
-- **정규 텍스트**: 항목마다 `{label}: {value} {body}` (value 가 없으면 `{label}: {body}`), `emphasized` 는 `: ` 뒤를 `<b>…</b>` 로 감싼다. `\n` 으로 잇는다
+- **정규 텍스트**: 항목마다 `{label}: {value} {body}` — 없는 쪽은 빼고 공백 하나로 잇는다(`{label}: {value}` · `{label}: {body}`). `emphasized` 는 `: ` 뒤를 `<b>…</b>` 로 감싼다. `\n` 으로 잇는다
 
 ### 7.7 `sheet` — 이름-값 표 (근거 1건)
 
@@ -287,27 +326,14 @@ Sheet { type: "sheet", text, rows: { label: RichText, value: RichText }[] }
 
 - 관측: 숙련 4장 SEP 표 6행 (FOMC 만)
 - 대조와 다른 점: 행마다 묻는 것이 다르다(2026 중앙값, 2027 중앙값, 인상 예상 인원 …). 대조는 같은 물음에 두 답
-- 값에 색으로 방향·판단을 입히지 않는다. 관측된 `up`(빨강) · `flat` → _open-2
+- 값에 색으로 방향·판단을 입히지 않는다 (D20). 관측된 `up`(빨강)은 판단 색이라 패키지에 없다. "1%p 올랐다" 같은 방향·판단이 필요하면 글로 — `claim`.
+  `flat` 은 보이는 차이가 없는 표시라 버린다
 - **정규 텍스트**: 행마다 `{label}: {value}`, `\n` 으로 잇는다
 - 근거 1건이다. 두 번째 사례가 나오기 전에는 넓히지 않는다 — 열 3개 이상, 머리행, 강조 행은 미확인
 
-### 7.8 `scale` — 척도 (_open-1)
+### 7.8 (척도 → §10.1 로 옮김, D20)
 
-관측: 입문 4장 게이지. 글은 "2% 연준이 원하는 속도" · "3%대 지금 미국". 그 위에 눈금 위치 `[33, 62]` 와 초록→빨강 그라데이션.
-
-**D14 규칙 3 위반이다.** 글은 두 값만 말하는데 눈금 위치는 "목표와 현재 사이 거리가 이만큼"이라는 비율을 말한다.
-위치의 근거(축의 최소·최대)는 어디에도 없다. 선형이라고 보면 62% 는 약 3.7% 자리인데 글은 "3%대"라고만 한다.
-
-두 선택지를 열어 둔다. 편집 판단이라 도윤이 고른다.
-
-| | (a) 값 기반 척도로 살린다 | (b) 두 값 대조로 바꾼다 |
-|---|---|---|
-| 모양 | `Scale { type: "scale", text, axis: { min, max, unit }, points: { label: RichText, value: number }[] }` | `contrast` 두 항목 — "연준이 원하는 속도" 2% / "지금 미국" 3%대 |
-| 정규 텍스트 | 축과 모든 값을 숫자로. 예: "0~6% 눈금 — 연준이 원하는 속도: 2%, 지금 미국: 3.3%" | 대조 선형화 그대로 |
-| 글 수정 | "3%대" → 실제 값(F31 3.3%). 위치가 가리키는 것을 글이 말해야 한다. **축 범위를 고르는 것도 그림을 바꾸는 편집 판단** | 없음 |
-| 프론트 | 위치 = (value − min) / (max − min). **첫 프론트 계산이 생긴다.** 읽는 시점과 무관한 배치라 D8 은 안 깨지지만 D12("계산 없음")는 개정 | 계산 없음 |
-| 그라데이션 | 좋음→나쁨 판단이다. 두려면 글이 말해야 한다 (_open-2) | 없음 |
-| 원형 | `scale` 추가 (근거 1건) | `scale` 없음 — 원형 5개 |
+게이지는 `contrast` 두 항목이 됐다(§7.6). 척도 원형은 두지 않는다. 판정과 초안 내용은 §10.1.
 
 ### 7.9 모르는 `type` 이 왔을 때
 
@@ -330,15 +356,15 @@ Sheet { type: "sheet", text, rows: { label: RichText, value: RichText }[] }
 | votes `hit`, examples `punch`, rule_line 통째 `<b>` | 둘 다 | 항목 강조 | `emphasized` → 선형화에 `<b>` |
 | rule_line ✕/✓ | FTC | **극성 — 뜻이 있다** | 대조 `label` 글자 |
 | steps 번호 | FTC | 순서 표시 | 배열 순서, 선형화가 번호를 붙인다 |
-| timeline 연결선 · `is_last` | FOMC | 표시 | 버린다 (등간격 → _open-3) |
+| timeline 연결선 · `is_last` | FOMC | 표시 | 버린다. 간격은 순서만 뜻한다 (D20) |
 | tags `fed`/`state` 색 | FTC | 범주 — 이미 라벨 글자에 있다 | 버린다. 위치로 구분 |
 | stats `flat` | FOMC | 표시 (보이는 차이 없음) | 버린다 |
-| stats `up` 빨강 | FOMC | **판단** — "나쁘게 올랐다"가 글에 없다 | _open-2 |
-| callout `warn` 빨강 테두리 | FOMC | **판단** — 경고 | _open-2 |
-| gauge 눈금 `[33, 62]` | FOMC | **수량 — 글에 없다 (규칙 3 위반)** | _open-1 |
-| gauge 그라데이션 | FOMC | **판단** — 초록→빨강 | _open-1 · _open-2 |
+| stats `up` 빨강 | FOMC | **판단** — "나쁘게 올랐다"가 글에 없다 | 버린다 — 판단 색 금지 (D20). 필요하면 글로 |
+| callout `warn` 빨강 테두리 | FOMC | **판단** — 경고 | 버린다 — 판단 색 금지 (D20). 필요하면 글로 |
+| gauge 눈금 `[33, 62]` | FOMC | **수량 — 글에 없다 (규칙 3 위반)** | 버린다 — 게이지는 `contrast` 두 항목 (D20) |
+| gauge 그라데이션 | FOMC | **판단** — 초록→빨강 | 버린다 — 판단 색 금지 (D20) |
 | 경계선 quote 의 왼쪽 선 색 | FTC | 인용이 아님을 색으로만 표시 | 버린다 — `contrast` 로 |
-| teaser `Q` / `·` | 둘 다 | 형태 표시 | 버린다. 형태 자체는 _open-4 |
+| teaser `Q` / `·` | 둘 다 | 형태 표시 | 버린다. 형태는 자유 (D20) |
 | examples 점 | FTC | 표시 | 버린다 |
 
 ---
@@ -358,15 +384,17 @@ Sheet { type: "sheet", text, rows: { label: RichText, value: RichText }[] }
 
 발행할 때 기계로 검사한다.
 
-1. `levels` ≥ 1, 레벨마다 `slides` ≥ 1, 슬라이드마다 `blocks` ≥ 1
+1. `levels` 1~3개. `id` 는 basic · intermediate · advanced 중 하나이고 겹치지 않으며 그 순서로 놓인다 (D20). 레벨마다 `slides` ≥ 1, 슬라이드마다 `blocks` ≥ 1
 2. `open_questions.length == slides.length − 1`, 모든 `text` 가 비어 있지 않다 (D15 QA①)
 3. 어디에도 다른 슬라이드를 가리키는 필드가 없다 — `resolves` · `goto` · 인덱스 류 (D15)
 4. 모든 블록에 `type` 과 `text`, 그리고 `text == linearize(block)` (D14 규칙 1 · 6)
 5. `type` 이 §7.2 목록에 있다
-6. 모든 span 에 `layer`. `writing` 이면 refs 가 비어 있고, 나머지는 1개 이상이며 그 층의 Ref 다 (§6)
+6. 모든 span 에 `layer`. `writing` 이면 refs 가 비어 있고, 나머지는 1개 이상이며 그 층의 Ref 다 (§6).
+   **0.2 대기 표시(`_refs_pending`)가 있는 span 은 refs 가 비어 있으므로 발행되지 않는다.** 대기 표시는 픽스처에서만 허용하고, 픽스처 검증은 WARN 으로 센다 (§6.2 · D20)
 7. 인라인 서식은 `<b>` 와 `\n` 뿐이고, `<b>` 는 span 을 넘지 않는다
 8. `emphasized` 항목은 `<b>` 로 통째 감싸지 않는다 — 강조를 두 번 적지 않는다
 9. 시간 공식이나 읽는 시각에 기대는 필드가 없다 (D8)
+10. 발행물에는 `_` 로 시작하는 필드가 없다. `_` 는 픽스처 주석이다 (`_refs_pending` · `_volatility` · `_published_at_basis` 등)
 
 QA② — 다음 장이 실제로 답했는가 — 는 기계 검사가 아니다. 게이트 3.
 
@@ -379,6 +407,7 @@ QA② — 다음 장이 실제로 답했는가 — 는 기계 검사가 아니�
 | 항목 | 이유 |
 |---|---|
 | 상태축 블록 어휘 | D11. 스크루웜 슬라이드가 없다 |
+| **척도** | **미확인. 두 번째 사례 전까지 두지 않는다 (D20)** — §10.1 |
 | 대조 세 항목 이상 | 관측 4건 모두 두 항목 |
 | `sheet` 확장 (열 3개 이상, 머리행, 강조 행) | 근거 1건 |
 | 스토리라인("지난 이야기") 블록 | FINDINGS §8.5 미정. 실물 없음 |
@@ -388,17 +417,41 @@ QA② — 다음 장이 실제로 답했는가 — 는 기계 검사가 아니�
 | kicker 서사 역할의 구조화 | 읽을 소비자가 없다 |
 | 이미지 · 지도 · 도표 | 실물에 없다 |
 
+### 10.1 척도 — 미확인. 두 번째 사례 전까지 두지 않는다 (D20)
+
+0.1a 초안의 §7.8 을 옮겨 둔다. 척도가 필요한 두 번째 기사가 나오면 여기서 다시 시작한다.
+
+**관측** — 입문 4장 게이지. 글은 "2% 연준이 원하는 속도" · "3%대 지금 미국". 그 위에 눈금 위치 `[33, 62]` 와 초록→빨강 그라데이션.
+글은 두 값만 말하는데 눈금 위치는 "목표와 현재 사이 거리가 이만큼"이라는 비율을 말했다 — D14 규칙 3 위반.
+축의 최소·최대는 어디에도 없었고, 선형이라고 보면 62% 는 약 3.7% 자리인데 글은 "3%대"라고만 했다.
+
+**판정 (D20)** — 두 값 대조로 바꾼다(§7.6). 독자가 알아야 할 것 — 원하는 속도 2% / 지금 3%대 — 만 말하고 글자는 그대로다.
+속도계 비유는 본문 글에 남는다. 프론트 계산이 없어 D12 도 그대로다. 근거 1건 원형이 하나 준다.
+
+**척도를 다시 들인다면 필요한 것** (초안의 선택지 (a))
+| | |
+|---|---|
+| 모양 | `Scale { type: "scale", text, axis: { min, max, unit }, points: { label: RichText, value: number }[] }` |
+| 정규 텍스트 | 축과 모든 값을 숫자로. 예: "0~6% 눈금 — 연준이 원하는 속도: 2%, 지금 미국: 3.3%" |
+| 글 | 위치가 가리키는 값을 글이 말해야 한다("3%대" → 실제 값). **축 범위를 고르는 것도 그림을 바꾸는 편집 판단**이고, 축 숫자가 입문 독자에게 설명을 요구한다 |
+| 프론트 | 위치 = (value − min) / (max − min). 첫 프론트 계산 — D12 개정 |
+| 색 | 좋음→나쁨 그라데이션은 판단 색이라 못 쓴다 (D20) |
+
 ---
 
-## 11. _open — 도윤 게이트
+## 11. _open — 판정됨 → D20
 
-| # | 무엇 | 선택지 |
-|---|---|---|
-| _open-1 | 게이지 (FOMC-14) | §7.8 — (a) 값 기반 척도로 살린다 / (b) 두 값 대조로 바꾼다 |
-| _open-2 | 색으로 판단을 더하는 표시 — sheet `up`(빨강), callout `warn`(빨간 테두리), 게이지 그라데이션 | (a) 금지. 판단이 필요하면 글로 쓴다("1%p 올랐다") (b) 블록에 판단 필드를 두고 선형화가 판단 말을 내보낸다 — 그래야 시각이 글을 넘지 않는다 |
-| _open-3 | 순서 목록의 등간격 (FOMC-22). 실제 간격은 9일 · 21일 | (a) 허용 — "간격은 순서만 뜻한다"를 프론트 규칙으로 둔다 (b) 날짜 라벨이 있는 목록은 간격을 글로도 말한다 (c) 연결선 없는 목록으로만 그린다 |
-| _open-4 | open_question 의 형태 (FOMC-3) | (a) 질문형만 (b) 레벨별 — 입문 질문형, 숙련 목차형 (c) 평서 예고도 허용 |
-| _open-5 | 레벨 `id` 어휘 (FTC-15) | (a) 닫힌 어휘 basic · adv, 레벨 하나면 basic (b) 닫힌 어휘 + 단일 레벨 전용 값 (c) 기사마다 자유 문자열 |
+2026-09-29 게이트. 판정자 PM (도윤 위임). 판단 순서는 ① 독자가 느끼는 것 ② 기술적 무리 · 유지보수 · 병목.
+
+| # | 무엇 | 판정 | 계약에서 |
+|---|---|---|---|
+| _open-1 | 게이지 (FOMC-14) | 판정됨 → D20: (b) 두 값 대조. `scale` 원형 없음 | §7.6 · §10.1 |
+| _open-2 | 판단을 싣는 색 — sheet `up` · callout `warn` · 게이지 그라데이션 | 판정됨 → D20: (a) 금지. 판단은 글로(`claim`) | §7.1-5 · §7.3 · §7.7 |
+| _open-3 | 순서 목록의 등간격 (FOMC-22) | 판정됨 → D20: (a) 허용. 간격은 순서만 뜻한다 | §7.5 |
+| _open-4 | open_question 의 형태 (FOMC-3) | 판정됨 → D20: 형태 자유, 답이 안 난 물음이 담겨야 한다. 레벨에 묶지 않는다 | §5 |
+| _open-5 | 레벨 `id` 어휘 (FTC-15) | 판정됨 → D20: basic · intermediate · advanced, 기사당 1~3개. 레벨이 하나면 쓰인 레벨 | §3 |
+
+D20 은 이 밖에 두 가지를 더 정했다 — 층 판정 규칙(§6.1), 0.1b 를 0.2 보다 먼저 하기 위한 대기 표시(§6.2).
 
 ---
 
@@ -408,33 +461,38 @@ QA② — 다음 장이 실제로 답했는가 — 는 기계 검사가 아니�
 
 1. **최상단** — `event_hint` → `event_ref`, `_published_at` → `published_at`, `_source.document_title` 에서 "Claro — " 를 뗀 것 → `title`,
    `_source.lang` → `lang`. `chrome` · `interaction` · `_source` 의 나머지는 패키지 밖
-2. **레벨** — `slide_count` · `deck_element_id` · `hidden_attr` · `initially_visible` 을 뺀다. `open_questions` 배열을 새로 만든다
+2. **레벨** — `slide_count` · `deck_element_id` · `hidden_attr` · `initially_visible` 을 뺀다. `open_questions` 배열을 새로 만든다. `id` `adv` → `advanced` (D20)
 3. **teaser → `open_questions`** — `qtext` 만 옮긴다. `qmark` · `goto_index` · `wrapper` · `has_tear_divider` 는 버린다
 4. **슬라이드** — `index` 를 뺀다. `h1` → `headline`(RichText)
 5. **본문 글 → RichText** — 모든 글 필드를 span 배열로. `_fact_refs` 를 span 에 흡수한다. `<br>` → `\n`
-6. **kind → layer** — fact → `fact`, derived_claim → `claim`, concept → `concept`, writing → `writing`.
-   아래는 기계적으로 안 넘어간다 — **어떻게 풀지는 편집 판단이라 0.1b 게이트에서 정한다**
-   - `unsupported` 4 (입문 8장 둘 · 입문 8장 callout 하나 · 숙련 5장 "201일째") — 사실 보강(0.2)인가 문장 수정인가
-   - `brief_text` 1 (입문 7장 "회의 내부 기록은 3주 뒤에 공개돼요") — 브리프 산문을 Fact 로 올려야 refs 가 생긴다
-   - `partial` 12 — `fact` 나 `claim` 으로. note 는 QA 기록이지 패키지 값이 아니다
-   - **F · DC 를 섞은 17 span** — layer 하나로 가르고 refs 를 그 층 것만 남긴다
-   - **bridge 후보 2** — "그런데 지금 미국은 3%대입니다"(0.0b 게이트에서 concept 표시를 뗌),
-     "목표보다 빠르게 오르고 있어요"(지금 concept C-0002 와 fact F10·F31 을 함께 달고 있다 — span 하나에 층 둘).
-     **refs 는 0.2 의 Bridge 정의가 있어야 채울 수 있다** — 0.1b 가 0.2 보다 먼저라 임시 표기가 필요하다
+6. **kind → layer** — D20 규칙대로(§6.1 · §6.2). 판정이 애매했던 span 은 목록으로 남겨 PM 이 검수한다
+   - 그대로 넘어가는 것: fact → `fact`, derived_claim → `claim`, concept → `concept`, writing → `writing`
+   - **F · DC 를 섞은 17 span** — 추론이 하나라도 있으면 `claim`, refs 는 DC 만. 끊긴 F 연결은 `_` 주석으로 남긴다(0.2 가 Claim → Fact 로 옮긴다)
+   - `partial` 12 — 브리프 사실이 그 문장을 다 말하면 `fact`, 넘어서면 `claim`. note 는 QA 기록이지 패키지 값이 아니다
+   - **0.2 대기 7** — 글은 그대로 두고 refs 는 §6.2 대기 표시
+     - 이란 전쟁 `unsupported` 4 (입문 8장 둘 · 입문 8장 callout 하나 · 숙련 5장 "201일째") — `fact`, `need: "Fact 출처"`.
+       도윤의 배경지식에서 온 사실이고 출처가 비어 있을 뿐이다. 보강은 C-2 · C-3 · 0.2
+     - 브리프 산문 1 (입문 7장 "회의 내부 기록은 3주 뒤에 공개돼요") — `fact`, `need: "Fact 승격"`
+     - 브리지 2 — "그런데 지금 미국은 3%대입니다", "목표보다 빠르게 오르고 있어요"(지금은 concept 과 fact 를 함께 달고 있다) — `bridge`, `need: "Bridge"`
+   - ⚠️ **애매 — PM 검수 목록에 넣을 것**: 이란 `unsupported` 4 중 입문 8장 callout 의
+     "이 전쟁이 끝나면 물가는 저절로 내려갈 수도, 더 커지면 훨씬 나빠질 수도 있어요" 는 사실이 아니라 시나리오 해석이다.
+     D20 의 이란 규칙(`fact`)과 층 판정 규칙(애매하면 `claim`)이 이 문장에서 갈린다. 층 판정 규칙을 따르면 `claim`, `need: "Claim"`
 7. **블록 변환**
    - body_text → `prose` (`dim` → `secondary`, `small` · `style_attr` 버림)
-   - callout → `prose` `weight: callout` (`warn` 은 _open-2 결과대로)
+   - callout → `prose` `weight: callout` (`warn` 은 버린다 — 판단 색, D20)
    - closing → `prose` `weight: conclusion`
    - quote → `quote` (`tag` → `attribution`, `quotation_marks_in_text` 는 0.2 FOMC-6 결과대로)
    - votes → `contrast` (`when` → label, `tally` → value, `what_html` → body, `hit` → `emphasized`)
    - timeline → `list` `ordered: true` (`when` → label, `is_last` · `has_connector_line` · `html_class` 버림)
-   - stats → `sheet` (`k` → label, `v` → value, `v_modifier` 는 _open-2 결과대로)
+   - stats → `sheet` (`k` → label, `v` → value, `v_modifier` 는 버린다 — `up` 은 판단 색, `flat` 은 표시, D20)
    - end_actions → 버린다 (패키지 밖)
-8. **게이지 눈금 `[33, 62]` — D14 규칙 3 위반.** _open-1 결과대로 고친다.
-   (a) 면 축 범위 선택 + "3%대" → 실제 값, (b) 면 `contrast` 두 항목. 그라데이션은 어느 쪽이든 버리거나 _open-2 결과대로
+8. **게이지 → `contrast` 두 항목. 글자는 그대로 (D20).**
+   `caption` → label("연준이 원하는 속도" / "지금 미국"), `value_text` → value("2%" / "3%대"). body 는 없다.
+   눈금 `[33, 62]`(D14 규칙 3 위반) · 축 · 그라데이션 · `role` 은 버린다
 9. **모든 블록에 `text`** — 선형화 결과를 싣는다
 10. `_concept_ref` 를 뺀다 — span 의 concept refs 에서 나온다
-11. `_volatility` · `_published_at_basis` 는 패키지가 아니다 — 저작 데이터(§8). 0.2 가 자리를 정하기 전까지 픽스처에 `_` 주석으로 둘지는 0.1b 가 정한다
+11. `_volatility` · `_published_at_basis` 는 **픽스처에 `_` 주석으로 남긴다 (D20).** 패키지 필드가 아니라 저작 데이터(§8)지만,
+    0.2 가 자리를 정할 때까지 D8 검증과 invalid 두 건이 이걸 쓴다. `where` 경로는 새 모양에 맞게 고친다
 12. `fixtures/invalid/` 두 건을 새 골든에서 다시 만든다 (골든 + 위반 1개)
 13. `scripts/verify-article.py`(`where` 경로에 기댄다) · `scripts/diff-observed-article.py`(관측 → 골든 대응이 바뀐다)를 고친다
 
@@ -461,7 +519,7 @@ FTC observed 는 골든이 아니라 0.1b 대상이 아니다. 어휘 대응만 
 | `top._source.task` | FOMC | 패키지 밖 — 픽스처 이력 |
 | `top.chrome.*` | FOMC | 패키지 밖 — 프론트 UI |
 | `top.interaction.*` | FOMC | 패키지 밖 — 프론트 UI |
-| `level.id` | FOMC | `levels[].id` (_open-5) |
+| `level.id` | FOMC | `levels[].id` — `adv` → `advanced` (D20) |
 | `level.label` | FOMC | `levels[].label` |
 | `level.slide_count` | FOMC | 버린다 — `slides.length` |
 | `level.deck_element_id` | FOMC | 버린다 — 프론트 |
@@ -472,7 +530,7 @@ FTC observed 는 골든이 아니라 0.1b 대상이 아니다. 어휘 대응만 
 | `slide.h1` | FOMC | `slides[].headline` (RichText) |
 | `slide.teaser` | FOMC | `levels[].open_questions[]` — 마지막 장은 없음 |
 | `slide.teaser.qtext` | FOMC | `open_questions[].text` |
-| `slide.teaser.qmark` | FOMC | 버린다 — 형태 표시 (_open-4) |
+| `slide.teaser.qmark` | FOMC | 버린다 — 형태 표시. 형태는 자유 (D20) |
 | `slide.teaser.goto_index` | FOMC | 버린다 — 위치로 정해진다 (D15) |
 | `slide.teaser.wrapper` | FOMC | 버린다 — 표시 |
 | `slide.teaser.has_tear_divider` | FOMC | 버린다 — 표시 |
@@ -486,11 +544,19 @@ FTC observed 는 골든이 아니라 0.1b 대상이 아니다. 어휘 대응만 
 | `block:body_text.style_attr` | 둘 다 | 버린다 — 표시 |
 | `block:callout.type` | FOMC | `prose` · `weight: callout` |
 | `block:callout.html` | FOMC | `paragraphs[].body` |
-| `block:callout.modifier` | FOMC | _open-2 (warn) |
+| `block:callout.modifier` | FOMC | 버린다 — `warn` 은 판단 색 (D20) |
 | `block:closing.type` | 둘 다 | `prose` · `weight: conclusion` |
 | `block:closing.html` | 둘 다 | `paragraphs[].body` |
 | `block:end_actions.*` | 둘 다 | 패키지 밖 — 프론트 UI · probe 진입은 범위 밖 |
-| `block:gauge.*` | FOMC | _open-1 (§7.8) |
+| `block:gauge.type` | FOMC | `contrast` (D20) |
+| `block:gauge.labels[].caption` | FOMC | `items[].label` |
+| `block:gauge.labels[].value_text` | FOMC | `items[].value` |
+| `block:gauge.labels[].value_html` | FOMC | 버린다 — `value_text` 와 같은 글 + 굵게(표시) |
+| `block:gauge.labels[].role` | FOMC | 버린다 — 항목은 위치로 구분 |
+| `block:gauge.labels[].left_percent` | FOMC | 버린다 — 눈금 (D14 규칙 3 위반) |
+| `block:gauge.marks[].left_percent` | FOMC | 버린다 — 눈금 (D14 규칙 3 위반) |
+| `block:gauge.scale.*` | FOMC | 버린다 — 축 없음, 그라데이션은 판단 색 (D20) |
+| `block:gauge.comment_in_html` | FOMC | 버린다 — 전사 주석 |
 | `block:quote.type` | 둘 다 | `quote` — 출처 없는 것은 `contrast` |
 | `block:quote.html` | 둘 다 | `body` |
 | `block:quote.tag` | 둘 다 | `attribution` |
@@ -502,12 +568,12 @@ FTC observed 는 골든이 아니라 0.1b 대상이 아니다. 어휘 대응만 
 | `block:stats.type` | FOMC | `sheet` |
 | `block:stats.rows[].k` | FOMC | `rows[].label` |
 | `block:stats.rows[].v` | FOMC | `rows[].value` |
-| `block:stats.rows[].v_modifier` | FOMC | `up` → _open-2, `flat` → 버린다 |
+| `block:stats.rows[].v_modifier` | FOMC | 버린다 — `up` 은 판단 색, `flat` 은 표시 (D20) |
 | `block:timeline.type` | FOMC | `list` · `ordered: true` |
 | `block:timeline.items[].when` | FOMC | `items[].label` |
 | `block:timeline.items[].html` | FOMC | `items[].body` |
 | `block:timeline.items[].is_last` | FOMC | 버린다 — 표시 |
-| `block:timeline.items[].has_connector_line` | FOMC | 버린다 — 표시 (_open-3) |
+| `block:timeline.items[].has_connector_line` | FOMC | 버린다 — 표시. 간격은 순서만 뜻한다 (D20) |
 | `block:timeline.html_class` | FOMC | 버린다 — 표시 |
 | `block:votes.type` | FOMC | `contrast` |
 | `block:votes.cards[].when` | FOMC | `items[].label` |
