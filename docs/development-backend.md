@@ -12,12 +12,15 @@
 | 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ☑ 2026-09-21 |
 | 0.1a | ARTICLE_PACKAGE.md 작성 | 계약 1 | S3 | ☑ 2026-09-29 · D20 |
 | 0.1b | 골든을 계약에 맞춰 재작성 (+게이지 → 대조) | 골든 v2 · invalid 재생성 · 검증 스크립트 | 새 세션 | ☑ 2026-09-29 · D23 (`logs/backend/phase-0-step-0-1b.md`) |
-| 0.2 | DATA_MODEL + CONCEPT_IDENTITY | 계약 2·3 | S4 | ☐ 미작성 |
+| 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☐ 프롬프트 준비됨 · 게이트 |
+| 0.2b | DATA_MODEL.md — Fact · Claim · Bridge · Storyline · Source. 골든 대기 13 해소 | 계약 2 | — | ☐ 0.2a 뒤 |
+| 0.2c | 관찰 기록 — knowledge_evidence · reading_plan_log · probe. **F-3 전에** | 계약 2 추가 | — | ☐ |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
 | 0.4~ | 스키마 구현 | 마이그레이션 | Step당 세션 | ☐ |
 
-> **순서 (D20)**: 0.1a 게이트 반영 → **0.1b** → 0.2. 0.1b 가 끝나면 프론트 레인이 열리고 0.2 와 동시에 진행한다.
-> 0.2 프롬프트는 0.1b 뒤에 쓴다.
+> **순서**: 0.2a → 0.2b → 0.2c. 0.2b 의 Concept 참조가 0.2a 에 기댄다.
+> 0.2c 는 F-3(실제 독자 테스트) 전에 끝나야 한다 — 기록하지 않은 관찰은 복구 불가 (FINDINGS §9.4).
+> 계약 도출 원천은 실물 또는 FINDINGS "확정" (D24).
 
 ---
 
@@ -405,6 +408,78 @@ PM 이 이 목록만 검수한다.
 
 ---
 
+## Step 0.2a — CONCEPT_IDENTITY.md 작성
+
+### 세션 개시 프롬프트 (복붙)
+
+```
+개념 정체성 계약(CONCEPT_IDENTITY)을 써라.
+이 프로젝트에서 되돌리기 가장 어려운 계약이다 (FINDINGS §9.5): 잘못되면 에러 없이 조용히 데이터가 썩는다.
+천천히, 근거를 대며 써라.
+
+읽을 것 (이것만):
+  CLAUDE.md
+  docs/FINDINGS.md          §4.3 · §4.4 · §9.4 · §9.5 · §9.6 · §12.4
+  docs/DECISIONS.md         D19 · D20 · D22 · D24
+  docs/content/concept-library.md     실물. 개념 10개, 버전 이력, conflicting alias 사례
+  docs/contract/ARTICLE_PACKAGE.md    §6 만 (concept span 과 Ref)
+  logs/content/concept-lint-2026-09.md · logs/content/concept-rewrite-2026-09.md
+  logs/correction-log.csv
+  fixtures/fomc-2026-09.article.json  concept span 만 (layer: concept)
+
+산출:
+  docs/contract/CONCEPT_IDENTITY.md
+  logs/backend/phase-0-step-0-2a.md
+
+도출 원칙 (D24):
+  원천은 실물 또는 FINDINGS 의 "확정" 항목이다. 둘 다 아니면 "미확인".
+  - 실물: 라이브러리 10개 · 버전을 올린 사례 4건(C-1b) · conflicting alias 1건 · prereq 관계 · 골든의 concept span
+  - FINDINGS 확정: §9.5 (UUID · alias · status · merge redirect · split 금지 · Resolver 3구간 · Topic/leaf)
+  - §9.6 보류는 넣지 마라: 임계값 수치 · propagation · posterior · evidence weight
+  merge · split · PROVISIONAL 은 실물 사례가 없다. 되돌리기 어려운 구조라 FINDINGS 확정대로 구조는 넣되,
+  절차 세부에는 "실물 없음"을 표시해라.
+
+반드시 답할 것:
+  1. concept_id — 라이브러리는 사람이 읽는 "C-0002", FINDINGS §9.5 는 UUID. 둘의 관계와 어느 쪽이 불변인가
+  2. 버전 고정 — 발행된 기사는 개념 버전을 고정해야 한다 (§4.3).
+     실물: 골든이 C-0002 를 가리키는데 v2 → v3 에서 ④ 단계가 사라졌다. 버전을 안 고정하면 없는 단계를 가리킨다.
+     ARTICLE_PACKAGE 의 concept Ref 가 정확히 무엇을 가리켜야 하나
+  3. 버전을 올릴 때와 새 개념을 만들 때의 경계.
+     실물: C-1b 네 건 — 문안 교체(C-0010 · C-0008), 양화사·회의값 제거(C-0005), 단계 하나를 브리지로 이전(C-0002)
+  4. conflicting_alias — "dynamic pricing" 이 두 정반대 뜻으로 쓰인다 (C-0010)
+  5. "브리지 필수" 표시 — C-0002 v3 는 ①②③ 만 갖고 ④ 는 기사가 브리지로 붙인다.
+     빠뜨리면 실제 독자 검증을 통과한 유일한 흐름(2026-09-18 4단계)이 깨진다. 개념에 이걸 적을 자리와 검사 방법
+  6. Topic 과 leaf KC (§9.5) — 라이브러리 10개는 각각 무엇인가. evidence 는 leaf 에만 (§9.4)
+  7. 개념 문안의 필드 — 명제 · FULL · REFRESHER · ANALOGY · BOUNDARY · 비유 한계선.
+     D19 린트 ①(REFRESHER ⊆ 명제 ∪ FULL)이 이 구조에 기댄다. 비유 한계선은 독자에게 안 보이는 저작 메모다
+  8. 소유 — 이 계약이 Concept 의 주인이다. ARTICLE_PACKAGE §6 의 layer "concept" 와 어떻게 짝이 되나
+
+하지 말 것:
+  - knowledge_evidence · user_concept_state 스키마 (0.2c). "evidence 는 leaf 에만" 같은 제약만 적는다
+  - Fact · Claim · Bridge · Storyline (0.2b). Bridge 가 Concept 을 어떻게 가리키는지는 "0.2b 에서"로 남긴다
+  - 라이브러리 수정 · concept_id 변경
+  - FINDINGS §9.6 보류 항목
+
+판단이 필요하면 멈추고 로그에 _open 으로 적어라. 게이트에서 정한다.
+
+완료하면:
+  - 위 8개 질문마다 [계약 반영 / _open / 미확인] 과 근거(실물 또는 FINDINGS 절)를 로그 맨 앞에 요약
+  - 라이브러리 10개를 이 계약 모양으로 옮기면 무엇이 빠지고 무엇이 바뀌는지 목록 (0.2 이후 작업 목록)
+  - 계약을 기계로 확인하는 스크립트 (다른 계약들처럼), 일부러 망가뜨린 사본으로 실제로 실패하는지 확인
+  커밋: B-0.2a [GATE] → push
+```
+
+### 완료 조건
+- [ ] 8개 질문 전부 처리 표시 + 근거
+- [ ] §9.6 보류 항목 없음
+- [ ] 실물 없는 구조에 "실물 없음" 표시
+- [ ] 라이브러리 → 계약 이전 목록
+- [ ] 검증 스크립트 + 일부러 망가뜨린 사본
+- [ ] **게이트**
+- [ ] 완료일:
+
+---
+
 ## Step 0.1a 가 답해야 할 것 (S3)
 
 ### 원 findings (S1)
@@ -468,6 +543,8 @@ PM 이 이 목록만 검수한다.
 - `scripts/verify-observed.py` — 0.0a 산출물을 원본 HTML 과 대조 (S1 작성, PM 이 로그 부록에서 이전)
 
 ## 계약 변경 요청 (프론트 → 백엔드)
+> PM (2026-09-30): R-1 (`published_at` JSON 모양) 확인. **0.2b 에서 처리한다** — FINDINGS §5.3 시간 필드와 D6(발행 시각, OPEN)이 같이 걸린다.
+
 <!-- 프론트 세션은 계약 파일을 직접 고치지 않고 여기에 적는다 -->
 ### R-1 · `published_at` 의 JSON 모양 (F-1, 2026-09-29) — 급하지 않음
 - 계약 §1 은 `published_at: Date`, §2 는 "기준 **시각**"이라고 쓴다. 골든은 `"2026-09-16"`(날짜만, 문자열)이고
