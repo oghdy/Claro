@@ -408,6 +408,29 @@ PM 이 이 목록만 검수한다.
 
 ---
 
+## Step 0.2a 게이트 반영 (D25) — 0.2a 세션에 보낼 것
+
+```
+0.2a 게이트 판정이 나왔다. D25 (docs/DECISIONS.md) 를 읽고 계약에 반영해라. 판정자: PM (도윤 위임).
+
+  1. _open-1 → (b). ConceptRef 에 part 추가. §3.2 · §6.3 · §12 · §13 을 맞추고,
+     브리지 검사를 part 기반으로 바꿔라. 네가 찾은 빈틈(③ · 비유를 바꿔 말하고 ④ 를 뺌)이
+     이제 잡히는 것을 일부러 망가뜨린 사본으로 보여라. part 가 null 로 빠져나가는 것은 게이트 3 이라고 적어라
+  2. _open-2 → (a). code 는 만들 때 붙인다
+  3. _open-3 → (c). Topic 은 두지 않는다. 생기면 Concept 밖에 둔다 (§8 · §14 에 적어라)
+  4. _open-4 → 계약은 명제를 나누지 않는다. "콘텐츠 레인 C-4 가 판정, 마감 F-3 (첫 evidence 전)" 으로 적어라
+  5. 이름 옮김(concept_id = UUID, code = "C-0002") 수용
+  6. §15 를 "판정됨 → D25" 로. CHANGELOG 한 줄
+  7. ARTICLE_PACKAGE §6 이 ConceptRef 를 가리키는 곳이 part 추가와 맞는지 확인하고,
+     안 맞으면 고치지 말고 로그에 적어라 (ARTICLE_PACKAGE 수정은 따로 한다)
+
+검증 스크립트 · 자체 시험을 맞게 고치고 결과를 로그에 붙여라.
+docs/development-backend.md 0.2a 체크 + 완료일
+커밋: B-0.2a 게이트 반영 → push
+```
+
+---
+
 ## Step 0.2a — CONCEPT_IDENTITY.md 작성
 
 ### 세션 개시 프롬프트 (복붙)
