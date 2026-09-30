@@ -472,11 +472,11 @@ ARTICLE_PACKAGE 는 이것들을 ID 로만 가리켰다. 이 계약이 그 주�
 ```
 
 ### 완료 조건
-- [ ] 10개 질문 처리 표시 + 근거
-- [ ] ARTICLE_PACKAGE 참조 문구 정합 (§0 · §1 · §6)
-- [ ] 대기 13 분류 (계약으로 풀림 / 콘텐츠 대기)
-- [ ] 0.2m 이전 작업 목록
-- [ ] 검증 스크립트 + 망가뜨린 사본, 기존 검사 회귀 없음
+- [x] 10개 질문 처리 표시 + 근거 — 로그 맨 앞 표 (_open 3: fact_type 닫기 · 1차 출처 필수 · ID 체계)
+- [x] ARTICLE_PACKAGE 참조 문구 정합 (§0 · §1 · §6) — `verify-contract-coverage.py` 통과
+- [x] 대기 13 분류 (계약으로 풀림 / 콘텐츠 대기) — 계약 §17. 이 계약으로 3 · 콘텐츠 10 (레인 없는 것 2)
+- [x] 0.2m 이전 작업 목록 — 계약 §18 + `verify-data-model.py --report`
+- [x] 검증 스크립트 + 망가뜨린 사본, 기존 검사 회귀 없음 — `scripts/verify-data-model.py` · `scripts/selftest-verify-data-model.py` (사본 80)
 - [ ] **게이트**
 - [ ] 완료일:
 
@@ -648,3 +648,5 @@ docs/development-backend.md 0.2a 체크 + 완료일
   `scripts/verify-article.py` 도 `date.fromisoformat` 으로 날짜만 받는다
 - JSON 에는 `Date` 가 없으니 문자열 모양(날짜만 `YYYY-MM-DD` 인지, 시각 · 시간대가 붙는지)을 계약에 적어 달라. D6(발행 시각 정책, OPEN)과 묶일 수 있다
 - 프론트는 지금 이 값을 읽지 않는다(계산 없음, D12). `packages/contract` 는 비어 있지 않은 문자열로만 받는다 — 막히는 것 없음
+- **→ 0.2b 답 (게이트 전)**: `"YYYY-MM-DD"` 날짜만. 어느 날짜 · 어느 시간대로 자를지는 D6 (DATA_MODEL §5.3). `packages/contract` 는 그대로 맞다.
+  ARTICLE_PACKAGE §1 의 `Date` 표기는 이번 수정 범위 밖이라 남아 있다

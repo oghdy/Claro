@@ -7,6 +7,7 @@
 | 2026-09-28 | 초안 — 골든(FOMC)과 FTC observed 에서 도출. **도윤 게이트 전** | S3 · B-0.1a |
 | 2026-09-29 | 게이트 반영 (D20) — `scale` 제거(원형 5) · 판단 색 금지 · 순서 목록 간격 · open_question 형태 자유 · 레벨 어휘 3단계 · 층 판정 규칙 · 픽스처의 0.2 대기 표시 | S3 · B-0.1a |
 | 2026-09-29 | D22 반영 — 이란 규칙은 사실 서술 문장에만(전망 문장은 `claim`, `need: "DerivedClaim"`) · `Level.label` 제거 | S3 · B-0.1a |
+| 2026-09-30 | 참조 문구를 DATA_MODEL · CONCEPT_IDENTITY 에 맞춤 — §0 저장 구조의 주인 · §1 `event_ref: EventRef`, `refs` 원소는 층이 정한다 · §6 층별 Ref 표 · 골든 층 수를 0.1b 이후로(concept 20 → 21 등) · §6.2 대기의 행선지. 규칙은 안 바뀜 | B-0.2b |
 
 > **상태: 게이트 통과 (D20 · D22, 2026-09-29).**
 > 근거는 두 실물뿐이다 — `fixtures/fomc-2026-09.article.json`(골든, 주 입력), `fixtures/ftc-2026-08.observed.json`(블록 모양만).
@@ -24,7 +25,9 @@ Article Package = 백엔드가 프론트에 넘기는 완성 기사 한 벌.
 - **발행 후 바뀌지 않는다.** 읽는 시점에 따라 달라지는 값이 없다 (D8 규칙 1)
 - **넣는 것** — 프론트가 받아서 그리는 데 필요한 것: 읽는 순서, 글, 블록 구조, 문장마다 출처 층(§8.4)
 - **안 넣는 것**
-  - Fact · Claim · Concept · Bridge · Storyline · Event 의 저장 구조 → **0.2 에서 정의.** 여기서는 `Ref`(ID)로만 가리킨다
+  - Fact · Claim · Bridge · Storyline · Event · Source 의 저장 구조 → **DATA_MODEL**, Concept → **CONCEPT_IDENTITY**.
+    여기서는 참조(Ref)로만 가리킨다. 참조 모양은 층마다 다르다(§6) — 키 하나인 것(FactRef · ClaimRef · BridgeRef · EventRef)도 있고,
+    버전과 문안까지 가리키는 것(ConceptRef `{ concept_id, version, part }`)도 있다
   - probe, 개인화(레벨 선택·기본값), 사용자 상태(진행·완독), D18
   - 프론트 UI — 브랜드, 레벨 전환 버튼, 진행바, 장수 표시, 스크롤·키보드, 마지막 장의 버튼(`end_actions`)
   - 저작 데이터 — D8 공식·불변식·as_of, 교정 이력 (§8)
@@ -35,7 +38,7 @@ Article Package = 백엔드가 프론트에 넘기는 완성 기사 한 벌.
 
 ```ts
 ArticlePackage {
-  event_ref:    Ref              // 0.2. 골든 event_hint "FOMC-20260916"
+  event_ref:    EventRef         // DATA_MODEL §2. 골든 "FOMC-20260916"
   title:        string           // 기사 제목
   lang:         "ko"
   published_at: Date             // D8 DERIVED 의 기준 시각. 발행 시각 정책은 D6(OPEN)
@@ -60,7 +63,7 @@ RichText = Span[]
 Span {
   text:  string                  // 인라인 서식은 <b>…</b> 와 \n 둘뿐
   layer: "fact" | "claim" | "concept" | "bridge" | "writing"
-  refs:  Ref[]                   // writing 이면 [], 나머지는 1개 이상. Ref 의 모양은 0.2
+  refs:  Ref[]                   // 원소 모양은 층이 정한다 (§6 표). writing 이면 [], 나머지는 1개 이상
 }                                // 픽스처에서만: _refs_pending { until: "0.2", need } — §6.2. 발행물엔 없다
 
 Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
@@ -148,19 +151,21 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
   - `\n` — 줄바꿈. (골든은 headline 에 `\n`, 본문에 `<br>` 을 썼다 → `\n` 하나로)
   - 그 밖의 태그 · class · style 은 없다
 
-| `layer` | 뜻 | `refs` 가 가리키는 것 (모양은 0.2) | 근거 |
+| `layer` | 뜻 | `refs` 원소 → 가리키는 것 | 근거 (골든 span 수, 0.1b 이후) |
 |---|---|---|---|
-| `fact` | 사실 서술 | Fact | 골든 fact 41 |
-| `claim` | 사실에서 끌어낸 해석 (Derived Claim) | Claim | 골든 derived_claim 19 |
-| `concept` | 개념 설명 | Concept | 골든 concept 20 |
-| `bridge` | 개념을 오늘 사건에 잇는 문장 | Bridge | FINDINGS §4.1 `CONCEPT_BRIDGE`. 골든 입문 4장 "그런데 지금 미국은 3%대입니다" — 지금 골든엔 적을 자리가 없다 (0.0b 관찰) |
+| `fact` | 사실 서술 | FactRef → Fact (DATA_MODEL §3) | 골든 fact 64 |
+| `claim` | 사실에서 끌어낸 해석 (Derived Claim) | ClaimRef → DerivedClaim (DATA_MODEL §7) | 골든 claim 30 |
+| `concept` | 개념 설명 | ConceptRef → 개념 버전의 한 문안 (CONCEPT_IDENTITY §3.2) | 골든 concept 21 |
+| `bridge` | 개념을 오늘 사건에 잇는 문장 | BridgeRef → Bridge (DATA_MODEL §8) | 골든 bridge 2 — 입문 4장 "그런데 지금 미국은 3%대입니다" · "목표보다 빠르게 오르고 있어요". FINDINGS §4.1 `CONCEPT_BRIDGE` |
 | `writing` | 사실 주장이 없는 글 — 질문, 리듬, 전환 | 없음 (`[]`) | 골든 writing 6 |
 
+패키지 최상단 `event_ref` 는 EventRef 다. Ref 의 정의는 DATA_MODEL §2.2 · CONCEPT_IDENTITY §3.2 에 있다 — 이 계약은 가리키기만 한다.
+
 - **span 하나에 layer 하나.** `refs` 는 그 층의 atom 만 가리킨다 — Claim span 에 Fact ID 를 섞지 않는다
-  (0.0b 관찰: 골든 17 span 이 `F-*` 와 `DC-*` 를 섞었다). Claim 이 어떤 Fact 에 기대는지는 Claim 이 안다 → 0.2
+  (0.0b 관찰: 골든 17 span 이 `F-*` 와 `DC-*` 를 섞었다). Claim 이 어떤 Fact 에 기대는지는 Claim 이 안다 → DATA_MODEL §7 (`basis`). 브리지가 품은 사실도 같다 → DATA_MODEL §8 (`facts`)
 - `fact` · `claim` · `concept` · `bridge` 는 refs 가 1개 이상이다 (픽스처의 0.2 대기만 예외 — §6.2). 층이 맞게 붙었는지(사실을 말하는 글을 `writing` 으로 달지 않았는지)는 기계로 못 본다 — 게이트
 - **원문(인용)은 층이 아니라 블록이다** → §7.4. 원문도 결국 어떤 Fact 의 원문 구간이라 span 층은 `fact` 다
-- 층을 어떻게 보여줄지(색, 밑줄, 탭하면 근거)는 프론트가 정한다. 근거 내용을 펼치려면 Ref 를 풀어야 하고, 그 경로는 0.2 이후다
+- 층을 어떻게 보여줄지(색, 밑줄, 탭하면 근거)는 프론트가 정한다. 근거 내용을 펼치려면 Ref 를 풀어야 한다 — 무엇으로 풀리는지는 DATA_MODEL §2.2, 프론트가 푸는 경로(API)는 이 계약 밖이다
 
 ### 6.1 층 판정 규칙 — 사실인지 해석인지 애매하면 `claim` 으로 단다 (D20)
 
@@ -175,6 +180,7 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
 
 0.2 가 ID 체계를 정하기 전에는 refs 를 채울 수 없는 span 이 있다(골든: 브리지 2, 브리프 산문 1, 이란 전쟁 4 — 사실 3 · 전망 1).
 0.1b 를 0.2 보다 먼저 하기 위해 그런 span 은 **픽스처에서만** 이렇게 표시한다.
+(0.2b 가 참조 모양을 정했다. D23 이후 대기 13 이 각각 어디서 풀리는지는 DATA_MODEL §17. 표시 규칙은 그대로다)
 
 ```json
 { "text": "그런데 지금 미국은 3%대입니다.", "layer": "bridge", "refs": [],
