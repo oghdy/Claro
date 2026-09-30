@@ -5,8 +5,9 @@
 |---|---|---|
 | 2026-09-20 | 생성 (빈 껍데기) | PM |
 | 2026-09-30 | 초안 — 라이브러리 10개 · 버전 이력 6건 · 골든 concept span 21 · FINDINGS §4.3 §4.4 §9.4 §9.5 확정에서 도출. **게이트 전** | B-0.2a |
+| 2026-09-30 | 게이트 반영 (D25) — ConceptRef 에 `part`, 브리지 검사를 part 로 · PROVISIONAL 도 만들 때 `code` · Topic 두지 않음(생기면 Concept 밖) · 명제 나누기는 콘텐츠 레인 C-4 (마감 F-3) · 이름 옮김 수용 | B-0.2a |
 
-> **상태: 초안 · 게이트 전 (B-0.2a).**
+> **상태: 게이트 통과 (D25 · 2026-09-30). _open 4개 모두 판정됨 (§15).**
 > 되돌리기 가장 어려운 계약이다 (FINDINGS §9.5). 잘못되면 에러 없이 데이터가 조용히 썩는다.
 > 그래서 불변식(§13)마다 누가 어디서 확인하는지 적었고, 지금 확인할 수 있는 것은 스크립트가 확인한다.
 >
@@ -16,7 +17,7 @@
 > - 확정 — FINDINGS §4.3 · §4.4 · §9.4 · §9.5
 >
 > **표시** — **실물** 근거 있음 · **확정 §x** FINDINGS 확정에서 옴 · **실물 없음** 확정에서 왔지만 사례가 없다. 첫 사례가 나오면 다시 본다 ·
-> **미확인** 둘 다 아니라 정하지 않았다 · **_open-N** 게이트가 정한다 (§15)
+> **미확인** 둘 다 아니라 정하지 않았다 · **D25** 게이트 판정 (§15)
 >
 > **검사** — `python3 scripts/verify-concept-identity.py` (`--report` 로 §16 이전 목록과 골든 문안 대조)
 
@@ -45,7 +46,7 @@ UUID = string
 
 Concept {                          // 정체성. 버전이 올라도 그대로인 것 (§2)
   concept_id:     UUID             // 확정 §9.5. 불변 · 재사용 없음. 기계 참조의 유일한 키
-  code:           string           // "C-0002". 불변 · 재사용 없음. 사람이 부르는 이름표 (실물). PROVISIONAL → _open-2
+  code:           string           // "C-0002". 불변 · 재사용 없음. 사람이 부르는 이름표 (실물). 만들 때 붙인다 — PROVISIONAL 도 (D25)
   canonical_name: string           // "INFLATION_LEVEL_VS_RATE". 유일. 바뀔 수 있고 옛 이름은 alias 로
   concept_type:   string           // 관측 5개 (§8). 어휘 닫기 미확인
   status:         "CANONICAL" | "PROVISIONAL" | "MERGED" | "DEPRECATED"
@@ -78,6 +79,7 @@ Authoring    { notes: string[], reuse_expected: string | null, first_source: str
 ConceptRef {                       // 발행물이 개념을 가리키는 모양 (§3.2)
   concept_id: UUID
   version:    integer              // 기사를 쓸 때 쓴 버전
+  part:       string | null        // 어느 문안을 재료로 썼나 (D25). null = 문안을 옮기지 않은 언급
 }
 
 ConceptAlias     { alias: string, language: string, concept_id: UUID, source: string | null }
@@ -123,7 +125,9 @@ ConceptCandidate {                 // Resolver 입력 기록 (§11). 실물 없�
 - **기존 10개** — 이전할 때 UUID 를 한 번 발급하고 `code` 는 그대로 둔다. 지금까지 `concept_id` 라고 부르던 "C-0002" 는 이 계약의 `code` 다.
   이름을 옮겨 적을 뿐 **값은 하나도 바뀌지 않는다** (§16)
 - `canonical_name` 은 식별자가 아니다. 유일하지만 바뀔 수 있고, 바뀌면 옛 이름을 alias 로 넣는다 (라이브러리 규칙 · 실물)
-- PROVISIONAL 개념에도 `code` 를 붙이나 → **_open-2**
+- **`code` 는 개념을 만들 때 붙인다 — PROVISIONAL 도 (D25).** 게이트 · correction-log 는 사람이 부르는 이름으로 돈다.
+  합쳐지는 PROVISIONAL 은 번호를 태운다. 번호가 비는 것은 문제가 아니다 (재사용하지 않는다)
+- **이름 옮김 수용 (D25)** — UUID = `concept_id`, "C-0002" = `code`. 문서들이 "C-0002" 를 concept_id 라 부르던 것은 라이브러리를 옮길 때 정리한다
 
 ---
 
@@ -143,7 +147,7 @@ ConceptVersion 은 한 개념의 문안 전부(§5 필드)를 통째로 담은 �
 ### 3.2 `ConceptRef` — 발행물이 개념을 가리키는 모양
 
 ```
-ConceptRef { concept_id, version }     // 기사를 쓸 때 쓴 버전. 최신이 아니어도 그 버전을 적는다
+ConceptRef { concept_id, version, part }   // 기사를 쓸 때 쓴 버전과 그 버전의 어느 문안. 최신이 아니어도 쓴 버전을 적는다
 ```
 
 **왜 버전까지 (실물)**
@@ -154,8 +158,26 @@ ConceptRef { concept_id, version }     // 기사를 쓸 때 쓴 버전. 최신�
 **규칙**
 - 발행 뒤 ConceptRef 는 바뀌지 않는다. 개념이 MERGED 가 되어도 패키지는 옛 `concept_id` 를 그대로 갖고, 푸는 쪽이 redirect 를 따른다 (§10.2)
 - 골든을 이 모양으로 옮기면: **C-0001@1 · C-0002@3 · C-0003@1 · C-0005@3**. 골든의 라이브러리 문안 16 span 이 이 버전들과 글자 그대로 같다 (검사 C). §16
-- 어느 문안(FULL ③ · 비유 …)을 옮겼는지까지 가리킬 것인가 → **_open-1**. §6.3 브리지 검사가 여기에 기댄다
 - 0.2c 에 넘기는 것: §9.4 의 `content_version` 은 ConceptRef.`version` 과 같은 뜻이어야 한다. 모양은 0.2c
+
+### 3.3 `part` — 어느 문안을 재료로 썼나 (D25)
+
+| `part` | 가리키는 것 | 골든 실물 |
+|---|---|---|
+| `"FULL:③"` | FULL 의 한 단계 (단계 `label` 이 있을 때) | C-0002 ① 4 · ② 3 · ③ 2 span |
+| `"FULL"` | FULL 전체 (단계가 하나일 때) | C-0001 3 span |
+| `"REFRESHER"` | REFRESHER | C-0005 2 span |
+| `"ANALOGY:속도계"` | 비유 하나 (`name` 으로) | C-0002 2 span |
+| `"BOUNDARY"` | BOUNDARY | — |
+| `null` | 문안을 옮기지 않은 언급 — 헤드라인 요약, 대조 항목 이름 등 | 헤드라인 3 · 대조 항목 2 (§16 에서 판정) |
+
+- **왜** — 독자 검증을 통과한 유일한 흐름(①②③④ → 비유)을 지키는 장치다 (§6.3). 파이프라인 기사는 LLM 이 새로 쓰므로(§4.2) 글자로는 어느 단계인지 알 수 없다.
+  집필 단계는 어떤 재료를 썼는지 이미 안다 — 붙이는 비용이 거의 없다 (D25). §9.4 `block_decisions` 의 FULL · REFRESHER 와 같은 말을 쓴다
+- `part` 는 **무엇을 재료로 썼나**이지 글자가 같은가가 아니다. 바꿔 말한 문장도 그 문안을 옮긴 것이면 `part` 를 단다
+- `part` 는 가리킨 **그 버전**에 있는 문안 이름이다. 없는 이름이면 실패 (불변식 12)
+- ConceptRef 하나에 `part` 하나. span 이 한 개념의 두 문안을 섞으면 span 을 나눈다 — span 경계는 데이터다 (ARTICLE_PACKAGE §6)
+- 라이브러리 문안이 **글자 그대로** 있는 span 은 `part` 가 그 문안이어야 한다 (불변식 14, 기계)
+- **바꿔 말한 문장에 `part` 를 `null` 로 달아 빠져나가는 것은 기계가 못 본다 — 게이트 3 이 본다**
 
 ---
 
@@ -195,7 +217,7 @@ ConceptRef { concept_id, version }     // 기사를 쓸 때 쓴 버전. 최신�
 - 애매하면 새 개념 (확정 §9.5 "애매하면 잘게 자른다")
 
 **경계에 선 실물 — C-0002 v3.** ④ 를 브리지로 옮기자 명제 후반부("상승률이 내려오는 중이어도 목표보다 높을 수 있다")를 말하는 FULL 문안이 없어졌다 (C-1b 관찰 1).
-명제는 그대로라 규칙상 버전이 맞다. 대신 이 명제가 주장 둘을 묶고 있다는 신호다 → **_open-4**
+명제는 그대로라 규칙상 버전이 맞다. 대신 이 명제가 주장 둘을 묶고 있다는 신호다 → **D25: 콘텐츠 레인 C-4 가 판정, 마감 F-3** (§10.3)
 
 ---
 
@@ -263,16 +285,16 @@ Analogy    { name: "속도계", …, requires: ["①", "②", "③", "④"] }
 
 기사 한 레벨의 span 을 읽는 순서로 늘어놓았을 때, 개념 X@v 의 슬롯 S (`after` = A) 에 대해:
 
-1. X 의 FULL 단계 A 를 옮긴 span 이 있으면, 그중 마지막 span **바로 다음 span** 이 `bridge` 층이다 (0.2b 이후: 그 Bridge 가 (X, v, S) 를 채운다)
-2. `requires` 에 S 가 있는 비유를 옮긴 span 은 모두 단계 A 뒤에 나온 첫 `bridge` span 보다 뒤에 있다. 단계 A 없이 그 비유를 쓰면 실패다
+1. ConceptRef (X, v, `part` = "FULL:A") 를 가진 span 이 있으면, 그중 마지막 span **바로 다음 span** 이 `bridge` 층이다 (0.2b 이후: 그 Bridge 가 (X, v, S) 를 채운다)
+2. `requires` 에 S 가 있는 비유 — ConceptRef (X, v, `part` = "ANALOGY:이름") — 를 가진 span 은 모두 단계 A 뒤에 나온 첫 `bridge` span 보다 뒤에 있다. 단계 A 없이 그 비유를 쓰면 실패다
    (1 과 2 는 따로 본다 — ③ 과 ④ 사이에 무언가 끼면 1 만, ④ 가 없으면 둘 다 걸린다)
 
 - **"바로 다음"** — 라이브러리 문구("③ 바로 다음에")를 그대로 옮겼다. 사이에 `writing` span 하나가 끼어도 실패다. 느슨하게 할 실물이 생기면 다시 본다
-- **지금 "옮긴 span" 을 찾는 방법 = 글자 대조.** span 글이 그 단계 문장과 같으면(`<b>` · 따옴표 모양 · 줄바꿈 정규화) 그 단계로 본다. 골든은 이것으로 된다 — ③ 2 · 브리지 2 · 속도계 2 span 을 찾았다
-- **빈틈** — 파이프라인의 기사는 LLM 이 한 번에 새로 쓴다 (§4.2). 망가뜨린 사본으로 확인한 것 (0.2a 로그):
-  - ③ 만 바꿔 말하고 ④ 를 빼면 — 비유가 문안 그대로라 비유 쪽(규칙 2)에서 잡힌다
-  - ③ 과 비유를 **둘 다** 바꿔 말하고 ④ 를 빼면 — 글자 대조가 아무것도 못 찾고 **조용히 통과한다**
-  막으려면 ConceptRef 가 어느 문안을 옮겼는지 알아야 한다 → **_open-1**
+- **"옮긴 span" = `part` 로 찾는다 (D25).** 글자가 같을 필요가 없다. 바꿔 말한 ③ 도 `part: "FULL:③"` 이면 ③ 이다
+- 게이트 전 초안은 글자 대조로 찾았고, 빈틈이 있었다 — ③ 과 비유를 **둘 다** 바꿔 말하고 ④ 를 빼면 조용히 통과했다.
+  `part` 로 바꾼 뒤 같은 사본이 **잡힌다** (0.2a 로그, 망가뜨린 사본)
+- **남은 빈틈 — `part: null`.** 바꿔 말한 ③ 에 `part` 를 null 로 달면 규칙 1 이 그 span 을 못 본다. **이것은 게이트 3 이 본다.** 기계가 잡는 것은 글자 그대로인데 `part` 가 틀린 경우뿐이다 (불변식 14)
+- **옮기기 전 픽스처** — refs 가 버전 · `part` 없는 `"C-XXXX"` 인 골든은 `part` 가 없으므로 글자 대조로 대신 찾는다. WARN 으로 세고, 골든을 ConceptRef 로 옮기면 사라진다 (§16)
 - 이 검사는 게이트 3 을 대신하지 않는다. 브리지 자리에 문장이 있는지만 본다. 그 문장이 ③ 의 목표와 지금을 견주는지는 사람이 본다
 
 ---
@@ -320,8 +342,8 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 | code | canonical_name | concept_type | domain | 층 |
 |---|---|---|---|---|
 | C-0001 | RATE_TO_SPENDING | causal_mechanism | MONETARY | leaf |
-| C-0002 | INFLATION_LEVEL_VS_RATE | concept | MONETARY | leaf (명제 둘 묶음 의심 → _open-4) |
-| C-0003 | CB_INFLATION_TARGET | institution_rule | MONETARY | leaf (명제 둘 묶음 의심 → _open-4) |
+| C-0002 | INFLATION_LEVEL_VS_RATE | concept | MONETARY | leaf (명제 둘 묶음 → C-4 가 나눈다, D25) |
+| C-0003 | CB_INFLATION_TARGET | institution_rule | MONETARY | leaf (명제 둘 묶음 → C-4 가 본다, D25) |
 | C-0004 | FOMC_ROLE | entity | MONETARY | leaf |
 | C-0005 | VOTERS_VS_PARTICIPANTS | institution_rule | MONETARY | leaf |
 | C-0006 | SEP_ROLE | institution_rule | MONETARY | leaf |
@@ -332,7 +354,9 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 
 - **도메인은 Topic 이 아니다.** `domain` 필드다 (확정 §9.5 스키마). 라이브러리 규칙 6: "도메인 묶음은 탐색용이며 mastery 를 갖지 않는다". ID 가 없으니 evidence 가 붙을 수 없다
 - `domain` 은 개념이 태어난 묶음이지 쓰이는 범위가 아니다 — C-0009 는 REGULATORY 인데 PUBLIC_HEALTH(스크루웜)에서 재사용됐다 (§12.4)
-- **Topic 은 실물 없음.** §9.5 의 예(Federal Reserve)뿐이다. 어디에 둘지 → **_open-3**
+- **Topic 은 실물 없음. 지금 두지 않는다 (D25).** §9.5 의 예(Federal Reserve)뿐이고 쓸 곳이 없다
+- **생기면 Concept 밖에 둔다 (D25).** evidence 는 Concept 만 가리키므로 Topic 에 evidence 가 붙을 수 없다 — 검사가 아니라 구조가 막는다.
+  Topic 과 leaf 를 잇는 관계는 확정 `relation_type` 셋에 없다. 묶음이 자기 leaf 목록을 갖는 모양이 될 것이다 — 그때 정한다 (§14)
 - `concept_type` (관측 5개: causal_mechanism · concept · institution_rule · entity · civic_structure) 은 leaf 인지와 상관없다. entity 인 C-0004 도 leaf 다.
   어휘를 닫을지는 **미확인** — 읽는 소비자가 §12.4 관찰 하나뿐이다
 - **0.2c 에 넘기는 제약**: evidence 의 `concept_id` 는 leaf 만 가리킨다. MERGED 개념에는 새로 기록하지 않는다 (§10.2)
@@ -356,7 +380,7 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 
 ## 10. status · merge · split
 
-### 10.1 status (확정 §9.5)
+### 10.1 status (확정 §9.5) — PROVISIONAL · MERGED · DEPRECATED 는 실물 없음
 
 | 값 | 뜻 | 실물 |
 |---|---|---|
@@ -388,7 +412,11 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 - 이 계약에는 split 연산이 없다. **어떤 연산도 한 개념의 evidence 를 여러 개념으로 나누지 않는다**
 - 한 개념이 사실 둘이었다고 드러나면 새 leaf 개념을 만든다. 옛 개념과 그 evidence 는 그대로 둔다. 옛 개념을 DEPRECATED 로 둘지 등 절차는 **미확인**
 - **지금은 예외다.** evidence 가 아직 0 이다 (0.2c 전, 독자 기록 없음). 지금 명제를 나누는 것은 split 이 아니라 문안 편집이다.
-  가장 싼 시점이 지금이고, 첫 evidence 가 기록되는 순간 끝난다 → **_open-4**
+  가장 싼 시점이 지금이고, 첫 evidence 가 기록되는 순간 끝난다
+- **이 계약은 명제를 나누지 않는다.** D25: 나눈다(기본값, §9.5 "애매하면 잘게 자른다"). **콘텐츠 레인 C-4 가 판정한다** — C-4 가 초안, 도윤이 문안 선택.
+  **마감 F-3 (첫 실제 독자 기록 = 첫 evidence) 전.** 대상 C-0002 · C-0003 · C-0009(약).
+  제약: 독자가 보는 4단계 흐름(①②③④ → 비유)은 바뀌지 않는다 — 나누는 것은 KC 의 경계이지 독자 글이 아니다.
+  C-0002 를 나누면 둘째 주장("내려오는 중이어도 목표보다 높을 수 있다")의 FULL 이 새로 필요하다 (지금은 ④ 브리지가 말한다)
 - 애매하면 잘게 자른다 (확정 §9.5 · 라이브러리 규칙 5)
 
 ---
@@ -408,7 +436,7 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 - 충돌 별칭과 일치한 것만으로는 HIGH 가 아니다 (§7.2)
 - MERGED 개념에 매칭되면 redirect 를 따라간 개념에 LINK 한다
 - ConceptCandidate 필드는 §1 (확정 §9.5). `status` 어휘 · embedding 모델 **미확인**. `match_score` 는 기록일 뿐, 이 계약은 그 값으로 아무것도 정하지 않는다
-- ambiguous 가 만든 PROVISIONAL 에 `code` 를 붙이나 → **_open-2**
+- AMBIGUOUS 가 만든 PROVISIONAL 에도 만들 때 `code` 를 붙인다 (D25 · §2)
 
 ---
 
@@ -419,13 +447,14 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 | ARTICLE_PACKAGE §6 | 이 계약 |
 |---|---|
 | `layer: "concept"` — 개념 설명 | span 이 설명하는 개념 |
-| `refs` — "Ref 의 모양은 0.2" | concept 층의 Ref = **ConceptRef** (§3.2). 1개 이상. 다른 층의 Ref 는 0.2b |
+| `refs` — "Ref 의 모양은 0.2" | concept 층의 Ref = **ConceptRef** `{ concept_id, version, part }` (§3.2 · §3.3). 1개 이상. 다른 층의 Ref 는 0.2b |
 | "span 하나에 layer 하나. refs 는 그 층의 atom 만" | concept 층 refs 에는 ConceptRef 만 |
 
 - **span 글은 라이브러리 문안과 같지 않아도 된다.** 실물: 골든 concept span 21 중 16 은 라이브러리 문장 그대로, 5 는 아니다 — 헤드라인 3("연준이 보는 건\n물가가 아니라 속도예요" 등) · 대조 항목 2("연준이 원하는 속도" · "2%"). 기사는 재료로 새로 쓴 글이다 (§4.2)
-- 한 span 이 개념 둘을 가리킬 수 있다 — 실물: 입문 4장 헤드라인 → C-0002 · C-0003
-- **반대로, 라이브러리 문안을 그대로 옮긴 span 은 concept 층이고 그 개념을 refs 에 갖는다** (불변식 14). 골든 16 span 모두 그렇다
-- **발행할 때** (불변식 12) — 가리킨 (`concept_id`, `version`) 이 있고, 그 개념은 leaf 이며 status 가 CANONICAL 또는 PROVISIONAL
+- 한 span 이 개념 둘을 가리킬 수 있다 — 실물: 입문 4장 헤드라인 → C-0002 · C-0003. ConceptRef 마다 `part` 가 따로다
+- 글자가 달라도 문안을 재료로 썼으면 `part` 를 단다 (§3.3). 헤드라인 요약처럼 문안을 옮기지 않은 언급은 `part: null`
+- **반대로, 라이브러리 문안을 그대로 옮긴 span 은 concept 층이고 그 개념을 그 `part` 로 refs 에 갖는다** (불변식 14). 골든 16 span 모두 층 · 개념이 맞다
+- **발행할 때** (불변식 12) — 가리킨 (`concept_id`, `version`) 이 있고, `part` 는 그 버전에 있는 문안 이름이거나 null 이며, 그 개념은 leaf 이고 status 가 CANONICAL 또는 PROVISIONAL
 - **발행한 뒤** — 패키지의 ConceptRef 는 바뀌지 않는다. 개념이 MERGED · DEPRECATED 가 되어도 패키지는 유효하다. 고정한 버전의 문안이 남아 있기 때문이다 (§3.1)
 - **`used_in` 은 저장하지 않는다.** 발행 패키지의 ConceptRef 에서 계산한다.
   실물: 라이브러리 재사용 표는 FOMC 가 C-0001~0006 을 만들었다고 하는데, C-0004 · C-0006 에는 `used_in` 이 없다. 두 곳에 적으니 벌써 어긋났다
@@ -450,10 +479,10 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 9. 정규화한 이름이 두 개념 이상의 alias(또는 다른 개념의 `canonical_name` · `code`)이면 그 개념마다 ConflictingAlias 가 있다. ConflictingAlias 의 이름은 그 개념의 alias 에 있다 (기계)
 10. 관계의 양 끝이 있다. 선행 관계에 순환이 없다. 한 쌍은 한 번 적는다 (기계: 양 끝 · 순환. 한 번 — 라이브러리는 양쪽에 적으므로 어긋난 곳을 WARN)
 11. evidence 는 leaf 에만 기록한다. MERGED 개념에는 새로 기록하지 않는다 (0.2c)
-12. 발행물의 concept 층 refs 는 ConceptRef 이고, 가리킨 (`concept_id`, `version`) 이 있으며, 발행 때 그 개념은 leaf · CANONICAL 또는 PROVISIONAL 이다. 발행 뒤 고치지 않는다
-    (기계: 골든 refs 가 라이브러리에 있다. 버전 고정은 골든을 옮기기 전까지 WARN 으로 센다)
-13. 브리지 슬롯 순서 — §6.3 (기계: 글자 대조. 빈틈 _open-1)
-14. 라이브러리 문안을 그대로 옮긴 span 은 concept 층이고 그 개념을 refs 에 갖는다 (기계)
+12. 발행물의 concept 층 refs 는 ConceptRef 이고, 가리킨 (`concept_id`, `version`) 이 있고, `part` 는 그 버전의 문안 이름이거나 null 이며, 발행 때 그 개념은 leaf · CANONICAL 또는 PROVISIONAL 이다. 발행 뒤 고치지 않는다
+    (기계: 모양 · 개념 · 버전 범위 · 현재 버전의 `part` 이름. "C-XXXX" 모양은 골든을 옮기기 전까지 WARN 으로 센다)
+13. 브리지 슬롯 순서 — §6.3 (기계: `part` 로. "C-XXXX" 픽스처는 글자 대조로 대신. `part: null` 로 빠져나가는 것은 게이트 3)
+14. 라이브러리 문안을 그대로 옮긴 span 은 concept 층이고, 그 개념을 refs 에 가지며, 그 ConceptRef 의 `part` 가 그 문안이다 (기계)
 15. `used_in` 은 저장하지 않는다 (0.4)
 
 ---
@@ -471,55 +500,24 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 | `validation_status` · candidate `status` 어휘 · embedding 모델 | 확정 §9.5 가 이름만 두었다. 실물 없음 |
 | DEPRECATED 를 언제 쓰고 그 evidence 를 어떻게 하는지 | 실물 없음 |
 | merge · 새 개념으로 나누기의 절차 세부 | 실물 없음 |
-| 옛 버전(v1 · v2) 문안을 저장소로 옮길지 | 발행물이 아직 없어 가리키는 것이 없다. 필요해지면 git 3판에서 꺼낸다 |
+| 옛 버전(v1 · v2) 문안을 저장소로 옮길지 | 발행물이 아직 없어 가리키는 것이 없다. 필요해지면 git 3판에서 꺼낸다. 그 전에는 옛 버전을 가리킨 `part` 를 기계가 확인하지 못한다 (WARN) |
+| Topic — 모양 · leaf 와 잇는 방법 | 지금 두지 않는다 (D25). 생기면 Concept 밖. 확정 `relation_type` 셋에 묶음 관계가 없어 그때 정한다 |
 
 ---
 
-## 15. _open — 게이트가 정한다
+## 15. _open — 판정됨 → D25
 
-판단 순서 ① 독자가 느끼는 것 ② 기술적 무리 · 유지보수 · 병목.
+2026-09-30 게이트. 판정자 PM (도윤 위임). 판단 순서 ① 독자 ② 기술.
 
-### _open-1 · ConceptRef 가 "어느 문안" 까지 가리키나
-
-| | 모양 | 브리지 검사 (§6.3) |
-|---|---|---|
-| (a) 지금 계약 | `{ concept_id, version }` | 글자 대조. LLM 이 ③ 을 바꿔 말하면 **조용히 통과** |
-| (b) | `{ concept_id, version, part }` — `part` = "FULL:③" · "REFRESHER" · "ANALOGY:속도계" · "BOUNDARY" · null (문안을 옮기지 않은 언급 — 헤드라인 등) | 바꿔 쓴 글에서도 선다. `part` 를 null 로 달아 빠져나가는 것은 게이트 3 이 본다 |
-
-- **독자**: 걸린 것은 실제 독자 검증을 통과한 유일한 흐름(①②③④ → 비유)이다. 파이프라인 기사는 LLM 이 새로 쓰므로(§4.2) (a) 의 검사는 첫 파이프라인 기사부터 사실상 꺼진다
-- **기술**: 집필 단계는 어떤 재료를 썼는지 이미 안다 — 붙이는 비용이 거의 없다. §9.4 `block_decisions` 의 SKIP · REFRESHER · FULL 과 같은 말을 쓰게 된다. ConceptRef 가 한 필드 커진다
-- **추천: (b)**
-
-### _open-2 · PROVISIONAL 에도 `code` 를 붙이나 — 실물 없음
-
-- (a) 모든 개념에 만들 때 붙인다. `code` 는 비지 않는다. FLAG 를 보는 사람이 부를 이름이 있다. 합쳐진 PROVISIONAL 은 번호를 태운다 (번호가 비는 것은 문제가 아니다)
-- (b) CANONICAL 이 될 때 붙인다. `code` 가 "사람이 본 개념" 표시가 된다. PROVISIONAL 은 UUID 로만 불린다
-- 독자: 영향 없음. 기술: (a) 는 비는 필드가 하나 준다. correction-log · 게이트는 사람이 부르는 이름으로 돌아간다
-- **추천: (a)**
-
-### _open-3 · Topic 을 어디에 두나 — 실물 없음
-
-- (a) Concept 밖에 둔다 (따로 묶음). evidence 는 Concept 만 가리키므로 Topic 에 evidence 가 붙을 수 **없다 — 구조가 막는다**
-- (b) Concept 안에 `kind: LEAF | TOPIC`. 기록할 때 검사로 막는다
-- (c) 소비자(탐색 UI 등)가 생길 때까지 두지 않는다
-- 독자: 영향 없음. 기술: 여기가 무너지면 조용히 썩는다(§9.5). 검사로 막는 것보다 구조로 막는 쪽이 오래 간다. Topic 과 leaf 를 잇는 관계는 확정 `relation_type` 셋에 없어서 (b) 는 관계 어휘를 늘려야 한다
-- **추천: (c), 생길 때는 (a)** — 지금 Topic 이 필요한 실물이 없다
-
-### _open-4 · 첫 evidence 전에 명제를 나눌 것인가 — 콘텐츠 판정 (도윤)
-
-명제 하나가 주장 둘을 묶은 개념:
-| 개념 | 주장 1 | 주장 2 | 메모 |
+| # | 무엇 | 판정 | 계약에서 |
 |---|---|---|---|
-| **C-0002** | 보는 숫자는 수준이 아니라 상승률 | 내려오는 중이어도 목표보다 높을 수 있다 | v3 FULL 에 주장 2 의 문안이 없다 (C-1b 관찰 1). 입문 4장에서 주장 2 는 ④ 브리지가 말한다 |
-| **C-0003** | 중앙은행은 목표 상승률을 두고 정책을 판단한다 | 미국 연준의 목표는 2% | 일반 규칙 + 미국 값. 다른 중앙은행 기사에 재사용하면 독자가 아는 것이 둘 중 하나일 수 있다 |
-| C-0009 (약) | 연방과 주는 각각 다른 권한으로 같은 사안을 규율할 수 있다 | 주가 더 강한 규제를 두기도 한다 | 주장 2 가 1 의 결과로 읽힌다 |
+| _open-1 | ConceptRef 가 어느 문안까지 가리키나 | 판정됨 → D25: **(b) `part` 추가**. 브리지 검사를 `part` 로. `part: null` 로 빠져나가는 것은 게이트 3 | §1 · §3.3 · §6.3 · §12 · §13-12~14 |
+| _open-2 | PROVISIONAL 에도 `code` 를 붙이나 | 판정됨 → D25: **(a) 만들 때 붙인다** | §1 · §2 · §11 |
+| _open-3 | Topic 을 어디에 두나 | 판정됨 → D25: **(c) 지금 두지 않는다. 생기면 Concept 밖에** | §8 · §14 |
+| _open-4 | 첫 evidence 전에 명제를 나눌 것인가 | 판정됨 → D25: **나눈다 (기본값). 계약은 나누지 않는다 — 콘텐츠 레인 C-4 가 판정, 마감 F-3 (첫 evidence 전)** | §4.2 · §8 · §10.3 |
+| — | 이름 옮김 (UUID = `concept_id`, "C-0002" = `code`) | 판정됨 → D25: **수용** | §2 |
 
-- **왜 지금인가**: evidence 가 0 인 지금 나누면 문안 편집이다. 첫 독자 기록 뒤에는 split 이 불가능하다 (§10.3). 그 뒤로는 "알고 있어요" 한 번이 두 주장 중 무엇에 대한 것이었는지 영원히 모른다
-- **독자**: "알고 있어요" 가 두 주장을 한 번에 물으면, 한쪽만 아는 독자는 답할 수 없다
-- (a) 지금 검토해 나눈다 (콘텐츠 레인) (b) 나누지 않고 명제 그대로 옮긴다 (c) 미룬다 — 단 마감은 첫 evidence
-- **추천: (a), 마감 F-3 (첫 실제 독자 기록) 전**. 나눌지 말지는 콘텐츠 판정이라 이 계약이 정하지 않는다
-
-### 콘텐츠 레인 질문 — 계약 모양은 안 바뀐다. 라이브러리를 옮길 때 답이 있어야 한다
+### 콘텐츠 레인 질문 → C-4 (D25) — 계약 모양은 안 바뀐다. 라이브러리를 옮길 때 답이 있어야 한다
 
 | # | 질문 | 출처 |
 |---|---|---|
@@ -553,25 +551,28 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 | code | 바뀌는 것 | 확인할 것 |
 |---|---|---|
 | C-0001 | 비유 `브레이크 페달` + 한계선 1 · `prereq_of` → 관계 1 · `first_source` → 메모 | C-0003 쪽 선행 표시 없음 (Q-C4) |
-| C-0002 | FULL 단계 ①②③ (이름 3 → `title`, 저작용) · 🔗 → BridgeSlot ④ after ③ · 🚨 → 비유 `requires` ①②③④ · 한계선 2 · FULL 머리 문구 "독자에게는 반드시 4단계로" → 슬롯이 대신 말한다 | _open-4 · Q-C1 |
-| C-0003 | `prereq` → 관계 | _open-4 · Q-C4 |
+| C-0002 | FULL 단계 ①②③ (이름 3 → `title`, 저작용) · 🔗 → BridgeSlot ④ after ③ · 🚨 → 비유 `requires` ①②③④ · 한계선 2 · FULL 머리 문구 "독자에게는 반드시 4단계로" → 슬롯이 대신 말한다 | C-4 명제 나누기 (D25) · Q-C1 |
+| C-0003 | `prereq` → 관계 | C-4 명제 나누기 (D25) · Q-C4 |
 | C-0004 | `used_in` 이 없다 — 재사용 표와 어긋남, 계산으로 풀린다 | — |
 | C-0005 | 운영 노트 → 메모 | Q-C5 |
 | C-0006 | `prereq` → 관계 · 운영 노트 → 메모 · `used_in` 없음 (C-0004 와 같다) | Q-C4 |
 | C-0007 · C-0008 | `reuse_expected` → 메모 | — |
-| C-0009 | `reuse_expected` → 메모 | _open-4 (약) |
+| C-0009 | `reuse_expected` → 메모 | C-4 명제 나누기 (약, D25) |
 | C-0010 | BOUNDARY 2줄 → {경우, 해당} · alias 괄호 2 → `source` · `dynamic pricing` → ConflictingAlias · 🚨 용어 충돌 경고 → 메모 (규칙은 ConflictingAlias 가 맡는다) | Q-C2 · Q-C3 |
 
 ### 골든
 - concept span 21 의 refs 22개 `"C-XXXX"` → ConceptRef: **C-0001@1 · C-0002@3 · C-0003@1 · C-0005@3** (문안 16 span 이 이 버전과 글자 그대로 같다)
+- `part` — 글자 그대로인 16 span 은 검사 C 가 찾은 그대로: C-0002 `FULL:①` 4 · `FULL:②` 3 · `FULL:③` 2 · `ANALOGY:속도계` 2 · C-0001 `FULL` 3 · C-0005 `REFRESHER` 2.
+  나머지 5 span(헤드라인 3 · 대조 항목 2)은 옮길 때 판정한다 — 바꿔 말한 문안이면 그 `part`, 요약 언급이면 null (§3.3).
+  예: 입문 5장 헤드라인 "금리는 그 차의 브레이크예요" 는 C-0001 비유 `브레이크 페달` 을 바꿔 말한 것으로 보인다
 - 입문 4장 브리지 2 span — 0.2b Bridge 가 (C-0002, v3, ④) 를 채운다
-- _open-1 이 (b) 면 `part` 도 단다 — 검사 C 가 이미 16 span 의 `part` 를 찾아 두었다
 
 ### 다른 곳 (이 계약을 따라 바뀔 것)
 | 어디 | 무엇 | 누가 |
 |---|---|---|
 | ARTICLE_PACKAGE §1 · §6 `refs: Ref[]` "Ref 의 모양은 0.2" | concept 층 = ConceptRef (이 계약). 층별 Ref 유니언은 0.2b 가 Fact · Claim · Bridge 를 정할 때 같이 | 백엔드 0.2b |
-| `packages/contract/src/types.ts` `Ref = string` | ConceptRef 모양. 프론트는 refs 를 읽지 않아 막히는 것은 없다 | 0.2b 이후 |
+| ARTICLE_PACKAGE §0 "`Ref`(ID)로만 가리킨다" | ConceptRef 는 ID 하나가 아니라 `{ concept_id, version, part }` 다 — 문구가 안 맞는다 (0.2a 게이트 반영 로그) | ARTICLE_PACKAGE 수정 (따로) |
+| `packages/contract/src/types.ts` `Ref = string` · `validate.ts` `SPAN_REFS` | ConceptRef 는 문자열이 아니다. 골든을 옮기면 프론트 검증기가 `SPAN_REFS` 로 거부한다. 프론트는 refs 를 읽지 않으므로 모양 검사만 풀면 된다 | 골든 이전 전에 프론트 레인 |
 | `scripts/verify-article.py` | concept refs 를 `C-\d{4}` 문자열로 본다 → ConceptRef | 골든 이전 때 |
 | `scripts/lint-concepts.py` | 라이브러리 md 의 빈 줄 · ⚠️ 모양으로 본문과 메모를 가른다 → 구조 필드 | 저장이 생기면 |
 | FINDINGS §4.5 "수정본은 C-0002 참조" | v3 라이브러리에는 3단계뿐이다. 4단계 전체는 골든 입문 3·4장 (C-1b 관찰 4) | PM |

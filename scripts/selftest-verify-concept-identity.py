@@ -4,9 +4,13 @@
 
 계약 · 로그 · 라이브러리 · 골든의 사본(메모리 안, 파일로 남기지 않는다)에 위반을 하나씩 넣고
 기대한 code 만 나오는지 본다 (다른 code 가 섞이면 실패). 망가뜨리지 않은 원본은 통과해야 한다.
-"알려진 빈틈" 행은 망가뜨렸는데 **못 잡는 것**이 기대값이다 — 계약 §6.3 · _open-1 이 적은 빈틈을 실제로 보인다.
+"빈틈" 행은 망가뜨렸는데 **못 잡는 것**이 기대값이다 — 계약 §6.3 이 적은 빈틈을 실제로 보인다.
+
+골든은 아직 refs 가 "C-XXXX" 다. part 기반 검사(D25)를 시험하려고 골든을 ConceptRef 모양으로 옮긴 사본(mgold)을
+메모리 안에서 만든다 — part 는 검사 C 가 글자 대조로 찾은 것, concept_id 는 시험용 UUID(uuid5).
+진짜 UUID 발급은 라이브러리 이전 작업이다 (계약 §16).
 """
-import copy, importlib.util, json, os, re, sys
+import copy, importlib.util, json, os, re, sys, uuid
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 spec = importlib.util.spec_from_file_location('vci', os.path.join(ROOT, 'scripts/verify-concept-identity.py'))
@@ -16,6 +20,26 @@ spec.loader.exec_module(V)
 read = lambda p: open(p, encoding='utf-8').read()
 CONTRACT, LIBRARY, LOG = read(V.CONTRACT), read(V.LIBRARY), read(V.LOG)
 GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))
+LIB = V.parse_library(LIBRARY)
+UID = {c['code']: str(uuid.uuid5(uuid.NAMESPACE_URL, f'claro-selftest:{c["code"]}')) for c in LIB['concepts']}
+ID_MAP = {u: code for code, u in UID.items()}
+CUR = {c['code']: c['version'] for c in LIB['concepts']}
+
+
+def migrate(g):
+    """골든 사본의 concept refs 를 ConceptRef {concept_id, version, part} 로"""
+    g = copy.deepcopy(g)
+    idx = V.parts(LIB)
+    for _, spans in V.level_spans(g):
+        for _, sp in spans:
+            if sp.get('layer') == 'concept':
+                key = V.match_part(sp, idx)
+                sp['refs'] = [{'concept_id': UID[r], 'version': CUR[r], 'part': key[1] if key and key[0] == r else None}
+                              for r in sp['refs']]
+    return g
+
+
+MGOLD = migrate(GOLD)
 
 
 def sub(text, old, new, count=1):
@@ -41,6 +65,29 @@ def gold_slide(fn):
     def f(g):
         g = copy.deepcopy(g)
         fn(g['levels'][0]['slides'][3]['blocks'][0]['paragraphs'], g)
+        return g
+    return f
+
+
+def reword_3_and_analogy(ps, g, part=True):
+    """입문 4장: ③ 두 문장과 속도계 두 문장을 바꿔 말한다. part=False 면 part 를 null 로"""
+    for sp, t in ((ps[0]['body'][0], '연준은 1년에 2% 정도 오르는 걸 적당하다고 봐요. '),
+                  (ps[0]['body'][1], '0%도 아니고 딱 2%예요.'),
+                  (ps[2]['body'][0], '자동차 계기판을 떠올려 보세요. '),
+                  (ps[2]['body'][1], '바늘이 지금 속도, 연준이 원하는 눈금은 2예요.')):
+        sp['text'] = t
+        if not part:
+            for r in sp['refs']:
+                r['part'] = None
+
+
+def set_ref(level, slide, path, **kv):
+    def f(g):
+        g = copy.deepcopy(g)
+        o = g['levels'][level]['slides'][slide]
+        for k in path:
+            o = o[k]
+        o['refs'][0].update(kv) if kv else o['refs'][0].pop('part')
         return g
     return f
 
@@ -72,6 +119,9 @@ CASES = [
                    'ConflictingAlias { alias: string, concept_id: UUID }'), {'CONTRACT_FIELD'}),
     ('§4.3 — ConceptRef 에서 version 삭제 (버전 고정 없음)', 'contract',
      lambda c: sub(c, '  version:    integer              // 기사를 쓸 때 쓴 버전\n', ''), {'CONTRACT_FIELD'}),
+    ('D25 — ConceptRef 에서 part 삭제', 'contract',
+     lambda c: sub(c, '  part:       string | null        // 어느 문안을 재료로 썼나 (D25). null = 문안을 옮기지 않은 언급\n', ''),
+     {'CONTRACT_FIELD'}),
     ('§9.5 enum — status 에 ACTIVE 추가', 'contract',
      lambda c: sub(c, '"MERGED" | "DEPRECATED"', '"MERGED" | "DEPRECATED" | "ACTIVE"'), {'CONTRACT_ENUM'}),
     ('§9.5 enum — relation_type 에서 RELATED 삭제', 'contract',
@@ -145,26 +195,43 @@ CASES = [
      gold_slide(lambda ps, g: (ps[0]['body'][0].__setitem__('text', '연준은 1년에 2% 정도 오르는 걸 적당하다고 봐요. '),
                                ps[0]['body'][1].__setitem__('text', '0%도 아니고 딱 2%예요.'),
                                ps.pop(1))), {'GOLD_ANALOGY_ORDER'}),
-    ('알려진 빈틈 (_open-1) — ③ 과 비유를 둘 다 바꿔 말하고 ④ 를 지움. 못 잡는 것이 기대값', 'gold',
-     gold_slide(lambda ps, g: (ps[0]['body'][0].__setitem__('text', '연준은 1년에 2% 정도 오르는 걸 적당하다고 봐요. '),
-                               ps[0]['body'][1].__setitem__('text', '0%도 아니고 딱 2%예요.'),
-                               ps[2]['body'][0].__setitem__('text', '자동차 계기판을 떠올려 보세요. '),
-                               ps[2]['body'][1].__setitem__('text', '바늘이 지금 속도, 연준이 원하는 눈금은 2예요.'),
-                               ps.pop(1))), set()),
+    ('빈틈 — 옮기기 전 골든("C-XXXX", part 없음): ③ · 비유 바꿔 말하고 ④ 지움. 글자 대조라 못 잡는다 (WARN 으로 센다)', 'gold',
+     gold_slide(lambda ps, g: (reword_3_and_analogy(ps, g), ps.pop(1))), set()),
+    # ── C'. ConceptRef 로 옮긴 골든 사본 (mgold) — part 기반 (D25)
+    ('D25 — 게이트 전 빈틈: ③ · 비유를 바꿔 말하고 ④ 지움. part 가 있으니 이제 잡힌다', 'mgold',
+     gold_slide(lambda ps, g: (reword_3_and_analogy(ps, g), ps.pop(1))), {'GOLD_BRIDGE_ORDER', 'GOLD_ANALOGY_ORDER'}),
+    ('D25 — ③ 만 바꿔 말하고 ④ 지움, 비유도 뺌 (글자 대조로는 아무 단서가 없다)', 'mgold',
+     gold_slide(lambda ps, g: (reword_3_and_analogy(ps, g), ps.pop(2), ps.pop(1))), {'GOLD_BRIDGE_ORDER'}),
+    ('빈틈 — 바꿔 말한 ③ · 비유에 part null 을 달고 ④ 지움. 게이트 3 몫이라 기계는 못 잡는다', 'mgold',
+     gold_slide(lambda ps, g: (reword_3_and_analogy(ps, g, part=False), ps.pop(1))), set()),
+    ('§13-14 — 글자 그대로인 ③ span 에 part null', 'mgold',
+     gold_slide(lambda ps, g: ps[0]['body'][0]['refs'][0].__setitem__('part', None)), {'GOLD_PART_MISMATCH'}),
+    ('§13-14 — 글자 그대로인 C-0005 REFRESHER span 에 part "FULL"', 'mgold',
+     set_ref(1, 3, ['blocks', 1, 'paragraphs', 1, 'body', 0], part='FULL'), {'GOLD_PART_MISMATCH'}),
+    ('§13-12 — 그 버전에 없는 part (헤드라인에 "FULL:⑤")', 'mgold',
+     set_ref(0, 2, ['headline', 0], part='FULL:⑤'), {'GOLD_PART_UNKNOWN'}),
+    ('§13-12 — 없는 버전 (C-0002@4)', 'mgold', set_ref(0, 2, ['headline', 0], version=4), {'GOLD_REF_VERSION'}),
+    ('§13-12 — 풀 수 없는 concept_id', 'mgold',
+     set_ref(0, 2, ['headline', 0], concept_id='00000000-0000-0000-0000-000000000000'), {'GOLD_REF_UNKNOWN'}),
+    ('§3.2 — ConceptRef 에 part 필드가 없다', 'mgold', set_ref(0, 2, ['headline', 0]), {'GOLD_REF_SHAPE'}),
 ]
 
 
 def main():
-    base = V.run(CONTRACT, LIBRARY, GOLD, LOG)[0]
-    ok = not base
-    print(f'== verify-concept-identity.py — 사본 {len(CASES)}개 (+ 원본)')
+    base = V.run(CONTRACT, LIBRARY, GOLD, LOG, ID_MAP)[0]
+    mbase, mwarn = V.run(CONTRACT, LIBRARY, MGOLD, LOG, ID_MAP)[:2]
+    ok = not base and not mbase and not any(c == 'GOLD_UNPINNED' for c, _ in mwarn)
+    print(f'== verify-concept-identity.py — 사본 {len(CASES)}개 (+ 원본 · ConceptRef 로 옮긴 골든)')
     print(f'  {"PASS" if not base else "FAIL"}  망가뜨리지 않은 원본은 통과해야 한다')
     print(f'        기대 — / 실제 {sorted({c for c, _ in base}) or "—"}')
+    print(f'  {"PASS" if not mbase else "FAIL"}  ConceptRef 로 옮긴 골든(mgold)도 통과하고, GOLD_UNPINNED 가 없어야 한다')
+    print(f'        기대 — / 실제 {sorted({c for c, _ in mbase}) or "—"} · WARN {sorted({c for c, _ in mwarn})}')
     for name, target, fn, want in CASES:
         want = {'LOG_QUESTION'} if want is None else want
-        args = {'contract': CONTRACT, 'library': LIBRARY, 'gold': GOLD, 'log': LOG}
+        args = {'contract': CONTRACT, 'library': LIBRARY, 'gold': GOLD, 'mgold': MGOLD, 'log': LOG}
         args[target] = fn(args[target])
-        errs = V.run(args['contract'], args['library'], args['gold'], args['log'])[0]
+        gold = args['mgold'] if target == 'mgold' else args['gold']
+        errs = V.run(args['contract'], args['library'], gold, args['log'], ID_MAP)[0]
         got = {c for c, _ in errs}
         passed = got == want
         ok &= passed

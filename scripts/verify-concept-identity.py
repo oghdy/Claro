@@ -10,7 +10,10 @@
                  0.2a 로그 머리 요약에 질문 8개가 [계약 반영 / _open / 미확인] 과 근거를 갖는다
   B. 라이브러리  계약 불변식 중 지금 라이브러리 md 에서 확인할 수 있는 것 — §13 의 2 · 3 · 4 · 5 · 7 · 8 · 9 · 10
   C. 골든        concept span refs 가 라이브러리에 있다(12) · 라이브러리 문안을 옮긴 span 은 concept 층이고
-                 그 개념을 refs 에 갖는다(14) · 브리지 슬롯 순서(13, 글자 대조)
+                 그 개념을 그 part 로 refs 에 갖는다(14) · 브리지 슬롯 순서(13)
+                 refs 두 모양을 받는다 —
+                   ConceptRef {concept_id, version, part} : 순서 검사는 part 로 (D25). part null 은 게이트 3
+                   "C-XXXX" (골든 이전 전)               : part 가 없어 글자 대조로 대신한다. WARN 으로 센다
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
 """
@@ -32,7 +35,7 @@ REQUIRED_FIELDS = {
                         'validation_status'),
     'ConceptCandidate': ('candidate_text', 'embedding', 'candidate_context', 'suggested_concept_id',
                          'match_score', 'status'),
-    'ConceptRef': ('concept_id', 'version'),
+    'ConceptRef': ('concept_id', 'version', 'part'),                   # part — D25 (_open-1 → b)
 }
 REQUIRED_ENUMS = {
     ('Concept', 'status'): {'CANONICAL', 'PROVISIONAL', 'MERGED', 'DEPRECATED'},
@@ -107,7 +110,8 @@ def check_contract(text):
             continue
         for f in fields:
             if f not in types[t]:
-                errs.append(('CONTRACT_FIELD', f'{t}.{f} 가 없다 (FINDINGS §9.5 확정)'))
+                src = {'ConceptRef': '§4.3 확정 · D25'}.get(t, 'FINDINGS §9.5 확정')
+                errs.append(('CONTRACT_FIELD', f'{t}.{f} 가 없다 ({src})'))
     for (t, f), want in REQUIRED_ENUMS.items():
         got = set(re.findall(r'"([A-Z_]+)"', types.get(t, {}).get(f, '')))
         if got != want:
@@ -433,7 +437,7 @@ def sentences(t):
 
 
 def parts(lib):
-    """{(code, part): {문장}} — part = 'FULL:①' · 'FULL' · 'REFRESHER' · 'ANALOGY' · 'BOUNDARY'"""
+    """{(code, part): {문장}} — part = 'FULL:①' · 'FULL' · 'REFRESHER' · 'ANALOGY:속도계' · 'BOUNDARY' (계약 §3.2)"""
     out = {}
     for c in lib['concepts']:
         for label, _, body in c['full']:
@@ -443,7 +447,7 @@ def parts(lib):
             if b:
                 out[(c['code'], k)] = set(sentences(' '.join(b)))
         if c['analogy'] and c['analogy']['body']:
-            out[(c['code'], 'ANALOGY')] = set(sentences(' '.join(c['analogy']['body'])))
+            out[(c['code'], f'ANALOGY:{c["analogy"]["name"]}')] = set(sentences(' '.join(c['analogy']['body'])))
     return out
 
 
@@ -475,41 +479,78 @@ def match_part(sp, idx):
     return None
 
 
-def check_golden(gold, lib):
+def check_golden(gold, lib, id_map=None):
+    """id_map = {concept_id: code}. 라이브러리에 UUID 가 생기기 전에는 셀프테스트만 넘긴다"""
     errs, warns, report = [], [], []
     known = {c['code']: c for c in lib['concepts']}
+    id_map = id_map or {}
     idx = parts(lib)
-    unpinned, cspans, verbatim, loose = 0, 0, {}, 0
+    valid = {}                                            # code → 지금 버전의 part 이름들
+    for code, part in idx:
+        valid.setdefault(code, set()).add(part)
+    legacy, pinned, cspans, verbatim, loose, nullpart = 0, 0, 0, {}, 0, 0
     for lvid, spans in level_spans(gold):
-        tagged = []
+        tagged = []                                       # (경로, span, {(code, part)} 이 span 이 옮긴 문안)
         for path, sp in spans:
             key = match_part(sp, idx)
-            tagged.append((path, sp, key))
+            claimed, refcodes = set(), {}
             if sp.get('layer') == 'concept':
                 cspans += 1
                 for r in sp.get('refs', []):
-                    if isinstance(r, str):
-                        unpinned += 1
+                    if isinstance(r, str):                # 골든 이전 전 — part 없음
+                        legacy += 1
                         if r not in known:
                             errs.append(('GOLD_REF_UNKNOWN', f'{lvid} {path}: concept ref {r} 가 라이브러리에 없다 (§13-12)'))
+                        refcodes[r] = 'legacy'
+                        continue
+                    if not isinstance(r, dict) or set(r) != {'concept_id', 'version', 'part'}:
+                        errs.append(('GOLD_REF_SHAPE', f'{lvid} {path}: concept ref {r!r} 는 ConceptRef '
+                                                       f'{{concept_id, version, part}} 가 아니다 (§3.2)'))
+                        continue
+                    pinned += 1
+                    code = id_map.get(r['concept_id'])
+                    if code not in known:
+                        errs.append(('GOLD_REF_UNKNOWN', f'{lvid} {path}: concept_id {r["concept_id"]} 를 풀 수 없다 (§13-12)'))
+                        continue
+                    cur = known[code]['version']
+                    if not isinstance(r['version'], int) or not 1 <= r['version'] <= cur:
+                        errs.append(('GOLD_REF_VERSION', f'{lvid} {path}: {code}@{r["version"]} — 버전은 1~{cur} (§13-12)'))
+                        continue
+                    refcodes[code] = r['part']
+                    if r['part'] is None:
+                        nullpart += 1
+                    elif r['version'] != cur:
+                        warns.append(('GOLD_PART_OLD', f'{lvid} {path}: {code}@{r["version"]} part {r["part"]} — '
+                                                       f'옛 버전 문안이 저장소에 없어 part 를 확인하지 못했다 (§14)'))
+                        claimed.add((code, r['part']))
+                    elif r['part'] not in valid.get(code, ()):
+                        errs.append(('GOLD_PART_UNKNOWN', f'{lvid} {path}: {code}@{cur} 에 part "{r["part"]}" 가 없다 '
+                                                          f'— {sorted(valid.get(code, ()))} (§3.2)'))
                     else:
-                        errs.append(('GOLD_REF_SHAPE', f'{lvid} {path}: concept ref 모양 {r!r} — 골든 이전 전에는 "C-XXXX"'))
+                        claimed.add((code, r['part']))
                 if key is None:
                     loose += 1
             if key:
                 code, part = key
-                if sp.get('layer') != 'concept' or code not in sp.get('refs', []):
+                verbatim.setdefault(key, []).append(f'{lvid} {path}')
+                if sp.get('layer') != 'concept' or code not in refcodes:
                     errs.append(('GOLD_REF_SOURCE', f'{lvid} {path}: {code} {part} 문안인데 layer={sp.get("layer")} '
                                                     f'refs={sp.get("refs")} (§13-14)'))
-                verbatim.setdefault((code, part), []).append(f'{lvid} {path}')
-        # 브리지 슬롯 순서 (§6.3 · §13-13)
+                elif refcodes[code] == 'legacy':
+                    claimed.add(key)                      # part 가 없으니 글자 대조가 대신한다
+                elif refcodes[code] != part:
+                    errs.append(('GOLD_PART_MISMATCH', f'{lvid} {path}: {code} {part} 문안 그대로인데 '
+                                                       f'part={refcodes[code]!r} (§13-14)'))
+            tagged.append((path, sp, claimed))
+        # 브리지 슬롯 순서 (§6.3 · §13-13) — span 이 옮긴 문안(claimed) 으로 본다
         for c in lib['concepts']:
             steps = {st[0] for st in c['full'] if st[0]}
+            ana_part = f'ANALOGY:{c["analogy"]["name"]}' if c['analogy'] else None
             for s in c['slots']:
                 if s['after'] not in steps or s['label'] in steps:
                     continue                                  # 슬롯 자체가 틀렸다 — LIB_BRIDGE_SLOT 이 이미 말한다
-                aft = [i for i, (_, _, k) in enumerate(tagged) if k == (c['code'], f'FULL:{s["after"]}')]
-                ana = [i for i, (_, _, k) in enumerate(tagged) if k == (c['code'], 'ANALOGY')]
+                aft = [i for i, t in enumerate(tagged) if (c['code'], f'FULL:{s["after"]}') in t[2]]
+                ana = [i for i, t in enumerate(tagged) if (c['code'], ana_part) in t[2]]
                 needs = c['analogy'] and s['label'] in c['analogy']['requires']
                 if not aft:
                     if ana and needs:
@@ -532,13 +573,15 @@ def check_golden(gold, lib):
                         if bridge_at is None or i <= bridge_at:
                             errs.append(('GOLD_ANALOGY_ORDER', f'{lvid} {tagged[i][0]}: {c["code"]} 비유가 '
                                                                f'{s["after"]} + 브리지 {s["label"]} 보다 먼저'))
-    if unpinned:
-        warns.append(('GOLD_UNPINNED', f'concept span {cspans} 의 ref {unpinned}개가 버전 없는 "C-XXXX" — ConceptRef 로 이전 전 (§16)'))
-    return errs, warns, {'verbatim': verbatim, 'loose': loose, 'bridge': report}
+    if legacy:
+        warns.append(('GOLD_UNPINNED', f'concept span {cspans} 의 ref {legacy}개가 버전 · part 없는 "C-XXXX" — '
+                                       f'브리지 검사는 글자 대조로 대신했다. ConceptRef 로 이전 전 (§16)'))
+    return errs, warns, {'verbatim': verbatim, 'loose': loose, 'bridge': report, 'pinned': pinned,
+                         'legacy': legacy, 'nullpart': nullpart}
 
 
 # ── 실행 ────────────────────────────────────────────────────────────────────
-def run(contract_text, library_text, gold, log_text):
+def run(contract_text, library_text, gold, log_text, id_map=None):
     lib = parse_library(library_text)
     errs, warns = [], []
     errs += check_contract(contract_text)
@@ -546,7 +589,7 @@ def run(contract_text, library_text, gold, log_text):
     e, w = check_library(lib)
     errs += e
     warns += w
-    e, w, rep = check_golden(gold, lib)
+    e, w, rep = check_golden(gold, lib, id_map)
     errs += e
     warns += w
     return errs, warns, lib, rep
@@ -595,6 +638,7 @@ def main():
           f'CHANGELOG 버전 {len(lib["changelog"])}건')
     print(f'         {os.path.relpath(GOLDEN, ROOT)} — 문안 그대로 {sum(len(v) for v in rep["verbatim"].values())} span · '
           f'문안 아님 {rep["loose"]} span (concept 층)')
+    print(f'         concept refs — ConceptRef {rep["pinned"]} (part null {rep["nullpart"]}) · "C-XXXX" {rep["legacy"]}')
     if report:
         print('\n라이브러리 → 계약 (§16)')
         print('\n'.join(migration_report(lib)))

@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.2a 게이트 대기 (2026-09-30 · `logs/backend/phase-0-step-0-2a.md`)**
+**Phase 0 / Step 0.2a 완료 (2026-09-30 · D25) — 이어서 0.2b**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -12,7 +12,7 @@
 | 0.0b | 오류 교정 → 골든 픽스처 | `fixtures/fomc-2026-09.article.json` | S2 | ☑ 2026-09-21 |
 | 0.1a | ARTICLE_PACKAGE.md 작성 | 계약 1 | S3 | ☑ 2026-09-29 · D20 |
 | 0.1b | 골든을 계약에 맞춰 재작성 (+게이지 → 대조) | 골든 v2 · invalid 재생성 · 검증 스크립트 | 새 세션 | ☑ 2026-09-29 · D23 (`logs/backend/phase-0-step-0-1b.md`) |
-| 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ◐ 2026-09-30 초안 · **게이트 대기** (_open 4 · 콘텐츠 질문 6) |
+| 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☑ 2026-09-30 · D25 (`logs/backend/phase-0-step-0-2a.md`) |
 | 0.2b | DATA_MODEL.md — Fact · Claim · Bridge · Storyline · Source. 골든 대기 13 해소 | 계약 2 | — | ☐ 0.2a 뒤 |
 | 0.2c | 관찰 기록 — knowledge_evidence · reading_plan_log · probe. **F-3 전에** | 계약 2 추가 | — | ☐ |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
@@ -497,9 +497,9 @@ docs/development-backend.md 0.2a 체크 + 완료일
 - [x] §9.6 보류 항목 없음 — `scripts/verify-concept-identity.py` 검사 A
 - [x] 실물 없는 구조에 "실물 없음" 표시 — 검사 A
 - [x] 라이브러리 → 계약 이전 목록 — 계약 §16 + `--report`
-- [x] 검증 스크립트 + 일부러 망가뜨린 사본 — `scripts/selftest-verify-concept-identity.py` (사본 39)
-- [ ] **게이트**
-- [ ] 완료일:
+- [x] 검증 스크립트 + 일부러 망가뜨린 사본 — `scripts/selftest-verify-concept-identity.py` (사본 39 → 게이트 반영 뒤 49)
+- [x] **게이트** — D25 (2026-09-30). 반영: part · code · Topic · C-4 · 이름 옮김
+- [x] 완료일: 2026-09-30
 
 ---
 
