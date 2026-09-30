@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start -p 3100",
     "typecheck": "tsc -p .",
-    "test": "playwright test"
+    "test": "playwright test",
+    "lab:phone": "next build && next start -p 3100 -H 0.0.0.0"
   },
   "dependencies": {
     "@claro/contract": "workspace:*",

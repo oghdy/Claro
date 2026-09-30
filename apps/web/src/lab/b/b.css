@@ -1,0 +1,119 @@
+/* B — 카드 · 고딕 · 촘촘. 다크 고정 — 기본값 제안.
+   색은 바탕 · 면 두 단계 · 글 세 단계뿐이다. 뜻에 따라 바뀌는 색 없음 (D20). */
+:root:has(.lab-b) body { background: #0f1113; }
+.lab-b {
+  --bg: #0f1113; --surface: #1a1d21; --surface-2: #24282d; --ink: #ecebe6; --muted: #9ca1a7; --faint: #6b7076;
+  --rule: rgba(236, 235, 230, 0.12);
+  position: fixed; inset: 0; display: flex; flex-direction: column;
+  background: var(--bg); color: var(--ink);
+  font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  word-break: keep-all; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
+}
+.lab-b button { font: inherit; color: inherit; cursor: pointer; }
+.lab-b button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.b-bar { flex: none; width: 100%; max-width: 440px; margin: 0 auto; padding: 10px 14px 8px; }
+.b-segs { display: flex; gap: 3px; }
+.b-segs span { flex: 1; height: 3px; border-radius: 2px; background: var(--rule); }
+.b-segs span[data-done] { background: var(--ink); }
+.b-row { display: flex; align-items: center; margin-top: 10px; }
+.b-levels { display: flex; gap: 2px; padding: 2px; border-radius: 8px; background: var(--surface); }
+.b-levels button { border: 0; background: none; font-size: 12.5px; font-weight: 600; padding: 5px 11px; border-radius: 6px; color: var(--faint); }
+.b-levels button[aria-pressed="true"] { background: var(--surface-2); color: var(--ink); }
+.b-count { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.b-stage { position: relative; flex: 1; min-height: 0; display: flex; justify-content: center; }
+.b-pager {
+  flex: 1; max-width: 440px; display: flex; overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
+}
+.b-pager::-webkit-scrollbar { display: none; }
+.b-card {
+  flex: 0 0 100%; height: 100%; overflow-y: auto; overscroll-behavior-y: contain;
+  scroll-snap-align: start; scroll-snap-stop: always;
+  padding: 16px 18px 28px; display: flex; flex-direction: column;
+}
+.b-side { display: none; }
+
+.b-more {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 0 12px; text-align: center; pointer-events: none;
+  font-size: 12px; font-weight: 600; color: var(--muted);
+  background: linear-gradient(to bottom, transparent, var(--bg) 55%);
+  opacity: 0; transition: opacity 0.2s;
+}
+.b-more[data-show] { opacity: 1; }
+.b-hint {
+  position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); margin: 0; width: max-content; max-width: calc(100% - 32px);
+  padding: 9px 14px; border-radius: 999px; background: var(--surface-2); font-size: 12.5px; color: var(--muted);
+  animation: b-fade 0.3s ease-out;
+}
+.b-sheet {
+  position: absolute; left: 12px; right: 12px; bottom: 12px; max-width: 416px; margin: 0 auto;
+  display: flex; align-items: baseline; gap: 10px; padding: 14px 16px; border-radius: 14px;
+  background: var(--surface-2); font-size: 14px; line-height: 1.5; color: var(--muted); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  animation: b-up 0.22s ease-out;
+}
+.b-sheet-word { flex: none; font-size: 15px; color: var(--ink); }
+.b-sheet-close { margin-left: auto; font-size: 18px; line-height: 1; color: var(--faint); }
+@keyframes b-up { from { transform: translateY(12px); opacity: 0; } }
+@keyframes b-fade { from { opacity: 0; } }
+
+/* 누른 문장 — 모든 층이 같은 표시(밑줄). 무엇인지는 아래 글이 말한다 */
+.lab-b .x-slide [data-layer] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.lab-b [data-layer][data-selected] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; background: var(--surface-2); border-radius: 3px; }
+
+/* 글 */
+.lab-b .x-kicker { width: fit-content; margin: 0 0 12px; padding: 4px 9px; border-radius: 6px; background: var(--surface); font-size: 12px; font-weight: 600; color: var(--muted); }
+.lab-b .x-headline { margin: 0 0 18px; font-size: 23px; line-height: 1.38; font-weight: 750; letter-spacing: -0.025em; }
+.lab-b .x-blocks { display: flex; flex-direction: column; gap: 14px; }
+.lab-b .x-prose { display: flex; flex-direction: column; gap: 11px; }
+.lab-b .x-p { margin: 0; font-size: 15.5px; line-height: 1.7; }
+.lab-b .x-p[data-weight="secondary"] { font-size: 14px; line-height: 1.65; color: var(--muted); }
+.lab-b .x-p[data-weight="callout"] { padding: 14px 15px; border-radius: 12px; background: var(--surface); }
+.lab-b .x-p[data-weight="conclusion"] { font-size: 19.5px; line-height: 1.55; font-weight: 700; padding-top: 6px; }
+
+.lab-b .x-quote { margin: 0; padding: 14px 15px; border-radius: 12px; background: var(--surface); }
+.lab-b .x-attr { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+.lab-b .x-qbody { margin: 0; font-size: 15px; line-height: 1.65; }
+
+.lab-b .x-list { margin: 0; padding: 4px 0 0; list-style: none; display: flex; flex-direction: column; }
+.lab-b .x-li { position: relative; padding: 0 0 14px 22px; display: flex; flex-direction: column; font-size: 14.5px; line-height: 1.55; }
+/* 순서 목록 — 선과 점. 간격은 순서만 뜻한다 — 등간격 (D20). 모든 점이 같다 */
+.lab-b .x-li::before { content: ""; position: absolute; left: 3px; top: 7px; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.lab-b .x-list[data-ordered] .x-li:not(:last-child)::after { content: ""; position: absolute; left: 6px; top: 16px; bottom: 0; width: 1px; background: var(--rule); }
+.lab-b .x-li-label { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.lab-b .x-li[data-emphasized] .x-li-body { font-weight: 700; }
+
+.lab-b .x-contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lab-b .x-c { padding: 13px 13px 14px; border-radius: 12px; background: var(--surface); }
+.lab-b .x-c-label { font-size: 12px; font-weight: 600; color: var(--muted); }
+.lab-b .x-c-value { font-size: 26px; line-height: 1.25; font-weight: 800; margin-top: 4px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.lab-b .x-c-body { font-size: 13.5px; line-height: 1.5; margin-top: 5px; }
+.lab-b .x-c[data-emphasized] .x-c-value, .lab-b .x-c[data-emphasized] .x-c-body { font-weight: 800; }
+
+.lab-b .x-sheet { margin: 0; border-radius: 12px; background: var(--surface); padding: 2px 14px; }
+.lab-b .x-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; }
+.lab-b .x-row + .x-row { border-top: 1px solid var(--rule); }
+.lab-b .x-row dt { font-size: 13px; line-height: 1.45; color: var(--muted); }
+.lab-b .x-row dd { margin: 0; font-size: 15px; font-weight: 700; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* 물음 = 다음 버튼 */
+.lab-b .b-next {
+  margin-top: 22px; width: 100%; display: flex; align-items: center; gap: 12px; text-align: left;
+  border: 0; border-radius: 14px; padding: 16px 16px; background: var(--ink); color: var(--bg);
+  font-size: 16px; font-weight: 700; line-height: 1.45;
+}
+.b-next-q { flex: 1; }
+.b-next-arrow { flex: none; font-size: 18px; }
+.lab-b .b-restart { justify-content: center; background: var(--surface-2); color: var(--ink); }
+
+@media (min-width: 700px) {
+  .b-stage { padding: 12px 0 20px; align-items: stretch; gap: 20px; }
+  .b-pager { border-radius: 22px; background: var(--bg); box-shadow: 0 0 0 1px var(--rule); }
+  .b-side { display: block; align-self: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--rule); background: var(--surface); font-size: 22px; line-height: 1; }
+  .b-side:disabled { opacity: 0.3; cursor: default; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .b-more { transition: none; }
+  .b-hint, .b-sheet { animation: none; }
+}

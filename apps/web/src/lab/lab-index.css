@@ -1,0 +1,18 @@
+.lab-index { max-width: 60rem; margin: 0 auto; padding: 28px 16px 64px; font-size: 15px; line-height: 1.65; }
+.lab-index h1 { font-size: 24px; margin: 0 0 8px; }
+.lab-index h2 { font-size: 18px; margin: 40px 0 12px; }
+.lab-index .lede { color: #555; margin: 0 0 24px; }
+.lab-index .dirs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+.lab-index .dirs > li { border: 1px solid #ddd; border-radius: 10px; padding: 16px; }
+.lab-index .dirs a { display: flex; justify-content: space-between; align-items: center; gap: 12px; text-decoration: none; color: inherit; font-size: 18px; }
+.lab-index .dirs a span { font-size: 14px; border: 1px solid #1a1a1a; border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
+.lab-index .dirs p { margin: 10px 0 12px; }
+.lab-index dl { margin: 0; font-size: 13.5px; }
+.lab-index dl div { display: grid; grid-template-columns: 6.5em 1fr; gap: 8px; padding: 4px 0; border-top: 1px solid #eee; }
+.lab-index dt { color: #666; }
+.lab-index dd { margin: 0; }
+.lab-index .table { overflow-x: auto; }
+.lab-index table { border-collapse: collapse; font-size: 13.5px; min-width: 40rem; }
+.lab-index th, .lab-index td { text-align: left; vertical-align: top; padding: 8px 10px; border-top: 1px solid #ddd; }
+.lab-index thead th { border-top: 0; }
+.lab-index .note { margin-top: 32px; color: #666; font-size: 13px; }
