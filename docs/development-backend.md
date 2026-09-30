@@ -13,8 +13,9 @@
 | 0.1a | ARTICLE_PACKAGE.md 작성 | 계약 1 | S3 | ☑ 2026-09-29 · D20 |
 | 0.1b | 골든을 계약에 맞춰 재작성 (+게이지 → 대조) | 골든 v2 · invalid 재생성 · 검증 스크립트 | 새 세션 | ☑ 2026-09-29 · D23 (`logs/backend/phase-0-step-0-1b.md`) |
 | 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☑ 2026-09-30 · D25 (`logs/backend/phase-0-step-0-2a.md`) |
-| 0.2b | DATA_MODEL.md — Fact · Claim · Bridge · Storyline · Source. 골든 대기 13 해소 | 계약 2 | — | ☐ 0.2a 뒤 |
-| 0.2c | 관찰 기록 — knowledge_evidence · reading_plan_log · probe. **F-3 전에** | 계약 2 추가 | — | ☐ |
+| 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☐ 프롬프트 준비됨 · 게이트 |
+| 0.2c | 관찰 기록 — knowledge_evidence · reading_plan_log · probe · correction_log. **F-3 전에** | 계약 2 추가 | — | ☐ |
+| 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | — | ☐ 0.2c 뒤 |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
 | 0.4~ | 스키마 구현 | 마이그레이션 | Step당 세션 | ☐ |
 
@@ -405,6 +406,79 @@ PM 이 이 목록만 검수한다.
 - [x] 애매했던 층 판정 목록 (34건, 로그)
 - [x] **PM 검수** (D20 — 독자 글이 안 바뀌므로 에디토리얼 게이트 없음) — D23 으로 반영, 독자 글 1건 수정은 도윤 승인
 - [x] 완료일: 2026-09-29
+
+---
+
+## Step 0.2b — DATA_MODEL.md 작성
+
+### 세션 개시 프롬프트 (복붙)
+
+```
+데이터 계약(DATA_MODEL)을 써라. 사실 · 출처 · 시간 · 해석 · 브리지 · 스토리라인이 저장되는 모양이다.
+ARTICLE_PACKAGE 는 이것들을 ID 로만 가리켰다. 이 계약이 그 주인이다.
+
+읽을 것 (이것만):
+  CLAUDE.md
+  docs/FINDINGS.md          §4.1 · §5 전부 · §6.2 상태 코드 · §7.1 · §7.2 · §9.2
+  docs/DECISIONS.md         D6 · D8 · D20 · D22 · D23 · D24 · D25
+  docs/contract/ARTICLE_PACKAGE.md    §0 · §1 · §6 · §7.4 · §8 · §9 · §12
+  docs/contract/CONCEPT_IDENTITY.md   §1 · §3 · §6 · §12 (ConceptRef · BridgeSlot 과의 짝)
+  docs/findings/fomc-2026-09-brief.md       실물: F01~F37 · DC-A~E · Storyline · Coverage
+  docs/findings/ftc-personalized-pricing-brief.md · docs/findings/screwworm-c-type-brief.md   사실 표 · 유형 비교용
+  fixtures/fomc-2026-09.article.json   _refs_pending · _fact_refs_dropped · _volatility · _attribution_refs
+  docs/development-backend.md          "Step 0.2 가 답해야 할 것 (S4)" 표 · "계약 변경 요청" R-1
+
+산출:
+  docs/contract/DATA_MODEL.md
+  logs/backend/phase-0-step-0-2b.md
+
+도출 원칙 (D24): 실물 또는 FINDINGS "확정". 둘 다 아니면 "미확인". 실물 없는 구조엔 "실물 없음".
+
+반드시 답할 것:
+  1. Fact — 필드와 fact_type 어휘. 브리프(POLICY_ACTION · VOTE · HISTORICAL_CONTEXT …)와
+     FINDINGS §5.2(OFFICIAL_ACTION · OFFICIAL_CLAIM · MEASUREMENT …)가 다르다. 하나로.
+     §5.2 확정: 기관이 "주장한 것"은 사실이 아니라 "주장했다는 사실"이다
+  2. Source — 원문 보관 · 원문 위치(span) · Fact ↔ Source N:M · source_registry 권리 필드 (§5.1 · §5.3 · §5.5 확정)
+  3. 시간 — §5.3 의 네 필드. 그리고 R-1: 패키지 published_at 이 JSON 에서 어떤 모양인가 (날짜만 / 시각). D6 은 OPEN 이다
+  4. volatility — D8 값 셋은 그대로. 어디에 붙나: S2 가 본 것은 "문장 조각"이다
+     (F11 "2026년"은 STABLE, 본문 "올해"는 DERIVED — 같은 사실, 다른 분류).
+     공식 · as_of 같은 저작 데이터의 자리, 골든 _volatility 가 옮겨갈 곳
+  5. DerivedClaim — 기대는 사실(골든 _fact_refs_dropped 가 갈 곳), 반증 기록 (§7.2 확정). 실물: 브리프 DC-A~E
+  6. Bridge — CONCEPT_BRIDGE / STORY_BRIDGE (§4.1 확정). CONCEPT_IDENTITY 의 BridgeSlot 과 어떻게 짝이 되나.
+     실물: 골든 브리지 2개 — 그중 "그런데 지금 미국은 3%대입니다"는 사실(F31)을 품고 있다
+  7. Storyline · Event — 독립 객체, 버전이 있다 (§9.2 확정). 실물: 이란 사실은 FOMC 사건이 아니라 SL-iran-war 소속 (도윤 관찰).
+     §9.2 는 "발행된 기사가 스토리라인 버전을 고정한다"고 했는데 ARTICLE_PACKAGE 에 그 필드가 없다 — 필요한가
+  8. 인용 — 인용 블록의 출처 표시가 어느 사실 · 원문을 가리키나 (골든 _attribution_refs), 인용부호는 글인가 표시인가 (FOMC-6)
+  9. 참조 모양 — FactRef · ClaimRef · BridgeRef. ConceptRef(0.2a)와 함께 ARTICLE_PACKAGE 의 "Ref(ID)" 문구를 맞춰라.
+     0.2a 가 찾은 불일치: §0 "Ref(ID)로만 가리킨다" / §1 Ref 타입 / §6 표의 "골든 concept 20"(지금 21).
+     **ARTICLE_PACKAGE 는 이 항목에 한해 직접 고쳐도 된다** — §0 · §1 · §6 의 참조 문구와 CHANGELOG 만
+  10. 골든 대기 13 — 이 계약으로 풀리는 것(브리지 2 · 사실 승격 1)과, 콘텐츠 작업을 기다리는 것
+      (사실 출처 5 → C-2 · C-3, 해석 도출 5 → 반증 절차)을 목록으로. 콘텐츠 작업을 대신 하지 마라
+
+하지 말 것:
+  - knowledge_evidence · reading_plan_log · probe · correction_log (0.2c)
+  - Concept 구조 (0.2a 에 있다. 가리키기만)
+  - Coverage Schema 전체 설계 — 슬롯 상태 코드(§6.2 확정)가 Fact 에 닿는 부분만. 나머지는 미확인
+  - FINDINGS §9.6 보류 항목
+  - 골든 · 브리프 · 라이브러리 수정. ARTICLE_PACKAGE 는 위 9번 범위만
+
+판단이 필요하면 멈추고 로그에 _open 으로. 게이트에서 정한다.
+
+완료하면:
+  - 10개 질문마다 [계약 반영 / _open / 미확인] + 근거를 로그 맨 앞에
+  - 골든 · 브리프를 이 계약 모양으로 옮길 때의 작업 목록 (0.2m 입력)
+  - 검증 스크립트 + 일부러 망가뜨린 사본으로 실제로 실패하는지 확인. 기존 검사도 다시 돌려라
+  커밋: B-0.2b [GATE] → push
+```
+
+### 완료 조건
+- [ ] 10개 질문 처리 표시 + 근거
+- [ ] ARTICLE_PACKAGE 참조 문구 정합 (§0 · §1 · §6)
+- [ ] 대기 13 분류 (계약으로 풀림 / 콘텐츠 대기)
+- [ ] 0.2m 이전 작업 목록
+- [ ] 검증 스크립트 + 망가뜨린 사본, 기존 검사 회귀 없음
+- [ ] **게이트**
+- [ ] 완료일:
 
 ---
 

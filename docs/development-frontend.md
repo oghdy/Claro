@@ -13,7 +13,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | F-1 | 골든을 계약대로 **정확하게** 그린다. 모노레포 뼈대 · contract 타입 · 웹 렌더 | ☑ 2026-09-29 · PM 검수 대기 |
 | F-2a | 디자인 탐색 — 서로 다른 방향 3개를 **실제로 넘겨볼 수 있는 페이지**로 | ☐ 프롬프트 준비됨 |
 | F-2b | 디자인 확정 — 도윤이 고른 조합으로 토큰 · 타이포 · 전환 | ☐ F-2a 반응 뒤 |
-| F-3 | 실제 독자 테스트용 배포 (FINDINGS §12.3 — 아직 한 번도 안 함). **0.2c(관찰 기록) 뒤** | ☐ |
+| F-3 | 실제 독자 테스트용 배포 (FINDINGS §12.3 — 아직 한 번도 안 함). **선행 조건은 `development-content.md` "F-3 전에 끝나야 하는 것"** | ☐ |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -39,6 +39,10 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | 모아 보기 | Mobbin (앱) · Godly · Awwwards (웹) · Refero |
 
 볼 때 **"독자를 더 술술 읽게 하나, 예쁘기만 한가"**를 같이 묻는다 (FINDINGS §15).
+
+## 0.2m (이전) 때 프론트가 할 것
+- `packages/contract/src/validate.ts:115` — refs 가 **문자열만** 통과한다. 개념 참조가 객체(`ConceptRef { concept_id, version, part }`)가 되고
+  0.2b 에서 다른 참조도 모양이 정해진다. 골든을 옮기는 순간 막히므로 이전과 같이 고친다 (0.2a 발견)
 
 ## F-2 에 반드시 넣을 것
 - **화면보다 긴 슬라이드 + 스크롤 스냅.** 375×812 에선 괜찮지만 375×667(아이폰 SE)에선 프로토타입도 여러 장이 넘쳤다.
