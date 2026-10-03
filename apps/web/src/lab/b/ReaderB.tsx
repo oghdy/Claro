@@ -13,13 +13,19 @@ import { LAYER_EXPLAIN, LAYER_WORD, prefersReducedMotion } from "../layers";
 //   아래에 글이 남아 있으면 "아래에 더 있어요"가 뜬다.
 //   층 표시: 문장을 누르면 아래에서 그 문장의 층이 뜬다(사실 · 해석 · 개념 · 연결). 평소엔 아무 표시 없음.
 
-export function ReaderB({ pkg }: { pkg: ArticlePackage }) {
+// B2 (2026-10-03, 도윤 반응 뒤 시험) — layerModes 를 켜면 위쪽에 "층" 전환이 생긴다: 끔 · 꼬리표(A 의 방식) · 글꼴(C 의 방식).
+//   문장을 누르면 뜨는 설명은 세 경우 모두 그대로다. 확정이 아니라 비교용이다.
+export type LayerMode = "off" | "tags" | "font";
+const MODE_NAMES: Record<LayerMode, string> = { off: "끔", tags: "꼬리표", font: "글꼴" };
+
+export function ReaderB({ pkg, layerModes = false }: { pkg: ArticlePackage; layerModes?: boolean }) {
   const [levelId, setLevelId] = useState<LevelId>(pkg.levels[0]!.id);
   const [idx, setIdx] = useState(0);
+  const [mode, setMode] = useState<LayerMode>("off");
   const level = pkg.levels.find((l) => l.id === levelId)!;
 
   return (
-    <div className="lab-b">
+    <div className="lab-b" data-layers={layerModes ? mode : undefined}>
       <header className="b-bar">
         <div className="b-segs" aria-hidden="true">
           {level.slides.map((_, i) => (
@@ -36,10 +42,30 @@ export function ReaderB({ pkg }: { pkg: ArticlePackage }) {
               ))}
             </div>
           )}
+          {layerModes && (
+            <div className="b-levels b-modes" role="group" aria-label="층 표시">
+              <span className="b-modes-label">층</span>
+              {(Object.keys(MODE_NAMES) as LayerMode[]).map((m) => (
+                <button key={m} type="button" aria-pressed={m === mode} onClick={() => setMode(m)}>
+                  {MODE_NAMES[m]}
+                </button>
+              ))}
+            </div>
+          )}
           <span className="b-count">
             {idx + 1}/{level.slides.length}
           </span>
         </div>
+        {layerModes && mode === "tags" && (
+          <p className="b-legend">
+            {LAYER_WORD.fact} — 출처에 있는 것 · {LAYER_WORD.claim} — Claro 가 끌어낸 것 · {LAYER_WORD.concept} — 배경 설명 · {LAYER_WORD.bridge} — 개념을 오늘 일에 잇는 말
+          </p>
+        )}
+        {layerModes && mode === "font" && (
+          <p className="b-legend">
+            <span data-layer="fact">고딕</span> — 기록된 사실 · <span data-layer="claim">명조</span> — Claro 가 풀어 쓴 말 (설명 · 해석)
+          </p>
+        )}
       </header>
       <PagerB key={level.id} level={level} idx={idx} onIndex={setIdx} />
     </div>

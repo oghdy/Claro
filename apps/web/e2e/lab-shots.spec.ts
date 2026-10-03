@@ -9,7 +9,7 @@ const SIZES = { se: MOBILE_SE, x: MOBILE_X, desktop: DESKTOP };
 // 층 표시를 켠 모습 — 입문 2장 (해석 · 사실 · 이어 주는 글이 한 장에 다 있다)
 async function showLayers(page: Page, dir: Dir) {
   if (dir === "a") await page.getByRole("button", { name: "층 보기" }).click();
-  if (dir === "b") await page.locator('[data-slide-index="1"] .x-p [data-layer="claim"]').first().click();
+  if (dir.startsWith("b")) await page.locator('[data-slide-index="1"] .x-p [data-layer="claim"]').first().click();
   await page.waitForTimeout(300);
 }
 
@@ -56,7 +56,7 @@ for (const dir of DIRS)
     await openLevel(page, dir, "basic");
     await page.waitForTimeout(1200);
     const beat = () => page.waitForTimeout(900);
-    if (dir === "b") {
+    if (dir.startsWith("b")) {
       // 1 → 2 → 3 → 4(카드 안에서 아래로) → 5, 그리고 2장으로 돌아가 문장을 눌러 층 보기
       for (let i = 0; i < 4; i++) (await swipe(cdp, { dx: 260, y: 300, speed: 700 }), await beat());
       await swipe(cdp, { dy: 260, speed: 600 }), await beat();

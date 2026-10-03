@@ -19,7 +19,7 @@ for (const dir of DIRS)
       let swipes = 0;
       const settle = () => page.waitForTimeout(700);
       await markSeen(page);
-      if (dir === "b") {
+      if (dir.startsWith("b")) {
         for (let i = 0; i < n; i++) {
           for (let k = 0; k < 20; k++) {
             const before = await scrollPos(page, dir);

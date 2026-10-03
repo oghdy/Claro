@@ -32,6 +32,9 @@ export default function Page() {
           </li>
         ))}
       </ul>
+      <p className="note">
+        <Link href="/lab/b2">B2 — B 에 층 표시(꼬리표 · 글꼴)를 섞어 본 것 →</Link> (2026-10-03, 시험)
+      </p>
       <h2>비교</h2>
       <div className="table">
         <table>

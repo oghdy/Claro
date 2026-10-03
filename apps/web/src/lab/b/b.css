@@ -117,3 +117,26 @@
   .b-more { transition: none; }
   .b-hint, .b-sheet { animation: none; }
 }
+
+/* ---- B2: 층 전환 (끔 · 꼬리표 · 글꼴). 확정 아님 — 비교용 ---- */
+.b-modes { margin-left: 8px; align-items: center; }
+.b-modes-label { font-size: 11.5px; font-weight: 600; color: var(--faint); padding: 0 4px 0 7px; }
+.b-modes button { padding: 5px 8px; }
+.b-legend { margin: 8px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--muted); }
+/* 꼬리표 — 층이 바뀌는 자리에만. 모든 층이 같은 모양 · 같은 색, 다른 건 글자뿐 (D20). 글자는 layers.ts LAYER_WORD 와 같다 */
+.lab-b[data-layers="tags"] .x-slide [data-layer]::before {
+  display: inline-block; margin-right: 0.35em; padding: 2px 4px; vertical-align: 0.15em;
+  font-size: 10px; font-weight: 700; line-height: 1.1; letter-spacing: 0; color: var(--muted);
+  border: 1px solid var(--faint); border-radius: 4px;
+}
+.lab-b[data-layers="tags"] .x-slide [data-layer="fact"]::before { content: "사실"; }
+.lab-b[data-layers="tags"] .x-slide [data-layer="claim"]::before { content: "해석"; }
+.lab-b[data-layers="tags"] .x-slide [data-layer="concept"]::before { content: "개념"; }
+.lab-b[data-layers="tags"] .x-slide [data-layer="bridge"]::before { content: "연결"; }
+.lab-b[data-layers="tags"] .x-slide [data-layer="fact"] + [data-layer="fact"]::before,
+.lab-b[data-layers="tags"] .x-slide [data-layer="claim"] + [data-layer="claim"]::before,
+.lab-b[data-layers="tags"] .x-slide [data-layer="concept"] + [data-layer="concept"]::before,
+.lab-b[data-layers="tags"] .x-slide [data-layer="bridge"] + [data-layer="bridge"]::before { content: none; }
+/* 글꼴 — 사실은 고딕 그대로, Claro 가 쓴 말(해석 · 개념 · 연결 · 이어 주는 글)은 명조. 색 · 크기는 같다 */
+.lab-b[data-layers="font"] :is(.x-slide, .b-legend) [data-layer]:not([data-layer="fact"]) { font-family: var(--lab-noto-serif), "AppleMyungjo", serif; letter-spacing: 0; }
+.b-legend [data-layer] { color: var(--ink); font-weight: 700; }

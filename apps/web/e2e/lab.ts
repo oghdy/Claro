@@ -1,7 +1,7 @@
 // F-2a lab 공용 — 방향마다 "한 장으로 가기"와 "독자 글 단위 모으기"
 import type { CDPSession, Page } from "@playwright/test";
 
-export const DIRS = ["a", "b", "c"] as const;
+export const DIRS = ["a", "b", "b2", "c"] as const;
 export type Dir = (typeof DIRS)[number];
 export const NAMES: Record<string, string> = { basic: "입문", intermediate: "중급", advanced: "숙련" };
 export const MOBILE_SE = { width: 375, height: 667 };
@@ -24,7 +24,7 @@ export async function goTo(page: Page, dir: Dir, i: number, end = false) {
         const deck = document.querySelector<HTMLElement>(".a-deck")!;
         deck.style.scrollSnapType = "none"; // 사진을 찍을 위치에 정확히 세운다 (넘기는 동작은 영상 · 읽기 테스트가 본다)
         deck.scrollTop = end ? s.offsetTop + s.offsetHeight - deck.clientHeight : s.offsetTop;
-      } else if (dir === "b") {
+      } else if (dir.startsWith("b")) {
         const pager = document.querySelector<HTMLElement>(".b-pager")!;
         pager.style.scrollSnapType = "none";
         pager.scrollLeft = i * pager.clientWidth;
