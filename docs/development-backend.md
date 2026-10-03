@@ -409,6 +409,34 @@ PM 이 이 목록만 검수한다.
 
 ---
 
+## Step 0.2b 게이트 반영 (D27) — 0.2b 세션에 보낼 것
+
+```
+0.2b 게이트 판정이 나왔다. D27 (docs/DECISIONS.md) 을 읽고 반영해라. 판정자: PM (도윤 위임).
+
+  1. _open-1 → (a). fact_type 은 7값으로 닫는다
+  2. _open-2 → (a). 발행하려면 Fact 마다 1차 출처
+  3. _open-3 → Fact · Claim · Bridge · Source 는 추천대로 UUID + label.
+     **Event · Storyline 도 UUID + code 로 한다 (추천과 다르다).** code 는 지금 쓰는 문자열
+     ("FOMC-20260916" · "SL-iran-war") 그대로이고 유일 · 불변 — Concept 의 code 와 같은 방식. 이유는 D27.
+     §2.1 · §9 · §13 · §18 을 맞추고, ARTICLE_PACKAGE 의 event_ref 문구도 맞춰라 (참조 문구 범위)
+  4. "도출하며 판단한 것" 표의 판단들은 수용됐다
+  5. §16 을 "판정됨 → D27" 로. CHANGELOG 한 줄
+  6. §17 의 레인: "9월 초" · "3주 뒤" · 1차 출처 없는 사실 · 인용 원문 · DERIVED 입력 사실 → 콘텐츠 C-3.
+     해석 5 · DC-A~E 기록 · DC-C 범위 → C-5. 원문 위치(span) · 공개 시점 증명 → 파이프라인 (손으로 안 한다)
+  7. 독자 글 수정 1건 (도윤 승인): 입문 7장 대조의
+     세 명만 “올리자”고 반대  →  세 명만 올리자고 반대   (따옴표만 뺀다. 줄바꿈은 그대로)
+     - 골든을 고치고 invalid 2건을 다시 만든다
+     - compare-reader-text 의 허용된 차이에 이 한 건을 더한다 (2건이 된다. 그 밖의 차이는 여전히 실패)
+     - correction-log 1행: stage = 게이트(0.2b) · error_type = 레이어 혼입 (해석이 원문 표시를 달았다) ·
+       source_of_catch = 0.2b 인용 검사 · time_spent_min 비움
+
+검증 스크립트 전부(기존 것 포함) 다시 돌려 로그에 붙이고, development-backend.md 0.2b 체크 + 완료일
+커밋: B-0.2b 게이트 반영 → push
+```
+
+---
+
 ## Step 0.2b — DATA_MODEL.md 작성
 
 ### 세션 개시 프롬프트 (복붙)
