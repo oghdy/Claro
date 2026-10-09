@@ -335,6 +335,13 @@ CASES = [
     ('불변식 2 — concept span 에 "C-0002" 문자열', 'model',
      m_(lambda m: span_at(m, 'basic', 'slides/3/blocks/0/paragraphs/0/body/0').__setitem__('refs', ['C-0002'])),
      {'REF_UNRESOLVED'}),
+    ('CONCEPT_IDENTITY 불변식 12 — ③ span 하나만 C-0002@3 으로 (한 판에 두 버전)', 'model',
+     m_(lambda m: span_at(m, 'basic', 'slides/3/blocks/0/paragraphs/0/body/0')['refs'][0].__setitem__('version', 3)),
+     {'CONCEPT_VERSION_MIXED'}),
+    ('§8.2 — 패키지의 C-0002 참조를 전부 @3 으로, 브리지는 @4 그대로 (D32 는 @4 에 고정)', 'model',
+     m_(lambda m: [r.__setitem__('version', 3) for _, spans in V.VC.level_spans(m['record']['package']) for _, sp in spans
+                   if sp['layer'] == 'concept' for r in sp['refs'] if r['concept_id'] == CONCEPT_ID['C-0002']]),
+     {'BRIDGE_CONCEPT'}),
     ('불변식 22 — DC-C basis 비움', 'model', m_(lambda m: m['claims'][CID['DC-C']].__setitem__('basis', [])), {'CLAIM_NO_BASIS'}),
     ('불변식 18 — 브리지 facts 비움 (F31 을 품지 않은 브리지)', 'model',
      m_(lambda m: m['bridges'][BID].__setitem__('facts', [])), {'BRIDGE_NO_FACTS'}),

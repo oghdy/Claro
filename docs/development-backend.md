@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.2c — 완료 (2026-10-09 · D30 반영). 다음: 0.2m**
+**Phase 0 / Step 0.2m-a — 끝 (2026-10-09 · 게이트 대기). 0.2m-b 도 끝. 다음: 0.3 (백엔드 스택) · 0.4**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -15,7 +15,7 @@
 | 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☑ 2026-09-30 · D25 (`logs/backend/phase-0-step-0-2a.md`) |
 | 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☑ `b832391` · `61a82b1` · 2026-10-09 |
 | 0.2c | OBSERVATION.md — 독자 기록(knowledge_evidence · reading_plan_log · probe) · 교정 기록. **F-3 전에** | 계약 4 | 새 세션 | ☑ 2026-10-09 · D30 (`logs/backend/phase-0-step-0-2c.md`) |
-| 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | — | ☐ 프롬프트 준비 2026-10-09 — a · b 둘로 나눔 (아래) |
+| 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | 새 세션 (a) · 0.2c 세션 (b) | ◐ a ☑ 2026-10-09 게이트 대기 (`logs/backend/phase-0-step-0-2m-a.md`) · b `5c8ced4` |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
 | 0.4~ | 스키마 구현 | 마이그레이션 | Step당 세션 | ☐ |
 
@@ -477,6 +477,19 @@ PM 이 이 목록만 검수한다.
   - logs/backend/phase-0-step-0-2m-a.md · development-backend.md 체크
   커밋: B-0.2m-a [GATE] → push. 파일은 하나씩 지정해서 add (같은 작업 트리에 다른 세션이 있다)
 ```
+
+### 완료 조건 (0.2m-a)
+- [x] 1 · 계약을 실물에 — DATA_MODEL §17 (날짜 붙은 기록 · 불변식 25 는 어휘만) · CONCEPT_IDENTITY 실물 수 · selftest 둘 (`f8f6dce`)
+- [x] 2 · 라이브러리 → `docs/content/concept-library.json` (개념 13 · UUID). 문안 대조 44 단위 · 2661자 · 차이 0 (`409dc05`)
+- [x] 3 · 골든 → 패키지(층별 Ref) + `fomc-2026-09.record.json` + `fixtures/store.json`. 독자 글 대조 117 단위 · 3378자 · 차이 0. 대기 21 → 0 (`38e17fd`)
+- [x] 4 · `packages/contract` — 타입 · validate · 테스트. apps/web 바뀐 파일 0 (`7efe93e`)
+- [x] 5 · invalid 3건 · 검사 전부 · 망가뜨린 사본
+- [x] 물음 a ~ g — 로그 맨 앞. _open-m1 ~ m8 (DATA_MODEL §19 · CONCEPT_IDENTITY §17)
+- [x] 완료일: 2026-10-09 — **게이트 대기**
+
+**남은 빨간불 (이 Step 의 것이 아니다)**
+- `verify-observation` FAIL — OBSERVATION §4.2 표의 `C-0003` 줄 (D32 로 C-0012 가 됐다). 0.2m-b 가 한 줄 고친다
+- e2e `lab/a 숙련 — 375×667 에서 끝까지 읽힌다` — C-5 2차에서 숙련 장이 길어진 탓. 이전 전 골든으로도 같다. 프론트(F-2b)
 
 ## Step 0.2m-b — 교정 기록 이전 · OBSERVATION 을 D26 에 맞춘다 (0.2c 세션에 이어서)
 

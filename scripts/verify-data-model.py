@@ -540,6 +540,17 @@ def check_model(m, lib, publish=False):
             for k in c['checks']:
                 if k['outcome'] in ('NOT_REFUTED', 'SCOPED') and not k['facts']:
                     P('CHECK_NO_FACTS', f'{w}: 반증 "{k["question"][:24]}" 의 답에 사실이 없다 (§7.3)')
+    # 한 판 안에서 한 개념은 한 버전이다 (CONCEPT_IDENTITY 불변식 12 · OBSERVATION §4.2 가 기대는 것)
+    pinned = defaultdict(set)
+    for lid, spans in VC.level_spans(pkg):
+        for path, sp in spans:
+            if sp['layer'] == 'concept':
+                for r in sp['refs']:
+                    if isinstance(r, dict) and r.get('concept_id') in m['concept_codes']:
+                        pinned[r['concept_id']].add(r.get('version'))
+    for cid_, vs in pinned.items():
+        if len(vs) > 1:
+            E('CONCEPT_VERSION_MIXED', f'{m["concept_codes"][cid_]}: 한 패키지가 버전 {sorted(vs, key=str)} 를 섞어 가리킨다 — 한 판 안에서 한 개념은 한 버전')
     # 18 — Bridge
     slots = {c['code']: (c['version'], {s['label']: s['after'] for s in c['slots']}) for c in lib['concepts']}
     for b in B.values():
@@ -550,6 +561,8 @@ def check_model(m, lib, publish=False):
             code = m['concept_codes'].get(b['concept_id'])
             if not code or not isinstance(b['concept_version'], int):
                 E('BRIDGE_CONCEPT', f'{w}: CONCEPT_BRIDGE 인데 개념 · 버전이 없다')
+            elif b['bridge_id'] in reach_b and pinned.get(b['concept_id']) and b['concept_version'] not in pinned[b['concept_id']]:
+                E('BRIDGE_CONCEPT', f'{w}: {code}@{b["concept_version"]} 의 슬롯을 채운다는데 패키지는 {code}@{sorted(pinned[b["concept_id"]], key=str)} 를 가리킨다 — 같은 버전이어야 한다 (§8.2)')
             elif b['slot'] is not None:
                 cur, sl = slots[code]
                 if b['concept_version'] != cur:

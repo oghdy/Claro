@@ -871,8 +871,8 @@ def run(contract_text, library_text, gold, log_text, id_map=None, store=None):
         e, w = check_store(store, lib, library_text, contract_text)
         errs += e
         warns += w
-        if id_map is None and not e:
-            id_map = id_map_of(store)
+        if id_map is None and not any(c in ('STORE_SHAPE', 'STORE_KEY') for c, _ in e):
+            id_map = id_map_of(store)                    # 키가 멀쩡하면 골든의 참조는 풀 수 있다 (다른 저장소 오류와 섞이지 않게)
     e, w, rep = check_golden(gold, lib, id_map)
     errs += e
     warns += w

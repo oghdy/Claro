@@ -508,7 +508,8 @@ ConflictingAlias { alias: "dynamic pricing", concept_id: <C-0010>,
 9. 정규화한 이름이 두 개념 이상의 alias(또는 다른 개념의 `canonical_name` · `code`)이면 그 개념마다 ConflictingAlias 가 있다. ConflictingAlias 의 이름은 그 개념의 alias 에 있다 (기계)
 10. 관계의 양 끝이 있다. 선행 관계에 순환이 없다. 한 쌍은 한 번 적는다 (기계: 양 끝 · 순환. 한 번 — 라이브러리는 양쪽에 적으므로 어긋난 곳을 WARN)
 11. evidence 는 leaf 에만 기록한다. MERGED 개념에는 새로 기록하지 않는다 (0.2c)
-12. 발행물의 concept 층 refs 는 ConceptRef 이고, 가리킨 (`concept_id`, `version`) 이 있고, `part` 는 그 버전의 문안 이름이거나 null 이며, 발행 때 그 개념은 leaf · CANONICAL 또는 PROVISIONAL 이다. 발행 뒤 고치지 않는다
+12. 발행물의 concept 층 refs 는 ConceptRef 이고, 가리킨 (`concept_id`, `version`) 이 있고, `part` 는 그 버전의 문안 이름이거나 null 이며, 발행 때 그 개념은 leaf · CANONICAL 또는 PROVISIONAL 이다. 발행 뒤 고치지 않는다.
+    한 패키지 안에서 한 개념은 한 버전이다 — 섞으면 그 판이 독자에게 보여준 버전이 하나로 정해지지 않는다 (OBSERVATION §4.2 의 `block_decisions.version` 이 여기에 기댄다. 0.2m-a 에서 적었다 · 기계: `verify-data-model.py`)
     (기계: 모양 · 개념 · 버전 범위 · 현재 버전의 `part` 이름. "C-XXXX" 모양은 골든을 옮기기 전까지 WARN 으로 센다)
 13. 브리지 슬롯 순서 — §6.3 (기계: `part` 로. "C-XXXX" 픽스처는 글자 대조로 대신. `part: null` 로 빠져나가는 것은 게이트 3)
 14. 라이브러리 문안을 그대로 옮긴 span 은 concept 층이고, 그 개념을 refs 에 가지며, 그 ConceptRef 의 `part` 가 그 문안이다 (기계)

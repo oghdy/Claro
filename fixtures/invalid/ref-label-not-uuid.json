@@ -1,0 +1,1649 @@
+{
+  "_violation": {
+    "code": "REF_SHAPE",
+    "of": "fomc-2026-09.article.json",
+    "rule": "DATA_MODEL §2.1 · §2.2 — fact 층의 Ref 는 Fact 의 UUID 다. label(\"F01\")은 참조에 쓰지 않는다",
+    "where": "levels/0/slides/0/headline/0/refs/0",
+    "what": "입문 1장 제목의 첫 참조를 옛 문자열 \"F01\" 로 되돌렸다 (이전 전 골든의 모양)",
+    "made_from": "fixtures/fomc-2026-09.article.json + 위반 1개 (B-0.2m-a)"
+  },
+  "_source": {
+    "derived_from": "fixtures/fomc-2026-09.observed.json",
+    "prototype": "prototypes/fomc-slides.html",
+    "task": "B-0.0b",
+    "corrected_on": "2026-09-21",
+    "corrections": "logs/correction-log.csv — 2026-09-21 · FOMC-20260916 · 5행",
+    "gate": "게이트 3 통과 — 판정자 도윤, 2026-09-21",
+    "restructured": {
+      "task": "B-0.1b",
+      "date": "2026-09-29",
+      "from": "c46871d:fixtures/fomc-2026-09.article.json",
+      "contract": "docs/contract/ARTICLE_PACKAGE.md §12",
+      "gate": "PM 검수 (D20) — 독자 글 불변이라 도윤 게이트 없음",
+      "pm_review": "D23 (2026-09-29) — 층 판정 #1 #19 #25 #31 뒤집음, #16 독자 글 1건 수정(도윤 승인)"
+    },
+    "corrected_c5": {
+      "task": "C-5",
+      "date": "2026-10-09",
+      "log": "logs/content/golden-correction-2026-10.md §0 (P 번호) · §6",
+      "gate": "D29 — 도윤 \"추천대로\". 18건 중 글자가 바뀐 15건 (P4 P6 P7 P8 P9 P10 P11 P13 P14 P15 P16 P17 P18 P20 P24) + 입문 8장 제목 층 + F31 · F37 as_of",
+      "corrections": "logs/correction-log.csv — 2026-10-09 · FOMC-20260916",
+      "round_2": {
+        "date": "2026-10-09",
+        "log": "logs/content/golden-correction-2026-10.md \"## 2차\" (R 번호) · \"## 2차 반영\"",
+        "gate": "D29 끝 — 도윤 \"추천대로\". R1 A · R2 A · R4 A · R5 A · R6 A · R7 A · R8 A · R9 A · R10 A (R3 그대로)"
+      }
+    },
+    "migrated": {
+      "task": "B-0.2m-a",
+      "date": "2026-10-09",
+      "from": "409dc05:fixtures/fomc-2026-09.article.json",
+      "contract": "docs/contract/DATA_MODEL.md §18 · CONCEPT_IDENTITY.md §16",
+      "what": "refs 를 층별 Ref 로 (FactRef · ClaimRef · BridgeRef = UUID, ConceptRef = { concept_id, version, part }) · event_ref 를 Event 의 UUID 로 · `_volatility` · `_published_at_basis` · `_source_note` → fomc-2026-09.record.json 의 authoring · `_fact_refs_dropped` → DerivedClaim.basis · Bridge.facts (store.json) · `_attribution_refs` 버림 · 대기 21 을 전부 채움. 독자 글은 한 글자도 안 바뀌었다 (compare-reader-text)",
+      "record": "fixtures/fomc-2026-09.record.json",
+      "store": "fixtures/store.json"
+    }
+  },
+  "event_ref": "15661514-6b4a-4da8-8879-47430c6be5a9",
+  "title": "3년 만의 금리 인상",
+  "lang": "ko",
+  "published_at": "2026-09-16",
+  "levels": [
+    {
+      "id": "basic",
+      "slides": [
+        {
+          "kicker": "오늘의 뉴스",
+          "headline": [
+            {
+              "text": "미국이 3년 만에\n금리를 올렸어요",
+              "layer": "fact",
+              "refs": [
+                "F01",
+                "ac2297ba-97ee-4638-86a1-27c21be85dcc"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "미국 중앙은행인 연준이 9월 16일 기준금리를 0.25%포인트 올렸습니다. 이제 <b>3.75~4.00%</b>예요.\n\n금리를 <b>올린</b> 건 2023년 7월 이후 처음입니다. 3년 넘게 연준은 금리를 그대로 두거나 내리기만 했어요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "미국 중앙은행인 연준이 9월 16일 기준금리를 0.25%포인트 올렸습니다. ",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb"
+                      ]
+                    },
+                    {
+                      "text": "이제 <b>3.75~4.00%</b>예요.",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "금리를 <b>올린</b> 건 2023년 7월 이후 처음입니다. ",
+                      "layer": "fact",
+                      "refs": [
+                        "ac2297ba-97ee-4638-86a1-27c21be85dcc"
+                      ]
+                    },
+                    {
+                      "text": "3년 넘게 연준은 금리를 그대로 두거나 내리기만 했어요.",
+                      "layer": "fact",
+                      "refs": [
+                        "ac2297ba-97ee-4638-86a1-27c21be85dcc"
+                      ]
+                    }
+                  ],
+                  "weight": "secondary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "첫 번째 반전",
+          "headline": [
+            {
+              "text": "아니요.\n크게 달라지지 않았어요",
+              "layer": "claim",
+              "refs": [
+                "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "여름 동안 나온 물가 지표는 눈에 띄게 나빠지지 않았습니다.\n\n<b>그런데도 연준은 올렸어요.</b>",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "여름 동안 나온 물가 지표는 눈에 띄게 나빠지지 않았습니다.",
+                      "layer": "claim",
+                      "refs": [
+                        "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "<b>그런데도 연준은 올렸어요.</b>",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "이상하죠. 물가가 나빠져서 올리는 거라면, 나빠지지 않았는데 왜 올렸을까요?",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "이상하죠. ",
+                      "layer": "writing",
+                      "refs": []
+                    },
+                    {
+                      "text": "물가가 나빠져서 올리는 거라면, 나빠지지 않았는데 왜 올렸을까요?",
+                      "layer": "writing",
+                      "refs": []
+                    }
+                  ],
+                  "weight": "callout"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "이것만 알고 가면 돼요 ①",
+          "headline": [
+            {
+              "text": "연준이 보는 건\n물가가 아니라 속도예요",
+              "layer": "concept",
+              "refs": [
+                {
+                  "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                  "version": 4,
+                  "part": null
+                }
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "라면이 2000원이라고 해봅시다. 작년엔 1900원이었어요. “라면이 2000원이다”는 그냥 가격입니다. “라면값이 작년보다 5% 올랐다”는 오르는 속도예요.\n\n연준이 보는 건 첫 번째가 아니라 두 번째입니다. 라면이 얼마인지는 보지 않아요. <b>얼마나 빠르게 비싸지고 있는지</b>를 봅니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "라면이 2000원이라고 해봅시다. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:①"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "작년엔 1900원이었어요. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:①"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "“라면이 2000원이다”는 그냥 가격입니다. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:①"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "“라면값이 작년보다 5% 올랐다”는 오르는 속도예요.",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:①"
+                        }
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "연준이 보는 건 첫 번째가 아니라 두 번째입니다. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:②"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "라면이 얼마인지는 보지 않아요. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:②"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "<b>얼마나 빠르게 비싸지고 있는지</b>를 봅니다.",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:②"
+                        }
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "이것만 알고 가면 돼요 ②",
+          "headline": [
+            {
+              "text": "연준이 원하는 속도는\n1년에 2%예요",
+              "layer": "concept",
+              "refs": [
+                {
+                  "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                  "version": 4,
+                  "part": null
+                },
+                {
+                  "concept_id": "5941edb1-5d98-40d1-ba09-c25d372d5568",
+                  "version": 1,
+                  "part": null
+                }
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "연준은 이 속도가 1년에 <b>2%</b> 정도면 적당하다고 봅니다. 아예 안 오르는 것도 원하지 않고, 딱 2%예요.\n\n그런데 지금 미국은 3%대입니다. 목표보다 빠르게 오르고 있어요.\n\n자동차 속도계에 빗댈 수 있습니다. 계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "연준은 이 속도가 1년에 <b>2%</b> 정도면 적당하다고 봅니다. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:③"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "아예 안 오르는 것도 원하지 않고, 딱 2%예요.",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "FULL:③"
+                        }
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "그런데 지금 미국은 3%대입니다. ",
+                      "layer": "bridge",
+                      "refs": [
+                        "953c3816-c375-4b95-bf20-516f89bba7fc"
+                      ]
+                    },
+                    {
+                      "text": "목표보다 빠르게 오르고 있어요.",
+                      "layer": "bridge",
+                      "refs": [
+                        "953c3816-c375-4b95-bf20-516f89bba7fc"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "자동차 속도계에 빗댈 수 있습니다. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "ANALOGY:속도계"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+                          "version": 4,
+                          "part": "ANALOGY:속도계"
+                        }
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "contrast",
+              "text": "연준이 원하는 속도: 2%\n지금 미국: 3%대",
+              "items": [
+                {
+                  "label": [
+                    {
+                      "text": "연준이 원하는 속도",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "5941edb1-5d98-40d1-ba09-c25d372d5568",
+                          "version": 1,
+                          "part": null
+                        }
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "2%",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "5941edb1-5d98-40d1-ba09-c25d372d5568",
+                          "version": 1,
+                          "part": null
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "지금 미국",
+                      "layer": "fact",
+                      "refs": [
+                        "145f189e-e7e3-4af3-9d8e-13cdb1ace448"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "3%대",
+                      "layer": "fact",
+                      "refs": [
+                        "145f189e-e7e3-4af3-9d8e-13cdb1ace448"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "그리고 이 속도는 여름 내내 크게 줄지 않았어요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "그리고 이 속도는 여름 내내 크게 줄지 않았어요.",
+                      "layer": "claim",
+                      "refs": [
+                        "36e0a773-81a2-42fc-bab3-838775e71457"
+                      ]
+                    }
+                  ],
+                  "weight": "secondary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "이것만 알고 가면 돼요 ③",
+          "headline": [
+            {
+              "text": "금리는\n그 차의 브레이크예요",
+              "layer": "concept",
+              "refs": [
+                {
+                  "concept_id": "247d3e88-b62f-4811-9315-cf48de7e560e",
+                  "version": 1,
+                  "part": "ANALOGY:브레이크 페달"
+                }
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "금리가 올라가면 돈을 빌리는 일이 비싸집니다. 집을 사려고 대출을 받거나, 기업이 새 사업에 투자하기가 부담스러워져요.\n\n사람들이 지갑을 덜 열면 경제가 달리는 속도가 느려지고, <b>물가가 오르는 속도도 따라서 느려집니다.</b>",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "금리가 올라가면 돈을 빌리는 일이 비싸집니다. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "247d3e88-b62f-4811-9315-cf48de7e560e",
+                          "version": 1,
+                          "part": "FULL"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "집을 사려고 대출을 받거나, 기업이 새 사업에 투자하기가 부담스러워져요.",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "247d3e88-b62f-4811-9315-cf48de7e560e",
+                          "version": 1,
+                          "part": "FULL"
+                        }
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "사람들이 지갑을 덜 열면 경제가 달리는 속도가 느려지고, <b>물가가 오르는 속도도 따라서 느려집니다.</b>",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "247d3e88-b62f-4811-9315-cf48de7e560e",
+                          "version": 1,
+                          "part": "FULL"
+                        }
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "핵심",
+          "headline": [
+            {
+              "text": "기준이\n우리 생각과 달랐어요",
+              "layer": "claim",
+              "refs": [
+                "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "연준이 던진 질문은 “물가가 나빠졌는가”가 아니었습니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "연준이 던진 질문은 “물가가 나빠졌는가”가 아니었습니다.",
+                      "layer": "claim",
+                      "refs": [
+                        "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "[8월 말 · 의장 연설] 기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다. 그렇지 않다면 아직 할 일이 남아 있는 것이다.",
+              "attribution": "8월 말 · 의장 연설",
+              "body": [
+                {
+                  "text": "기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다. ",
+                  "layer": "fact",
+                  "refs": [
+                    "2eef7bcc-b2f4-4f7f-bd90-d4e6250ac5a3"
+                  ]
+                },
+                {
+                  "text": "그렇지 않다면 아직 할 일이 남아 있는 것이다.",
+                  "layer": "fact",
+                  "refs": [
+                    "2eef7bcc-b2f4-4f7f-bd90-d4e6250ac5a3"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "속도가 3에서 2로 내려오고는 있는데 <b>너무 느리게</b> 내려온다면? 그것도 브레이크를 더 밟을 이유가 됩니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "속도가 3에서 2로 내려오고는 있는데 <b>너무 느리게</b> 내려온다면? ",
+                      "layer": "claim",
+                      "refs": [
+                        "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+                      ]
+                    },
+                    {
+                      "text": "그것도 브레이크를 더 밟을 이유가 됩니다.",
+                      "layer": "claim",
+                      "refs": [
+                        "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "두 달 사이",
+          "headline": [
+            {
+              "text": "7월엔 셋만 그렇게 봤어요.\n이번엔 전원이었고요.",
+              "layer": "claim",
+              "refs": [
+                "80ba71b4-5db3-4e02-af1a-fb1fc25fbffc"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "contrast",
+              "text": "7월 29일: 9 : 3 동결. 세 명만 올리자고 반대\n9월 16일: <b>12 : 0 인상. 반대 없음</b>",
+              "items": [
+                {
+                  "label": [
+                    {
+                      "text": "7월 29일",
+                      "layer": "fact",
+                      "refs": [
+                        "f0ff74bd-58fb-4137-9952-ac7f8e215d05"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "9 : 3",
+                      "layer": "fact",
+                      "refs": [
+                        "f0ff74bd-58fb-4137-9952-ac7f8e215d05"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "동결. 세 명만\n올리자고 반대",
+                      "layer": "fact",
+                      "refs": [
+                        "f0ff74bd-58fb-4137-9952-ac7f8e215d05"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "9월 16일",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                        "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "12 : 0",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                        "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "인상.\n반대 없음",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                        "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+                      ]
+                    }
+                  ],
+                  "emphasized": true
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "그 사이 8월 말 의장이 앞의 기준을 밝혔고, 시장도 인상 쪽으로 기울기 시작했어요.\n\n다만 그 세 사람이 나머지를 설득한 건지, 새로 들어온 정보 때문에 판단이 같아진 건지는 <b>아직 알 수 없습니다.</b> 회의 내부 기록은 3주 뒤에 공개돼요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "그 사이 8월 말 의장이 앞의 기준을 밝혔고, 시장도 인상 쪽으로 기울기 시작했어요.",
+                      "layer": "claim",
+                      "refs": [
+                        "1feac34b-27d9-49b6-9244-98c903d0d462"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "다만 그 세 사람이 나머지를 설득한 건지, 새로 들어온 정보 때문에 판단이 같아진 건지는 <b>아직 알 수 없습니다.</b> ",
+                      "layer": "claim",
+                      "refs": [
+                        "61bceae5-e0d8-4c08-9afc-779d4a466396"
+                      ]
+                    },
+                    {
+                      "text": "회의 내부 기록은 3주 뒤에 공개돼요.",
+                      "layer": "fact",
+                      "refs": [
+                        "05c0bec0-96f7-49f8-89dc-24b0f5ad7025"
+                      ]
+                    }
+                  ],
+                  "weight": "secondary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "큰 변수",
+          "headline": [
+            {
+              "text": "이란 전쟁이\n어디로 갈지 모릅니다",
+              "layer": "claim",
+              "refs": [
+                "fd2c3cd0-3119-4d27-96ae-e3a0d2b7c479"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "2월 말에 시작돼 반년 넘게 이어지고 있어요. 4월에 미국이 휴전을 발표했지만 이후에도 공격이 반복되면서 기름값은 크게 올랐다 내렸다를 되풀이했습니다.\n\n회의가 열린 주에는 트럭과 기차에 쓰는 경유 가격이 사상 최고치를 기록했어요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "2월 말에 시작돼 반년 넘게 이어지고 있어요. ",
+                      "layer": "fact",
+                      "refs": [
+                        "e32c7581-e6fc-43a7-9ece-6ca1260bf2e8",
+                        "cc7d37bb-b465-4ac5-a092-4ac103f931c5"
+                      ]
+                    },
+                    {
+                      "text": "4월에 미국이 휴전을 발표했지만 이후에도 공격이 반복되면서 기름값은 크게 올랐다 내렸다를 되풀이했습니다.",
+                      "layer": "fact",
+                      "refs": [
+                        "b54874a8-9b1e-49da-9706-876ec948f8c2",
+                        "762eb9e5-427c-40c1-b2dc-d75c081dd025",
+                        "8471f4ad-3492-4804-bf46-17ffd982f1b1",
+                        "cc7d37bb-b465-4ac5-a092-4ac103f931c5",
+                        "cb0a66db-635c-4bd3-9219-92ce9ab5233f"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "회의가 열린 주에는 트럭과 기차에 쓰는 경유 가격이 사상 최고치를 기록했어요.",
+                      "layer": "fact",
+                      "refs": [
+                        "d9d59c06-cc15-46f4-ab20-3ad81064c142"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "여기서 중요한 건 기름값이 비싸다는 게 아닙니다.\n<b>이 전쟁이 끝나면 물가는 한결 나아질 수도, 더 커지면 훨씬 나빠질 수도 있어요.</b> 연준이 확신이 없다고 본 이유의 하나가 여기 있습니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "여기서 중요한 건 기름값이 비싸다는 게 아닙니다.\n",
+                      "layer": "writing",
+                      "refs": []
+                    },
+                    {
+                      "text": "<b>이 전쟁이 끝나면 물가는 한결 나아질 수도, 더 커지면 훨씬 나빠질 수도 있어요.</b> ",
+                      "layer": "claim",
+                      "refs": [
+                        "1a12974c-e166-4b2d-88f5-fcfdaecf772a"
+                      ]
+                    },
+                    {
+                      "text": "연준이 확신이 없다고 본 이유의 하나가 여기 있습니다.",
+                      "layer": "claim",
+                      "refs": [
+                        "08f6d03b-85a4-4dc6-8836-c3b56fb690d7"
+                      ]
+                    }
+                  ],
+                  "weight": "callout"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "앞으로",
+          "headline": [
+            {
+              "text": "한 번은 더.\n그런데 긴 흐름은 아니에요",
+              "layer": "claim",
+              "refs": [
+                "2a690658-15d5-45bb-b552-1ba10e93a807"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "위원들 대부분이 올해 안에 한 번 더 올릴 수 있다고 봤습니다.\n\n다만 연준이 함께 내놓은 전망에서 <b>올해 말 금리와 내년 말 금리는 같은 수준</b>이에요. 올해 한 번쯤 더 올리고, 내년에는 대체로 그 자리.\n\n참고로 연준 자신도 물가가 2%로 돌아오는 건 2029년으로 보고 있어요. 생각보다 긴 길입니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "위원들 대부분이 올해 안에 한 번 더 올릴 수 있다고 봤습니다.",
+                      "layer": "fact",
+                      "refs": [
+                        "a7bed2f3-6bb3-4a94-8e44-d4202c35bff1"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "다만 연준이 함께 내놓은 전망에서 <b>올해 말 금리와 내년 말 금리는 같은 수준</b>이에요. ",
+                      "layer": "fact",
+                      "refs": [
+                        "8dfe73f2-8da6-418b-b660-46d97eea3c39"
+                      ]
+                    },
+                    {
+                      "text": "올해 한 번쯤 더 올리고, 내년에는 대체로 그 자리.",
+                      "layer": "claim",
+                      "refs": [
+                        "2a690658-15d5-45bb-b552-1ba10e93a807"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "참고로 연준 자신도 물가가 2%로 돌아오는 건 2029년으로 보고 있어요. ",
+                      "layer": "fact",
+                      "refs": [
+                        "bf696ae1-827e-4354-80a6-0db54f027538"
+                      ]
+                    },
+                    {
+                      "text": "생각보다 긴 길입니다.",
+                      "layer": "writing",
+                      "refs": []
+                    }
+                  ],
+                  "weight": "secondary"
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "물가가 튀어서 올린 게 아닙니다.\n<b>내려오고는 있는데\n충분히 빠르지 않다</b>고 본 거예요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "물가가 튀어서 올린 게 아닙니다.\n",
+                      "layer": "claim",
+                      "refs": [
+                        "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+                      ]
+                    },
+                    {
+                      "text": "<b>내려오고는 있는데\n충분히 빠르지 않다</b>고 본 거예요.",
+                      "layer": "claim",
+                      "refs": [
+                        "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+                      ]
+                    }
+                  ],
+                  "weight": "conclusion"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "open_questions": [
+        {
+          "text": "물가가 갑자기 나빠졌나요?"
+        },
+        {
+          "text": "연준은 뭘 보고 있는 걸까요?"
+        },
+        {
+          "text": "그럼 어느 속도가 적당한 거죠?"
+        },
+        {
+          "text": "그럼 금리는 뭔가요?"
+        },
+        {
+          "text": "그래서 왜 지금 밟은 거죠?"
+        },
+        {
+          "text": "두 달 전에도 그렇게 봤나요?"
+        },
+        {
+          "text": "물가는 왜 빨리 안 내려오죠?"
+        },
+        {
+          "text": "그럼 금리는 계속 오르나요?"
+        }
+      ]
+    },
+    {
+      "id": "advanced",
+      "slides": [
+        {
+          "kicker": "9월 FOMC",
+          "headline": [
+            {
+              "text": "동결에서 인상으로,\n그것도 만장일치",
+              "layer": "fact",
+              "refs": [
+                "f0ff74bd-58fb-4137-9952-ac7f8e215d05",
+                "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "contrast",
+              "text": "7월 29일: 9 : 3 동결 3명 +25bp 주장\n9월 16일: <b>12 : 0 +25bp 3.75~4.00%</b>",
+              "items": [
+                {
+                  "label": [
+                    {
+                      "text": "7월 29일",
+                      "layer": "fact",
+                      "refs": [
+                        "f0ff74bd-58fb-4137-9952-ac7f8e215d05"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "9 : 3",
+                      "layer": "fact",
+                      "refs": [
+                        "f0ff74bd-58fb-4137-9952-ac7f8e215d05"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "동결\n3명 +25bp 주장",
+                      "layer": "fact",
+                      "refs": [
+                        "f0ff74bd-58fb-4137-9952-ac7f8e215d05"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "9월 16일",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                        "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "12 : 0",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                        "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "+25bp\n3.75~4.00%",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                        "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+                      ]
+                    }
+                  ],
+                  "emphasized": true
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "2023년 7월 이후 첫 인상. 7주 만에 소수의견이 전원 합의가 됐습니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "2023년 7월 이후 첫 인상. ",
+                      "layer": "fact",
+                      "refs": [
+                        "ac2297ba-97ee-4638-86a1-27c21be85dcc"
+                      ]
+                    },
+                    {
+                      "text": "7주 만에 소수의견이 전원 합의가 됐습니다.",
+                      "layer": "claim",
+                      "refs": [
+                        "80ba71b4-5db3-4e02-af1a-fb1fc25fbffc"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "판단 기준",
+          "headline": [
+            {
+              "text": "악화가 아니라\n개선 속도가 기준이었습니다",
+              "layer": "claim",
+              "refs": [
+                "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "8월 말까지 나온 여름 물가 지표는 예상보다 나았습니다. 7월 근원 PCE는 전년 대비 3.3%로, 6월에 낸 연말 전망치와 같은 숫자였고요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "8월 말까지 나온 여름 물가 지표는 예상보다 나았습니다. ",
+                      "layer": "claim",
+                      "refs": [
+                        "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+                      ]
+                    },
+                    {
+                      "text": "7월 근원 PCE는 전년 대비 3.3%로, 6월에 낸 연말 전망치와 같은 숫자였고요.",
+                      "layer": "claim",
+                      "refs": [
+                        "1dfa9d89-68c2-45af-9d0e-a726dd989903"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "quote",
+              "text": "[8/28 잭슨홀] 기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다.",
+              "attribution": "8/28 잭슨홀",
+              "body": [
+                {
+                  "text": "기저 물가가 목표를 향해 분명하게, 충분히 빠른 속도로 가고 있다는 확신이 있어야 한다.",
+                  "layer": "fact",
+                  "refs": [
+                    "2eef7bcc-b2f4-4f7f-bd90-d4e6250ac5a3"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "의장은 여름 지표가 기저 흐름의 의미 있는 개선을 보여주지는 않는다고 평가했습니다. 9월 전망에서 올해 근원 PCE는 오히려 <b>3.3% → 3.4%</b>로 올라갔고요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "의장은 여름 지표가 기저 흐름의 의미 있는 개선을 보여주지는 않는다고 평가했습니다. ",
+                      "layer": "fact",
+                      "refs": [
+                        "0b52011f-f322-41af-9745-751a1b393ca6",
+                        "a7190147-d750-4c11-8979-f9820692f849"
+                      ]
+                    },
+                    {
+                      "text": "9월 전망에서 올해 근원 PCE는 오히려 <b>3.3% → 3.4%</b>로 올라갔고요.",
+                      "layer": "fact",
+                      "refs": [
+                        "e8272831-d8f1-424b-8a95-0aae015b6fd7"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "7월 → 9월",
+          "headline": [
+            {
+              "text": "무엇이 그 사이에\n있었나",
+              "layer": "writing",
+              "refs": []
+            }
+          ],
+          "blocks": [
+            {
+              "type": "list",
+              "text": "1. 7/29 — 9-3 동결. Hammack · Kashkari · Logan 반대\n2. 8/7 — 7월 고용 발표 — 취업자 <b>23,000명 감소</b>(9/4 증가로 수정), 실업률 4.1%\n3. 8/28 — 잭슨홀 — 의장이 기준을 명시\n4. 9월 초 — 시장, 인상 확률 60% 안팎 반영\n5. 9/4 · 9/11 — 8월 고용 162,000명 증가 · 8월 소비자물가 전월 대비 0.4%\n6. 9/16 — 12-0 인상",
+              "ordered": true,
+              "items": [
+                {
+                  "label": [
+                    {
+                      "text": "7/29",
+                      "layer": "fact",
+                      "refs": [
+                        "f0ff74bd-58fb-4137-9952-ac7f8e215d05"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "9-3 동결. Hammack · Kashkari · Logan 반대",
+                      "layer": "fact",
+                      "refs": [
+                        "f0ff74bd-58fb-4137-9952-ac7f8e215d05"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "8/7",
+                      "layer": "fact",
+                      "refs": [
+                        "9ecc823c-6a68-4517-b605-886cb06782f4"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "7월 고용 발표 — 취업자 <b>23,000명 감소</b>",
+                      "layer": "fact",
+                      "refs": [
+                        "9ecc823c-6a68-4517-b605-886cb06782f4"
+                      ]
+                    },
+                    {
+                      "text": "(9/4 증가로 수정)",
+                      "layer": "fact",
+                      "refs": [
+                        "a8853f71-0ab2-49b1-b530-a0cd9c3fa079"
+                      ]
+                    },
+                    {
+                      "text": ", 실업률 4.1%",
+                      "layer": "fact",
+                      "refs": [
+                        "9ecc823c-6a68-4517-b605-886cb06782f4"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "8/28",
+                      "layer": "fact",
+                      "refs": [
+                        "a7190147-d750-4c11-8979-f9820692f849",
+                        "2eef7bcc-b2f4-4f7f-bd90-d4e6250ac5a3"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "잭슨홀 — 의장이 기준을 명시",
+                      "layer": "fact",
+                      "refs": [
+                        "2eef7bcc-b2f4-4f7f-bd90-d4e6250ac5a3"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "9월 초",
+                      "layer": "fact",
+                      "refs": [
+                        "72049212-d079-4b12-ae31-76b0d63c0c1d",
+                        "860d094f-d9a9-4159-ae6a-a48d7447cfdf"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "시장, 인상 확률 60% 안팎 반영",
+                      "layer": "fact",
+                      "refs": [
+                        "72049212-d079-4b12-ae31-76b0d63c0c1d",
+                        "860d094f-d9a9-4159-ae6a-a48d7447cfdf"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "9/4 · 9/11",
+                      "layer": "fact",
+                      "refs": [
+                        "3b2c5597-8f46-49ba-96aa-e75908b08e46",
+                        "205b056f-bd9b-423a-ad1a-60f3d9ffd9e8"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "8월 고용 162,000명 증가 · 8월 소비자물가 전월 대비 0.4%",
+                      "layer": "fact",
+                      "refs": [
+                        "3b2c5597-8f46-49ba-96aa-e75908b08e46",
+                        "205b056f-bd9b-423a-ad1a-60f3d9ffd9e8"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "9/16",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                        "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+                      ]
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "12-0 인상",
+                      "layer": "fact",
+                      "refs": [
+                        "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
+                        "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "내부 역학은 3주 뒤 회의록 전까지 확인 불가. 현재 확실한 것은 순서뿐입니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "내부 역학은 3주 뒤 회의록 전까지 확인 불가. ",
+                      "layer": "claim",
+                      "refs": [
+                        "61bceae5-e0d8-4c08-9afc-779d4a466396"
+                      ]
+                    },
+                    {
+                      "text": "현재 확실한 것은 순서뿐입니다.",
+                      "layer": "claim",
+                      "refs": [
+                        "61bceae5-e0d8-4c08-9afc-779d4a466396"
+                      ]
+                    }
+                  ],
+                  "weight": "secondary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "9월 SEP",
+          "headline": [
+            {
+              "text": "한 번 더.\n그리고 내년은 제자리",
+              "layer": "claim",
+              "refs": [
+                "2a690658-15d5-45bb-b552-1ba10e93a807"
+              ]
+            }
+          ],
+          "blocks": [
+            {
+              "type": "sheet",
+              "text": "2026년 말 정책금리 중앙값: 4.1%\n2027년 말 정책금리 중앙값: 4.1%\n연내 추가 인상 예상: 18명 중 16명\n두 번 더 예상: 4명\n2026년 헤드라인 PCE 전망 (3월 2.7%): 3.7%\n2026년 실업률 전망 (3월 4.4%): 4.1%",
+              "rows": [
+                {
+                  "label": [
+                    {
+                      "text": "2026년 말 정책금리 중앙값",
+                      "layer": "fact",
+                      "refs": [
+                        "8dfe73f2-8da6-418b-b660-46d97eea3c39"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "4.1%",
+                      "layer": "fact",
+                      "refs": [
+                        "8dfe73f2-8da6-418b-b660-46d97eea3c39"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "2027년 말 정책금리 중앙값",
+                      "layer": "fact",
+                      "refs": [
+                        "8dfe73f2-8da6-418b-b660-46d97eea3c39"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "4.1%",
+                      "layer": "fact",
+                      "refs": [
+                        "8dfe73f2-8da6-418b-b660-46d97eea3c39"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "연내 추가 인상 예상",
+                      "layer": "fact",
+                      "refs": [
+                        "a7bed2f3-6bb3-4a94-8e44-d4202c35bff1"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "18명 중 16명",
+                      "layer": "fact",
+                      "refs": [
+                        "a7bed2f3-6bb3-4a94-8e44-d4202c35bff1"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "두 번 더 예상",
+                      "layer": "fact",
+                      "refs": [
+                        "a7bed2f3-6bb3-4a94-8e44-d4202c35bff1"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "4명",
+                      "layer": "fact",
+                      "refs": [
+                        "a7bed2f3-6bb3-4a94-8e44-d4202c35bff1"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "2026년 헤드라인 PCE 전망 (3월 2.7%)",
+                      "layer": "fact",
+                      "refs": [
+                        "6fbd4e50-707b-4a33-80dc-e27b33d982da"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "3.7%",
+                      "layer": "fact",
+                      "refs": [
+                        "6fbd4e50-707b-4a33-80dc-e27b33d982da"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "2026년 실업률 전망 (3월 4.4%)",
+                      "layer": "fact",
+                      "refs": [
+                        "310e4806-f7c0-4a4a-a4a3-a1eee96872e6"
+                      ]
+                    }
+                  ],
+                  "value": [
+                    {
+                      "text": "4.1%",
+                      "layer": "fact",
+                      "refs": [
+                        "310e4806-f7c0-4a4a-a4a3-a1eee96872e6"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "2026년과 2027년 중앙값이 같다는 것이 핵심입니다. 인상 사이클의 시작이 아니라 <b>짧은 조정</b>으로 보고 있다는 뜻이에요.\n\n표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다. 그래서 두 숫자가 다릅니다. 2027년 말 금리를 4.1%보다 높게 본 참가자는 18명 중 8명, 4명은 오히려 인하를 봤습니다. 의장은 이번에도 자기 전망치를 제출하지 않았고요.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "2026년과 2027년 중앙값이 같다는 것이 핵심입니다. ",
+                      "layer": "claim",
+                      "refs": [
+                        "2a690658-15d5-45bb-b552-1ba10e93a807"
+                      ]
+                    },
+                    {
+                      "text": "인상 사이클의 시작이 아니라 <b>짧은 조정</b>으로 보고 있다는 뜻이에요.",
+                      "layer": "claim",
+                      "refs": [
+                        "2a690658-15d5-45bb-b552-1ba10e93a807"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "4b3796d2-cbee-4c2e-93d2-1a8ea8830723",
+                          "version": 3,
+                          "part": "REFRESHER"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "그래서 두 숫자가 다릅니다. ",
+                      "layer": "concept",
+                      "refs": [
+                        {
+                          "concept_id": "4b3796d2-cbee-4c2e-93d2-1a8ea8830723",
+                          "version": 3,
+                          "part": "REFRESHER"
+                        }
+                      ]
+                    },
+                    {
+                      "text": "2027년 말 금리를 4.1%보다 높게 본 참가자는 18명 중 8명, 4명은 오히려 인하를 봤습니다. ",
+                      "layer": "fact",
+                      "refs": [
+                        "8dfe73f2-8da6-418b-b660-46d97eea3c39",
+                        "8f9fe956-b6b8-4add-85a3-15e68735112f"
+                      ]
+                    },
+                    {
+                      "text": "의장은 이번에도 자기 전망치를 제출하지 않았고요.",
+                      "layer": "fact",
+                      "refs": [
+                        "eb2fca0f-5853-4006-941c-06132cb20f6d"
+                      ]
+                    }
+                  ],
+                  "weight": "secondary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kicker": "남는 문제",
+          "headline": [
+            {
+              "text": "이 결정에 걸려 있는\n두 가지 불확실성",
+              "layer": "writing",
+              "refs": []
+            }
+          ],
+          "blocks": [
+            {
+              "type": "prose",
+              "text": "<b>1. 물가 전망의 큰 변수가 전쟁입니다.</b>\n이란 전쟁은 201일째. 4월 휴전 발표 이후에도 공격이 반복되며 유가는 크게 등락했고, 회의가 열린 주 경유 가격은 사상 최고였습니다. 성명문도 지정학적 전개로 인한 불확실성을 명시했어요.\n\n<b>2. 고용 숫자는 한 달로 읽기 어렵습니다.</b>\n7월 취업자는 거의 늘지 않았는데 8월에는 162,000명 늘었습니다. 실업률은 그 사이 4.1%에서 움직이지 않았죠. 의장은 취업자가 적게 느는 것을 노동공급이 거의 늘지 않는 탓으로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "<b>1. 물가 전망의 큰 변수가 전쟁입니다.</b>\n",
+                      "layer": "claim",
+                      "refs": [
+                        "fd2c3cd0-3119-4d27-96ae-e3a0d2b7c479"
+                      ]
+                    },
+                    {
+                      "text": "이란 전쟁은 201일째. ",
+                      "layer": "fact",
+                      "refs": [
+                        "e32c7581-e6fc-43a7-9ece-6ca1260bf2e8"
+                      ]
+                    },
+                    {
+                      "text": "4월 휴전 발표 이후에도 공격이 반복되며 유가는 크게 등락했고, ",
+                      "layer": "fact",
+                      "refs": [
+                        "b54874a8-9b1e-49da-9706-876ec948f8c2",
+                        "762eb9e5-427c-40c1-b2dc-d75c081dd025",
+                        "8471f4ad-3492-4804-bf46-17ffd982f1b1",
+                        "cc7d37bb-b465-4ac5-a092-4ac103f931c5",
+                        "cb0a66db-635c-4bd3-9219-92ce9ab5233f"
+                      ]
+                    },
+                    {
+                      "text": "회의가 열린 주 경유 가격은 사상 최고였습니다. ",
+                      "layer": "fact",
+                      "refs": [
+                        "d9d59c06-cc15-46f4-ab20-3ad81064c142"
+                      ]
+                    },
+                    {
+                      "text": "성명문도 지정학적 전개로 인한 불확실성을 명시했어요.",
+                      "layer": "fact",
+                      "refs": [
+                        "d8918a89-70ef-496b-93a1-751d5a13c206"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                },
+                {
+                  "body": [
+                    {
+                      "text": "<b>2. 고용 숫자는 한 달로 읽기 어렵습니다.</b>\n",
+                      "layer": "claim",
+                      "refs": [
+                        "670f9a6f-4bf0-4028-9956-f6e0cac2c2f9"
+                      ]
+                    },
+                    {
+                      "text": "7월 취업자는 거의 늘지 않았는데 8월에는 162,000명 늘었습니다. ",
+                      "layer": "fact",
+                      "refs": [
+                        "a8853f71-0ab2-49b1-b530-a0cd9c3fa079",
+                        "3b2c5597-8f46-49ba-96aa-e75908b08e46"
+                      ]
+                    },
+                    {
+                      "text": "실업률은 그 사이 4.1%에서 움직이지 않았죠. ",
+                      "layer": "fact",
+                      "refs": [
+                        "3b2c5597-8f46-49ba-96aa-e75908b08e46"
+                      ]
+                    },
+                    {
+                      "text": "의장은 취업자가 적게 느는 것을 노동공급이 거의 늘지 않는 탓으로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다.",
+                      "layer": "claim",
+                      "refs": [
+                        "670f9a6f-4bf0-4028-9956-f6e0cac2c2f9"
+                      ]
+                    }
+                  ],
+                  "weight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "text": "따라서 이번 회의의 변화는\n금리 숫자가 아니라\n<b>인상 의견이\n소수의견에서 실제 결정으로 옮겨왔다는 점</b>입니다.",
+              "paragraphs": [
+                {
+                  "body": [
+                    {
+                      "text": "따라서 이번 회의의 변화는\n금리 숫자가 아니라\n<b>인상 의견이\n소수의견에서 실제 결정으로 옮겨왔다는 점</b>입니다.",
+                      "layer": "claim",
+                      "refs": [
+                        "80ba71b4-5db3-4e02-af1a-fb1fc25fbffc"
+                      ]
+                    }
+                  ],
+                  "weight": "conclusion"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "open_questions": [
+        {
+          "text": "무엇이 기준이었나"
+        },
+        {
+          "text": "7주 사이의 경로"
+        },
+        {
+          "text": "점도표가 말하는 것"
+        },
+        {
+          "text": "남는 두 가지 불확실성"
+        }
+      ]
+    }
+  ]
+}
