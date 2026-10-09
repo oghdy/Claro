@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.2b 완료 (2026-10-09 · D27) — 이어서 0.2c**
+**Phase 0 / Step 0.2b 완료 (`61a82b1`, 2026-10-09) — 다음: 0.2c (프롬프트 미작성)**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
