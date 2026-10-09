@@ -817,3 +817,204 @@ $ git checkout docs/contract/DATA_MODEL.md && git diff --stat -- docs/contract d
 - 2차 안의 골든 반영 · 브리프 · 계약 수정 · 새 사실 조사
 - R10 의 추천
 - 브리프 §6 방어 표("경제가 튼튼해서 올릴 여유가 있었다")를 뒤집을지 — R4 에서 드러났고 0.2m · PM 의 일이다
+
+---
+
+## 2차 반영 · 2026-10-09 · D29 끝 — 도윤 "추천대로"
+
+읽은 것: DECISIONS D29 끝의 "C-5 반영 검수 + 2차 안".
+반영: R1 A · R2 A · R4 A · R5 A · R6 A · R7 A · R8 A · R9 A · R10 A. R3 은 그대로.
+**계약 · 브리프 · apps · packages 는 건드리지 않았다.** 입문 3 · 4장은 한 글자도, 주석도 바뀌지 않았다 (아래 검증). "201일째"의 `war_start` 는 그대로 두었다.
+
+### 맨 앞 — 알아야 할 것 넷
+
+1. **`pnpm -s test` 의 e2e 가 돌지 못했다.** `packages/contract` 는 14 passed. `apps/web` 은 시작하자마자 멈췄다 — `Error: http://localhost:3100 is already used`. 그 포트를 쥔 것은 `next start -p 3100 -H 0.0.0.0` (pid 15188)이고 이 세션이 띄운 것이 아니다. 7분쯤 기다렸으나 그대로였다. **죽이지 않았고 설정도 고치지 않았다.** 그래서 이번 골든으로 화면이 끝까지 읽히는지는 **확인되지 않았다** — 특히 숙련 3장은 목록이 한 줄 늘었고(R10) 숙련 5장 둘째 문단이 길어졌다(R4). 지난번 e2e 는 "375×667 에서 끝까지 읽힌다"를 봤다. 포트가 비면 다시 돌려야 한다.
+   스크린샷은 바뀌지 않았다 (돌지 않았으니). 되돌린 것 없음. 돌리기 전 `git status` 에 남의 미커밋 파일은 없었다
+2. **open_question 은 `compare-reader-text` 의 대조 범위 안이다** — 넣었다. 스크립트가 슬라이드마다 `open_question` 을 글 단위로 대조한다(`{레벨}[{i}] open_question`). R5 · R6 · R7 · R8 을 허용 차이 4건으로 등록했다. 검사를 넓히지 않았다
+3. **`compare-reader-text.py` 에 "허용된 삽입"을 하나 더했다 (R10).** 기존 허용 차이는 글자 바꿈만 적을 수 있고, 목록에 줄이 느는 것은 "모양이 다르다"로 실패한다. `ALLOWED_INSERTED` — 위치(`advanced[2] blocks/0` 의 4번째)와 글자가 정확히 등록된 한 줄만 빼고 나머지를 옛 글과 대조한다. 글자가 다르거나 자리가 다르거나 등록 안 된 줄이 더 있으면 실패한다 (selftest 3개 추가). **검사를 넓힌 것이므로 PM 확인이 필요하다** — 받아들이지 않으면 R10 을 골든에서 빼야 등록 안 된 차이가 0 이 된다
+4. **계약 표가 더 어긋났다 — 지난번 표를 아래로 바꾼다 (백엔드 · 0.2m).**
+   - DATA_MODEL §17: 골든 대기 17 → **21**. 아래 13줄(지난번 9줄 + 이번 4줄)로 고치면 `verify-data-model` · `selftest-verify-data-model` 이 OK 다 (임시로 고쳐 돌린 뒤 되돌렸다 — 아래 검증)
+
+     | # | 레벨 · 장 | 글 | layer | need | |
+     |---|---|---|---|---|---|
+     | 5 | basic 8 | 4월에 미국이 휴전을 발표했지만 … | fact | Fact 출처 | 글자 바뀜 (P7) |
+     | 8 | advanced 5 | 4월 휴전 발표 이후에도 공격이 반복되며 … | fact | Fact 출처 | 글자 바뀜 (P20) |
+     | 11 | basic 8 | 이 전쟁이 끝나면 물가는 한결 나아질 수도 … | claim | DerivedClaim | 글자 바뀜 (P9) |
+     | 12 | basic 8 | 연준이 확신이 없다고 본 이유의 하나가 … | claim | DerivedClaim | 글자 바뀜 (P10) |
+     | 13 | advanced 5 | 1. 물가 전망의 큰 변수가 전쟁입니다. | claim | DerivedClaim | 글자 바뀜 (P18) |
+     | 14 | basic 8 | 이란 전쟁이 … | claim | DerivedClaim | 새 줄 (D29-4 제목 층) |
+     | 15 | basic 9 | 참고로 연준 자신도 물가가 2%로 돌아오는 건 2029년으로 … | fact | Fact 출처 | 새 줄 (P11 — SEP-09) |
+     | 16 | advanced 3 | (9/4 증가로 수정) | fact | Fact 출처 | 새 줄 (P16 — BLS-08) |
+     | 17 | advanced 3 | 시장, 인상 확률 60% 안팎 반영 | fact | Fact 출처 | 새 줄 (P15 — CME-1 · CME-2) |
+     | 18 | advanced 3 | 9/4 · 9/11 | fact | Fact 출처 | **이번** (R10 — 발표일) |
+     | 19 | advanced 3 | 8월 고용 162,000명 증가 · 8월 소비자물가 전월 대비 0.4% | fact | Fact 출처 | **이번** (R10 — BLS-08 · CPI-08) |
+     | 20 | advanced 5 | 7월 취업자는 거의 늘지 않았는데 8월에는 162,000명 늘었습니다. | fact | Fact 출처 | **이번** (R4 — BLS-08) |
+     | 21 | advanced 5 | 실업률은 그 사이 4.1%에서 움직이지 않았죠. | fact | Fact 출처 | **이번** (R4 — BLS-08) |
+
+     시험 사본의 발행 검사 합계는 64 → **68** (REFS_PENDING 15 → 19)
+   - OBSERVATION §8: `verify-observation` 은 지금 "실물 32행 ≠ 초안 14행"으로 FAIL 이고, 이번에 CSV 가 **42행**이 됐다 (stage `게이트(C-5 2차 · D29)` 10행 추가). 고치지 않았다
+
+### 반영한 것
+
+| R | 레벨 · 장 | 새 글 | 층 · refs · 주석 |
+|---|---|---|---|
+| R1 A | 입문 2 제목 | 아니요. / 크게 달라지지 않았어요 | claim DC-C 그대로 |
+| R2 A | 입문 2 | 여름 동안 나온 물가 지표는 눈에 띄게 나빠지지 않았습니다. | claim DC-C 그대로 |
+| R5 A | 입문 6 뒤 질문 | 두 달 전에도 그렇게 봤나요? | DERIVED "두 달 전" 그대로 |
+| R6 A | 입문 7 뒤 질문 | 물가는 왜 빨리 안 내려오죠? | |
+| R7 A | 입문 8 뒤 질문 | 그럼 금리는 계속 오르나요? | |
+| R8 A | 숙련 4 뒤 질문 | 남는 두 가지 불확실성 | |
+| R9 A | 숙련 2 | 8월 말까지 나온 여름 물가 지표는 예상보다 나았습니다. | claim DC-C 그대로 |
+| R10 A | 숙련 3 타임라인 | (새 줄 · "9월 초"와 "9/16" 사이) 9/4 · 9/11 — 8월 고용 162,000명 증가 · 8월 소비자물가 전월 대비 0.4% | 라벨 · 글 둘 다 fact · **대기 Fact 출처** (BLS-08 · CPI-08) |
+| R4 A | 숙련 5 둘째 문단 | **2. 고용 숫자는 한 달로 읽기 어렵습니다.** / 7월 취업자는 거의 늘지 않았는데 8월에는 162,000명 늘었습니다. / 실업률은 그 사이 4.1%에서 움직이지 않았죠. / 의장은 취업자가 적게 느는 것을 노동공급이 거의 늘지 않는 탓으로 설명했고, 성명문은 … | 제목 · 끝 문장 claim DC-E 그대로. 가운데 두 문장은 **fact · 대기 Fact 출처** (BLS-08). `_volatility` F30 조각 2개 삭제 |
+
+- **층을 하나 바꿨다 (R4)**: "실업률은 … 내려갔죠"는 claim(DC-E)이었다 — "그런데"로 대비를 만든 해석이었다. 새 문장 "실업률은 그 사이 4.1%에서 움직이지 않았죠"는 잰 수치만 말하므로 fact 로 달았다 (D23)
+- `_open` 은 지난번과 같은 것이 늘었다: 사실 ID 가 없는 VOLATILE 조각 — "162,000명"(두 곳) · "4.1%에서" · "0.4%". `_source_note` 에 as_of(9/4 · 9/11)를 글로 적었다
+- 숙련 5장에서 F30 을 가리키는 span 이 없어졌다 (F30 은 3장 타임라인에만 남는다)
+- invalid 2건 — 새 골든 + 위반 1개로 다시 만들었다 (위치는 지난번과 같다)
+- correction-log — 10행 (`게이트(C-5 2차 · D29)`). 유형: 팩트 누락 4 (R1 · R4 · R9 · R10) · 원문 불일치 3 (R2 · R4 의 D-5 · R6) · 압축 3 (R5 · R7 · R8).
+  지시는 "R4 · R10 은 팩트 누락"이었다. R1 · R9 도 같은 원인(8월 CPI 없이 쓴 말)이라 팩트 누락으로 적었다. **질문 셋(R5 · R7 · R8)은 맞는 유형이 없어 "압축"으로 적었다** (질문과 답 사이의 이음이 빠짐) — PM 확인
+
+### 반증 기록 — 닫는다
+
+**DC-C** — 물음 7개, UNRESOLVED 0 → 계산하면 **VALID WITH SCOPE**.
+- 1 SCOPED (전망: 직전 6월 대비) · 2 NOT_REFUTED (연준이 든 이유) · 3 SCOPED ("예상보다"는 8/28 까지) · 4 SCOPED (1년 상승률로는 나빠지지 않았고 한 달로는 8월에 빨라졌다 — CPI-06 · 07 · 08 · PPI-08 · MXP-08) · 5 SCOPED (기름값은 뛰었다) · 6 NOT_REFUTED (번지는 것을 막는다) · 7 SCOPED (식품 · 에너지 제외 1년 상승률은 석 달 연속 내려왔다)
+- `statement` (0.2m 에 넣을 문장): 연준이 든 이유는 "물가 지표가 나빠졌다"가 아니라 "기저 물가가 충분히 빠르게 목표로 가고 있다는 확신이 없다"였다. 범위 — ① 연준(의장 · 성명문)이 밝힌 이유다 ② "나빠지지 않았다"는 소비자물가의 1년 상승률(6~8월)과 직전(6월) 전망 대비다. 한 달 수치는 8월에 다시 빨라졌고 생산자물가 · 수입물가 · 기름값은 올랐다. 3월 전망 대비로는 1%p 나빠졌다
+- 골든의 DC-C 문장 가운데 판정보다 세게 말하는 것은 이제 없다: 입문 2장 제목 · 본문(R1 · R2 — 물음 4) · 숙련 2장(R9 — 물음 3 · P13) · 입문 9장 결론(그대로 — 물음 7 로 선다) · 입문 6장 · 숙련 2장 제목(물음 2)
+- Common Goal 은 선다. 남는 조건 없음
+
+**DC-E** — 물음 7개, UNRESOLVED 0 → **VALID WITH SCOPE**.
+- 1 · 2 SCOPED ("줄었다" → "거의 늘지 않았다") · 3 SCOPED (연준은 고용을 양호하다고 봤다 — "단단하지 않다"는 서지 않는다) · 4 SCOPED (낮은 취업자 증가를 의장은 노동공급으로 설명) · 5 SCOPED (8월 +162,000 · 실업률 4.1 그대로) · 6 SCOPED ("엇갈린다"는 7월만의 말) · 7 NOT_REFUTED (한 달 변화는 수정되고, 12만 명 안쪽은 통계로 가리기 어렵다)
+- `statement`: 취업자 수는 달마다 크게 움직인다 — 7월은 거의 늘지 않았고 8월은 162,000명 늘었다. 실업률은 그 사이 4.1% 에서 움직이지 않았다
+- 골든의 DC-E 문장은 둘이 됐다: 문단 제목 "고용 숫자는 한 달로 읽기 어렵습니다" · 끝 문장(의장 · 성명문의 설명)
+- **닫히지 않은 채 넘어가는 것 하나** (D29 가 0.2m 으로 넘김): 브리프 §6 이 "오독"으로 막은 "경제가 튼튼해서 올릴 여유가 있었다"가 발행일의 1차 자료(PC-09 "in good shape" · BLS-08)에 더 가깝다. R4-A 는 그 물음에 답하지 않고 비켜 간다
+
+### 검증
+**입문 3 · 4장 불변** (직전 커밋의 골든과 대조):
+```
+입문 3장 — 슬라이드 전체(kicker · headline · blocks · _volatility) 동일: True
+입문 4장 — 슬라이드 전체(kicker · headline · blocks · _volatility) 동일: True
+basic 바뀐 open_question: [(5, '두 달 전엔 왜 안 올렸죠?', '두 달 전에도 그렇게 봤나요?'), (6, '물가는 왜 안 내려오고 있죠?', '물가는 왜 빨리 안 내려오죠?'), (7, '이제 계속 오르나요?', '그럼 금리는 계속 오르나요?')]
+advanced 바뀐 open_question: [(3, '남는 두 가지 긴장', '남는 두 가지 불확실성')]
+바뀐 슬라이드: ['basic 2장', 'advanced 2장', 'advanced 3장', 'advanced 5장']
+```
+
+**`python3 scripts/compare-reader-text.py`**
+```
+옛 골든 c46871d → 새 골든 fixtures/fomc-2026-09.article.json
+  레벨 2 · 슬라이드 14 · 독자 글 단위 115개 · 3294자 대조
+  허용된 차이 29/29건 (그 밖의 차이는 전부 실패):
+    basic[1] headline: '오히려 나은 편이었어요' → '크게 달라지지 않았어요'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R1 A — 8월 CPI 를 넣으면 "나은 편"이 서지 않는다 (DC-C 물음 4))
+    basic[1] blocks/0 p0: '시장이 걱정하던 것보다 좋았습니다.' → '눈에 띄게 나빠지지 않았습니다.'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R2 A — D-6 · "예상보다"는 8/28 까지의 말)
+    basic[5] open_question: '두 달 전엔 왜 안 올렸죠?' → '두 달 전에도 그렇게 봤나요?'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R5 A (Q1) — 7장이 "왜"에 답하지 않는다 (D15))
+    basic[6] open_question: '물가는 왜 안 내려오고 있죠?' → '물가는 왜 빨리 안 내려오죠?'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R6 A (Q2) — 9장 결론 "내려오고는 있는데"와 부딪힘)
+    basic[6] blocks/0 0.body: '세 명만\n“올리자”고 반대' → '세 명만\n올리자고 반대'  (D27 · 0.2b 인용 검사 — 바꿔 말한 것에 발언 표시(따옴표)를 단 것. 따옴표만 뺐다. 도윤 승인)
+    basic[6] blocks/1 p0: '시장은 인상 가능성을 90% 넘게 반영하기 시작했어요.' → '시장도 인상 쪽으로 기울기 시작했어요.'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P4 B — D-2 · M-1 (90% 는 기자 발언. CME 58~66%))
+    basic[7] kicker: '가장 큰 변수' → '큰 변수'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P6 A — "가장"을 말한 1차가 없다)
+    basic[7] open_question: '이제 계속 오르나요?' → '그럼 금리는 계속 오르나요?'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R7 A — 주어가 없어 앞 장의 기름값 · 물가로 읽힌다)
+    basic[7] blocks/0 p0: '4월에 휴전 합의가 한 번 있었지만 이후 공격이' → '4월에 미국이 휴전을 발표했지만 이후에도 공격이'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P7 B — I-1 "한 번" [못 찾음] · §5.2 한쪽 당사자의 발표)
+    basic[7] blocks/0 p1: '회의가 열린 날에는' → '회의가 열린 주에는'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P8 A — D-7 (EIA 주간 조사))
+    basic[7] blocks/1 p0: '연준이 “확신이 없다”고 말한' → '연준이 확신이 없다고 본'  (D23 · 0.1b PM 검수 #16 — 해석에 원문 표시(따옴표)를 단 것. 도윤 승인 2026-09-29)
+    basic[7] blocks/1 p0: '물가는 저절로 내려갈 수도' → '물가는 한결 나아질 수도'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P9 PM 안 (D29) — "저절로"가 반증에 걸림)
+    basic[7] blocks/1 p0: '이유의 상당 부분이' → '이유의 하나가'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P10 A — 비중을 말한 1차가 없다 (ST-09 "in part"))
+    basic[8] blocks/0 p2: '물가가 2% 근처로 돌아오는 건 내년 말쯤으로' → '물가가 2%로 돌아오는 건 2029년으로'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P11 A — SEP-09: 2027년 2.3 · 2029년 2.0)
+    advanced[1] blocks/0 p0: '6월 전망치와 사실상 같았고요.' → '6월에 낸 연말 전망치와 같은 숫자였고요.'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P13 A — 12개월 실적과 4분기 전망은 재는 것이 다르다)
+    advanced[1] blocks/0 p0: '여름 물가 지표는 예상보다 나았습니다.' → '8월 말까지 나온 여름 물가 지표는 예상보다 나았습니다.'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R9 A — "예상보다"는 8/28 까지의 말)
+    advanced[2] blocks/0 (+4번째 줄): '' → '9/4 · 9/11 — 8월 고용 162,000명 증가 · 8월 소비자물가 전월 대비 0.4%'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R10 A — 타임라인에 회의 직전의 가장 새 지표 둘이 없었다 (팩트 누락 · BLS-08 · CPI-08))
+    advanced[2] blocks/0 1.body: '<b>23,000명 감소</b>,' → '<b>23,000명 감소</b>(9/4 증가로 수정),'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P16 B — D-1 (BLS 9/4: -23,000 → +21,000))
+    advanced[2] blocks/0 2.body: '의장이 인상 기준을 명시' → '의장이 기준을 명시'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P14 A — M-2 (JH "not to a decision"))
+    advanced[2] blocks/0 3.body: '인상 확률 90% 이상 반영. 10년물 4.6% 돌파' → '인상 확률 60% 안팎 반영'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P15 B — D-2 · D-3 · M-1)
+    advanced[3] open_question: '남는 두 가지 긴장' → '남는 두 가지 불확실성'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R8 A — 5장 제목의 낱말과 맞춤)
+    advanced[3] blocks/1 p1: '2027년에 추가 인상을 찍은 참가자는 8명뿐,' → '2027년 말 금리를 4.1%보다 높게 본 참가자는 18명 중 8명,'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P17 B — D-4 (점도표는 사람을 잇지 않는다) · DC-D 물음 1 ("뿐"))
+    advanced[4] blocks/0 p0: '물가의 큰 부분이 전쟁에 달려 있습니다.' → '물가 전망의 큰 변수가 전쟁입니다.'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P18 A — 비중을 말한 1차가 없다 (MIN-07 "clouded the inflation outlook"))
+    advanced[4] blocks/0 p0: '4월 휴전 이후에도' → '4월 휴전 발표 이후에도'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P20 A — §5.2 한쪽 당사자의 발표)
+    advanced[4] blocks/0 p0: '회의 당일 경유 가격은' → '회의가 열린 주 경유 가격은'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P20 A — D-7 (EIA 주간 조사))
+    advanced[4] blocks/0 p1: '고용은 겉보기만큼 단단하지 않습니다.' → '고용 숫자는 한 달로 읽기 어렵습니다.'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R4 A (P21) — DC-E. 8월 고용을 넣으면 "단단하지 않다"도 "엇갈린다"도 서지 않는다)
+    advanced[4] blocks/0 p1: '7월 취업자는 오히려 23,000명 줄었습니다. 그런데 실업률은 4.2%에서 4.1%로 내려갔죠.' → '7월 취업자는 거의 늘지 않았는데 8월에는 162,000명 늘었습니다. 실업률은 그 사이 4.1%에서 움직이지 않았죠.'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R4 A (P22) — D-1 · BLS-08 (7월 +21,000 수정 · 8월 +162,000 · 실업률 4.1 그대로))
+    advanced[4] blocks/0 p1: '의장은 이를 노동공급 감소로 설명했고,' → '의장은 취업자가 적게 느는 것을 노동공급이 거의 늘지 않는 탓으로 설명했고,'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md R4 A (P23) — D-5 (JH "barely growing"))
+    advanced[4] blocks/1 p0: '인상을 둘러싼 내부 긴장이\n전망에서 실제 행동으로 옮겨왔다는 점' → '인상 의견이\n소수의견에서 실제 결정으로 옮겨왔다는 점'  (C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md P24 A — DC-A 가 말하는 것으로 좁힘 (F29 는 1차 대조 안 됨))
+  계약이 버리는 것 (대조 밖): end_actions 2개 · teaser 기호 · 눈금 · modifier · style
+
+OK — 등록 안 된 차이 0 (허용된 차이 밖의 독자 글 불변)
+```
+
+**`python3 scripts/verify-article.py`**
+```
+PASS  fixtures/fomc-2026-09.article.json
+   WARN  0.2 대기 21 span — Bridge 2 · DerivedClaim 6 · Fact 승격 1 · Fact 출처 12
+   WARN  basic[7] blocks/0/paragraphs/0/body "반년 넘게": DERIVED 출처 ['war_start'] 가 브리프 밖
+   WARN  advanced[4] blocks/0/paragraphs/0/body "201일째": DERIVED 불변식 검증 불가 — 개전일이 브리프에 없고 기사 안 출처("2월 말")는 기간이다. 2/28 이면 201, 2/21 이면 208
+   WARN  advanced[4] blocks/0/paragraphs/0/body "201일째": DERIVED 출처 ['war_start'] 가 브리프 밖
+PASS  fixtures/invalid/derived-from-volatile.json  — 거부 기대 DERIVED_FROM_VOLATILE
+   검출: ['DERIVED_FROM_VOLATILE']
+   DERIVED_FROM_VOLATILE: basic[6] blocks/1/paragraphs/1/body "3주 뒤에": 출처 ['minutes'] 가 STABLE 이 아니다 — D8 규칙 4: VOLATILE 로 강등해야 한다
+   골든과 다른 곳 1군데: ['/levels/0/slides/6/_volatility/1/derived_from/0/volatility']
+PASS  fixtures/invalid/volatile-missing-asof.json  — 거부 기대 VOLATILE_MISSING_AS_OF
+   검출: ['VOLATILE_MISSING_AS_OF']
+   VOLATILE_MISSING_AS_OF: basic[3] blocks/0/paragraphs/1/body "지금 미국은 3%대": VOLATILE 인데 as_of 가 없다 (D8)
+   골든과 다른 곳 1군데: ['/levels/0/slides/3/_volatility/0/as_of']
+
+OK
+```
+
+**`python3 scripts/selftest-verify-article.py | tail -3`**
+```
+  → 전부 기대대로
+
+OK
+```
+
+**`python3 scripts/verify-observed.py | tail -1`**
+```
+PASS — 슬라이드 수·순서·본문 텍스트가 원본 HTML과 일치
+```
+
+**`python3 scripts/verify-data-model.py | tail -1`** — FAIL (계약 §17 표. 위 4번. GOLD_PENDING_TABLE 18줄, 다른 오류 없음)
+```
+18
+0
+FAIL
+```
+
+**`python3 scripts/verify-observation.py | tail -2`** — FAIL (계약 §8 집계. 고치지 않았다)
+```
+FAIL CSV_ROWS: 실물 42행 ≠ 초안 대응 14행 — 대응을 다시 적어야 한다
+3개 실패
+```
+
+**계약 §17 을 위 13줄대로 임시로 고친 상태에서** (돌린 뒤 `git checkout docs/contract/DATA_MODEL.md`):
+```
+$ python3 scripts/verify-data-model.py | tail -5
+         발행 검사에서 막히는 것 68 — CHECK_NO_FACTS 1 · CLAIM_UNCHECKED 2 · DERIVED_INPUT_NO_FACT 4 · DERIVED_UNVERIFIED 1 · FACT_NOT_YET_PUBLIC 8 · FACT_NO_PRIMARY 8 · FACT_NO_SOURCE_SPAN 23 · QUOTE_NO_COMMON_SOURCE 2 · REFS_PENDING 19
+
+  WARN  ARTICLE_ID_PENDING: 골든에 article_id · article_version 이 없다 — 0.2m 대기 (§11 · D30)
+
+OK
+
+$ python3 scripts/selftest-verify-data-model.py | tail -1
+사본 89개 · OK
+
+$ git diff --stat -- docs/contract docs/findings apps packages logs/frontend
+(출력 없음)
+```
+
+**`pnpm -s test`** — exit 1. 전체 출력:
+```
+$ pnpm -r test
+Scope: 3 of 4 workspace projects
+packages/contract test$ vitest run
+packages/contract test:  RUN  v5.0.2 /Users/hadohadopapi/Desktop/claro/packages/contract
+packages/contract test:  Test Files  1 passed (1)
+packages/contract test:       Tests  14 passed (14)
+packages/contract test:    Start at  17:54:58
+packages/contract test:    Duration  146ms (transform 57%, tests 25%, import 15%, worker 3%)
+packages/contract test: Done
+apps/web test$ playwright test
+apps/web test: Error: http://localhost:3100 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer.
+apps/web test: Failed
+/Users/hadohadopapi/Desktop/claro/apps/web:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @claro/web@0.0.0 test: `playwright test`
+Exit status 1
+[ELIFECYCLE] Test failed. See above for more details.
+```
+`lsof -nP -iTCP:3100 -sTCP:LISTEN` → `node 15188 … TCP *:3100 (LISTEN)` · 부모 `sh -c next build && next start -p 3100 -H 0.0.0.0`. 건드리지 않았다.

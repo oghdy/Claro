@@ -20,7 +20,11 @@
       "log": "logs/content/golden-correction-2026-10.md §0 (P 번호) · §6",
       "gate": "D29 — 도윤 \"추천대로\". 18건 중 글자가 바뀐 15건 (P4 P6 P7 P8 P9 P10 P11 P13 P14 P15 P16 P17 P18 P20 P24) + 입문 8장 제목 층 + F31 · F37 as_of",
       "corrections": "logs/correction-log.csv — 2026-10-09 · FOMC-20260916",
-      "not_yet": "P1 P2 P12 P21 P22 P23 · Q1 Q2 — 2차 안 (도윤 선택 대기)"
+      "round_2": {
+        "date": "2026-10-09",
+        "log": "logs/content/golden-correction-2026-10.md \"## 2차\" (R 번호) · \"## 2차 반영\"",
+        "gate": "D29 끝 — 도윤 \"추천대로\". R1 A · R2 A · R4 A · R5 A · R6 A · R7 A · R8 A · R9 A · R10 A (R3 그대로)"
+      }
     }
   },
   "event_ref": "FOMC-20260916",
@@ -145,32 +149,34 @@
           "kicker": "첫 번째 반전",
           "headline": [
             {
-              "text": "아니요.\n오히려 나은 편이었어요",
+              "text": "아니요.\n크게 달라지지 않았어요",
               "layer": "claim",
               "refs": [
                 "DC-C"
               ],
               "_fact_refs_dropped": [
                 "F32"
-              ]
+              ],
+              "_source_note": "R1 — CPI-06 · CPI-07 · CPI-08: 전체 12개월 3.5 → 3.4 → 3.4 · 한 달 -0.4 → 0.1 → 0.4. \"나은 편\"은 8월까지 넣으면 서지 않는다 (DC-C 물음 4). 브리프에 F 없음 — 0.2m"
             }
           ],
           "blocks": [
             {
               "type": "prose",
-              "text": "여름 동안 나온 물가 지표는 시장이 걱정하던 것보다 좋았습니다.\n\n<b>그런데도 연준은 올렸어요.</b>",
+              "text": "여름 동안 나온 물가 지표는 눈에 띄게 나빠지지 않았습니다.\n\n<b>그런데도 연준은 올렸어요.</b>",
               "paragraphs": [
                 {
                   "body": [
                     {
-                      "text": "여름 동안 나온 물가 지표는 시장이 걱정하던 것보다 좋았습니다.",
+                      "text": "여름 동안 나온 물가 지표는 눈에 띄게 나빠지지 않았습니다.",
                       "layer": "claim",
                       "refs": [
                         "DC-C"
                       ],
                       "_fact_refs_dropped": [
                         "F32"
-                      ]
+                      ],
+                      "_source_note": "R2 — CPI-06 · CPI-07 · CPI-08 (전체 12개월 3.5 · 3.4 · 3.4 / 식품 · 에너지 제외 2.6 · 2.5 · 2.4). \"예상보다\"(JH · F32)는 8/28 까지의 말이라 8월로 넓히지 않았다 (D-6 · DC-C 물음 3 · 4). 브리프에 F 없음 — 0.2m"
                     }
                   ],
                   "weight": "normal"
@@ -1186,7 +1192,7 @@
           "text": "그래서 왜 지금 밟은 거죠?"
         },
         {
-          "text": "두 달 전엔 왜 안 올렸죠?",
+          "text": "두 달 전에도 그렇게 봤나요?",
           "_volatility": [
             {
               "where": "text",
@@ -1215,10 +1221,10 @@
           ]
         },
         {
-          "text": "물가는 왜 안 내려오고 있죠?"
+          "text": "물가는 왜 빨리 안 내려오죠?"
         },
         {
-          "text": "이제 계속 오르나요?"
+          "text": "그럼 금리는 계속 오르나요?"
         }
       ]
     },
@@ -1391,19 +1397,20 @@
           "blocks": [
             {
               "type": "prose",
-              "text": "여름 물가 지표는 예상보다 나았습니다. 7월 근원 PCE는 전년 대비 3.3%로, 6월에 낸 연말 전망치와 같은 숫자였고요.",
+              "text": "8월 말까지 나온 여름 물가 지표는 예상보다 나았습니다. 7월 근원 PCE는 전년 대비 3.3%로, 6월에 낸 연말 전망치와 같은 숫자였고요.",
               "paragraphs": [
                 {
                   "body": [
                     {
-                      "text": "여름 물가 지표는 예상보다 나았습니다. ",
+                      "text": "8월 말까지 나온 여름 물가 지표는 예상보다 나았습니다. ",
                       "layer": "claim",
                       "refs": [
                         "DC-C"
                       ],
                       "_fact_refs_dropped": [
                         "F32"
-                      ]
+                      ],
+                      "_source_note": "R9 — JH (8/28) \"this summer's PCE and CPI readings were better than expected\". 8월 지표(CPI-08, 9/11)는 그 뒤에 나왔다 — 3장 타임라인이 싣는다 (R10)"
                     },
                     {
                       "text": "7월 근원 PCE는 전년 대비 3.3%로, 6월에 낸 연말 전망치와 같은 숫자였고요.",
@@ -1515,7 +1522,7 @@
           "blocks": [
             {
               "type": "list",
-              "text": "1. 7/29 — 9-3 동결. Hammack · Kashkari · Logan 반대\n2. 8/7 — 7월 고용 발표 — 취업자 <b>23,000명 감소</b>(9/4 증가로 수정), 실업률 4.1%\n3. 8/28 — 잭슨홀 — 의장이 기준을 명시\n4. 9월 초 — 시장, 인상 확률 60% 안팎 반영\n5. 9/16 — 12-0 인상",
+              "text": "1. 7/29 — 9-3 동결. Hammack · Kashkari · Logan 반대\n2. 8/7 — 7월 고용 발표 — 취업자 <b>23,000명 감소</b>(9/4 증가로 수정), 실업률 4.1%\n3. 8/28 — 잭슨홀 — 의장이 기준을 명시\n4. 9월 초 — 시장, 인상 확률 60% 안팎 반영\n5. 9/4 · 9/11 — 8월 고용 162,000명 증가 · 8월 소비자물가 전월 대비 0.4%\n6. 9/16 — 12-0 인상",
               "ordered": true,
               "items": [
                 {
@@ -1619,6 +1626,32 @@
                         "need": "Fact 출처"
                       },
                       "_source_note": "P15 — CME-1 (8/31 66%) · CME-2 (회의 전 주 ~58%). F36(90% 이상) · F35(4.6%)는 이 줄에서 뺐다 (D-2 · D-3 · M-1). 바뀌는 값이다(VOLATILE · as_of 8/31~9/7 주) — 사실 ID 가 없어 _volatility 에 못 적었다 (_open). 권리(can_quote) 미확인. ID 는 0.2m"
+                    }
+                  ]
+                },
+                {
+                  "label": [
+                    {
+                      "text": "9/4 · 9/11",
+                      "layer": "fact",
+                      "refs": [],
+                      "_refs_pending": {
+                        "until": "0.2",
+                        "need": "Fact 출처"
+                      },
+                      "_source_note": "R10 — 발표일. BLS-08 (2026-09-04 08:30 ET) · CPI-08 (2026-09-11 08:30 ET)"
+                    }
+                  ],
+                  "body": [
+                    {
+                      "text": "8월 고용 162,000명 증가 · 8월 소비자물가 전월 대비 0.4%",
+                      "layer": "fact",
+                      "refs": [],
+                      "_refs_pending": {
+                        "until": "0.2",
+                        "need": "Fact 출처"
+                      },
+                      "_source_note": "R10 — BLS-08 \"Total nonfarm payroll employment increased by 162,000 in August\" · CPI-08 \"increased 0.4 percent on a seasonally adjusted basis in August after rising 0.1 percent in July\". 둘 다 바뀌는 값이다(VOLATILE · as_of 9/4 · 9/11) — 사실 ID 가 없어 _volatility 에 못 적었다 (_open — P15 와 같다). 브리프에 F 없음 — 0.2m"
                     }
                   ]
                 },
@@ -1980,7 +2013,7 @@
           "blocks": [
             {
               "type": "prose",
-              "text": "<b>1. 물가 전망의 큰 변수가 전쟁입니다.</b>\n이란 전쟁은 201일째. 4월 휴전 발표 이후에도 공격이 반복되며 유가는 크게 등락했고, 회의가 열린 주 경유 가격은 사상 최고였습니다. 성명문도 지정학적 전개로 인한 불확실성을 명시했어요.\n\n<b>2. 고용은 겉보기만큼 단단하지 않습니다.</b>\n7월 취업자는 오히려 23,000명 줄었습니다. 그런데 실업률은 4.2%에서 4.1%로 내려갔죠. 의장은 이를 노동공급 감소로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다.",
+              "text": "<b>1. 물가 전망의 큰 변수가 전쟁입니다.</b>\n이란 전쟁은 201일째. 4월 휴전 발표 이후에도 공격이 반복되며 유가는 크게 등락했고, 회의가 열린 주 경유 가격은 사상 최고였습니다. 성명문도 지정학적 전개로 인한 불확실성을 명시했어요.\n\n<b>2. 고용 숫자는 한 달로 읽기 어렵습니다.</b>\n7월 취업자는 거의 늘지 않았는데 8월에는 162,000명 늘었습니다. 실업률은 그 사이 4.1%에서 움직이지 않았죠. 의장은 취업자가 적게 느는 것을 노동공급이 거의 늘지 않는 탓으로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다.",
               "paragraphs": [
                 {
                   "body": [
@@ -2036,38 +2069,42 @@
                 {
                   "body": [
                     {
-                      "text": "<b>2. 고용은 겉보기만큼 단단하지 않습니다.</b>\n",
+                      "text": "<b>2. 고용 숫자는 한 달로 읽기 어렵습니다.</b>\n",
                       "layer": "claim",
                       "refs": [
                         "DC-E"
                       ]
                     },
                     {
-                      "text": "7월 취업자는 오히려 23,000명 줄었습니다. ",
+                      "text": "7월 취업자는 거의 늘지 않았는데 8월에는 162,000명 늘었습니다. ",
                       "layer": "fact",
-                      "refs": [
-                        "F30"
-                      ]
+                      "refs": [],
+                      "_refs_pending": {
+                        "until": "0.2",
+                        "need": "Fact 출처"
+                      },
+                      "_source_note": "R4 — BLS-08 (9/4): 8월 +162,000 · 7월 \"revised up by 44,000, from -23,000 to +21,000\". 7월 첫 발표(F30 · BLS-07)는 -23,000 \"changed little\". 바뀌는 값이다(VOLATILE · as_of 9/4) — 사실 ID 가 없어 _volatility 에 못 적었다 (_open). 브리프에 F 없음 — 0.2m"
                     },
                     {
-                      "text": "그런데 실업률은 4.2%에서 4.1%로 내려갔죠. ",
-                      "layer": "claim",
-                      "refs": [
-                        "DC-E"
-                      ],
-                      "_fact_refs_dropped": [
-                        "F30"
-                      ]
+                      "text": "실업률은 그 사이 4.1%에서 움직이지 않았죠. ",
+                      "layer": "fact",
+                      "refs": [],
+                      "_refs_pending": {
+                        "until": "0.2",
+                        "need": "Fact 출처"
+                      },
+                      "_source_note": "R4 — BLS-08 Summary table A: Unemployment rate July 2026 4.1 · Aug. 2026 4.1 · Change 0.0. 전에는 claim(DC-E)이었다 — 대비(\"그런데 … 내려갔죠\")가 빠져 잰 수치만 남았다 (D23). VOLATILE · as_of 9/4 (_open)"
                     },
                     {
-                      "text": "의장은 이를 노동공급 감소로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다.",
+                      "text": "의장은 취업자가 적게 느는 것을 노동공급이 거의 늘지 않는 탓으로 설명했고, 성명문은 고용 증가가 노동력 증가와 보조를 맞췄다고 썼습니다.",
                       "layer": "claim",
                       "refs": [
                         "DC-E"
                       ],
                       "_fact_refs_dropped": [
                         "F09"
-                      ]
+                      ],
+                      "_source_note": "R4 (D-5) — JH \"When labor supply is barely growing, monthly job gains are naturally going to run low.\""
                     }
                   ],
                   "weight": "normal"
@@ -2131,27 +2168,6 @@
               ],
               "as_of": "2026-09-14",
               "as_of_basis": "EIA-D 주간 조사일 9/14 (C-3 D-7 · P20). 브리프 F37 의 T0(9/16) 당일 수치는 [못 찾음] M-3"
-            },
-            {
-              "where": "blocks/0/paragraphs/1/body",
-              "span": "23,000명 줄었습니다",
-              "class": "VOLATILE",
-              "refs": [
-                "F30"
-              ],
-              "as_of": "2026-08-07",
-              "as_of_basis": "브리프 F30 시점 T-40 (8/7 발표)"
-            },
-            {
-              "where": "blocks/0/paragraphs/1/body",
-              "span": "4.2%에서 4.1%로",
-              "class": "VOLATILE",
-              "refs": [
-                "F30"
-              ],
-              "as_of": "2026-08-07",
-              "as_of_basis": "브리프 F30 시점 T-40 (8/7 발표)",
-              "note": "4.2%(6월)는 DC-E 본문"
             }
           ]
         }
@@ -2167,7 +2183,7 @@
           "text": "점도표가 말하는 것"
         },
         {
-          "text": "남는 두 가지 긴장"
+          "text": "남는 두 가지 불확실성"
         }
       ]
     }

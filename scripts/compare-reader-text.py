@@ -9,6 +9,7 @@
   허용하는 변환  `<br>` → `\\n` (계약 §6). 그 밖에는 한 글자라도 다르면 실패다.
   허용된 차이  ALLOWED 에 적힌 승인된 수정만 (D23 #16 · D27 “올리자” · C-5 P 번호 16건 — D29). 위치 · 바꾼 부분이 정확히 맞아야 한다
               한 글 단위에 여러 건이 걸리면 그중 적용된 건들만으로 새 글이 정확히 설명돼야 한다 (남는 글자가 있으면 실패)
+              ALLOWED_INSERTED — 승인된 새 줄 (2차 R10 한 건). 위치 · 글자가 정확히 맞는 한 줄만 빼고 나머지를 옛 글과 대조한다
               `<b>` 는 글의 일부로 대조한다 — 굵기 위치도 바뀌면 안 된다
   대조하지 않는 것 (계약이 버린다)  teaser 기호(Q · ·) · end_actions · 눈금 · 색 · modifier · style
   모양 대응도 본다  블록 종류 · 문단 무게(dim → secondary …) · 강조(hit → emphasized) · 장수 · 문단 수 · 항목 수
@@ -65,7 +66,53 @@ ALLOWED = [
      'why': C5 + 'P20 A — D-7 (EIA 주간 조사)'},
     {'where': 'advanced[4] blocks/1 p0', 'old': '인상을 둘러싼 내부 긴장이\n전망에서 실제 행동으로 옮겨왔다는 점', 'new': '인상 의견이\n소수의견에서 실제 결정으로 옮겨왔다는 점',
      'why': C5 + 'P24 A — DC-A 가 말하는 것으로 좁힘 (F29 는 1차 대조 안 됨)'},
+    # ---- 2차 (D29 끝 · 도윤 "추천대로") — 로그 "## 2차" 의 R 번호
+    {'where': 'basic[1] headline', 'old': '오히려 나은 편이었어요', 'new': '크게 달라지지 않았어요',
+     'why': C5 + 'R1 A — 8월 CPI 를 넣으면 "나은 편"이 서지 않는다 (DC-C 물음 4)'},
+    {'where': 'basic[1] blocks/0 p0', 'old': '시장이 걱정하던 것보다 좋았습니다.', 'new': '눈에 띄게 나빠지지 않았습니다.',
+     'why': C5 + 'R2 A — D-6 · "예상보다"는 8/28 까지의 말'},
+    {'where': 'basic[5] open_question', 'old': '두 달 전엔 왜 안 올렸죠?', 'new': '두 달 전에도 그렇게 봤나요?',
+     'why': C5 + 'R5 A (Q1) — 7장이 "왜"에 답하지 않는다 (D15)'},
+    {'where': 'basic[6] open_question', 'old': '물가는 왜 안 내려오고 있죠?', 'new': '물가는 왜 빨리 안 내려오죠?',
+     'why': C5 + 'R6 A (Q2) — 9장 결론 "내려오고는 있는데"와 부딪힘'},
+    {'where': 'basic[7] open_question', 'old': '이제 계속 오르나요?', 'new': '그럼 금리는 계속 오르나요?',
+     'why': C5 + 'R7 A — 주어가 없어 앞 장의 기름값 · 물가로 읽힌다'},
+    {'where': 'advanced[3] open_question', 'old': '남는 두 가지 긴장', 'new': '남는 두 가지 불확실성',
+     'why': C5 + 'R8 A — 5장 제목의 낱말과 맞춤'},
+    {'where': 'advanced[1] blocks/0 p0', 'old': '여름 물가 지표는 예상보다 나았습니다.', 'new': '8월 말까지 나온 여름 물가 지표는 예상보다 나았습니다.',
+     'why': C5 + 'R9 A — "예상보다"는 8/28 까지의 말'},
+    {'where': 'advanced[4] blocks/0 p1', 'old': '고용은 겉보기만큼 단단하지 않습니다.', 'new': '고용 숫자는 한 달로 읽기 어렵습니다.',
+     'why': C5 + 'R4 A (P21) — DC-E. 8월 고용을 넣으면 "단단하지 않다"도 "엇갈린다"도 서지 않는다'},
+    {'where': 'advanced[4] blocks/0 p1', 'old': '7월 취업자는 오히려 23,000명 줄었습니다. 그런데 실업률은 4.2%에서 4.1%로 내려갔죠.',
+     'new': '7월 취업자는 거의 늘지 않았는데 8월에는 162,000명 늘었습니다. 실업률은 그 사이 4.1%에서 움직이지 않았죠.',
+     'why': C5 + 'R4 A (P22) — D-1 · BLS-08 (7월 +21,000 수정 · 8월 +162,000 · 실업률 4.1 그대로)'},
+    {'where': 'advanced[4] blocks/0 p1', 'old': '의장은 이를 노동공급 감소로 설명했고,', 'new': '의장은 취업자가 적게 느는 것을 노동공급이 거의 늘지 않는 탓으로 설명했고,',
+     'why': C5 + 'R4 A (P23) — D-5 (JH "barely growing")'},
 ]
+
+# 허용된 삽입 — 승인된 새 항목(목록 · 대조 · 표의 한 줄). 새 골든의 그 블록 `at` 번째 항목이 `units` 와 글자까지 같아야 하고,
+# 그 항목을 뺀 나머지가 옛 글과 맞아야 한다. 등록된 줄이 없거나 글자가 다르면 그대로 대조해서 실패한다
+ALLOWED_INSERTED = [
+    {'where': 'advanced[2] blocks/0', 'at': 4,
+     'units': {'label': '9/4 · 9/11', 'body': '8월 고용 162,000명 증가 · 8월 소비자물가 전월 대비 0.4%'},
+     'why': C5 + 'R10 A — 타임라인에 회의 직전의 가장 새 지표 둘이 없었다 (팩트 누락 · BLS-08 · CPI-08)'},
+]
+
+
+def drop_inserted(block, ins):
+    """(kind, shape, units) 에서 등록된 항목을 빼고 뒤 항목 번호를 당긴다. 글자가 등록된 것과 다르면 None"""
+    kind, sh, units = block
+    at = ins['at']
+    got = {l.split('.', 1)[1]: t for l, t in units if l.split('.', 1)[0] == str(at)}
+    if got != ins['units'] or at >= len(sh):
+        return None
+    out = []
+    for l, t in units:
+        j, f = l.split('.', 1)
+        if int(j) == at:
+            continue
+        out.append((f'{int(j) - 1}.{f}' if int(j) > at else l, t))
+    return (kind, sh[:at] + sh[at + 1:], out)
 
 
 def br(h):
@@ -221,6 +268,13 @@ def compare(old, new):
             same(w, len(a['blocks']), len(b['blocks']), '블록 수가')
             for j, (ba, bb) in enumerate(zip(a['blocks'], b['blocks'])):
                 wb = f'{w} blocks/{j}'
+                for ins in ALLOWED_INSERTED:
+                    if ins['where'] == wb and bb[0] in ('list', 'contrast', 'sheet') and len(bb[1]) == len(ba[1]) + 1:
+                        cut = drop_inserted(bb, ins)
+                        if cut is not None:
+                            bb = cut
+                            allowed_hit.append({'where': f"{wb} (+{ins['at']}번째 줄)", 'old': '', 'why': ins['why'],
+                                                'new': ' — '.join(ins['units'].values())})
                 same(wb, ba[0], bb[0], '블록 종류가')
                 same(wb, ba[1], bb[1], '모양(무게·강조·순서)이')
                 same(wb, [l for l, _ in ba[2]], [l for l, _ in bb[2]], '글 단위 목록이')
@@ -252,7 +306,7 @@ def main(argv):
     dropped = sum(1 for lv in old['levels'] for s in lv['slides'] for b in s['blocks'] if b['type'] == 'end_actions')
     print(f'옛 골든 {old_p or OLD_REV} → 새 골든 {new_p or os.path.relpath(NEW_DEFAULT, ROOT)}')
     print(f'  레벨 {len(ou)} · 슬라이드 {sum(len(v) for v in ou.values())} · 독자 글 단위 {n_units}개 · {n_chars}자 대조')
-    print(f'  허용된 차이 {len(allowed_hit)}/{len(ALLOWED)}건 (그 밖의 차이는 전부 실패):')
+    print(f'  허용된 차이 {len(allowed_hit)}/{len(ALLOWED) + len(ALLOWED_INSERTED)}건 (그 밖의 차이는 전부 실패):')
     for al in allowed_hit:
         print(f"    {al['where']}: {al['old']!r} → {al['new']!r}  ({al['why']})")
     print(f'  계약이 버리는 것 (대조 밖): end_actions {dropped}개 · teaser 기호 · 눈금 · modifier · style')

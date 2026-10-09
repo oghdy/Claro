@@ -311,6 +311,9 @@ def run_compare():
          lambda d: ed16(d, lambda t: t.replace('연준이 확신이 없다고 본', '연준이 “확신이 없다”고 말한')), expect_fail=False)
     case('허용된 위치에서 승인된 것과 다르게 고침 (본 → 봤다)', lambda d: ed16(d, lambda t: t.replace('없다고 본 이유', '없다고 봤던 이유')))
     case('허용된 위치에서 승인된 수정 + 글자 하나 더', lambda d: ed16(d, lambda t: t.replace('여기 있습니다', '바로 여기 있습니다')))
+    case('허용된 삽입 줄(R10)의 글자를 바꿈', lambda d: block_of(d, 1, 2, 'list')['items'][4]['body'][0].update(text='8월 고용 262,000명 증가 · 8월 소비자물가 전월 대비 0.4%'))
+    case('허용된 삽입 줄(R10)을 다른 자리로 옮김', lambda d: (lambda it: it.insert(1, it.pop(4)))(block_of(d, 1, 2, 'list')['items']))
+    case('등록 안 된 줄을 하나 더 끼움', lambda d: (lambda it: it.insert(2, copy.deepcopy(it[1])))(block_of(d, 1, 2, 'list')['items']))
     case('승인된 수정을 다른 문장에 적용 (허용은 위치 한 곳만)',
          lambda d: d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'].__setitem__(
              0, {**d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'][0],
