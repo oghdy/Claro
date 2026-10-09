@@ -279,3 +279,103 @@ PASS  [계산] 입문 4장에서 숙련으로 바꾸고 끝 → 멈춘 장 ('adv
 - **게이트** — _open 5개 판정 (PM · 도윤)
 - 0.2m — 계약 §15 (교정 기록 이전) · _open-1 판정 뒤 골든에 판 ID
 - F-3 전 — 위 "프론트에 더 필요한 것" 1 · 2 · 3 · 4 · 6 · 7 · 9 · 10
+
+
+---
+
+## B-0.2c 게이트 반영 (D30) · 2026-10-09
+
+초안은 통과했고 _open 5개는 모두 초안대로 정해졌다 (D30). 독자 운영은 D31 (OPEN)로 나갔다.
+
+### 고친 것
+
+| 파일 | 무엇 |
+|---|---|
+| `docs/contract/OBSERVATION.md` | §14 를 "판정됨 → D30"으로 닫고 본문의 `_open-N` 표시를 전부 판정으로 바꿈 (`grep -c "_open-"` = 0) · §7.4 — `response` · `is_correct` 자리 옮김이 판정으로 승인됨 · §3 — 계약은 "원장에 사람을 알아볼 값이 없다"까지, 나머지는 D31 · §12 — 배정표가 F-3 전에 있어야 한다 · **§13 미확인 셋을 §12 "F-3 전에 닫혀야 하는 것"으로 옮김**(장 안에서 끝까지 읽었는지 · 새로고침이 새 열람인가 · 시험 줄 가르기 — 무엇이 정해져야 하는지와 언제까지인지만. 모양은 안 정했다) · §7.2 — 명제를 못 나누게 되는 순간은 첫 KnowledgeEvidence 줄 · §2.1 · §10 — ArticleRef 의 짝이 생김 · CHANGELOG |
+| `docs/contract/DATA_MODEL.md` | ArticleRecord 에 `article_id`(UUID) · `article_version`(정수) — 타입 블록 · §11 · 불변식 26 · §15 ("무엇이 새 판을 만드나" 미확인, 저장 키는 D1) · CHANGELOG. **이번 한 번만 고쳤다 (지시)** |
+| `docs/contract/ARTICLE_PACKAGE.md` | §2 · §10 의 "패키지 자체의 ID" 가 DATA_MODEL §11 을 가리키는 한 줄씩 · CHANGELOG. 규칙은 안 바뀜 |
+| `scripts/verify-data-model.py` | ArticleRecord 필수 칸에 둘 추가 · 시험 사본에 시험용 키 · 불변식 26 (`RECORD_KEY`) · 골든에 두 칸이 없으면 `ARTICLE_ID_PENDING` WARN ("0.2m 대기") |
+| `scripts/selftest-verify-data-model.py` | 사본 3 추가 (86 → 89) |
+| `scripts/verify-observation.py` | ArticleRef 의 두 칸이 DATA_MODEL ArticleRecord 에 같은 이름으로 있는가 (`CONTRACT_PAIR`) |
+| `scripts/selftest-verify-observation.py` | 사본 1 추가 (77 → 78) · CHANGELOG 사본이 두 행을 다 바꾸게 |
+
+골든 · 라이브러리 · `correction-log.csv` · `apps/` 는 고치지 않았다. 골든에 판 ID 를 넣지 않았다 (0.2m).
+계약에 숫자(시간 · 개수 · 기준값)를 더하지 않았다. probe 를 놓는 자리 · 넘기는 방향에 기대는 내용도 없다 — §12 의 "D26 이 정해진 뒤"는 **언제**만 말한다.
+
+### 판정이 계약의 어디에 들어갔나
+
+| D30 | 계약 |
+|---|---|
+| _open-1 `article_id` + `article_version` | DATA_MODEL §1 · §11 · 불변식 26 / OBSERVATION §2.1 · §10 / ARTICLE_PACKAGE §2 · §10 |
+| _open-2 응답은 ProbeResponse 에 | OBSERVATION §7.4 (승인) · §14 |
+| _open-3 원장에는 뜻 없는 UUID 만 | OBSERVATION §3 · §12 → D31 |
+| _open-4 타입에 넣지 않는다 · 배정표 | OBSERVATION §12 → D31 |
+| _open-5 여섯 값 | OBSERVATION §8.3 · §15-6 |
+| PM-1 미확인 셋 → F-3 전 | OBSERVATION §12 (표) · §5.4 · §13 에서 뺌 |
+| PM-2 명제를 못 나누게 되는 순간 | OBSERVATION §7.2 · §12 |
+| PM-3 0.2m 으로 | 그대로 — 골든 발급은 WARN 으로 보인다. VOLATILE 앞뒤 · Goal 타입은 계약에 넣지 않았다 (지시 밖) |
+
+### 검증
+
+모든 명령은 저장소 루트에서.
+
+**1. `python3 scripts/verify-observation.py`** — exit 0
+```
+verify-observation
+  계약   docs/contract/OBSERVATION.md — 타입 15 · 칸 105
+  실물   correction-log.csv 14행 → CorrectionEntry — gate {'None': 12, 'GATE_3': 2} · caught_by {'ARTIFACT_COMPARE': 7, 'PLAIN_READING': 3, 'AUTOMATED_CHECK': 4}
+         target {'ARTICLE': 9, 'CONCEPT': 7} · Replacement 6 · type_note 3 · time_spent_min 적힌 행 0
+  골든   basic block_decisions — C-0001@1 FULL · C-0002@3 FULL · C-0003@1 SKIP · C-0005@3 SKIP
+  골든   advanced block_decisions — C-0001@1 SKIP · C-0002@3 SKIP · C-0003@1 SKIP · C-0005@3 REFRESHER
+  시험 원장 (가짜 독자 1) — plan 2 · 읽기 사건 13 · 물음 2 · 노출 3 · 응답 2 · 증거 3
+         계산 — 완독 True · 멈춘 장 ('basic', 3) · 가장 멀리 {'basic': 3, 'advanced': 4} · 전환으로 떠난 레벨 ['basic', 'advanced']
+
+OK
+```
+
+**2. `python3 scripts/selftest-verify-observation.py`** — exit 0 (마지막 줄 · 새 사본)
+```
+PASS  [contract] CHANGELOG 행 삭제 → ['CONTRACT_CHANGELOG']
+PASS  [others] D30 — DATA_MODEL ArticleRecord 에서 article_version 이 사라짐 → ['CONTRACT_PAIR']
+사본 78개 + 계산 1 · OK
+```
+실패 행 없음 (`grep -c '^FAIL'` = 0).
+
+**3. `python3 scripts/verify-data-model.py`** — exit 0 (요약 · WARN · 마지막 줄)
+```
+verify-data-model
+  계약   docs/contract/DATA_MODEL.md
+  실물   브리프 3 — 사실 타입 30종 · FOMC 사실 38 · DC 5
+         골든 — 대기 13 ({'Bridge': 2, 'DerivedClaim': 5, 'Fact 승격': 1, 'Fact 출처': 5}) · 시간 조각 29 ({'DERIVED': 18, 'VOLATILE': 11}) · 인용 2
+         끊긴 F 연결 — DC 있는 claim 17 · 대기 claim 4 · bridge 2 · 그 밖 1
+  시험 사본 — Fact 38 · Claim 5 · Bridge 1 · Source 8 · 시간 조각 29
+         발행 검사에서 막히는 것 64 — CHECK_NO_FACTS 1 · CLAIM_UNCHECKED 2 · DERIVED_INPUT_NO_FACT 4 · DERIVED_UNVERIFIED 1 · FACT_NOT_YET_PUBLIC 9 · FACT_NO_PRIMARY 9 · FACT_NO_SOURCE_SPAN 25 · QUOTE_NO_COMMON_SOURCE 2 · REFS_PENDING 11
+
+  WARN  ARTICLE_ID_PENDING: 골든에 article_id · article_version 이 없다 — 0.2m 대기 (§11 · D30)
+
+OK
+```
+발행 검사에서 막히는 것 64 — 전과 같다. WARN 은 `ARTICLE_ID_PENDING` 하나가 늘었다 (0.2m 대기).
+
+**4. `python3 scripts/selftest-verify-data-model.py`** — exit 0 (새 사본 · 마지막 줄)
+```
+PASS  [contract] D30 — ArticleRecord.article_id 삭제 → ['CONTRACT_FIELD']
+PASS  [model] 불변식 26 — ArticleRecord 의 article_id 가 code 문자열 → ['RECORD_KEY']
+PASS  [model] 불변식 26 — ArticleRecord 에 article_version 이 없다 → ['RECORD_KEY']
+사본 89개 · OK
+```
+
+**5. 나머지 — 회귀 없음**
+
+| 명령 | exit | 마지막 줄 |
+|---|---|---|
+| `python3 scripts/verify-article.py` | 0 | `OK` |
+| `python3 scripts/verify-concept-identity.py` | 0 | `OK` (WARN 은 전과 같다) |
+| `python3 scripts/verify-contract-coverage.py` | 0 | `OK` |
+| `python3 scripts/selftest-verify-article.py` | 0 | `OK` |
+| `python3 scripts/selftest-verify-concept-identity.py` | 0 | `OK` |
+| `python3 scripts/compare-reader-text.py` | 0 | `OK — 독자 글 불변` |
+
+### 남은 일
+- 0.2m — 골든에 `article_id` · `article_version` 발급 (`ARTICLE_ID_PENDING` 이 사라진다) · 계약 §15 교정 기록 이전
+- F-3 전 — OBSERVATION §12 의 개정 셋 (D26 뒤) · D31

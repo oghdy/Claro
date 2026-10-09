@@ -6,6 +6,7 @@
 | 2026-09-20 | 생성 (빈 껍데기) | PM |
 | 2026-09-30 | 초안 — 브리프 3건 사실 표 · FOMC DC-A~E · 골든 `_` 주석(대기 13 · 끊긴 F 연결 · `_volatility` · `_attribution_refs`) · FINDINGS §4.1 §5 §6.2 §7.1 §7.2 §9.2 확정에서 도출. **게이트 전** | B-0.2b |
 | 2026-10-09 | 게이트 반영 (D27) — `fact_type` 7값으로 닫음(딱 맞지 않던 세 무리의 행선지 확정) · 발행하려면 Fact 마다 1차 출처 · Event · Storyline 도 UUID + `code` · §16 판정됨 · §17 레인(C-3 · C-5 · 파이프라인) · 독자 글 1건(“올리자” 따옴표) 반영 | B-0.2b |
+| 2026-10-09 | D30 반영 — ArticleRecord 에 `article_id`(UUID) · `article_version`(정수). 불변 · 짝이 유일 (불변식 26). 무엇이 새 판을 만드나는 미확인. 골든 발급은 0.2m (검사 WARN) | B-0.2c |
 
 > **상태: 게이트 통과 (D27 · 2026-10-03). _open 3개 모두 판정됨 (§16).**
 > ARTICLE_PACKAGE 는 사실 · 해석 · 브리지 · 사건을 참조로만 가리켰다. 이 계약이 그 참조가 가리키는 것의 주인이다.
@@ -169,6 +170,8 @@ StorylineVersion {                  // 한 번 만들면 고치지 않는다. �
 }
 
 ArticleRecord {                     // 발행 한 번 = 하나. 통째로 불변 (§11)
+  article_id:      UUID             // D30. 불변. 독자 기록(OBSERVATION ArticleRef)이 이것으로 가리킨다
+  article_version: integer          // D30. 불변. (article_id · article_version) 은 전체에서 유일. 무엇이 새 판을 만드나는 미확인
   package:   ArticlePackage         // ARTICLE_PACKAGE — 프론트로 가는 부분
   authoring: ArticleAuthoring       // 프론트로 가지 않는다
 }
@@ -626,7 +629,13 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 - **실물**: 골든 파일 한 벌이 이미 이 모양이다 — 패키지 필드 + `_` 저작 주석. ARTICLE_PACKAGE §12-11 이 "`_volatility` · `_published_at_basis` 는 저작 데이터, 0.2 가 자리를 정할 때까지 `_` 주석"이라 했다.
   이 계약이 그 자리다: `_` 주석 → `authoring`
 - 프론트는 `record.package` 만 받는다. `authoring` 은 발행 검사(D8 재계산 · 스토리라인 확인)와 뒤에 오는 백엔드 기능이 읽는다
-- 패키지 자체의 ID · 저장 키 — **미확인** (ARTICLE_PACKAGE §10 과 같다. D1 백엔드 OPEN)
+- **`article_id`(UUID) · `article_version`(정수) — D30.** 발행 한 번을 가리키는 키다. 둘 다 불변이고, 둘의 짝은 전체에서 유일하다.
+  독자 기록이 "어느 기사의 어느 판"을 이것으로 가리킨다 (OBSERVATION §2.1 ArticleRef) — 이 칸이 없으면 독자 기록을 한 줄도 쓸 수 없다.
+  이름은 확정 §9.4 의 것 그대로이고, UUID 인 것은 다른 키와 같은 방식이다 (D27)
+  - **패키지 안이 아니라 ArticleRecord 에 둔다.** 패키지의 ID 를 따로 만들지 않는다 — 판 하나에 패키지가 하나다
+  - **무엇이 새 판을 만드나 — 미확인.** 판이 둘인 실물이 없다. 확정 §9.2 는 늦게 온 사실을 원 기사가 아니라 스토리라인에 붙인다 (§15)
+  - **골든에는 아직 없다.** 발급은 0.2m 이다. 그때까지 검사는 `ARTICLE_ID_PENDING` WARN 으로 센다 ("0.2m 대기")
+- 저장 키 — **미확인** (D1 백엔드 OPEN)
 
 | 골든 `_` 주석 | 옮겨갈 곳 |
 |---|---|
@@ -725,6 +734,10 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 **대기**
 25. 골든 대기 span 이 §17 표와 같다 — 글 · 층 · need (기계). 대기는 픽스처에서만 (ARTICLE_PACKAGE §6.2)
 
+**ArticleRecord**
+26. `article_id` 는 UUID, `article_version` 은 양의 정수 (기계: 시험 사본). 둘 다 발행 뒤 바뀌지 않고 둘의 짝은 전체에서 유일하다 (0.4).
+    골든에 두 칸이 없는 동안은 WARN — 0.2m 대기 (D30)
+
 ---
 
 ## 15. 미확인
@@ -745,7 +758,8 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 | 번역 표시를 독자에게 보일지 | 프로토타입에 없다 |
 | Coverage 슬롯 정의 · PARTIAL · NOT_EXTRACTED 의 `sources` 필수 여부 | §12 |
 | 대체(supersede) 관계 — 새 Fact 가 옛 Fact 를 대신한다는 기록 | correction_log (0.2c) |
-| ArticleRecord 의 저장 키 · 패키지 ID | D1 백엔드 OPEN · ARTICLE_PACKAGE §10 |
+| 무엇이 기사의 새 판(`article_version`)을 만드나 | 판이 둘인 실물이 없다 (§11 · D30) |
+| ArticleRecord 의 저장 키 | D1 백엔드 OPEN |
 
 ---
 

@@ -60,7 +60,7 @@ REQUIRED_FIELDS = {
     'Event': ('event_id', 'code', 'title', 'occurred_at', 'storyline_id'),                     # code — D27
     'Storyline': ('storyline_id', 'code', 'title', 'version', 'ongoing'),                      # §9.2 · code — D27                              # §9.2
     'StorylineVersion': ('storyline_id', 'version', 'created_at', 'change'),
-    'ArticleRecord': ('package', 'authoring'),
+    'ArticleRecord': ('article_id', 'article_version', 'package', 'authoring'),     # D30
     'ArticleAuthoring': ('time_expressions', 'storylines', 'notes'),
     'StorylinePin': ('storyline_id', 'version'),
     'TimeExpression': ('at', 'class', 'facts', 'value_at_authoring', 'check', 'formula', 'inputs'),
@@ -538,7 +538,8 @@ def build_model(g, contract_text, facts_b, claims_b, sources_b, lib):
                       inputs=[{'key': x['key'], 'what': x['what'], 'value': x['value'],
                                'fact': fid[x['refs'][0]] if x.get('refs') else None} for x in v['derived_from']])
         tes.append(te)
-    m['record'] = {'package': pkg, 'authoring': {'time_expressions': tes, 'storylines': [{'storyline_id': IRAN_ID, 'version': 1}],
+    m['record'] = {'article_id': UID('article', g['event_ref']), 'article_version': 1,   # 시험용. 진짜 발급은 0.2m (D30)
+                   'package': pkg, 'authoring': {'time_expressions': tes, 'storylines': [{'storyline_id': IRAN_ID, 'version': 1}],
                                                  'notes': [g.get('_published_at_basis', '')]}}
     m['pending'] = pending
     m['concept_codes'] = {UID('concept', c['code']): c['code'] for c in lib['concepts']}
@@ -588,6 +589,14 @@ def check_model(m, lib, publish=False):
     P = lambda c, msg: (errs if publish else held).append((c, msg))
     F, C, B, S = m['facts'], m['claims'], m['bridges'], m['sources']
     pkg, auth = m['record']['package'], m['record']['authoring']
+    # 26 — ArticleRecord 의 키 (D30)
+    aid, av = m['record'].get('article_id'), m['record'].get('article_version')
+    try:
+        ok = str(uuid.UUID(str(aid))) == aid
+    except ValueError:
+        ok = False
+    if not ok or type(av) is not int or av < 1:
+        E('RECORD_KEY', f'ArticleRecord 의 article_id {aid!r} · article_version {av!r} — UUID 와 양의 정수 (불변식 26)')
     # 1 — 키 · label
     seen = Counter()
     for kind, key in (('facts', 'fact_id'), ('claims', 'claim_id'), ('bridges', 'bridge_id'), ('sources', 'source_id')):
@@ -810,6 +819,8 @@ def run(contract_text, log_text, g, lib_text):
     errs = check_contract(contract_text, brief_types()) + check_log(log_text)
     e, warns, rep = check_golden(g, contract_text, fb, cb)
     errs += e
+    if 'article_id' not in g or 'article_version' not in g:
+        warns.append(('ARTICLE_ID_PENDING', '골든에 article_id · article_version 이 없다 — 0.2m 대기 (§11 · D30)'))
     model = None
     if not e:                                           # 골든이 이 계약으로 옮겨지지 않으면 시험 사본을 만들지 않는다
         model = build_model(g, contract_text, fb, cb, sb, lib)

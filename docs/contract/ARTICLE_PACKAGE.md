@@ -9,6 +9,7 @@
 | 2026-09-29 | D22 반영 — 이란 규칙은 사실 서술 문장에만(전망 문장은 `claim`, `need: "DerivedClaim"`) · `Level.label` 제거 | S3 · B-0.1a |
 | 2026-09-30 | 참조 문구를 DATA_MODEL · CONCEPT_IDENTITY 에 맞춤 — §0 저장 구조의 주인 · §1 `event_ref: EventRef`, `refs` 원소는 층이 정한다 · §6 층별 Ref 표 · 골든 층 수를 0.1b 이후로(concept 20 → 21 등) · §6.2 대기의 행선지. 규칙은 안 바뀜 | B-0.2b |
 | 2026-10-09 | D27 반영 — `event_ref` 는 Event 의 UUID (골든의 문자열은 code). 참조 문구만 | B-0.2b |
+| 2026-10-09 | D30 반영 — §2 · §10 "패키지 자체의 ID" 가 DATA_MODEL §11 (ArticleRecord `article_id` · `article_version`)을 가리키게. 가리키는 문구만 | B-0.2c |
 
 > **상태: 게이트 통과 (D20 · D22, 2026-09-29).**
 > 근거는 두 실물뿐이다 — `fixtures/fomc-2026-09.article.json`(골든, 주 입력), `fixtures/ftc-2026-08.observed.json`(블록 모양만).
@@ -83,7 +84,7 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
 | `published_at` | DERIVED 값("201일째", "올해")이 계산된 기준 시각 (§8) | 골든 `_published_at` · D8 |
 | `levels` | 레벨 배열 (§3). 1~3개 (D20) | 골든 2개, FTC 1개 |
 
-패키지 자체의 ID·버전은 실물에 없다 — 미확인.
+패키지 자체의 ID·버전은 두지 않는다 — 판을 가리키는 키는 ArticleRecord 의 `article_id` · `article_version` 이다 (DATA_MODEL §11 · D30).
 
 ---
 
@@ -423,7 +424,7 @@ QA② — 다음 장이 실제로 답했는가 — 는 기계 검사가 아니�
 | 스토리라인("지난 이야기") 블록 | FINDINGS §8.5 미정. 실물 없음 |
 | 본문 속 짧은 인용("물가가 나빠졌는가")을 원문으로 표시할지 | 본문에 있으나 구분 표시가 없었다. FOMC-6(0.2)과 함께 |
 | VOLATILE 기준 시점을 독자에게 보일지 | §8 |
-| 패키지 자체의 ID · 버전 | 실물에 없다 |
+| 패키지 자체의 ID · 버전 | 패키지에는 없다. 판은 ArticleRecord 의 `article_id` · `article_version` 으로 가리킨다 → DATA_MODEL §11 (D30) |
 | kicker 서사 역할의 구조화 | 읽을 소비자가 없다 |
 | 이미지 · 지도 · 도표 | 실물에 없다 |
 

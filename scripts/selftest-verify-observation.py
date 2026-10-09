@@ -89,7 +89,8 @@ CASES = [
     ('§8.1 — 실물 열 하나를 표에서 삭제', 'contract', lambda t: '\n'.join(l for l in t.splitlines() if not l.startswith('| `what_was_wrong` |')), {'CONTRACT_CSV_COLUMN'}),
     ('§8.2 — 실물과 다른 행 수', 'contract', sub('| `writing` | 4 |', '| `writing` | 3 |'), {'CONTRACT_REAL_MISMATCH'}),
     ('§4.2 — 골든과 다른 decision (C-0003 입문 FULL)', 'contract', sub('| C-0003 | **SKIP** —', '| C-0003 | **FULL** —'), {'CONTRACT_REAL_MISMATCH'}),
-    ('CHANGELOG 행 삭제', 'contract', sub('**게이트 전** | B-0.2c |', '**게이트 전** | PM |'), {'CONTRACT_CHANGELOG'}),
+    ('CHANGELOG 행 삭제', 'contract', lambda t: t.replace(' | B-0.2c |', ' | PM |'), {'CONTRACT_CHANGELOG'}),
+    ('D30 — DATA_MODEL ArticleRecord 에서 article_version 이 사라짐', 'others', lambda o: [x.replace('  article_version: integer          // D30', '  edition:         integer          // D30') for x in o], {'CONTRACT_PAIR'}),
     # ── 로그 ──
     ('로그 — 질문 3 행 삭제', 'log', lambda t: '\n'.join(l for l in t.splitlines() if not l.startswith('| 3 |')), {'LOG_QUESTION'}),
     ('로그 — 질문 6 표시 삭제', 'log', lambda t: '\n'.join(l.replace('계약 반영', '반영').replace('_open', 'open').replace('미확인', '모름') if l.startswith('| 6 |') else l for l in t.splitlines()), {'LOG_QUESTION'}),
@@ -158,6 +159,8 @@ def codes(errs):
 
 
 def run(target, mutate):
+    if target == 'others':
+        return codes(V.run(CONTRACT, LOG, CSVT, GOLD, LIBT, mutate(OTHERS), DEV)[0])
     if target in ('contract', 'log', 'csv'):
         c = mutate(CONTRACT) if target == 'contract' else CONTRACT
         l = mutate(LOG) if target == 'log' else LOG

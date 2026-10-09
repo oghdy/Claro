@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.2c — PM 검수 통과 (2026-10-09) → D30. 게이트 반영 대기 (아래 "Step 0.2c 게이트 반영")**
+**Phase 0 / Step 0.2c — 완료 (2026-10-09 · D30 반영). 다음: 0.2m**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -14,7 +14,7 @@
 | 0.1b | 골든을 계약에 맞춰 재작성 (+게이지 → 대조) | 골든 v2 · invalid 재생성 · 검증 스크립트 | 새 세션 | ☑ 2026-09-29 · D23 (`logs/backend/phase-0-step-0-1b.md`) |
 | 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☑ 2026-09-30 · D25 (`logs/backend/phase-0-step-0-2a.md`) |
 | 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☑ `b832391` · `61a82b1` · 2026-10-09 |
-| 0.2c | OBSERVATION.md — 독자 기록(knowledge_evidence · reading_plan_log · probe) · 교정 기록. **F-3 전에** | 계약 4 | 새 세션 | ◐ 초안 2026-10-09 · 검수 통과 D30 · 게이트 반영 대기 |
+| 0.2c | OBSERVATION.md — 독자 기록(knowledge_evidence · reading_plan_log · probe) · 교정 기록. **F-3 전에** | 계약 4 | 새 세션 | ☑ 2026-10-09 · D30 (`logs/backend/phase-0-step-0-2c.md`) |
 | 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | — | ☐ 0.2c 뒤 |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
 | 0.4~ | 스키마 구현 | 마이그레이션 | Step당 세션 | ☐ |
@@ -518,8 +518,8 @@ VOLATILE 값이 바뀐 Fact 의 앞뒤를 잇는 기록의 자리 · Goal 을 �
 - [x] probe 를 놓는 자리를 설계하지 않음 (D18)
 - [x] correction-log 이전 목록 · 프론트에 필요한 것 목록
 - [x] 검증 스크립트 + 망가뜨린 사본, 회귀 없음
-- [x] **게이트** — D30 (2026-10-09). 반영 커밋 대기
-- [ ] 완료일:
+- [x] **게이트** — D30 (2026-10-09). 반영: _open 5개 초안대로 · ArticleRecord `article_id` · `article_version` (DATA_MODEL) · 미확인 셋 → F-3 전 · 독자 운영은 D31
+- [x] 완료일: 2026-10-09
 
 ---
 

@@ -185,9 +185,15 @@ def check_contract(text, others_text, devcontent_text, csv_text, gold, lib):
                 errs.append(('CONTRACT_DIRECTION', f'ReadingEvent.{f} — 방향 · 손짓에 기대는 칸이나 값 (D26 OPEN)'))
             if t in ('Probe', 'ProbePlanItem', 'ProbeTarget') and (PLACEMENT.search(f) or 'SlideLoc' in expr):
                 errs.append(('CONTRACT_PROBE_PLACEMENT', f'{t}.{f} — probe 를 놓을 자리를 정하지 않는다 (D18 OPEN)'))
-    foreign = set()
+    foreign, record = set(), {}
     for o in others_text:
-        foreign |= set(VC.ts_types(o))
+        ot = VC.ts_types(o)
+        foreign |= set(ot)
+        record = ot.get('ArticleRecord', record)
+    # ArticleRef 의 짝 — DATA_MODEL 의 ArticleRecord 가 같은 이름의 두 칸을 갖는다 (D30)
+    for f in types.get('ArticleRef', {}):
+        if f not in record:
+            errs.append(('CONTRACT_PAIR', f'ArticleRef.{f} 의 짝이 DATA_MODEL ArticleRecord 에 없다 (§10 · D30)'))
     for t in types:
         if t in foreign:
             errs.append(('CONTRACT_FOREIGN_TYPE', f'{t} 는 다른 계약의 타입이다 — 한 타입은 한 파일에만'))

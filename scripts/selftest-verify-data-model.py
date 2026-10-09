@@ -171,6 +171,8 @@ def bump_storyline(m):
 # (이름, 대상, 망가뜨리기, 기대 code 집합)
 # 대상: contract · log · gold → run() 전체 / model → check_model(시험 사본) / publish → check_model(publishable, 발행)
 CASES = [
+    ('D30 — ArticleRecord.article_id 삭제', 'contract',
+     lambda c: sub(c, '  article_id:      UUID             // D30', '  record_key:      UUID             // D30'), {'CONTRACT_FIELD'}),
     # ── A. 계약 문서
     ('§5.4 — Fact.as_of 삭제', 'contract',
      lambda c: sub(c, '  as_of:              TimePoint | null        // VOLATILE 이면 필수. 이 값이 "지금 값"이던 때 (§6.2)\n', ''),
@@ -272,6 +274,10 @@ CASES = [
     ('§6.3 — DERIVED 입력 하나에 사실 둘', 'gold',
      g_(lambda g: vol(g, 1, 0, '7주 만에')['derived_from'][0].__setitem__('refs', ['F28', 'F02'])), {'GOLD_INPUT_MULTI'}),
     # ── D. 시험 사본 (지금 검사)
+    ('불변식 26 — ArticleRecord 의 article_id 가 code 문자열', 'model',
+     m_(lambda m: m['record'].__setitem__('article_id', 'FOMC-20260916')), {'RECORD_KEY'}),
+    ('불변식 26 — ArticleRecord 에 article_version 이 없다', 'model',
+     m_(lambda m: m['record'].pop('article_version')), {'RECORD_KEY'}),
     ('불변식 4 — F01 fact_type 을 브리프 타입 POLICY_ACTION 그대로', 'model',
      m_(lambda m: m['facts'][FID['F01']].__setitem__('fact_type', 'POLICY_ACTION')), {'FACT_TYPE'}),
     ('불변식 5 — OFFICIAL_CLAIM F24 의 actor 삭제', 'model',
