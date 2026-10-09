@@ -44,13 +44,15 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 ## 세션 상태 — **PM 검수 대기 1건 (C-4)** (2026-10-09, 압축 뒤 갱신)
 | 순서 | 세션 | 커밋 | 상태 |
 |---|---|---|---|
-| ◐ | **C-5** 골든 교정 2차 | `bfdeafb` · C-3b `8fb4ca9` | D29 통과. **C-3b 가 8월 CPI · 8월 고용(+162,000)을 찾아 수정안 6개(P1 · P2 · P12 · P21~23)의 전제가 바뀌었다.** 남은 것: 고친 "C-5 게이트 반영" 지시문 전달 (`development-content.md`) → 18개 골든 반영 + 6개 · Q1 · Q2 2차 안 → 도윤 선택 |
+| ◐ | **C-5** 골든 교정 2차 | `bfdeafb` · `8fb4ca9` · `6aae27d` | 18건 골든 반영 확인. **2차 안 R1~R10 도윤 선택 대기** (PM 추천은 D29 끝). 고르면 "C-5 2차 반영" 지시문 (`development-content.md`) |
 | ✅ | **0.2c** 관찰 기록 계약 | `7a61b52` · `2d96fac` | **닫힘 (D30).** 반영 확인 완료 |
 | **1** | **C-4** 명제 나누기 | `74318b1` [GATE] | 미검수. 나누기 3 · 신규 개념 3 · Q-C3 미확인 · 스크루웜 문안 없음. 로그 `logs/content/concept-split-2026-10.md`. 도윤 문안 선택 |
 | — | F-2a 디자인 탐색 | `c7443b5` · `94ae9e4` | 완료. **도윤이 B(가로 카드 · 다크)를 직접 골랐다** → **D26 OPEN**. 도윤이 그 세션과 UI 를 계속 얘기 중 |
 | — | 닫힘 | | S1 · S2 · S3 · 0.1b · 0.2a · 0.2b · C-1 · C-3 · F-1 |
 
 **0.2m 프롬프트에 실을 것**: `development-backend.md` "Step 0.2c 게이트 반영" 절 끝에 모아 두었다 (D29-6 · D30-3).
+
+**0.2m 에 더 실을 것 (C-5 반영에서 나옴)**: §17 표 · OBSERVATION §8 집계를 실물에 맞추기 (그리고 실물이 자랄 때마다 깨지지 않게) · span 의 `_source_note` 주석 키 · 사실 ID 없는 "바뀌는 값"(숙련 3장 "60% 안팎")을 적을 자리 · "201일째" `war_start` 를 확인된 날짜로 · 브리프 §6 방어("튼튼해서 올릴 여유")가 1차 자료와 맞는지.
 
 **적어둔 것**: 유형 표 "레이어 혼입"의 뜻이 넓어졌다(해석에 원문 표시가 붙은 것 2행) — 표가 안 따라갔다. `time_spent_min` 14행 모두 비었다 — 문안 선택 때 걸린 시간을 물어 적는다 (D30-4).
 
@@ -137,6 +139,8 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 | OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 78 + 계산 1 |
 | DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 사본 89 · `ARTICLE_ID_PENDING` WARN (0.2m 대기) |
 | 프론트 | `pnpm -s typecheck` · `pnpm -s test` | 통과 (계약 14 · 화면 7). e2e 는 이 Mac 의 Chrome 을 쓴다 |
+
+**지금 알려진 빨간불 (2026-10-09 · C-5 반영 뒤)**: `verify-data-model` FAIL (DATA_MODEL §17 대기 표 9줄) · `verify-observation` FAIL (§8 "14행" 집계 ≠ CSV 32행). 계약 문서가 실물의 글자 · 행 수를 박아 둔 탓이다. 0.2m 의 첫 일로 맞춘다 (D29). `compare-reader-text` 허용 차이는 18.
 
 새 검사가 생기면 이 표에 한 줄 넣는다.
 

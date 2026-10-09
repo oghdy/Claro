@@ -130,6 +130,35 @@ C-5 게이트 판정이 나왔다. docs/DECISIONS.md D29 (끝의 "C-3b 결과" �
 
 ---
 
+## C-5 2차 반영 — C-5 세션에 보낼 것 (도윤이 R1~R10 을 고른 뒤)
+
+도윤이 고른 것이 아래와 다르면 "고른 안" 줄을 고쳐서 보낸다.
+
+```
+2차 안 검수가 끝났다. docs/DECISIONS.md D29 끝의 "C-5 반영 검수 + 2차 안"을 읽어라. 18건 반영은 통과다.
+도윤이 고른 안을 골든에 반영해라.
+
+고른 안:
+  R1 A · R2 A · R3 그대로 · R4 A · R5 A · R6 A · R7 A · R8 A · R9 A · R10 A
+
+같이:
+  - R4 · R10 의 새 수치(BLS-08 · CPI-08)는 지난번과 같은 방식(대기 Fact 출처 + _source_note)으로
+  - open_question 을 고치는 것(R5 · R6 · R7 · R8)은 compare-reader-text 가 대조하는 범위인지 먼저 확인해라.
+    대조 밖이면 넣지 말고 로그에 적어라 — 검사를 넓힐지는 PM 이 정한다
+  - "201일째"의 war_start 는 그대로 둔다 (목록 밖)
+  - correction-log 에 건별로. 유형은 지난번 기준 그대로 (R4 · R10 은 팩트 누락)
+  - 반증 기록 DC-C · DC-E 를 고른 안에 맞춰 닫는다
+
+하지 말 것: 계약 · 브리프 · apps · packages 수정. verify-data-model · verify-observation 의 FAIL 은 계약 표가 따라오지 않아서다 — 고치지 마라.
+  §17 표에 더 어긋나는 줄이 생기면 지난번처럼 로그에 표로 적어라 (백엔드가 0.2m 에서 맞춘다)
+
+완료 조건: 지난번과 같다 — compare-reader-text 등록 안 된 차이 0 · verify-article · selftest · verify-observed ·
+  invalid 재생성 · 입문 3 · 4장 불변 diff · pnpm -s test 결과만 (스크린샷은 되돌린다. 되돌리기 전에 git status 로 남의 미커밋 파일이 없는지 봐라)
+  커밋: C-5 2차 반영 → push. 파일은 하나씩 지정해서 add
+```
+
+---
+
 ## C-3 · 골든 사실 출처 확인
 
 ### 세션 개시 프롬프트 (복붙) — 웹 검색이 되는 세션에서
