@@ -38,6 +38,8 @@ export default function Page() {
         <Link href="/lab/b3">B3 — 전환 · 배치를 다듬어 본 것 →</Link> (2026-10-09, 시험)
         <br />
         <Link href="/lab/b4">B4 — B3 + 물음 버튼으로만 넘기기 →</Link> (2026-10-09, 시험)
+        <br />
+        <Link href="/lab/b5">B5 — 물음을 따라가는 여정 (막대 없음 · 물음이 다음 화면의 머리) →</Link> (2026-10-09, 시험)
       </p>
       <h2>비교</h2>
       <div className="table">

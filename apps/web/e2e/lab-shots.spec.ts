@@ -56,7 +56,14 @@ for (const dir of DIRS)
     await openLevel(page, dir, "basic");
     await page.waitForTimeout(1200);
     const beat = () => page.waitForTimeout(900);
-    if (dir === "b4") {
+    if (dir === "b5") {
+      // 물음을 눌러 1 → 4, 4장은 내려야 물음이 나온다 → 5, 지나온 길을 열어 2번째 자리로 돌아가기
+      for (let i = 0; i < 3; i++) (await page.locator(`[data-slide-index="${i}"] .b-next`).tap(), await page.waitForTimeout(2300));
+      await swipe(cdp, { dy: 260, speed: 600 }), await page.waitForTimeout(1400);
+      await page.locator('[data-slide-index="3"] .b-next').tap(), await page.waitForTimeout(2300);
+      await page.locator(".b5-where").tap(), await page.waitForTimeout(1500);
+      await page.locator(".b5-trail li").nth(1).locator("button").tap(), await page.waitForTimeout(1300);
+    } else if (dir === "b4") {
       // 물음 버튼으로만: 1 → 2 → 3 → 4(아래로 내려야 버튼) → 5, 이전 버튼으로 한 장 돌아가기
       for (let i = 0; i < 3; i++) (await page.locator(`[data-slide-index="${i}"] .b-next`).tap(), await page.waitForTimeout(1700));
       await swipe(cdp, { dy: 260, speed: 600 }), await page.waitForTimeout(1300);

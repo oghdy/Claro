@@ -29,8 +29,8 @@ for (const dir of DIRS)
             if ((await scrollPos(page, dir)) === before) break;
           }
           if (i < n - 1) {
-            // b4 는 물음 버튼으로만 넘어간다
-            if (dir === "b4") await page.locator(`[data-slide-index="${i}"] .b-next`).tap();
+            // b4 · b5 는 물음 버튼으로만 넘어간다
+            if (dir === "b4" || dir === "b5") await page.locator(`[data-slide-index="${i}"] .b-next`).tap();
             else await swipe(cdp, { dx: 250, y: 300 });
             swipes++, await settle(), await markSeen(page);
           }

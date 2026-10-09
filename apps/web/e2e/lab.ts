@@ -1,7 +1,7 @@
 // F-2a lab 공용 — 방향마다 "한 장으로 가기"와 "독자 글 단위 모으기"
 import type { CDPSession, Page } from "@playwright/test";
 
-export const DIRS = ["a", "b", "b2", "b3", "b4", "c"] as const;
+export const DIRS = ["a", "b", "b2", "b3", "b4", "b5", "c"] as const;
 export type Dir = (typeof DIRS)[number];
 export const NAMES: Record<string, string> = { basic: "입문", intermediate: "중급", advanced: "숙련" };
 export const MOBILE_SE = { width: 375, height: 667 };
@@ -17,6 +17,7 @@ export async function openLevel(page: Page, dir: Dir, level: string) {
 
 /** i 번째 슬라이드의 맨 위로 (A · C) / i 번째 카드로 (B). end=true 면 그 슬라이드의 글 끝이 화면 아래에 닿게 */
 export async function goTo(page: Page, dir: Dir, i: number, end = false) {
+  if (dir === "b5") return b5GoTo(page, i, end);
   await page.evaluate(
     ({ dir, i, end }) => {
       const s = document.querySelector<HTMLElement>(`[data-slide-index="${i}"]`)!;
@@ -39,6 +40,21 @@ export async function goTo(page: Page, dir: Dir, i: number, end = false) {
   await page.waitForTimeout(dir === "b3" || dir === "b4" ? 1400 : 250); // b3 는 글이 차례로 나타난 뒤에 찍는다
 }
 
+/** b5 는 스크롤로 넘기지 않는다 — 독자처럼 물음 버튼을 눌러 앞으로, "지나온 길"로 뒤로 간다 */
+async function b5GoTo(page: Page, i: number, end: boolean) {
+  let cur = Number((await page.locator(".b-count").innerText()).split("/")[0]) - 1;
+  for (; cur < i; cur++) {
+    await page.locator(`[data-slide-index="${cur}"] .b-next`).first().click();
+    await page.waitForTimeout(900);
+  }
+  if (cur > i) {
+    await page.locator(".b5-where").click();
+    await page.locator(".b5-trail li").nth(i).locator("button").click();
+  }
+  await page.locator(`[data-slide-index="${i}"]`).evaluate((c, end) => (c.scrollTop = end ? c.scrollHeight : 0), end);
+  await page.waitForTimeout(1500);
+}
+
 /** 질문 화면 (A 만) — slides[i] 와 slides[i+1] 사이 */
 export async function goToQuestion(page: Page, i: number) {
   await page.evaluate((i) => {
@@ -58,6 +74,7 @@ export async function markSeen(page: Page): Promise<[number, number]> {
     const top = document.querySelector(".a-bar, .b-bar, .c-bar")!.getBoundingClientRect().bottom;
     const units = Array.from(root.querySelectorAll<HTMLElement>("[data-u]"));
     units.forEach((el, i) => {
+      if (el.closest("[inert]")) return; // b5: 겹쳐 둔 다른 장은 화면에 없는 것이다
       const r = el.getBoundingClientRect();
       if (r.height > 0 && r.top >= top - 1 && r.bottom <= innerHeight + 1 && r.left >= -1 && r.right <= innerWidth + 1) w.__seen!.add(i);
     });
@@ -91,6 +108,10 @@ export async function scrollPos(page: Page, dir: Dir): Promise<number> {
   return page.evaluate((dir) => {
     if (dir === "a") return document.querySelector(".a-deck")!.scrollTop;
     if (dir === "c") return scrollY;
+    if (dir === "b5") {
+      const card = document.querySelector<HTMLElement>(".b5-deck > [data-active]")!;
+      return Number(card.dataset.slideIndex) * 100000 + card.scrollTop;
+    }
     const pager = document.querySelector<HTMLElement>(".b-pager")!;
     const i = Math.round(pager.scrollLeft / pager.clientWidth);
     return i * 100000 + (pager.children[i] as HTMLElement).scrollTop;
