@@ -420,3 +420,180 @@ $ 골든 입문 3 · 4 · 5장 본문 concept span 14개가 라이브러리 v3 �
 14/14
 ```
 `.claude/` 와 `docs/contract/OBSERVATION.md` 는 이 작업의 것이 아니다 (다른 세션). 커밋에 넣지 않았다.
+
+---
+
+# C-4 반영 (D32) — 2026-10-09
+
+D32: 초안 통과, 판정은 전부 추천대로, 새 문안 도윤 승인. `docs/content/concept-library.md` 에만 반영했다. 골든 · 계약 · apps · 스크립트는 건드리지 않았다.
+
+## 반영한 것
+
+| # | 무엇 | 라이브러리에서 |
+|---|---|---|
+| 1 | C-0002 → **v4** | 명제를 "…수준이 아니라 상승률이다." 하나로. FULL ①②③ · 🔗 ④ · REFRESHER · 속도계 · 한계선 문안은 v3 그대로. 운영 노트 2 (FULL ②③ 은 연준 · ③ 은 C-0012 의 주장이기도). 한계선 ① 끝에 "저작 메모다. 브리지 슬롯이 아니다" (Q-C1). `prereq_of` 에 C-0011 · C-0012 |
+| 2 | C-0003 → **v2** · C-0009 → **v2** | 초안의 명제 · FULL · REFRESHER. alias "2% 목표" → C-0012, "주법" → C-0013 |
+| 3 | 신규 **C-0011** `INFLATION_FALLING_VS_AT_TARGET` (A · 명제 안 A) · **C-0012** `FED_INFLATION_TARGET_2PCT` (B) · **C-0013** `STATE_STRICTER_THAN_FEDERAL` (C) | 초안의 FULL · REFRESHER · prereq · aliases. C-0013 운영 노트 "연방법이 주법을 막는 영역의 기사에는 쓰지 않는다". C-0011 · C-0012 는 MONETARY 절 끝, C-0013 은 REGULATORY 절 끝 |
+| 4 | Q-C2 | C-0010 BOUNDARY 머리 "FULL 을 쓰든 REFRESHER 를 쓰든 둘 다와" + 운영 노트. 문안 불변 — **버전은 올리지 않았다** |
+| 5 | Q-C4 · Q-C5 | 새 절 "선행 관계 — 후보" (9줄, 후보라고 적음). 개념별 `prereq` · `prereq_of` 를 양쪽에 맞춤 (C-0003 에 C-0001 · C-0004 에 `prereq_of` C-0006 — 누락이던 것). C-0005 alias "12명 18명" 뺌 — **버전은 올리지 않았다** |
+| 6 | Q-C3 · Q-C6 | C-0010 운영 노트 "미확인 — FTC 기사 1차 대조 때", alias 그대로. 스크루웜 3개는 넣지 않았다 |
+| 7 | 재사용 추적 | 스크루웜 (브리프) 줄 — 재사용 1 (C-0009) · 신규 3 은 "이름뿐, 여기 없다" · 25%. 표 아래에 "C-0011~13 은 어느 사건의 신규가 아니다" 메모 |
+
+지시에 없지만 넣은 것 (전부 저작 메모 · 메타데이터. 독자 글 아님)
+- 새 문안이 있는 개념마다 "독자 검증을 거치지 않았다 — 게이트 4" 운영 노트 (D32 PM 4)
+- C-0011: 6% · 4% 를 실제 값으로 바꿔 쓰지 말 것 · "속도가 줄어도 값은 오른다"를 넣지 말 것
+- C-0013 `used_in`: FTC-20260819 — 그 FULL 두 문장이 FTC 에서 온 것이라. `used_in` 은 어차피 버리는 칸이다 (계약 §16)
+- 새 개념의 이름은 초안의 가안 그대로다. 이름은 바꿀 수 있다 (옛 이름 → alias)
+
+## 완료 조건
+
+### 린트 ② — `lint-concepts.py`
+```
+$ python3 scripts/lint-concepts.py
+lint-concepts  docs/content/concept-library.md
+terms  지금 현재 올해 이번   fields  FULL REFRESHER ANALOGY
+
+coverage
+  C-0001 RATE_TO_SPENDING           FULL REFRESHER ANALOGY
+  C-0002 INFLATION_LEVEL_VS_RATE    FULL REFRESHER ANALOGY
+  C-0003 CB_INFLATION_TARGET        FULL REFRESHER
+  C-0004 FOMC_ROLE                  FULL REFRESHER
+  C-0005 VOTERS_VS_PARTICIPANTS     FULL REFRESHER
+  C-0006 SEP_ROLE                   FULL REFRESHER
+  C-0011 INFLATION_FALLING_VS_AT_TARGET FULL REFRESHER
+  C-0012 FED_INFLATION_TARGET_2PCT  FULL REFRESHER
+  C-0007 AGENCY_AUTHORITY_LIMIT     FULL REFRESHER
+  C-0008 POLICY_STATEMENT_VS_RULE   FULL REFRESHER
+  C-0009 FEDERAL_VS_STATE           FULL REFRESHER
+  C-0010 PERSONALIZED_PRICING       FULL REFRESHER
+  C-0013 STATE_STRICTER_THAN_FEDERAL FULL REFRESHER
+  13 concepts · 28 fields
+
+hits
+  C-0002 ANALOGY   L77   지금  계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.
+  1 hits
+(exit 1)
+```
+알려진 오탐 1건(C-0002 ANALOGY "지금", 줄 번호만 73 → 77)뿐이다. **새 hit 없음.** 13개 · 28필드를 전부 읽었다.
+
+### 린트 ① — 새 REFRESHER 5개 (손으로. 스크립트는 ② 만 한다)
+
+| 개념 | REFRESHER 의 주장 | 받치는 곳 (같은 버전) | |
+|---|---|---|---|
+| C-0003 v2 | 목표 상승률을 정해 둔다 | 명제 "목표 상승률을 두고" | ✓ |
+| C-0003 v2 | 그에 비춰 금리를 판단한다 | 명제 "그 목표에 비춰 정책을 판단" + FULL 셋째 문장(금리) | ✓ |
+| C-0009 v2 | 연방과 주가 각자의 권한으로 같은 사안을 따로 다룰 수 있다 | 명제 | ✓ |
+| C-0011 v1 | 내려오고 있어도 목표보다 높을 수 있다 | 명제 | ✓ |
+| C-0012 v1 | 연준의 물가 목표는 2% | 명제 | ✓ |
+| C-0013 v1 | 주는 연방보다 더 강한 규제를 두기도 한다 | 명제 | ✓ |
+
+C-0002 v4 REFRESHER(불변) "값 자체가 아니라 오르는 속도" → v4 명제에 있다 ✓. 5개 + 1 전부 통과.
+
+### 골든 입문 3 · 4 · 5장 concept span ↔ 라이브러리
+```
+$ (지난번과 같은 대조 — 본문 concept span 이 라이브러리에 글자 그대로 있는가, <b> · 따옴표 모양 무시)
+14/14
+```
+`verify-concept-identity` 도 같은 것을 센다: "문안 그대로 16 span" (반영 전과 같다. 입문 3 · 4 · 5장 14 + 숙련 C-0005 REFRESHER 2).
+C-0002 의 독자 글이 안 바뀐 것: `git diff docs/content/concept-library.md` 에서 C-0002 인용 줄 중 바뀐 것은 한계선 ① 한 줄(저작 메모)뿐이다. FULL ①②③ · 속도계는 diff 에 없다.
+
+작업 트리의 골든은 다른 세션이 고치는 중이다 (`M fixtures/fomc-2026-09.article.json`). 위 대조는 그 상태로 돌렸다. 나는 골든을 건드리지 않았다.
+
+### `verify-concept-identity.py` — OK
+```
+$ python3 scripts/verify-concept-identity.py
+verify-concept-identity
+  계약   docs/contract/CONCEPT_IDENTITY.md
+  실물   docs/content/concept-library.md — 개념 13 · CHANGELOG 버전 10건
+         fixtures/fomc-2026-09.article.json — 문안 그대로 16 span · 문안 아님 5 span (concept 층)
+         concept refs — ConceptRef 0 (part null 0) · "C-XXXX" 22
+
+  WARN  LIB_USED_IN_DRIFT: C-0004: 재사용 표는 FOMC-20260916 에서 생성이라는데 used_in 은 없음 — 저장하지 않고 계산한다 (§12)
+  WARN  LIB_USED_IN_DRIFT: C-0006: 재사용 표는 FOMC-20260916 에서 생성이라는데 used_in 은 없음 — 저장하지 않고 계산한다 (§12)
+  WARN  GOLD_UNPINNED: concept span 21 의 ref 22개가 버전 · part 없는 "C-XXXX" — 브리지 검사는 글자 대조로 대신했다. ConceptRef 로 이전 전 (§16)
+
+OK
+```
+반영 전에 있던 WARN `LIB_RELATION_ONE_SIDE` 2건(C-0001→C-0003 · C-0004→C-0006)은 양쪽에 맞춰 적어서 사라졌다. 나머지 3건은 반영 전과 같다.
+
+### `selftest-verify-concept-identity.py` — **멈춘다 (FAIL 이 아니라 사본을 못 만든다). 고치지 않았다**
+```
+$ python3 scripts/selftest-verify-concept-identity.py
+== verify-concept-identity.py — 사본 49개 (+ 원본 · ConceptRef 로 옮긴 골든)
+…
+AssertionError: 사본을 만들 수 없다 — 원본에 없는 문자열: '`version`: v3 (2026-09-29)'
+```
+selftest 는 라이브러리의 글자를 바꿔 망가뜨린 사본을 만든다. 그 글자가 이번에 바뀌었다. 정적으로 찾은 것:
+
+| selftest 줄 | 사본 | 기대던 원본 문자열 | 지금 라이브러리 |
+|---|---|---|---|
+| L152 | C-0002 버전 불일치 (`LIB_VERSION`) | `` `version`: v3 (2026-09-29) `` | `` `version`: v4 (2026-10-09) `` |
+| L156 | §13-7 C-0009 REFRESHER 본문 삭제 (`LIB_MISSING`) | `> 연방과 주는 권한이 달라서 규제 강도가 다를 수 있습니다.` | `> 미국에서는 연방과 주가 각자의 권한으로 같은 사안을 따로 다룰 수 있습니다.` |
+
+첫 줄에서 멈추므로 **뒤의 사본이 통과하는지는 보지 못했다.** 특히 "ConceptRef 로 옮긴 골든" 사본은 C-0002@3 · C-0003@1 로 고정했을 것이다 (계약 §16) — 지금 버전은 4 · 2 다. selftest 를 고친 뒤에 드러날 수 있다.
+
+### 계약 문서와 어긋난 줄 (`docs/contract/CONCEPT_IDENTITY.md`) — 고치지 않았다. 0.2m 에서 백엔드가 맞춘다
+
+| 계약 줄 | 계약이 적은 것 | 지금 실물 |
+|---|---|---|
+| L7 · L15 · L115 · L125 · L339 · L426 · L537 | 라이브러리 **10개** | **13개** (C-0011~13) |
+| L15 · L188 · L207 · L495 | 버전 이력 **6건** · "6건 모두 명제 불변" | **9건** (+ C-0002 v4 · C-0003 v2 · C-0009 v2). **이 3건은 명제가 바뀌었다** |
+| L188 · L199 | "명제는 한 번도 안 바뀌었다" · "명제 10줄은 한 글자도 안 바뀌었다. alias · type · prereq · status 도 그대로" | 명제 3줄이 줄었다 (§10.3 예외). alias 4곳 · prereq 5곳도 바뀌었다 |
+| L200 | "6건 모두: 문안이 명제를 벗어났다 → 문안을 명제 쪽으로" | 새 3건은 다른 모양이다 — 명제를 나눴다 |
+| L210 · L495 | 명제 문구를 고치는 버전 — "실물 없음" | 실물 3 (뜻이 좁아진 경우다. "문구만"은 여전히 없음) |
+| L219 | "경계에 선 실물 — C-0002 v3" (명제 후반부를 말하는 FULL 이 없다) | v4 에서 풀렸다. 후반부는 C-0011 |
+| L230 · L231 · L232 · L387 | 명제 · FULL · REFRESHER · CANONICAL **10/10** | **13/13** |
+| L240 | `used_in` **8/10** | 9/13 |
+| L241 | `prereq` · `prereq_of` **4** | 줄로는 10, 관계로는 8쌍 (+ RELATED 후보 1). 종류는 "선행 관계 — 후보" 표에 |
+| L304 | alias 실물 **10/10** | 12/13 — C-0011 은 alias 가 없다 |
+| L160 · L564 · L568 | 골든 → **C-0002@3 · C-0003@1**, 브리지 (C-0002, v3, ④) | C-0002@**4** (D32). `C-0003` 참조 3개는 C-0012@1 로 갈 것. C-0001@1 · C-0005@3 은 그대로 |
+| L259 · L278 | "C-0002 v3 는 FULL ①②③ 만 갖는다" · "v3 가 실물이다" | v3 에 대한 말로는 맞다. 현재 버전은 v4 (문안 같음) |
+| L524 ~ L529 | Q-C1 ~ Q-C6 열려 있음 | D32 로 판정됨. Q-C3 만 미확인으로 남음 |
+| L553 ~ L561 (§16 개념별 표) | C-0001 "C-0003 쪽 선행 표시 없음" · C-0005 Q-C5 · C-0002 · 3 · 9 "C-4 명제 나누기" | 반영됨. C-0011~13 줄이 없다 |
+
+`verify-concept-identity.py` 는 이 수들을 계약 글에서 읽지 않고 실물에서 세므로 OK 가 나온다. 어긋난 것은 계약의 **글**이다.
+
+## 백엔드(0.2m)에 넘길 것
+
+D32 가 넘긴 것
+1. 골든을 **C-0002@4** 에 고정 (v3 과 FULL 글자 같음. @3 에 고정하면 그 명제에 떼어 낸 주장이 남는다)
+2. 골든의 `C-0003` 참조 3개 — 입문 4장 헤드라인 · 대조표 "연준이 원하는 속도" · "2%" — 의 도착지 **C-0012@1**
+3. 입문 4장 ③ 두 span 에 C-0012 참조를 **더할지** (지금 `C-0002` 하나. "알고 있어요"가 span 의 참조 하나에만 기록된다면 필요하다)
+4. Q-C2 검사를 만들지 — C-0010 의 FULL · REFRESHER span 이 있는 레벨에 BOUNDARY span 이 있는가
+5. alias 를 빼는 것이 버전을 올리는 일인지 — C-0005 는 올리지 않고 뺐다
+
+반영하다 나온 것
+6. **`selftest-verify-concept-identity.py` 가 멈춘다** — L152 · L156 (위 표). 고친 뒤 나머지 사본도 다시 볼 것
+7. **계약 글의 실물 수** — 위 표 전부
+8. **문안이 안 바뀐 규칙 변경이 버전을 올리는가** — C-0010 BOUNDARY "둘 다와 함께"(Q-C2)는 독자 글이 아니라 제시 규칙이다. 올리지 않았다. 5번과 같은 물음이다
+9. **명제가 바뀐 버전의 `basis`** — C-0002 v4 · C-0003 v2 · C-0009 v2 는 "evidence 0 예외"다. ConceptVersion 에 이 사유를 담을 칸이 있는지. 첫 evidence 뒤에는 같은 일을 버전으로 할 수 없다는 것이 구조로 드러나야 한다
+10. **옮겨 간 alias** — "2% 목표"(C-0003 → C-0012) · "주법"(C-0009 → C-0013). 뺀 것이 아니라 주장을 따라갔다
+11. **선행 관계 종류** — 라이브러리의 개념별 `prereq` 줄에는 종류가 없다. 종류는 "선행 관계 — 후보" 표에만 있다. C-0005 ↔ C-0006 RELATED 는 표에만 있고 `prereq` 줄에는 없다 (선행이 아니라서)
+12. **C-0002 FULL ③ 과 C-0012 가 같은 주장을 말한다** — 의도된 겹침이다 (D32 1-2 안 1). 중복 개념 검사가 생기면 걸릴 수 있다
+13. **`lint-concepts.py` 는 린트 ② 만 한다.** 린트 ① 은 이번에도 손으로 봤다
+14. 재사용 추적 표의 스크루웜 줄은 "신규 생성" 칸이 글이다 (코드 범위가 아니다). `verify-concept-identity.py` 는 지금 통과한다
+
+## 하지 않은 것
+- 골든 · 계약 · apps · 스크립트 수정
+- C-0002 v3 독자 글(FULL ①②③ · 속도계) 변경 — 0자
+- C-0010 · C-0008 명제 (D32 — 지금 안 본다)
+- `logs/correction-log.csv` — 오류를 고친 것이 아니라 경계를 나눈 것이다
+- 스크루웜 개념 3개
+
+## 검증 — 커밋 직전
+```
+$ git status --short
+ M docs/content/concept-library.md
+ M docs/development-content.md
+ M fixtures/fomc-2026-09.article.json
+ M fixtures/invalid/derived-from-volatile.json
+ M fixtures/invalid/volatile-missing-asof.json
+ M logs/content/concept-split-2026-10.md
+ M scripts/compare-reader-text.py
+ M scripts/selftest-verify-article.py
+?? .claude/
+
+$ git diff --stat -- docs/contract apps scripts/verify-concept-identity.py scripts/selftest-verify-concept-identity.py scripts/lint-concepts.py
+(출력 없음)
+```
+`fixtures/*` · `scripts/compare-reader-text.py` · `scripts/selftest-verify-article.py` · `.claude/` 의 변경은 다른 세션 것이다. 커밋에 넣지 않았다.
