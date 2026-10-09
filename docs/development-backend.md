@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.2b 완료 (`61a82b1`, 2026-10-09) — 다음: 0.2c (프롬프트 미작성)**
+**Phase 0 / Step 0.2c — 세션 대기. 프롬프트 준비됨**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -13,8 +13,8 @@
 | 0.1a | ARTICLE_PACKAGE.md 작성 | 계약 1 | S3 | ☑ 2026-09-29 · D20 |
 | 0.1b | 골든을 계약에 맞춰 재작성 (+게이지 → 대조) | 골든 v2 · invalid 재생성 · 검증 스크립트 | 새 세션 | ☑ 2026-09-29 · D23 (`logs/backend/phase-0-step-0-1b.md`) |
 | 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☑ 2026-09-30 · D25 (`logs/backend/phase-0-step-0-2a.md`) |
-| 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☑ 2026-10-09 · D27 (`logs/backend/phase-0-step-0-2b.md`) |
-| 0.2c | 관찰 기록 — knowledge_evidence · reading_plan_log · probe · correction_log. **F-3 전에** | 계약 2 추가 | — | ☐ |
+| 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☑ `b832391` · `61a82b1` · 2026-10-09 |
+| 0.2c | OBSERVATION.md — 독자 기록(knowledge_evidence · reading_plan_log · probe) · 교정 기록. **F-3 전에** | 계약 4 | 새 세션 | ☐ 프롬프트 준비됨 · 게이트 |
 | 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | — | ☐ 0.2c 뒤 |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
 | 0.4~ | 스키마 구현 | 마이그레이션 | Step당 세션 | ☐ |
@@ -406,6 +406,82 @@ PM 이 이 목록만 검수한다.
 - [x] 애매했던 층 판정 목록 (34건, 로그)
 - [x] **PM 검수** (D20 — 독자 글이 안 바뀌므로 에디토리얼 게이트 없음) — D23 으로 반영, 독자 글 1건 수정은 도윤 승인
 - [x] 완료일: 2026-09-29
+
+---
+
+## Step 0.2c — OBSERVATION.md 작성
+
+### 세션 개시 프롬프트 (복붙)
+
+```
+관찰 기록 계약(OBSERVATION)을 써라. 두 가지를 담는다:
+독자가 무엇을 했고 시스템이 무엇을 보여줬는지의 기록, 그리고 게이트에서 무엇을 고쳤는지의 기록.
+첫 실제 독자 테스트(F-3) 전에 있어야 한다 — 기록하지 않은 관찰은 복구할 수 없다 (FINDINGS §9.4).
+
+읽을 것 (이것만):
+  CLAUDE.md                 특히 "절대 하지 말 것"
+  docs/FINDINGS.md          §8.3 · §9.1 ~ §9.6 · §10.3 · §13 (Phase 1 게이트)
+  docs/DECISIONS.md         D17 · D18 · D20 · D21 · D24 · D25 · D26 · D27
+  docs/contract/ARTICLE_PACKAGE.md    §1 · §3 · §4 · §5 · §10
+  docs/contract/CONCEPT_IDENTITY.md   §3 · §8 · §10
+  docs/contract/DATA_MODEL.md         §2 · §11
+  logs/correction-log.csv             실물. 교정 기록
+  docs/development-content.md         "correction_log" 절 (오류 유형 · 유형 규칙)
+  apps/web/src (lab 제외)             실물. 지금 화면이 실제로 만들 수 있는 읽기 사건
+  logs/frontend/F-1.md · logs/frontend/F-2a.md   레벨 전환 · 넘기는 방식 · 층 표시
+
+산출:
+  docs/contract/OBSERVATION.md   (새 파일. 다른 계약과 같은 머리말 · CHANGELOG)
+  logs/backend/phase-0-step-0-2c.md
+
+도출 원칙 (D24): 실물 또는 FINDINGS "확정". 둘 다 아니면 "미확인". 실물 없는 구조엔 "실물 없음".
+  독자 기록은 아직 한 줄도 없다. FINDINGS §9.4 확정이 주 원천이고, 실물은 화면이 실제로 낼 수 있는 사건이다.
+
+반드시 답할 것:
+  1. knowledge_evidence — 독자가 무엇을 했나 (§9.4 확정). **사실만 기록한다. 가중치 · 해석은 넣지 않는다.**
+     개념은 무엇으로 가리키나 — evidence 는 leaf 에만 (CONCEPT_IDENTITY §8). 그때 본 문안 버전은 어떻게 남기나
+  2. reading_plan_log — 시스템이 무엇을 보여줬나 (§9.4 확정). 이게 없으면 1 을 해석할 수 없다.
+     MVP 는 독자가 고르는 정적 레벨이다 (§9.3). 개념마다 무엇을 보여줬는지(SKIP · REFRESHER · FULL)는
+     ConceptRef.part (D25) 와 같은 말을 쓰는가
+  3. 읽기 사건 — 완독은 마지막 슬라이드 도달이다 (§8.3). "몇 장에서 멈췄나".
+     레벨 전환이 이탈로 기록되면 안 된다 (FOMC-21 · F-1 로그).
+     넘기는 방향은 아직 안 정했다 (D26) — 방향에 기대지 않는 사건으로 정의해라
+  4. probe — 유형 넷과 위치 PRE · POST · DELAYED (§9.4 확정). 무응답은 증거가 아니다. 예산은 세션 단위다.
+     **어디에 놓을지는 D18 이 OPEN 이다. 놓는 자리를 설계하지 마라.** 기록의 모양만
+  5. 무엇을 봤는지 가리키기 — 기록이 "어느 기사의 어느 판 · 어느 레벨 · 어느 슬라이드"를 가리켜야 한다.
+     패키지 자체의 ID 는 ARTICLE_PACKAGE §10 에 미확인으로 남아 있다. ArticleRecord (DATA_MODEL §11) 와 어떻게 짝이 되나
+  6. 독자를 무엇으로 식별하나 — F-3 은 20~30명이다 (§13). 익명인가, 무엇을 저장하지 않는가
+  7. 교정 기록 — 실물 CSV 의 열을 그대로 출발점으로. stage 값이 들쭉날쭉하다(writing · data_model · 게이트 3 · concept_library …).
+     유형 칸(성격 · 처방)과 발견 칸(무엇이 잡았나)의 구분 (development-content 유형 규칙).
+     발행 뒤 사실이 틀린 것으로 드러났을 때 무엇이 무엇을 대체했는지 (DATA_MODEL §2.3 이 여기로 넘겼다)
+  8. F-3 에 필요한 최소 — §13 Phase 1 게이트(같은 요점으로 만든 물음, Claro 와 일반 기사 비교, 며칠 뒤 재확인)를
+     돌리려면 위 기록 중 무엇이 반드시 있어야 하나. 나머지는 미뤄도 되는가
+
+하지 말 것 — CLAUDE.md 가 금지한 것 그대로:
+  - 가중치 · 임계값 · 반감기 · 전파 · 설명 필요도 공식. user_concept_state 스키마 (그건 언제든 다시 계산하는 캐시다)
+  - 추정기 인터페이스, shadow · A/B 기반 시설
+  - 화면 구현 · 사건 전송 코드. 계약만 쓴다
+  - 다른 계약 수정. 맞지 않는 곳은 로그에 적어라
+  - 골든 · 라이브러리 · apps/ 수정
+
+판단이 필요하면 멈추고 로그에 _open 으로. 게이트에서 정한다.
+
+완료하면:
+  - 8개 질문마다 [계약 반영 / _open / 미확인] + 근거를 로그 맨 앞에
+  - 기존 correction-log.csv 를 이 계약 모양으로 옮기면 무엇이 바뀌는지 목록 (0.2m 입력)
+  - 프론트가 이 계약대로 기록을 남기려면 화면에 무엇이 더 필요한지 목록 (F-3 입력). 구현하지 마라
+  - 검증 스크립트 + 일부러 망가뜨린 사본. 기존 검사도 다시 돌려라
+  커밋: B-0.2c [GATE] → push
+```
+
+### 완료 조건
+- [ ] 8개 질문 처리 표시 + 근거
+- [ ] CLAUDE.md 금지 항목 없음 (가중치 · 임계값 · 추정기)
+- [ ] probe 를 놓는 자리를 설계하지 않음 (D18)
+- [ ] correction-log 이전 목록 · 프론트에 필요한 것 목록
+- [ ] 검증 스크립트 + 망가뜨린 사본, 회귀 없음
+- [ ] **게이트**
+- [ ] 완료일:
 
 ---
 
