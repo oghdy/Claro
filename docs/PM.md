@@ -41,16 +41,18 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 그 뒤: D1 백엔드 스택 → 0.4 스키마 구현 → Phase 1 (파이프라인 A 반자동 + 게이트 4)
 ```
 
-## 세션 상태 — **PM 검수 대기 2건** (2026-10-09, 압축 뒤 갱신)
+## 세션 상태 — **PM 검수 대기 1건 (C-4)** (2026-10-09, 압축 뒤 갱신)
 | 순서 | 세션 | 커밋 | 상태 |
 |---|---|---|---|
 | ✅ | **C-5** 골든 교정 2차 | `bfdeafb` [GATE] | **검수 통과 → D29.** 남은 것: ① ~~도윤 문안 선택~~ ✅ "추천대로" (D29 끝) ② **C-3b** — 도윤이 세션에 보냄 (8월 CPI 등 3건 — 프롬프트 `development-content.md`) ③ 둘 다 끝나면 "C-5 게이트 반영" 지시문 전달 → 골든 반영 + Q1 · Q2 안 |
-| **1** | **0.2c** 관찰 기록 계약 | `7a61b52` [GATE] | 미검수. `docs/contract/OBSERVATION.md` 초안 · _open 5. 로그 `logs/backend/phase-0-step-0-2c.md` |
-| **2** | **C-4** 명제 나누기 | `74318b1` [GATE] | 미검수. 나누기 3 · 신규 개념 3 · Q-C3 미확인 · 스크루웜 문안 없음. 로그 `logs/content/concept-split-2026-10.md`. 도윤 문안 선택 |
+| ✅ | **0.2c** 관찰 기록 계약 | `7a61b52` [GATE] | **검수 통과 → D30** (_open 5 전부 초안대로). 남은 것: "Step 0.2c 게이트 반영" 지시문 전달 (`development-backend.md`) → 반영 커밋 확인 |
+| **1** | **C-4** 명제 나누기 | `74318b1` [GATE] | 미검수. 나누기 3 · 신규 개념 3 · Q-C3 미확인 · 스크루웜 문안 없음. 로그 `logs/content/concept-split-2026-10.md`. 도윤 문안 선택 |
 | — | F-2a 디자인 탐색 | `c7443b5` · `94ae9e4` | 완료. **도윤이 B(가로 카드 · 다크)를 직접 골랐다** → **D26 OPEN**. 도윤이 그 세션과 UI 를 계속 얘기 중 |
 | — | 닫힘 | | S1 · S2 · S3 · 0.1b · 0.2a · 0.2b · C-1 · C-3 · F-1 |
 
-**0.2m 프롬프트에 실을 것**: 반증 기록의 답이 발행 뒤 문서에만 기댈 때 발행할 수 있는가 (D29-6, DATA_MODEL 에 없음).
+**0.2m 프롬프트에 실을 것**: `development-backend.md` "Step 0.2c 게이트 반영" 절 끝에 모아 두었다 (D29-6 · D30-3).
+
+**적어둔 것**: 유형 표 "레이어 혼입"의 뜻이 넓어졌다(해석에 원문 표시가 붙은 것 2행) — 표가 안 따라갔다. `time_spent_min` 14행 모두 비었다 — 문안 선택 때 걸린 시간을 물어 적는다 (D30-4).
 
 **검수 순서의 이유**: C-5 가 독자 글에 직접 닿고 수정안이 가장 많다(도윤 시간이 가장 든다). 0.2c 는 F-3 · 0.2m 을 막는다. C-4 는 마감(F-3)까지 여유가 있다.
 
@@ -75,6 +77,7 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 | C-4 문안 선택 (PM 추천 뒤) | F-3 전 |
 | D21 기사당 레벨 수 | 파이프라인 A 설계 전 |
 | D1 백엔드 스택 | 0.2b 뒤 (아래 §4) |
+| **D31** F-3 운영 — 대응표 · 무리 배정표 · 동의 · 물음이 개념을 겨누는가 | F-3 설계 때 |
 | D6 발행 시각 · D18 질문 슬라이드=probe · D2~D5 · D7 | 해당 설계 때 |
 
 ---
@@ -131,6 +134,8 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 | 위 검사의 자체 시험 | `python3 scripts/selftest-verify-concept-identity.py` | exit 0 |
 | 개념 린트 ② (시간 지시어) | `python3 scripts/lint-concepts.py` | **exit 1, 1 hit** — C-0002 ANALOGY "지금" = 알려진 오탐. 정상이다 |
 | observed → 골든 차이 | `python3 scripts/diff-observed-article.py` | 참고용 출력 |
+| OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 77 + 계산 1 |
+| DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 발행에서 막히는 것 64 · 사본 86 |
 | 프론트 | `pnpm -s typecheck` · `pnpm -s test` | 통과 (계약 14 · 화면 7). e2e 는 이 Mac 의 Chrome 을 쓴다 |
 
 새 검사가 생기면 이 표에 한 줄 넣는다.

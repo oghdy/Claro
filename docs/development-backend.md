@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.2c — 초안 완료 (2026-10-09), 게이트 대기 · _open 5 (`logs/backend/phase-0-step-0-2c.md`)**
+**Phase 0 / Step 0.2c — PM 검수 통과 (2026-10-09) → D30. 게이트 반영 대기 (아래 "Step 0.2c 게이트 반영")**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -14,7 +14,7 @@
 | 0.1b | 골든을 계약에 맞춰 재작성 (+게이지 → 대조) | 골든 v2 · invalid 재생성 · 검증 스크립트 | 새 세션 | ☑ 2026-09-29 · D23 (`logs/backend/phase-0-step-0-1b.md`) |
 | 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☑ 2026-09-30 · D25 (`logs/backend/phase-0-step-0-2a.md`) |
 | 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☑ `b832391` · `61a82b1` · 2026-10-09 |
-| 0.2c | OBSERVATION.md — 독자 기록(knowledge_evidence · reading_plan_log · probe) · 교정 기록. **F-3 전에** | 계약 4 | 새 세션 | ◐ 초안 2026-10-09 · 게이트 대기 (_open 5) |
+| 0.2c | OBSERVATION.md — 독자 기록(knowledge_evidence · reading_plan_log · probe) · 교정 기록. **F-3 전에** | 계약 4 | 새 세션 | ◐ 초안 2026-10-09 · 검수 통과 D30 · 게이트 반영 대기 |
 | 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | — | ☐ 0.2c 뒤 |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
 | 0.4~ | 스키마 구현 | 마이그레이션 | Step당 세션 | ☐ |
@@ -409,6 +409,44 @@ PM 이 이 목록만 검수한다.
 
 ---
 
+## Step 0.2c 게이트 반영 (D30) — 0.2c 세션에 보낼 것
+
+```
+0.2c 게이트 판정이 나왔다. docs/DECISIONS.md D30 · D31 을 읽어라. 초안은 통과다. _open 5개는 전부 네 초안대로다.
+
+OBSERVATION.md 에 반영:
+  1. §14 _open 5개를 "D30 으로 정해짐"으로 닫는다. 본문의 "_open-N" 표시도 같이
+     - _open-2: 확정 §9.4 의 response · is_correct 자리를 옮긴 것이 판정으로 승인됐다고 §7.4 에 적는다
+     - _open-3: 대응표 · 동의 · 보관 · 독자 배경 · user_id 되찾기는 계약 밖 → D31 (OPEN). 계약은 "원장에 사람을 알아볼 값이 없다"까지
+     - _open-4: 타입에 넣지 않는다. F-3 은 user_id 로 묶인 배정표로 돌린다 (D31). §12 에 "배정표가 F-3 전에 있어야 한다"를 적는다
+  2. §13 미확인 가운데 셋을 §12 "F-3 전에 닫혀야 하는 것"으로 옮긴다 — 기록하지 않으면 복구할 수 없는 것들이다:
+     장 안에서 끝까지 읽었는지 (§5.4 · D26 뒤) / 새로고침이 새 열람인가 / 시험 · 개발 중에 생긴 줄 가르기.
+     **모양은 지금 정하지 마라.** 무엇이 정해져야 하는지와 언제까지인지만 옮긴다
+  3. §7.2 또는 §12 에: 명제를 못 나누게 되는 순간은 첫 KnowledgeEvidence 줄이다 (D30-2)
+  4. CHANGELOG
+
+DATA_MODEL.md (이번에 한해 고친다 — _open-1):
+  ArticleRecord 에 article_id (UUID) · article_version (정수). 불변 · 유일. "무엇이 새 판을 만드나"는 미확인으로.
+  ARTICLE_PACKAGE §10 의 "패키지 자체의 ID — 미확인"에는 가리키는 한 줄만. 두 파일 모두 CHANGELOG
+  골든에는 아직 넣지 마라 (0.2m 의 일). 검사에서는 "0.2m 대기" WARN 으로
+
+하지 말 것:
+  - 골든 · 라이브러리 · correction-log.csv · apps 수정
+  - probe 놓는 자리 (D18) · 넘기는 방향 (D26) 에 기대는 내용
+  - 숫자 (시간 · 개수 · 기준값)
+
+완료 조건:
+  verify-observation · selftest-verify-observation · verify-data-model · selftest-verify-data-model ·
+  verify-article · verify-concept-identity · verify-contract-coverage 결과를 로그에 붙인다. 회귀 없음
+  커밋: B-0.2c 게이트 반영 (D30) → push. 파일은 하나씩 지정해서 add (같은 작업 트리에 다른 세션이 있다)
+```
+
+**0.2m 프롬프트에 실을 것 (D29 · D30)**: 골든에 article_id · version 발급 · correction-log 이전 11항목 (OBSERVATION §15) ·
+VOLATILE 값이 바뀐 Fact 의 앞뒤를 잇는 기록의 자리 · Goal 을 가리킬 타입 · 반증 기록의 답이 발행 뒤 문서에만 기댈 때 (D29-6).
+뒤의 셋은 물음으로만 싣는다 — PM 이 답을 정하지 않는다.
+
+---
+
 ## Step 0.2c — OBSERVATION.md 작성
 
 ### 세션 개시 프롬프트 (복붙)
@@ -480,7 +518,7 @@ PM 이 이 목록만 검수한다.
 - [x] probe 를 놓는 자리를 설계하지 않음 (D18)
 - [x] correction-log 이전 목록 · 프론트에 필요한 것 목록
 - [x] 검증 스크립트 + 망가뜨린 사본, 회귀 없음
-- [ ] **게이트** — 초안 2026-10-09, _open 5개 판정 대기
+- [x] **게이트** — D30 (2026-10-09). 반영 커밋 대기
 - [ ] 완료일:
 
 ---
