@@ -56,7 +56,13 @@ for (const dir of DIRS)
     await openLevel(page, dir, "basic");
     await page.waitForTimeout(1200);
     const beat = () => page.waitForTimeout(900);
-    if (dir.startsWith("b")) {
+    if (dir === "b4") {
+      // 물음 버튼으로만: 1 → 2 → 3 → 4(아래로 내려야 버튼) → 5, 이전 버튼으로 한 장 돌아가기
+      for (let i = 0; i < 3; i++) (await page.locator(`[data-slide-index="${i}"] .b-next`).tap(), await page.waitForTimeout(1700));
+      await swipe(cdp, { dy: 260, speed: 600 }), await page.waitForTimeout(1300);
+      await page.locator('[data-slide-index="3"] .b-next').tap(), await page.waitForTimeout(1700);
+      await page.getByRole("button", { name: "이전 장" }).tap(), await page.waitForTimeout(1200);
+    } else if (dir.startsWith("b")) {
       // 1 → 2 → 3 → 4(카드 안에서 아래로) → 5, 그리고 2장으로 돌아가 문장을 눌러 층 보기
       for (let i = 0; i < 4; i++) (await swipe(cdp, { dx: 260, y: 300, speed: 700 }), await beat());
       await swipe(cdp, { dy: 260, speed: 600 }), await beat();

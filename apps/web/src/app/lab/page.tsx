@@ -36,6 +36,8 @@ export default function Page() {
         <Link href="/lab/b2">B2 — B 에 층 표시(꼬리표 · 글꼴)를 섞어 본 것 →</Link> (2026-10-03, 시험)
         <br />
         <Link href="/lab/b3">B3 — 전환 · 배치를 다듬어 본 것 →</Link> (2026-10-09, 시험)
+        <br />
+        <Link href="/lab/b4">B4 — B3 + 물음 버튼으로만 넘기기 →</Link> (2026-10-09, 시험)
       </p>
       <h2>비교</h2>
       <div className="table">

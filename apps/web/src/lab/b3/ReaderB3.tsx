@@ -20,17 +20,20 @@ import { LAYER_EXPLAIN, LAYER_WORD, prefersReducedMotion } from "../layers";
 const STEP = 70; // 블록 하나가 나타나는 간격 (ms)
 const LEAD = 160; // kicker · 제목 뒤 첫 블록까지
 
-export function ReaderB3({ pkg }: { pkg: ArticlePackage }) {
+// B4 (2026-10-09, 도윤) — buttonOnly: 옆으로 쓸어서는 넘어가지 않는다. 물음 버튼을 눌러야 다음 장이 열린다.
+//   돌아가기는 위쪽 "‹" 버튼(또는 ←). 카드 안 세로 스크롤은 그대로다.
+export function ReaderB3({ pkg, buttonOnly = false }: { pkg: ArticlePackage; buttonOnly?: boolean }) {
   const [levelId, setLevelId] = useState<LevelId>(pkg.levels[0]!.id);
   const [idx, setIdx] = useState(0);
   const [tags, setTags] = useState(false);
   const segsRef = useRef<HTMLDivElement>(null);
+  const backRef = useRef<() => void>(() => {});
   const level = pkg.levels.find((l) => l.id === levelId)!;
   const others = pkg.levels.filter((l) => l.id !== levelId);
   const switchLevel = (id: LevelId) => (setLevelId(id), setIdx(0));
 
   return (
-    <div className="lab-b lab-b3" data-layers={tags ? "tags" : "off"}>
+    <div className="lab-b lab-b3" data-layers={tags ? "tags" : "off"} data-button-only={buttonOnly ? "" : undefined}>
       <header className="b-bar">
         <div className="b-segs b3-segs" aria-hidden="true" ref={segsRef}>
           {level.slides.map((_, i) => (
@@ -40,6 +43,11 @@ export function ReaderB3({ pkg }: { pkg: ArticlePackage }) {
           ))}
         </div>
         <div className="b-row">
+          {buttonOnly && (
+            <button type="button" className="b4-back" aria-label="이전 장" disabled={idx === 0} onClick={() => backRef.current()}>
+              ‹
+            </button>
+          )}
           {pkg.levels.length > 1 && (
             <div className="b-levels" role="group" aria-label="설명 수준">
               {pkg.levels.map((l) => (
@@ -62,15 +70,16 @@ export function ReaderB3({ pkg }: { pkg: ArticlePackage }) {
           </p>
         )}
       </header>
-      <PagerB3 key={level.id} level={level} idx={idx} onIndex={setIdx} segs={segsRef} others={others.map((l) => l.id)} onLevel={switchLevel} />
+      <PagerB3 key={level.id} level={level} idx={idx} onIndex={setIdx} segs={segsRef} others={others.map((l) => l.id)} onLevel={switchLevel} buttonOnly={buttonOnly} backRef={backRef} />
     </div>
   );
 }
 
 function PagerB3({
-  level, idx, onIndex, segs, others, onLevel,
+  level, idx, onIndex, segs, others, onLevel, buttonOnly, backRef,
 }: {
   level: Level; idx: number; onIndex: (i: number) => void; segs: React.RefObject<HTMLDivElement | null>; others: LevelId[]; onLevel: (id: LevelId) => void;
+  buttonOnly: boolean; backRef: React.RefObject<() => void>;
 }) {
   const pagerRef = useRef<HTMLDivElement>(null);
   const selRef = useRef<HTMLElement | null>(null);
@@ -106,11 +115,17 @@ function PagerB3({
     window.addEventListener("resize", update);
     const key = (e: KeyboardEvent) => {
       const i = Math.round(pager.scrollLeft / pager.clientWidth);
-      if (e.key === "ArrowRight") go(i + 1);
+      if (e.key === "ArrowRight" && !buttonOnly) go(i + 1); // 버튼만: → 로도 건너뛰지 않는다
       if (e.key === "ArrowLeft") go(i - 1);
       if (e.key === "Escape") closeSheet();
     };
     window.addEventListener("keydown", key);
+    backRef.current = () => go(Math.round(pager.scrollLeft / pager.clientWidth) - 1);
+    // 버튼만: 트랙패드 · 휠의 가로 스크롤을 막는다 (세로는 그대로)
+    const wheel = (e: WheelEvent) => {
+      if (buttonOnly && Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.preventDefault();
+    };
+    pager.addEventListener("wheel", wheel, { passive: false });
 
     // 등장: 카드가 화면에 들어오기 시작하면 글이 차례로 나타나고(data-seen), 물음 버튼 자리가 화면에 들어오면 버튼이 나온다(data-ready)
     let seenIO: IntersectionObserver | undefined, readyIO: IntersectionObserver | undefined;
@@ -148,11 +163,12 @@ function PagerB3({
       pager.removeEventListener("scroll", update, { capture: true });
       window.removeEventListener("resize", update);
       window.removeEventListener("keydown", key);
+      pager.removeEventListener("wheel", wheel);
       clearTimeout(settle);
       seenIO?.disconnect();
       readyIO?.disconnect();
     };
-  }, [onIndex, go, segs]);
+  }, [onIndex, go, segs, buttonOnly, backRef]);
 
   function onTap(e: React.MouseEvent) {
     const el = (e.target as HTMLElement).closest<HTMLElement>(".x-slide [data-layer]");
@@ -228,9 +244,11 @@ function PagerB3({
           );
         })}
       </div>
-      <button type="button" className="b-side b-nextside" aria-label="다음 장" onClick={() => go(idx + 1)} disabled={idx === n - 1}>
-        ›
-      </button>
+      {!buttonOnly && (
+        <button type="button" className="b-side b-nextside" aria-label="다음 장" onClick={() => go(idx + 1)} disabled={idx === n - 1}>
+          ›
+        </button>
+      )}
       <div className="b-more" data-show={more && !sel ? "" : undefined} aria-hidden="true">
         아래에 더 있어요 ↓
       </div>

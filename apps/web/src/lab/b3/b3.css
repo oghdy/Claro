@@ -77,3 +77,11 @@
 .lab-b3[data-layers="tags"] .x-row:has(dt [data-layer="bridge"]) dd [data-layer="bridge"]::before,
 .lab-b3[data-layers="tags"] .x-li:has(.x-li-label [data-layer="bridge"]) .x-li-body [data-layer="bridge"]::before,
 .lab-b3[data-layers="tags"] .x-c:has(.x-c-value [data-layer="bridge"]) .x-c-body [data-layer="bridge"]::before { content: none; }
+
+/* ---- B4: 버튼으로만 넘긴다. 옆으로 쓸어도 넘어가지 않는다 ----
+   overflow-x: hidden 으로 막으면 iOS Safari 에서 버튼의 scrollTo 도 안 움직였다(시뮬레이터에서 확인).
+   그래서 스크롤은 살려 두고 손가락의 가로 이동만 막는다(touch-action). 트랙패드 가로 휠은 스크립트가 막는다 */
+.lab-b3[data-button-only] .b-pager { touch-action: pan-y; }
+.lab-b3[data-button-only] .b-card { touch-action: pan-y; }
+.b4-back { margin-right: 8px; border: 0; border-radius: 8px; width: 34px; height: 30px; background: var(--surface); font-size: 18px; line-height: 1; color: var(--ink) !important; }
+.b4-back:disabled { color: var(--faint) !important; opacity: 0.5; cursor: default; }
