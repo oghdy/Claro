@@ -30,7 +30,7 @@ docs/FINDINGS.md 는 통째로 읽지 마라 (43KB). 필요한 절만 그때그�
 ```
 Phase 0 — 계약 확정 (구현 전 기반 문서)
 
-백엔드  0.0a ✅ → 0.0b ✅ → 0.1a ✅ → 0.1b ✅ → 0.2a ✅ → 0.2b ✅ → 0.2c ◐게이트 → 0.2m
+백엔드  0.0a ✅ → 0.0b ✅ → 0.1a ✅ → 0.1b ✅ → 0.2a ✅ → 0.2b ✅ → 0.2c ✅ → 0.2m
          역산      골든      화면계약   골든재작성  개념계약   데이터계약  관찰기록      이전
 프론트                                  F-1 ✅ → F-2a ✅ → [D26] → F-2b ──────────────┐
                                         정확히    디자인탐색          디자인확정        │
@@ -44,8 +44,8 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 ## 세션 상태 — **PM 검수 대기 1건 (C-4)** (2026-10-09, 압축 뒤 갱신)
 | 순서 | 세션 | 커밋 | 상태 |
 |---|---|---|---|
-| ✅ | **C-5** 골든 교정 2차 | `bfdeafb` [GATE] | **검수 통과 → D29.** 남은 것: ① ~~도윤 문안 선택~~ ✅ "추천대로" (D29 끝) ② **C-3b** — 도윤이 세션에 보냄 (8월 CPI 등 3건 — 프롬프트 `development-content.md`) ③ 둘 다 끝나면 "C-5 게이트 반영" 지시문 전달 → 골든 반영 + Q1 · Q2 안 |
-| ✅ | **0.2c** 관찰 기록 계약 | `7a61b52` [GATE] | **검수 통과 → D30** (_open 5 전부 초안대로). 남은 것: "Step 0.2c 게이트 반영" 지시문 전달 (`development-backend.md`) → 반영 커밋 확인 |
+| ◐ | **C-5** 골든 교정 2차 | `bfdeafb` · C-3b `8fb4ca9` | D29 통과. **C-3b 가 8월 CPI · 8월 고용(+162,000)을 찾아 수정안 6개(P1 · P2 · P12 · P21~23)의 전제가 바뀌었다.** 남은 것: 고친 "C-5 게이트 반영" 지시문 전달 (`development-content.md`) → 18개 골든 반영 + 6개 · Q1 · Q2 2차 안 → 도윤 선택 |
+| ✅ | **0.2c** 관찰 기록 계약 | `7a61b52` · `2d96fac` | **닫힘 (D30).** 반영 확인 완료 |
 | **1** | **C-4** 명제 나누기 | `74318b1` [GATE] | 미검수. 나누기 3 · 신규 개념 3 · Q-C3 미확인 · 스크루웜 문안 없음. 로그 `logs/content/concept-split-2026-10.md`. 도윤 문안 선택 |
 | — | F-2a 디자인 탐색 | `c7443b5` · `94ae9e4` | 완료. **도윤이 B(가로 카드 · 다크)를 직접 골랐다** → **D26 OPEN**. 도윤이 그 세션과 UI 를 계속 얘기 중 |
 | — | 닫힘 | | S1 · S2 · S3 · 0.1b · 0.2a · 0.2b · C-1 · C-3 · F-1 |
@@ -134,8 +134,8 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 | 위 검사의 자체 시험 | `python3 scripts/selftest-verify-concept-identity.py` | exit 0 |
 | 개념 린트 ② (시간 지시어) | `python3 scripts/lint-concepts.py` | **exit 1, 1 hit** — C-0002 ANALOGY "지금" = 알려진 오탐. 정상이다 |
 | observed → 골든 차이 | `python3 scripts/diff-observed-article.py` | 참고용 출력 |
-| OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 77 + 계산 1 |
-| DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 발행에서 막히는 것 64 · 사본 86 |
+| OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 78 + 계산 1 |
+| DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 사본 89 · `ARTICLE_ID_PENDING` WARN (0.2m 대기) |
 | 프론트 | `pnpm -s typecheck` · `pnpm -s test` | 통과 (계약 14 · 화면 7). e2e 는 이 Mac 의 Chrome 을 쓴다 |
 
 새 검사가 생기면 이 표에 한 줄 넣는다.
@@ -189,6 +189,9 @@ ARTICLE_PACKAGE 에 남은 "→ 0.2" 문구와 `published_at: Date` 는 계약 �
     → 층(어디서 왔나)과 그림(독자가 무엇을 믿게 되나)은 다른 질문이다. 둘 다 묻는다
 10. **OPEN 인 결정의 가정이 되돌릴 수 없는 곳에 스며드는 것을 본다** (2026-10-03, D27). 0.2b 추천(사건 ID = 사람이 붙인 문자열)은
     D3(사건 선정 주체, OPEN)을 "사람"으로 가정했다. 게이트에서 추천을 볼 때 **그 근거가 아직 안 정한 결정에 기대는지** 확인한다
+
+12. **좁혀서 참이 되는 문장과 독자가 맞는 그림을 얻는 것은 다르다** (2026-10-09, D29 C-3b). C-5 가 DC-E 를 "7월에 한정하면 선다"로 넘긴 것을 PM 이 그대로 받았다.
+    발행일에 이미 나와 있던 8월 고용(+162,000)이 빠져 있었다. → 반증 기록에 UNRESOLVED 가 남으면 "문장을 좁혔으니 괜찮다"로 넘기지 말고 사실을 찾는다
 
 ## 효과가 확인된 장치
 - **작업 세션에 PM 관찰을 미리 안 준다** — S1 이 PM.md 없이 속도계 오류를 스스로 찾았다
