@@ -30,9 +30,9 @@ docs/FINDINGS.md 는 통째로 읽지 마라 (43KB). 필요한 절만 그때그�
 ```
 Phase 0 — 계약 확정 (구현 전 기반 문서)
 
-백엔드  0.0a ✅ → 0.0b ✅ → 0.1a ✅ → 0.1b ✅ → 0.2a ✅ → 0.2b ✅ → 0.2c ✅ → 0.2m-a ∥ 0.2m-b
+백엔드  0.0a ✅ → 0.0b ✅ → 0.1a ✅ → 0.1b ✅ → 0.2a ✅ → 0.2b ✅ → 0.2c ✅ → 0.2m ✅ → 0.2n
          역산      골든      화면계약   골든재작성  개념계약   데이터계약  관찰기록      이전
-프론트                                  F-1 ✅ → F-2a ✅ → D26 ✅ → (0.2m-a 뒤) F-2b ────┐
+프론트                                  F-1 ✅ → F-2a ✅ → D26 ✅ → F-2b (열림) ────────┐
                                         정확히    디자인탐색          디자인확정        │
 콘텐츠  C-1 ✅ → C-1b ✅ → C-3 ✅    C-4 ✅    C-5 ✅ (C-3b ✅)                          │
         린트     문안수정   출처확인   명제나누기     골든 교정 2차                     ▼
@@ -41,24 +41,25 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 그 뒤: D1 백엔드 스택 → 0.4 스키마 구현 → Phase 1 (파이프라인 A 반자동 + 게이트 4)
 ```
 
-## 세션 상태 — 2026-10-09 저녁. 콘텐츠 레인이 닫혔다. 다음은 0.2m
+## 세션 상태 — 2026-10-09 밤. 이전(0.2m)이 끝났다 (D33)
 | 세션 | 커밋 | 상태 |
 |---|---|---|
-| **0.2m-a** 라이브러리 · 골든 이전 | — | **도는 중** (2026-10-09 저녁 전달). 게이트에서 물음 a ~ g |
-| **0.2m-b** 교정 기록 이전 · OBSERVATION 을 D26 에 | — | **도는 중** (0.2c 세션). a 와 나란히 |
-| **F-2b** 디자인 확정 | — | D26 DECIDED (도윤 · `943447d` — B5 "물음을 따라가는 여정"). **프롬프트 준비됨** (`development-frontend.md` "F-2b"). 0.2m-a 커밋 뒤 새 세션에. 게이트 = 도윤이 실제 폰에서 봄 + 물을 것 6개 |
-| ✅ C-5 | `bfdeafb` → `6aae27d` → `3de2974` | 닫힘 (D29). 골든 글 확정. 2차 때 e2e 는 포트 3100 이 잡혀 못 돌렸다 — 0.2m-a 가 돌린다 |
-| ✅ C-4 | `74318b1` → `a48e0ad` | 닫힘 (D32). 개념 13개 |
-| ✅ 0.2c · C-3b · F-2a | | 닫힘 (D30 · D29 · D26) |
+| **0.2n-a** 게이트 반영 — 요점(Goal) 타입 · 저작 메모를 버전 밖으로 | — | **지시문 준비됨** (`development-backend.md` "Step 0.2n"). 0.2m-a 세션에 |
+| **0.2n-b** 게이트 반영 — "장의 끝" 사건 · 교정 기록 jsonl · Probe → 요점 | — | **지시문 준비됨** (같은 곳). 0.2m-b 세션에. a 가 키 이름을 먼저 커밋 |
+| **F-2b** 디자인 확정 | — | **프롬프트 준비됨 — 지금 보낸다** (`development-frontend.md`). 게이트 = 도윤이 실제 폰에서 봄 + 물을 것 7개 |
+| **C-6** 저장소 사실의 글 교정 | — | **프롬프트 준비됨** (`development-content.md`). **0.2n-a 커밋 뒤** (같은 파일 store.json) |
+| ✅ 0.2m-a · 0.2m-b | `03b6c3c` · `4107393` | 닫힘 (D33). 검사 12종 전부 통과 |
+| ✅ C-5 · C-4 · 0.2c · C-3b · F-2a | | 닫힘 (D29 · D32 · D30 · D26) |
 
-**지금 빨간불 (알려진 것, 0.2m 이 끈다)**: `verify-data-model` (§17 표) · `selftest-verify-concept-identity` (옛 글자 "v3") → 0.2m-a / `verify-observation` (§8 "14행" ≠ 42행) → 0.2m-b.
-원인은 하나다 — 계약 문서가 살아 있는 실물의 글자 · 개수를 적어 두었다. 두 프롬프트 모두 "다시 안 깨지게"를 첫 일로 넣었다.
+**빨간불 없음.** (lint-concepts exit 1 · 1 hit 는 알려진 오탐.) e2e 1건 실패 = 버린 방향 `lab/a` — F-2b 가 정리.
 
-**D26 에서 따라온 것**: FINDINGS §8.1 고침 (PM) · open_question 이 모든 장 사이에 필수가 되는지 → 0.2m-a 물음 a · "끝까지 읽었는지"는 다음 장 진입으로 풀림, 마지막 장만 남음 → 0.2m-b · **실제 폰에서 본 적이 없다** → F-2b 에 반드시.
+**골든의 모양이 바뀌었다 (0.2m-a)**: `fixtures/fomc-2026-09.article.json` (패키지) · `.record.json` (article_id · 저작 데이터) · `fixtures/store.json` (사실 62 · 출처 31 · 해석 10).
+라이브러리는 `docs/content/concept-library.json` 이 저장소, md 는 사람이 읽고 쓰는 면 (md 문안을 고치고 저장소에 새 버전을 안 만들면 검사가 실패한다).
+교정 기록은 `logs/correction-log.jsonl` (CSV 는 얼린다 — 0.2n-b).
 
-**F-2a 인수인계 (2026-10-09)를 받았다** — FINDINGS §8.1 · §8.5 고침 · D26 PM 검수 메모 (DECISIONS 끝) · F-2b 프롬프트. D26 이 개인화(장을 빼기)와 만나는 자리는 메모에만 있다 — 그 설계 때 꺼낸다.
+**발행에서 막히는 것 61 — 독자에게 닿는 것 5.** 0.2n-a(판단 6 · DC-B 근거) 뒤 F44 "3주 뒤" 공개 시점 증명만 남을 것이다 (사실은 맞다 — 그대로 둔다, D33).
 
-**0.2m 에 실을 것 메모는 전부 프롬프트에 들어갔다.** `time_spent_min` 은 여전히 비어 있다 (D30-4).
+**적어둔 것**: 입문 5장 제목이 비유를 개념보다 먼저 낸다 (§4.4 — 게이트 3 에서 볼 것) · `time_spent_min` 42행 전부 비었다 · 미룬 _open 넷 (m4 FTC 때 · m5 D31 때 · m6 파이프라인 1 때 · m7 stale 검사 때).
 
 ## F-3 선행 조건 — 실제 독자가 읽기 전에 전부
 `development-content.md` "F-3 전에 끝나야 하는 것"이 원본이다.
@@ -67,7 +68,7 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 - ~~C-5 골든 교정 2차~~ ✅ (D29)
 - (원문 위치 25 · 공개 시점 증명 9 는 선행 조건 아님 — 파이프라인의 일)
 - 게이트 4(2~3명 비공식)는 선행 조건 없이 먼저 가능
-- ~~0.2c 관찰 기록~~ ✅ · **0.2m-a · 0.2m-b** — 기록 안 한 관찰은 복구 불가
+- ~~0.2c · 0.2m~~ ✅ · **0.2n-a · 0.2n-b** (요점 타입 · "장의 끝" 사건) · **C-6** (저장소 사실의 글)
 - D31 F-3 운영 (대응표 · 배정표 · 동의) — 도윤. 첫 회는 FOMC 하나로
 - F-2b 디자인 확정
 
@@ -134,11 +135,12 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 | 위 검사의 자체 시험 | `python3 scripts/selftest-verify-concept-identity.py` | exit 0 |
 | 개념 린트 ② (시간 지시어) | `python3 scripts/lint-concepts.py` | **exit 1, 1 hit** — C-0002 ANALOGY "지금" = 알려진 오탐. 정상이다 |
 | observed → 골든 차이 | `python3 scripts/diff-observed-article.py` | 참고용 출력 |
-| OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 78 + 계산 1 |
-| DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 사본 89 · `ARTICLE_ID_PENDING` WARN (0.2m 대기) |
+| OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 90 + 계산 1 |
+| 라이브러리 md ↔ 저장소 | `python3 scripts/compare-concept-text.py` | 차이 0 |
+| DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 사본 100 |
 | 프론트 | `pnpm -s typecheck` · `pnpm -s test` | 통과 (계약 14 · 화면 7). e2e 는 이 Mac 의 Chrome 을 쓴다 |
 
-**지금 알려진 빨간불 (2026-10-09 · C-5 반영 뒤)**: `verify-data-model` FAIL (DATA_MODEL §17 대기 표 9줄) · `verify-observation` FAIL (§8 "14행" 집계 ≠ CSV 32행). 계약 문서가 실물의 글자 · 행 수를 박아 둔 탓이다. 0.2m 의 첫 일로 맞춘다 (D29). `compare-reader-text` 허용 차이는 18.
+빨간불 없음 (2026-10-09 · D33). `compare-reader-text` 는 옛 골든(`c46871d`) 대비 허용 차이 29, 이전 전후 차이 0.
 
 새 검사가 생기면 이 표에 한 줄 넣는다.
 
