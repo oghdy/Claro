@@ -7,7 +7,8 @@
   대조하는 것  kicker · headline · 본문 문단 · 인용(출처 표시 + 글) · 목록(라벨 + 글) ·
               대조(라벨 + 값 + 글) · 표(라벨 + 값) · open_question
   허용하는 변환  `<br>` → `\\n` (계약 §6). 그 밖에는 한 글자라도 다르면 실패다.
-  허용된 차이  ALLOWED 에 적힌 승인된 수정만 (지금 2건 — D23 #16 · D27 “올리자”). 위치 · 바꾼 부분이 정확히 맞아야 한다
+  허용된 차이  ALLOWED 에 적힌 승인된 수정만 (D23 #16 · D27 “올리자” · C-5 P 번호 16건 — D29). 위치 · 바꾼 부분이 정확히 맞아야 한다
+              한 글 단위에 여러 건이 걸리면 그중 적용된 건들만으로 새 글이 정확히 설명돼야 한다 (남는 글자가 있으면 실패)
               `<b>` 는 글의 일부로 대조한다 — 굵기 위치도 바뀌면 안 된다
   대조하지 않는 것 (계약이 버린다)  teaser 기호(Q · ·) · end_actions · 눈금 · 색 · modifier · style
   모양 대응도 본다  블록 종류 · 문단 무게(dim → secondary …) · 강조(hit → emphasized) · 장수 · 문단 수 · 항목 수
@@ -25,11 +26,45 @@ LEVEL_MAP = {'basic': 'basic', 'adv': 'advanced'}       # D20
 
 # 허용된 차이 — 도윤이 승인한 독자 글 수정. 여기 적힌 것 말고는 한 글자도 달라선 안 된다.
 # 위치가 같고, 옛 글에서 `old` 를 정확히 한 번 `new` 로 바꾼 결과가 새 글과 같아야 한다(다른 글자가 더 바뀌면 실패)
+# 같은 위치에 여러 건이면 그중 어느 묶음을 적용한 결과든 새 글과 같으면 된다 — 각 `old` 는 옛 글에 정확히 한 번 있어야 한다
+C5 = 'C-5 · D29 도윤 승인 2026-10-09 · logs/content/golden-correction-2026-10.md '
 ALLOWED = [
     {'where': 'basic[7] blocks/1 p0', 'old': '연준이 “확신이 없다”고 말한', 'new': '연준이 확신이 없다고 본',
      'why': 'D23 · 0.1b PM 검수 #16 — 해석에 원문 표시(따옴표)를 단 것. 도윤 승인 2026-09-29'},
     {'where': 'basic[6] blocks/0 0.body', 'old': '세 명만\n“올리자”고 반대', 'new': '세 명만\n올리자고 반대',
      'why': 'D27 · 0.2b 인용 검사 — 바꿔 말한 것에 발언 표시(따옴표)를 단 것. 따옴표만 뺐다. 도윤 승인'},
+    {'where': 'basic[6] blocks/1 p0', 'old': '시장은 인상 가능성을 90% 넘게 반영하기 시작했어요.', 'new': '시장도 인상 쪽으로 기울기 시작했어요.',
+     'why': C5 + 'P4 B — D-2 · M-1 (90% 는 기자 발언. CME 58~66%)'},
+    {'where': 'basic[7] kicker', 'old': '가장 큰 변수', 'new': '큰 변수',
+     'why': C5 + 'P6 A — "가장"을 말한 1차가 없다'},
+    {'where': 'basic[7] blocks/0 p0', 'old': '4월에 휴전 합의가 한 번 있었지만 이후 공격이', 'new': '4월에 미국이 휴전을 발표했지만 이후에도 공격이',
+     'why': C5 + 'P7 B — I-1 "한 번" [못 찾음] · §5.2 한쪽 당사자의 발표'},
+    {'where': 'basic[7] blocks/0 p1', 'old': '회의가 열린 날에는', 'new': '회의가 열린 주에는',
+     'why': C5 + 'P8 A — D-7 (EIA 주간 조사)'},
+    {'where': 'basic[7] blocks/1 p0', 'old': '물가는 저절로 내려갈 수도', 'new': '물가는 한결 나아질 수도',
+     'why': C5 + 'P9 PM 안 (D29) — "저절로"가 반증에 걸림'},
+    {'where': 'basic[7] blocks/1 p0', 'old': '이유의 상당 부분이', 'new': '이유의 하나가',
+     'why': C5 + 'P10 A — 비중을 말한 1차가 없다 (ST-09 "in part")'},
+    {'where': 'basic[8] blocks/0 p2', 'old': '물가가 2% 근처로 돌아오는 건 내년 말쯤으로', 'new': '물가가 2%로 돌아오는 건 2029년으로',
+     'why': C5 + 'P11 A — SEP-09: 2027년 2.3 · 2029년 2.0'},
+    {'where': 'advanced[1] blocks/0 p0', 'old': '6월 전망치와 사실상 같았고요.', 'new': '6월에 낸 연말 전망치와 같은 숫자였고요.',
+     'why': C5 + 'P13 A — 12개월 실적과 4분기 전망은 재는 것이 다르다'},
+    {'where': 'advanced[2] blocks/0 1.body', 'old': '<b>23,000명 감소</b>,', 'new': '<b>23,000명 감소</b>(9/4 증가로 수정),',
+     'why': C5 + 'P16 B — D-1 (BLS 9/4: -23,000 → +21,000)'},
+    {'where': 'advanced[2] blocks/0 2.body', 'old': '의장이 인상 기준을 명시', 'new': '의장이 기준을 명시',
+     'why': C5 + 'P14 A — M-2 (JH "not to a decision")'},
+    {'where': 'advanced[2] blocks/0 3.body', 'old': '인상 확률 90% 이상 반영. 10년물 4.6% 돌파', 'new': '인상 확률 60% 안팎 반영',
+     'why': C5 + 'P15 B — D-2 · D-3 · M-1'},
+    {'where': 'advanced[3] blocks/1 p1', 'old': '2027년에 추가 인상을 찍은 참가자는 8명뿐,', 'new': '2027년 말 금리를 4.1%보다 높게 본 참가자는 18명 중 8명,',
+     'why': C5 + 'P17 B — D-4 (점도표는 사람을 잇지 않는다) · DC-D 물음 1 ("뿐")'},
+    {'where': 'advanced[4] blocks/0 p0', 'old': '물가의 큰 부분이 전쟁에 달려 있습니다.', 'new': '물가 전망의 큰 변수가 전쟁입니다.',
+     'why': C5 + 'P18 A — 비중을 말한 1차가 없다 (MIN-07 "clouded the inflation outlook")'},
+    {'where': 'advanced[4] blocks/0 p0', 'old': '4월 휴전 이후에도', 'new': '4월 휴전 발표 이후에도',
+     'why': C5 + 'P20 A — §5.2 한쪽 당사자의 발표'},
+    {'where': 'advanced[4] blocks/0 p0', 'old': '회의 당일 경유 가격은', 'new': '회의가 열린 주 경유 가격은',
+     'why': C5 + 'P20 A — D-7 (EIA 주간 조사)'},
+    {'where': 'advanced[4] blocks/1 p0', 'old': '인상을 둘러싼 내부 긴장이\n전망에서 실제 행동으로 옮겨왔다는 점', 'new': '인상 의견이\n소수의견에서 실제 결정으로 옮겨왔다는 점',
+     'why': C5 + 'P24 A — DC-A 가 말하는 것으로 좁힘 (F29 는 1차 대조 안 됨)'},
 ]
 
 
@@ -153,10 +188,15 @@ def compare(old, new):
         n_units += 1
         n_chars += len(a)
         if a != b:
-            for al in ALLOWED:
-                if al['where'] == where and a.count(al['old']) == 1 and a.replace(al['old'], al['new']) == b:
-                    allowed_hit.append(al)
-                    return
+            here = [al for al in ALLOWED if al['where'] == where]
+            for mask in range(1, 1 << len(here)):            # 그 위치의 허용 건 중 어느 묶음이든 — 승인된 글을 강제하지는 않는다
+                pick, cur = [al for k, al in enumerate(here) if mask >> k & 1], a
+                if all(a.count(al['old']) == 1 for al in pick):
+                    for al in pick:
+                        cur = cur.replace(al['old'], al['new'])
+                    if cur == b:
+                        allowed_hit.extend(pick)
+                        return
             fails.append(f'{where}: 글자가 다르다 — {show_diff(a, b)}')
 
     def same(where, a, b, what):
@@ -218,7 +258,7 @@ def main(argv):
     print(f'  계약이 버리는 것 (대조 밖): end_actions {dropped}개 · teaser 기호 · 눈금 · modifier · style')
     for f in fails:
         print('  FAIL', f)
-    print('\nOK — 독자 글 불변' if not fails else f'\n{len(fails)}건 실패')
+    print('\nOK — 등록 안 된 차이 0 (허용된 차이 밖의 독자 글 불변)' if not fails else f'\n{len(fails)}건 실패')
     return 1 if fails else 0
 
 

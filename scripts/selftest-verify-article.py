@@ -310,7 +310,7 @@ def run_compare():
     case('허용된 차이 #16 을 되돌리면(옛 글 그대로) 통과 — 허용은 승인된 새 글만 강제하지 않는다',
          lambda d: ed16(d, lambda t: t.replace('연준이 확신이 없다고 본', '연준이 “확신이 없다”고 말한')), expect_fail=False)
     case('허용된 위치에서 승인된 것과 다르게 고침 (본 → 봤다)', lambda d: ed16(d, lambda t: t.replace('없다고 본 이유', '없다고 봤던 이유')))
-    case('허용된 위치에서 승인된 수정 + 글자 하나 더', lambda d: ed16(d, lambda t: t.replace('상당 부분이', '상당한 부분이')))
+    case('허용된 위치에서 승인된 수정 + 글자 하나 더', lambda d: ed16(d, lambda t: t.replace('여기 있습니다', '바로 여기 있습니다')))
     case('승인된 수정을 다른 문장에 적용 (허용은 위치 한 곳만)',
          lambda d: d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'].__setitem__(
              0, {**d['levels'][0]['slides'][0]['blocks'][0]['paragraphs'][0]['body'][0],
