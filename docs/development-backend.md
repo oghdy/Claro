@@ -15,7 +15,7 @@
 | 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☑ 2026-09-30 · D25 (`logs/backend/phase-0-step-0-2a.md`) |
 | 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☑ `b832391` · `61a82b1` · 2026-10-09 |
 | 0.2c | OBSERVATION.md — 독자 기록(knowledge_evidence · reading_plan_log · probe) · 교정 기록. **F-3 전에** | 계약 4 | 새 세션 | ☑ 2026-10-09 · D30 (`logs/backend/phase-0-step-0-2c.md`) |
-| 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | — | ☐ 0.2c 뒤 |
+| 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | — | ☐ 프롬프트 준비 2026-10-09 — a · b 둘로 나눔 (아래) |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
 | 0.4~ | 스키마 구현 | 마이그레이션 | Step당 세션 | ☐ |
 
@@ -406,6 +406,105 @@ PM 이 이 목록만 검수한다.
 - [x] 애매했던 층 판정 목록 (34건, 로그)
 - [x] **PM 검수** (D20 — 독자 글이 안 바뀌므로 에디토리얼 게이트 없음) — D23 으로 반영, 독자 글 1건 수정은 도윤 승인
 - [x] 완료일: 2026-09-29
+
+---
+
+## Step 0.2m-a — 이전: 라이브러리 · 골든을 계약 모양으로 (새 세션)
+
+입력이 확정됐다 (2026-10-09): 골든 글 `3de2974` (C-5 2차 반영) · 라이브러리 `a48e0ad` (C-4 반영) · 계약 넷 · D26.
+
+### 세션 개시 프롬프트 (복붙)
+
+```
+라이브러리와 골든을 계약 모양으로 옮긴다 (Step 0.2m-a). 계약 넷이 다 정해졌고, 골든의 글과 라이브러리 문안도 확정됐다.
+지금 골든과 라이브러리는 계약 이전의 모양이다 (문자열 참조 "C-0002" · "F31" · UUID 없음). 실제 독자 기록(F-3)이 시작되기 전에 옮겨야 한다.
+
+읽을 것 (이것만):
+  CLAUDE.md
+  docs/FINDINGS.md          §8.2 · §9.2 · §9.5
+  docs/DECISIONS.md         D8 · D15 · D16 · D17 · D22 · D23 · D25 · D26 · D27 · D29 · D30 · D32
+  docs/contract/            넷 전부. 특히 CONCEPT_IDENTITY §16 · DATA_MODEL §17 · §18 (이전 목록)
+  docs/content/concept-library.md
+  docs/findings/fomc-2026-09-brief.md · docs/findings/storyline-iran-war.md
+  fixtures/                 골든 · invalid
+  logs/content/golden-correction-2026-10.md   "C-5 [GATE] 반영" 절과 "2차 반영" 절만 — §17 표에서 어긋난 줄 · _source_note · 새 사실
+  logs/content/concept-split-2026-10.md       끝의 "반영" 절만 — 계약과 어긋난 줄의 표 · 백엔드에 넘길 것 14개
+  logs/content/source-check-2026-10.md        새 사실의 1차 구절이 필요할 때만 찾아본다
+  scripts/                  기존 검사
+  packages/contract/src     프론트의 타입 · 검증기 (같은 계약의 두 번째 구현)
+  docs/development-frontend.md  "0.2m (이전) 때 프론트가 할 것"
+
+지금 빨간불 (먼저 확인해라):
+  verify-data-model FAIL — DATA_MODEL §17 표가 골든의 옛 문장을 글자로 적고 있다
+  selftest-verify-concept-identity 멈춤 — 라이브러리의 옛 글자("version: v3")를 찾는다
+  (verify-observation FAIL 은 네 일이 아니다 — 0.2m-b 가 고친다)
+
+할 일 — 이 순서로, 단계마다 커밋:
+  1. 계약을 실물에 맞춘다. DATA_MODEL §17 · CONCEPT_IDENTITY 의 실물 수 · selftest.
+     **같은 일이 다음 교정 때 또 생기지 않게 해라** — 계약 문서가 살아 있는 실물의 글자 · 개수를 적어 두고 검사가 그것을 대조하는 곳을 찾아,
+     어떻게 할지 안을 내라 (날짜 붙은 기록으로 두기 / 검사에서 빼기 / 실물에서 계산하기). 계약의 뜻이 바뀌는 선택이면 _open
+  2. 라이브러리 → CONCEPT_IDENTITY §16 목록대로. 개념 13개에 UUID. code · 문안 · 버전 이력은 그대로.
+     **독자 글(FULL · REFRESHER · ANALOGY · BOUNDARY)은 한 글자도 바꾸지 마라.** 옮기기 전후 문안을 기계로 대조해 보여라
+  3. 골든 → DATA_MODEL §18 목록대로. ConceptRef { concept_id, version, part } · C-0002 는 v4 에 고정 · C-0003 을 가리키던 셋은 C-0012@1 ·
+     article_id · article_version · Event · Storyline 의 UUID + code · Fact · Claim · Bridge 참조.
+     저작 데이터(사실 · 해석 · 반증 기록)를 브리프와 C-3 · C-5 기록에서 옮긴다 — **있는 것만.** 1차 구절이 기록에 없는 사실은 만들지 말고 대기로 남겨라
+     **독자 글은 한 글자도 바꾸지 마라** — compare-reader-text 로 이전 전후 차이 0 을 보여라. open_question 8 · 4 개도
+  4. packages/contract 를 따라가게 한다 — 타입 · validate.ts (refs 가 문자열만 통과한다) · 테스트.
+     apps/web 은 typecheck · test 가 통과하는 데 필요한 최소만. **화면에 보이는 것은 0 바뀐다.** apps/web/src/lab 은 건드리지 마라
+  5. invalid 재생성 · 검사 전부 통과 · 망가뜨린 사본으로 새 검사가 진짜 실패하는지
+
+정하지 말고 답하거나 _open 으로 올릴 물음 (실물 · 확정으로 답이 나오면 계약에 반영하고, 아니면 게이트에서 정한다):
+  a. D26 — 넘어가는 방법이 물음 버튼 하나뿐이다. 그러면 마지막을 뺀 모든 슬라이드 뒤에 open_question 이 반드시 하나 있어야 한다.
+     ARTICLE_PACKAGE 가 지금 그것을 요구하나 (골든은 9장 · 8개, 5장 · 4개로 맞는다). D18 의 전제("질문이 별도 슬라이드")가 바뀐 것도 같이
+  b. 반증 기록의 답이 발행 뒤 문서에만 기댈 때 발행할 수 있나 (D29-6)
+  c. VOLATILE 값이 바뀌어 생긴 새 Fact 와 옛 Fact 의 앞뒤를 잇는 기록의 자리 (DATA_MODEL §15 는 OBSERVATION 을 가리키는데 거기엔 틀린 것만 있다)
+  d. Comprehension Goal 을 가리킬 타입이 없다 (OBSERVATION Probe 가 요점을 못 가리킨다)
+  e. span 의 `_source_note` (C-5 가 새로 쓴 주석 키) · 사실 ID 없는 "바뀌는 값"(숙련 3장 "60% 안팎")을 적을 자리 · "201일째"의 war_start (C-3 이 2/28 을 확인했다)
+  f. 입문 4장 ③ 두 span 에 C-0012 참조를 더할지 (D32 1-2) · C-0010 BOUNDARY 가 FULL · REFRESHER 와 함께 나오는지의 검사 (Q-C2)
+  g. alias 를 빼거나 제시 규칙만 바뀐 것이 버전을 올리는 일인가 · 명제가 바뀐 버전의 사유("evidence 0 예외")를 담을 칸
+
+하지 말 것:
+  - 독자 글 · 개념 문안 수정. 틀린 곳이 보이면 로그에 적어라
+  - OBSERVATION.md · logs/correction-log.csv · scripts/verify-observation.py (0.2m-b 가 같은 시간에 고친다)
+  - apps/web 의 화면 · lab · 디자인. 금지 항목(가중치 · 임계값 · 추정기)
+  - 브리프를 고쳐 쓰는 것 — 브리프는 원천 자료다. 옮기기만 한다
+
+완료하면:
+  - 검사 전부의 결과를 로그에 (verify-article · compare-reader-text · verify-contract-coverage · verify-concept-identity · verify-data-model ·
+    각 selftest · lint-concepts · pnpm -s typecheck · pnpm -s test). pnpm test 가 logs/frontend 의 그림을 바꾸면 되돌린다
+  - `verify-data-model --report` 의 "발행에서 막히는 것"이 몇 건 남았고, 그 가운데 독자에게 닿는 것이 무엇인지
+  - 물음 a ~ g 마다 [계약 반영 / _open / 미확인] + 근거를 로그 맨 앞에
+  - logs/backend/phase-0-step-0-2m-a.md · development-backend.md 체크
+  커밋: B-0.2m-a [GATE] → push. 파일은 하나씩 지정해서 add (같은 작업 트리에 다른 세션이 있다)
+```
+
+## Step 0.2m-b — 교정 기록 이전 · OBSERVATION 을 D26 에 맞춘다 (0.2c 세션에 이어서)
+
+### 보낼 것 (복붙) — 기존 0.2c 세션에. 닫혔으면 새 세션에 "먼저 읽을 것" 한 줄을 붙여서
+
+```
+0.2c 의 후속이다 (Step 0.2m-b). 세 가지를 한다. docs/DECISIONS.md D26 · D29 · D30 · D31 을 먼저 읽어라.
+(새 세션이면 먼저: CLAUDE.md · docs/contract/OBSERVATION.md · logs/backend/phase-0-step-0-2c.md · logs/correction-log.csv ·
+ docs/development-content.md 의 "correction_log" 절 · docs/development-frontend.md 의 "F-2b 에 넘길 것")
+
+1. 지금 verify-observation 이 FAIL 이다 — 계약 §8 이 "실물 14행"의 집계를 적어 두었는데 CSV 가 42행이 됐다 (C-5 가 28행을 더했다).
+   계약을 실물에 맞추고, **행이 늘 때마다 깨지지 않게 해라** (날짜 붙은 기록으로 두기 / 검사에서 빼기 / 실물에서 계산하기 — 안을 내고, 계약의 뜻이 바뀌면 _open)
+2. logs/correction-log.csv 를 계약 모양으로 옮긴다 (OBSERVATION §15 목록). 42행 전부.
+   - 어디에 어떤 파일로 두는지는 계약이 "미확인"으로 남겼다 — 안을 내고 _open. 정해질 때까지 CSV 원본은 지우지 마라
+   - caught_by · occasion · targets 는 행마다 네가 초안을 적고 "사람이 확인한다" 표시. 글(what_was_wrong · what_i_changed · catch_note)은 한 글자도 바꾸지 마라
+   - 새 28행에는 C-3 의 1차 원문 대조로 잡은 것이 있다 — SOURCE_RECHECK 의 첫 실물이다
+3. D26 이 정해졌다: 한 번에 한 장, 넘어가는 방법은 물음 버튼 하나, 물음 버튼은 그 장을 다 읽었을 때 나온다.
+   §12 "F-3 전에 닫혀야 하는 것" 셋을 이 결정 위에서 다시 봐라:
+   - 장 안에서 끝까지 읽었는지 — 이 구조에서는 다음 장에 들어간 것이 앞 장을 끝낸 것이다. 그러면 남는 것은 무엇인가 (마지막 장 — 요점 문장이 거기 있다)
+   - 새로고침이 새 열람인가 · 시험 줄 가르기 — 실물(apps/web/src, lab/b5)이 답을 주면 반영하고, 아니면 안을 내고 _open
+   - 읽기 사건이 여전히 방향 · 손짓을 모르는지, "지나온 길"로 되돌아가는 것이 지금 사건으로 적히는지 확인
+   숫자(시간 · 기준값)는 넣지 마라. probe 를 놓는 자리는 여전히 설계하지 마라 (D18 — 전제가 바뀌었다는 것만 적어라)
+
+하지 말 것: 다른 계약 · 골든 · 라이브러리 · apps · packages 수정 (0.2m-a 가 같은 시간에 골든과 다른 계약을 옮긴다). 금지 항목
+
+완료하면: verify-observation · selftest 결과 + 망가뜨린 사본 · _open 목록을 로그 맨 앞에 · logs/backend/phase-0-step-0-2m-b.md
+  커밋: B-0.2m-b [GATE] → push. 파일은 하나씩 지정해서 add
+```
 
 ---
 
