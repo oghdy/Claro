@@ -9,11 +9,13 @@
                  probe 를 놓을 자리를 정하는 칸이 없다. 다른 계약의 타입을 다시 정의하지 않았다. 실물 없는 절에 "실물 없음".
                  계약이 실물이라고 적은 수(§4.2 골든 · §8 CSV)가 실물과 같다
   B. 로그        0.2c 로그 머리 요약에 질문 8개가 [계약 반영 / _open / 미확인] 과 근거를 갖는다
-  C. 교정 기록   실물 CSV 14행을 **메모리 안에서** 이 계약 모양으로 옮기고(초안 대응) 불변식 20 · 21 을 돌린다
+  C. 교정 기록   옮긴 파일(logs/correction-log.jsonl)에 불변식 20 · 21 을 돌리고, 원본 CSV 와 글이 한 글자도 다르지 않은지 본다.
+                 CSV 에 행이 더 생긴 것은 FAIL 이 아니라 WARN 이다 (아직 안 옮긴 행). CSV 가 줄거나 옛 행이 바뀌면 FAIL.
+                 계약 §8 의 집계는 "1~N행" 기준의 날짜 붙은 기록이다 — 그 N행만 견준다. 원장은 덧붙이기만 하므로 행이 늘어도 안 깨진다
   D. 시험 원장   독자 기록은 실물이 한 줄도 없다. 골든을 읽는 가짜 독자 하나의 원장을 메모리 안에서 만들어 불변식 1 ~ 19 를 돌린다.
                  가짜 독자 · 가짜 물음은 검사를 시험하려는 것이다 — 관찰이 아니다. 파일로 남기지 않는다
 
-exit 0 OK · 1 FAIL
+exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
 """
 import copy, csv, importlib.util, io, json, os, re, sys, uuid
 from collections import Counter, defaultdict
@@ -21,10 +23,11 @@ from collections import Counter, defaultdict
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, 'docs/contract/OBSERVATION.md')
 OTHERS = [os.path.join(ROOT, 'docs/contract', n) for n in ('ARTICLE_PACKAGE.md', 'CONCEPT_IDENTITY.md', 'DATA_MODEL.md')]
-LOG = os.path.join(ROOT, 'logs/backend/phase-0-step-0-2c.md')
+LOG = os.path.join(ROOT, 'logs/backend/phase-0-step-0-2c.md')              # 질문 8개는 0.2c 로그에 있다
 GOLDEN = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
 LIBRARY = os.path.join(ROOT, 'docs/content/concept-library.md')
 CSV_PATH = os.path.join(ROOT, 'logs/correction-log.csv')
+JSONL_PATH = os.path.join(ROOT, 'logs/correction-log.jsonl')      # 옮긴 파일 — 자리 · 형식은 _open (계약 §16)
 DEVCONTENT = os.path.join(ROOT, 'docs/development-content.md')
 
 
@@ -139,7 +142,7 @@ def read_csv(text):
     return header, [dict(zip(header, r)) for r in rd if r]
 
 
-def check_contract(text, others_text, devcontent_text, csv_text, gold, lib):
+def check_contract(text, others_text, devcontent_text, csv_text, gold, lib, entries=()):
     errs = []
     types, al = VC.ts_types(text), aliases(text)
     for t, fields in REQUIRED_FIELDS.items():
@@ -216,16 +219,27 @@ def check_contract(text, others_text, devcontent_text, csv_text, gold, lib):
     for col in header:
         if f'`{col}`' not in b81:
             errs.append(('CONTRACT_CSV_COLUMN', f'실물 열 `{col}` 이 §8.1 표에 없다'))
+    # §8 의 집계는 "1~N행" 기준의 날짜 붙은 기록이다. 그 N행만 견준다 — 행이 늘어도 깨지지 않는다 (원장은 덧붙이기만 한다)
+    def upto(body, what):
+        m = re.search(r'1\s*~\s*(\d+)행', next((l for l in body.splitlines() if l.startswith('|')), ''))
+        if not m:
+            errs.append(('CONTRACT_SNAPSHOT', f'{what} 표 머리에 "1~N행"이 없다 — 어느 행까지의 집계인지 적어야 한다'))
+            return None
+        return int(m.group(1))
     _, b82 = sec_by_num(text, '8.2')
-    said = {r[0].strip('`'): r[1] for r in table_rows(b82)}
-    real = {k: str(v) for k, v in Counter(r['stage'] for r in rows).items()}
-    if said != real:
-        errs.append(('CONTRACT_REAL_MISMATCH', f'§8.2 stage 표 {said} ≠ 실물 {real}'))
+    n = upto(b82, '§8.2')
+    if n is not None:
+        said = {r[0].strip('`'): r[1] for r in table_rows(b82)}
+        real = {k: str(v) for k, v in Counter(r['stage'] for r in rows[:n]).items()}
+        if len(rows) < n or said != real:
+            errs.append(('CONTRACT_REAL_MISMATCH', f'§8.2 stage 표(1~{n}행) {said} ≠ 실물 {real} (CSV {len(rows)}행)'))
     _, b83 = sec_by_num(text, '8.3')
-    said = {r[0].split('`')[1]: int(re.match(r'\d+', r[2]).group()) for r in table_rows(b83) if '`' in r[0]}
-    real = Counter(m['caught_by'] for m in DRAFT_MAP)
-    if {k: v for k, v in said.items() if v} != dict(real) or sum(said.values()) != len(rows):
-        errs.append(('CONTRACT_REAL_MISMATCH', f'§8.3 caught_by 표 {said} ≠ 초안 대응 {dict(real)} (실물 {len(rows)}행)'))
+    n = upto(b83, '§8.3')
+    if n is not None and entries:
+        said = {r[0].split('`')[1]: int(re.match(r'\d+', r[2]).group()) for r in table_rows(b83) if '`' in r[0]}
+        real = Counter(e['caught_by'] for e in entries[:n])
+        if len(entries) < n or {k: v for k, v in said.items() if v} != dict(real):
+            errs.append(('CONTRACT_REAL_MISMATCH', f'§8.3 caught_by 표(1~{n}행) {said} ≠ 옮긴 파일 {dict(real)} ({len(entries)}행)'))
     _, b42 = sec_by_num(text, '4.2')
     tabs = [r for r in table_rows(b42.split('**실물**')[-1]) if re.match(r'C-\d{4}', r[0])]
     said = {r[0]: tuple(re.match(r'\**(\w+)', c).group(1) for c in r[1:3]) for r in tabs}
@@ -265,6 +279,7 @@ def derive_decisions(gold, lib):
     """{level: {code: (decision, version)}} — 골든은 아직 code 문자열만 가리킨다. part 는 문안 대조로 얻는다 (0.2m 이 채운다)"""
     idx = VC.parts(lib)
     ver = {c['code']: int(c['version']) for c in lib['concepts']}
+    by_id = {c['meta'].get('concept_id'): c['code'] for c in lib['concepts'] if c['meta'].get('concept_id')}
     seen, codes = {}, set()
     for lid, spans in VC.level_spans(gold):
         seen[lid] = defaultdict(set)
@@ -272,9 +287,14 @@ def derive_decisions(gold, lib):
             if sp.get('layer') != 'concept':
                 continue
             hit = VC.match_part(sp, idx)
-            for code in sp['refs']:
+            for ref in sp['refs']:
+                if isinstance(ref, dict):                      # 0.2m-a 뒤 — ConceptRef { concept_id, version, part }. part 를 그대로 읽는다
+                    code = by_id.get(ref.get('concept_id'), ref.get('concept_id'))
+                    part = ref.get('part')
+                else:                                          # 옮기기 전 — code 문자열. part 는 문안 대조로 얻는다
+                    code, part = ref, (hit[1] if hit and hit[0] == ref else None)
                 codes.add(code)
-                seen[lid][code].add(hit[1] if hit and hit[0] == code else None)
+                seen[lid][code].add(part)
     return {lid: {c: (decision_of(seen[lid].get(c, set())), ver[c]) for c in sorted(codes)} for lid in seen}
 
 
@@ -283,50 +303,35 @@ def UID(kind, key):
     return str(uuid.uuid5(uuid.NAMESPACE_URL, f'claro-trial/{kind}/{key}'))
 
 
-A, C = 'ARTICLE', 'CONCEPT'
-_S1 = '0.0b 교정 (S1 역산)'
-DRAFT_MAP = [   # CSV 행 순서 그대로
-    dict(gate=None, occasion=_S1, stage='writing', targets=[(A, '입문 3장')], caught_by='ARTIFACT_COMPARE', check=None, repl=[]),
-    dict(gate=None, occasion=_S1, stage='writing', targets=[(A, '숙련 4장')], caught_by='ARTIFACT_COMPARE', check=None, repl=[]),
-    dict(gate=None, occasion=_S1, stage='writing', targets=[(A, '숙련 4장')], caught_by='ARTIFACT_COMPARE', check=None, repl=[]),
-    dict(gate=None, occasion=_S1, stage='writing', targets=[(A, '숙련 4장')], caught_by='ARTIFACT_COMPARE', check=None, repl=[]),
-    dict(gate=None, occasion=_S1, stage=None, targets=[(A, '저작 데이터')], caught_by='ARTIFACT_COMPARE', check=None, repl=[]),
-    dict(gate='GATE_3', occasion='게이트 3', stage=None, targets=[(C, 'C-0005', 'REFRESHER'), (A, '숙련 4장')],
-         caught_by='PLAIN_READING', check=None, repl=[('C-0005', 1, 2)]),
-    dict(gate='GATE_3', occasion='S2 교정', stage=None, targets=[(C, 'C-0002', 'FULL ④'), (A, '입문 4장')],
-         caught_by='ARTIFACT_COMPARE', check=None, repl=[('C-0002', 1, 2)]),
-    dict(gate=None, occasion='C-1 린트', stage=None, targets=[(C, 'C-0010', 'REFRESHER')], caught_by='AUTOMATED_CHECK',
-         check='lint-1', repl=[('C-0010', 1, 2)]),
-    dict(gate=None, occasion='C-1b 게이트', stage=None, targets=[(C, 'C-0010', 'BOUNDARY')], caught_by='PLAIN_READING',
-         check=None, repl=[]),                                                 # 같은 v2 — 위 행이 Replacement 를 갖는다
-    dict(gate=None, occasion='C-1 린트', stage=None, targets=[(C, 'C-0008', 'REFRESHER')], caught_by='AUTOMATED_CHECK',
-         check='lint-1', repl=[('C-0008', 1, 2)]),
-    dict(gate=None, occasion='C-1 판정', stage=None, targets=[(C, 'C-0005', 'FULL')], caught_by='ARTIFACT_COMPARE',
-         check=None, repl=[('C-0005', 2, 3)]),
-    dict(gate=None, occasion='C-1 린트', stage=None, targets=[(C, 'C-0002', 'FULL ④')], caught_by='AUTOMATED_CHECK',
-         check='lint-2', repl=[('C-0002', 2, 3)]),
-    dict(gate=None, occasion='0.1b PM 검수', stage=None, targets=[(A, '입문 8장')], caught_by='PLAIN_READING', check=None, repl=[]),
-    dict(gate=None, occasion='0.2b 게이트', stage=None, targets=[(A, '입문 7장')], caught_by='AUTOMATED_CHECK',
-         check='quote-check', repl=[]),
-]
+def load_entries(jsonl_text):
+    return [json.loads(l) for l in jsonl_text.splitlines() if l.strip()]
 
 
-def migrate_csv(rows):
-    out = []
-    for i, (r, m) in enumerate(zip(rows, DRAFT_MAP)):
-        changed, _, note = r['what_i_changed'].partition(' 유형: ')
-        targets = [{'kind': t[0], 'code': r['event_id'] if t[0] == A else t[1], 'where': t[-1]} for t in m['targets']]
-        out.append({
-            'correction_id': UID('correction', i), 'date': r['date'], 'event_code': r['event_id'] or None,
-            'gate': m['gate'], 'occasion': m['occasion'], 'stage': m['stage'], 'targets': targets,
-            'error_type': r['error_type'], 'type_note': note or None, 'what_was_wrong': r['what_was_wrong'],
-            'what_i_changed': changed, 'caught_by': m['caught_by'], 'check': m['check'],
-            'catch_note': r['source_of_catch'] or None,
-            'time_spent_min': int(r['time_spent_min']) if r['time_spent_min'] else None, 'after_publication': False,
-            'replacements': [{'kind': 'CONCEPT_VERSION', 'old_id': UID('concept', c), 'old_version': a,
-                              'new_id': UID('concept', c), 'new_version': b} for c, a, b in m['repl']],
-        })
-    return out
+def check_migration(rows, entries):
+    """옮긴 파일 ↔ 원본 CSV. 글은 한 글자도 다르지 않다. -> (errs, warns)"""
+    errs, warns = [], []
+    if len(entries) > len(rows):
+        errs.append(('MIGRATION_ROWS', f'옮긴 파일 {len(entries)}행 > CSV {len(rows)}행 — CSV 에서 행이 사라졌다 (원장은 덧붙이기만 한다)'))
+    elif len(entries) < len(rows):
+        warns.append(('MIGRATION_BEHIND', f'CSV {len(rows)}행 가운데 {len(rows) - len(entries)}행이 아직 안 옮겨졌다 ({len(entries) + 1}행부터)'))
+    pairs = (('date', 'date'), ('event_id', 'event_code'), ('error_type', 'error_type'), ('what_was_wrong', 'what_was_wrong'),
+             ('what_i_changed', 'what_i_changed'), ('source_of_catch', 'catch_note'))
+    for i, (r, e) in enumerate(zip(rows, entries), 1):
+        for a, b in pairs:
+            if r[a] != (e.get(b) or ''):
+                errs.append(('MIGRATION_TEXT', f'{i}행 {b} 가 CSV 의 {a} 와 글자가 다르다'))
+        if e.get('_row') != i:
+            errs.append(('MIGRATION_ROWS', f'옮긴 파일 {i}번째 줄의 _row 가 {e.get("_row")} — CSV 행 순서 그대로여야 한다'))
+    ids = [e.get('correction_id') for e in entries]
+    if len(set(ids)) != len(ids):
+        errs.append(('MIGRATION_ROWS', 'correction_id 가 겹친다'))
+    n = sum(1 for e in entries if e.get('_draft'))
+    if n:
+        warns.append(('CORR_DRAFT', f'{n}행의 gate · occasion · targets · caught_by 가 초안이다 — 사람이 확인한다 (`_draft`)'))
+    n = sum(1 for e in entries for rp in e['replacements'] if rp.get('_pending'))
+    if n:
+        warns.append(('REPL_PENDING', f'Replacement {n}건이 concept_id 대기 — 0.2m-a 가 라이브러리에 UUID 를 발급한 뒤 채운다 (`_pending`)'))
+    return errs, warns
 
 
 def check_csv(header, rows, enums):
@@ -334,8 +339,6 @@ def check_csv(header, rows, enums):
     if header != CSV_HEADER:
         errs.append(('CSV_HEADER', f'실물 열 {header} ≠ 계약이 출발한 열 {CSV_HEADER}'))
         return errs
-    if len(rows) != len(DRAFT_MAP):
-        errs.append(('CSV_ROWS', f'실물 {len(rows)}행 ≠ 초안 대응 {len(DRAFT_MAP)}행 — 대응을 다시 적어야 한다'))
     for i, r in enumerate(rows, 1):
         if r['error_type'] not in enums['error_type']:
             errs.append(('CSV_ERROR_TYPE', f'{i}행 error_type "{r["error_type"]}" 이 9종에 없다'))
@@ -344,8 +347,9 @@ def check_csv(header, rows, enums):
     return errs
 
 
-def keys_ok(kind, row, types, errs, code):
-    extra = set(row) - set(types.get(kind, {}))
+def keys_ok(kind, row, types, errs, code, notes=False):
+    """notes — `_` 로 시작하는 칸은 옮긴 파일의 주석이다 (`_row` · `_draft` · `_pending`). 독자 원장에는 허용하지 않는다"""
+    extra = {k for k in row if not (notes and k.startswith('_'))} - set(types.get(kind, {}))
     if extra:
         errs.append((code, f'{kind} 줄에 계약에 없는 칸 {sorted(extra)} (불변식 1)'))
 
@@ -354,7 +358,7 @@ def check_corrections(entries, types, enums):
     errs = []
     replaced = {}
     for i, e in enumerate(entries, 1):
-        keys_ok('CorrectionEntry', e, types, errs, 'CORR_FIELD')
+        keys_ok('CorrectionEntry', e, types, errs, 'CORR_FIELD', notes=True)
         for f in ('gate', 'error_type', 'caught_by'):
             if e[f] is not None and e[f] not in enums[f]:
                 errs.append(('CORR_ENUM', f'{i}행 {f} "{e[f]}"'))
@@ -373,6 +377,12 @@ def check_corrections(entries, types, enums):
             if rp['kind'] not in enums['replacement_kind']:
                 errs.append(('REPL_SHAPE', f'{i}행 Replacement kind "{rp["kind"]}"'))
                 continue
+            pend = (rp.get('_pending') or {}).get('concept_code')
+            if (rp['old_id'] is None) != bool(pend):
+                errs.append(('REPL_SHAPE', f'{i}행 Replacement — old_id 가 비었으면 대기 표시가, 있으면 대기 표시가 없어야 한다'))
+                continue
+            if pend:
+                rp = dict(rp, old_id=pend, new_id=pend)                         # 대기 — 키 자리에 code 를 놓고 모양만 본다
             if rp['kind'] == 'CONCEPT_VERSION':
                 if rp['old_version'] is None or rp['new_version'] is None or rp['new_id'] != rp['old_id'] \
                         or rp['new_version'] <= rp['old_version']:
@@ -623,14 +633,18 @@ def enums_from(text):
     }
 
 
-def run(contract_text, log_text, csv_text, gold, library_text, others_text, devcontent_text):
+def run(contract_text, log_text, csv_text, jsonl_text, gold, library_text, others_text, devcontent_text):
     lib = VC.parse_library(library_text)
     types, enums = enums_from(contract_text)
-    errs = check_contract(contract_text, others_text, devcontent_text, csv_text, gold, lib)
+    entries = load_entries(jsonl_text)
+    errs = check_contract(contract_text, others_text, devcontent_text, csv_text, gold, lib, entries)
     errs += check_log(log_text)
     header, rows = read_csv(csv_text)
     errs += check_csv(header, rows, enums)
-    entries = migrate_csv(rows) if header == CSV_HEADER else []
+    warns = []
+    if header == CSV_HEADER:
+        e, warns = check_migration(rows, entries)
+        errs += e
     errs += check_corrections(entries, types, enums)
     ledger = build_ledger(gold, lib)
     errs += check_ledger(ledger, types, enums)
@@ -638,21 +652,21 @@ def run(contract_text, log_text, csv_text, gold, library_text, others_text, devc
     # 입문 4장에서 숙련으로 바꿨다가 돌아온 독자 — 전환이 이탈로 읽히지 않는다 (§5.3)
     if not (s['completed'] and s['stopped_at'] == ('basic', 3) and s['switched_from'] == ['basic', 'advanced']):
         errs.append(('SUMMARY', f'시험 열람의 계산이 기대와 다르다: {s}'))
-    return errs, entries, ledger, s
+    return errs, entries, ledger, s, warns
 
 
 def main():
     read = lambda p: open(p, encoding='utf-8').read()
-    errs, entries, ledger, s = run(read(CONTRACT), read(LOG) if os.path.exists(LOG) else '', read(CSV_PATH),
-                                   json.load(open(GOLDEN, encoding='utf-8')), read(LIBRARY),
+    errs, entries, ledger, s, warns = run(read(CONTRACT), read(LOG) if os.path.exists(LOG) else '', read(CSV_PATH),
+                                   read(JSONL_PATH), json.load(open(GOLDEN, encoding='utf-8')), read(LIBRARY),
                                    [read(p) for p in OTHERS], read(DEVCONTENT))
     types = VC.ts_types(read(CONTRACT))
     print('verify-observation')
     print(f'  계약   docs/contract/OBSERVATION.md — 타입 {len(types)} · 칸 {sum(len(f) for f in types.values())}')
-    print(f'  실물   correction-log.csv {len(entries)}행 → CorrectionEntry — '
+    print(f'  실물   correction-log.jsonl {len(entries)}행 (CSV 에서 옮김) — '
           f'gate {dict(Counter(str(e["gate"]) for e in entries))} · caught_by {dict(Counter(e["caught_by"] for e in entries))}')
     print(f'         target {dict(Counter(t["kind"] for e in entries for t in e["targets"]))} · '
-          f'Replacement {sum(len(e["replacements"]) for e in entries)} · type_note {sum(1 for e in entries if e["type_note"])} · '
+          f'Replacement {sum(len(e["replacements"]) for e in entries)} · 유형 {dict(Counter(e["error_type"] for e in entries))} · '
           f'time_spent_min 적힌 행 {sum(1 for e in entries if e["time_spent_min"] is not None)}')
     code = {c: v['code'] for c, v in ledger['concepts'].items()}
     for lid, d in ledger['package']['decisions'].items():
@@ -661,14 +675,16 @@ def main():
           f'노출 {len(ledger["exposures"])} · 응답 {len(ledger["responses"])} · 증거 {len(ledger["evidence"])}')
     print(f'         계산 — 완독 {s["completed"]} · 멈춘 장 {s["stopped_at"]} · 가장 멀리 {s["furthest"]} · 전환으로 떠난 레벨 {s["switched_from"]}')
     if '--report' in sys.argv:
-        print('\ncorrection-log.csv → CorrectionEntry (초안 대응 — 0.2m 에서 사람이 확인한다)')
+        print('\ncorrection-log.jsonl — 행마다 (gate · occasion · targets · caught_by 는 초안. 사람이 확인한다)')
         for i, e in enumerate(entries, 1):
             tg = ' + '.join(f'{t["kind"]} {t["code"]} [{t["where"]}]' for t in e['targets'])
             rp = ' · '.join(f'v{r["old_version"]}→v{r["new_version"]}' for r in e['replacements']) or '—'
             print(f'  {i:>2} {e["date"]} {e["error_type"]} | gate {e["gate"]} · occasion "{e["occasion"]}" · stage {e["stage"]}')
             print(f'     target {tg} | caught_by {e["caught_by"]}' + (f' ({e["check"]})' if e['check'] else '')
-                  + f' | 대신 {rp} | type_note {"있음" if e["type_note"] else "—"}')
+                  + f' | 대신 {rp}')
     print()
+    for c, msg in warns:
+        print(f'  WARN  {c}: {msg}')
     for c, msg in errs:
         print(f'FAIL {c}: {msg}')
     print('OK' if not errs else f'{len(errs)}개 실패')

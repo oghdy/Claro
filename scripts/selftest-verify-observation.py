@@ -2,7 +2,7 @@
 
     python3 scripts/selftest-verify-observation.py
 
-계약 · 로그 · 교정 기록 CSV · 옮긴 교정 기록 · 시험 원장의 사본에 위반을 하나씩 넣고 기대한 code 만 나오는지 본다
+계약 · 로그 · 교정 기록 CSV · 옮긴 파일(jsonl) · 옮긴 교정 기록 · 시험 원장의 사본에 위반을 하나씩 넣고 기대한 code 만 나오는지 본다
 (다른 code 가 섞이면 실패). 망가뜨리지 않은 원본은 통과해야 한다. 사본은 전부 메모리 안이다 — 파일로 남기지 않는다.
 
 시험 원장은 가짜 독자 하나다 (독자 기록의 실물이 없다). 검사를 시험하려는 것이지 관찰이 아니다.
@@ -17,11 +17,12 @@ spec.loader.exec_module(V)
 
 read = lambda p: open(p, encoding='utf-8').read()
 CONTRACT, LOG, CSVT, LIBT, DEV = read(V.CONTRACT), read(V.LOG), read(V.CSV_PATH), read(V.LIBRARY), read(V.DEVCONTENT)
+JSONLT = read(V.JSONL_PATH)
 OTHERS = [read(p) for p in V.OTHERS]
 GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))
 LIB = V.VC.parse_library(LIBT)
 TYPES, ENUMS = V.enums_from(CONTRACT)
-ENTRIES = V.migrate_csv(V.read_csv(CSVT)[1])
+ENTRIES = V.load_entries(JSONLT)
 LEDGER = V.build_ledger(GOLD, LIB)
 
 
@@ -88,6 +89,8 @@ CASES = [
     ('유형 표에 없는 유형 추가', 'contract', sub('"축약 변질" | "레이어 혼입"', '"축약 변질" | "레이어 혼입" | "기타"'), {'CONTRACT_ERROR_TYPES'}),
     ('§8.1 — 실물 열 하나를 표에서 삭제', 'contract', lambda t: '\n'.join(l for l in t.splitlines() if not l.startswith('| `what_was_wrong` |')), {'CONTRACT_CSV_COLUMN'}),
     ('§8.2 — 실물과 다른 행 수', 'contract', sub('| `writing` | 4 |', '| `writing` | 3 |'), {'CONTRACT_REAL_MISMATCH'}),
+    ('§8.2 — 어느 행까지의 집계인지 안 적음', 'contract', sub('| 실물 값 | 행 (1~14행) |', '| 실물 값 | 행 |'), {'CONTRACT_SNAPSHOT'}),
+    ('§8.3 — 옮긴 파일과 다른 수', 'contract', sub('| 확정 §10.3 | 25 —', '| 확정 §10.3 | 24 —'), {'CONTRACT_REAL_MISMATCH'}),
     ('§4.2 — 골든과 다른 decision (C-0003 입문 FULL)', 'contract', sub('| C-0003 | **SKIP** —', '| C-0003 | **FULL** —'), {'CONTRACT_REAL_MISMATCH'}),
     ('CHANGELOG 행 삭제', 'contract', lambda t: t.replace(' | B-0.2c |', ' | PM |'), {'CONTRACT_CHANGELOG'}),
     ('D30 — DATA_MODEL ArticleRecord 에서 article_version 이 사라짐', 'others', lambda o: [x.replace('  article_version: integer          // D30', '  edition:         integer          // D30') for x in o], {'CONTRACT_PAIR'}),
@@ -96,8 +99,13 @@ CASES = [
     ('로그 — 질문 6 표시 삭제', 'log', lambda t: '\n'.join(l.replace('계약 반영', '반영').replace('_open', 'open').replace('미확인', '모름') if l.startswith('| 6 |') else l for l in t.splitlines()), {'LOG_QUESTION'}),
     # ── 교정 기록 CSV (실물) ──
     ('CSV — 열 이름이 바뀜', 'csv', sub('source_of_catch,time_spent_min', 'caught,time_spent_min'), {'CSV_HEADER', 'CONTRACT_CSV_COLUMN'}),
-    ('CSV — 9종에 없는 유형', 'csv', sub('FOMC-20260916,writing,압축,', 'FOMC-20260916,writing,문장 어색,'), {'CSV_ERROR_TYPE', 'CORR_ENUM'}),
-    ('CSV — 행이 늘었는데 대응을 안 적음', 'csv', lambda t: t + '2026-10-10,FOMC-20260916,writing,압축,x,y,z,\n', {'CSV_ROWS', 'CONTRACT_REAL_MISMATCH'}),
+    ('CSV — 행이 늘었다 (아직 안 옮김) — 통과해야 한다. WARN 만', 'csv', lambda t: t + '2026-10-10,FOMC-20260916,새 게이트,압축,x,y,z,\n', set()),
+    ('CSV — 옮긴 행의 글자 하나가 바뀜', 'csv', sub('속도계 비유가 C-0002 4단계 없이', '속도계 비유가 C-0002 네 단계 없이'), {'MIGRATION_TEXT'}),
+    ('CSV — 마지막 행이 사라짐', 'csv', lambda t: '\n'.join(t.rstrip('\n').split('\n')[:-1]) + '\n', {'MIGRATION_ROWS'}),
+    ('CSV — 옛 행(3행)이 사라짐', 'csv', lambda t: t.replace(next(l for l in t.split('\n') if 'FOMC-19' in l) + '\n', ''), {'MIGRATION_ROWS', 'MIGRATION_TEXT', 'CONTRACT_REAL_MISMATCH'}),
+    ('옮긴 파일 — catch_note 글자를 고침', 'jsonl', sub('인접 문장과의 모순', '옆 문장과의 모순'), {'MIGRATION_TEXT'}),
+    ('옮긴 파일 — 행 순서가 바뀜', 'jsonl', lambda t: '\n'.join(t.split('\n')[1::-1] + t.split('\n')[2:]), {'MIGRATION_TEXT', 'MIGRATION_ROWS'}),
+    ('CSV — 9종에 없는 유형', 'csv', sub('FOMC-20260916,writing,압축,', 'FOMC-20260916,writing,문장 어색,'), {'CSV_ERROR_TYPE', 'MIGRATION_TEXT'}),
     # ── 옮긴 교정 기록 (불변식 20 · 21) ──
     ('기계 검사가 잡았는데 check 가 없다', 'corr', m_(lambda E: E[7].update(check=None)), {'CORR_CHECK'}),
     ('사람이 잡았는데 check 가 있다', 'corr', m_(lambda E: E[5].update(check='lint-1')), {'CORR_CHECK'}),
@@ -110,6 +118,8 @@ CASES = [
     ('옛 것과 새 것이 같은 FACT', 'corr', m_(lambda E: fact_repl(E[0], 'f1', 'f1')), {'REPL_SHAPE'}),
     ('개념 버전을 낮은 버전으로 대신', 'corr', m_(lambda E: E[7]['replacements'][0].update(new_version=1)), {'REPL_SHAPE'}),
     ('같은 옛 것을 두 번 대신 (C-0010 v1 — 9행에도)', 'corr', m_(lambda E: E[8]['replacements'].append(dict(E[7]['replacements'][0]))), {'REPL_TWICE'}),
+    ('대기 표시 없이 old_id 가 비었다', 'corr', m_(lambda E: E[7]['replacements'][0].pop('_pending')), {'REPL_SHAPE'}),
+    ('옮긴 파일의 `_` 주석 칸 — 통과해야 한다', 'corr', m_(lambda E: E[0].update(_note='x')), set()),
     ('대신하기가 돈다 (f1 → f2 → f1)', 'corr', m_(lambda E: (fact_repl(E[0], 'f1', 'f2'), fact_repl(E[1], 'f2', 'f1'))), {'REPL_CYCLE'}),
     # ── 시험 원장 (불변식 1 ~ 19) ──
     ('증거 줄에 값을 매기는 칸 (weight)', 'ledger', m_(lambda L: L['evidence'][0].update(weight=2)), {'LEDGER_FIELD'}),
@@ -160,12 +170,12 @@ def codes(errs):
 
 def run(target, mutate):
     if target == 'others':
-        return codes(V.run(CONTRACT, LOG, CSVT, GOLD, LIBT, mutate(OTHERS), DEV)[0])
-    if target in ('contract', 'log', 'csv'):
+        return codes(V.run(CONTRACT, LOG, CSVT, JSONLT, GOLD, LIBT, mutate(OTHERS), DEV)[0])
+    if target in ('contract', 'log', 'csv', 'jsonl'):
         c = mutate(CONTRACT) if target == 'contract' else CONTRACT
         l = mutate(LOG) if target == 'log' else LOG
         s = mutate(CSVT) if target == 'csv' else CSVT
-        return codes(V.run(c, l, s, GOLD, LIBT, OTHERS, DEV)[0])
+        return codes(V.run(c, l, s, mutate(JSONLT) if target == 'jsonl' else JSONLT, GOLD, LIBT, OTHERS, DEV)[0])
     if target == 'corr':
         return codes(V.check_corrections(mutate(ENTRIES), TYPES, ENUMS))
     return codes(V.check_ledger(mutate(LEDGER), TYPES, ENUMS))
