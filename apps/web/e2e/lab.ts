@@ -1,7 +1,7 @@
 // F-2a lab 공용 — 방향마다 "한 장으로 가기"와 "독자 글 단위 모으기"
 import type { CDPSession, Page } from "@playwright/test";
 
-export const DIRS = ["a", "b", "b2", "c"] as const;
+export const DIRS = ["a", "b", "b2", "b3", "c"] as const;
 export type Dir = (typeof DIRS)[number];
 export const NAMES: Record<string, string> = { basic: "입문", intermediate: "중급", advanced: "숙련" };
 export const MOBILE_SE = { width: 375, height: 667 };
@@ -36,7 +36,7 @@ export async function goTo(page: Page, dir: Dir, i: number, end = false) {
     },
     { dir, i, end },
   );
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(dir === "b3" ? 1400 : 250); // b3 는 글이 차례로 나타난 뒤에 찍는다
 }
 
 /** 질문 화면 (A 만) — slides[i] 와 slides[i+1] 사이 */
