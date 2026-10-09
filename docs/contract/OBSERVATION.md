@@ -6,6 +6,7 @@
 | 2026-10-09 | 초안 — FINDINGS §8.3 §9.3 §9.4 §9.5 §10.2 §10.3 확정 · `logs/correction-log.csv` 14행 · development-content 유형 표 9종 · `apps/web/src` 본 화면이 낼 수 있는 사건 · F-1 / F-2a 로그에서 도출. **게이트 전** | B-0.2c |
 | 2026-10-09 | 게이트 반영 (D30) — _open 5개 모두 초안대로 닫음 · `response` · `is_correct` 자리 옮김 승인 · ArticleRef 의 짝이 DATA_MODEL 에 생김 · 독자 운영은 D31 · 미확인 셋을 §12 "F-3 전에 닫혀야 하는 것"으로 · 명제를 못 나누게 되는 순간 = 첫 KnowledgeEvidence 줄 | B-0.2c |
 | 2026-10-09 | 0.2m-b — §8 의 집계를 "1~N행" 기준의 날짜 붙은 기록으로(행이 늘어도 안 깨진다) · 교정 기록 42행을 `logs/correction-log.jsonl` 로 옮김(SOURCE_RECHECK 첫 실물) · D26 반영: 읽기 사건의 실물을 B5 로, §5.4 · §12 를 "물음 버튼을 눌러야 넘어간다" 위에서 다시 씀 · D18 전제 바뀜 · _open 5개 (§16). **게이트 전** | B-0.2m-b |
+| 2026-10-09 | 0.2m-a 뒤 맞춤 — §4.2 골든 표를 커밋 `03b6c3c` 에 묶인 기록으로 (C-4 뒤 C-0003 → C-0012) · Replacement 6건에 concept_id · 골든에 판의 키가 발급됨. 타입 · 불변식 불변 | B-0.2m-b |
 
 > **상태: 0.2c 게이트 통과 (D30 · 2026-10-09, §14). 0.2m-b 가 올린 _open 5개는 게이트 전 (§16).**
 > 기록하지 않은 관찰은 복구할 수 없다 (확정 §9.4). 이 계약은 두 가지 기록의 모양을 정한다 —
@@ -221,7 +222,8 @@ Replacement {                      // 무엇이 무엇을 대신하나. 옛 것�
 - **가리키는 것은 ArticleRecord 하나다** — 발행 한 번 (DATA_MODEL §11). 패키지와 저작 데이터가 함께 불변이라 한 번 가리키면 영원히 같은 글이다
 - **짝은 DATA_MODEL §11 에 있다 (D30).** ArticleRecord 가 `article_id` · `article_version` 을 갖는다 — 불변이고, 둘의 짝은 전체에서 유일하다.
   이 칸이 없으면 독자 기록을 한 줄도 쓸 수 없다
-- **골든에는 아직 없다.** `event_ref`("FOMC-20260916")뿐이고, 화면은 파일 이름으로 읽는다(`lib/load.ts`). 0.2m 이 발급한다
+- **골든에 발급됐다 (0.2m-a).** `fixtures/fomc-2026-09.record.json` 이 `article_id` · `article_version` 을 갖는다.
+  화면은 아직 패키지를 파일 이름으로 읽고(`lib/load.ts`) 이 키를 받지 않는다 — 기록을 남기려면 화면이 판의 키를 알아야 한다 (F-3 입력)
 - `event_ref` 로 대신할 수 없다. 사건 하나에 기사가 하나라는 근거가 없고, 같은 기사를 고쳐 다시 내면 판이 달라진다
 - **무엇이 새 판을 만드나 — 미확인.** 확정 §9.2 는 늦게 온 사실을 원 기사가 아니라 스토리라인에 붙인다고 했다. 판이 2 가 되는 실물이 없다
 
@@ -278,16 +280,18 @@ Replacement {                      // 무엇이 무엇을 대신하나. 옛 것�
 
 - **목록에 오르는 개념** = 그 판의 패키지가 **어느 레벨에서든** 가리키는 개념 전부. 그래야 SKIP 이 남는다
 - `version` = 그 패키지의 ConceptRef.`version`. 한 판 안에서 한 개념은 한 버전이다
-- **실물** (골든, 문안 대조로 얻은 `part`):
+- **실물** — 골든 `03b6c3c` (0.2m-a 가 옮긴 뒤. 참조가 ConceptRef 라 `part` 를 그대로 읽는다).
+  **이 표는 그 커밋의 골든에 대한 기록이다.** 골든이 바뀌어도 이 표는 안 바뀌고, 검사는 그 커밋의 골든으로 견준다:
 
 | 개념 | 입문 | 숙련 |
 |---|---|---|
-| C-0001 | FULL (5장) | SKIP |
+| C-0001 | FULL + 비유 (5장) | SKIP |
 | C-0002 | FULL ①②③ + 비유 (3 · 4장) | SKIP |
-| C-0003 | **SKIP** — 헤드라인 · 대조 항목에 이름만 나온다 (`part` null) | SKIP |
 | C-0005 | SKIP | REFRESHER (4장) |
+| C-0012 | **SKIP** — 4장에 이름만 나온다 (`part` null) | SKIP |
 
-- **C-0003 이 보여주는 것**: 언급됐지만 설명 문안은 안 나온 개념이 SKIP 이다. 세 값은 "설명을 얼마나 보여줬나"이지 "나왔나"가 아니다
+- **C-0012 가 보여주는 것**: 언급됐지만 설명 문안은 안 나온 개념이 SKIP 이다. 세 값은 "설명을 얼마나 보여줬나"이지 "나왔나"가 아니다.
+  (초안 때는 이 자리가 C-0003 이었다 — C-4 가 명제를 나누면서 그 언급이 C-0012 의 것이 됐다. D32)
 - FULL 의 일부 단계만 나온 경우(①만)를 FULL 로 볼지 — 실물 없음. 지금 규칙으로는 FULL 이다. **미확인**
 - **정적 레벨에서는 이 값이 패키지에서 계산된다.** 그래도 plan 에 적는다 — 추정기가 생기면 계산되지 않는 값이 되고, 그때 옛 plan 과 새 plan 이 같은 모양이어야 한다.
   적은 값은 패키지에서 계산한 값과 같아야 한다 (불변식 6)
@@ -550,11 +554,11 @@ DATA_MODEL §2.3 이 여기로 넘겼다: "틀린 것이 나중에 드러나면 
 
 | 이 계약 | 가리키는 것 | 주인 | 상태 |
 |---|---|---|---|
-| ArticleRef | ArticleRecord 의 `article_id` · `article_version` | DATA_MODEL §11 | 맞다 (D30). 골든에는 0.2m 이 발급한다 |
+| ArticleRef | ArticleRecord 의 `article_id` · `article_version` | DATA_MODEL §11 | 맞다 (D30). 골든 기록에 발급됐다 (0.2m-a) |
 | `level` | Level.`id` | ARTICLE_PACKAGE §3 | 맞다 |
 | SlideLoc | `slides[i]` · `blocks[j]` | ARTICLE_PACKAGE §4 | 맞다 — 위치 |
 | `concept_id` · `content_version` · BlockDecision | Concept · ConceptVersion | CONCEPT_IDENTITY §2 · §3 | 맞다 |
-| `decision` | ConceptRef.`part` | CONCEPT_IDENTITY §3.3 | 맞다 — 0.2m 이 골든에 `part` 를 채운 뒤 기계로 계산된다 |
+| `decision` | ConceptRef.`part` | CONCEPT_IDENTITY §3.3 | 맞다 — 골든이 `part` 를 갖는다 (0.2m-a). 기계로 계산된다 |
 | `event_code` | Event.`code` | DATA_MODEL §2.1 | 맞다 (D27: 교정 기록은 code 로 부른다) |
 | Replacement | Fact · Claim · Bridge 의 키 · ConceptVersion | DATA_MODEL §2 · CONCEPT_IDENTITY §3 | 맞다 |
 | Probe.`event_id` | Event | DATA_MODEL §9 | 요점(Goal)을 가리킬 곳이 없다 — 미확인 |
@@ -703,11 +707,11 @@ FINDINGS §13 Phase 1 게이트 — 두 사건 · 두 무리를 엇갈려 Claro 
 | `correction_id` | 행마다 UUID 를 발급했다 |
 | `gate` · `occasion` · `stage` · `targets` · `caught_by` · `check` | **초안이다 — 사람이 확인한다.** 행마다 `_draft` 에 그 칸 이름이 있다. 확인한 행에서 지운다. 검사는 WARN 으로 센다 |
 | `type_note` | **옮기지 않았다 — 전부 null.** "유형: …" 문단(6행)을 떼어 내면 `what_i_changed` 의 글자가 바뀐다. 글은 그대로 두고, 이 칸은 새로 적는 행부터 쓴다 |
-| `replacements` | CONCEPT_VERSION 6건 (C-0002 1→2 · 2→3 / C-0005 1→2 · 2→3 / C-0008 1→2 / C-0010 1→2). **`old_id` · `new_id` 는 대기** — Concept 의 UUID 는 0.2m-a 가 발급한다. `_pending` 에 code 를 적어 두었다. 검사는 WARN |
+| `replacements` | CONCEPT_VERSION 6건 (C-0002 1→2 · 2→3 / C-0005 1→2 · 2→3 / C-0008 1→2 / C-0010 1→2). `old_id` · `new_id` 는 `docs/content/concept-library.json` 의 `concept_id` 다 (0.2m-a 가 발급한 뒤 채웠다) |
 | `after_publication` | 전부 false |
 | `time_spent_min` | 전부 null — CSV 에 한 번도 안 적혔다. 되살릴 수 없다 |
 
-`_row` · `_draft` · `_pending` 은 옮긴 파일의 주석이다 (ARTICLE_PACKAGE 의 `_` 주석과 같은 방식). 계약의 칸이 아니다 — 독자 원장에는 허용하지 않는다 (불변식 1).
+`_row` · `_draft` 는 옮긴 파일의 주석이다 (ARTICLE_PACKAGE 의 `_` 주석과 같은 방식). 계약의 칸이 아니다 — 독자 원장에는 허용하지 않는다 (불변식 1).
 
 ---
 

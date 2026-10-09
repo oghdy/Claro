@@ -27,6 +27,8 @@ LOG = os.path.join(ROOT, 'logs/backend/phase-0-step-0-2c.md')              # 질
 GOLDEN = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
 LIBRARY = os.path.join(ROOT, 'docs/content/concept-library.md')
 CSV_PATH = os.path.join(ROOT, 'logs/correction-log.csv')
+STORE = os.path.join(ROOT, 'docs/content/concept-library.json')      # 계약 모양 저장소 (0.2m-a) — concept_id 는 여기에
+GOLDEN_REL, STORE_REL = 'fixtures/fomc-2026-09.article.json', 'docs/content/concept-library.json'
 JSONL_PATH = os.path.join(ROOT, 'logs/correction-log.jsonl')      # 옮긴 파일 — 자리 · 형식은 _open (계약 §16)
 DEVCONTENT = os.path.join(ROOT, 'docs/development-content.md')
 
@@ -142,7 +144,7 @@ def read_csv(text):
     return header, [dict(zip(header, r)) for r in rd if r]
 
 
-def check_contract(text, others_text, devcontent_text, csv_text, gold, lib, entries=()):
+def check_contract(text, others_text, devcontent_text, csv_text, gold, lib, entries=(), store=None, pinned=None):
     errs = []
     types, al = VC.ts_types(text), aliases(text)
     for t, fields in REQUIRED_FIELDS.items():
@@ -240,14 +242,34 @@ def check_contract(text, others_text, devcontent_text, csv_text, gold, lib, entr
         real = Counter(e['caught_by'] for e in entries[:n])
         if len(entries) < n or {k: v for k, v in said.items() if v} != dict(real):
             errs.append(('CONTRACT_REAL_MISMATCH', f'§8.3 caught_by 표(1~{n}행) {said} ≠ 옮긴 파일 {dict(real)} ({len(entries)}행)'))
+    # §4.2 의 골든 표는 커밋 하나에 묶인 기록이다 — 그 커밋의 골든으로 견준다. 골든이 바뀌어도 깨지지 않는다
     _, b42 = sec_by_num(text, '4.2')
-    tabs = [r for r in table_rows(b42.split('**실물**')[-1]) if re.match(r'C-\d{4}', r[0])]
-    said = {r[0]: tuple(re.match(r'\**(\w+)', c).group(1) for c in r[1:3]) for r in tabs}
-    dec = derive_decisions(gold, lib)
-    real = {code: (dec['basic'][code][0], dec['advanced'][code][0]) for code in dec['basic']}
-    if said != real:
-        errs.append(('CONTRACT_REAL_MISMATCH', f'§4.2 골든 표 {said} ≠ 골든에서 계산 {real}'))
+    rev = pinned_rev(text)
+    if not rev or not pinned:
+        errs.append(('CONTRACT_SNAPSHOT', '§4.2 골든 표가 어느 커밋의 골든인지 없다 ("골든 `<커밋>`") 또는 그 커밋을 읽지 못했다'))
+    else:
+        tabs = [r for r in table_rows(b42.split('**실물**')[-1]) if re.match(r'C-\d{4}', r[0])]
+        said = {r[0]: tuple(re.match(r'\**(\w+)', c).group(1) for c in r[1:3]) for r in tabs}
+        dec = derive_decisions(pinned[0], lib, pinned[1])
+        real = {code: (dec['basic'][code][0], dec['advanced'][code][0]) for code in dec['basic']}
+        if said != real:
+            errs.append(('CONTRACT_REAL_MISMATCH', f'§4.2 골든 표 {said} ≠ 골든 {rev} 에서 계산 {real}'))
     return errs
+
+
+def pinned_rev(text):
+    m = re.search(r'골든 `([0-9a-f]{7,40})`', sec_by_num(text, '4.2')[1])
+    return m.group(1) if m else None
+
+
+def load_pinned(rev):
+    """그 커밋의 (골든, 저장소). 못 읽으면 None"""
+    import subprocess
+    try:
+        show = lambda rel: json.loads(subprocess.run(['git', '-C', ROOT, 'show', f'{rev}:{rel}'], capture_output=True, check=True).stdout)
+        return show(GOLDEN_REL), show(STORE_REL)
+    except Exception:
+        return None
 
 
 # ── B. 로그 ──────────────────────────────────────────────────────────────────
@@ -275,11 +297,12 @@ def decision_of(parts):
     return 'REFRESHER' if 'REFRESHER' in parts else 'SKIP'
 
 
-def derive_decisions(gold, lib):
+def derive_decisions(gold, lib, store=None):
     """{level: {code: (decision, version)}} — 골든은 아직 code 문자열만 가리킨다. part 는 문안 대조로 얻는다 (0.2m 이 채운다)"""
     idx = VC.parts(lib)
     ver = {c['code']: int(c['version']) for c in lib['concepts']}
-    by_id = {c['meta'].get('concept_id'): c['code'] for c in lib['concepts'] if c['meta'].get('concept_id')}
+    by_id = {c['concept_id']: c['code'] for c in (store or {}).get('concepts', [])}
+    ver.update({c['code']: int(c['version']) for c in (store or {}).get('concepts', [])})
     seen, codes = {}, set()
     for lid, spans in VC.level_spans(gold):
         seen[lid] = defaultdict(set)
@@ -330,7 +353,7 @@ def check_migration(rows, entries):
         warns.append(('CORR_DRAFT', f'{n}행의 gate · occasion · targets · caught_by 가 초안이다 — 사람이 확인한다 (`_draft`)'))
     n = sum(1 for e in entries for rp in e['replacements'] if rp.get('_pending'))
     if n:
-        warns.append(('REPL_PENDING', f'Replacement {n}건이 concept_id 대기 — 0.2m-a 가 라이브러리에 UUID 를 발급한 뒤 채운다 (`_pending`)'))
+        warns.append(('REPL_PENDING', f'Replacement {n}건이 concept_id 대기 (`_pending`)'))
     return errs, warns
 
 
@@ -354,8 +377,9 @@ def keys_ok(kind, row, types, errs, code, notes=False):
         errs.append((code, f'{kind} 줄에 계약에 없는 칸 {sorted(extra)} (불변식 1)'))
 
 
-def check_corrections(entries, types, enums):
+def check_corrections(entries, types, enums, store=None):
     errs = []
+    known = {c['concept_id']: int(c['version']) for c in (store or {}).get('concepts', [])}
     replaced = {}
     for i, e in enumerate(entries, 1):
         keys_ok('CorrectionEntry', e, types, errs, 'CORR_FIELD', notes=True)
@@ -388,6 +412,8 @@ def check_corrections(entries, types, enums):
                         or rp['new_version'] <= rp['old_version']:
                     errs.append(('REPL_SHAPE', f'{i}행 CONCEPT_VERSION 은 같은 개념의 더 큰 버전으로 (불변식 21)'))
                     continue
+                if store and not pend and not (rp['old_id'] in known and rp['new_version'] <= known[rp['old_id']]):
+                    errs.append(('REPL_UNKNOWN', f'{i}행 CONCEPT_VERSION 이 저장소에 없는 개념 · 버전을 가리킨다'))
                 old, new = (rp['old_id'], rp['old_version']), (rp['new_id'], rp['new_version'])
             else:
                 if not e['after_publication']:
@@ -414,11 +440,11 @@ def check_corrections(entries, types, enums):
 ARTICLE_ID, ARTICLE_V = UID('article', 'FOMC-20260916'), 1
 
 
-def build_ledger(gold, lib):
+def build_ledger(gold, lib, store=None):
     cid = {c['code']: UID('concept', c['code']) for c in lib['concepts']}
     concepts = {cid[c['code']]: {'code': c['code'], 'version': int(c['version']), 'status': 'CANONICAL', 'leaf': True}
                 for c in lib['concepts']}
-    dec = derive_decisions(gold, lib)
+    dec = derive_decisions(gold, lib, store)
     package = {'levels': {lv['id']: len(lv['slides']) for lv in gold['levels']},
                'decisions': {lid: {cid[c]: v for c, v in d.items()} for lid, d in dec.items()}}
     U, S, S2, R = UID('user', 1), UID('session', 1), UID('session', 2), UID('reading', 1)
@@ -633,11 +659,11 @@ def enums_from(text):
     }
 
 
-def run(contract_text, log_text, csv_text, jsonl_text, gold, library_text, others_text, devcontent_text):
+def run(contract_text, log_text, csv_text, jsonl_text, gold, library_text, others_text, devcontent_text, store=None, pinned=None):
     lib = VC.parse_library(library_text)
     types, enums = enums_from(contract_text)
     entries = load_entries(jsonl_text)
-    errs = check_contract(contract_text, others_text, devcontent_text, csv_text, gold, lib, entries)
+    errs = check_contract(contract_text, others_text, devcontent_text, csv_text, gold, lib, entries, store, pinned)
     errs += check_log(log_text)
     header, rows = read_csv(csv_text)
     errs += check_csv(header, rows, enums)
@@ -645,8 +671,8 @@ def run(contract_text, log_text, csv_text, jsonl_text, gold, library_text, other
     if header == CSV_HEADER:
         e, warns = check_migration(rows, entries)
         errs += e
-    errs += check_corrections(entries, types, enums)
-    ledger = build_ledger(gold, lib)
+    errs += check_corrections(entries, types, enums, store)
+    ledger = build_ledger(gold, lib, store)
     errs += check_ledger(ledger, types, enums)
     s = reading_summary(ledger, ledger['plans'][0]['reading_id'])
     # 입문 4장에서 숙련으로 바꿨다가 돌아온 독자 — 전환이 이탈로 읽히지 않는다 (§5.3)
@@ -659,7 +685,8 @@ def main():
     read = lambda p: open(p, encoding='utf-8').read()
     errs, entries, ledger, s, warns = run(read(CONTRACT), read(LOG) if os.path.exists(LOG) else '', read(CSV_PATH),
                                    read(JSONL_PATH), json.load(open(GOLDEN, encoding='utf-8')), read(LIBRARY),
-                                   [read(p) for p in OTHERS], read(DEVCONTENT))
+                                   [read(p) for p in OTHERS], read(DEVCONTENT), json.loads(read(STORE)),
+                                   load_pinned(pinned_rev(read(CONTRACT)) or ''))
     types = VC.ts_types(read(CONTRACT))
     print('verify-observation')
     print(f'  계약   docs/contract/OBSERVATION.md — 타입 {len(types)} · 칸 {sum(len(f) for f in types.values())}')

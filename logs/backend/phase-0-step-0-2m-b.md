@@ -308,3 +308,62 @@ PASS  [계산] 입문 4장에서 숙련으로 바꾸고 끝 → 멈춘 장 ('adv
 - 판정 뒤: _open-6 · 10 이 (a) 면 타입 · 불변식 20 개정 / _open-9 가 (a) 면 CSV 를 얼리고 development-content 절을 고친다
 - 0.2m-a 뒤: jsonl 의 `_pending` 6건에 concept_id · `verify-observation` 을 옮긴 골든 · 라이브러리로 다시 돌린다
 - 사람 확인: jsonl 42행의 `_draft`
+
+
+---
+
+## 0.2m-a 뒤 맞춤 · 2026-10-09
+
+같은 지시문이 한 번 더 왔다. Step 은 `5c8ced4` 로 끝나 있었다. 다시 하지 않고 **지금 상태를 쟀더니 `verify-observation` 이 FAIL 이었다** — 0.2m-a 가 골든과 라이브러리를 옮긴 뒤다.
+위 "다른 곳과 맞지 않는 것"에 "실물로 확인하지 못했다"고 적어 둔 그 자리다.
+
+### 무엇이 깨졌나
+```
+FAIL CONTRACT_REAL_MISMATCH: §4.2 골든 표 {C-0001 · C-0002 · C-0003 · C-0005} ≠ 골든에서 계산 {C-0001 · C-0002 · C-0005 · C-0012}
+selftest: 사본 87개 + 계산 1 · 32개 실패 (전부 이 하나에서 번진 것)
+```
+- 검사가 틀린 게 아니다. **골든이 바뀌었다** — C-4(D32)가 명제를 나누면서 입문 4장의 "이름만 나오는" 언급이 C-0003 에서 C-0012 의 것이 됐다
+- 객체 참조(ConceptRef)는 지난번에 넣어 둔 길로 읽혔다. `part` 를 문안 대조 없이 그대로 읽는다
+- **1번과 같은 병이다** — 계약이 살아 있는 실물의 값을 적어 두었다. CSV 는 덧붙이기만 해서 "1~N행"으로 묶었는데, 골든은 덧붙이기가 아니라 고쳐 쓰인다
+
+### 고친 것
+| 파일 | 무엇 |
+|---|---|
+| `docs/contract/OBSERVATION.md` | §4.2 골든 표를 **커밋 하나에 묶인 기록**으로 (골든 `03b6c3c`) — 표를 지금 골든에 맞추고(C-0003 → C-0012 · C-0001 은 FULL + 비유), 어느 커밋의 골든인지 적었다. §2.1 · §10 — 골든에 판의 키가 발급됐다 (`fixtures/fomc-2026-09.record.json`) · `part` 가 채워졌다. §15 — Replacement 대기 해소. CHANGELOG. **타입 · 불변식 불변** |
+| `scripts/verify-observation.py` | §4.2 표를 **그 커밋의 골든 · 저장소**(`git show`)로 견준다 — 골든이 또 바뀌어도 안 깨진다. 커밋을 안 적으면 `CONTRACT_SNAPSHOT`. 개념 UUID · 버전은 `docs/content/concept-library.json` 에서. Replacement 가 저장소에 있는 개념 · 버전을 가리키는가 (`REPL_UNKNOWN`) |
+| `logs/correction-log.jsonl` | Replacement 6건의 `old_id` · `new_id` 에 0.2m-a 가 발급한 `concept_id`. `_pending` 0. **글은 안 건드렸다** (검사가 CSV 와 글자 단위로 견준다) |
+| `scripts/selftest-verify-observation.py` | 사본 87 → 90 |
+
+살아 있는 골든은 시험 원장을 만드는 데 계속 쓴다 — 거기서는 값을 **단정하지 않고 계산**하므로 골든이 바뀌어도 따라간다.
+
+### 검증
+
+**1. `python3 scripts/verify-observation.py`** — exit 0 (WARN 1 — `REPL_PENDING` 이 사라졌다)
+```
+verify-observation
+  계약   docs/contract/OBSERVATION.md — 타입 15 · 칸 105
+  실물   correction-log.jsonl 42행 (CSV 에서 옮김) — gate {'None': 40, 'GATE_3': 2} · caught_by {'ARTIFACT_COMPARE': 10, 'PLAIN_READING': 3, 'AUTOMATED_CHECK': 4, 'SOURCE_RECHECK': 25}
+         target {'ARTICLE': 37, 'CONCEPT': 7} · Replacement 6 · 유형 {'압축': 7, '오독 미방어': 3, '시점 앵커 누락': 1, '축약 변질': 3, '레이어 혼입': 9, '원문 불일치': 14, '팩트 누락': 5} · time_spent_min 적힌 행 0
+  골든   basic block_decisions — C-0001@1 FULL · C-0002@4 FULL · C-0005@3 SKIP · C-0012@1 SKIP
+  골든   advanced block_decisions — C-0001@1 SKIP · C-0002@4 SKIP · C-0005@3 REFRESHER · C-0012@1 SKIP
+  시험 원장 (가짜 독자 1) — plan 2 · 읽기 사건 13 · 물음 2 · 노출 3 · 응답 2 · 증거 3
+         계산 — 완독 True · 멈춘 장 ('basic', 3) · 가장 멀리 {'basic': 3, 'advanced': 4} · 전환으로 떠난 레벨 ['basic', 'advanced']
+
+  WARN  CORR_DRAFT: 42행의 gate · occasion · targets · caught_by 가 초안이다 — 사람이 확인한다 (`_draft`)
+OK
+```
+
+**2. `python3 scripts/selftest-verify-observation.py`** — exit 0 (새로 넣거나 바꾼 사본 · 마지막 줄. 실패 행 0)
+```
+PASS  [contract] §4.2 — 골든과 다른 decision (C-0012 입문 FULL) → ['CONTRACT_REAL_MISMATCH']
+PASS  [corr] 대기 표시 없이 old_id 가 비었다 → ['REPL_SHAPE']
+PASS  [corr] 저장소에 없는 개념을 가리키는 Replacement → ['REPL_UNKNOWN']
+PASS  [corr] 저장소에 없는 버전으로 대신 (C-0010 v9) → ['REPL_UNKNOWN']
+PASS  [contract] §4.2 — 어느 커밋의 골든인지 안 적음 → ['CONTRACT_SNAPSHOT']
+사본 90개 + 계산 1 · OK
+```
+
+### 남은 일 (바뀐 것만)
+- ~~jsonl 의 `_pending` 6건~~ — 채웠다
+- 게이트 — _open 5개 그대로 (계약 §16)
+- 사람 확인 — jsonl 42행의 `_draft`

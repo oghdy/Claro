@@ -18,12 +18,14 @@ spec.loader.exec_module(V)
 read = lambda p: open(p, encoding='utf-8').read()
 CONTRACT, LOG, CSVT, LIBT, DEV = read(V.CONTRACT), read(V.LOG), read(V.CSV_PATH), read(V.LIBRARY), read(V.DEVCONTENT)
 JSONLT = read(V.JSONL_PATH)
+STORE = json.loads(read(V.STORE))
+PINNED = V.load_pinned(V.pinned_rev(CONTRACT))
 OTHERS = [read(p) for p in V.OTHERS]
 GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))
 LIB = V.VC.parse_library(LIBT)
 TYPES, ENUMS = V.enums_from(CONTRACT)
 ENTRIES = V.load_entries(JSONLT)
-LEDGER = V.build_ledger(GOLD, LIB)
+LEDGER = V.build_ledger(GOLD, LIB, STORE)
 
 
 def sub(old, new):
@@ -91,7 +93,7 @@ CASES = [
     ('§8.2 — 실물과 다른 행 수', 'contract', sub('| `writing` | 4 |', '| `writing` | 3 |'), {'CONTRACT_REAL_MISMATCH'}),
     ('§8.2 — 어느 행까지의 집계인지 안 적음', 'contract', sub('| 실물 값 | 행 (1~14행) |', '| 실물 값 | 행 |'), {'CONTRACT_SNAPSHOT'}),
     ('§8.3 — 옮긴 파일과 다른 수', 'contract', sub('| 확정 §10.3 | 25 —', '| 확정 §10.3 | 24 —'), {'CONTRACT_REAL_MISMATCH'}),
-    ('§4.2 — 골든과 다른 decision (C-0003 입문 FULL)', 'contract', sub('| C-0003 | **SKIP** —', '| C-0003 | **FULL** —'), {'CONTRACT_REAL_MISMATCH'}),
+    ('§4.2 — 골든과 다른 decision (C-0012 입문 FULL)', 'contract', sub('| C-0012 | **SKIP** —', '| C-0012 | **FULL** —'), {'CONTRACT_REAL_MISMATCH'}),
     ('CHANGELOG 행 삭제', 'contract', lambda t: t.replace(' | B-0.2c |', ' | PM |'), {'CONTRACT_CHANGELOG'}),
     ('D30 — DATA_MODEL ArticleRecord 에서 article_version 이 사라짐', 'others', lambda o: [x.replace('  article_version: integer          // D30', '  edition:         integer          // D30') for x in o], {'CONTRACT_PAIR'}),
     # ── 로그 ──
@@ -118,7 +120,10 @@ CASES = [
     ('옛 것과 새 것이 같은 FACT', 'corr', m_(lambda E: fact_repl(E[0], 'f1', 'f1')), {'REPL_SHAPE'}),
     ('개념 버전을 낮은 버전으로 대신', 'corr', m_(lambda E: E[7]['replacements'][0].update(new_version=1)), {'REPL_SHAPE'}),
     ('같은 옛 것을 두 번 대신 (C-0010 v1 — 9행에도)', 'corr', m_(lambda E: E[8]['replacements'].append(dict(E[7]['replacements'][0]))), {'REPL_TWICE'}),
-    ('대기 표시 없이 old_id 가 비었다', 'corr', m_(lambda E: E[7]['replacements'][0].pop('_pending')), {'REPL_SHAPE'}),
+    ('대기 표시 없이 old_id 가 비었다', 'corr', m_(lambda E: E[7]['replacements'][0].update(old_id=None, new_id=None)), {'REPL_SHAPE'}),
+    ('저장소에 없는 개념을 가리키는 Replacement', 'corr', m_(lambda E: E[7]['replacements'][0].update(old_id=V.UID('concept', 'x'), new_id=V.UID('concept', 'x'))), {'REPL_UNKNOWN'}),
+    ('저장소에 없는 버전으로 대신 (C-0010 v9)', 'corr', m_(lambda E: E[7]['replacements'][0].update(new_version=9)), {'REPL_UNKNOWN'}),
+    ('§4.2 — 어느 커밋의 골든인지 안 적음', 'contract', lambda t: __import__('re').sub(r'골든 `[0-9a-f]{7,40}`', '골든', t, count=1), {'CONTRACT_SNAPSHOT'}),
     ('옮긴 파일의 `_` 주석 칸 — 통과해야 한다', 'corr', m_(lambda E: E[0].update(_note='x')), set()),
     ('대신하기가 돈다 (f1 → f2 → f1)', 'corr', m_(lambda E: (fact_repl(E[0], 'f1', 'f2'), fact_repl(E[1], 'f2', 'f1'))), {'REPL_CYCLE'}),
     # ── 시험 원장 (불변식 1 ~ 19) ──
@@ -170,14 +175,14 @@ def codes(errs):
 
 def run(target, mutate):
     if target == 'others':
-        return codes(V.run(CONTRACT, LOG, CSVT, JSONLT, GOLD, LIBT, mutate(OTHERS), DEV)[0])
+        return codes(V.run(CONTRACT, LOG, CSVT, JSONLT, GOLD, LIBT, mutate(OTHERS), DEV, STORE, PINNED)[0])
     if target in ('contract', 'log', 'csv', 'jsonl'):
         c = mutate(CONTRACT) if target == 'contract' else CONTRACT
         l = mutate(LOG) if target == 'log' else LOG
         s = mutate(CSVT) if target == 'csv' else CSVT
-        return codes(V.run(c, l, s, mutate(JSONLT) if target == 'jsonl' else JSONLT, GOLD, LIBT, OTHERS, DEV)[0])
+        return codes(V.run(c, l, s, mutate(JSONLT) if target == 'jsonl' else JSONLT, GOLD, LIBT, OTHERS, DEV, STORE, PINNED)[0])
     if target == 'corr':
-        return codes(V.check_corrections(mutate(ENTRIES), TYPES, ENUMS))
+        return codes(V.check_corrections(mutate(ENTRIES), TYPES, ENUMS, STORE))
     return codes(V.check_ledger(mutate(LEDGER), TYPES, ENUMS))
 
 
