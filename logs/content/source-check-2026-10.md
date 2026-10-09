@@ -274,3 +274,155 @@ OK
 ```
 `.claude/` 는 이 작업과 무관하다. 커밋에 넣지 않았다.
 발행 검사에서 막히는 64건은 그대로다 — 이 Step 은 출처를 **찾아 적었을** 뿐 Fact · Source 를 만들지 않았다. 채우는 것은 0.2m · 파이프라인.
+
+---
+
+## C-3b [GATE] · 2026-10-09 · 보조 세션 · 판정 대기(PM)
+
+대상: C-5 가 "없음"으로 적은 사실 3건 (`golden-correction-2026-10.md` §5) — DC-C 물음 4 · DC-E 물음 5 · DC-A 물음 2. D29.
+읽은 것: CLAUDE.md · FINDINGS §5 · §7.2 · DECISIONS D27 · D28 · D29 · 이 파일의 C-3 · golden-correction §2 (DC-C · DC-A · DC-E) · §4 · §5.
+**수치와 원문 문장만 적는다. 판정하지 않았다** — "나빠졌다 / 아니다"는 C-5 의 일이다. 위 C-3 의 내용은 고치지 않았다.
+방법은 C-3 과 같다: 1차 문서를 직접 열어 글을 읽었다. 구절은 원문 그대로다.
+
+### 맨 앞
+
+- **1 · 8월 CPI — 찾음.** 수치와 요약 문장은 아래 표. 같은 기간(8/28 ~ 9/16)의 BLS 물가 지표 2건(8월 PPI · 8월 수입물가)도 찾았다
+- **2 · 8월 고용 — 찾음.** 취업자 +162,000 · 실업률 4.1%
+- **3 · 9월 성명문의 "Voting for …" 문단 — [못 찾음]. 그런 문단이 성명문에 없다.** HTML · PDF 둘 다 열었다. 9월 성명문은 "by a 12 – 0 vote"까지만 쓰고 이름을 하나도 적지 않는다. 7월 성명문도 찬성자 이름은 없고 반대자 문단만 있다. 발행일 전에 공개된 문서에서 찾은 것은 **셋이 2026년 위원이라는 것**(1월 회의록)과 "12 – 0"(ST-09)이다 — 이 둘을 이으면 무엇이 되는지는 적지 않았다
+
+### 1차 문서 목록 (추가분)
+
+| 약칭 | 기관 · 제목 · 날짜 | URL |
+|---|---|---|
+| CPI-08 | U.S. Bureau of Labor Statistics · "Consumer Price Index – August 2026" (USDL-26-1496) · 2026-09-11 08:30 ET | https://www.bls.gov/news.release/archives/cpi_09112026.htm |
+| CPI-07 | U.S. Bureau of Labor Statistics · "Consumer Price Index – July 2026" (USDL-26-1378) · 2026-08-12 08:30 ET | https://www.bls.gov/news.release/archives/cpi_08122026.htm |
+| CPI-06 | U.S. Bureau of Labor Statistics · "Consumer Price Index – June 2026" (USDL-26-1191) · 2026-07-14 08:30 ET | https://www.bls.gov/news.release/archives/cpi_07142026.htm |
+| PPI-08 | U.S. Bureau of Labor Statistics · "Producer Price Indexes – August 2026" (USDL 26-1495) · 2026-09-10 08:30 ET | https://www.bls.gov/news.release/archives/ppi_09102026.htm |
+| MXP-08 | U.S. Bureau of Labor Statistics · "U.S. Import and Export Price Indexes – August 2026" (USDL-26-1514) · 2026-09-16 08:30 ET | https://www.bls.gov/news.release/archives/ximpim_09162026.htm |
+| BLS-08 | (C-3 목록과 같은 문서. USDL-26-1435 · 2026-09-04 08:30 ET) | https://www.bls.gov/news.release/archives/empsit_09042026.htm |
+| ST-09-PDF | Federal Reserve Board · FOMC statement 2026-09-16 의 PDF 판 (2쪽 — 성명문 + Implementation Note) | https://www.federalreserve.gov/monetarypolicy/files/monetary20260916a1.pdf |
+| IMPL-09 | Federal Reserve Board · "Implementation Note issued September 16, 2026" | https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a1.htm |
+| MIN-01 | FOMC · "Minutes of the Federal Open Market Committee, January 27–28, 2026" · 공개 2026-02-18 (CAL: "Released February 18, 2026") | https://www.federalreserve.gov/monetarypolicy/fomcminutes20260128.htm |
+| FOMC-ABOUT | Federal Reserve Board · "Federal Open Market Committee — About the FOMC" · 페이지 표시 "Last Update: October 07, 2026" | https://www.federalreserve.gov/monetarypolicy/fomc.htm |
+
+전부 직접 열었다 (2026-10-09). ST-09 · ST-07 · CAL 도 다시 열었다.
+
+---
+
+### 1. 8월 CPI — DC-C 물음 4
+
+**CPI-08 요약 (원문 그대로, 첫 네 문단):**
+> The Consumer Price Index for All Urban Consumers (CPI-U) increased 0.4 percent on a seasonally adjusted basis in August after rising 0.1 percent in July, the U.S. Bureau of Labor Statistics reported today. Over the last 12 months, the all items index increased 3.4 percent before seasonal adjustment.
+>
+> The index for gasoline rose 3.9 percent in August, accounting for over one third of the monthly all items increase. The index for energy increased 2.1 percent over the month. The shelter index rose 0.3 percent in August after rising 0.1 percent in July. The index for food increased 0.1 percent over the month, as the index for food away from home increased 0.3 percent.
+>
+> The index for all items less food and energy rose 0.3 percent after increasing 0.2 percent in July. Indexes that increased over the month include communication, lodging away from home, airline fares, education, and used cars and trucks. Conversely, the index for medical care and the index for motor vehicle insurance were among the major indexes that decreased in August.
+>
+> The all items index rose 3.4 percent for the 12 months ending August as it did for the 12 months ending July. The all items less food and energy index rose 2.4 percent over the year, following a 2.5-percent increase over the 12 months ending July. The energy index increased 16.3 percent for the 12 months ending August. The food index increased 2.7 percent over the last year.
+
+**6월 · 7월 · 8월 — 각 달의 발표문이 그 달에 대해 쓴 수치:**
+
+| | 발표 | 전체 전월 대비 (계절조정) | 전체 전년 대비 (조정 전) | 근원 전월 대비 | 근원 전년 대비 | 에너지 전월 대비 | 에너지 전년 대비 |
+|---|---|---|---|---|---|---|---|
+| 6월 | CPI-06 · 7/14 | -0.4 | 3.5 | 0.0 | 2.6 | -5.7 | 15.7 |
+| 7월 | CPI-07 · 8/12 | 0.1 | 3.4 | 0.2 | 2.5 | -1.5 | 14.7 |
+| 8월 | CPI-08 · 9/11 | 0.4 | 3.4 | 0.3 | 2.4 | 2.1 | 16.3 |
+
+("근원" = BLS 의 "all items less food and energy". BLS 는 "core"라는 말을 쓰지 않는다)
+
+원문 구절:
+- CPI-06: "The Consumer Price Index for All Urban Consumers (CPI-U) decreased 0.4 percent on a seasonally adjusted basis in June after rising 0.5 percent in May … This decline in the all items index was the largest 1-month decrease since April 2020 when it fell 0.8 percent. Over the last 12 months, the all items index increased 3.5 percent before seasonal adjustment." · "The index for energy fell 5.7 percent in June after rising 3.9 percent in May, 3.8 percent in April, and 10.9 percent in March." · "The index for all items less food and energy was unchanged in June." · "The all items index rose 3.5 percent for the 12 months ending June after rising 4.2 percent for the 12 months ending May. The all items less food and energy index rose 2.6 percent over the year, following a 2.9-percent increase over the 12 months ending May."
+- CPI-07: "The Consumer Price Index for All Urban Consumers (CPI-U) increased 0.1 percent on a seasonally adjusted basis in July after falling 0.4 percent in June … Over the last 12 months, the all items index increased 3.4 percent before seasonal adjustment." · "The index for all items less food and energy rose 0.2 percent after being unchanged in June." · "The all items index rose 3.4 percent for the 12 months ending July after rising 3.5 percent for the 12 months ending June. The all items less food and energy index rose 2.5 percent over the year, following a 2.6-percent increase over the 12 months ending June. The energy index increased 14.7 percent for the 12 months ending July."
+- CPI-08 Table A, "All items" 줄 (계절조정 전월 대비, 2월 → 8월 · 끝은 조정 전 12개월): "0.3 · 0.9 · 0.6 · 0.5 · -0.4 · 0.1 · 0.4 · 3.4". "All items less food and energy" 줄: "0.2 · 0.2 · 0.4 · 0.2 · 0.0 · 0.2 · 0.3 · 2.4". 6월 · 7월 값은 CPI-06 · CPI-07 이 쓴 값과 같다 (세 발표문 사이에 수정 없음)
+- CPI-08 의 그 밖: "Gasoline (all types)" 8월 3.9 · 12개월 27.4 / "Shelter" 8월 0.3 · 12개월 3.0 (7월 발표 때 3.2 · 6월 발표 때 3.3) / "Services less energy services" 8월 0.3 · 12개월 3.0
+
+**같은 기간(8/28 ~ 9/16)에 나온 다른 공식 물가 지표:**
+
+| 문서 | 발표 | 원문 구절 |
+|---|---|---|
+| PPI-08 | 9/10 | "The Producer Price Index for final demand moved up 0.4 percent in August, seasonally adjusted … Final demand prices rose 0.1 percent in July and decreased 0.1 percent in June. … On an unadjusted basis, the index for final demand increased 5.4 percent for the 12 months ended in August." · "The index for final demand less foods, energy, and trade services rose 0.3 percent in August after moving up 0.4 percent in July. For the 12 months ended in August, prices for final demand less foods, energy, and trade services advanced 4.7 percent." · "Over three-fourths of the broad-based rise can be attributed to prices for final demand energy, which moved up 4.2 percent." · "Over a third of the August increase in the index for final demand goods can be traced to prices for diesel fuel, which jumped 24.1 percent." · Table A 의 12개월 변화(조정 전) — 5월 5.9 · 6월 5.6 · 7월 4.8 · 8월 5.4 |
+| MXP-08 | **9/16 08:30 ET** (성명문 5시간 반 전) | "U.S. import prices increased 0.7 percent in August … following a 0.3-percent decrease in July. Higher prices for nonfuel imports more than offset lower prices for fuel imports in August." · "Prices for U.S. imports advanced 7.0 percent from August 2025 to August 2026, the largest over-the-year increase since the index rose 7.7 percent for the 12-month period ended August 2022." · "Fuel prices edged down 0.1 percent in August following a decrease of 6.6 percent in July and a decline of 3.7 percent in June." · "Nonfuel import prices rose 5.5 percent from August 2025 to August 2026, the largest over-the-year increase since the index advanced 5.9 percent for the 12-month period ended May 2022." |
+
+- 8월 PCE(BEA)는 열지 않았다. C-3 의 BEA-07 이 8/26 발표였고 MIN-09 는 8월 PCE 를 9/30 개편과 함께 말한다 — 이 기간 밖으로 보이지만 **BEA 일정을 직접 확인하지는 않았다**
+- 민간 지표 · 기대인플레이션 조사(미시간대 · 뉴욕 연은) · 연은별 지표는 찾지 않았다 — "공식 물가 지표"를 BLS · BEA 의 가격 지수로 읽었다
+- 8월 CPI 에 대한 **예상치**는 BLS 문서에 없다. 찾지 않았다 (golden-correction §5 의 다른 줄이다)
+
+---
+
+### 2. 8월 고용 — DC-E 물음 5
+
+**BLS-08 요약 (원문 그대로, 첫 문단):**
+> Total nonfarm payroll employment increased by 162,000 in August, and the unemployment rate was unchanged at 4.1 percent, the U.S. Bureau of Labor Statistics reported today. Employment increased in food services and drinking places and in local government education. The information industry lost jobs.
+
+| 항목 | 값 | 원문 구절 |
+|---|---|---|
+| 8월 취업자 수 변화 | +162,000 | "Total nonfarm payroll employment rose by 162,000 in August, higher than the average monthly gain of 31,000 over the prior 12 months." |
+| 8월 실업률 | 4.1% (7월 4.1%) | "The unemployment rate was unchanged at 4.1 percent in August, and the number of unemployed people changed little at 7.0 million. Both measures changed little over the year." · Summary table A: Unemployment rate — "June 2026 4.2 · July 2026 4.1 · Aug. 2026 4.1 · Change 0.0" |
+| 6월 · 7월 수정 | 6월 +20,000 → +31,000 · 7월 -23,000 → +21,000 | "The change in total nonfarm payroll employment for June was revised up by 11,000, from +20,000 to +31,000, and the change for July was revised up by 44,000, from -23,000 to +21,000. With these revisions, employment in June and July combined is 55,000 higher than previously reported." (뒷부분은 C-3 이 이미 옮겼다) |
+| 3개월 평균 | 71 (천 명) | Summary table B, "3-month average change, in thousands" — Total nonfarm: "June 2026 81 · July 2026(p) 38 · Aug. 2026(p) 71" |
+| 경제활동참가율 | 61.6% | "The labor force participation rate edged up to 61.6 percent in August but is down by 0.5 percentage point since January." · Summary table A: Civilian labor force — July 169,094 · Aug. 169,777 · Change 683 (천 명) |
+| 업종 | | "Employment in food services and drinking places increased by 59,000 in August" · "Local government education added 42,000 jobs in August, largely offsetting a decrease in the prior month." · "Information employment declined by 23,000 in August" |
+| 경제적 이유의 시간제 | -414,000 | "The number of people employed part time for economic reasons decreased by 414,000 to 4.4 million in August." |
+| 시간당 임금 | +0.3% · 전년 대비 3.1% | "average hourly earnings for all employees on private nonfarm payrolls rose by 10 cents, or 0.3 percent, to $37.75. Over the year, average hourly earnings have increased by 3.1 percent." |
+
+- BLS 가 발표문 FAQ 에 적은 것: "An over-the-month employment change of about 122,000 is statistically significant in the establishment survey"
+- 8월 수치가 **10/2 발표(BLS-09)에서 수정됐는지는 보지 않았다.** C-3 은 BLS-09 에서 7월 재수정(-10,000)만 옮겼다. 발행일(9/16) 기준 최신 공식 수치는 위의 +162,000 이다
+- 8월의 일시해고(temporary layoff) 수치는 발표문 본문에 없다 (7월 발표문에는 있었다 — F30)
+
+---
+
+### 3. 9월 성명문의 투표자 명단 — DC-A 물음 2
+
+**[못 찾음] — 9월 성명문에 "Voting for …" 문단이 없다.**
+
+| 문서 | 직접 열었나 | 무엇이 있고 없는가 |
+|---|---|---|
+| ST-09 (HTML) | 열었다 | 표결에 대한 말은 첫 문장 하나뿐이다: "The Federal Open Market Committee approved the following statement for release by a 12 – 0 vote:" — **위원 이름이 하나도 없다.** "Voting for" · "Voting against" 문단 없음. 전문은 위 C-3 의 E 절에 있는 그대로다 (다시 대조했다 — 같다) |
+| ST-09-PDF | 열었다 | 같은 글. 1쪽 끝은 "-0-" · "Attachment" · 연락처. 이름 없음 |
+| IMPL-09 | 열었다 | "The Board of Governors of the Federal Reserve System voted unanimously to raise the interest rate paid on reserve balances to 3.90 percent" · "the Federal Open Market Committee voted to direct the Open Market Desk …" — 이사회 표결이 만장일치라는 것까지. 이름 없음 |
+| ST-07 | 열었다 | 7월 성명문도 **찬성자 이름은 적지 않는다.** "by a 9 – 3 vote" 와 반대자 문단뿐이다: "Voting against the monetary policy action were Beth M. Hammack, Neel Kashkari, and Lorie K. Logan, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting." — 이 형식의 성명문은 반대가 있을 때만 이름을 적는 것으로 보인다 (두 건만 봤다) |
+
+**발행일(9/16) 전에 공개된 문서에서 찾은, 셋의 2026년 투표권에 닿는 구절:**
+
+| 문서 · 공개일 | 원문 구절 |
+|---|---|
+| MIN-01 · 2026-02-18 | "Annual Organizational Matters — The agenda for this meeting reported that advices of the election of the following members and alternate members of the Federal Open Market Committee for a term beginning January 27, 2026, were received and that these individuals executed their oaths of office. The elected members and alternate members were as follows: John C. Williams, President of the Federal Reserve Bank of New York, with Sushmita Shukla, First Vice President of the Federal Reserve Bank of New York, as alternate; Anna Paulson, President of the Federal Reserve Bank of Philadelphia, with Thomas I. Barkin, President of the Federal Reserve Bank of Richmond, as alternate; **Beth M. Hammack**, President of the Federal Reserve Bank of Cleveland, with Austan D. Goolsbee, President of the Federal Reserve Bank of Chicago, as alternate; **Lorie K. Logan**, President of the Federal Reserve Bank of Dallas, with Raphael W. Bostic, President of the Federal Reserve Bank of Atlanta, as alternate; **Neel Kashkari**, President of the Federal Reserve Bank of Minneapolis, with Mary C. Daly, President of the Federal Reserve Bank of San Francisco, as alternate." (굵은 글씨는 옮긴이) |
+| ST-07 · 2026-07-29 | 위 반대자 문단 — 셋이 7월에 표를 냈다 |
+| ST-09 · 2026-09-16 | "by a 12 – 0 vote" |
+| FOMC-ABOUT · **공개 시점 증명 안 됨** | "The Federal Open Market Committee (FOMC) consists of twelve members--the seven members of the Board of Governors of the Federal Reserve System; the president of the Federal Reserve Bank of New York; and four of the remaining eleven Reserve Bank presidents, who serve one-year terms on a rotating basis." · "Committee membership changes at the first regularly scheduled meeting of the year." · "2026 Committee Members" 목록 12명 — "Kevin Warsh, Board of Governors, Chairman / John C. Williams, New York, Vice Chair / Michael S. Barr … / Michelle W. Bowman … / Lisa D. Cook … / Beth M. Hammack, Cleveland / Philip N. Jefferson … / Neel Kashkari, Minneapolis / Lorie K. Logan, Dallas / Anna Paulson, Philadelphia / Jerome H. Powell … / Christopher J. Waller …". 지금 페이지의 표시는 "Last Update: October 07, 2026" 이다 — **9/16 에 이 글이 이 모양이었는지는 확인하지 못했다** (C-3 의 M-4 와 같은 문제 · 파이프라인 "공개 시점 증명") |
+
+- **"셋이 9월에 찬성표를 냈다"를 이름으로 적은 문서는 여전히 MIN-09(10/7) 하나다.** 발행일 기준으로 있는 것은 위 네 줄이다. 이것으로 DC-A 물음 2 가 풀리는지는 판정하지 않았다 — D29 판정 6 의 계약 물음과 같은 자리다
+- 9/15 ~ 16 회의에 셋이 **참석**했다는 발행 시점 문서는 찾지 못했다 (참석자 명단은 회의록에만 있다). 기자회견 녹취(PC-09)의 표결 언급은 C-3 F21 의 "The Committee's unanimous vote shows our resolve …" (3쪽)이다 — 이름 없음. PC-09 는 다시 열지 않았다
+- MIN-01 의 2026년 위원 명단은 1월 기준이다. 그 뒤 이사 쪽은 바뀌었다 (MIN-01 표결 명단의 Stephen I. Miran 이 9월 명단에 없고 Kevin Warsh 가 있다). 지역 연은 총재 넷은 1월 · 7월 · FOMC-ABOUT 에서 같다
+
+---
+
+### 하지 않은 것
+- 판정 — 수치가 "나빠졌다 / 아니다", DC-C · DC-E · DC-A 의 `outcome`. C-5
+- 8월 PCE · 예상치 · 민간 지표 · 8월 고용의 10/2 수정 여부 — 3건 밖
+- 골든 · 브리프 · 계약 · golden-correction 로그 · 이 파일의 C-3 부분 수정
+- 원문 저장 · 글자 위치 · 권리 확인 (C-3 과 같다)
+
+### 검증 — 앞의 내용 · 골든 · 브리프 · 계약을 건드리지 않았다
+커밋 직전:
+```
+$ git status --short
+ M docs/development-content.md
+ M logs/content/source-check-2026-10.md
+?? .claude/
+
+$ git diff --stat
+ docs/development-content.md          |   2 +-
+ logs/content/source-check-2026-10.md | 128 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 129 insertions(+), 1 deletion(-)
+
+$ git diff --stat -- fixtures docs/contract docs/findings logs/content/golden-correction-2026-10.md
+(출력 없음)
+
+$ git diff logs/content/source-check-2026-10.md | grep -c '^-[^-]'     # 이 파일에서 지워진 줄
+0
+
+$ python3 scripts/verify-data-model.py --report | tail -1
+OK
+```
+(위 128 줄은 이 검증 절을 붙이기 전의 수다.) `.claude/` 는 이 작업과 무관하다. 커밋에 넣지 않았다.
