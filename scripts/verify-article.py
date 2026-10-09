@@ -1,9 +1,14 @@
-"""골든 article 픽스처 검증 — 계약 §9 불변식 + D8 (B-0.1b, 계약 ARTICLE_PACKAGE.md 모양).
+"""골든 픽스처 검증 — ARTICLE_PACKAGE §9 불변식 + 층별 Ref + D8 (B-0.1b · 0.2m-a 에서 계약 모양으로).
 
-    python3 scripts/verify-article.py             # 골든 + fixtures/invalid/*.json
-    python3 scripts/verify-article.py --report    # 층 분포 · 0.2 대기 span 목록 · 끊긴 F 연결까지 출력
-    python3 scripts/verify-article.py --publish   # §9-10 까지: `_` 필드가 하나라도 있으면 실패 (발행 검사)
-    python3 scripts/verify-article.py PATH ...    # 특정 파일만
+    python3 scripts/verify-article.py             # 골든 한 벌 + fixtures/invalid/*.json
+    python3 scripts/verify-article.py --report    # 층 분포 · 대기 span 목록까지 출력
+    python3 scripts/verify-article.py --publish   # §9-10 까지: 패키지에 `_` 필드가 하나라도 있으면 실패 (발행 검사)
+
+골든 한 벌 (0.2m-a)
+  fixtures/fomc-2026-09.article.json   ArticlePackage — 프론트로 가는 것 (+ 픽스처 주석 `_source`)
+  fixtures/fomc-2026-09.record.json    ArticleRecord 의 나머지 — article_id · article_version · authoring. `_package` 가 위 파일을 가리킨다
+  fixtures/store.json                  패키지의 참조가 가리키는 것 — Event · Storyline · Source · Fact · FactSource · DerivedClaim · Bridge
+  docs/content/concept-library.json    Concept · ConceptVersion (CONCEPT_IDENTITY)
 
 계약 §9 (발행 불변식)
   1  levels 1~3개, id 는 basic · intermediate · advanced 중 하나·겹치지 않음·그 순서. slides ≥ 1, blocks ≥ 1
@@ -11,26 +16,35 @@
   3  다른 슬라이드를 가리키는 필드가 없다 (resolves · goto · index 류, D15)
   4  모든 블록에 type · text, text == linearize(block) (D14 규칙 1 · 6)
   5  type 이 원형 5개 안에 있다
-  6  모든 span 에 layer. writing 이면 refs 가 비고, 나머지는 1개 이상이며 그 층의 Ref 다.
-     `_refs_pending` (0.2 대기) 이 있는 span 은 픽스처에서만 허용하고 WARN 으로 센다 — 대기 표시 없이 비면 실패 (§6.2)
+  6  모든 span 에 layer. writing 이면 refs 가 비고, 나머지는 1개 이상이며 **그 층의 Ref** 다 (DATA_MODEL §2.2) —
+       fact → Fact 의 UUID · claim → DerivedClaim 의 UUID · bridge → Bridge 의 UUID · concept → ConceptRef { concept_id, version, part }
+     가리킨 것이 저장소에 있어야 한다. 옛 문자열("F31" · "DC-C" · "C-0002")은 Ref 가 아니다
+     `_refs_pending` 이 있는 span 은 픽스처에서만 허용하고 WARN 으로 센다 — 대기 표시 없이 비면 실패 (§6.2)
   7  인라인 서식은 <b> 와 \\n 뿐, <b> 는 span 을 넘지 않는다
   8  emphasized 항목은 <b> 로 통째 감싸지 않는다
-  9  시간 공식이나 읽는 시각에 기대는 필드가 없다 (D8) — 패키지 필드로는 못 들어오고, `_volatility` 주석은 아래 D8 검사를 받는다
+  9  시간 공식이나 읽는 시각에 기대는 필드가 패키지에 없다 (D8) — 저작 데이터는 record 의 authoring 에 있다
   10 발행물에는 `_` 필드가 없다 — 픽스처에서는 허용, --publish 에서만 검사한다
-D8 (`_volatility` 주석, 슬라이드 · open_question 에 붙는다. where 는 그 개체 기준 경로)
-  VOLATILE 은 as_of 필수 / DERIVED 의 출처는 전부 STABLE / DERIVED 는 published_at 으로 재계산해 불변식 확인
+D8 (record.authoring.time_expressions — DATA_MODEL §6.3)
+  조각이 그 글에 정확히 한 번 / VOLATILE 조각은 as_of 가 있는 VOLATILE 사실을 가리킨다 /
+  DERIVED 의 입력 사실은 전부 STABLE / DERIVED 는 published_at 으로 재계산해 불변식 확인
 D9  골든에 observed 전용 키(_findings 등)가 없다
-스키마 각 개체가 계약이 정한 필드만 갖는다 (옛 모양의 index · label · slide_count · teaser 등이 남으면 실패)
+스키마 각 개체가 계약이 정한 필드만 갖는다. 옛 저작 주석(`_volatility` · `_fact_refs_dropped` …)이 패키지에 남으면 실패
 
-파일에 "_violation" 이 있으면 invalid 픽스처로 보고, 선언한 code 로만 거부돼야 통과다.
-또 골든과 정확히 한 군데만 달라야 한다(위반 하나만 주입).
+fixtures/invalid/*.json — `_violation { code, of }` 가 있다. `of` 는 골든 한 벌 중 그 파일이 갈아 끼우는 파일이다.
+선언한 code 로만 거부돼야 통과다. 또 그 골든 파일과 정확히 한 군데만 달라야 한다(위반 하나만 주입).
 """
 import calendar, datetime as dt, glob, json, math, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GOLDEN = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
-BRIEF = os.path.join(ROOT, 'docs/findings/fomc-2026-09-brief.md')
-LIBRARY = os.path.join(ROOT, 'docs/content/concept-library.md')
+RECORD = os.path.join(ROOT, 'fixtures/fomc-2026-09.record.json')
+STORE = os.path.join(ROOT, 'fixtures/store.json')
+CONCEPTS = os.path.join(ROOT, 'docs/content/concept-library.json')
+GOLDEN_SET = {os.path.basename(p): p for p in (GOLDEN, RECORD, STORE)}
+UUID_RE = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
+# 0.2m-a 에서 자리를 옮긴 저작 주석 — 패키지에 남아 있으면 안 된다 (DATA_MODEL §11)
+OLD_ANNOTATIONS = ('_volatility', '_published_at_basis', '_fact_refs_dropped', '_attribution_refs', '_source_note')
+PENDING_NEEDS = {'Bridge': {'bridge'}, 'DerivedClaim': {'claim'}, 'Fact 출처': {'fact'}, 'Fact 승격': {'fact'}}   # DATA_MODEL §17
 
 FORBIDDEN_TOP = ('_findings', '_dom_inventory', '_transcription_notes', '_render_time_computation')
 LEVEL_IDS = ('basic', 'intermediate', 'advanced')
@@ -41,8 +55,6 @@ WEIGHTS = ('normal', 'secondary', 'callout', 'conclusion')
 POINTER_KEY = re.compile(r'^(resolves|goto\w*|index|\w+_index|next_slide|target_slide)$')
 D8_KEYS = ('formula', 'as_of', 'as_of_basis', 'derived_from', 'value_at_authoring', 'volatility', 'invariant',
            'check', 'class', 'now', 'render', 'recompute')
-# 0.2 대기 사유는 층과 맞아야 한다 — claim 은 Derived Claim 도출이 필요하다(D22), bridge 는 Bridge 정의가 필요하다
-NEED_FOR_LAYER = {'claim': {'DerivedClaim'}, 'bridge': {'Bridge'}}
 
 # 개체별 허용 필드 (`_` 로 시작하는 필드는 픽스처 주석이라 따로 다룬다)
 KEYS = {
@@ -71,13 +83,50 @@ def strip_tags(s):
     return re.sub(r'<[^>]+>', '', s)
 
 
-def known_ids():
-    brief = open(BRIEF, encoding='utf-8').read()
-    facts = set(re.findall(r'^\| (F\d\d) \|', brief, re.M))
-    dcs = set(re.findall(r'^### (DC-[A-Z])\b', brief, re.M))
-    lib = open(LIBRARY, encoding='utf-8').read()
-    concepts = set(re.findall(r'^### (C-\d{4})\b', lib, re.M))
-    return facts, dcs, concepts
+class Known:
+    """참조가 가리킬 수 있는 것 — 저장소(store.json)와 개념 저장소에서"""
+
+    def __init__(self, store, concepts):
+        self.store = store
+        self.facts = {f['fact_id']: f for f in store.get('facts', [])}
+        self.claims = {c['claim_id']: c for c in store.get('claims', [])}
+        self.bridges = {b['bridge_id']: b for b in store.get('bridges', [])}
+        self.events = {e['event_id']: e for e in store.get('events', [])}
+        self.storylines = {x['storyline_id']: x for x in store.get('storylines', [])}
+        self.concepts = {c['concept_id']: c for c in concepts.get('concepts', [])}
+        self.parts = {}                                  # concept_id → 지금 버전의 part 이름
+        for v in concepts.get('versions', []):
+            c = self.concepts.get(v['concept_id'])
+            if not c or c['version'] != v['version']:
+                continue
+            ps = {f'FULL:{st["label"]}' if st['label'] else 'FULL' for st in v['full']} | {'REFRESHER'}
+            ps |= {f'ANALOGY:{a["name"]}' for a in v['analogies']} | ({'BOUNDARY'} if v['boundary'] else set())
+            self.parts[v['concept_id']] = ps
+
+    def layer_of(self, ref):
+        """그 UUID 가 어느 층의 것인가 (층 섞임을 가려 말하려고)"""
+        for name, pool in (('fact', self.facts), ('claim', self.claims), ('bridge', self.bridges), ('concept', self.concepts)):
+            if ref in pool:
+                return name
+        return None
+
+
+def read_json(path):
+    return json.load(open(path, encoding='utf-8'))
+
+
+def known_ids(store=None, concepts=None):
+    return Known(read_json(STORE) if store is None else store, read_json(CONCEPTS) if concepts is None else concepts)
+
+
+def load_bundle(replace=None):
+    """골든 한 벌 → {package, record, store, concepts}. replace = {파일 이름: 내용} 이면 그 파일만 갈아 끼운다 (invalid 픽스처)"""
+    replace = replace or {}
+    get = lambda p: replace[os.path.basename(p)] if os.path.basename(p) in replace else read_json(p)
+    record = get(RECORD)
+    pkg_name = record.get('_package', os.path.basename(GOLDEN))
+    package = replace[pkg_name] if pkg_name in replace else read_json(os.path.join(ROOT, 'fixtures', pkg_name))
+    return {'package': package, 'record': record, 'store': get(STORE), 'concepts': read_json(CONCEPTS)}
 
 
 # ---------------------------------------------------------------- 선형화 (계약 §7.3 ~ §7.7)
@@ -162,13 +211,12 @@ def evaluate(entry, published_at):
 
 # ---------------------------------------------------------------- 검사
 class Checker:
-    def __init__(self, ids, publish=False):
-        self.facts, self.dcs, self.concepts = ids
+    def __init__(self, known, publish=False):
+        self.known = known
         self.publish = publish
         self.errs = []                 # (code, msg)
         self.warns = []                # 문자열
         self.pending = []              # (경로, layer, need, 문장 앞부분)
-        self.dropped = []              # (경로, 끊긴 F refs)
         self.layers = {}               # layer → span 수
 
     def E(self, code, msg):
@@ -182,6 +230,8 @@ class Checker:
             return False
         for k in obj:
             if k.startswith('_'):
+                if k in OLD_ANNOTATIONS:
+                    self.E('OLD_ANNOTATION', f'{path}/{k}: 옛 저작 주석이 패키지에 남았다 — record 의 authoring · 저장소로 옮겨야 한다 (DATA_MODEL §11)')
                 if self.publish:
                     self.E('UNDERSCORE_IN_PUBLISH', f'{path}/{k}: 발행물에 `_` 필드가 있다 (§9-10)')
             elif POINTER_KEY.match(k):
@@ -236,11 +286,24 @@ class Checker:
             self.E('SPAN_LAYER', f'{path}: layer={layer!r}')
             return
         self.layers[layer] = self.layers.get(layer, 0) + 1
-        if not isinstance(refs, list) or any(not isinstance(x, str) for x in refs):
-            self.E('SPAN_REFS', f'{path}: refs 가 문자열 목록이 아니다')
+        if not isinstance(refs, list):
+            self.E('SPAN_REFS', f'{path}: refs 가 목록이 아니다')
             return
-        if len(set(refs)) != len(refs):
-            self.E('REFS_DUP', f'{path}: refs 에 중복 {refs}')
+        K = self.known
+        ok = True
+        for r in refs:                                  # 원소 모양은 층이 정한다 (DATA_MODEL §2.2)
+            if layer == 'concept':
+                if not isinstance(r, dict) or set(r) != {'concept_id', 'version', 'part'}:
+                    self.E('SPAN_REFS', f'{path}: concept 층의 Ref 는 ConceptRef {{concept_id, version, part}} 다 — {r!r}')
+                    ok = False
+            elif not isinstance(r, str):
+                self.E('SPAN_REFS', f'{path}: {layer} 층의 Ref 는 UUID 문자열 하나다 — {r!r}')
+                ok = False
+        if not ok:
+            return
+        keys = [json.dumps(r, sort_keys=True, ensure_ascii=False) for r in refs]
+        if len(set(keys)) != len(keys):
+            self.E('REFS_DUP', f'{path}: refs 에 중복')
         pend = sp.get('_refs_pending')
         where = f'{path} "{text[:24]}"'
         if layer == 'writing':
@@ -249,18 +312,27 @@ class Checker:
             if pend is not None:
                 self.E('PENDING_INVALID', f'{path}: writing 은 기다릴 refs 가 없다')
         else:
-            check = {'fact': (self.facts, r'F\d\d'), 'claim': (self.dcs, r'DC-[A-Z]'),
-                     'concept': (self.concepts, r'C-\d{4}')}.get(layer)
+            pool = {'fact': K.facts, 'claim': K.claims, 'bridge': K.bridges}.get(layer)
             for r in refs:
-                if check is None:
-                    break                                   # bridge — Ref 모양은 0.2
-                if not re.fullmatch(check[1], r):
-                    self.E('REF_WRONG_LAYER', f'{path}: {layer} span 에 그 층이 아닌 Ref {r!r} — refs 는 그 층의 atom 만 (§6)')
-                elif r not in check[0]:
-                    self.E('REF_UNKNOWN', f'{path}: 브리프/개념 라이브러리에 없는 ID {r}')
+                if layer == 'concept':
+                    c = K.concepts.get(r['concept_id'])
+                    if c is None:
+                        self.E('REF_UNKNOWN', f'{path}: concept_id {r["concept_id"]!r} 가 개념 저장소에 없다')
+                    elif not isinstance(r['version'], int) or isinstance(r['version'], bool) or not 1 <= r['version'] <= c['version']:
+                        self.E('REF_VERSION', f'{path}: {c["code"]}@{r["version"]!r} — 버전은 1~{c["version"]}')
+                    elif r['part'] is not None and r['version'] == c['version'] and r['part'] not in K.parts.get(r['concept_id'], ()):
+                        self.E('REF_PART', f'{path}: {c["code"]}@{r["version"]} 에 part {r["part"]!r} 가 없다 (CONCEPT_IDENTITY §3.3)')
+                elif r in pool:
+                    continue
+                elif K.layer_of(r):
+                    self.E('REF_WRONG_LAYER', f'{path}: {layer} span 에 {K.layer_of(r)} 의 Ref — refs 는 그 층의 atom 만 (§6)')
+                elif not UUID_RE.match(r):
+                    self.E('REF_SHAPE', f'{path}: {layer} 층의 Ref {r!r} 가 UUID 가 아니다 — label · code 는 참조에 쓰지 않는다 (DATA_MODEL §2.1)')
+                else:
+                    self.E('REF_UNKNOWN', f'{path}: {r} 가 {layer} 저장소에 없다')
             if not refs:
                 if pend is None:
-                    self.E('REFS_EMPTY', f'{path}: {layer} 인데 refs 가 비었고 0.2 대기 표시도 없다 (§9-6)')
+                    self.E('REFS_EMPTY', f'{path}: {layer} 인데 refs 가 비었고 대기 표시도 없다 (§9-6)')
                 else:
                     ok = (isinstance(pend, dict) and pend.get('until') == '0.2'
                           and isinstance(pend.get('need'), str) and pend['need'].strip()
@@ -268,18 +340,13 @@ class Checker:
                     if not ok:
                         self.E('PENDING_INVALID', f'{path}: _refs_pending 모양이 {{until:"0.2", need}} 가 아니다')
                     else:
-                        allowed = NEED_FOR_LAYER.get(layer)
-                        if allowed and pend['need'] not in allowed:
-                            self.E('PENDING_NEED_LAYER', f'{path}: {layer} 의 need 는 {sorted(allowed)} 여야 한다 — {pend["need"]!r} (D22)')
+                        if pend['need'] not in PENDING_NEEDS:
+                            self.E('PENDING_NEED_LAYER', f'{path}: need {pend["need"]!r} 가 대기 어휘 {sorted(PENDING_NEEDS)} 밖이다 (DATA_MODEL §17)')
+                        elif layer not in PENDING_NEEDS[pend['need']]:
+                            self.E('PENDING_NEED_LAYER', f'{path}: {layer} 층에 need {pend["need"]!r} — 층과 맞지 않는다 (D22 · DATA_MODEL §17)')
                         self.pending.append((where, layer, pend['need']))
             elif pend is not None:
                 self.E('PENDING_WITH_REFS', f'{path}: refs 가 있는데 _refs_pending 이 남아 있다')
-        d = sp.get('_fact_refs_dropped')
-        if d is not None:
-            bad = [x for x in d if x not in self.facts] if isinstance(d, list) else ['?']
-            if bad:
-                self.E('DROPPED_UNKNOWN', f'{path}: _fact_refs_dropped 에 브리프에 없는 ID {bad}')
-            self.dropped.append((where, d))
 
     # ---- 블록
     def emphasized(self, it, fields, path):
@@ -376,44 +443,63 @@ def plain_of(x):
     return strip_tags(x) if isinstance(x, str) else None
 
 
-def check_volatility(obj, tag, pub, errs, warns):
+def check_record(pkg, record, K, pub, errs, warns):
+    """ArticleRecord 의 키 + authoring.time_expressions (D8 · DATA_MODEL §6.3). 깊은 검사는 verify-data-model.py"""
     E = lambda code, msg: errs.append((code, msg))
-    for v in obj.get('_volatility', []):
-        w = f'{tag} {v.get("where")} "{v.get("span")}"'
-        txt = plain_of(resolve(obj, v['where'])) if isinstance(v.get('where'), str) else None
-        if txt is None or v['span'] not in txt:
-            E('VOL_SPAN', f'{w}: where 가 가리키는 글에 span 이 없다')
-        cls = v.get('class')
-        if cls not in ('STABLE', 'DERIVED', 'VOLATILE'):
-            E('VOL_CLASS', f'{w}: class={cls}')
+    aid, av = record.get('article_id'), record.get('article_version')
+    if not (isinstance(aid, str) and UUID_RE.match(aid)) or type(av) is not int or av < 1:
+        E('RECORD_KEY', f'article_id {aid!r} · article_version {av!r} — UUID 와 양의 정수 (DATA_MODEL 불변식 26)')
+    auth = record.get('authoring')
+    if not isinstance(auth, dict) or set(auth) != {'time_expressions', 'storylines', 'notes'}:
+        E('RECORD_SHAPE', 'authoring 은 { time_expressions, storylines, notes } 다 (DATA_MODEL §1)')
+        return
+    levels = {lv.get('id'): lv for lv in pkg.get('levels', []) if isinstance(lv, dict)}
+    for te in auth['time_expressions']:
+        at = te.get('at') or {}
+        w = f'{at.get("level")} {at.get("path")} "{at.get("fragment")}"'
+        txt = plain_of(resolve(levels.get(at.get('level')), at['path'])) if isinstance(at.get('path'), str) and at.get('level') in levels else None
+        if txt is None or not isinstance(at.get('fragment'), str) or len(re.findall(re.escape(at['fragment']), txt)) != 1:
+            E('VOL_SPAN', f'{w}: at 이 가리키는 글에 조각이 정확히 한 번 있어야 한다 (DATA_MODEL 불변식 15)')
+        cls = te.get('class')
+        if cls not in ('DERIVED', 'VOLATILE'):
+            E('VOL_CLASS', f'{w}: class={cls!r} — DERIVED · VOLATILE 만 적는다 (STABLE 은 적지 않는다)')
         if cls == 'VOLATILE':
-            if not v.get('as_of'):
-                E('VOLATILE_MISSING_AS_OF', f'{w}: VOLATILE 인데 as_of 가 없다 (D8)')
-            elif not re.fullmatch(r'\d{4}-\d{2}(-\d{2})?', v['as_of']):
-                E('VOLATILE_BAD_AS_OF', f'{w}: as_of={v["as_of"]}')
+            fs = [K.facts.get(x) for x in te.get('facts', [])]
+            if not fs or any(f is None or f['volatility'] != 'VOLATILE' for f in fs):
+                E('VOLATILE_NO_FACT', f'{w}: VOLATILE 조각은 VOLATILE 사실을 1개 이상 가리킨다 (DATA_MODEL 불변식 16)')
+            for f in fs:
+                if f is None or f['volatility'] != 'VOLATILE':
+                    continue
+                if not f.get('as_of'):
+                    E('VOLATILE_MISSING_AS_OF', f'{w}: 사실 {f["label"]} 이 VOLATILE 인데 as_of 가 없다 (D8 · DATA_MODEL §6.2)')
+                elif not re.fullmatch(r'\d{4}-\d{2}(-\d{2})?', f['as_of']):
+                    E('VOLATILE_BAD_AS_OF', f'{w}: 사실 {f["label"]} as_of={f["as_of"]}')
         if cls == 'DERIVED':
-            vs = [x for x in v['derived_from'] if x.get('volatility') != 'STABLE']
+            ins = te.get('inputs', [])
+            vs = [x['key'] for x in ins if x.get('fact') and K.facts.get(x['fact'], {}).get('volatility') != 'STABLE']
             if vs:
-                E('DERIVED_FROM_VOLATILE',
-                  f'{w}: 출처 {[x["key"] for x in vs]} 가 STABLE 이 아니다 — D8 규칙 4: VOLATILE 로 강등해야 한다')
+                E('DERIVED_FROM_VOLATILE', f'{w}: 입력 {vs} 의 사실이 STABLE 이 아니다 — D8 규칙 4: VOLATILE 로 강등해야 한다')
                 continue
             if pub is None:                          # published_at 이 없으면 재계산할 기준이 없다 — 위에서 이미 실패로 셌다
                 continue
-            got = evaluate(v, pub)
+            entry = {'formula': {k: v for k, v in te['formula'].items() if v is not None}, 'value_at_authoring': te['value_at_authoring'],
+                     'check': te['check'], 'derived_from': [{'key': x['key'], 'value': x['value']} for x in ins]}
+            got = evaluate(entry, pub)
             if got == 'FAIL':
                 E('DERIVED_INVARIANT_FAIL', f'{w}: recompute(published_at) != value_at_authoring (D8 규칙 3)')
-            elif got != v.get('invariant'):
-                E('DERIVED_INVARIANT_MISMATCH', f'{w}: 기록 {v.get("invariant")} / 재계산 {got}')
-            if got == 'UNVERIFIABLE':
-                warns.append(f'{w}: DERIVED 불변식 검증 불가 — {v.get("note", "")}')
-            outside = [x['key'] for x in v['derived_from'] if not x['refs'] and not x.get('brief_loc')]
-            if outside:
-                warns.append(f'{w}: DERIVED 출처 {outside} 가 브리프 밖')
+            elif got == 'UNVERIFIABLE':
+                warns.append(f'{w}: DERIVED 불변식 검증 불가 — 입력의 정밀도가 모자라다')
+            nofact = [x['key'] for x in ins if not x.get('fact')]
+            if nofact:
+                warns.append(f'{w}: DERIVED 입력 {nofact} 에 사실이 없다')
+    for f in K.facts.values():                       # 조각이 가리키지 않아도 — VOLATILE 사실은 as_of 가 있다
+        if f['volatility'] == 'VOLATILE' and not f.get('as_of') and not any(f['fact_id'] in te.get('facts', []) for te in auth['time_expressions']):
+            E('VOLATILE_MISSING_AS_OF', f'사실 {f["label"]}: VOLATILE 인데 as_of 가 없다 (DATA_MODEL 불변식 6)')
 
 
-def check(doc, ids, publish=False):
-    """-> (errs, warns, checker). errs: (code, msg) 목록"""
-    c = Checker(ids, publish)
+def check(doc, known, publish=False, record=None):
+    """-> (errs, warns, checker). errs: (code, msg) 목록. doc = 패키지, record = ArticleRecord 의 나머지 (있으면 D8 까지)"""
+    c = Checker(known, publish)
     for k in FORBIDDEN_TOP:
         if k in doc:
             c.E('D9_OBSERVED_KEY', f'최상단에 {k} 가 있다')
@@ -442,8 +528,8 @@ def check(doc, ids, publish=False):
         c.E('SCHEMA_KEY', f'lang={doc["lang"]!r}')
     if not isinstance(doc['title'], str) or not doc['title'].strip() or doc['title'].startswith('Claro'):
         c.E('SCHEMA_KEY', 'title 이 비었거나 브랜드("Claro — ")가 붙어 있다 (§2)')
-    if not isinstance(doc['event_ref'], str) or not doc['event_ref']:
-        c.E('SCHEMA_KEY', 'event_ref 가 비었다')
+    if doc['event_ref'] not in known.events:
+        c.E('EVENT_REF', f'event_ref {doc["event_ref"]!r} 가 Event 의 키(UUID)가 아니다 — code 는 참조에 쓰지 않는다 (DATA_MODEL §2.2 · D27)')
 
     levels = doc['levels']
     # 1
@@ -472,7 +558,6 @@ def check(doc, ids, publish=False):
                     c.E('OQ_EMPTY', f'{lid}/open_questions/{i}: text 가 비었다 (D15 QA①)')
                 elif '<' in oq['text'] or '>' in oq['text']:
                     c.E('INLINE_FORMAT', f'{lid}/open_questions/{i}: text 에 태그가 있다')
-                check_volatility(oq, f'{lid}/open_questions/{i}', pub, c.errs, c.warns)
         for i, s in enumerate(slides):
             path = f'{lid}[{i}]'
             if not c.keys(s, 'slide', path):
@@ -484,7 +569,10 @@ def check(doc, ids, publish=False):
                 continue
             for j, b in enumerate(s['blocks']):
                 c.block(b, f'{path}/blocks/{j}')
-            check_volatility(s, path, pub, c.errs, c.warns)
+    # 패키지의 뼈대(레벨 · 장 · 필드)가 깨졌으면 저작 데이터를 대지 않는다 — 자리를 못 찾는 것이 당연하다
+    broken = {'LEVEL_ID', 'SLIDES_EMPTY', 'OQ_LENGTH', 'SCHEMA_MISSING', 'SCHEMA_KEY', 'SCHEMA_TYPE', 'BLOCKS_EMPTY'}
+    if record is not None and not any(code in broken for code, _ in c.errs):
+        check_record(doc, record, known, pub, c.errs, c.warns)
     return c.errs, c.warns, c
 
 
@@ -509,51 +597,54 @@ def leaf_diff(a, b, path=''):
 def pending_summary(c):
     from collections import Counter
     n = Counter(need for _, _, need in c.pending)
-    return f'0.2 대기 {len(c.pending)} span — ' + ' · '.join(f'{k} {v}' for k, v in sorted(n.items())) if c.pending else ''
+    return f'대기 {len(c.pending)} span — ' + ' · '.join(f'{k} {v}' for k, v in sorted(n.items())) if c.pending else ''
 
 
 def report(c):
     print('  층별 span 수:', dict(sorted(c.layers.items())), f'(합 {sum(c.layers.values())})')
     for where, layer, need in c.pending:
         print(f'  대기 [{layer:<6} {need}] {where}')
-    for where, d in c.dropped:
-        print(f'  끊긴 F 연결 {d} — {where}')
+
+
+def run_bundle(b, publish=False):
+    return check(b['package'], Known(b['store'], b['concepts']), publish, b['record'])
 
 
 def main(argv):
     rep = '--report' in argv
     publish = '--publish' in argv
-    paths = [a for a in argv if not a.startswith('--')] or \
-        [GOLDEN] + sorted(glob.glob(os.path.join(ROOT, 'fixtures/invalid/*.json')))
-    ids = known_ids()
-    golden = json.load(open(GOLDEN, encoding='utf-8'))
     failed = 0
-    for p in paths:
-        doc = json.load(open(p, encoding='utf-8'))
+    gold = load_bundle()
+    errs, warns, c = run_bundle(gold, publish)
+    print(f'{"PASS" if not errs else "FAIL"}  골든 한 벌 — ' + ' · '.join(os.path.relpath(p, ROOT) for p in (GOLDEN, RECORD, STORE)))
+    for code, m in errs:
+        print(f'   ERROR {code}: {m}')
+    print(f'   대기 span {len(c.pending)}' + (f' — {pending_summary(c)}' if c.pending else ''))
+    for w in warns:
+        print(f'   WARN  {w}')
+    failed += bool(errs)
+    if rep and not errs:
+        report(c)
+    for p in sorted(glob.glob(os.path.join(ROOT, 'fixtures/invalid/*.json'))):
+        doc = read_json(p)
         rel = os.path.relpath(p, ROOT)
-        errs, warns, c = check(doc, ids, publish)
-        viol = doc.get('_violation')
-        if viol is None:
-            print(f'{"PASS" if not errs else "FAIL"}  {rel}')
-            for code, m in errs:
-                print(f'   ERROR {code}: {m}')
-            if c.pending:
-                print(f'   WARN  {pending_summary(c)}')
-            for w in warns:
-                print(f'   WARN  {w}')
-            failed += bool(errs)
-            if rep and not errs:
-                report(c)
-        else:
-            codes = sorted({code for code, _ in errs})
-            diffs = leaf_diff(golden, doc)
-            ok = codes == [viol['code']] and len(diffs) == 1
-            print(f'{"PASS" if ok else "FAIL"}  {rel}  — 거부 기대 {viol["code"]}')
-            print(f'   검출: {codes}')
-            for code, m in errs:
-                print(f'   {code}: {m}')
-            print(f'   골든과 다른 곳 {len(diffs)}군데: {diffs}')
-            failed += not ok
+        viol = doc.get('_violation') or {}
+        of = viol.get('of')
+        if of not in GOLDEN_SET:
+            print(f'FAIL  {rel}  — `_violation.of` 가 골든 한 벌의 파일 이름이 아니다: {of!r}')
+            failed += 1
+            continue
+        body = {k: v for k, v in doc.items() if k != '_violation'}
+        errs, _, _ = run_bundle(load_bundle({of: body}))
+        codes = sorted({code for code, _ in errs})
+        diffs = leaf_diff(read_json(GOLDEN_SET[of]), body)
+        ok = codes == [viol['code']] and len(diffs) == 1
+        print(f'{"PASS" if ok else "FAIL"}  {rel}  — {of} 를 갈아 끼움 · 거부 기대 {viol["code"]}')
+        print(f'   검출: {codes}')
+        for code, m in errs:
+            print(f'   {code}: {m}')
+        print(f'   골든과 다른 곳 {len(diffs)}군데: {diffs}')
+        failed += not ok
     print('\nOK' if not failed else f'\n{failed}개 실패')
     return 1 if failed else 0
 

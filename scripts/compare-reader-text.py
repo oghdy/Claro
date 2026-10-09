@@ -2,6 +2,7 @@
 
     python3 scripts/compare-reader-text.py                  # 옛 골든 = git c46871d, 새 골든 = fixtures/
     python3 scripts/compare-reader-text.py --old PATH --new PATH
+    python3 scripts/compare-reader-text.py --before REV      # 이전 전후 (둘 다 계약 모양) — 허용된 차이 없이, span 경계 · 층까지
 
 독자가 읽는 글자가 하나도 바뀌지 않았는지 문자 단위로 본다.
   대조하는 것  kicker · headline · 본문 문단 · 인용(출처 표시 + 글) · 목록(라벨 + 글) ·
@@ -290,16 +291,90 @@ def load(arg, rel_default=None):
     return json.load(open(arg, encoding='utf-8'))
 
 
+def span_seq(doc):
+    """[(레벨, 경로, 글, 층)] — 모든 span 을 읽는 순서로. 경계와 층까지 댄다"""
+    out = []
+
+    def walk(o, path):
+        if isinstance(o, list):
+            if o and all(isinstance(x, dict) and 'layer' in x for x in o):
+                out.extend((path + f'/{i}', sp['text'], sp['layer']) for i, sp in enumerate(o))
+                return
+            for i, x in enumerate(o):
+                walk(x, f'{path}/{i}')
+        elif isinstance(o, dict):
+            for k, v in o.items():
+                if not k.startswith('_'):
+                    walk(v, f'{path}/{k}')
+    for lv in doc['levels']:
+        walk(lv['slides'], lv['id'] + '/slides')
+    return out
+
+
+def strict(rev, new_p):
+    """이전 전후 — 둘 다 계약 모양. 허용된 차이가 없다. 독자 글 단위 · span 경계 · 층 · 블록 text 가 전부 같아야 한다 (0.2m-a)"""
+    out = subprocess.run(['git', 'show', f'{rev}:{OLD_REL}'], cwd=ROOT, capture_output=True, check=True)
+    before, after = json.loads(out.stdout.decode('utf-8')), json.load(open(new_p or NEW_DEFAULT, encoding='utf-8'))
+    fails = []
+    for k in ('title', 'lang', 'published_at'):
+        if before.get(k) != after.get(k):
+            fails.append(f'{k}: {before.get(k)!r} → {after.get(k)!r}')
+    bu, au = new_units(before), new_units(after)
+    n_units = n_chars = 0
+    if list(bu) != list(au):
+        fails.append(f'레벨이 다르다 {list(bu)} → {list(au)}')
+    for lid in bu:
+        if len(bu[lid]) != len(au.get(lid, [])):
+            fails.append(f'{lid}: 장수 {len(bu[lid])} → {len(au.get(lid, []))}')
+            continue
+        for i, (x, y) in enumerate(zip(bu[lid], au[lid])):
+            for what in ('kicker', 'headline', 'oq'):
+                n_units += x[what] is not None
+                n_chars += len(x[what] or '')
+                if x[what] != y[what]:
+                    fails.append(f'{lid}[{i}] {what}: {show_diff(x[what] or "", y[what] or "")}')
+            if [(t, sh) for t, sh, _ in x['blocks']] != [(t, sh) for t, sh, _ in y['blocks']]:
+                fails.append(f'{lid}[{i}]: 블록 종류 · 모양이 다르다')
+                continue
+            for j, ((_, _, ux), (_, _, uy)) in enumerate(zip(x['blocks'], y['blocks'])):
+                if [k for k, _ in ux] != [k for k, _ in uy]:
+                    fails.append(f'{lid}[{i}] blocks/{j}: 글 단위가 다르다')
+                    continue
+                for (k, a), (_, b) in zip(ux, uy):
+                    n_units += 1
+                    n_chars += len(a)
+                    if a != b:
+                        fails.append(f'{lid}[{i}] blocks/{j} {k}: {show_diff(a, b)}')
+    sb, sa = span_seq(before), span_seq(after)
+    if sb != sa:
+        bad = [(x, y) for x, y in zip(sb, sa) if x != y][:3]
+        fails.append(f'span 경계 · 층이 다르다 — {len(sb)} → {len(sa)} span, 첫 차이 {bad}')
+    tb = [b['text'] for lv in before['levels'] for s in lv['slides'] for b in s['blocks']]
+    ta = [b['text'] for lv in after['levels'] for s in lv['slides'] for b in s['blocks']]
+    if tb != ta:
+        fails.append('블록 text(정규 텍스트)가 다르다')
+    print(f'이전 전 git {rev}:{OLD_REL} → 이전 후 {new_p or os.path.relpath(NEW_DEFAULT, ROOT)}  (허용된 차이 없음)')
+    print(f'  독자 글 단위 {n_units}개 · {n_chars}자 · span {len(sa)}개(경계 · 층) · 블록 text {len(ta)}개 대조')
+    for f in fails:
+        print('  FAIL', f)
+    print('\nOK — 차이 0' if not fails else f'\n{len(fails)}건 실패')
+    return 1 if fails else 0
+
+
 def main(argv):
-    old_p = new_p = None
+    old_p = new_p = before = None
     it = iter(argv)
     for a in it:
         if a == '--old':
             old_p = next(it)
         elif a == '--new':
             new_p = next(it)
+        elif a == '--before':
+            before = next(it)
         else:
             raise SystemExit(__doc__)
+    if before:
+        return strict(before, new_p)
     old = load(old_p)
     new = json.load(open(new_p or NEW_DEFAULT, encoding='utf-8'))
     fails, n_units, n_chars, ou, allowed_hit = compare(old, new)

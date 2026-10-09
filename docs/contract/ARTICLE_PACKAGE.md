@@ -10,6 +10,7 @@
 | 2026-09-30 | 참조 문구를 DATA_MODEL · CONCEPT_IDENTITY 에 맞춤 — §0 저장 구조의 주인 · §1 `event_ref: EventRef`, `refs` 원소는 층이 정한다 · §6 층별 Ref 표 · 골든 층 수를 0.1b 이후로(concept 20 → 21 등) · §6.2 대기의 행선지. 규칙은 안 바뀜 | B-0.2b |
 | 2026-10-09 | D27 반영 — `event_ref` 는 Event 의 UUID (골든의 문자열은 code). 참조 문구만 | B-0.2b |
 | 2026-10-09 | D30 반영 — §2 · §10 "패키지 자체의 ID" 가 DATA_MODEL §11 (ArticleRecord `article_id` · `article_version`)을 가리키게. 가리키는 문구만 | B-0.2c |
+| 2026-10-09 | 골든을 옮겼다 (0.2m-a) — §1 `event_ref` 주석 · §5 에 D26 (물음이 넘어가는 유일한 길이다. 불변식 2 가 이미 요구한다 — 규칙은 안 바뀜) · §6.2 대기 0. 가리키는 문구만 | B-0.2m-a |
 
 > **상태: 게이트 통과 (D20 · D22, 2026-09-29).**
 > 근거는 두 실물뿐이다 — `fixtures/fomc-2026-09.article.json`(골든, 주 입력), `fixtures/ftc-2026-08.observed.json`(블록 모양만).
@@ -40,7 +41,7 @@ Article Package = 백엔드가 프론트에 넘기는 완성 기사 한 벌.
 
 ```ts
 ArticlePackage {
-  event_ref:    EventRef         // DATA_MODEL §2 — Event 의 UUID (D27). 골든의 "FOMC-20260916" 은 그 Event 의 code — 0.2m 에서 UUID 로
+  event_ref:    EventRef         // DATA_MODEL §2 — Event 의 UUID (D27). 사람이 부르는 이름 "FOMC-20260916" 은 그 Event 의 code 다
   title:        string           // 기사 제목
   lang:         "ko"
   published_at: Date             // D8 DERIVED 의 기준 시각. 발행 시각 정책은 D6(OPEN)
@@ -127,6 +128,10 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
 - **슬라이드 사이의 독립 데이터다 (D17).** 슬라이드의 필드가 아니다.
   `levels[].open_questions[i]` 는 `slides[i]` 와 `slides[i+1]` **사이**에 있다
   - 프로토타입처럼 슬라이드 아래에 붙일지, 한 화면으로 따로 띄울지는 프론트가 정한다. 어느 쪽이든 계약은 그대로다
+  - **D26 (2026-10-09 · 도윤)**: 프론트는 물음을 **버튼**으로 그리고, 그것이 다음 장으로 넘어가는 유일한 길이다. 누른 물음이 다음 화면의 머리가 된다.
+    그래서 마지막 장을 뺀 모든 장 뒤에 물음이 정확히 하나 있어야 하는데 — **이 계약이 이미 그것을 요구한다** (아래 "길이는 정확히 `slides.length − 1`, 모든 `text` 는 비어 있지 않다" · 불변식 2).
+    D26 으로 바뀐 것은 무게다: 이 불변식이 깨지면 읽기 좋지 않은 것이 아니라 **독자가 다음 장으로 갈 수 없다.** 모양은 안 바뀐다.
+    D18 (질문 슬라이드 = PRE probe 자리?)의 전제 "질문이 별도 슬라이드"는 D26 에서 사라졌다 — 물음은 장이 아니다 (§4 "장수에 들어가지 않는다" 그대로). D18 은 OPEN 인 채 전제를 다시 써야 한다 → PM
 - **teaser 만 open_question 이다 (D16).** 본문 수사의문문("이상하죠. 왜 올렸을까요?")은 본문 span(`layer: writing`)이다
 - **읽기 흐름은 선형이다 (D15)**
   - `open_questions[i]` 에는 `slides[i+1]` 이 답한다. 다른 슬라이드를 가리킬 방법이 없다 — `resolves` · `goto` 같은 필드를 두지 않는다
@@ -182,7 +187,7 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
 
 0.2 가 ID 체계를 정하기 전에는 refs 를 채울 수 없는 span 이 있다(골든: 브리지 2, 브리프 산문 1, 이란 전쟁 4 — 사실 3 · 전망 1).
 0.1b 를 0.2 보다 먼저 하기 위해 그런 span 은 **픽스처에서만** 이렇게 표시한다.
-(0.2b 가 참조 모양을 정했다. D23 이후 대기 13 이 각각 어디서 풀리는지는 DATA_MODEL §17. 표시 규칙은 그대로다)
+(0.2b 가 참조 모양을 정했다. 대기의 어휘는 DATA_MODEL §17. 표시 규칙은 그대로다. **골든의 대기는 0.2m-a 에서 0 이 됐다** — 아래 예는 모양의 예다)
 
 ```json
 { "text": "그런데 지금 미국은 3%대입니다.", "layer": "bridge", "refs": [],

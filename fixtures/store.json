@@ -1,12 +1,4 @@
 {
-  "_violation": {
-    "code": "VOLATILE_MISSING_AS_OF",
-    "of": "store.json",
-    "rule": "D8 — VOLATILE 은 as_of 필수 (FINDINGS §5.4 · DATA_MODEL §6.2 · 불변식 6)",
-    "where": "facts[label=F31].as_of",
-    "what": "7월 근원 PCE 3.3% (F31)는 다시 조회하면 바뀌는 값인데 기준 시각이 없다. 골든 입문 4장 \"지금 미국은 3%대\" · 숙련 2장이 이 사실을 가리킨다",
-    "made_from": "fixtures/store.json + 위반 1개 (B-0.2m-a 에서 다시 만듦 — as_of 는 조각이 아니라 사실에 있다)"
-  },
   "_source": {
     "task": "B-0.2m-a",
     "date": "2026-10-09",
@@ -893,7 +885,7 @@
       "fact_type": "MEASUREMENT",
       "actor": null,
       "volatility": "VOLATILE",
-      "as_of": null,
+      "as_of": "2026-08-26",
       "event_at": "2026-07",
       "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
       "storyline_id": null,

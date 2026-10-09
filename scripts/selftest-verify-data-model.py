@@ -1,18 +1,18 @@
-"""verify-data-model.py 가 실제로 실패할 수 있는지 — 일부러 망가뜨린 사본으로 확인한다 (B-0.2b).
+"""verify-data-model.py 가 실제로 실패할 수 있는지 — 일부러 망가뜨린 사본으로 확인한다 (B-0.2b · 0.2m-a).
 
     python3 scripts/selftest-verify-data-model.py
 
-계약 · 로그 · 골든 · 시험 사본(골든 + FOMC 브리프를 이 계약 모양으로 옮긴 것)의 사본에 위반을 하나씩 넣고
+계약 · 로그 · 골든 한 벌(article · record · store) · 모델의 사본에 위반을 하나씩 넣고
 기대한 code 만 나오는지 본다 (다른 code 가 섞이면 실패). 망가뜨리지 않은 원본은 통과해야 한다.
 사본은 전부 메모리 안이다 — 파일로 남기지 않는다.
 
-발행 검사(불변식 8 · 9 · 11 · 13 · 17 · 19 · 20 · 23)는 지금 시험 사본에서 **막히는 것이 정상**이다(출처 · 반증이 비었다).
+발행 검사(불변식 8 · 9 · 11 · 13 · 17 · 19 · 20 · 23)는 지금 골든에서 **막히는 것이 정상**이다(원문 위치 · 권리가 비었다).
 그 검사가 제대로 무는지 보려고 가짜 재료로 다 채운 사본(`publishable`)을 만들어 발행 검사를 통과시킨 뒤 하나씩 망가뜨린다.
 가짜 재료(SYN 출처 · 시험 사실 · 시험 반증)는 검사를 시험하려는 것이다 — 콘텐츠가 아니다.
 
 "빈틈" 행은 망가뜨렸는데 **못 잡는 것**이 기대값이다 — 계약이 게이트 3 으로 넘긴 것을 실제로 보인다.
 """
-import copy, importlib.util, json, os, re, sys
+import copy, importlib.util, json, os, re, sys, uuid
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 spec = importlib.util.spec_from_file_location('vdm', os.path.join(ROOT, 'scripts/verify-data-model.py'))
@@ -21,13 +21,18 @@ spec.loader.exec_module(V)
 
 read = lambda p: open(p, encoding='utf-8').read()
 CONTRACT, LOG, LIBT = read(V.CONTRACT), read(V.LOG), read(V.LIBRARY)
-GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))
+RECS = ''.join(read(p) for p in V.RECORDS)
+BUNDLE = V.VA.load_bundle()
 LIB = V.VC.parse_library(LIBT)
-FB, CB, SB = V.brief_facts(V.BRIEFS['FOMC']), V.brief_claims(V.BRIEFS['FOMC']), V.brief_sources(V.BRIEFS['FOMC'])
-BASE = V.build_model(GOLD, CONTRACT, FB, CB, SB, LIB)
+BASE = V.load_model(BUNDLE)
 FID = {f['label']: k for k, f in BASE['facts'].items()}
+FID.update(F32=FID['F32a'], F37=FID['F37b'])            # 브리프의 이름 → 나눈 뒤 (DATA_MODEL §3.3)
 CID = {c['label']: k for k, c in BASE['claims'].items()}
 BID = next(iter(BASE['bridges']))
+EVENT_ID, IRAN_ID = next(iter(BASE['events'])), next(iter(BASE['storylines']))
+EVENT_CODE = BASE['events'][EVENT_ID]['code']
+CONCEPT_ID = {code: k for k, code in BASE['concept_codes'].items()}
+UID = lambda kind, label: str(uuid.uuid5(uuid.NAMESPACE_URL, f'claro-selftest:{kind}:{label}'))   # 시험용 키
 
 
 def sub(text, old, new, count=1):
@@ -44,20 +49,21 @@ def section(num, old, new):
     return f
 
 
-def g_(fn):
-    def f(g):
-        g = copy.deepcopy(g)
-        fn(g)
-        return g
+def b_(fn):
+    """골든 한 벌의 사본을 고친다 — fn(package, record, store)"""
+    def f(b):
+        b = copy.deepcopy(b)
+        fn(b['package'], b['record'], b['store'])
+        return b
     return f
+
+
+def sfact(st, label):
+    return next(f for f in st['facts'] if f['label'] == label)
 
 
 def slide(g, lv, i):
     return g['levels'][lv]['slides'][i]
-
-
-def vol(g, lv, i, span):
-    return next(v for v in slide(g, lv, i)['_volatility'] if v['span'] == span)
 
 
 def m_(fn):
@@ -82,7 +88,7 @@ def te(m, frag):
 # ── 가짜 재료로 다 채운 사본 — 발행 검사를 시험하려는 것 ──────────────────────
 def publishable(m):
     m = copy.deepcopy(m)
-    syn = V.UID('source', 'SYN')
+    syn = UID('source', 'SYN')
     m['sources'][syn] = {'source_id': syn, 'label': 'SYN', 'title': '시험', 'publisher': 'synthetic', 'url': None,
                          'kind': 'PRIMARY', 'language': 'en', 'published_at': '2026-09-01', 'ingested_at': '2026-09-01'}
     m['documents'][syn] = 'x' * 100
@@ -90,9 +96,9 @@ def publishable(m):
     n = 0
 
     def new_fact(label):
-        fid = V.UID('fact', label)
+        fid = UID('fact', label)
         m['facts'][fid] = {'fact_id': fid, 'label': label, 'claim_text': '시험', 'fact_type': 'MEASUREMENT', 'actor': None,
-                           'volatility': 'STABLE', 'as_of': None, 'event_at': None, 'event_id': V.EVENT_ID,
+                           'volatility': 'STABLE', 'as_of': None, 'event_at': None, 'event_id': EVENT_ID,
                            'storyline_id': None, 'storyline_version': None, 'extraction_model': None,
                            'extraction_version': None}
         return fid
@@ -104,8 +110,8 @@ def publishable(m):
         if layer == 'fact':
             sp['refs'] = [fid]
         else:
-            cid = V.UID('claim', f'SYN-C{n}')
-            m['claims'][cid] = {'claim_id': cid, 'label': f'SYN-C{n}', 'event_id': V.EVENT_ID, 'statement': '시험',
+            cid = UID('claim', f'SYN-C{n}')
+            m['claims'][cid] = {'claim_id': cid, 'label': f'SYN-C{n}', 'event_id': EVENT_ID, 'statement': '시험',
                                 'kind': 'ASSERTED', 'basis': [fid],
                                 'checks': [{'question': '시험', 'slot': None, 'recollected': False, 'answer': '',
                                             'facts': [fid], 'outcome': 'NOT_REFUTED'}]}
@@ -119,8 +125,11 @@ def publishable(m):
                 x['fact'] = new_fact(f'SYN-F{n}')
                 if x['key'] == 'war_start':
                     x['value'] = '2026-02-28'
-    # 반증 — 비었거나 사실 없는 답
+    # 반증 — 비었거나 사실 없는 답 · ASSERTED 의 미결 (지금 골든: DC-I · DC-J)
     for c in m['claims'].values():
+        for k in c['checks']:
+            if c['kind'] == 'ASSERTED' and k['outcome'] == 'UNRESOLVED':
+                k['outcome'] = 'SCOPED'
         if not c['checks']:
             c['checks'] = [{'question': '시험', 'slot': None, 'recollected': False, 'answer': '',
                             'facts': list(c['basis'][:1]), 'outcome': 'NOT_REFUTED'}]
@@ -134,11 +143,11 @@ def publishable(m):
 
 
 PUB = publishable(BASE)
-SYN = V.UID('source', 'SYN')
+SYN = UID('source', 'SYN')
 
 
 def add_source(m, label, **kv):
-    sid = V.UID('source', label)
+    sid = UID('source', label)
     m['sources'][sid] = dict(m['sources'][SYN], source_id=sid, label=label, **kv)
     m['documents'][sid] = 'y' * 100
     return sid
@@ -157,30 +166,30 @@ def unspan(m, fact_label):
 
 
 def second_bridge(m):
-    b2 = V.UID('bridge', 'other')
-    m['bridges'][b2] = dict(m['bridges'][BID], bridge_id=b2, label='다른 브리지', concept_id=V.UID('concept', 'C-0001'),
+    b2 = UID('bridge', 'other')
+    m['bridges'][b2] = dict(m['bridges'][BID], bridge_id=b2, label='다른 브리지', concept_id=CONCEPT_ID['C-0001'],
                             concept_version=1, slot=None)
     span_at(m, 'basic', 'slides/3/blocks/0/paragraphs/1/body/0')['refs'] = [b2]
 
 
 def bump_storyline(m):
-    m['storylines'][V.IRAN_ID]['version'] = 2
-    m['storyline_versions'].append({'storyline_id': V.IRAN_ID, 'version': 2, 'created_at': '2026-09-16', 'change': '시험'})
+    m['storylines'][IRAN_ID]['version'] = 2
+    m['storyline_versions'].append({'storyline_id': IRAN_ID, 'version': 2, 'created_at': '2026-09-16', 'change': '시험'})
 
 
 # (이름, 대상, 망가뜨리기, 기대 code 집합)
 # 대상: contract · log · gold → run() 전체 / model → check_model(시험 사본) / publish → check_model(publishable, 발행)
 CASES = [
     ('D30 — ArticleRecord.article_id 삭제', 'contract',
-     lambda c: sub(c, '  article_id:      UUID             // D30', '  record_key:      UUID             // D30'), {'CONTRACT_FIELD'}),
+     lambda c: sub(c, '  article_id:      UUID             // D30', '  record_key:      UUID             // D30'), {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     # ── A. 계약 문서
     ('§5.4 — Fact.as_of 삭제', 'contract',
      lambda c: sub(c, '  as_of:              TimePoint | null        // VOLATILE 이면 필수. 이 값이 "지금 값"이던 때 (§6.2)\n', ''),
-     {'CONTRACT_FIELD'}),
+     {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     ('§5.5 — FactSource.span_start 삭제', 'contract',
-     lambda c: sub(c, '  span_start: integer               // SourceDocument.text 안 글자 위치. 실물 없음\n', ''), {'CONTRACT_FIELD'}),
+     lambda c: sub(c, '  span_start: integer               // SourceDocument.text 안 글자 위치. 실물 없음\n', ''), {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     ('§5.3 — Source.ingested_at 삭제', 'contract',
-     lambda c: sub(c, '  ingested_at:  TimePoint           // 확정 §5.3. Claro 가 수집한 때\n', ''), {'CONTRACT_FIELD'}),
+     lambda c: sub(c, '  ingested_at:  TimePoint           // 확정 §5.3. Claro 가 수집한 때\n', ''), {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     ('§5.1 — SourceRegistry.can_quote 삭제', 'contract',
      lambda c: sub(c, '  can_quote:            boolean | null\n', ''), {'CONTRACT_FIELD'}),
     ('§5.2 — FactType 에 BACKGROUND 추가 (D27 이 닫은 7값을 연다)', 'contract',
@@ -203,7 +212,7 @@ CASES = [
      lambda c: sub(c, '"PRIMARY" | "SECONDARY"   //', '"PRIMARY"   //'), {'CONTRACT_ENUM'}),
     ('D27 — Event.code 삭제 (사람이 부르는 이름이 없다)', 'contract',
      lambda c: sub(c, '  code:         string              // "FOMC-20260916". 유일 · 불변 · 재사용 없음 — Concept 의 code 와 같은 방식 (D27)\n', ''),
-     {'CONTRACT_FIELD'}),
+     {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     ('D27 — EventId 를 다시 문자열로 (초안의 추천)', 'contract',
      lambda c: sub(c, 'EventId     = UUID ', 'EventId     = string '), {'CONTRACT_FIELD'}),
     ('D27 — §3.3 에 _open-1 표시가 다시 들어옴', 'contract',
@@ -234,7 +243,7 @@ CASES = [
      lambda c: sub(c, '| PROJECTION | FOMC F11 F14~F19 · 스크루웜 S19 | OFFICIAL_CLAIM |',
                    '| PROJECTION | FOMC F11 F14~F19 · 스크루웜 S19 | FORECAST |'), {'CONTRACT_TYPE_MAP'}),
     ('§6.4 — year_of 행 삭제 (골든이 쓰는 op)', 'contract',
-     lambda c: re.sub(r'^\| `year_of` \|.*\n', '', c, count=1, flags=re.M), {'CONTRACT_OP', 'GOLD_OP_UNKNOWN'}),
+     lambda c: re.sub(r'^\| `year_of` \|.*\n', '', c, count=1, flags=re.M), {'CONTRACT_OP'}),
     ('CHANGELOG — B-0.2b 행 전부 삭제', 'contract',
      lambda c: re.sub(r'^\| 20\d\d-\d\d-\d\d \| .*\| B-0\.2b \|\n', '', c, flags=re.M), {'CONTRACT_CHANGELOG'}),
     # ── B. 로그
@@ -242,36 +251,46 @@ CASES = [
     ('로그 — 질문 4 행의 표시 지움', 'log',
      lambda l: re.sub(r'^\| 4 \|.*$', lambda m: re.sub(r'계약 반영|_open|미확인', '—', m.group()), l, count=1, flags=re.M),
      {'LOG_QUESTION'}),
-    # ── C. 골든
-    ('R-1 — published_at 에 시각', 'gold', g_(lambda g: g.__setitem__('published_at', '2026-09-16T14:00:00-04:00')),
-     {'GOLD_PUBLISHED_AT_SHAPE'}),
-    ('§6.2 — F31 as_of 를 한 곳만 바꿈 (사실의 속성이 조각마다 다르다)', 'gold',
-     g_(lambda g: vol(g, 0, 3, '3%대').__setitem__('as_of', '2026-09-11')), {'GOLD_ASOF_CONFLICT'}),
-    ('불변식 15 — 시간 조각 "올해 말 금리" → "올해" (그 글에 두 번)', 'gold',
-     g_(lambda g: vol(g, 0, 8, '올해 말 금리').__setitem__('span', '올해')), {'GOLD_FRAGMENT_AMBIGUOUS'}),
-    ('불변식 16 — VOLATILE 조각의 사실을 지움', 'gold',
-     g_(lambda g: vol(g, 0, 7, '경유 가격이 사상 최고치').__setitem__('refs', [])), {'GOLD_VOLATILE_NO_FACT'}),
-    ('§7.2 — DC-C span 의 끊긴 연결에 F38 추가 (브리프 DC-C 근거 밖 → 옮기면 잃는다)', 'gold',
-     g_(lambda g: slide(g, 0, 1)['headline'][0]['_fact_refs_dropped'].append('F38')), {'GOLD_DROPPED_NOT_IN_BASIS'}),
-    ('§10.1 — 인용 출처 표시에서 body 사실 F33 삭제', 'gold',
-     g_(lambda g: slide(g, 0, 5)['blocks'][1].__setitem__('_attribution_refs', ['F32'])), {'GOLD_ATTRIBUTION'}),
-    ('§10.2 — 인용 body 를 따옴표로 쌈 (FTC observed 모양)', 'gold',
-     g_(lambda g: (lambda b: (b[0].__setitem__('text', '“' + b[0]['text']), b[-1].__setitem__('text', b[-1]['text'] + '”')))(
-         slide(g, 1, 1)['blocks'][1]['body'])), {'GOLD_QUOTE_MARKS'}),
-    ('불변식 25 — 브리지 대기 need 를 Fact 출처로 (층과 안 맞는다)', 'gold',
-     g_(lambda g: slide(g, 0, 3)['blocks'][0]['paragraphs'][1]['body'][0]['_refs_pending'].__setitem__('need', 'Fact 출처')),
-     {'GOLD_PENDING_NEED'}),
-    ('불변식 25 — 대기 need 가 어휘 밖 ("나중에")', 'gold',
-     g_(lambda g: slide(g, 0, 3)['blocks'][0]['paragraphs'][1]['body'][0]['_refs_pending'].__setitem__('need', '나중에')),
-     {'GOLD_PENDING_NEED'}),
-    ('빈틈 — 대기 span 하나를 몰래 채움. 계약 글과 대조하지 않으므로 FAIL 이 아니다 — 대기 수(WARN)가 줄 뿐 (0.2m-a _open-m1)', 'gold',
-     g_(lambda g: (lambda sp: (sp.pop('_refs_pending'), sp.__setitem__('refs', ['F36'])))(
-         next(sp for _, _, _, sp in V.golden_spans(g) if sp.get('_refs_pending', {}).get('need') == 'Fact 출처'))), set()),
-    ('§6.4 — op 를 decades 로', 'gold',
-     g_(lambda g: vol(g, 0, 0, '3년 만에')['formula'].__setitem__('op', 'decades')), {'GOLD_OP_UNKNOWN'}),
-    ('§6.3 — DERIVED 입력 하나에 사실 둘', 'gold',
-     g_(lambda g: vol(g, 1, 0, '7주 만에')['derived_from'][0].__setitem__('refs', ['F28', 'F02'])), {'GOLD_INPUT_MULTI'}),
-    # ── D. 시험 사본 (지금 검사)
+    # ── C. 원천 · 골든 한 벌 (0.2m-a)
+    ('R-1 — published_at 에 시각', 'bundle', b_(lambda g, r, st: g.__setitem__('published_at', '2026-09-16T14:00:00-04:00')),
+     {'GOLD_PUBLISHED_AT_SHAPE', 'PUBLISHED_AT_SHAPE'}),
+    ('원천 — 브리프 사실 F01 의 글자를 고침 (3.75~4.00% → 3.75~4.0%)', 'bundle',
+     b_(lambda g, r, st: (lambda f: f.__setitem__('claim_text', f['claim_text'].replace('4.00%', '4.0%')))(sfact(st, 'F01'))),
+     {'BRIEF_TEXT'}),
+    ('원천 — 브리프의 틀린 숫자를 저장소에서 슬쩍 고침 (F36 90% → 60%)', 'bundle',
+     b_(lambda g, r, st: (lambda f: f.__setitem__('claim_text', f['claim_text'].replace('90%', '60%')))(sfact(st, 'F36'))),
+     {'BRIEF_TEXT'}),
+    ('원천 — 나눈 사실 F32a 를 다듬어 씀 (말하며 → 말함)', 'bundle',
+     b_(lambda g, r, st: (lambda f: f.__setitem__('claim_text', f['claim_text'].replace('말하며', '말함')))(sfact(st, 'F32a'))),
+     {'BRIEF_TEXT'}),
+    ('원천 — 브리프 사실 F38 을 저장소에서 뺌 (골든이 안 쓴다고 버리지 않는다)', 'bundle',
+     b_(lambda g, r, st: st['facts'].remove(sfact(st, 'F38'))), {'BRIEF_MISSING'}),
+    ('원천 — 나누고 남은 절(F32 뒷부분)의 기록을 지움', 'bundle',
+     b_(lambda g, r, st: st['_not_facts'].pop(0)), {'BRIEF_MISSING'}),
+    ('원천 — 1차 구절을 고쳐 씀 (기록에 없는 글)', 'bundle',
+     b_(lambda g, r, st: (lambda x: x.__setitem__('_passage', x['_passage'].replace('12 – 0', '12-0')))(
+         next(x for x in st['fact_sources'] if '12 – 0' in x.get('_passage', '')))), {'PASSAGE_NOT_IN_RECORD'}),
+    ('원천 — 1차 구절을 지어냄', 'bundle',
+     b_(lambda g, r, st: st['fact_sources'][0].__setitem__('_passage', 'The Committee judged that inflation had worsened.')),
+     {'PASSAGE_NOT_IN_RECORD'}),
+    ('§1 — Fact 에 계약에 없는 필드 (source)', 'bundle', b_(lambda g, r, st: sfact(st, 'F01').__setitem__('source', 'S1')),
+     {'STORE_SHAPE'}),
+    ('§1 — Fact 에서 actor 삭제', 'bundle', b_(lambda g, r, st: sfact(st, 'F24').pop('actor')), {'STORE_SHAPE'}),
+    ('§6.3 — 시간 조각에 옛 필드 where', 'bundle',
+     b_(lambda g, r, st: r['authoring']['time_expressions'][0].__setitem__('where', 'headline')), {'STORE_SHAPE'}),
+    ('§6.2 — as_of 를 시간 조각에 다시 적음 (사실의 속성이다)', 'bundle',
+     b_(lambda g, r, st: r['authoring']['time_expressions'][2].__setitem__('as_of', '2026-08-26')), {'STORE_SHAPE'}),
+    ('§11 — record 에 article_id 가 없다', 'bundle', b_(lambda g, r, st: r.pop('article_id')), {'STORE_SHAPE'}),
+    ('불변식 25 — 대기 need 가 어휘 밖 ("나중에")', 'bundle',
+     b_(lambda g, r, st: slide(g, 0, 8)['blocks'][0]['paragraphs'][2]['body'][0].update(
+         refs=[], _refs_pending={'until': '0.2', 'need': '나중에'})), {'GOLD_PENDING_NEED'}),
+    ('불변식 25 — fact span 의 대기 need 가 Bridge (층과 안 맞는다)', 'bundle',
+     b_(lambda g, r, st: slide(g, 0, 8)['blocks'][0]['paragraphs'][2]['body'][0].update(
+         refs=[], _refs_pending={'until': '0.2', 'need': 'Bridge'})), {'GOLD_PENDING_NEED'}),
+    ('빈틈 — 채워진 span 하나를 다시 대기로 돌림. 계약 글과 대조하지 않으므로 FAIL 이 아니다 — 대기 수가 늘 뿐 (_open-m1)', 'bundle',
+     b_(lambda g, r, st: slide(g, 0, 8)['blocks'][0]['paragraphs'][2]['body'][0].update(
+         refs=[], _refs_pending={'until': '0.2', 'need': 'Fact 출처'})), set()),
+    # ── D. 모델 (지금 검사)
     ('불변식 26 — ArticleRecord 의 article_id 가 code 문자열', 'model',
      m_(lambda m: m['record'].__setitem__('article_id', 'FOMC-20260916')), {'RECORD_KEY'}),
     ('불변식 26 — ArticleRecord 에 article_version 이 없다', 'model',
@@ -287,7 +306,7 @@ CASES = [
     ('§6.1 — F11 을 Fact 에서 DERIVED 로 (D8 가정) → 그 사실로 계산한 "올해" 조각도 걸린다', 'model',
      m_(lambda m: m['facts'][FID['F11']].__setitem__('volatility', 'DERIVED')), {'FACT_VOLATILITY', 'DERIVED_FROM_VOLATILE'}),
     ('불변식 7 — F37 이 사건 · 스토리라인 둘 다 소유', 'model',
-     m_(lambda m: m['facts'][FID['F37']].__setitem__('event_id', V.EVENT_ID)), {'FACT_OWNER'}),
+     m_(lambda m: m['facts'][FID['F37']].__setitem__('event_id', EVENT_ID)), {'FACT_OWNER'}),
     ('불변식 7 — F37 이 없는 스토리라인 버전 2 에 붙음', 'model',
      m_(lambda m: m['facts'][FID['F37']].__setitem__('storyline_version', 2)), {'FACT_OWNER'}),
     ('불변식 1 — 한 사건 안에 label F01 이 둘', 'model',
@@ -295,9 +314,20 @@ CASES = [
     ('불변식 1 — Claim 키가 Fact 키와 같다', 'model',
      m_(lambda m: m['claims'].__setitem__(FID['F01'], dict(m['claims'][CID['DC-A']], claim_id=FID['F01']))), {'KEY_DUP'}),
     ('D27 — 패키지 event_ref 가 code 문자열 ("FOMC-20260916") — 브리지의 사건과도 어긋난다', 'model',
-     m_(lambda m: m['record']['package'].__setitem__('event_ref', V.EVENT)), {'EVENT_REF', 'BRIDGE_EVENT'}),
+     m_(lambda m: m['record']['package'].__setitem__('event_ref', EVENT_CODE)), {'EVENT_REF', 'BRIDGE_EVENT'}),
     ('D27 — 두 사건이 같은 code', 'model',
-     m_(lambda m: m['events'].__setitem__('x', dict(m['events'][V.EVENT_ID], event_id='x'))), {'CODE_DUP'}),
+     m_(lambda m: m['events'].__setitem__(UID('event', 'dup'), dict(m['events'][EVENT_ID], event_id=UID('event', 'dup')))),
+     {'CODE_DUP'}),
+    ('불변식 1 — Event 의 키가 code 문자열', 'model',
+     m_(lambda m: m['events'].__setitem__('FOMC-20260729', dict(m['events'][EVENT_ID], event_id='FOMC-20260729', code='FOMC-20260729'))),
+     {'KEY_SHAPE'}),
+    ('불변식 14 — 스토리라인 버전 2 인데 버전 줄은 1 뿐', 'model',
+     m_(lambda m: m['storylines'][IRAN_ID].__setitem__('version', 2)), {'STORYLINE_VERSION'}),
+    ('불변식 15 — 시간 조각 "올해 말 금리" → "올해" (그 글에 두 번)', 'model',
+     m_(lambda m: te(m, '올해 말 금리')['at'].__setitem__('fragment', '올해')), {'TE_LOCATOR'}),
+    ('불변식 16 — VOLATILE 조각의 사실을 지움', 'model',
+     m_(lambda m: te(m, '경유 가격이 사상 최고치').__setitem__('facts', [])), {'TE_VOLATILE_FACTS'}),
+    ('§6.4 — op 를 decades 로', 'model', m_(lambda m: te(m, '3년 만에')['formula'].__setitem__('op', 'decades')), {'TE_OP'}),
     ('불변식 2 — fact span 에 ClaimRef', 'model',
      m_(lambda m: span_at(m, 'basic', 'slides/0/headline/0').__setitem__('refs', [CID['DC-A']])), {'REF_UNRESOLVED'}),
     ('불변식 2 — claim span 에 FactRef (층 섞기)', 'model',
@@ -308,7 +338,7 @@ CASES = [
     ('불변식 22 — DC-C basis 비움', 'model', m_(lambda m: m['claims'][CID['DC-C']].__setitem__('basis', [])), {'CLAIM_NO_BASIS'}),
     ('불변식 18 — 브리지 facts 비움 (F31 을 품지 않은 브리지)', 'model',
      m_(lambda m: m['bridges'][BID].__setitem__('facts', [])), {'BRIDGE_NO_FACTS'}),
-    ('불변식 18 — 브리지 슬롯 ⑤ (C-0002@3 에 없다)', 'model',
+    ('불변식 18 — 브리지 슬롯 ⑤ (C-0002 의 지금 버전에 없다)', 'model',
      m_(lambda m: m['bridges'][BID].__setitem__('slot', '⑤')), {'BRIDGE_CONCEPT', 'BRIDGE_SLOT_ORDER'}),   # ③ 다음 브리지가 ④ 를 못 채운다
     ('불변식 18 — CONCEPT_BRIDGE 인데 개념 없음', 'model',
      m_(lambda m: m['bridges'][BID].__setitem__('concept_id', None)), {'BRIDGE_CONCEPT', 'BRIDGE_SLOT_ORDER'}),
@@ -350,7 +380,8 @@ CASES = [
     ('불변식 11 — F28 의 유일한 출처가 발행 뒤 공개 (§5.3 7월 회의록 사례)', 'publish',
      m_(lambda m: only_source(m, 'F28', add_source(m, 'LATE', published_at='2026-10-07'))), {'FACT_NOT_YET_PUBLIC'}),
     ('불변식 11 — 출처 공개일이 월 정밀도라 증명 못 함 ("2026-09")', 'publish',
-     m_(lambda m: only_source(m, 'F28', add_source(m, 'MONTH', published_at='2026-09'))), {'FACT_NOT_YET_PUBLIC'}),
+     m_(lambda m: only_source(m, 'F28', add_source(m, 'MONTH', published_at='2026-09'))), {'FACT_PUBLIC_UNPROVEN'}),
+    ('불변식 19 — 인용의 원문은 하나인데 원문 위치가 없다', 'publish', m_(lambda m: unspan(m, 'F33')), {'FACT_NO_SOURCE_SPAN', 'QUOTE_SPAN_MISSING'}),
     ('불변식 13 — SL-iran-war 가 v2 로 올랐는데 핀은 v1', 'publish', m_(bump_storyline), {'STORYLINE_STALE'}),
     ('불변식 13 — 핀 없음', 'publish', m_(lambda m: m['record']['authoring'].__setitem__('storylines', [])),
      {'STORYLINE_STALE'}),
@@ -385,11 +416,11 @@ def codes(errs):
 
 
 def run(target, mutate):
-    if target in ('contract', 'log', 'gold'):
+    if target in ('contract', 'log', 'bundle'):
         c = mutate(CONTRACT) if target == 'contract' else CONTRACT
         l = mutate(LOG) if target == 'log' else LOG
-        g = mutate(GOLD) if target == 'gold' else GOLD
-        errs, _, _, _, _ = V.run(c, l, g, LIBT)
+        b = mutate(BUNDLE) if target == 'bundle' else BUNDLE
+        errs, _, _, _, _ = V.run(c, l, b, LIBT, RECS)
         return codes(errs)
     if target == 'model':
         return codes(V.check_model(mutate(BASE), LIB)[0])
@@ -398,7 +429,7 @@ def run(target, mutate):
 
 def main():
     fails = 0
-    base = {'원본 (계약 · 로그 · 골든 · 시험 사본)': run('gold', lambda g: g),
+    base = {'원본 (계약 · 로그 · 골든 한 벌 · 모델)': run('bundle', lambda b: b),
             '가짜 재료로 다 채운 사본 — 발행 검사': run('publish', lambda m: m)}
     for name, got in base.items():
         ok = not got

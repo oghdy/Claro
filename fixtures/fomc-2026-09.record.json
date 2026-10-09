@@ -1,12 +1,4 @@
 {
-  "_violation": {
-    "code": "DERIVED_FROM_VOLATILE",
-    "of": "fomc-2026-09.record.json",
-    "rule": "D8 규칙 4 — 입력 중 하나라도 VOLATILE 이면 DERIVED 를 쓸 수 없다. VOLATILE 로 강등해야 한다",
-    "where": "authoring.time_expressions[fragment=\"3주 뒤에\"].inputs[0].fact",
-    "what": "입문 7장 \"3주 뒤에\"(DERIVED)의 입력이 VOLATILE 사실(F31)을 가리킨다",
-    "made_from": "fixtures/fomc-2026-09.record.json + 위반 1개 (B-0.2m-a 에서 다시 만듦 — 입력의 변동성은 그 사실의 것이다)"
-  },
   "_source": {
     "task": "B-0.2m-a",
     "date": "2026-10-09",
@@ -154,7 +146,7 @@
             "key": "minutes",
             "what": "9월 회의록 공개",
             "value": "2026-10-07",
-            "fact": "145f189e-e7e3-4af3-9d8e-13cdb1ace448"
+            "fact": "05c0bec0-96f7-49f8-89dc-24b0f5ad7025"
           }
         ]
       },

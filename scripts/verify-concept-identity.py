@@ -13,9 +13,8 @@
   B. 라이브러리  계약 불변식 중 지금 라이브러리 md 에서 확인할 수 있는 것 — §13 의 2 · 3 · 4 · 5 · 7 · 8 · 9 · 10
   C. 골든        concept span refs 가 라이브러리에 있다(12) · 라이브러리 문안을 옮긴 span 은 concept 층이고
                  그 개념을 그 part 로 refs 에 갖는다(14) · 브리지 슬롯 순서(13)
-                 refs 두 모양을 받는다 —
-                   ConceptRef {concept_id, version, part} : 순서 검사는 part 로 (D25). part null 은 게이트 3
-                   "C-XXXX" (골든 이전 전)               : part 가 없어 글자 대조로 대신한다. WARN 으로 센다
+                 refs 는 ConceptRef {concept_id, version, part} 다 — 순서 검사는 part 로 (D25). part null 은 게이트 3.
+                 옛 모양 "C-XXXX" 는 골든을 옮긴 뒤(0.2m-a)로 실패다
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
 """
@@ -782,11 +781,10 @@ def check_golden(gold, lib, id_map=None):
             if sp.get('layer') == 'concept':
                 cspans += 1
                 for r in sp.get('refs', []):
-                    if isinstance(r, str):                # 골든 이전 전 — part 없음
+                    if isinstance(r, str):                # 옛 모양 "C-XXXX" — 골든을 옮겼다 (0.2m-a). 이제 Ref 가 아니다
                         legacy += 1
-                        if r not in known:
-                            errs.append(('GOLD_REF_UNKNOWN', f'{lvid} {path}: concept ref {r} 가 라이브러리에 없다 (§13-12)'))
-                        refcodes[r] = 'legacy'
+                        errs.append(('GOLD_REF_SHAPE', f'{lvid} {path}: concept ref {r!r} 는 ConceptRef 가 아니다 — '
+                                                       f'code 는 참조에 쓰지 않는다 (§2 · §3.2 · §13-12)'))
                         continue
                     if not isinstance(r, dict) or set(r) != {'concept_id', 'version', 'part'}:
                         errs.append(('GOLD_REF_SHAPE', f'{lvid} {path}: concept ref {r!r} 는 ConceptRef '
@@ -821,8 +819,6 @@ def check_golden(gold, lib, id_map=None):
                 if sp.get('layer') != 'concept' or code not in refcodes:
                     errs.append(('GOLD_REF_SOURCE', f'{lvid} {path}: {code} {part} 문안인데 layer={sp.get("layer")} '
                                                     f'refs={sp.get("refs")} (§13-14)'))
-                elif refcodes[code] == 'legacy':
-                    claimed.add(key)                      # part 가 없으니 글자 대조가 대신한다
                 elif refcodes[code] != part:
                     errs.append(('GOLD_PART_MISMATCH', f'{lvid} {path}: {code} {part} 문안 그대로인데 '
                                                        f'part={refcodes[code]!r} (§13-14)'))
@@ -858,9 +854,6 @@ def check_golden(gold, lib, id_map=None):
                         if bridge_at is None or i <= bridge_at:
                             errs.append(('GOLD_ANALOGY_ORDER', f'{lvid} {tagged[i][0]}: {c["code"]} 비유가 '
                                                                f'{s["after"]} + 브리지 {s["label"]} 보다 먼저'))
-    if legacy:
-        warns.append(('GOLD_UNPINNED', f'concept span {cspans} 의 ref {legacy}개가 버전 · part 없는 "C-XXXX" — '
-                                       f'브리지 검사는 글자 대조로 대신했다. ConceptRef 로 이전 전 (§16)'))
     return errs, warns, {'verbatim': verbatim, 'loose': loose, 'bridge': report, 'pinned': pinned,
                          'legacy': legacy, 'nullpart': nullpart}
 

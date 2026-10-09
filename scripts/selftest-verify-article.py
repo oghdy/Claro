@@ -2,12 +2,12 @@
 
     python3 scripts/selftest-verify-article.py
 
-골든의 사본(메모리 안, 파일로 남기지 않는다)에 위반을 하나씩 주입하고
+골든 한 벌(패키지 · record · 저장소)의 사본(메모리 안, 파일로 남기지 않는다)에 위반을 하나씩 주입하고
   · verify-article.py  가 기대한 code 로 거부하는지 (기대 code 만 나와야 통과)
   · compare-reader-text.py 가 독자 글 변경을 잡는지
 를 본다. 망가뜨리지 않은 골든은 통과해야 한다.
 """
-import copy, importlib.util, json, os, sys
+import copy, importlib.util, inspect, json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,8 +21,14 @@ def load(name):
 
 V = load('verify-article')
 C = load('compare-reader-text')
-IDS = V.known_ids()
-GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))
+GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))          # 패키지
+REC = json.load(open(V.RECORD, encoding='utf-8'))           # ArticleRecord 의 나머지 (authoring)
+STORE = json.load(open(V.STORE, encoding='utf-8'))          # 참조가 가리키는 것
+CONCEPTS = json.load(open(V.CONCEPTS, encoding='utf-8'))
+FID = {f['label']: f['fact_id'] for f in STORE['facts']}
+CID = {c['label']: c['claim_id'] for c in STORE['claims']}
+C0002 = next(c['concept_id'] for c in CONCEPTS['concepts'] if c['code'] == 'C-0002')
+NOWHERE = '00000000-0000-4000-8000-000000000000'
 OLD = C.load(None)
 
 
@@ -68,8 +74,18 @@ def block_of(d, lv, si, type_, nth=0):
     return [b for b in d['levels'][lv]['slides'][si]['blocks'] if b['type'] == type_][nth]
 
 
-def vol(d, lv, si, span):
-    return next(v for v in d['levels'][lv]['slides'][si]['_volatility'] if v['span'] == span)
+def te(r, frag):
+    return next(t for t in r['authoring']['time_expressions'] if t['at']['fragment'] == frag)
+
+
+def sfact(s, label):
+    return next(f for f in s['facts'] if f['label'] == label)
+
+
+def pend(sp, need, until='0.2'):
+    """span 을 대기로 돌린다 — refs 를 비우고 대기 표시를 단다"""
+    sp['refs'] = []
+    sp['_refs_pending'] = {'until': until, 'need': need}
 
 
 MUT = []          # (이름, 기대 code 집합, 변형 함수, publish)
@@ -112,7 +128,7 @@ def _(d): d['levels'][0]['open_questions'][0]['goto_index'] = 1
 @mut('§9-3 슬라이드에 index', {'POINTER_FIELD'})
 def _(d): d['levels'][0]['slides'][0]['index'] = 0
 @mut('§9-3 `_` 주석 안의 goto (주석에도 없어야 한다)', {'POINTER_FIELD'})
-def _(d): d['levels'][0]['slides'][0]['_volatility'][0]['goto'] = 1
+def _(d): d['_source']['goto'] = 1
 # ---------------------------------------------------------------- §9-4
 @mut('§9-4 블록 text 삭제', {'BLOCK_NO_TEXT'}, relinearize=False)
 def _(d): del block_of(d, 0, 0, 'prose')['text']
@@ -124,7 +140,7 @@ def _(d):
     row = block_of(d, 1, 3, 'sheet')['rows'][4]['value'][0]; assert row['text'] == '3.7%'; row['text'] = '3.8%'
 @mut('§9-4 강조를 구조에서만 뺌 (hit → emphasized 제거), text 는 그대로', {'TEXT_MISMATCH'}, relinearize=False)
 def _(d): del block_of(d, 0, 6, 'contrast')['items'][1]['emphasized']
-@mut('§9-4 목록 순서를 구조에서만 바꿈 (항목에 붙은 _volatility where 도 어긋나 VOL_SPAN 이 같이 나온다)', {'TEXT_MISMATCH', 'VOL_SPAN'}, relinearize=False)
+@mut('§9-4 목록 순서를 구조에서만 바꿈 (그 항목을 가리키던 시간 조각의 자리도 어긋나 VOL_SPAN 이 같이 나온다)', {'TEXT_MISMATCH', 'VOL_SPAN'}, relinearize=False)
 def _(d): b = block_of(d, 1, 2, 'list'); b['items'][0], b['items'][1] = b['items'][1], b['items'][0]
 @mut('§9-4 ordered 뒤집음 (번호가 글자로 남아야 한다)', {'TEXT_MISMATCH'}, relinearize=False)
 def _(d): block_of(d, 1, 2, 'list')['ordered'] = False
@@ -137,36 +153,64 @@ def _(d): block_of(d, 0, 3, 'contrast')['type'] = 'scale'
 @mut('§9-6 layer 옛 이름 derived_claim', {'SPAN_LAYER'})
 def _(d): find_span(d, 'claim', lambda s: s['refs'])['layer'] = 'derived_claim'
 @mut('§9-6 writing 인데 refs', {'REFS_WRITING'})
-def _(d): find_span(d, 'writing')['refs'] = ['F01']
+def _(d): find_span(d, 'writing')['refs'] = [FID['F01']]
 @mut('§9-6 fact 인데 refs 비었고 대기 표시도 없음', {'REFS_EMPTY'})
 def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = []
-@mut('§9-6 대기 span 의 _refs_pending 만 지움 (조용히 두면 안 된다)', {'REFS_EMPTY'})
-def _(d): del find_span(d, 'bridge')['_refs_pending']
-@mut('§9-6 claim span 에 Fact ID (층 섞임)', {'REF_WRONG_LAYER'})
-def _(d): find_span(d, 'claim', lambda s: s['refs'])['refs'] = ['F01']
-@mut('§9-6 fact span 에 DC ID (층 섞임)', {'REF_WRONG_LAYER'})
-def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = ['DC-A']
-@mut('§9-6 fact span 에 F·DC 혼합 (D20 — 섞으면 안 된다)', {'REF_WRONG_LAYER'})
-def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = ['F01', 'DC-A']
-@mut('§9-6 없는 Fact ID', {'REF_UNKNOWN'})
-def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = ['F99']
-@mut('§9-6 없는 개념 ID', {'REF_UNKNOWN'})
-def _(d): find_span(d, 'concept')['refs'] = ['C-9999']
+@mut('§9-6 bridge 인데 refs 비었고 대기 표시도 없음 (조용히 두면 안 된다)', {'REFS_EMPTY'})
+def _(d): find_span(d, 'bridge')['refs'] = []
+@mut('§6.2 span 하나를 대기로 돌림 — 픽스처에서는 실패가 아니라 WARN 으로 센다', set())
+def _(d): pend(find_span(d, 'fact', lambda s: s['refs']), 'Fact 출처')
+@mut('§9-6 claim span 에 Fact 의 Ref (층 섞임)', {'REF_WRONG_LAYER'})
+def _(d): find_span(d, 'claim', lambda s: s['refs'])['refs'] = [FID['F01']]
+@mut('§9-6 fact span 에 DerivedClaim 의 Ref (층 섞임)', {'REF_WRONG_LAYER'})
+def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = [CID['DC-A']]
+@mut('§9-6 fact span 에 Fact · Claim 혼합 (D20 — 섞으면 안 된다)', {'REF_WRONG_LAYER'})
+def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = [FID['F01'], CID['DC-A']]
+@mut('§9-6 bridge span 에 개념의 UUID (층 섞임)', {'REF_WRONG_LAYER'})
+def _(d): find_span(d, 'bridge')['refs'] = [C0002]
+@mut('§9-6 저장소에 없는 UUID', {'REF_UNKNOWN'})
+def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = [NOWHERE]
+@mut('DATA_MODEL §2.1 옛 문자열 label "F31" 을 Ref 로 (label 은 참조에 쓰지 않는다)', {'REF_SHAPE'})
+def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = ['F31']
+@mut('DATA_MODEL §2.1 옛 문자열 "DC-C" 를 Ref 로', {'REF_SHAPE'})
+def _(d): find_span(d, 'claim', lambda s: s['refs'])['refs'] = ['DC-C']
+@mut('§9-6 concept span 에 옛 문자열 "C-0002" (ConceptRef 가 아니다)', {'SPAN_REFS'})
+def _(d): find_span(d, 'concept')['refs'] = ['C-0002']
+@mut('§9-6 fact span 에 ConceptRef 객체 (그 층의 Ref 는 UUID 하나다)', {'SPAN_REFS'})
+def _(d): find_span(d, 'fact', lambda s: s['refs'])['refs'] = [{'concept_id': C0002, 'version': 4, 'part': None}]
+@mut('CONCEPT_IDENTITY §3.2 ConceptRef 에 part 가 없다', {'SPAN_REFS'})
+def _(d): del find_span(d, 'concept')['refs'][0]['part']
+@mut('CONCEPT_IDENTITY §3.2 ConceptRef 에 code 를 함께 실음 (같은 것을 두 곳에)', {'SPAN_REFS'})
+def _(d): find_span(d, 'concept')['refs'][0]['code'] = 'C-0002'
+@mut('§9-6 없는 개념', {'REF_UNKNOWN'})
+def _(d): find_span(d, 'concept')['refs'][0]['concept_id'] = NOWHERE
+@mut('CONCEPT_IDENTITY 불변식 12 없는 버전 (지금 버전 + 1)', {'REF_VERSION'})
+def _(d): find_span(d, 'concept')['refs'][0]['version'] += 1
+@mut('CONCEPT_IDENTITY 불변식 12 그 버전에 없는 part', {'REF_PART'})
+def _(d): find_span(d, 'concept')['refs'][0]['part'] = 'FULL:⑤'
+@mut('§9-6 refs 에 같은 Ref 두 번', {'REFS_DUP'})
+def _(d): sp = find_span(d, 'fact', lambda s: s['refs']); sp['refs'] = sp['refs'][:1] * 2
 @mut('§9-6 refs 와 대기 표시가 동시에', {'PENDING_WITH_REFS'})
 def _(d): find_span(d, 'fact', lambda s: s['refs'], pending=False)['_refs_pending'] = {'until': '0.2', 'need': 'Fact 출처'}
 @mut('§9-6 writing 에 대기 표시', {'PENDING_INVALID'})
 def _(d): find_span(d, 'writing')['_refs_pending'] = {'until': '0.2', 'need': 'Fact 출처'}
 @mut('§9-6 대기 표시 until 이 0.2 가 아님', {'PENDING_INVALID'})
-def _(d): find_span(d, 'bridge')['_refs_pending']['until'] = '0.3'
+def _(d): pend(find_span(d, 'fact', lambda s: s['refs']), 'Fact 출처', until='0.3')
 @mut('§9-6 claim 의 need 가 Fact 출처 (D22 — claim 은 DerivedClaim)', {'PENDING_NEED_LAYER'})
-def _(d): find_span(d, 'claim', pending=True)['_refs_pending']['need'] = 'Fact 출처'
+def _(d): pend(find_span(d, 'claim', lambda s: s['refs']), 'Fact 출처')
+@mut('DATA_MODEL §17 대기 need 가 어휘 밖', {'PENDING_NEED_LAYER'})
+def _(d): pend(find_span(d, 'fact', lambda s: s['refs']), '나중에')
 @mut('§9-6 span 에 layer 없음', {'SCHEMA_MISSING'})
 def _(d): del find_span(d, 'fact', lambda s: s['refs'])['layer']
-@mut('§9-6 _fact_refs_dropped 에 없는 ID', {'DROPPED_UNKNOWN'})
-def _(d): find_span(d, 'claim', lambda s: '_fact_refs_dropped' in s)['_fact_refs_dropped'] = ['F99']
+@mut('DATA_MODEL §11 옛 저작 주석이 span 에 남음 (_fact_refs_dropped)', {'OLD_ANNOTATION'})
+def _(d): find_span(d, 'claim', lambda s: s['refs'])['_fact_refs_dropped'] = ['F33']
+@mut('DATA_MODEL §11 옛 저작 주석이 슬라이드에 남음 (_volatility)', {'OLD_ANNOTATION'})
+def _(d): d['levels'][0]['slides'][0]['_volatility'] = []
+@mut('DATA_MODEL §2.2 event_ref 가 code 문자열', {'EVENT_REF'})
+def _(d): d['event_ref'] = 'FOMC-20260916'
 @mut('§6 인용 글이 fact 가 아님', {'QUOTE_LAYER'})
-def _(d): block_of(d, 0, 5, 'quote')['body'][0].update(layer='claim', refs=['DC-C'])
-@mut('span text 빈 문자열 (그 span 에 붙은 _volatility 도 같이 걸린다)', {'SPAN_EMPTY', 'VOL_SPAN'})
+def _(d): block_of(d, 0, 5, 'quote')['body'][0].update(layer='claim', refs=[CID['DC-C']])
+@mut('span text 빈 문자열 (그 글을 가리키던 시간 조각도 같이 걸린다)', {'SPAN_EMPTY', 'VOL_SPAN'})
 def _(d): find_span(d, 'fact', lambda s: s['refs'])['text'] = ''
 # ---------------------------------------------------------------- §9-7 / §9-8
 @mut('§9-7 span 안에 <br>', {'INLINE_FORMAT'})
@@ -191,24 +235,40 @@ def _(d): d['now'] = 'render'
 def _(d): d['published_at'] = '지금'
 @mut('D8 published_at 을 10/16 으로 (모든 DERIVED 를 다시 계산해야 한다)', {'DERIVED_INVARIANT_FAIL'})
 def _(d): d['published_at'] = '2026-10-16'
-@mut('D8 VOLATILE 의 as_of 삭제', {'VOLATILE_MISSING_AS_OF'})
-def _(d): del vol(d, 0, 3, '지금 미국은 3%대')['as_of']
+@mut('D8 VOLATILE 사실의 as_of 삭제 (저장소)', {'VOLATILE_MISSING_AS_OF'})
+def _(d, r, s): sfact(s, 'F31')['as_of'] = None
+@mut('D8 조각이 가리키지 않는 VOLATILE 사실의 as_of 삭제 (저장소)', {'VOLATILE_MISSING_AS_OF'})
+def _(d, r, s): sfact(s, 'F35')['as_of'] = None
 @mut('D8 as_of 형식 오류', {'VOLATILE_BAD_AS_OF'})
-def _(d): vol(d, 0, 3, '지금 미국은 3%대')['as_of'] = '8월 말'
-@mut('D8 DERIVED 출처를 VOLATILE 로', {'DERIVED_FROM_VOLATILE'})
-def _(d): vol(d, 0, 6, '3주 뒤에')['derived_from'][0]['volatility'] = 'VOLATILE'
+def _(d, r, s): sfact(s, 'F31')['as_of'] = '8월 말'
+@mut('D8 VOLATILE 조각이 STABLE 사실을 가리킴', {'VOLATILE_NO_FACT'})
+def _(d, r, s): te(r, '지금 미국은 3%대')['facts'] = [FID['F01']]
+@mut('D8 VOLATILE 조각에 사실이 없다', {'VOLATILE_NO_FACT'})
+def _(d, r, s): te(r, '지금 미국은 3%대')['facts'] = []
+@mut('D8 DERIVED 의 입력 사실을 VOLATILE 로 (저장소 — 회의록 공개일)', {'DERIVED_FROM_VOLATILE'})
+def _(d, r, s): sfact(s, 'F44').update(volatility='VOLATILE', as_of='2026-10-07')
+@mut('D8 DERIVED 입력이 VOLATILE 사실을 가리킴 (record)', {'DERIVED_FROM_VOLATILE'})
+def _(d, r, s): te(r, '3주 뒤에')['inputs'][0]['fact'] = FID['F31']
 @mut('D8 value_at_authoring 을 틀리게 (3주 → 4주)', {'DERIVED_INVARIANT_FAIL'})
-def _(d): vol(d, 0, 6, '3주 뒤에')['value_at_authoring'] = 4
-@mut('D8 기록된 invariant 가 재계산과 다름', {'DERIVED_INVARIANT_MISMATCH'})
-def _(d): vol(d, 0, 6, '3주 뒤에')['invariant'] = 'UNVERIFIABLE'
+def _(d, r, s): te(r, '3주 뒤에')['value_at_authoring'] = 4
+@mut('D8 개전일을 하루 앞으로 (201일째 → 202)', {'DERIVED_INVARIANT_FAIL'})
+def _(d, r, s): te(r, '201일째')['inputs'][0]['value'] = '2026-02-27'
 @mut('D8 class 오류', {'VOL_CLASS'})
-def _(d): vol(d, 0, 3, '지금 미국은 3%대')['class'] = 'LIVE'
-@mut('D8 where 경로가 가리키는 글에 span 이 없다', {'VOL_SPAN'})
-def _(d): vol(d, 0, 3, '지금 미국은 3%대')['where'] = 'headline'
-@mut('D8 where 경로가 없다', {'VOL_SPAN'})
-def _(d): vol(d, 0, 3, '지금 미국은 3%대')['where'] = 'blocks/9/paragraphs/0/body'
+def _(d, r, s): te(r, '지금 미국은 3%대')['class'] = 'LIVE'
+@mut('D8 at 이 가리키는 글에 조각이 없다', {'VOL_SPAN'})
+def _(d, r, s): te(r, '지금 미국은 3%대')['at']['path'] = 'slides/3/headline'
+@mut('D8 at 경로가 없다', {'VOL_SPAN'})
+def _(d, r, s): te(r, '지금 미국은 3%대')['at']['path'] = 'slides/3/blocks/9/paragraphs/0/body'
+@mut('D8 조각이 그 글에 두 번 ("올해")', {'VOL_SPAN'})
+def _(d, r, s): te(r, '올해 말 금리')['at']['fragment'] = '올해'
 @mut('D8 open_question 의 DERIVED 를 깸 (두 달 전 → 3)', {'DERIVED_INVARIANT_FAIL'})
-def _(d): d['levels'][0]['open_questions'][5]['_volatility'][0]['value_at_authoring'] = 3
+def _(d, r, s): te(r, '두 달 전')['value_at_authoring'] = 3
+@mut('DATA_MODEL 불변식 26 article_id 가 code 문자열', {'RECORD_KEY'})
+def _(d, r, s): r['article_id'] = 'FOMC-20260916'
+@mut('DATA_MODEL 불변식 26 article_version 이 없다', {'RECORD_KEY'})
+def _(d, r, s): del r['article_version']
+@mut('DATA_MODEL §1 authoring 에 옛 칸', {'RECORD_SHAPE'})
+def _(d, r, s): r['authoring']['volatility'] = []
 # ---------------------------------------------------------------- 스키마 · D9 · §9-10
 @mut('D9 최상단에 _findings', {'D9_OBSERVED_KEY'})
 def _(d): d['_findings'] = []
@@ -238,25 +298,29 @@ def _(d): del block_of(d, 0, 5, 'quote')['attribution']
 def _(d): pass
 
 
+def check(d, r, s, publish=False):
+    return V.check(d, V.Known(s, CONCEPTS), publish, r)
+
+
 def run_verify():
     rows, bad = [], 0
-    errs, _, _ = V.check(copy.deepcopy(GOLD), IDS)
-    ok = not errs
-    rows.append(('PASS' if ok else 'FAIL', '망가뜨리지 않은 골든은 통과해야 한다', '—', '—' if ok else sorted({c for c, _ in errs})))
+    errs, _, c = check(copy.deepcopy(GOLD), REC, STORE)
+    ok = not errs and not c.pending
+    rows.append(('PASS' if ok else 'FAIL', '망가뜨리지 않은 골든 한 벌은 통과해야 한다 (대기 0)', '—', '—' if ok else sorted({c for c, _ in errs})))
     bad += not ok
-    errs, _, _ = V.check(copy.deepcopy(GOLD), IDS, publish=True)
+    errs, _, _ = check(copy.deepcopy(GOLD), REC, STORE, publish=True)
     got = {c for c, _ in errs}
     ok = 'UNDERSCORE_IN_PUBLISH' in got and got <= {'UNDERSCORE_IN_PUBLISH'}
     rows.append(('PASS' if ok else 'FAIL', '골든을 --publish 로 검사하면 `_` 때문에 거부 (§9-10 — 골든은 발행물이 아니다)',
                  ['UNDERSCORE_IN_PUBLISH'], sorted(got)))
     bad += not ok
     for name, want, fn, publish, relinearize in MUT:
-        d = copy.deepcopy(GOLD)
+        d, r, s = copy.deepcopy(GOLD), copy.deepcopy(REC), copy.deepcopy(STORE)
         try:
-            fn(d)
+            fn(*(d, r, s)[:len(inspect.signature(fn).parameters)])
             if relinearize:
                 relin(d)
-            errs, _, _ = V.check(d, IDS, publish)
+            errs, _, _ = check(d, r, s, publish)
             got = {c for c, _ in errs}
         except Exception as e:                                # 검증기가 죽는 것도 실패다
             got = {f'CRASH {type(e).__name__}: {e}'}

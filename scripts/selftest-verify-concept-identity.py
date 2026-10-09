@@ -19,27 +19,13 @@ spec.loader.exec_module(V)
 
 read = lambda p: open(p, encoding='utf-8').read()
 CONTRACT, LIBRARY, LOG = read(V.CONTRACT), read(V.LIBRARY), read(V.LOG)
-GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))
+GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))          # 0.2m-a 뒤로 concept refs 는 ConceptRef 다
 LIB = V.parse_library(LIBRARY)
-UID = {c['code']: str(uuid.uuid5(uuid.NAMESPACE_URL, f'claro-selftest:{c["code"]}')) for c in LIB['concepts']}
+_STORE = json.load(open(V.STORE, encoding='utf-8'))
+UID = {c['code']: c['concept_id'] for c in _STORE['concepts']}
 ID_MAP = {u: code for code, u in UID.items()}
 CUR = {c['code']: c['version'] for c in LIB['concepts']}
-
-
-def migrate(g):
-    """골든 사본의 concept refs 를 ConceptRef {concept_id, version, part} 로"""
-    g = copy.deepcopy(g)
-    idx = V.parts(LIB)
-    for _, spans in V.level_spans(g):
-        for _, sp in spans:
-            if sp.get('layer') == 'concept':
-                key = V.match_part(sp, idx)
-                sp['refs'] = [{'concept_id': UID[r], 'version': CUR[r], 'part': key[1] if key and key[0] == r else None}
-                              for r in sp['refs']]
-    return g
-
-
-MGOLD = migrate(GOLD)
+MGOLD = GOLD                                                # 옛 이름 — "ConceptRef 로 옮긴 골든". 이제 골든 그 자체다
 
 
 def sub(text, old, new, count=1):
@@ -189,11 +175,12 @@ CASES = [
     ('§13-10 — 선행 순환 (C-0003 → C-0001 추가)', 'library',
      lib_in('C-0001', '`prereq_of`: C-0003', '`prereq_of`: C-0003\n- `prereq`: C-0003'), {'LIB_RELATION_CYCLE'}),
     # ── C. 골든
-    ('§13-12 — concept ref 가 라이브러리에 없다 (헤드라인 → C-0099)', 'gold',
-     lambda g: (lambda g: (g['levels'][0]['slides'][2]['headline'][0].__setitem__('refs', ['C-0099']), g)[1])(
-         copy.deepcopy(g)), {'GOLD_REF_UNKNOWN'}),
+    ('§13-12 — 옛 문자열 "C-0002" 를 ref 로 (code 는 참조에 쓰지 않는다)', 'gold',
+     lambda g: (lambda g: (g['levels'][0]['slides'][2]['headline'][0].__setitem__('refs', ['C-0002']), g)[1])(
+         copy.deepcopy(g)), {'GOLD_REF_SHAPE'}),
     ('§13-14 — ③ 문안 span 의 refs 를 C-0003 으로', 'gold',
-     gold_slide(lambda ps, g: ps[0]['body'][0].__setitem__('refs', ['C-0003'])), {'GOLD_REF_SOURCE'}),
+     gold_slide(lambda ps, g: ps[0]['body'][0]['refs'][0].update(concept_id=UID['C-0003'], version=CUR['C-0003'], part=None)),
+     {'GOLD_REF_SOURCE'}),
     ('§13-14 — C-0001 FULL 문안을 fact 층으로', 'gold',
      lambda g: (lambda g: (g['levels'][0]['slides'][4]['blocks'][0]['paragraphs'][0]['body'][0]
                            .__setitem__('layer', 'fact'), g)[1])(copy.deepcopy(g)), {'GOLD_REF_SOURCE'}),
@@ -211,12 +198,6 @@ CASES = [
      lambda g: (lambda g: (g['levels'][0]['slides'][2]['blocks'][0]['paragraphs'].append(
          g['levels'][0]['slides'][3]['blocks'][0]['paragraphs'].pop(2)), g)[1])(copy.deepcopy(g)),
      {'GOLD_ANALOGY_ORDER'}),
-    ('③ 을 바꿔 말하고 ④ 를 지움 — 비유가 문안 그대로라 비유 쪽에서 잡힌다', 'gold',
-     gold_slide(lambda ps, g: (ps[0]['body'][0].__setitem__('text', '연준은 1년에 2% 정도 오르는 걸 적당하다고 봐요. '),
-                               ps[0]['body'][1].__setitem__('text', '0%도 아니고 딱 2%예요.'),
-                               ps.pop(1))), {'GOLD_ANALOGY_ORDER'}),
-    ('빈틈 — 옮기기 전 골든("C-XXXX", part 없음): ③ · 비유 바꿔 말하고 ④ 지움. 글자 대조라 못 잡는다 (WARN 으로 센다)', 'gold',
-     gold_slide(lambda ps, g: (reword_3_and_analogy(ps, g), ps.pop(1))), set()),
     # ── C'. ConceptRef 로 옮긴 골든 사본 (mgold) — part 기반 (D25)
     ('D25 — 게이트 전 빈틈: ③ · 비유를 바꿔 말하고 ④ 지움. part 가 있으니 이제 잡힌다', 'mgold',
      gold_slide(lambda ps, g: (reword_3_and_analogy(ps, g), ps.pop(1))), {'GOLD_BRIDGE_ORDER', 'GOLD_ANALOGY_ORDER'}),
@@ -330,13 +311,10 @@ def run_store_cases():
 
 def main():
     base = V.run(CONTRACT, LIBRARY, GOLD, LOG, ID_MAP)[0]
-    mbase, mwarn = V.run(CONTRACT, LIBRARY, MGOLD, LOG, ID_MAP)[:2]
-    ok = not base and not mbase and not any(c == 'GOLD_UNPINNED' for c, _ in mwarn)
-    print(f'== verify-concept-identity.py — 사본 {len(CASES)}개 (+ 원본 · ConceptRef 로 옮긴 골든)')
+    ok = not base
+    print(f'== verify-concept-identity.py — 사본 {len(CASES)}개 (+ 원본)')
     print(f'  {"PASS" if not base else "FAIL"}  망가뜨리지 않은 원본은 통과해야 한다')
     print(f'        기대 — / 실제 {sorted({c for c, _ in base}) or "—"}')
-    print(f'  {"PASS" if not mbase else "FAIL"}  ConceptRef 로 옮긴 골든(mgold)도 통과하고, GOLD_UNPINNED 가 없어야 한다')
-    print(f'        기대 — / 실제 {sorted({c for c, _ in mbase}) or "—"} · WARN {sorted({c for c, _ in mwarn})}')
     for name, target, fn, want in CASES:
         want = {'LOG_QUESTION'} if want is None else want
         args = {'contract': CONTRACT, 'library': LIBRARY, 'gold': GOLD, 'mgold': MGOLD, 'log': LOG}

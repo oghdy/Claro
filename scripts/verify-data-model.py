@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
-"""DATA_MODEL.md 를 기계로 확인한다 (B-0.2b).
+"""DATA_MODEL.md 를 기계로 확인한다 (B-0.2b · 0.2m-a 에서 실물 저장소로).
 
     python3 scripts/verify-data-model.py            # 검사
-    python3 scripts/verify-data-model.py --report   # + 골든 이전 목록 · 게이트 3 후보 · 시험 사본 발행 검사에서 막히는 것
+    python3 scripts/verify-data-model.py --report   # + 게이트 3 후보 · 발행 검사에서 막히는 것 (독자에게 닿는 것 / 기계 검증용)
 
 네 곳을 본다.
   A. 계약 문서   확정 필드 · enum (§5.1 · §5.2 · §5.3 · §5.5 · §6.2 · §4.1 · D8) 이 다 있다. §9.6 보류 항목이 없다.
                  다른 계약 · 0.2c 의 타입을 정의하지 않았다. 실물 없는 구조 절에 "실물 없음".
                  세 브리프의 모든 사실 타입이 §3.3 표에 있다. 공식 op 표 = 실물 7개
   B. 로그        0.2b 로그 머리 요약에 질문 10개가 [계약 반영 / _open / 미확인] 과 근거를 갖는다
-  C. 골든        지금 모양(`_` 주석)이 이 계약으로 잃는 것 없이 옮겨지는가 —
-                 R-1 날짜 모양 · 대기 어휘(need) 와 층 · 끊긴 F 연결 ⊆ 브리프 DC 근거 · VOLATILE as_of 가 사실마다 하나 ·
-                 시간 조각이 그 글에 한 번 · 인용 출처 표시 ⊇ body refs · 인용 body 에 따옴표 없음
-  D. 시험 사본   골든 + FOMC 브리프를 이 계약 모양으로 **메모리 안에서** 옮기고(시험용 UUID) 불변식을 돌린다.
-                 지금 검사는 통과해야 하고, 발행 검사에서 막히는 것은 WARN 으로 센다 (§18 — 0.2m · 콘텐츠가 채울 것).
-                 진짜 이전은 0.2m 이다. 이 사본은 파일로 남기지 않는다
+  C. 원천        저장소(fixtures/store.json)가 원천을 옮기기만 했는가 —
+                 브리프 사실 F01~F38 의 claim_text 가 브리프 글자 그대로다 (나눈 것은 그 글의 부분) ·
+                 `_passage`(1차 구절)가 C-3 기록 · 스토리라인 문서에 글자 그대로 있다 · 개체 필드가 계약 타입과 같다
+  D. 모델        골든 한 벌(article · record · store) + 개념 저장소를 계약 모양 그대로 읽어 불변식을 돌린다.
+                 지금 검사는 통과해야 하고, 발행 검사에서 막히는 것은 WARN 으로 센다 — 콘텐츠 · 파이프라인이 채울 것
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
 """
@@ -26,6 +25,9 @@ CONTRACT = os.path.join(ROOT, 'docs/contract/DATA_MODEL.md')
 LOG = os.path.join(ROOT, 'logs/backend/phase-0-step-0-2b.md')
 GOLDEN = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
 LIBRARY = os.path.join(ROOT, 'docs/content/concept-library.md')
+# 저장소의 1차 구절(`_passage`)이 글자 그대로 있어야 하는 기록 — 구절을 지어내지 못하게 한다
+RECORDS = [os.path.join(ROOT, p) for p in ('logs/content/source-check-2026-10.md', 'docs/findings/storyline-iran-war.md',
+                                           'logs/content/golden-correction-2026-10.md')]
 BRIEFS = {
     'FOMC': os.path.join(ROOT, 'docs/findings/fomc-2026-09-brief.md'),
     'FTC': os.path.join(ROOT, 'docs/findings/ftc-personalized-pricing-brief.md'),
@@ -244,7 +246,6 @@ def check_log(text):
     return errs
 
 
-# ── C. 골든 ──────────────────────────────────────────────────────────────────
 QMARKS = '"“”‘’\'「」'
 
 
@@ -270,65 +271,12 @@ def brief_facts(path):
     return out
 
 
-def brief_sources(path):
-    """Source Pack 표 (S1~S4 · P1~P4) → {label: {title, published_at}}"""
-    out = {}
-    t0 = dt.date(2026, 9, 16)
-    for line in open(path, encoding='utf-8').read().splitlines():
-        m = re.match(r'^\| ([SP]\d) \| (.*?) \| (.*?) \|', line)
-        if not m:
-            continue
-        when = m.group(3)
-        t = re.search(r'(\d{1,2})/(\d{1,2})(?: (\d{1,2}):(\d{2}) ET)?', when)
-        tm = re.search(r'T-(\d+)', when)
-        if t:
-            d = dt.date(2026, int(t.group(1)), int(t.group(2))).isoformat()
-            pub = f'{d}T{int(t.group(3)):02d}:{t.group(4)}-04:00' if t.group(3) else d
-        elif tm:
-            pub = (t0 - dt.timedelta(days=int(tm.group(1)))).isoformat()
-        else:
-            pub = None
-        out[m.group(1)] = {'title': m.group(2), 'published_at': pub}
-    return out
-
-
-def brief_claims(path):
-    """DC 절 → {DC: {kind, basis, checks[{question, facts, outcome}]}}"""
-    text = open(path, encoding='utf-8').read()
-    out = {}
-    for m in re.finditer(r'^### (DC-[A-Z]) — (.*?)$(.*?)(?=^### |^## |\Z)', text, re.M | re.S):
-        dc, head, body = m.group(1), m.group(2), m.group(3)
-        kind = 'DEFENSIVE' if '방어용' in head else 'ASSERTED'
-        checks = []
-        for line in body.splitlines():
-            if line.startswith('반증 후보'):
-                outcome = 'SCOPED' if 'SCOPE' in body else 'NOT_REFUTED'
-                checks.append({'question': line, 'facts': re.findall(r'F\d\d', line), 'outcome': outcome})
-        if kind == 'DEFENSIVE' and '나와야' in body and not checks:
-            checks.append({'question': '(브리프) 반대파가 위원회를 움직였나', 'facts': [], 'outcome': 'UNRESOLVED'})
-        body_wo_check = '\n'.join(l for l in body.splitlines() if not l.startswith('반증 후보'))
-        basis = list(dict.fromkeys(re.findall(r'F\d\d', body_wo_check)))
-        out[dc] = {'kind': kind, 'basis': basis, 'checks': checks, 'all': set(re.findall(r'F\d\d', body))}
-    return out
-
-
-def golden_spans(g):
+def golden_spans(pkg):
     """[(레벨 id, 장 번호(1부터), 레벨 기준 경로, span)] — 읽는 순서"""
-    for lid, spans in VC.level_spans(g):
+    for lid, spans in VC.level_spans(pkg):
         for path, sp in spans:
             n = int(path.split('/')[1]) + 1
             yield lid, n, path, sp
-
-
-def vol_entries(g):
-    """[(레벨 id, 레벨 기준 글 경로, entry)] — 슬라이드 · open_question 에 붙은 _volatility"""
-    for lv in g['levels']:
-        for i, s in enumerate(lv['slides']):
-            for v in s.get('_volatility', []):
-                yield lv['id'], f'slides/{i}/{v["where"]}', v
-        for i, q in enumerate(lv['open_questions']):
-            for v in q.get('_volatility', []):
-                yield lv['id'], f'open_questions/{i}/{v["where"]}', v
 
 
 def level_of(g, lid):
@@ -339,194 +287,114 @@ def count_in(text, frag):
     return len(re.findall(re.escape(frag), text)) if text is not None else 0
 
 
-def check_golden(g, contract_text, facts, claims):
-    errs, warns, rep = [], [], defaultdict(list)
+# ── C. 원천 — 저장소가 옮기기만 했는가 ───────────────────────────────────────
+STORE_TYPES = {'events': 'Event', 'storylines': 'Storyline', 'storyline_versions': 'StorylineVersion', 'sources': 'Source',
+               'source_documents': 'SourceDocument', 'source_registry': 'SourceRegistry', 'facts': 'Fact',
+               'fact_sources': 'FactSource', 'claims': 'DerivedClaim', 'bridges': 'Bridge', 'slot_checks': 'SlotCheck'}
+
+
+def check_origin(store, record, contract_text, fb, records_text):
+    """-> errs. 모양(계약 타입의 필드 그대로) · 브리프 글자 · 1차 구절"""
+    errs = []
     E = lambda c, m: errs.append((c, m))
-    # R-1 — published_at 은 날짜만 (§5.3)
-    if not (isinstance(g.get('published_at'), str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', g['published_at'])):
-        E('GOLD_PUBLISHED_AT_SHAPE', f'published_at={g.get("published_at")!r} — "YYYY-MM-DD" 여야 한다 (§5.3 · R-1)')
-    # 대기 — 어휘와 층만 본다 (불변식 25). 목록 · 수는 실물에서 센다 — 계약 글과 대조하지 않는다 (0.2m-a)
-    pend = [(lid, n, sp['text'], sp['layer'], sp['_refs_pending'].get('need'), path)
-            for lid, n, path, sp in golden_spans(g) if isinstance(sp.get('_refs_pending'), dict)]
-    for lid, n, txt, layer, need, path in pend:
-        if need not in PENDING_NEEDS:
-            E('GOLD_PENDING_NEED', f'{lid} {n}장 "{txt[:20]}": need {need!r} 가 대기 어휘 {sorted(PENDING_NEEDS)} 밖이다 (불변식 25)')
-        elif layer not in PENDING_NEEDS[need]:
-            E('GOLD_PENDING_NEED', f'{lid} {n}장 "{txt[:20]}": {layer} 층에 need {need!r} — 층과 맞지 않는다 (불변식 25)')
-    rep['pending_list'] = pend
-    rep['pending'] = Counter(p[4] for p in pend)
-    # 끊긴 F 연결 — DC 있는 claim span 은 그 DC 의 브리프 근거 안이어야 잃는 것이 없다 (§7.2)
-    for lid, n, path, sp in golden_spans(g):
-        d = sp.get('_fact_refs_dropped')
-        if not d:
+    types = VC.ts_types(contract_text)
+
+    def shape(o, t, w):
+        want, got = set(types.get(t, {})), ({k for k in o if not k.startswith('_')} if isinstance(o, dict) else set())
+        if want != got:
+            E('STORE_SHAPE', f'{w}: {t} 필드가 계약과 다르다 — 없음 {sorted(want - got)} · 남음 {sorted(got - want)} (§1)')
+    for key, t in STORE_TYPES.items():
+        if not isinstance(store.get(key), list):
+            E('STORE_SHAPE', f'저장소에 {key} 가 없다')
             continue
-        if sp['layer'] == 'claim' and sp['refs']:
-            pool = set().union(*(claims.get(r, {}).get('all', set()) for r in sp['refs']))
-            miss = [f for f in d if f not in pool]
-            if miss:
-                E('GOLD_DROPPED_NOT_IN_BASIS', f'{lid} {n}장 "{sp["text"][:20]}": 끊긴 {miss} 가 {sp["refs"]} 의 브리프 근거에 없다 — 옮기면 잃는다')
-            rep['dropped_claim'].append((lid, n, sp['text'], d))
-        elif sp['layer'] == 'claim':
-            rep['dropped_pending'].append((lid, n, sp['text'], d))
-        elif sp['layer'] == 'bridge':
-            rep['dropped_bridge'].append((lid, n, sp['text'], d))
-        else:
-            rep['dropped_other'].append((lid, n, sp['layer'], sp['text'], d))
-    # _volatility — 조각이 한 번 · VOLATILE as_of 가 사실마다 하나 · op 가 표 안
-    as_of = defaultdict(set)
-    ops = op_table(contract_text)
-    for lid, path, v in vol_entries(g):
-        txt = VA.plain_of(VA.resolve(level_of(g, lid), path))
-        k = count_in(txt, v['span'])
-        if k != 1:
-            E('GOLD_FRAGMENT_AMBIGUOUS', f'{lid} {path} "{v["span"]}": 그 글에 {k}번 나온다 — 한 번이어야 어느 조각인지 안다 (불변식 15)')
-        rep['vol'].append((lid, path, v['class']))
-        if v['class'] == 'VOLATILE':
-            if not v.get('refs'):
-                E('GOLD_VOLATILE_NO_FACT', f'{lid} {path} "{v["span"]}": VOLATILE 인데 가리키는 사실이 없다')
-            for r in v.get('refs', []):
-                as_of[r].add(v.get('as_of'))
-        elif v['class'] == 'DERIVED':
-            if v['formula']['op'] not in ops:
-                E('GOLD_OP_UNKNOWN', f'{lid} {path}: op {v["formula"]["op"]!r} 가 §6.4 표에 없다')
-            for x in v['derived_from']:
-                if len(x.get('refs', [])) > 1:
-                    E('GOLD_INPUT_MULTI', f'{lid} {path} 입력 {x["key"]}: 사실이 {x["refs"]} — 입력 하나에 사실 하나')
-    for f, s in sorted(as_of.items()):
-        if len(s) != 1:
-            E('GOLD_ASOF_CONFLICT', f'{f}: as_of 가 {sorted(map(str, s))} — 사실의 속성이면 하나여야 한다 (§6.2)')
-    rep['as_of'] = {f: next(iter(s)) for f, s in as_of.items() if len(s) == 1}
-    # 인용 (§10)
-    for lv in g['levels']:
+        for i, o in enumerate(store[key]):
+            shape(o, t, f'{key}[{i}]')
+            if t == 'DerivedClaim' and isinstance(o, dict):
+                for j, k in enumerate(o.get('checks', [])):
+                    shape(k, 'CounterCheck', f'{key}[{i}].checks[{j}]')
+    rec = {k for k in record if not k.startswith('_')}
+    if rec != set(types['ArticleRecord']) - {'package'} or not isinstance(record.get('_package'), str):
+        E('STORE_SHAPE', 'record 는 { article_id, article_version, authoring } + `_package`(패키지 파일 이름) 다 (§11)')
+    auth = record.get('authoring', {})
+    shape(auth, 'ArticleAuthoring', 'record.authoring')
+    for i, te in enumerate(auth.get('time_expressions', []) if isinstance(auth, dict) else []):
+        shape(te, 'TimeExpression', f'time_expressions[{i}]')
+        shape(te.get('at', {}), 'TextLocator', f'time_expressions[{i}].at')
+        for x in te.get('inputs', []):
+            shape(x, 'DerivedInput', f'time_expressions[{i}].inputs')
+        if te.get('formula') is not None:
+            shape(te['formula'], 'Formula', f'time_expressions[{i}].formula')
+    for i, p in enumerate(auth.get('storylines', []) if isinstance(auth, dict) else []):
+        shape(p, 'StorylinePin', f'record.authoring.storylines[{i}]')
+    if errs:
+        return errs
+    # 브리프 사실 — 글자 그대로. 나눈 것(`_split_of`)은 브리프 글의 부분 문자열이다. 브리프의 F 는 전부 어딘가에 있다
+    labels = {f['label']: f for f in store['facts']}
+    notf = ' '.join(x.get('label', '') for x in store.get('_not_facts', []))
+    for lab, b in sorted(fb.items()):
+        if lab in labels:
+            if labels[lab]['claim_text'] != b['text']:
+                E('BRIEF_TEXT', f'{lab}: claim_text 가 브리프와 다르다 — 브리프는 원천이다. 옮기기만 한다\n         브리프 {b["text"]!r}\n         저장소 {labels[lab]["claim_text"]!r}')
+            continue
+        parts = [f for l, f in labels.items() if re.fullmatch(re.escape(lab) + '[a-z]', l)]
+        if not parts:
+            E('BRIEF_MISSING', f'{lab}: 브리프 사실이 저장소에 없다 (나눈 것도 없다)')
+        for f in parts:
+            if f['claim_text'] not in b['text'] or '_split_of' not in f:
+                E('BRIEF_TEXT', f'{f["label"]}: 나눈 사실의 claim_text 는 브리프 {lab} 글의 부분이어야 한다 (§3.3 "나눈다")')
+        if len(parts) == 1 and lab not in notf:
+            E('BRIEF_MISSING', f'{lab}: 나눈 절이 하나뿐인데 나머지 절이 `_not_facts` 에 적혀 있지 않다 — 조용히 버리지 않는다')
+    for f in store['facts']:
+        if '_brief_type' in f and f['label'][:3] not in fb:
+            E('BRIEF_TEXT', f'{f["label"]}: 브리프에서 왔다는데(`_brief_type`) 브리프에 그 F 가 없다')
+    for x in store.get('_not_facts', []):
+        if not any(x['text'] in b['text'] for b in fb.values()):
+            E('BRIEF_TEXT', f'_not_facts {x.get("label")}: 브리프에 없는 글이다')
+    # 1차 구절 — 기록에 글자 그대로
+    fid = {f['fact_id']: f['label'] for f in store['facts']}
+    for x in store['fact_sources']:
+        p_ = x.get('_passage')
+        if p_ is not None and p_ not in records_text:
+            E('PASSAGE_NOT_IN_RECORD', f'{fid.get(x["fact_id"], x["fact_id"])}: 1차 구절이 기록(C-3 · 스토리라인 문서)에 글자 그대로 없다 — {p_[:50]!r}')
+    return errs
+
+
+def golden_report(pkg, store):
+    """게이트 3 후보 — 기계가 못 가리는 것을 뽑아만 둔다 (§3.4 · §10.2)"""
+    rep = defaultdict(list)
+    F = {f['fact_id']: f for f in store['facts']}
+    C = {c['claim_id']: c for c in store['claims']}
+    name = lambda r: (F.get(r) or C.get(r) or {}).get('label', r) if isinstance(r, str) else '(개념)'
+    for lid, n, path, sp in golden_spans(pkg):
+        if any(c in sp['text'] for c in '“”"'):
+            rep['inline_quote'].append((lid, n, sp['layer'], [name(r) for r in sp['refs']], sp['text']))
+        if sp['layer'] == 'fact' and sp['refs'] and all(F.get(r, {}).get('fact_type') == 'OFFICIAL_CLAIM' for r in sp['refs']):
+            rep['claim_fact'].append((lid, n, [name(r) for r in sp['refs']], sp['text']))
+    for lv in pkg['levels']:
         for i, s in enumerate(lv['slides']):
             for j, b in enumerate(s['blocks']):
-                if b.get('type') != 'quote':
-                    continue
-                w = f'{lv["id"]} {i + 1}장 blocks/{j}'
-                body = set(r for sp in b['body'] for r in sp['refs'])
-                attr = set(b.get('_attribution_refs', []))
-                if not body <= attr:
-                    E('GOLD_ATTRIBUTION', f'{w}: 출처 표시 사실 {sorted(attr)} 가 body 사실 {sorted(body)} 을 품지 않는다')
-                rep['quote'].append((w, b['attribution'], sorted(body), sorted(attr - body)))
-                t = VA.strip_tags(''.join(sp['text'] for sp in b['body'])).strip()
-                if t and (t[0] in QMARKS or t[-1] in QMARKS):
-                    E('GOLD_QUOTE_MARKS', f'{w}: 인용 body 가 따옴표로 싸여 있다 — 인용부호는 표시다 (§10.2)')
-    # 게이트 3 후보
-    tm = type_map(contract_text)
-    for lid, n, path, sp in golden_spans(g):
-        if any(c in sp['text'] for c in '“”"') and not path.startswith('x'):
-            rep['inline_quote'].append((lid, n, sp['layer'], sp['refs'], sp['text']))
-        if sp['layer'] == 'fact' and sp['refs'] and all(tm.get(facts.get(r, {}).get('btype')) == 'OFFICIAL_CLAIM'
-                                                         for r in sp['refs']):
-            rep['claim_fact'].append((lid, n, sp['refs'], sp['text']))
-    return errs, warns, rep
+                if b.get('type') == 'quote':
+                    rep['quote'].append((f'{lv["id"]} {i + 1}장 blocks/{j}', b['attribution'],
+                                         sorted({name(r) for sp in b['body'] for r in sp['refs']})))
+    return rep
 
 
-# ── D. 시험 사본 ─────────────────────────────────────────────────────────────
-EVENT = 'FOMC-20260916'                               # code — 사람이 부르는 이름 (D27)
-IRAN = 'SL-iran-war'
-IRAN_FACTS = {'F37'}
-UID = lambda kind, label: str(uuid.uuid5(uuid.NAMESPACE_URL, f'claro-selftest:{kind}:{label}'))
-EVENT_ID, IRAN_ID = UID('event', EVENT), UID('storyline', IRAN)      # 키는 UUID (D27). 시험용
-
-
-def default_type(btype, tm):
-    """시험 사본용 — §3.3 표가 7값이면 그것, 행마다 · 나눈다는 보수적으로 OFFICIAL_CLAIM (D20 비대칭)"""
-    v = tm.get(btype, '')
-    return v if v in FACT_TYPES else 'OFFICIAL_CLAIM'
-
-
-def build_model(g, contract_text, facts_b, claims_b, sources_b, lib):
-    """골든 + FOMC 브리프 → 이 계약 모양 (메모리 안, 시험용 UUID). 채울 재료가 없는 곳은 비워 둔다 — 지어내지 않는다"""
-    tm = type_map(contract_text)
-    as_of = {}
-    for lid, path, v in vol_entries(g):
-        if v['class'] == 'VOLATILE':
-            for r in v['refs']:
-                as_of[r] = v['as_of']
-    m = {'facts': {}, 'fact_sources': [], 'sources': {}, 'documents': {}, 'registry': {}, 'claims': {},
-         'bridges': {}, 'events': {}, 'storylines': {}, 'storyline_versions': [], 'slots': []}
-    m['events'][EVENT_ID] = {'event_id': EVENT_ID, 'code': EVENT, 'title': '2026-09-16 FOMC', 'occurred_at': '2026-09-16',
-                             'storyline_id': None}
-    m['storylines'][IRAN_ID] = {'storyline_id': IRAN_ID, 'code': IRAN, 'title': '이란 전쟁', 'version': 1, 'ongoing': True}
-    m['storyline_versions'].append({'storyline_id': IRAN_ID, 'version': 1, 'created_at': g['published_at'], 'change': '생성'})
-    for lab, s in sources_b.items():
-        sid = UID('source', lab)
-        m['sources'][sid] = {'source_id': sid, 'label': lab, 'title': s['title'], 'publisher': 'federalreserve.gov',
-                             'url': None, 'kind': 'PRIMARY', 'language': 'en', 'published_at': s['published_at'],
-                             'ingested_at': '2026-09-18'}
-    for lab, f in facts_b.items():
-        fid = UID('fact', lab)
-        ft = default_type(f['btype'], tm)
-        iran = lab in IRAN_FACTS
-        m['facts'][fid] = {
-            'fact_id': fid, 'label': lab, 'claim_text': f['text'], 'fact_type': ft,
-            'actor': 'FOMC' if ft in ('OFFICIAL_CLAIM', 'OFFICIAL_LIMIT') else None,
-            'volatility': 'VOLATILE' if lab in as_of else 'STABLE', 'as_of': as_of.get(lab),
-            'event_at': None, 'event_id': None if iran else EVENT_ID, 'storyline_id': IRAN_ID if iran else None,
-            'storyline_version': 1 if iran else None, 'extraction_model': None, 'extraction_version': None}
-        if f['src']:                                   # 출처 문서는 알지만 원문 위치는 없다 (§4.2 실물 없음)
-            m['fact_sources'].append({'fact_id': fid, 'source_id': UID('source', f['src']), 'section': None,
-                                      'span_start': None, 'span_end': None})
-    fid = {m['facts'][k]['label']: k for k in m['facts']}
-    for dc, c in claims_b.items():
-        cid = UID('claim', dc)
-        m['claims'][cid] = {'claim_id': cid, 'label': dc, 'event_id': EVENT_ID, 'statement': dc, 'kind': c['kind'],
-                            'basis': [fid[x] for x in c['basis'] if x in fid],
-                            'checks': [{'question': k['question'], 'slot': None, 'recollected': False, 'answer': '',
-                                        'facts': [fid[x] for x in k['facts'] if x in fid], 'outcome': k['outcome']}
-                                       for k in c['checks']]}
-    cid = {m['claims'][k]['label']: k for k in m['claims']}
-    # 브리지 — 골든 bridge span 의 끊긴 F 연결이 재료. 개념 버전은 지금 라이브러리 (CONCEPT_IDENTITY §3.2 골든 = C-0002@3)
-    ver = {c['code']: c['version'] for c in lib['concepts']}
-    bfacts = []
-    for lid, n, path, sp in golden_spans(g):
-        if sp['layer'] == 'bridge':
-            bfacts += [fid[x] for x in sp.get('_fact_refs_dropped', []) if x in fid]
-    bid = UID('bridge', 'C-0002④')
-    m['bridges'][bid] = {'bridge_id': bid, 'label': 'C-0002 ④', 'bridge_type': 'CONCEPT_BRIDGE', 'event_id': EVENT_ID,
-                         'concept_id': UID('concept', 'C-0002'), 'concept_version': ver['C-0002'], 'slot': '④',
-                         'from_event': None, 'facts': list(dict.fromkeys(bfacts))}
-    # 패키지 — `_` 를 떼고 refs 를 층별 Ref 로. 대기 span 은 브리지만 채운다 (나머지는 콘텐츠 몫이라 비워 둔다)
-    pkg = strip_underscore(g)
-    by_code = {e['code']: k for k, e in m['events'].items()}
-    pkg['event_ref'] = by_code.get(pkg['event_ref'], pkg['event_ref'])     # 골든은 아직 code 를 적는다 → UUID (§18)
-    idx = VC.parts(lib)
-    pending = []
-    for (lid, spans), (_, gspans) in zip(VC.level_spans(pkg), VC.level_spans(g)):
-        for (path, sp), (_, gsp) in zip(spans, gspans):
-            L = sp['layer']
-            if L == 'fact':
-                sp['refs'] = [fid[r] for r in sp['refs']]
-            elif L == 'claim':
-                sp['refs'] = [cid[r] for r in sp['refs']]
-            elif L == 'bridge':
-                sp['refs'] = [bid]
-            elif L == 'concept':
-                key = VC.match_part(sp, idx)
-                sp['refs'] = [{'concept_id': UID('concept', r), 'version': ver[r],
-                               'part': key[1] if key and key[0] == r else None} for r in sp['refs']]
-            if L != 'writing' and not sp['refs']:
-                pending.append((lid, path, L, gsp['_refs_pending']['need']))
-    tes = []
-    for lid, path, v in vol_entries(g):
-        te = {'at': {'level': lid, 'path': path, 'fragment': v['span']}, 'class': v['class'], 'facts': [],
-              'value_at_authoring': None, 'check': None, 'formula': None, 'inputs': []}
-        if v['class'] == 'VOLATILE':
-            te['facts'] = [fid[r] for r in v['refs']]
-        else:
-            f = v['formula']
-            te.update(value_at_authoring=v['value_at_authoring'], check=v['check'],
-                      formula={'op': f['op'], 'from': f.get('from'), 'to': f.get('to'), 'of': f.get('of'),
-                               'offset': f.get('offset')},
-                      inputs=[{'key': x['key'], 'what': x['what'], 'value': x['value'],
-                               'fact': fid[x['refs'][0]] if x.get('refs') else None} for x in v['derived_from']])
-        tes.append(te)
-    m['record'] = {'article_id': UID('article', g['event_ref']), 'article_version': 1,   # 시험용. 진짜 발급은 0.2m (D30)
-                   'package': pkg, 'authoring': {'time_expressions': tes, 'storylines': [{'storyline_id': IRAN_ID, 'version': 1}],
-                                                 'notes': [g.get('_published_at_basis', '')]}}
-    m['pending'] = pending
-    m['concept_codes'] = {UID('concept', c['code']): c['code'] for c in lib['concepts']}
+# ── D. 모델 ──────────────────────────────────────────────────────────────────
+def load_model(b):
+    """골든 한 벌 → check_model 이 읽는 모양. 옮기지 않는다 — 파일에 있는 그대로다 (0.2m-a)"""
+    st, rec, pkg = b['store'], b['record'], b['package']
+    m = {'facts': {f['fact_id']: f for f in st['facts']}, 'fact_sources': st['fact_sources'],
+         'sources': {s_['source_id']: s_ for s_ in st['sources']},
+         'documents': {d['source_id']: d['text'] for d in st['source_documents']},
+         'registry': {r['source']: r for r in st['source_registry']},
+         'claims': {c['claim_id']: c for c in st['claims']}, 'bridges': {x['bridge_id']: x for x in st['bridges']},
+         'events': {e['event_id']: e for e in st['events']}, 'storylines': {x['storyline_id']: x for x in st['storylines']},
+         'storyline_versions': st['storyline_versions'], 'slots': st['slot_checks']}
+    m['pending'] = [(lid, path, sp['layer'], sp['_refs_pending'].get('need')) for lid, n, path, sp in golden_spans(pkg)
+                    if isinstance(sp.get('_refs_pending'), dict)]
+    m['record'] = {'article_id': rec.get('article_id'), 'article_version': rec.get('article_version'),
+                   'package': strip_underscore(pkg), 'authoring': rec['authoring']}
+    m['concept_codes'] = {c['concept_id']: c['code'] for c in b['concepts']['concepts']}
     return m
 
 
@@ -588,9 +456,20 @@ def check_model(m, lib, publish=False):
             if k != v[key]:
                 E('KEY_MISMATCH', f'{kind} {k} 의 {key} 가 {v[key]}')
             seen[k] += 1
+    for kind, key in (('events', 'event_id'), ('storylines', 'storyline_id')):
+        for k, v in m[kind].items():
+            seen[k] += 1
+    for k in seen:
+        if not VA.UUID_RE.match(str(k)):
+            E('KEY_SHAPE', f'키 {k!r} 가 UUID 가 아니다 (불변식 1)')
     for k, n in seen.items():
         if n > 1:
             E('KEY_DUP', f'키 {k} 가 {n}번')
+    # 14 — StorylineVersion 은 1부터 1씩 빠짐없이, Storyline.version = 최대
+    for sid, sl in m['storylines'].items():
+        vs = sorted(v['version'] for v in m['storyline_versions'] if v['storyline_id'] == sid)
+        if vs != list(range(1, sl['version'] + 1)):
+            E('STORYLINE_VERSION', f'{sl["code"]}: 버전 {vs} — 1부터 {sl["version"]} 까지 빠짐없이 (불변식 14)')
     codes = Counter(x['code'] for kind in ('events', 'storylines') for x in m[kind].values())
     for c, n in codes.items():
         if n > 1:
@@ -757,10 +636,13 @@ def check_model(m, lib, publish=False):
             P('FACT_NO_PRIMARY', f'{w}: 1차 출처가 없다 (불변식 9 · _open-2)')
         dates = [tp_range(S[x['source_id']]['published_at']) for x in links if x['source_id'] in S]
         dates = [d for d in dates if d]
+        pubd = dt.date.fromisoformat(pub) if pub else None
         if pub and not dates:
             P('FACT_NOT_YET_PUBLIC', f'{w}: first_verified_public_at 이 없다 — 출처가 없다 (불변식 11)')
-        elif pub and min(d[1] for d in dates) > dt.date.fromisoformat(pub):
+        elif pub and min(d[0] for d in dates) > pubd:
             P('FACT_NOT_YET_PUBLIC', f'{w}: 가장 이른 출처가 발행일 뒤다 (불변식 11 · §5.3)')
+        elif pub and min(d[1] for d in dates) > pubd:       # 정밀도가 모자라 앞뒤가 갈리지 않는다 — 증명 못 한 것 (§5.2)
+            P('FACT_PUBLIC_UNPROVEN', f'{w}: 출처의 공개 시점이 발행일 앞인지 증명되지 않는다 — 정밀도가 모자라다 (불변식 11 · §5.2)')
     # 13 — 스토리라인 핀
     pins = {p['storyline_id']: p['version'] for p in auth['storylines']}
     for sid in sorted({F[k]['storyline_id'] for k in reach_f if F[k]['storyline_id']}):
@@ -778,10 +660,13 @@ def check_model(m, lib, publish=False):
                 if t and (t[0] in QMARKS or t[-1] in QMARKS):
                     E('QUOTE_MARKS', f'{w}: body 가 따옴표로 싸여 있다 (불변식 21)')
                 ids = {r for sp in b['body'] for r in sp['refs'] if r in F}
+                anysrc = set.intersection(*[{x['source_id'] for x in fs.get(r, [])} for r in ids]) if ids else set()
                 common = set.intersection(*[{x['source_id'] for x in fs.get(r, []) if isinstance(x['span_start'], int)}
                                             for r in ids]) if ids else set()
-                if not common:
-                    P('QUOTE_NO_COMMON_SOURCE', f'{w}: body 사실들이 원문 위치를 가진 공통 Source 가 없다 (불변식 19)')
+                if not anysrc:
+                    P('QUOTE_NO_COMMON_SOURCE', f'{w}: body 사실들에 공통 Source 가 없다 — 인용 하나 = 원문 하나 (불변식 19)')
+                elif not common:
+                    P('QUOTE_SPAN_MISSING', f'{w}: 공통 Source 는 있으나 원문 위치(span)가 없다 — 어느 구간인지 기계가 모른다 (불변식 19)')
                 elif not any(m['registry'].get(S[x]['publisher'], {}).get('can_quote') is True for x in common):
                     P('QUOTE_NOT_ALLOWED', f'{w}: 원문 발행처가 can_quote 가 아니다 (불변식 20 · §5.1)')
     # 24 — 슬롯
@@ -795,19 +680,36 @@ def check_model(m, lib, publish=False):
 
 
 # ── 실행 ────────────────────────────────────────────────────────────────────
-def run(contract_text, log_text, g, lib_text):
+# 발행 검사에서 막히는 것을 둘로 가른다 (D27) — 독자에게 닿는 것 / 기계 검증용(파이프라인)
+READER_FACING = ('REFS_PENDING', 'FACT_NO_PRIMARY', 'FACT_NOT_YET_PUBLIC', 'CLAIM_UNCHECKED', 'CHECK_NO_FACTS',
+                 'DERIVED_UNVERIFIED', 'DERIVED_INPUT_NO_FACT', 'QUOTE_NO_COMMON_SOURCE', 'STORYLINE_STALE', 'BRIDGE_CONCEPT')
+MACHINE_ONLY = ('FACT_NO_SOURCE_SPAN', 'FACT_PUBLIC_UNPROVEN', 'QUOTE_SPAN_MISSING', 'QUOTE_NOT_ALLOWED')
+
+
+def run(contract_text, log_text, bundle, lib_text, records_text=None):
+    """bundle = verify-article.load_bundle() 의 것 — {package, record, store, concepts}"""
     lib = VC.parse_library(lib_text)
     fb = brief_facts(BRIEFS['FOMC'])
-    cb = brief_claims(BRIEFS['FOMC'])
-    sb = brief_sources(BRIEFS['FOMC'])
+    if records_text is None:
+        records_text = ''.join(open(p, encoding='utf-8').read() for p in RECORDS)
     errs = check_contract(contract_text, brief_types()) + check_log(log_text)
-    e, warns, rep = check_golden(g, contract_text, fb, cb)
+    warns, rep = [], defaultdict(list)
+    e = check_origin(bundle['store'], bundle['record'], contract_text, fb, records_text)
     errs += e
-    if 'article_id' not in g or 'article_version' not in g:
-        warns.append(('ARTICLE_ID_PENDING', '골든에 article_id · article_version 이 없다 — 0.2m 대기 (§11 · D30)'))
     model = None
-    if not e:                                           # 골든이 이 계약으로 옮겨지지 않으면 시험 사본을 만들지 않는다
-        model = build_model(g, contract_text, fb, cb, sb, lib)
+    if not e:                                           # 모양이 깨졌으면 모델을 읽지 않는다
+        pkg = bundle['package']
+        if not (isinstance(pkg.get('published_at'), str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', pkg['published_at'])):
+            errs.append(('GOLD_PUBLISHED_AT_SHAPE', f'published_at={pkg.get("published_at")!r} — "YYYY-MM-DD" 여야 한다 (§5.3 · R-1)'))
+        for lid, n, path, sp in golden_spans(pkg):
+            pend = sp.get('_refs_pending')
+            if isinstance(pend, dict):
+                need = pend.get('need')
+                if need not in PENDING_NEEDS or sp['layer'] not in PENDING_NEEDS[need]:
+                    errs.append(('GOLD_PENDING_NEED', f'{lid} {n}장 "{sp["text"][:20]}": {sp["layer"]} 층에 need {need!r} — 어휘 · 층이 맞지 않는다 (불변식 25)'))
+                rep['pending_list'].append((lid, n, sp['text'], sp['layer'], need, path))
+        rep.update(golden_report(pkg, bundle['store']))
+        model = load_model(bundle)
         me, held = check_model(model, lib)
         errs += me
         rep['held'] = held
@@ -817,25 +719,28 @@ def run(contract_text, log_text, g, lib_text):
 def main():
     report = '--report' in sys.argv
     read = lambda p: open(p, encoding='utf-8').read()
-    g = json.load(open(GOLDEN, encoding='utf-8'))
-    errs, warns, rep, model, lib = run(read(CONTRACT), read(LOG) if os.path.exists(LOG) else '', g, read(LIBRARY))
+    bundle = VA.load_bundle()
+    errs, warns, rep, model, lib = run(read(CONTRACT), read(LOG) if os.path.exists(LOG) else '', bundle, read(LIBRARY))
     fb = brief_facts(BRIEFS['FOMC'])
+    st = bundle['store']
     print('verify-data-model')
     print(f'  계약   {os.path.relpath(CONTRACT, ROOT)}')
-    bt = brief_types()
-    print(f'  실물   브리프 3 — 사실 타입 {len(bt)}종 · FOMC 사실 {len(fb)} · DC {len(brief_claims(BRIEFS["FOMC"]))}')
-    vol = Counter(c for _, _, c in rep.get('vol', []))
-    print(f'         골든 — 대기 {sum(rep["pending"].values())} ({dict(sorted(rep["pending"].items()))}) · '
-          f'시간 조각 {sum(vol.values())} ({dict(sorted(vol.items()))}) · 인용 {len(rep.get("quote", []))}')
-    print(f'         끊긴 F 연결 — DC 있는 claim {len(rep["dropped_claim"])} · 대기 claim {len(rep["dropped_pending"])} · '
-          f'bridge {len(rep["dropped_bridge"])} · 그 밖 {len(rep["dropped_other"])}')
+    print(f'  원천   브리프 3 — 사실 타입 {len(brief_types())}종 · FOMC 사실 {len(fb)} · 1차 구절 기록 {len(RECORDS)} 파일')
+    nb = sum(1 for f in st['facts'] if '_brief_type' in f)
+    print(f'  저장소 {os.path.relpath(VA.STORE, ROOT)} — Fact {len(st["facts"])} (브리프에서 {nb} · 새로 {len(st["facts"]) - nb}) · '
+          f'FactSource {len(st["fact_sources"])} (1차 구절 {sum(1 for x in st["fact_sources"] if "_passage" in x)}) · Source {len(st["sources"])} · '
+          f'DerivedClaim {len(st["claims"])} · Bridge {len(st["bridges"])} · Event {len(st["events"])} · Storyline {len(st["storylines"])}')
     if model:
+        auth = model['record']['authoring']
+        vol = Counter(t['class'] for t in auth['time_expressions'])
         held = Counter(c for c, _ in rep['held'])
-        print(f'  시험 사본 — Fact {len(model["facts"])} · Claim {len(model["claims"])} · Bridge {len(model["bridges"])} · '
-              f'Source {len(model["sources"])} · 시간 조각 {len(model["record"]["authoring"]["time_expressions"])}')
-        print(f'         발행 검사에서 막히는 것 {sum(held.values())} — ' + ' · '.join(f'{k} {v}' for k, v in sorted(held.items())))
+        rf = sum(v for k, v in held.items() if k in READER_FACING)
+        print(f'  골든   대기 span {len(rep["pending_list"])} · 시간 조각 {sum(vol.values())} ({dict(sorted(vol.items()))}) · 인용 {len(rep["quote"])} · '
+              f'스토리라인 핀 {len(auth["storylines"])} · 저작 메모 {len(auth["notes"])}')
+        print(f'  발행 검사에서 막히는 것 {sum(held.values())} — 독자에게 닿는 것 {rf} · 기계 검증용 {sum(held.values()) - rf}')
+        print('         ' + ' · '.join(f'{k} {v}' for k, v in sorted(held.items())))
     if report:
-        report_out(rep, model, fb)
+        report_out(rep, model)
     print()
     for code, msg in warns:
         print(f'  WARN  {code}: {msg}')
@@ -845,23 +750,13 @@ def main():
     return 1 if errs else 0
 
 
-def report_out(rep, model, fb):
-    print('\n골든 VOLATILE → Fact.as_of (§6.2)')
-    for f, a in sorted(rep['as_of'].items()):
-        print(f'  {f} as_of {a}')
+def report_out(rep, model):
     print(f'\n골든 대기 span {len(rep["pending_list"])} — 실물에서 센다 (불변식 25)')
     for lid, n, t, layer, need, _ in rep['pending_list']:
         print(f'  {lid:<8} {n}장 {layer:<6} {need:<12} "{VA.strip_tags(t).strip()[:36]}"')
-    print('\n끊긴 F 연결 — 대기 claim (C-5 근거 후보) · bridge (Bridge.facts) · 그 밖')
-    for lid, n, t, d in rep['dropped_pending']:
-        print(f'  claim  {lid} {n}장 {d}  "{t[:30]}"')
-    for lid, n, t, d in rep['dropped_bridge']:
-        print(f'  bridge {lid} {n}장 {d}  "{t[:30]}"')
-    for lid, n, L, t, d in rep['dropped_other']:
-        print(f'  {L:<6} {lid} {n}장 {d}  "{t[:30]}"  ← 갈 곳 없음')
-    print('\n인용 (§10.1) — 출처 표시 · body 사실 · 표시에만 있던 사실(→ Source 서지)')
-    for w, a, body, extra in rep['quote']:
-        print(f'  {w}  "{a}"  body {body}  표시만 {extra}')
+    print('\n인용 (§10.1) — 출처 표시 · body 사실')
+    for w, a, body in rep['quote']:
+        print(f'  {w}  "{a}"  body {body}')
     print('\n게이트 3 후보 — 본문 따옴표 (§10.2)')
     for lid, n, L, refs, t in rep['inline_quote']:
         print(f'  {lid} {n}장 {L:<7} {refs}  {t.strip()!r}')
@@ -869,16 +764,22 @@ def report_out(rep, model, fb):
     for lid, n, refs, t in rep['claim_fact']:
         print(f'  {lid} {n}장 {refs}  {VA.strip_tags(t).strip()[:50]!r}')
     if model:
-        print('\n시험 사본 발행 검사 — 막히는 것 (§18: 0.2m · 콘텐츠가 채울 것)')
         by = defaultdict(list)
         for c, msg in rep['held']:
             by[c].append(msg)
-        for c, msgs in sorted(by.items()):
-            print(f'  {c} {len(msgs)}')
-            for msg in msgs[:6]:
-                print(f'    {msg}')
-            if len(msgs) > 6:
-                print(f'    … {len(msgs) - 6}개 더')
+        for title, group in (('독자에게 닿는 것', READER_FACING), ('기계 검증용 — 파이프라인이 채운다 (D27)', MACHINE_ONLY)):
+            print(f'\n발행 검사에서 막히는 것 — {title}: {sum(len(by[c]) for c in group)}')
+            for c in group:
+                if not by[c]:
+                    continue
+                print(f'  {c} {len(by[c])}')
+                for msg in by[c][: 40 if group is READER_FACING else 4]:
+                    print(f'    {msg}')
+                if group is MACHINE_ONLY and len(by[c]) > 4:
+                    print(f'    … {len(by[c]) - 4}개 더')
+        other = [c for c in by if c not in READER_FACING + MACHINE_ONLY]
+        if other:
+            print(f'\n  (갈래 밖) {other}')
 
 
 if __name__ == '__main__':
