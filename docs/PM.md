@@ -41,14 +41,16 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 그 뒤: D1 백엔드 스택 → 0.4 스키마 구현 → Phase 1 (파이프라인 A 반자동 + 게이트 4)
 ```
 
-## 세션 상태 — **PM 검수 대기 3건** (2026-10-09 현재, 아직 하나도 안 열어봤다)
-| 순서 | 세션 | 커밋 | 무엇이 올라왔나 (커밋 메시지 기준. 검수 전) |
+## 세션 상태 — **PM 검수 대기 2건** (2026-10-09, 압축 뒤 갱신)
+| 순서 | 세션 | 커밋 | 상태 |
 |---|---|---|---|
-| **1** | **C-5** 골든 교정 2차 | `bfdeafb` [GATE] | 수정안 24 · 반증 기록 DC-A · C · D · E + 신규 5 · **DC-C 빈 슬롯 1 (8월 CPI)** · **"DC-E 제목 서지 않음"**. 로그 `logs/content/golden-correction-2026-10.md`. 도윤 문안 선택 |
-| **2** | **0.2c** 관찰 기록 계약 | `7a61b52` [GATE] | `docs/contract/OBSERVATION.md` 초안 · _open 5. 로그 `logs/backend/phase-0-step-0-2c.md` |
-| **3** | **C-4** 명제 나누기 | `74318b1` [GATE] | 나누기 3 · 신규 개념 3 · Q-C3 미확인 · 스크루웜 문안 없음. 로그 `logs/content/concept-split-2026-10.md`. 도윤 문안 선택 |
+| ✅ | **C-5** 골든 교정 2차 | `bfdeafb` [GATE] | **검수 통과 → D29.** 남은 것: ① 도윤 문안 선택 (24 + PM 추천 3곳 다름) ② **C-3b** (8월 CPI 등 3건 — 프롬프트 `development-content.md`) ③ 둘 다 끝나면 "C-5 게이트 반영" 지시문 전달 → 골든 반영 + Q1 · Q2 안 |
+| **1** | **0.2c** 관찰 기록 계약 | `7a61b52` [GATE] | 미검수. `docs/contract/OBSERVATION.md` 초안 · _open 5. 로그 `logs/backend/phase-0-step-0-2c.md` |
+| **2** | **C-4** 명제 나누기 | `74318b1` [GATE] | 미검수. 나누기 3 · 신규 개념 3 · Q-C3 미확인 · 스크루웜 문안 없음. 로그 `logs/content/concept-split-2026-10.md`. 도윤 문안 선택 |
 | — | F-2a 디자인 탐색 | `c7443b5` · `94ae9e4` | 완료. **도윤이 B(가로 카드 · 다크)를 직접 골랐다** → **D26 OPEN**. 도윤이 그 세션과 UI 를 계속 얘기 중 |
 | — | 닫힘 | | S1 · S2 · S3 · 0.1b · 0.2a · 0.2b · C-1 · C-3 · F-1 |
+
+**0.2m 프롬프트에 실을 것**: 반증 기록의 답이 발행 뒤 문서에만 기댈 때 발행할 수 있는가 (D29-6, DATA_MODEL 에 없음).
 
 **검수 순서의 이유**: C-5 가 독자 글에 직접 닿고 수정안이 가장 많다(도윤 시간이 가장 든다). 0.2c 는 F-3 · 0.2m 을 막는다. C-4 는 마감(F-3)까지 여유가 있다.
 
@@ -69,7 +71,7 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 |---|---|
 | **D26** 넘기는 방향 — 도윤이 고른 B(가로 카드) vs §8.1(세로 스냅) | F-2b 전 |
 | 디자인 레퍼런스 (`docs/design/references/`) | F-2b 전 |
-| **C-5 수정안 24개 중 선택** (PM 추천 뒤) | F-3 전 |
+| **C-5 문안 선택** — 추천은 D29 (C-5 추천 21 + PM 이 다르게 본 3). 반영 뒤 Q1 · Q2 도 | F-3 전 |
 | C-4 문안 선택 (PM 추천 뒤) | F-3 전 |
 | D21 기사당 레벨 수 | 파이프라인 A 설계 전 |
 | D1 백엔드 스택 | 0.2b 뒤 (아래 §4) |
@@ -122,7 +124,7 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 |---|---|---|
 | observed ↔ 프로토타입 HTML | `python3 scripts/verify-observed.py` | exit 0, PASS |
 | 골든: 계약 §9 · D8 · invalid 2건 | `python3 scripts/verify-article.py` | exit 0, OK. WARN 있음 (0.2 대기 13 · 이란 개전일) |
-| 골든 독자 글 불변 | `python3 scripts/compare-reader-text.py` | exit 0, 허용된 차이 1/1 (D23 #16) |
+| 골든 독자 글 불변 | `python3 scripts/compare-reader-text.py` | exit 0, 허용된 차이 2/2 (D23 #16 · D27 “올리자”). C-5 반영 뒤 늘어난다 |
 | 위 두 검사의 자체 시험 | `python3 scripts/selftest-verify-article.py` | exit 0 |
 | ARTICLE_PACKAGE 커버리지 | `python3 scripts/verify-contract-coverage.py` | exit 0, PASS 10 |
 | CONCEPT_IDENTITY | `python3 scripts/verify-concept-identity.py` | exit 0, WARN 5 (used_in 계산 · 골든 참조 미고정 등 — 0.2m 에서 풀림) |
