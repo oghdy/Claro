@@ -4,7 +4,9 @@
     python3 scripts/verify-concept-identity.py            # 검사
     python3 scripts/verify-concept-identity.py --report   # + 라이브러리 → 계약 이전 목록 · 골든 문안 대조
 
-세 곳을 본다.
+네 곳을 본다.
+  D. 저장소      docs/content/concept-library.json 이 계약 모양(§1)이고 md 와 같은 것을 말한다 — 키(UUID · code · 이름) ·
+                 지금 버전의 문안 한 벌 · 독자 글은 md 와 **글자 단위로** 같다 · alias · 충돌 별칭 · 관계(한 쌍 한 번)
   A. 계약 문서   §9.5 확정 필드 · enum 이 다 있다. §9.6 보류 항목이 없다. 실물 없는 구조(merge · split ·
                  PROVISIONAL · Resolver · Topic) 절에 "실물 없음". 0.2b · 0.2c 타입을 정의하지 않았다.
                  0.2a 로그 머리 요약에 질문 8개가 [계약 반영 / _open / 미확인] 과 근거를 갖는다
@@ -22,6 +24,7 @@ import json, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTRACT = os.path.join(ROOT, 'docs/contract/CONCEPT_IDENTITY.md')
 LIBRARY = os.path.join(ROOT, 'docs/content/concept-library.md')
+STORE = os.path.join(ROOT, 'docs/content/concept-library.json')      # 계약 모양 저장소 (0.2m-a) — concept_id(UUID) 는 여기에만
 GOLDEN = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
 LOG = os.path.join(ROOT, 'logs/backend/phase-0-step-0-2a.md')
 
@@ -305,6 +308,107 @@ def analogy(c):
             'limits': limits, 'conditional': '조건부' in f['head']}
 
 
+def raw_library(text):
+    """md 의 독자 글을 **글자 그대로** 꺼낸다 (굵게 표시 `**` · 줄바꿈 포함) → {code: {...}}
+
+    parse_library 는 대조하기 좋게 `**` 를 뗀다. 이 함수는 떼지 않는다 — 저장소(JSON)와 글자 단위로 대려는 것이다.
+      prop       명제 한 줄
+      FULL       [(label | None, title | None, text)] — 단계 안의 줄은 \n 으로 잇는다
+      REFRESHER  text
+      ANALOGY    (name, text)
+      BOUNDARY   [줄]
+    """
+    out, cur, field, taken = {}, None, None, False
+    lines = text.splitlines()
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        m = CONCEPT_H.match(line)
+        if m:
+            cur = out.setdefault(m.group(1), {})
+            field = None
+        elif cur is not None and (line.startswith('## ') or line.strip() == '---'):
+            cur = None
+        elif cur is not None:
+            p = PROP.match(line)
+            if p:
+                cur['prop'] = p.group(1).strip()
+            f = FIELD_H.match(line)
+            if f:
+                field, taken = f.group(1), False
+                cur['_head_' + field] = f.group(2).strip()
+            if line.startswith('>'):
+                block = []
+                while i < len(lines) and lines[i].startswith('>'):
+                    block.append(re.sub(r'^> ?', '', lines[i]))
+                    i += 1
+                first = next((b for b in block if b.strip()), '')
+                if field and not taken and not first.replace('**', '').startswith(NOTE_MARKS):
+                    taken = True
+                    if field == 'FULL':
+                        steps = []
+                        for b in block:
+                            h = re.match(rf'^\*\*([{CIRCLED}])\s*(.*?)\*\*$', b)
+                            if h:
+                                steps.append([h.group(1), h.group(2) or None, []])
+                            elif b.strip() == '':
+                                continue
+                            elif steps:
+                                steps[-1][2].append(b)
+                            else:
+                                steps.append([None, None, [b]])
+                        cur['FULL'] = [(a, t, '\n'.join(ls)) for a, t, ls in steps]
+                    elif field == 'BOUNDARY':
+                        cur['BOUNDARY'] = [b for b in block if b.strip()]
+                    elif field == 'ANALOGY':
+                        name = re.search(r'`([^`]+)`', cur['_head_ANALOGY'])
+                        cur['ANALOGY'] = (name.group(1) if name else None, '\n'.join(b for b in block if b.strip()))
+                    else:
+                        cur[field] = '\n'.join(b for b in block if b.strip())
+                continue
+        i += 1
+    return out
+
+
+BOUNDARY_ARROW = {True: ' → 해당', False: ' → 해당 없음'}
+
+
+def reader_texts_md(text):
+    """{(code, part): 글} — md 에서. part 이름은 계약 §3.3 (+ 'PROPOSITION')"""
+    out = {}
+    for code, c in raw_library(text).items():
+        out[(code, 'PROPOSITION')] = c.get('prop')
+        for label, _, body in c.get('FULL', []):
+            out[(code, f'FULL:{label}' if label else 'FULL')] = body
+        if 'REFRESHER' in c:
+            out[(code, 'REFRESHER')] = c['REFRESHER']
+        if 'ANALOGY' in c:
+            out[(code, f'ANALOGY:{c["ANALOGY"][0]}')] = c['ANALOGY'][1]
+        if 'BOUNDARY' in c:
+            out[(code, 'BOUNDARY')] = '\n'.join(c['BOUNDARY'])
+    return out
+
+
+def reader_texts_store(store):
+    """{(code, part): 글} — 저장소(JSON)의 **지금 버전**에서. reader_texts_md 와 같은 키"""
+    code = {c['concept_id']: c['code'] for c in store['concepts']}
+    cur = {c['concept_id']: c['version'] for c in store['concepts']}
+    out = {}
+    for v in store['versions']:
+        if cur.get(v['concept_id']) != v['version']:
+            continue
+        k = code[v['concept_id']]
+        out[(k, 'PROPOSITION')] = v['proposition']
+        for st in v['full']:
+            out[(k, f'FULL:{st["label"]}' if st['label'] else 'FULL')] = st['text']
+        out[(k, 'REFRESHER')] = v['refresher']
+        for a in v['analogies']:
+            out[(k, f'ANALOGY:{a["name"]}')] = a['text']
+        if v['boundary']:
+            out[(k, 'BOUNDARY')] = '\n'.join(b['case'] + BOUNDARY_ARROW[b['applies']] for b in v['boundary'])
+    return out
+
+
 def norm_alias(s):
     return re.sub(r'\s+', '', s).lower()
 
@@ -426,6 +530,184 @@ def cycles(graph):
     for n in sorted(graph):
         dfs(n, [])
     return out
+
+
+# ── D. 저장소 (concept-library.json) ─────────────────────────────────────────
+UUID_RE = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
+STORE_TYPES = {'concepts': 'Concept', 'versions': 'ConceptVersion', 'aliases': 'ConceptAlias',
+               'conflicting_aliases': 'ConflictingAlias', 'relations': 'ConceptRelation'}
+NESTED_TYPES = {'full': 'FullStep', 'analogies': 'Analogy', 'boundary': 'BoundaryLine', 'bridge_slots': 'BridgeSlot'}
+PREREQ = ('REQUIRED_PREREQUISITE', 'HELPFUL_PREREQUISITE')
+
+
+def id_map_of(store):
+    return {c['concept_id']: c['code'] for c in store['concepts']}
+
+
+def check_store(store, lib, library_text, contract_text):
+    """저장소가 계약 모양이고(§1), md 와 같은 것을 말하는가. md 는 사람이 읽고 쓰는 면, 저장소는 기계가 푸는 면이다.
+
+    독자 글(명제 · FULL · REFRESHER · ANALOGY · BOUNDARY)은 **글자 단위로** 같아야 한다 — md 를 고치고 저장소에
+    새 버전을 안 만들면 여기서 실패한다 (§3.1 — 한 번 만든 버전은 고치지 않는다)."""
+    errs, warns = [], []
+    E = lambda c, m: errs.append((c, m))
+    types = ts_types(contract_text)
+    # 모양 — 계약 타입 블록의 필드 그대로 (`_` 는 픽스처 주석)
+    def shape(o, t, w):
+        want, got = set(types.get(t, {})), {k for k in o if not k.startswith('_')}
+        if want != got:
+            E('STORE_SHAPE', f'{w}: {t} 필드가 계약과 다르다 — 없음 {sorted(want - got)} · 남음 {sorted(got - want)} (§1)')
+    for key, t in STORE_TYPES.items():
+        if not isinstance(store.get(key), list):
+            E('STORE_SHAPE', f'{key} 가 없다')
+            return errs, warns
+        for i, o in enumerate(store[key]):
+            shape(o, t, f'{key}[{i}]')
+    for i, v in enumerate(store['versions']):
+        for k, t in NESTED_TYPES.items():
+            for j, o in enumerate(v.get(k) or []):
+                shape(o, t, f'versions[{i}].{k}[{j}]')
+        if isinstance(v.get('authoring'), dict):
+            shape(v['authoring'], 'Authoring', f'versions[{i}].authoring')
+    if errs:
+        return errs, warns
+    if 'used_in' in json.dumps(store, ensure_ascii=False):
+        E('STORE_USED_IN', 'used_in 이 저장소에 있다 — 저장하지 않고 발행 패키지에서 계산한다 (§13-15)')
+    # 1 · 2 · 3 — 키
+    cs = store['concepts']
+    ids, codes, names = [c['concept_id'] for c in cs], [c['code'] for c in cs], [c['canonical_name'] for c in cs]
+    for c in cs:
+        if not isinstance(c['concept_id'], str) or not UUID_RE.match(c['concept_id']):
+            E('STORE_KEY', f'{c["code"]}: concept_id {c["concept_id"]!r} 가 UUID 가 아니다 (§13-1)')
+        if not re.match(r'^C-\d{4,}$', str(c['code'])):
+            E('STORE_KEY', f'code {c["code"]!r} 형식 (§13-2)')
+        if c['status'] not in STATUS:
+            E('STORE_STATUS', f'{c["code"]}: status {c["status"]!r} (§13-4)')
+        if (c['status'] == 'MERGED') != (c['merged_into'] is not None):
+            E('STORE_STATUS', f'{c["code"]}: merged_into 는 MERGED 일 때만 있다 (§13-4)')
+    for what, xs in (('concept_id', ids), ('code', codes), ('canonical_name', names)):
+        for d in sorted({x for x in xs if xs.count(x) > 1}):
+            E('STORE_KEY', f'{what} {d} 가 두 번 이상 (§13-1~3)')
+    if errs:                                             # 키가 깨지면 그 아래(버전 · alias · 관계가 가리키는 것)는 뜻이 없다
+        return errs, warns
+    code = id_map_of(store)
+    # md 와 같은 개념 · 같은 메타
+    md = {c['code']: c for c in lib['concepts']}
+    if set(codes) != set(md):
+        E('STORE_MD_SET', f'개념이 md 와 다르다 — 저장소에만 {sorted(set(codes) - set(md))} · md 에만 {sorted(set(md) - set(codes))}')
+    for c in cs:
+        m = md.get(c['code'])
+        if not m:
+            continue
+        for k, a, b in (('concept_id', c['concept_id'], m['meta'].get('concept_id')), ('canonical_name', c['canonical_name'], m['name']), ('concept_type', c['concept_type'], m['meta'].get('type')),
+                        ('status', c['status'], m['meta'].get('status')), ('domain', c['domain'], m['domain']),
+                        ('version', c['version'], m['version'])):
+            if a != b:
+                E('STORE_MD_META', f'{c["code"]}: {k} 저장소 {a!r} ≠ md {b!r}')
+    # 5 · 7 — 버전: 지금 버전의 스냅숏이 정확히 하나, 이력이 1..N
+    vs = {}
+    for v in store['versions']:
+        if v['concept_id'] not in code:
+            E('STORE_VERSION', f'버전이 없는 개념 {v["concept_id"]} 을 가리킨다')
+            continue
+        vs.setdefault(code[v['concept_id']], []).append(v)
+    hist = {(h['code'], h['version']) for h in store.get('_version_history', [])}
+    for c in cs:
+        mine = [v for v in vs.get(c['code'], []) if v['version'] == c['version']]
+        if len(mine) != 1:
+            E('STORE_VERSION', f'{c["code"]}: 지금 버전 v{c["version"]} 의 문안이 {len(mine)}벌 — 정확히 하나 (§3.1 · §13-5)')
+            continue
+        v = mine[0]
+        if any(x['version'] > c['version'] for x in vs[c['code']]):
+            E('STORE_VERSION', f'{c["code"]}: Concept.version 보다 큰 버전이 있다 (§13-5)')
+        for k in ('created_on', 'change', 'basis', 'proposition', 'refresher'):
+            if not (isinstance(v[k], str) and v[k].strip()):
+                E('STORE_VERSION', f'{c["code"]}@{v["version"]}: {k} 가 비었다 (§13-5 · §13-7)')
+        if not v['full']:
+            E('STORE_VERSION', f'{c["code"]}@{v["version"]}: FULL 단계가 없다 (§13-7)')
+        m = md.get(c['code'])
+        if m and m['version_date'] and v['created_on'] != m['version_date']:
+            E('STORE_VERSION', f'{c["code"]}@{v["version"]}: created_on {v["created_on"]} ≠ md {m["version_date"]}')
+        miss = [n for n in range(1, c['version'] + 1) if (c['code'], n) not in hist]
+        if miss:
+            E('STORE_VERSION', f'{c["code"]}: 버전 이력에 v{miss} 가 없다 — 1부터 빠짐없이 (§13-5)')
+        # 8 — 슬롯 · requires
+        labels = {st['label'] for st in v['full'] if st['label']}
+        slots = {sl['label'] for sl in v['bridge_slots']}
+        for sl in v['bridge_slots']:
+            if sl['after'] not in labels or sl['label'] in labels:
+                E('STORE_SLOT', f'{c["code"]}: 슬롯 {sl["label"]} after {sl["after"]} — FULL 단계 {sorted(labels)} (§13-8)')
+        for a in v['analogies']:
+            bad = [r for r in a['requires'] if r not in labels | slots]
+            if bad:
+                E('STORE_SLOT', f'{c["code"]}: 비유 {a["name"]} requires {bad} 가 단계도 슬롯도 아니다 (§13-8)')
+        if m:
+            if [(sl['label'], sl['after']) for sl in v['bridge_slots']] != [(sl['label'], sl['after']) for sl in m['slots']]:
+                E('STORE_MD_META', f'{c["code"]}: 브리지 슬롯이 md 와 다르다')
+            want = m['analogy']['requires'] if m['analogy'] else None
+            got = v['analogies'][0]['requires'] if v['analogies'] else None
+            if want != got:
+                E('STORE_MD_META', f'{c["code"]}: 비유 requires 저장소 {got} ≠ md {want}')
+    # 독자 글 — 글자 단위
+    a, b = reader_texts_md(library_text), reader_texts_store(store)
+    for k in sorted(set(a) | set(b)):
+        if a.get(k) != b.get(k):
+            E('STORE_TEXT', f'{k[0]} {k[1]}: 저장소의 글이 md 와 다르다 — md {a.get(k)!r:.60} / 저장소 {b.get(k)!r:.60}')
+    # 9 — alias · 충돌 별칭
+    md_al = {(c['code'], x, src) for c in lib['concepts'] for x, src in c['aliases']}
+    st_al = set()
+    for x in store['aliases']:
+        if x['concept_id'] not in code:
+            E('STORE_ALIAS', f'alias {x["alias"]!r} 가 없는 개념을 가리킨다')
+            continue
+        if x['language'] not in ('ko', 'en'):
+            E('STORE_ALIAS', f'alias {x["alias"]!r}: language {x["language"]!r}')
+        st_al.add((code[x['concept_id']], x['alias']))
+    if st_al != {(c, x) for c, x, _ in md_al}:
+        d1, d2 = st_al - {(c, x) for c, x, _ in md_al}, {(c, x) for c, x, _ in md_al} - st_al
+        E('STORE_ALIAS', f'alias 가 md 와 다르다 — 저장소에만 {sorted(d1)} · md 에만 {sorted(d2)}')
+    owners = {}
+    for c0, x in st_al:
+        owners.setdefault(norm_alias(x), set()).add(c0)
+    for c in cs:
+        for n in (c['canonical_name'], c['code']):
+            if norm_alias(n) in owners:
+                owners[norm_alias(n)].add(c['code'])
+    declared = {(code.get(x['concept_id']), norm_alias(x['alias'])) for x in store['conflicting_aliases']}
+    for x in store['conflicting_aliases']:
+        if (code.get(x['concept_id']), x['alias']) not in st_al:
+            E('STORE_CONFLICT', f'충돌 별칭 {x["alias"]!r} 가 그 개념의 alias 에 없다 (§13-9)')
+    for al, who in sorted(owners.items()):
+        miss = [w for w in sorted(who) if (w, al) not in declared]
+        if len(who) > 1 and miss:
+            E('STORE_CONFLICT', f'이름 "{al}" 가 {sorted(who)} 에 겹치는데 {miss} 에 ConflictingAlias 가 없다 (§13-9)')
+    md_conf = {(c['code'], norm_alias(t)) for c in lib['concepts'] for t in c['conflict_terms']}
+    if declared != md_conf:
+        E('STORE_CONFLICT', f'충돌 별칭이 md 와 다르다 — 저장소 {sorted(declared)} / md {sorted(md_conf)}')
+    # 10 — 관계: 양 끝 · 한 번 · 순환 없음 · md 의 prereq 줄과 같은 선행 관계
+    seen, graph, st_edges = set(), {}, set()
+    for r in store['relations']:
+        a, b = code.get(r['from_id']), code.get(r['to_id'])
+        if not a or not b:
+            E('STORE_RELATION', f'관계의 끝 {r["from_id"] if not a else r["to_id"]} 이 없다 (§13-10)')
+            continue
+        if r['relation_type'] not in REQUIRED_ENUMS[('ConceptRelation', 'relation_type')]:
+            E('STORE_RELATION', f'{a}→{b}: relation_type {r["relation_type"]!r}')
+        if r['strength'] is not None:
+            E('STORE_RELATION', f'{a}→{b}: strength 에 값이 있다 — 자리만 둔다 (§9)')
+        pair = frozenset((a, b))
+        if pair in seen or a == b:
+            E('STORE_RELATION', f'{a}–{b}: 한 쌍은 한 번만 적는다 (§13-10)')
+        seen.add(pair)
+        if r['relation_type'] in PREREQ:
+            graph.setdefault(a, set()).add(b)
+            st_edges.add((a, b))
+    for cyc in cycles(graph):
+        E('STORE_RELATION', f'선행 관계 순환 {" → ".join(cyc)} (§13-10)')
+    md_edges = set(relations(lib))
+    if st_edges != md_edges:
+        E('STORE_RELATION', f'선행 관계가 md 의 prereq 줄과 다르다 — 저장소에만 {sorted(st_edges - md_edges)} · md 에만 {sorted(md_edges - st_edges)}')
+    return errs, warns
 
 
 # ── C. 골든 ─────────────────────────────────────────────────────────────────
@@ -584,7 +866,7 @@ def check_golden(gold, lib, id_map=None):
 
 
 # ── 실행 ────────────────────────────────────────────────────────────────────
-def run(contract_text, library_text, gold, log_text, id_map=None):
+def run(contract_text, library_text, gold, log_text, id_map=None, store=None):
     lib = parse_library(library_text)
     errs, warns = [], []
     errs += check_contract(contract_text)
@@ -592,6 +874,12 @@ def run(contract_text, library_text, gold, log_text, id_map=None):
     e, w = check_library(lib)
     errs += e
     warns += w
+    if store is not None:                                # 저장소가 있으면 concept_id 는 거기서 푼다
+        e, w = check_store(store, lib, library_text, contract_text)
+        errs += e
+        warns += w
+        if id_map is None and not e:
+            id_map = id_map_of(store)
     e, w, rep = check_golden(gold, lib, id_map)
     errs += e
     warns += w
@@ -633,12 +921,19 @@ def migration_report(lib):
 def main():
     report = '--report' in sys.argv
     read = lambda p: open(p, encoding='utf-8').read()
+    store = json.load(open(STORE, encoding='utf-8')) if os.path.exists(STORE) else None
     errs, warns, lib, rep = run(read(CONTRACT), read(LIBRARY), json.load(open(GOLDEN, encoding='utf-8')),
-                                read(LOG) if os.path.exists(LOG) else '')
+                                read(LOG) if os.path.exists(LOG) else '', store=store)
     print('verify-concept-identity')
     print(f'  계약   {os.path.relpath(CONTRACT, ROOT)}')
     print(f'  실물   {os.path.relpath(LIBRARY, ROOT)} — 개념 {len(lib["concepts"])} · '
           f'CHANGELOG 버전 {len(lib["changelog"])}건')
+    if store is not None:
+        n = len(reader_texts_store(store))
+        same = sum(1 for k, v in reader_texts_md(read(LIBRARY)).items() if reader_texts_store(store).get(k) == v)
+        print(f'         {os.path.relpath(STORE, ROOT)} — 개념 {len(store["concepts"])} (UUID) · 버전 문안 {len(store["versions"])}벌 · '
+              f'alias {len(store["aliases"])} · 충돌 별칭 {len(store["conflicting_aliases"])} · 관계 {len(store["relations"])}')
+        print(f'         독자 글 md ↔ 저장소 — {n} 단위 중 글자까지 같은 것 {same}')
     print(f'         {os.path.relpath(GOLDEN, ROOT)} — 문안 그대로 {sum(len(v) for v in rep["verbatim"].values())} span · '
           f'문안 아님 {rep["loose"]} span (concept 층)')
     print(f'         concept refs — ConceptRef {rep["pinned"]} (part null {rep["nullpart"]}) · "C-XXXX" {rep["legacy"]}')

@@ -238,6 +238,96 @@ CASES = [
 ]
 
 
+# ── D. 저장소 (concept-library.json) — 0.2m-a
+STORE = json.load(open(V.STORE, encoding='utf-8'))
+SCODE = {c['code']: c['concept_id'] for c in STORE['concepts']}
+
+
+def st_(fn):
+    def f(st):
+        st = copy.deepcopy(st)
+        fn(st)
+        return st
+    return f
+
+
+def concept(st, code):
+    return next(c for c in st['concepts'] if c['code'] == code)
+
+
+def version(st, code):
+    return next(v for v in st['versions'] if v['concept_id'] == SCODE[code])
+
+
+STORE_CASES = [
+    # (이름, 대상 'store' | 'library', 변형, 기대 code)
+    ('§13-1 — concept_id 가 code 문자열', 'store', st_(lambda st: concept(st, 'C-0004').__setitem__('concept_id', 'C-0004')),
+     {'STORE_KEY'}),
+    ('§13-1 — 두 개념이 같은 concept_id', 'store',
+     st_(lambda st: concept(st, 'C-0004').__setitem__('concept_id', SCODE['C-0001'])), {'STORE_KEY'}),
+    ('§13-4 — MERGED 인데 merged_into 없음', 'store', st_(lambda st: concept(st, 'C-0007').__setitem__('status', 'MERGED')),
+     {'STORE_STATUS'}),
+    ('§1 — Concept 에 계약에 없는 필드 (label)', 'store', st_(lambda st: concept(st, 'C-0001').__setitem__('label', '금리')),
+     {'STORE_SHAPE'}),
+    ('§1 — ConceptVersion 에서 basis 삭제', 'store', st_(lambda st: version(st, 'C-0001').pop('basis')), {'STORE_SHAPE'}),
+    ('§13-15 — used_in 을 저장소에 저장', 'store',
+     st_(lambda st: version(st, 'C-0001')['authoring']['notes'].append('used_in: FOMC-20260916')), {'STORE_USED_IN'}),
+    ('독자 글 — 저장소 C-0002 FULL ③ 한 글자 바꿈 ("딱" → "꼭")', 'store',
+     st_(lambda st: (lambda step: step.__setitem__('text', step['text'].replace('딱', '꼭')))(version(st, 'C-0002')['full'][2])),
+     {'STORE_TEXT'}),
+    ('독자 글 — 저장소 C-0002 FULL ② 굵게 표시만 뺌', 'store',
+     st_(lambda st: (lambda step: step.__setitem__('text', step['text'].replace('**', '')))(version(st, 'C-0002')['full'][1])),
+     {'STORE_TEXT'}),
+    ('독자 글 — 저장소 C-0010 BOUNDARY 극성 뒤집음', 'store',
+     st_(lambda st: version(st, 'C-0010')['boundary'][0].__setitem__('applies', True)), {'STORE_TEXT'}),
+    ('독자 글 — md 의 C-0001 REFRESHER 를 고치고 저장소에 새 버전을 안 만듦', 'library',
+     lib_in('C-0001', '약해지는 방향으로 작용합니다.', '약해집니다.'), {'STORE_TEXT'}),
+    ('§13-1 — md 의 concept_id 줄을 다른 UUID 로 (두 곳이 어긋남)', 'library',
+     lambda t: sub(t, SCODE['C-0006'], '00000000-0000-4000-8000-000000000000'), {'STORE_MD_META'}),
+    ('§13-5 — 저장소 버전만 올림 (문안 한 벌이 없다)', 'store', st_(lambda st: concept(st, 'C-0001').__setitem__('version', 2)),
+     {'STORE_VERSION', 'STORE_MD_META', 'STORE_TEXT'}),
+    ('§13-5 — 버전 이력에서 C-0005 v2 삭제', 'store',
+     st_(lambda st: st['_version_history'].remove(next(h for h in st['_version_history'] if (h['code'], h['version']) == ('C-0005', 2)))),
+     {'STORE_VERSION'}),
+    ('§13-8 — 슬롯 after 를 ⑤ 로', 'store', st_(lambda st: version(st, 'C-0002')['bridge_slots'][0].__setitem__('after', '⑤')),
+     {'STORE_SLOT', 'STORE_MD_META'}),
+    ('§13-8 — 비유 requires 에서 ④ 를 뺌 (속도계가 브리지 없이도 된다)', 'store',
+     st_(lambda st: version(st, 'C-0002')['analogies'][0]['requires'].remove('④')), {'STORE_MD_META'}),
+    ('§13-9 — ConflictingAlias 삭제 (다른 것의 같은 이름이 사라진다)', 'store', st_(lambda st: st['conflicting_aliases'].clear()),
+     {'STORE_CONFLICT'}),
+    ('§13-9 — 같은 alias 를 두 개념에 (충돌 표시 없음)', 'store',
+     st_(lambda st: st['aliases'].append(dict(st['aliases'][0], concept_id=SCODE['C-0004']))), {'STORE_CONFLICT', 'STORE_ALIAS'}),
+    ('§13-10 — 같은 쌍을 거꾸로 한 번 더 (C-0003 → C-0002)', 'store',
+     st_(lambda st: st['relations'].append(dict(st['relations'][0], from_id=st['relations'][0]['to_id'], to_id=st['relations'][0]['from_id']))),
+     {'STORE_RELATION'}),
+    ('§9 — strength 에 값', 'store', st_(lambda st: st['relations'][0].__setitem__('strength', 1)), {'STORE_RELATION'}),
+    ('§13-10 — 관계의 끝이 없는 개념', 'store',
+     st_(lambda st: st['relations'][0].__setitem__('to_id', '00000000-0000-4000-8000-000000000000')), {'STORE_RELATION'}),
+    ('§13-10 — 선행 관계 하나를 뺌 (md 의 prereq 줄과 어긋남)', 'store', st_(lambda st: st['relations'].pop(0)), {'STORE_RELATION'}),
+]
+
+
+def run_store_cases():
+    ok = True
+    base = V.run(CONTRACT, LIBRARY, GOLD, LOG, None, STORE)[0]
+    print(f'\n== 저장소 — 사본 {len(STORE_CASES)}개')
+    print(f'  {"PASS" if not base else "FAIL"}  망가뜨리지 않은 저장소는 통과해야 한다')
+    print(f'        기대 — / 실제 {sorted({c for c, _ in base}) or "—"}')
+    ok &= not base
+    for name, target, fn, want in STORE_CASES:
+        lib_text, st = (fn(LIBRARY), STORE) if target == 'library' else (LIBRARY, fn(STORE))
+        errs = V.run(CONTRACT, lib_text, GOLD, LOG, None, st)[0]
+        got = {c for c, _ in errs if c.startswith('STORE_')}
+        passed = got == want
+        ok &= passed
+        print(f'  {"PASS" if passed else "FAIL"}  {name}')
+        print(f'        기대 {sorted(want)} / 실제 {sorted(got) or "—"}')
+        if not passed:
+            for c, m in errs:
+                print(f'          {c}: {m}')
+    return ok
+
+
 def main():
     base = V.run(CONTRACT, LIBRARY, GOLD, LOG, ID_MAP)[0]
     mbase, mwarn = V.run(CONTRACT, LIBRARY, MGOLD, LOG, ID_MAP)[:2]
@@ -261,6 +351,7 @@ def main():
         if not passed:
             for c, m in errs:
                 print(f'          {c}: {m}')
+    ok &= run_store_cases()
     print('\nOK' if ok else '\nFAIL')
     return 0 if ok else 1
 

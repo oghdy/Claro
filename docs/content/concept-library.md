@@ -4,9 +4,11 @@
 - 2026-09-21 · C-0002 v2 — FULL ④ 의 시점 종속 문장 "그런데 지금 미국은 3%대입니다." 삭제(Concept Atom 은 시간에 독립적) · C-0005 v2 — REFRESHER 교체 (v1: "표결은 12명, 전망 제출은 참가자 전원이라 인원이 다릅니다.") · B-0.0b 게이트
 - 2026-09-29 · C-0010 v2 — REFRESHER·BOUNDARY 에 추정 대상(지불 의향) 복원 · C-0008 v2 — REFRESHER 에서 "이건" 제거, 일반형으로 · C-0005 v3 — FULL "각자"·특정 회의 값(12대0·18·9) 제거 · C-0002 v3 — FULL ④ 를 브리지로 이관, 규칙 문구 3단계+브리지로 · C-1b 게이트 (D19)
 - 2026-10-09 · C-4 반영 (D25 · D32) — 독자 기록 0 인 시점에 명제의 경계를 나눴다. 오류 교정이 아니다 · C-0002 v4 — 명제 축소 — evidence 0 예외 (CONCEPT_IDENTITY §10.3 · D25 · D32). 명제를 "수준이 아니라 상승률" 하나로. 뒷절 "내려오는 중이어도 목표보다 높을 수 있다" → 신규 C-0011. FULL · 슬롯 · REFRESHER · ANALOGY · 한계선 문안은 v3 그대로. 저작 메모 2 (FULL ②③ 은 연준 · 한계선 ① 은 슬롯이 아니라 저작 메모) · C-0003 v2 — 명제를 일반 규칙 하나로, FULL · REFRESHER 새로. "연준의 목표는 2%" → 신규 C-0012 (v1 FULL 첫 문장 · v1 REFRESHER 가 그리로 갔다). alias "2% 목표" → C-0012 · C-0009 v2 — 명제를 "따로 규율" 하나로, FULL 둘째 문장 · REFRESHER 새로. "주가 더 강한 규제를 두기도" → 신규 C-0013 (v1 FULL 둘째 · 셋째 문장이 그리로 갔다). alias "주법" → C-0013 · 신규 C-0011 · C-0012 · C-0013 v1 · C-0010 — BOUNDARY 를 FULL · REFRESHER 둘 다와 함께 제시 (Q-C2). 문안 불변, 버전 그대로 · C-0005 — alias "12명 18명" 뺌 (Q-C5). 문안 불변, 버전 그대로 · 선행 관계 후보 표 추가 (Q-C4) · 재사용 추적에 스크루웜 줄
+- 2026-10-09 · 이전 (B-0.2m-a · CONCEPT_IDENTITY §16) — 개념 13개에 `concept_id`(UUID)를 발급했다. 기계가 푸는 저장소는 `concept-library.json` 이다. 개념마다 `concept_id` 줄에 같은 UUID 를 적었다 (검사가 둘을 댄다). 이 파일의 `C-0002` 같은 번호는 `code` 다 — 값은 그대로이고 부르는 이름만 옮겼다 (D25). 문안 · 버전 · alias · 관계는 한 글자도 안 바뀌었다. `used_in` 은 저장소로 옮기지 않았다 (계산한다)
 
 > 시작: 2026-09-18. FOMC(9/16) · FTC 개인화 가격(8/19) 2건에서 추출.
-> **규칙**: 한번 부여한 `concept_id`는 절대 바꾸지 않는다. 이름이 바뀌면 alias에 추가한다.
+> **규칙**: 한번 부여한 `code`(`C-0002`)와 `concept_id`(UUID)는 절대 바꾸지 않는다. 이름이 바뀌면 alias에 추가한다.
+> **규칙**: 이 파일은 사람이 읽고 쓰는 면이다. 기계가 가리키는 것은 `concept-library.json` 의 (`concept_id`, 버전)이다. **여기 문안을 고치면 저장소에 새 버전을 만든다** — 안 만들면 `scripts/verify-concept-identity.py` 가 실패한다 (한 번 만든 버전은 고치지 않는다).
 > **규칙**: merge는 가능, split은 되돌릴 수 없다 → **애매하면 잘게 자른다.**
 > **규칙**: Concept Atom은 **시간에 독립적**이어야 한다. 현재 국면에 대한 가정이 들어가면 그건 Bridge다.
 
@@ -17,6 +19,7 @@
 ### C-0001 · `RATE_TO_SPENDING`
 **명제**: 금리가 오르면 차입 비용이 올라 소비와 투자를 억제하는 방향으로 작용한다.
 
+- `concept_id`: 247d3e88-b62f-4811-9315-cf48de7e560e
 - `aliases`: 금리 전달경로, 금리→소비, 통화정책 전달
 - `type`: causal_mechanism
 - `status`: CANONICAL
@@ -41,6 +44,7 @@
 ### C-0002 · `INFLATION_LEVEL_VS_RATE`
 **명제**: 물가 이야기에서 중앙은행이 보는 숫자는 가격의 절대 수준이 아니라 상승률이다.
 
+- `concept_id`: 8099c201-8ace-4262-acaf-8fda2a57b6d4
 - `aliases`: 물가 상승률, 인플레이션율, 물가 vs 물가상승률
 - `type`: concept
 - `status`: CANONICAL
@@ -90,6 +94,7 @@
 ### C-0003 · `CB_INFLATION_TARGET`
 **명제**: 중앙은행은 물가안정의 기준으로 특정한 목표 상승률을 두고, 그 목표에 비춰 정책을 판단한다.
 
+- `concept_id`: d1cb023e-06b3-4dff-8cc1-0efddbba7cc1
 - `aliases`: 물가안정목표제, inflation target
 - `type`: institution_rule
 - `status`: CANONICAL
@@ -112,6 +117,7 @@
 ### C-0004 · `FOMC_ROLE`
 **명제**: FOMC는 미국의 통화정책 방향을 결정하는 회의체다.
 
+- `concept_id`: 70b67e38-ab9d-4c51-91ab-65eb36c08549
 - `aliases`: 연방공개시장위원회, 연준 금리 회의
 - `type`: entity
 - `status`: CANONICAL
@@ -129,6 +135,7 @@
 ### C-0005 · `VOTERS_VS_PARTICIPANTS`
 **명제**: FOMC에서 정책 표결에 참여하는 인원과 경제 전망을 제출하는 참가자 수는 다르다.
 
+- `concept_id`: 4b3796d2-cbee-4c2e-93d2-1a8ea8830723
 - `aliases`: 투표권자 vs 참가자
 - `type`: institution_rule
 - `status`: CANONICAL
@@ -149,6 +156,7 @@
 ### C-0006 · `SEP_ROLE`
 **명제**: 연준은 정기적으로 참가자 개개인의 경제·금리 전망을 익명으로 공개한다.
 
+- `concept_id`: c02833e0-c337-4df6-ab2b-ff4abc6de0e4
 - `aliases`: 점도표, dot plot, Summary of Economic Projections, 경제전망요약
 - `type`: institution_rule
 - `status`: CANONICAL
@@ -168,6 +176,7 @@
 ### C-0011 · `INFLATION_FALLING_VS_AT_TARGET`
 **명제**: 물가 상승률이 내려오는 중이어도 목표보다 높을 수 있다.
 
+- `concept_id`: 4f666a99-911d-4672-8661-a990822f4c9f
 - `type`: concept
 - `status`: CANONICAL
 - `version`: v1 (2026-10-09)
@@ -189,6 +198,7 @@
 ### C-0012 · `FED_INFLATION_TARGET_2PCT`
 **명제**: 미국 연준의 물가 목표는 2%다.
 
+- `concept_id`: 5941edb1-5d98-40d1-ba09-c25d372d5568
 - `aliases`: 2% 목표
 - `type`: institution_rule
 - `status`: CANONICAL
@@ -214,6 +224,7 @@
 ### C-0007 · `AGENCY_AUTHORITY_LIMIT`
 **명제**: 정부 기관은 입법부가 법으로 부여한 권한의 범위 안에서만 규제할 수 있다.
 
+- `concept_id`: 3f4654c4-476b-45d2-9de2-1bb26756bfbb
 - `aliases`: 기관 권한 한계, 위임 범위, 법정 권한
 - `type`: civic_structure
 - `status`: CANONICAL
@@ -232,6 +243,7 @@
 ### C-0008 · `POLICY_STATEMENT_VS_RULE`
 **명제**: 기관이 내는 문서에는 법적 구속력이 있는 것과 방침을 알리는 것이 있으며, 후자는 그 자체로 의무를 만들지 않는다.
 
+- `concept_id`: 80da6279-1af5-49e7-a563-8e8ba030d7aa
 - `aliases`: 정책안, 집행정책, 제안 vs 확정, proposed vs final rule
 - `type`: civic_structure
 - `status`: CANONICAL
@@ -250,6 +262,7 @@
 ### C-0009 · `FEDERAL_VS_STATE`
 **명제**: 미국에서는 연방과 주가 각각 다른 권한으로 같은 사안을 규율할 수 있다.
 
+- `concept_id`: b579aa4c-266a-4f79-8936-530da7b7da4e
 - `aliases`: 연방 vs 주, 이중 규제
 - `type`: civic_structure
 - `status`: CANONICAL
@@ -272,6 +285,7 @@
 ### C-0010 · `PERSONALIZED_PRICING`
 **명제**: 개인 데이터로 소비자의 지불 의향을 추정해 사람마다 다른 가격을 제시하는 것. 수급에 따른 가격 변동과는 구분된다.
 
+- `concept_id`: 655496b9-1eb0-40ec-9f9d-83f219216e99
 - `aliases`: 개인화 가격, surveillance pricing, 감시 가격, dynamic pricing(주법 용례), personalized algorithmic pricing(뉴욕 용례)
 - `type`: concept
 - `status`: CANONICAL
@@ -303,6 +317,7 @@
 ### C-0013 · `STATE_STRICTER_THAN_FEDERAL`
 **명제**: 미국에서 주는 같은 사안에 연방보다 더 강한 규제를 두기도 한다.
 
+- `concept_id`: 0184b978-b7e9-4798-9104-0b1b8ef6014e
 - `aliases`: 주법
 - `type`: civic_structure
 - `status`: CANONICAL
@@ -345,7 +360,7 @@
 
 다음 사건 제작 시 아래를 기록한다. Concept Library 가설의 실제 검증치다.
 
-| 사건 | 도메인 | 재사용된 concept_id | 신규 생성 | 재사용률 |
+| 사건 | 도메인 | 재사용된 code | 신규 생성 | 재사용률 |
 |---|---|---|---|---|
 | FOMC-20260916 | MONETARY | — (최초) | C-0001~0006 | — |
 | FTC-20260819 | REGULATORY | **0개** | C-0007~0010 | **0%** |
@@ -396,7 +411,7 @@ Concept Atom을 쓸 때의 기준:
 → `correction_log`의 오류 유형에 `압축`을 별도 항목으로 둔다.
 
 **4. 버전은 올리되 ID는 고정**
-설명 문구는 개선된다. `version`을 올리고, 기사는 발행 당시 버전을 pin한다. `concept_id`는 절대 변경하지 않는다.
+설명 문구는 개선된다. `version`을 올리고, 기사는 발행 당시 버전을 pin한다. `code` 와 `concept_id` 는 절대 변경하지 않는다.
 
 **5. 애매하면 쪼갠다**
 merge는 evidence remap으로 되돌릴 수 있지만 split은 불가능하다. 하나로 묶을지 둘로 나눌지 고민되면 나눈다.
