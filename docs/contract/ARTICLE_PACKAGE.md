@@ -8,6 +8,7 @@
 | 2026-09-29 | 게이트 반영 (D20) — `scale` 제거(원형 5) · 판단 색 금지 · 순서 목록 간격 · open_question 형태 자유 · 레벨 어휘 3단계 · 층 판정 규칙 · 픽스처의 0.2 대기 표시 | S3 · B-0.1a |
 | 2026-09-29 | D22 반영 — 이란 규칙은 사실 서술 문장에만(전망 문장은 `claim`, `need: "DerivedClaim"`) · `Level.label` 제거 | S3 · B-0.1a |
 | 2026-09-30 | 참조 문구를 DATA_MODEL · CONCEPT_IDENTITY 에 맞춤 — §0 저장 구조의 주인 · §1 `event_ref: EventRef`, `refs` 원소는 층이 정한다 · §6 층별 Ref 표 · 골든 층 수를 0.1b 이후로(concept 20 → 21 등) · §6.2 대기의 행선지. 규칙은 안 바뀜 | B-0.2b |
+| 2026-10-09 | D27 반영 — `event_ref` 는 Event 의 UUID (골든의 문자열은 code). 참조 문구만 | B-0.2b |
 
 > **상태: 게이트 통과 (D20 · D22, 2026-09-29).**
 > 근거는 두 실물뿐이다 — `fixtures/fomc-2026-09.article.json`(골든, 주 입력), `fixtures/ftc-2026-08.observed.json`(블록 모양만).
@@ -38,7 +39,7 @@ Article Package = 백엔드가 프론트에 넘기는 완성 기사 한 벌.
 
 ```ts
 ArticlePackage {
-  event_ref:    EventRef         // DATA_MODEL §2. 골든 "FOMC-20260916"
+  event_ref:    EventRef         // DATA_MODEL §2 — Event 의 UUID (D27). 골든의 "FOMC-20260916" 은 그 Event 의 code — 0.2m 에서 UUID 로
   title:        string           // 기사 제목
   lang:         "ko"
   published_at: Date             // D8 DERIVED 의 기준 시각. 발행 시각 정책은 D6(OPEN)
@@ -159,7 +160,7 @@ Block = Prose | Quote | List | Contrast | Sheet     // 원형 5개 (D20)
 | `bridge` | 개념을 오늘 사건에 잇는 문장 | BridgeRef → Bridge (DATA_MODEL §8) | 골든 bridge 2 — 입문 4장 "그런데 지금 미국은 3%대입니다" · "목표보다 빠르게 오르고 있어요". FINDINGS §4.1 `CONCEPT_BRIDGE` |
 | `writing` | 사실 주장이 없는 글 — 질문, 리듬, 전환 | 없음 (`[]`) | 골든 writing 6 |
 
-패키지 최상단 `event_ref` 는 EventRef 다. Ref 의 정의는 DATA_MODEL §2.2 · CONCEPT_IDENTITY §3.2 에 있다 — 이 계약은 가리키기만 한다.
+패키지 최상단 `event_ref` 는 EventRef 다 — Event 의 UUID 이고, 사람이 부르는 이름(code)이 아니다 (D27). Ref 의 정의는 DATA_MODEL §2.2 · CONCEPT_IDENTITY §3.2 에 있다 — 이 계약은 가리키기만 한다.
 
 - **span 하나에 layer 하나.** `refs` 는 그 층의 atom 만 가리킨다 — Claim span 에 Fact ID 를 섞지 않는다
   (0.0b 관찰: 골든 17 span 이 `F-*` 와 `DC-*` 를 섞었다). Claim 이 어떤 Fact 에 기대는지는 Claim 이 안다 → DATA_MODEL §7 (`basis`). 브리지가 품은 사실도 같다 → DATA_MODEL §8 (`facts`)

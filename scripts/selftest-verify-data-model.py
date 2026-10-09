@@ -92,7 +92,7 @@ def publishable(m):
     def new_fact(label):
         fid = V.UID('fact', label)
         m['facts'][fid] = {'fact_id': fid, 'label': label, 'claim_text': '시험', 'fact_type': 'MEASUREMENT', 'actor': None,
-                           'volatility': 'STABLE', 'as_of': None, 'event_at': None, 'event_id': V.EVENT,
+                           'volatility': 'STABLE', 'as_of': None, 'event_at': None, 'event_id': V.EVENT_ID,
                            'storyline_id': None, 'storyline_version': None, 'extraction_model': None,
                            'extraction_version': None}
         return fid
@@ -105,7 +105,7 @@ def publishable(m):
             sp['refs'] = [fid]
         else:
             cid = V.UID('claim', f'SYN-C{n}')
-            m['claims'][cid] = {'claim_id': cid, 'label': f'SYN-C{n}', 'event_id': V.EVENT, 'statement': '시험',
+            m['claims'][cid] = {'claim_id': cid, 'label': f'SYN-C{n}', 'event_id': V.EVENT_ID, 'statement': '시험',
                                 'kind': 'ASSERTED', 'basis': [fid],
                                 'checks': [{'question': '시험', 'slot': None, 'recollected': False, 'answer': '',
                                             'facts': [fid], 'outcome': 'NOT_REFUTED'}]}
@@ -164,8 +164,8 @@ def second_bridge(m):
 
 
 def bump_storyline(m):
-    m['storylines'][V.IRAN]['version'] = 2
-    m['storyline_versions'].append({'storyline_id': V.IRAN, 'version': 2, 'created_at': '2026-09-16', 'change': '시험'})
+    m['storylines'][V.IRAN_ID]['version'] = 2
+    m['storyline_versions'].append({'storyline_id': V.IRAN_ID, 'version': 2, 'created_at': '2026-09-16', 'change': '시험'})
 
 
 # (이름, 대상, 망가뜨리기, 기대 code 집합)
@@ -181,7 +181,7 @@ CASES = [
      lambda c: sub(c, '  ingested_at:  TimePoint           // 확정 §5.3. Claro 가 수집한 때\n', ''), {'CONTRACT_FIELD'}),
     ('§5.1 — SourceRegistry.can_quote 삭제', 'contract',
      lambda c: sub(c, '  can_quote:            boolean | null\n', ''), {'CONTRACT_FIELD'}),
-    ('§5.2 — FactType 에 BACKGROUND 추가 (_open-1 (b) 를 게이트 전에)', 'contract',
+    ('§5.2 — FactType 에 BACKGROUND 추가 (D27 이 닫은 7값을 연다)', 'contract',
      lambda c: sub(c, '| "COURT_RULING" | "COMPANY_DISCLOSURE" | "INDEPENDENT_OBSERVATION"',
                    '| "COURT_RULING" | "COMPANY_DISCLOSURE" | "INDEPENDENT_OBSERVATION" | "BACKGROUND"'), {'CONTRACT_ENUM'}),
     ('§5.2 — FactType 에서 OFFICIAL_LIMIT 삭제', 'contract',
@@ -199,6 +199,17 @@ CASES = [
      lambda c: sub(c, '"CONCEPT_BRIDGE" | "STORY_BRIDGE"\n', '"CONCEPT_BRIDGE"\n'), {'CONTRACT_ENUM'}),
     ('§5.1 — Source.kind 에서 SECONDARY 삭제', 'contract',
      lambda c: sub(c, '"PRIMARY" | "SECONDARY"   //', '"PRIMARY"   //'), {'CONTRACT_ENUM'}),
+    ('D27 — Event.code 삭제 (사람이 부르는 이름이 없다)', 'contract',
+     lambda c: sub(c, '  code:         string              // "FOMC-20260916". 유일 · 불변 · 재사용 없음 — Concept 의 code 와 같은 방식 (D27)\n', ''),
+     {'CONTRACT_FIELD'}),
+    ('D27 — EventId 를 다시 문자열로 (초안의 추천)', 'contract',
+     lambda c: sub(c, 'EventId     = UUID ', 'EventId     = string '), {'CONTRACT_FIELD'}),
+    ('D27 — §3.3 에 _open-1 표시가 다시 들어옴', 'contract',
+     lambda c: sub(c, '| SELF_LIMIT | FTC G26 G29 | OFFICIAL_LIMIT |', '| SELF_LIMIT | FTC G26 G29 | **_open-1** |'),
+     {'CONTRACT_OPEN_LEFT', 'CONTRACT_TYPE_MAP'}),
+    ('D27 — §16 의 _open-2 행에서 "판정됨" 삭제', 'contract',
+     lambda c: sub(c, '| _open-2 | 발행하려면 Fact 마다 1차 출처가 있어야 하는가 | 판정됨 → D27:', '| _open-2 | 발행하려면 Fact 마다 1차 출처가 있어야 하는가 | 추천:'),
+     {'CONTRACT_OPEN_LEFT'}),
     ('§9.6 — 계약에 posterior', 'contract',
      lambda c: sub(c, '## 15. 미확인', '사실 신뢰는 posterior 로 갱신한다\n\n## 15. 미확인'), {'CONTRACT_HELD_TERM'}),
     ('§9.6 — 계약에 half-life', 'contract',
@@ -222,8 +233,8 @@ CASES = [
                    '| PROJECTION | FOMC F11 F14~F19 · 스크루웜 S19 | FORECAST |'), {'CONTRACT_TYPE_MAP'}),
     ('§6.4 — year_of 행 삭제 (골든이 쓰는 op)', 'contract',
      lambda c: re.sub(r'^\| `year_of` \|.*\n', '', c, count=1, flags=re.M), {'CONTRACT_OP', 'GOLD_OP_UNKNOWN'}),
-    ('CHANGELOG — B-0.2b 행 삭제', 'contract',
-     lambda c: re.sub(r'^\| 2026-09-30 \| 초안 .*\| B-0\.2b \|\n', '', c, count=1, flags=re.M), {'CONTRACT_CHANGELOG'}),
+    ('CHANGELOG — B-0.2b 행 전부 삭제', 'contract',
+     lambda c: re.sub(r'^\| 20\d\d-\d\d-\d\d \| .*\| B-0\.2b \|\n', '', c, flags=re.M), {'CONTRACT_CHANGELOG'}),
     ('§17 — 6 번 행 need 를 Fact 승격으로', 'contract',
      section('17.', '| 6 | advanced 3 | 9월 초 | fact | Fact 출처 |', '| 6 | advanced 3 | 9월 초 | fact | Fact 승격 |'),
      {'GOLD_PENDING_TABLE'}),
@@ -272,13 +283,17 @@ CASES = [
     ('§6.1 — F11 을 Fact 에서 DERIVED 로 (D8 가정) → 그 사실로 계산한 "올해" 조각도 걸린다', 'model',
      m_(lambda m: m['facts'][FID['F11']].__setitem__('volatility', 'DERIVED')), {'FACT_VOLATILITY', 'DERIVED_FROM_VOLATILE'}),
     ('불변식 7 — F37 이 사건 · 스토리라인 둘 다 소유', 'model',
-     m_(lambda m: m['facts'][FID['F37']].__setitem__('event_id', V.EVENT)), {'FACT_OWNER'}),
+     m_(lambda m: m['facts'][FID['F37']].__setitem__('event_id', V.EVENT_ID)), {'FACT_OWNER'}),
     ('불변식 7 — F37 이 없는 스토리라인 버전 2 에 붙음', 'model',
      m_(lambda m: m['facts'][FID['F37']].__setitem__('storyline_version', 2)), {'FACT_OWNER'}),
     ('불변식 1 — 한 사건 안에 label F01 이 둘', 'model',
      m_(lambda m: m['facts'][FID['F02']].__setitem__('label', 'F01')), {'LABEL_DUP'}),
     ('불변식 1 — Claim 키가 Fact 키와 같다', 'model',
      m_(lambda m: m['claims'].__setitem__(FID['F01'], dict(m['claims'][CID['DC-A']], claim_id=FID['F01']))), {'KEY_DUP'}),
+    ('D27 — 패키지 event_ref 가 code 문자열 ("FOMC-20260916") — 브리지의 사건과도 어긋난다', 'model',
+     m_(lambda m: m['record']['package'].__setitem__('event_ref', V.EVENT)), {'EVENT_REF', 'BRIDGE_EVENT'}),
+    ('D27 — 두 사건이 같은 code', 'model',
+     m_(lambda m: m['events'].__setitem__('x', dict(m['events'][V.EVENT_ID], event_id='x'))), {'CODE_DUP'}),
     ('불변식 2 — fact span 에 ClaimRef', 'model',
      m_(lambda m: span_at(m, 'basic', 'slides/0/headline/0').__setitem__('refs', [CID['DC-A']])), {'REF_UNRESOLVED'}),
     ('불변식 2 — claim span 에 FactRef (층 섞기)', 'model',
@@ -326,7 +341,7 @@ CASES = [
          'text', '지정학적 불확실성은 여전히 큽니다.')), set()),
     # ── D. 발행 검사 (가짜 재료로 다 채운 사본을 하나씩 망가뜨린다)
     ('불변식 8 — F01 원문 위치 없음 (출처 문서만 안다)', 'publish', m_(lambda m: unspan(m, 'F01')), {'FACT_NO_SOURCE_SPAN'}),
-    ('불변식 9 — F03 출처가 2차뿐 (_open-2 (a))', 'publish',
+    ('불변식 9 — F03 출처가 2차뿐 (D27 — 1차 필수)', 'publish',
      m_(lambda m: only_source(m, 'F03', add_source(m, 'NEWS', kind='SECONDARY'))), {'FACT_NO_PRIMARY'}),
     ('불변식 11 — F28 의 유일한 출처가 발행 뒤 공개 (§5.3 7월 회의록 사례)', 'publish',
      m_(lambda m: only_source(m, 'F28', add_source(m, 'LATE', published_at='2026-10-07'))), {'FACT_NOT_YET_PUBLIC'}),

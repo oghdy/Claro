@@ -5,8 +5,9 @@
 |---|---|---|
 | 2026-09-20 | 생성 (빈 껍데기) | PM |
 | 2026-09-30 | 초안 — 브리프 3건 사실 표 · FOMC DC-A~E · 골든 `_` 주석(대기 13 · 끊긴 F 연결 · `_volatility` · `_attribution_refs`) · FINDINGS §4.1 §5 §6.2 §7.1 §7.2 §9.2 확정에서 도출. **게이트 전** | B-0.2b |
+| 2026-10-09 | 게이트 반영 (D27) — `fact_type` 7값으로 닫음(딱 맞지 않던 세 무리의 행선지 확정) · 발행하려면 Fact 마다 1차 출처 · Event · Storyline 도 UUID + `code` · §16 판정됨 · §17 레인(C-3 · C-5 · 파이프라인) · 독자 글 1건(“올리자” 따옴표) 반영 | B-0.2b |
 
-> **상태: 초안 — 게이트 전. _open 3개 (§16).**
+> **상태: 게이트 통과 (D27 · 2026-10-03). _open 3개 모두 판정됨 (§16).**
 > ARTICLE_PACKAGE 는 사실 · 해석 · 브리지 · 사건을 참조로만 가리켰다. 이 계약이 그 참조가 가리키는 것의 주인이다.
 >
 > **원천 (D24)**
@@ -17,7 +18,7 @@
 > - 확정 — FINDINGS §4.1 · §5.1 ~ §5.5 · §6.2 상태 코드 · §7.1 · §7.2 · §9.2 · D8 · D20 · D22 · D23 · D25
 >
 > **표시** — **실물** 근거 있음 · **확정 §x** FINDINGS 확정에서 옴 · **실물 없음** 확정에서 왔지만 사례가 없다. 첫 사례가 나오면 다시 본다 ·
-> **미확인** 둘 다 아니라 정하지 않았다 · **_open-N** 게이트가 정한다 (§16)
+> **미확인** 둘 다 아니라 정하지 않았다 · **D27** 게이트 판정 (§16)
 >
 > **검사** — `python3 scripts/verify-data-model.py` (`--report` 로 골든 이전 목록 · 게이트 3 후보) ·
 > 자체 시험 `python3 scripts/selftest-verify-data-model.py`
@@ -37,7 +38,7 @@ Event · Storyline · StorylineVersion · TimeExpression · ArticleRecord · Art
 - Coverage Schema 설계(슬롯 정의 · 유형별 스키마). 여기서는 §6.2 확정 상태 코드가 Fact 에 닿는 곳만 (§12)
 - FINDINGS §9.6 보류 항목 전부. 이 계약에는 숫자 문턱이 하나도 없다
 - 저장 기술 · 테이블 설계 (D1 백엔드 OPEN). 여기는 모양과 불변식만
-- 사실 · 해석 · 출처를 채우는 일 — 콘텐츠 레인 (C-2 · C-3 · C-5). 계약은 자리만 만든다 (§17)
+- 사실 · 해석 · 출처를 채우는 일 — 콘텐츠 레인 (C-3 · C-5)과 파이프라인. 계약은 자리만 만든다 (§17)
 
 ---
 
@@ -45,8 +46,8 @@ Event · Storyline · StorylineVersion · TimeExpression · ArticleRecord · Art
 
 ```ts
 UUID        = string
-EventId     = string               // "FOMC-20260916" — 사람이 붙인 이름 (§2)
-StorylineId = string               // "SL-iran-war"
+EventId     = UUID                 // Event.event_id (D27). 사람이 부르는 이름은 Event.code
+StorylineId = UUID                 // Storyline.storyline_id (D27)
 TimePoint   = string               // ISO 8601, 아는 만큼만: "2026" · "2026-02" · "2026-09-16" · "2026-09-16T14:00-04:00" (§5)
 
 FactRef      = UUID                // Fact.fact_id
@@ -63,7 +64,7 @@ Fact {                              // 사실 하나. 수집 단위 — Deep Fac
   fact_id:            UUID
   label:              string        // "F31". 소유자(사건 · 스토리라인) 안에서 유일. 사람이 부르는 이름 (실물)
   claim_text:         string        // 확정 §5.5. 사실 문장
-  fact_type:          FactType      // 확정 §5.2 — 7값 (§3.2 · _open-1)
+  fact_type:          FactType      // 확정 §5.2 — 7값으로 닫는다 (§3.2 · D27)
   actor:              string | null // 누가 했나 · 말했나. OFFICIAL_CLAIM · OFFICIAL_LIMIT 이면 필수 (§3.3)
   volatility:         "STABLE" | "VOLATILE"   // 확정 §5.4 · D8. Fact 에는 DERIVED 가 없다 (§6)
   as_of:              TimePoint | null        // VOLATILE 이면 필수. 이 값이 "지금 값"이던 때 (§6.2)
@@ -146,6 +147,7 @@ Bridge {                            // 연결 (확정 §4.1). 글이 아니다 �
 
 Event {
   event_id:     EventId
+  code:         string              // "FOMC-20260916". 유일 · 불변 · 재사용 없음 — Concept 의 code 와 같은 방식 (D27)
   title:        string
   occurred_at:  TimePoint | null    // "그런 날짜가 없다" 면 null (실물: 스크루웜 브리프 §0)
   storyline_id: StorylineId | null
@@ -153,6 +155,7 @@ Event {
 
 Storyline {                         // 버전이 오르는 독립 객체. 자체 사실을 갖는다 (확정 §9.2)
   storyline_id: StorylineId
+  code:         string              // "SL-iran-war". 유일 · 불변 · 재사용 없음 (D27)
   title:        string
   version:      integer             // 가장 큰 StorylineVersion.version
   ongoing:      boolean             // "아직 진행 중인가" — 여기가 답한다 (D8 규칙 5). 실물 없음
@@ -209,9 +212,9 @@ SlotCheck {                         // Coverage 슬롯 하나의 점검 결과 �
 
 | 무엇 | 키 | 사람이 부르는 이름 | 근거 |
 |---|---|---|---|
-| Fact · DerivedClaim · Bridge · Source | UUID | `label` — "F31" · "DC-C" · "S1". 소유자 안에서만 유일 | 아래 · _open-3 |
-| Event | `event_id` 문자열 그대로 ("FOMC-20260916") | 같음 | 실물 — 골든 `event_ref` |
-| Storyline | `storyline_id` 문자열 그대로 ("SL-iran-war") | 같음 | 실물 — 도윤 관찰 · development-content C-3 |
+| Fact · DerivedClaim · Bridge · Source | UUID | `label` — "F31" · "DC-C" · "S1". 소유자 안에서만 유일 | 아래 · D27 |
+| Event | UUID (`event_id`) | `code` — "FOMC-20260916". 전체에서 유일 · 불변 | D27. code 값은 실물 — 골든 `event_ref` |
+| Storyline | UUID (`storyline_id`) | `code` — "SL-iran-war". 전체에서 유일 · 불변 | D27. code 값은 실물 — 도윤 관찰 · development-content C-3 |
 | Concept | CONCEPT_IDENTITY §2 (UUID + `code`) | "C-0002" | D25 |
 
 - **왜 label 을 키로 쓰지 않나 — 실물에서 이미 부딪혔다.**
@@ -219,8 +222,12 @@ SlotCheck {                         // Coverage 슬롯 하나의 점검 결과 �
   - 스크루웜 브리프는 사실 `S01`~`S34` 와 출처 `S1`~`S6` 을 같은 글자로 쓴다
   - F37(이란 · 경유 가격)은 FOMC 브리프에 번호를 받았지만 FOMC 사건이 아니라 SL-iran-war 소속이다(도윤 관찰). 소유자를 키에 넣으면("FOMC-20260916/F37") 소유가 바뀔 때 키가 바뀐다
 - **왜 UUID 인가** — 파이프라인이 사건마다 사실 20~30개 이상(확정 §7.1)을 사람 없이 만든다. 한 곳에서 번호를 셀 필요가 없다. CONCEPT_IDENTITY 와 같은 방식이다 (D25 수용)
-- **Event · Storyline 은 사람이 이름을 붙인다** — 사건 선정은 3회 모두 사람이 했다(FINDINGS §7 표, 스테이지 0). 수가 적고 실물이 이미 사람 이름으로 부른다. 골든 `event_ref` 가 그대로 남는다
-- **label 은 참조에 쓰지 않는다.** 기계가 저장하는 참조는 키 하나다. 같은 것을 두 곳에 두면 어긋난다 (D22 · CONCEPT_IDENTITY §2 와 같은 이유)
+- **Event · Storyline 도 UUID 다 (D27 — 초안의 추천을 뒤집었다).** 초안은 "사건 선정은 3회 모두 사람이 했다"를 근거로 사람이 붙인 문자열을 키로 쓰자고 했다.
+  사건을 누가 고르나(D3)는 OPEN 이다 — 정해지지 않은 결정의 가정이 되돌릴 수 없는 키 체계에 들어가면 안 된다.
+  지금 통일하는 비용은 골든 `event_ref` 하나(0.2m)이고, 나중에 바꾸면 옛 발행물과 새 발행물이 영원히 다른 키를 쓴다
+- **사람이 부르는 이름은 `code` 로 그대로 남는다** — "FOMC-20260916" · "SL-iran-war". 유일 · 불변 · 재사용 없음, 만들 때 붙인다. Concept 의 `code`(D25)와 같은 방식이다.
+  correction-log · 게이트 · 로그는 code 로 부른다. `label` 과 다른 점: label 은 소유자 안에서만 유일하고, code 는 전체에서 유일하다
+- **label · code 는 참조에 쓰지 않는다.** 기계가 저장하는 참조는 UUID 키 하나다. 같은 것을 두 곳에 두면 어긋난다 (D22 · CONCEPT_IDENTITY §2 와 같은 이유). 참조 방식이 프로젝트 전체에서 하나다
 
 ### 2.2 참조 모양 — 층이 정한다
 
@@ -234,7 +241,7 @@ ARTICLE_PACKAGE 의 span 은 층 하나에 refs 를 싣는다. refs 가 무엇�
 | `concept` | ConceptRef `{ concept_id, version, part }` | CONCEPT_IDENTITY §3.2 | 개념의 한 버전 · 한 문안 |
 | `writing` | 없음 (`[]`) | — | — |
 
-패키지 최상단 `event_ref` 는 EventRef 다.
+패키지 최상단 `event_ref` 는 EventRef 다 — Event 의 UUID 이지 code 가 아니다 (D27).
 
 - **FactRef · ClaimRef · BridgeRef 는 키 하나다.** Fact · Claim · Bridge 는 버전이 없다 — 발행물이 가리키면 고치지 않기 때문이다(§2.3). ConceptRef 만 버전과 `part` 를 갖는다: 개념 문안은 발행 뒤에도 고쳐 쓰이고(C-1b 실물 6건), 기사는 쓴 버전을 고정해야 한다
 - **층이 원소 모양을 정하므로** "refs 는 그 층의 atom 만"(ARTICLE_PACKAGE §6)이 모양으로도 지켜진다. Claim span 에 FactRef 를 넣으면 풀리지 않는다
@@ -276,14 +283,14 @@ ARTICLE_PACKAGE 의 span 은 층 하나에 refs 를 싣는다. refs 가 무엇�
 브리프 타입 30개 중 상당수는 **기사에서 무슨 역할을 하나**를 적었다 — `HISTORICAL_CONTEXT` · `NEXT_EVENT` · `EXTERNAL_SHOCK` · `PRIOR_*` · `EXCLUSION` · `CONSTRAINT`.
 역할은 Coverage 슬롯의 몫이다(FTC 브리프 §3 "명시적 제외 대상" 슬롯, 스크루웜 §3 "대응의 제약 조건" 슬롯이 실물). 한 필드에 두 축을 담지 않는다.
 
-그래서 `fact_type` 은 §5.2 의 7값이다. 확정 §5.2 의 요점이 이 필드에 산다:
+그래서 `fact_type` 은 §5.2 의 7값이고, **7값으로 닫는다 (D27).** 값을 더하면 그때마다 "이건 한 것인가 주장한 것인가"를 다시 정해야 한다. 확정 §5.2 의 요점이 이 필드에 산다:
 **기관이 "주장한 것"은 사실이 아니라 "주장했다는 사실"이다** — `OFFICIAL_CLAIM` 인 사실은 참이라는 뜻이 아니라 그 기관이 그렇게 말했다는 뜻이다.
 
 | `fact_type` | 뜻 (확정 §5.2) | 실물 |
 |---|---|---|
 | `OFFICIAL_ACTION` | 실제로 취해진 조치 | 있음 |
 | `OFFICIAL_CLAIM` | 기관이 주장한 것 — 평가 · 전망 · 발언 포함 | 있음 |
-| `OFFICIAL_LIMIT` | 기관이 자기 권한 한계를 밝힌 것 | 있음 (FTC G03) |
+| `OFFICIAL_LIMIT` | 기관이 자기 권한 한계를 밝힌 것. **기관이 스스로 밝힌 한계**로 읽는다 — 권한 · 지식 · 입장 (D27) | 있음 (FTC G03 · G26 · G29) |
 | `MEASUREMENT` | 측정된 수치 | 있음 |
 | `COURT_RULING` | 판결 | 실물 없음 |
 | `COMPANY_DISCLOSURE` | 기업 공시 | 실물 없음 |
@@ -314,14 +321,14 @@ ARTICLE_PACKAGE 의 span 은 층 하나에 refs 를 싣는다. refs 가 무엇�
 | EVIDENCE | FTC G27 G28 | OFFICIAL_CLAIM | FTC 가 연구를 인용했다는 사실. 연구 자체를 출처로 삼으면 INDEPENDENT_OBSERVATION |
 | OFFICIAL_LIMIT | FTC G03 | OFFICIAL_LIMIT | |
 | LEGAL_NATURE | FTC G08 G09 | OFFICIAL_LIMIT | 문서 스스로 밝힌 구속력 · 집행 요건의 한계 |
-| SELF_LIMIT | FTC G26 G29 | **_open-1** | 권한이 아니라 **지식 · 입장**의 한계다("잘 알려져 있지 않다" · "입장을 밝히지 않겠다"). §5.2 정의는 "권한 한계" |
+| SELF_LIMIT | FTC G26 G29 | OFFICIAL_LIMIT | 권한이 아니라 지식 · 입장의 한계지만("잘 알려져 있지 않다" · "입장을 밝히지 않겠다") 기관이 스스로 밝힌 한계다 (D27) |
 | MACRO_DATA | FOMC F30 F31 | MEASUREMENT | |
 | MARKET_CONTEXT | FOMC F34 F35 | MEASUREMENT | |
 | MARKET_EXPECTATION | FOMC F36 | MEASUREMENT | 시장 가격에서 읽은 확률 |
-| STATUS | 스크루웜 S02~S05 S15 S17 S20 | **행마다** | 건수(S02~S04) MEASUREMENT · "USDA 는 ~ 밝힘"(S15) OFFICIAL_CLAIM · 시설 건설 · 투입(S17 S20) OFFICIAL_ACTION · S05 **_open-1** |
+| STATUS | 스크루웜 S02~S05 S15 S17 S20 | **행마다** | 건수(S02~S04) MEASUREMENT · "USDA 는 ~ 밝힘"(S15) OFFICIAL_CLAIM · 시설 건설 · 투입(S17 S20) OFFICIAL_ACTION · S05(감염 동물 종류)는 그것을 말한 기관 자료의 OFFICIAL_CLAIM (D27) |
 | CONSTRAINT | 스크루웜 S16 S18 | **행마다** | S18 "최소 2027년까지 가동 안 됨" OFFICIAL_CLAIM(전망). S16 "생산량이 확산에 못 미치는 것이 핵심 제약"은 누구의 평가인지 브리프에 없다 — 기관 평가면 OFFICIAL_CLAIM, 아니면 사실이 아니라 **Derived Claim** |
-| HISTORICAL_CONTEXT | FOMC F03 | **_open-1** | "2023년 7월 이후 첫 인상" — 조치 기록들을 대어 본 결과다. 출처가 "다수 보도" (§4.3) |
-| FACT · METHOD · MECHANISM | 스크루웜 S09 S10 · S12 · S13 | **_open-1** | 과학 · 배경 지식(기생 부위, 승인 약물, 불임곤충기법 원리). §5.2 7값 어디에도 딱 맞지 않는다 |
+| HISTORICAL_CONTEXT | FOMC F03 | OFFICIAL_ACTION | "2023년 7월 이후 첫 인상" — 조치 기록들을 대어 본 결과다. 1차 조치 기록을 출처로 삼는다 (D27). 지금 출처는 "다수 보도"뿐 (§4.3) |
+| FACT · METHOD · MECHANISM | 스크루웜 S09 S10 · S12 · S13 | OFFICIAL_CLAIM | 과학 · 배경 지식(기생 부위, 승인 약물, 불임곤충기법 원리)은 그것을 말한 기관 자료의 주장으로 적는다 — "CDC 에 따르면". 보수적일 뿐 독자를 속이지 않는다 (D27). 연구를 직접 출처로 삼으면 INDEPENDENT_OBSERVATION |
 | PRIOR_OUTLOOK | FOMC F29 | **나눈다** | 6/17 동결 12대0(OFFICIAL_ACTION) + 같은 날 SEP 분포 9/8/1(OFFICIAL_CLAIM) |
 | EXTERNAL_SHOCK | FOMC F37 | **나눈다** | "이란 전쟁으로 연료 가격이 급등"(인과 — 누구의 주장인지 없음) + "경유 가격이 최고치"(MEASUREMENT). 소유는 SL-iran-war (§9) |
 | (타입 없음) | FTC G15~G25 G30~G45 · 스크루웜 S21~S34 | 행마다 | 브리프가 타입을 적지 않았다. 0.2m 에서 행마다 |
@@ -355,7 +362,9 @@ ARTICLE_PACKAGE 의 span 은 층 하나에 refs 를 싣는다. refs 가 무엇�
 
 - `kind: PRIMARY` — 1차 자료. Fact 를 짓는다. `SECONDARY` — 뉴스 매체. 오늘 무엇이 중요한지 찾는 신호다 (확정 §5.1)
 - 실물에서 2차가 사실의 출처로 쓰였다: FOMC F03 "출처: 다수 보도" · FTC S4~S6 "2차 자료 경유 — 1차 원문을 직접 읽지 않았다. Core 에서는 2차 자료가 일치하는 사실만 썼다" · 스크루웜 S6 "보도"
-- **발행하려면 Fact 마다 PRIMARY 출처가 1개 이상 있어야 하는가 → _open-2**
+- **발행하려면 Fact 마다 PRIMARY 출처가 1개 이상 있어야 한다 (D27 · 불변식 9).** 독자는 `fact` 표시를 "원문 확인"으로 읽는다(§8.4). 2차 보도끼리의 일치는 같은 원 보도를 옮긴 결과일 수 있다
+- **1차 = 그 사실을 만들었거나 측정한 주체의 자료 (D27).** 실물의 2차 사실(F03 · FTC 주법 · 6(b))은 1차가 공개돼 있다 — 없는 게 아니라 안 읽은 것이다
+- 공적 기관이 관여하지 않는 사건(FINDINGS §6.1 축 2 · 미검증)에서 1차가 정말 없으면 그때 이 불변식을 다시 본다
 
 ### 4.4 권리 (확정 §5.1)
 
@@ -459,8 +468,8 @@ D8 은 이것을 사실의 속성으로 두었는데, DERIVED 는 사실의 속�
 - **실물 7개.** S2 는 6개로 충분했다고 적었고(S4 표), 골든은 여기에 `year_of` 를 더 쓴다. 새 op 는 계약 개정으로만 는다
 - `from` · `to` · `of` 는 입력의 `key` 이거나 `"published_at"`
 - **발행하려면 재계산이 PASS 여야 한다.** 월 정밀도 입력 때문에 증명 못 한 것(UNVERIFIABLE)도 발행하지 않는다 — D8 규칙 3 은 "맞음"을 보이라는 불변식이다.
-  실물: "201일째" 는 개전일이 "2026-02" 뿐이라 UNVERIFIABLE (2/28 이면 201, 2/21 이면 208). C-2 가 개전일을 확인하면 풀린다
-- **발행하려면 모든 입력에 `fact` 가 있어야 한다.** 실물: `war_start`(이란 개전 — C-2) · `minutes`(9월 회의록 공개 — 대기 "Fact 승격")가 지금 비어 있다
+  실물: "201일째" 는 개전일이 "2026-02" 뿐이라 UNVERIFIABLE (2/28 이면 201, 2/21 이면 208). C-3 이 개전일을 확인하면 풀린다
+- **발행하려면 모든 입력에 `fact` 가 있어야 한다.** 실물: `war_start`(이란 개전 — C-3) · `minutes`(9월 회의록 공개 — 대기 "Fact 승격")가 지금 비어 있다
 
 ---
 
@@ -540,7 +549,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 
 ### 9.1 Event
 
-- 기사가 다루는 일 하나. `event_id` 는 사람이 붙인 이름 — 골든 `event_ref` "FOMC-20260916" 이 그대로 키다
+- 기사가 다루는 일 하나. 키는 UUID `event_id`, 사람이 부르는 이름은 `code` (D27 · §2.1). 골든 `event_ref` 의 "FOMC-20260916" 은 code 다 — 0.2m 에서 그 Event 의 UUID 로 바뀐다
 - `occurred_at` 은 없을 수 있다. **실물**: 스크루웜 브리프 §0 "이 사건에는 그런 날짜가 없다. 6월 3일 첫 사례 이후 계속 진행 중". 스크루웜은 패키지가 없어 `event_ref` 가 무엇을 가리킬지 대 보지 못했다 → **미확인**
 - Event 가 스토리라인에 속할 수 있다(`storyline_id`). FOMC 사건들을 묶는 스토리라인의 실물은 없다 — 브리프 "Storyline context" 표는 있지만 이름 · 버전이 없다
 
@@ -557,7 +566,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 
 - **실물 (도윤 관찰, 2026-09-21)**: 이란 사실은 FOMC 사건이 아니라 SL-iran-war 소속이다. 기사가 참조해야 할 사실을 스토리라인이 직접 갖는다
 - 그래서 Fact 는 `event_id` · `storyline_id` 중 정확히 하나를 갖는다. 스토리라인 사실은 붙은 버전(`storyline_version`)도 갖는다
-- 골든에서: F37(경유 가격 · 이란 전쟁) · 이란 대기 4 span 의 사실 → SL-iran-war. 나머지 F → FOMC-20260916 (브리프가 그렇게 묶었다)
+- 골든에서: F37(경유 가격 · 이란 전쟁) · 이란 대기 4 span 의 사실 → SL-iran-war. 나머지 F → FOMC-20260916 (브리프가 그렇게 묶었다). 여기 적은 이름은 code 이고, Fact 의 `event_id` · `storyline_id` 에는 UUID 가 들어간다
 - 소유가 사건 → 스토리라인으로 옮겨가는 일은 발행 전에만 있다 — 발행 뒤에는 Fact 를 고치지 않는다(§2.3)
 
 ### 9.4 발행된 기사가 스토리라인 버전을 고정한다 — 필요하다. 패키지 밖에 둔다
@@ -571,7 +580,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 - ARTICLE_PACKAGE §0: 패키지는 "프론트가 받아서 그리는 데 필요한 것"이고 Storyline 은 넣지 않는다. 프론트는 이 값으로 아무것도 그리지 않는다 — "이후 새로 확인된 내용"은 새 데이터라 어차피 패키지 밖에서 와야 하고, 그것을 계산하는 백엔드가 기록에서 기준 버전을 읽는다
 - ArticleRecord 도 통째로 불변이라(§11) §9.2 의 "고정"이 그대로 지켜진다. §9.2 가 적은 `ArticlePackage (storyline_snapshot)` 은 계약 이전의 말이다 — 이 계약에서 그 자리는 ArticleRecord 다
 - 발행 규칙 (불변식 13): 패키지가 닿는 사실의 스토리라인마다 핀이 있고, 핀 버전 = 그 스토리라인의 **발행 때 최신 버전**. 아니면 `STORYLINE_STALE`
-- 골든: `SL-iran-war` 하나 — 버전 번호는 스토리라인을 만들 때(0.2m) 정한다
+- 골든: `SL-iran-war`(code) 하나 — 핀에는 그 UUID 가 들어간다. 버전 번호는 스토리라인을 만들 때(0.2m) 정한다
 
 ---
 
@@ -606,8 +615,8 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 **본문 속 따옴표 — 글이다. 단 누군가의 말로 읽히면 그 말이 원문에 있어야 한다.**
 - D23 #16: 해석에 따옴표를 달자("'확신이 없다'고 말한") 독자는 원문으로 읽었다 — §8.4 의 약속을 가장 직접적으로 깬 사례였다. 독자에게 본문 따옴표는 원문 표시다
 - 그래서 본문 따옴표 안이 **누군가 한 말로 읽히면** 그 span 은 `fact` 층이고 그 Fact 의 원문에 그 말(의 원어)이 있어야 한다. 누구의 말도 아닌 따옴표(예문 · 물음 이름 붙이기)는 글이다
-- 기계는 어느 쪽인지 모른다 → 게이트 3. `--report` 가 골든의 본문 따옴표 4 곳을 뽑는다: 예문 2(“라면이 2000원이다” — concept) · 물음 이름 1(“물가가 나빠졌는가” — claim) ·
-  **발언처럼 읽히는 1**(입문 7장 대조 "세 명만 “올리자”고 반대" — fact F28. F28 은 "25bp 인상을 원해 반대"다 — "올리자"는 그 말을 옮긴 것이 아니라 바꿔 말한 것이다) → 게이트에서 볼 것
+- 기계는 어느 쪽인지 모른다 → 게이트 3. `--report` 가 골든의 본문 따옴표를 뽑는다. 지금 3 곳: 예문 2(“라면이 2000원이다” — concept) · 물음 이름 1(“물가가 나빠졌는가” — claim). 셋 다 발언을 옮긴 것이 아니다 (D27 확인)
+- **고친 1 건 (D27 · 도윤 승인)** — 입문 7장 대조 "세 명만 “올리자”고 반대" → "세 명만 올리자고 반대" (fact F28). F28 은 "25bp 인상을 원해 반대"다. "올리자"는 그 사람들의 말을 옮긴 것이 아니라 바꿔 말한 것인데 따옴표가 발언으로 읽히게 했다 — D23 #16 과 같은 모양. 따옴표만 뺐다
 
 ---
 
@@ -655,7 +664,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 | ARTICLE_PACKAGE | 이 계약 |
 |---|---|
 | §0 "저장 구조 → 0.2. 여기서는 Ref 로만" | 저장 구조가 여기(와 CONCEPT_IDENTITY)에 있다. 패키지는 층별 Ref 로 가리킨다 (§2.2) |
-| §1 `event_ref: Ref` | EventRef |
+| §1 `event_ref` | EventRef — Event 의 UUID (D27). 골든의 문자열은 `code` |
 | §1 · §6 `refs: Ref[]` "Ref 의 모양은 0.2" | 층이 정한다 — FactRef · ClaimRef · BridgeRef · ConceptRef (§2.2) |
 | §6 "Claim 이 어떤 Fact 에 기대는지는 Claim 이 안다 → 0.2" | DerivedClaim `basis` (§7) |
 | §6.2 대기 `need` 넷 | §17 |
@@ -673,7 +682,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 지금은 발행물이 없다. `verify-data-model.py` 는 골든을 이 계약 모양으로 **메모리 안에서 옮긴 시험 사본**에 발행 검사를 돌려, 무엇이 막히는지 센다 (§18).
 
 **식별 · 참조**
-1. 모든 키는 유일하고 바뀌지 않고 재사용되지 않는다. `label` 은 소유자 안에서 유일하다 (기계: 시험 사본 · 0.4)
+1. 모든 키는 UUID 이고 유일하며 바뀌지 않고 재사용되지 않는다. `label` 은 소유자 안에서, Event · Storyline 의 `code` 는 전체에서 유일하다. 패키지 `event_ref` 는 있는 Event 의 키다 — code 가 아니다 (기계: 시험 사본 · 0.4)
 2. span refs 원소는 층이 정한 Ref 이고, 가리킨 것이 있다 — fact → Fact · claim → DerivedClaim · bridge → Bridge (기계)
 3. 발행된 ArticleRecord 가 가리키는 Fact · DerivedClaim · Bridge · Source · SourceDocument 는 고치지 않는다 (0.4)
 
@@ -683,7 +692,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 6. `VOLATILE` 이면 `as_of` 가 있다. `STABLE` 이면 없다 (기계)
 7. `event_id` · `storyline_id` 중 정확히 하나. `storyline_id` 면 `storyline_version` 이 1 이상이고 그 스토리라인 버전 안이다 (기계)
 8. (발행) 패키지가 닿는 Fact 는 원문 위치(FactSource)가 1개 이상이고, 그 Source 에 SourceDocument 가 있고 span 이 그 글 안이다 (확정 §5.5)
-9. (발행) _open-2 — PRIMARY 출처 1개 이상
+9. (발행) 패키지가 닿는 Fact 는 PRIMARY 출처가 1개 이상 (확정 §5.1 · D27)
 10. 브리프 사실 표의 모든 타입이 §3.3 표에 있다 (기계)
 11. (발행) 패키지가 닿는 Fact 의 `first_verified_public_at ≤ published_at` (확정 §5.3). 증명 못 하면 발행 안 한다
 
@@ -740,47 +749,18 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 
 ---
 
-## 16. _open
+## 16. _open — 판정됨 → D27
 
-### _open-1 · `fact_type` 을 §5.2 의 7값으로 닫는가
+2026-10-03 게이트. 판정자 PM (도윤 위임). 판단 순서 ① 독자 ② 기술.
 
-브리프 30개 타입을 7값으로 옮기면 **세 무리가 딱 맞지 않는다** (§3.3 표의 _open-1 행).
-- SELF_LIMIT (FTC G26 · G29) — 권한이 아니라 **지식 · 입장**의 한계
-- HISTORICAL_CONTEXT (FOMC F03) — 조치 기록들을 대어 본 결과("이후 첫 인상")
-- FACT · METHOD · MECHANISM · STATUS 일부 (스크루웜 S05 S09 S10 S12 S13) — 과학 · 배경 지식
+| # | 무엇 | 판정 | 계약에서 |
+|---|---|---|---|
+| _open-1 | `fact_type` 을 §5.2 의 7값으로 닫는가 | 판정됨 → D27: **(a) 닫는다.** SELF_LIMIT → OFFICIAL_LIMIT(기관이 스스로 밝힌 한계) · HISTORICAL_CONTEXT → 1차 조치 기록을 출처로 OFFICIAL_ACTION · 배경 지식 → 말한 기관 자료의 OFFICIAL_CLAIM | §3.2 · §3.3 |
+| _open-2 | 발행하려면 Fact 마다 1차 출처가 있어야 하는가 | 판정됨 → D27: **(a) 필수.** 1차 = 그 사실을 만들었거나 측정한 주체의 자료. 공적 기관이 없는 사건에서 1차가 정말 없으면 그때 다시 본다 | §4.3 · 불변식 9 |
+| _open-3 | ID 체계 | 판정됨 → D27: Fact · Claim · Bridge · Source = UUID + `label` (추천대로). **Event · Storyline 도 UUID + `code` (추천과 다르다)** — 사건을 누가 고르나(D3)가 OPEN 인데 그 가정을 되돌릴 수 없는 키에 넣지 않는다 | §1 · §2.1 · §9 · §13 · §18 |
+| — | 초안이 스스로 내린 판단 (0.2b 로그 "도출하며 판단한 것") | 판정됨 → D27: **수용** — volatility 두 곳 · 판정은 반증 기록에서 계산 · 스토리라인 핀은 ArticleRecord 에 · 발행 뒤 불변 · `published_at` = `"YYYY-MM-DD"` · 인용 블록 따옴표는 표시 · op 7개 | §5.3 · §6 · §7.3 · §9.4 · §10.2 |
 
-| 안 | 내용 |
-|---|---|
-| **(a) 7값으로 닫는다 (추천)** | SELF_LIMIT → `OFFICIAL_LIMIT` 을 "기관이 스스로 밝힌 한계(권한 · 지식 · 입장)"로 읽는다. HISTORICAL_CONTEXT → 1차 조치 기록을 출처로 `OFFICIAL_ACTION`. 배경 지식 → 그것을 말한 기관 자료의 `OFFICIAL_CLAIM` (연구를 직접 출처로 삼으면 `INDEPENDENT_OBSERVATION`) |
-| (b) 값을 더한다 | 예: `SELF_LIMIT` · `BACKGROUND`. 브리프 작가가 굵게 표시해 가른 구분(SELF_LIMIT)이 살아남는다 |
-
-- **독자** — `fact_type` 은 독자에게 안 보인다. 독자가 보는 것은 층(`fact` / `claim`)이다. 차이는 **글이 주장한 쪽을 밝히느냐**에서 나고, 그건 `actor` 와 게이트 3 이 본다.
-  (a) 에서 배경 지식이 OFFICIAL_CLAIM 이 되면 "CDC 에 따르면 …"을 요구받는다 — 보수적일 뿐 독자를 속이지 않는다(D20 의 비대칭과 같은 방향)
-- **기술** — (b) 는 값이 늘 때마다 "이건 사실인가 주장인가"를 새 값마다 다시 정해야 한다. §5.2 의 요점은 그 구분 하나다
-- FTC G26 의 서사적 무게("규제 기관이 얼마나 벌어지는지 모른다고 썼다")는 fact_type 이 아니라 기사 선택 · 슬롯("효과에 대한 증거")이 나른다
-
-### _open-2 · 발행하려면 Fact 마다 1차 출처가 있어야 하는가 (확정 §5.1 과 실물의 어긋남)
-
-| 안 | 내용 |
-|---|---|
-| **(a) 필수 (추천)** | 확정 §5.1 그대로. 2차만 있는 사실은 1차를 찾을 때까지 발행 불가 (불변식 9) |
-| (b) 2차 여럿이 일치하면 허용 | FTC 브리프가 실제로 한 방식 ("2차 자료가 일치하는 사실만 썼다") |
-
-- **독자** — 2차 보도끼리의 일치는 같은 원 보도를 옮겨 적은 결과일 수 있다. 독자는 `fact` 표시를 "원문 확인"으로 읽는다(§8.4). (b) 는 그 약속을 약하게 한다
-- **비용** — 실물의 2차 사실(F03 · FTC 주법 · 6(b))은 1차 자료가 공개돼 있다 — 없는 게 아니라 안 읽은 것이다. 비용은 수집 한 번이다.
-  공적 기관이 관여하지 않는 사건(FINDINGS §6.1 축 2 · 미검증)에서는 1차가 정말 없을 수 있다 — 그때 이 불변식을 다시 본다
-- 골든 영향: F03(4 span)이 "다수 보도"뿐이다 → (a) 면 0.2m 에서 1차 출처가 필요하다
-
-### _open-3 · ID 체계
-
-| 안 | 내용 |
-|---|---|
-| **(a) 추천** | Fact · Claim · Bridge · Source = UUID + `label`. Event · Storyline = 사람이 붙인 문자열 그대로 (§2.1) |
-| (b) 전부 UUID | Event 도 UUID + 이름. 골든 `event_ref` 가 바뀐다 |
-| (c) 소유자 붙인 문자열 ("FOMC-20260916/F31") | 읽기 쉽지만 소유가 바뀌면 키가 바뀐다 — F37 이 실물 |
-
-- **독자** — 차이 없음. 셋 다 독자에게 안 보인다
-- **기술** — 되돌리기 어렵다. 발행물의 refs 가 이 키를 영원히 갖는다. (a) 는 CONCEPT_IDENTITY(D25)와 같은 방식이라 참조 방식이 하나다. 골든 refs 가 사람이 못 읽는 UUID 가 되는 비용은 `--report` 가 label 로 풀어 보여 준다
+D27 은 이 밖에 세 가지를 더 정했다 — 발행 검사가 막는 64 건을 누가 채우나(§17) · C-5 의 범위(§17) · 독자 글 수정 1건(§10.2, 도윤 승인).
 
 ---
 
@@ -793,11 +773,11 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 |---|---|---|---|---|---|
 | 1 | basic 4 | 그런데 지금 미국은 3%대입니다. | bridge | Bridge | **이 계약** — Bridge 1개 (C-0002, 3, ④), `facts` F31 · F10. 0.2m 이 만든다 |
 | 2 | basic 4 | 목표보다 빠르게 오르고 있어요. | bridge | Bridge | **이 계약** — 1 과 같은 Bridge |
-| 3 | basic 7 | 회의 내부 기록은 3주 뒤에 공개돼요. | fact | Fact 승격 | **이 계약** 이 모양을 준다 — 브리프 §1 "아직 없는 것"(9월 회의록 → 10월 초, T+21)을 Fact 로. 단 **출처가 Source Pack 에 없다** — 0.2m 이 Fact 를 만들면 대기가 "Fact 출처"로 바뀐다. 맡을 레인이 없다 → PM |
-| 4 | basic 8 | 2월 말에 시작돼 반년 넘게 이어지고 있어요. | fact | Fact 출처 | 콘텐츠 **C-2** (개전일) · C-3. 소유 SL-iran-war |
+| 3 | basic 7 | 회의 내부 기록은 3주 뒤에 공개돼요. | fact | Fact 승격 | **이 계약** 이 모양을 준다 — 브리프 §1 "아직 없는 것"(9월 회의록 → 10월 초, T+21)을 Fact 로. 출처가 Source Pack 에 없다 → 출처는 콘텐츠 **C-3** (D27) |
+| 4 | basic 8 | 2월 말에 시작돼 반년 넘게 이어지고 있어요. | fact | Fact 출처 | 콘텐츠 **C-3** (개전일 — C-2 를 합쳤다, D27). 소유 SL-iran-war |
 | 5 | basic 8 | 4월에 휴전 합의가 한 번 있었지만 … | fact | Fact 출처 | 콘텐츠 **C-3**. 소유 SL-iran-war |
-| 6 | advanced 3 | 9월 초 | fact | Fact 출처 | 콘텐츠 — **맡을 레인이 없다** (C-2 · C-3 는 이란). FOMC 스토리라인 날짜다 (D23 #25, 브리프는 9/15 만) → PM |
-| 7 | advanced 5 | 이란 전쟁은 201일째. | fact | Fact 출처 | 콘텐츠 **C-2**. 소유 SL-iran-war |
+| 6 | advanced 3 | 9월 초 | fact | Fact 출처 | 콘텐츠 **C-3** (D27). FOMC 쪽 날짜다 (D23 #25, 브리프는 9/15 만) |
+| 7 | advanced 5 | 이란 전쟁은 201일째. | fact | Fact 출처 | 콘텐츠 **C-3** (개전일). 소유 SL-iran-war |
 | 8 | advanced 5 | 4월 휴전 이후에도 공격이 반복되며 … | fact | Fact 출처 | 콘텐츠 **C-3**. 소유 SL-iran-war |
 | 9 | basic 4 | 그리고 이 속도는 여름 내내 크게 줄지 않았어요. | claim | DerivedClaim | 콘텐츠 **C-5** — 도출 + 반증 (§7). 근거 후보 F24 · F32 |
 | 10 | basic 7 | 그 사이 8월 말 의장이 앞의 기준을 밝혔고 … | claim | DerivedClaim | **C-5**. 근거 후보 F33 · F36 |
@@ -805,9 +785,24 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 | 12 | basic 8 | 연준이 확신이 없다고 본 이유의 상당 부분이 … | claim | DerivedClaim | **C-5**. 근거 후보 F07 · F33 |
 | 13 | advanced 5 | 1. 물가의 큰 부분이 전쟁에 달려 있습니다. | claim | DerivedClaim | **C-5**. 근거 후보 F07 · F37 |
 
-- **이 계약으로 풀리는 것 3** — 브리지 2 (모양 + 채울 재료가 골든에 다 있다) · 사실 승격 1 (모양만. 출처는 남는다)
-- **콘텐츠를 기다리는 것 10** — 사실 출처 5 (C-2 · C-3 넷 + **레인 없는 "9월 초" 하나**) · 해석 도출 5 (C-5)
-- 대기와 별개로 **C-5 가 더 받아야 할 것**: 브리프 DC-D · DC-E 는 반증 기록이 없다 · DC-A 둘째 반증 답은 F-ID 가 없다 (§7). 골든이 이미 DC-D(5 span) · DC-E(3 span)를 가리키므로 발행 검사(불변식 23)에 걸린다
+- **이 계약으로 풀리는 것 3** — 브리지 2 (모양 + 채울 재료가 골든에 다 있다) · 사실 승격 1 (모양만. 출처는 C-3)
+- **콘텐츠를 기다리는 것 10** — 사실 출처 5 (**C-3**) · 해석 도출 5 (**C-5**)
+- 대기와 별개로 **C-5 가 받는 것 (D27)**: 브리프 DC-D · DC-E 는 반증 기록이 없다 · DC-A 둘째 반증 답은 F-ID 가 없다 · **DC-C 범위** — 브리프가 "범위를 좁혀야 정확하다"고 하고 문장을 안 좁혔다. DC-C 는 이 기사의 Common Goal 이라 C-5 의 첫 항목이다 (§7).
+  골든이 이미 DC-D(5 span) · DC-E(3 span)를 가리키므로 발행 검사(불변식 23)에 걸린다
+
+### 발행 검사가 막는 64 건 — 누가 채우나 (D27)
+
+골든을 이 계약 모양으로 옮긴 시험 사본에 발행 검사를 돌리면 64 건이 막힌다 (`verify-data-model.py --report`). 계약이 틀린 게 아니라 손으로 만든 골든이 출처 작업을 건너뛰었다.
+
+| 막히는 것 | 건 | 누가 | F-3 전에 |
+|---|---|---|---|
+| 대기 span (위 표에서 브리지 2 를 뺀 것) | 11 | C-3 (사실 6) · C-5 (해석 5) | 한다 |
+| 1차 출처 없는 사실 | 9 | **C-3** | 한다 |
+| 인용 블록의 원문 | 2 | **C-3** — 가장 급하다. "원문" 블록으로 나가는데 브리프에 연설 원문이 없다 | 한다 |
+| DERIVED 입력 사실 · 증명 | 4 + 1 | **C-3** (개전일 · 회의록 공개일) | 한다 |
+| 반증 기록 · 답의 근거 사실 | 2 + 1 | **C-5** | 한다 |
+| 원문 위치 (span) | 25 | **파이프라인** — 손으로 안 한다. C-3 이 적은 원문 구절을 문서 저장 뒤 기계가 찾아 채운다 | 안 한다 |
+| 공개 시점 증명 | 9 | **파이프라인** | 안 한다 |
 
 ---
 
@@ -818,7 +813,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 ### 골든
 | 지금 | 이 계약 | 비고 |
 |---|---|---|
-| `event_ref` "FOMC-20260916" | EventRef — 그대로 | Event 행을 만든다 |
+| `event_ref` "FOMC-20260916" | EventRef — **그 Event 의 UUID 로** (D27) | Event 행을 만들고 `code` 에 "FOMC-20260916" |
 | fact refs `"F31"` 21 종 | FactRef (UUID) | Fact 발급 뒤 |
 | claim refs `"DC-C"` 5 종 | ClaimRef (UUID) | |
 | concept refs `"C-0002"` | ConceptRef | CONCEPT_IDENTITY §16 |
@@ -829,22 +824,22 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 | `_fact_refs_dropped` — **concept span 1** (숙련 4장 "표결은 투표권자 12명이 하고 …", F02) | **갈 곳이 없다** | concept 층 refs 는 개념만. 버린다 — 독자 글 · 층은 그대로. 게이트에서 확인 |
 | `_volatility` 29 | `authoring.time_expressions` 29 · `where` → `at` (레벨 기준 경로) | §6.3 |
 | VOLATILE `as_of` | Fact F30 F31 F35 F36 F37 → `volatility: VOLATILE` + `as_of` | §6.2 |
-| DERIVED 입력 `war_start` · `minutes` (refs 없음) | 입력 `fact` 대기 | C-2 · §17 #3 |
+| DERIVED 입력 `war_start` · `minutes` (refs 없음) | 입력 `fact` 대기 | C-3 (D27) |
 | `_attribution_refs` 2 | 버린다 | §10.1 |
 | `_published_at_basis` | `authoring.notes` | |
-| (없음) | `authoring.storylines` — SL-iran-war 핀 | §9.4 |
+| (없음) | `authoring.storylines` — SL-iran-war 핀 (UUID) | §9.4. Storyline 행을 만들고 `code` 에 "SL-iran-war" |
 | 파일 한 벌 | ArticleRecord `{ package, authoring }` | §11. 픽스처 파일 모양을 어떻게 나눌지는 0.2m |
 
 ### FOMC 브리프
 | 지금 | 이 계약 | 비고 |
 |---|---|---|
 | F01~F38 | Fact 38 (나누면 41) | `label` = F-ID. `fact_type` 은 §3.3 |
-| F29 · F32 · F37 | **나눈다** | 사실 하나에 두 종류 (§3.3). 브리프 수정 — PM · C-3(F37) |
+| F29 · F32 · F37 | **나눈다** | 사실 하나에 두 종류 (§3.3). 브리프 수정 — C-3 |
 | F06~F10 | `actor` "FOMC 성명문" | 글에 주어가 없다 (§3.4) |
 | F37 | 소유 SL-iran-war | 도윤 관찰 |
 | F28~F36 · F38 | 소유 FOMC-20260916 (브리프대로) | FOMC 스토리라인 객체는 실물이 없다 — 만들지는 PM |
-| 출처 열 S1 (F01~F05) · 표 제목 (S1)(S2)(S3) · Storyline 표는 출처 없음 | FactSource | **원문 위치가 있는 사실 0 / 38.** 발행 검사(불변식 8)에 전부 걸린다 — 스테이지 2(Claim 추출 + span)가 "스키마만"인 그대로다 |
-| F03 "다수 보도" | PRIMARY 출처 필요 (_open-2 (a) 이면) | |
+| 출처 열 S1 (F01~F05) · 표 제목 (S1)(S2)(S3) · Storyline 표는 출처 없음 | FactSource | **원문 위치가 있는 사실 0 / 38.** 발행 검사(불변식 8)에 전부 걸린다. **손으로 채우지 않는다 (D27)** — C-3 은 사실마다 원문 구절을 그대로 적고, 글자 위치는 문서를 저장한 뒤 파이프라인이 구절을 찾아 채운다 |
+| F03 "다수 보도" | PRIMARY 출처 필요 (D27) | C-3 |
 | S1~S4 · P1~P4 | Source 8 — `kind` PRIMARY, 발행처 federalreserve.gov, `published_at` 은 Source Pack 표에서 | P2 는 "8/19 공개" |
 | S3 preliminary | 확정본이 나오면 새 Source | §4.1 |
 | DC-A~E | DerivedClaim 5 — `basis` 는 브리프 근거 · `kind` · `checks` | DC-C `statement`(좁힌 문장?) · DC-D · DC-E 반증 · DC-A 둘째 답의 F-ID → **C-5** |
@@ -853,7 +848,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 
 ### FTC · 스크루웜 브리프
 골든 패키지가 없어 이번 이전 대상이 아니다. 옮길 때: §3.3 표 · 타입 없는 행 41 개(G15~G25 G30~G45 · S21~S34)는 행마다 · 스크루웜 "변동성" 열 → `Fact.volatility` (VOLATILE 4) ·
-FTC 2차 경유 출처 S4~S6 → _open-2 · 세 브리프의 DC-A 등 label 충돌 → UUID (§2.1) · FTC observed 인용의 따옴표를 뗀다 (§10.2)
+FTC 2차 경유 출처 S4~S6 → 1차를 읽어야 한다 (D27) · 세 브리프의 DC-A 등 label 충돌 → UUID (§2.1) · FTC observed 인용의 따옴표를 뗀다 (§10.2)
 
 ### 다른 곳 (이 계약을 따라 바뀔 것)
 | 어디 | 무엇 | 누가 |
@@ -863,4 +858,4 @@ FTC 2차 경유 출처 S4~S6 → _open-2 · 세 브리프의 DC-A 등 label 충�
 | ARTICLE_PACKAGE §1 `published_at: Date` · §2 "기준 시각" | `string` `"YYYY-MM-DD"` 로 적는다 (§5.3) | ARTICLE_PACKAGE 수정 (이번 범위 밖) |
 | ARTICLE_PACKAGE §2 · §3 · §7.4 · §8 · §10 · 부록 A 의 "→ 0.2" | 이 계약 절 번호로 | 같음 |
 | ARTICLE_PACKAGE §12-6 "0.2 대기 7" | D23 이후 13 | 같음 |
-| development-content | "9월 초" · "3주 뒤" 출처를 맡을 레인 · C-5 에 DC-D · DC-E · DC-A 둘째 답 | PM |
+| development-content | (D27 로 정해짐) "9월 초" · "3주 뒤" · 1차 출처 · 인용 원문 · DERIVED 입력 → C-3 · DC-D · DC-E · DC-A 둘째 답 · DC-C 범위 → C-5 | — |

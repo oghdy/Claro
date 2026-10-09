@@ -57,8 +57,8 @@ REQUIRED_FIELDS = {
     'CounterCheck': ('question', 'slot', 'recollected', 'answer', 'facts', 'outcome'),           # §7.2
     'Bridge': ('bridge_id', 'label', 'bridge_type', 'event_id', 'concept_id', 'concept_version', 'slot',
                'from_event', 'facts'),
-    'Event': ('event_id', 'title', 'occurred_at', 'storyline_id'),
-    'Storyline': ('storyline_id', 'title', 'version', 'ongoing'),                              # §9.2
+    'Event': ('event_id', 'code', 'title', 'occurred_at', 'storyline_id'),                     # code — D27
+    'Storyline': ('storyline_id', 'code', 'title', 'version', 'ongoing'),                      # §9.2 · code — D27                              # §9.2
     'StorylineVersion': ('storyline_id', 'version', 'created_at', 'change'),
     'ArticleRecord': ('package', 'authoring'),
     'ArticleAuthoring': ('time_expressions', 'storylines', 'notes'),
@@ -85,7 +85,7 @@ FOREIGN_TYPES = ('Concept', 'ConceptVersion', 'ConceptRef', 'ConceptAlias', 'Con
                  'ReadingPlanLog', 'reading_plan_log', 'Probe', 'probe', 'CorrectionLog', 'correction_log')
 # 실물이 없는 구조 — 이 번호의 절에 "실물 없음"
 NO_REAL_SECTIONS = ('3.2', '4.2', '4.4', '8.2', '9.2')
-TYPE_MARKERS = ('_open-1', '행마다', '나눈다')
+TYPE_MARKERS = ('행마다', '나눈다')                      # D27 — _open-1 은 닫혔다. 7값이거나 이 둘이어야 한다
 MARKS = ('계약 반영', '_open', '미확인')
 
 
@@ -216,7 +216,17 @@ def check_contract(text, btypes):
         if t not in tm:
             errs.append(('CONTRACT_TYPE_MAP', f'브리프 타입 {t} ({where[0][0]} {where[0][1]} …) 가 §3.3 표에 없다'))
         elif not (tm[t] in FACT_TYPES or any(k in tm[t] for k in TYPE_MARKERS)):
-            errs.append(('CONTRACT_TYPE_MAP', f'§3.3 {t} → {tm[t]!r} 가 7값도 표시(_open-1 · 행마다 · 나눈다)도 아니다'))
+            errs.append(('CONTRACT_TYPE_MAP', f'§3.3 {t} → {tm[t]!r} 가 7값도 표시(행마다 · 나눈다)도 아니다 (D27)'))
+    # D27 — Event · Storyline 키도 UUID. _open 은 §16 에서 전부 "판정됨 → D27"
+    for alias in ('EventId', 'StorylineId'):
+        if not re.search(rf'^{alias}\s*=\s*UUID\b', text, re.M):
+            errs.append(('CONTRACT_FIELD', f'{alias} 가 UUID 가 아니다 (D27 — 사람이 부르는 이름은 code)'))
+    h16, b16 = sec_by_num(text, '16.')
+    for n, line in enumerate(text.splitlines(), 1):
+        if re.search(r'_open-\d', line) and not ('판정됨' in line and line in b16):
+            errs.append(('CONTRACT_OPEN_LEFT', f'L{n}: 판정 안 된 _open 이 남았다 — {line.strip()[:50]}'))
+    if h16 is None or 'D27' not in h16:
+        errs.append(('CONTRACT_OPEN_LEFT', '§16 제목이 "판정됨 → D27" 이 아니다'))
     ops = op_table(text)
     if ops != OPS:
         errs.append(('CONTRACT_OP', f'§6.4 op {sorted(ops)} ≠ 실물 {sorted(OPS)}'))
@@ -429,18 +439,17 @@ def check_golden(g, contract_text, facts, claims):
 
 
 # ── D. 시험 사본 ─────────────────────────────────────────────────────────────
-EVENT = 'FOMC-20260916'
+EVENT = 'FOMC-20260916'                               # code — 사람이 부르는 이름 (D27)
 IRAN = 'SL-iran-war'
 IRAN_FACTS = {'F37'}
 UID = lambda kind, label: str(uuid.uuid5(uuid.NAMESPACE_URL, f'claro-selftest:{kind}:{label}'))
+EVENT_ID, IRAN_ID = UID('event', EVENT), UID('storyline', IRAN)      # 키는 UUID (D27). 시험용
 
 
 def default_type(btype, tm):
-    """시험 사본용 — §3.3 표가 7값이면 그것, _open-1 은 추천안 (a), 행마다 · 나눈다는 보수적으로 OFFICIAL_CLAIM (D20 비대칭)"""
+    """시험 사본용 — §3.3 표가 7값이면 그것, 행마다 · 나눈다는 보수적으로 OFFICIAL_CLAIM (D20 비대칭)"""
     v = tm.get(btype, '')
-    if v in FACT_TYPES:
-        return v
-    return {'SELF_LIMIT': 'OFFICIAL_LIMIT', 'HISTORICAL_CONTEXT': 'OFFICIAL_ACTION'}.get(btype, 'OFFICIAL_CLAIM')
+    return v if v in FACT_TYPES else 'OFFICIAL_CLAIM'
 
 
 def build_model(g, contract_text, facts_b, claims_b, sources_b, lib):
@@ -453,9 +462,10 @@ def build_model(g, contract_text, facts_b, claims_b, sources_b, lib):
                 as_of[r] = v['as_of']
     m = {'facts': {}, 'fact_sources': [], 'sources': {}, 'documents': {}, 'registry': {}, 'claims': {},
          'bridges': {}, 'events': {}, 'storylines': {}, 'storyline_versions': [], 'slots': []}
-    m['events'][EVENT] = {'event_id': EVENT, 'title': '2026-09-16 FOMC', 'occurred_at': '2026-09-16', 'storyline_id': None}
-    m['storylines'][IRAN] = {'storyline_id': IRAN, 'title': '이란 전쟁', 'version': 1, 'ongoing': True}
-    m['storyline_versions'].append({'storyline_id': IRAN, 'version': 1, 'created_at': g['published_at'], 'change': '생성'})
+    m['events'][EVENT_ID] = {'event_id': EVENT_ID, 'code': EVENT, 'title': '2026-09-16 FOMC', 'occurred_at': '2026-09-16',
+                             'storyline_id': None}
+    m['storylines'][IRAN_ID] = {'storyline_id': IRAN_ID, 'code': IRAN, 'title': '이란 전쟁', 'version': 1, 'ongoing': True}
+    m['storyline_versions'].append({'storyline_id': IRAN_ID, 'version': 1, 'created_at': g['published_at'], 'change': '생성'})
     for lab, s in sources_b.items():
         sid = UID('source', lab)
         m['sources'][sid] = {'source_id': sid, 'label': lab, 'title': s['title'], 'publisher': 'federalreserve.gov',
@@ -469,7 +479,7 @@ def build_model(g, contract_text, facts_b, claims_b, sources_b, lib):
             'fact_id': fid, 'label': lab, 'claim_text': f['text'], 'fact_type': ft,
             'actor': 'FOMC' if ft in ('OFFICIAL_CLAIM', 'OFFICIAL_LIMIT') else None,
             'volatility': 'VOLATILE' if lab in as_of else 'STABLE', 'as_of': as_of.get(lab),
-            'event_at': None, 'event_id': None if iran else EVENT, 'storyline_id': IRAN if iran else None,
+            'event_at': None, 'event_id': None if iran else EVENT_ID, 'storyline_id': IRAN_ID if iran else None,
             'storyline_version': 1 if iran else None, 'extraction_model': None, 'extraction_version': None}
         if f['src']:                                   # 출처 문서는 알지만 원문 위치는 없다 (§4.2 실물 없음)
             m['fact_sources'].append({'fact_id': fid, 'source_id': UID('source', f['src']), 'section': None,
@@ -477,7 +487,7 @@ def build_model(g, contract_text, facts_b, claims_b, sources_b, lib):
     fid = {m['facts'][k]['label']: k for k in m['facts']}
     for dc, c in claims_b.items():
         cid = UID('claim', dc)
-        m['claims'][cid] = {'claim_id': cid, 'label': dc, 'event_id': EVENT, 'statement': dc, 'kind': c['kind'],
+        m['claims'][cid] = {'claim_id': cid, 'label': dc, 'event_id': EVENT_ID, 'statement': dc, 'kind': c['kind'],
                             'basis': [fid[x] for x in c['basis'] if x in fid],
                             'checks': [{'question': k['question'], 'slot': None, 'recollected': False, 'answer': '',
                                         'facts': [fid[x] for x in k['facts'] if x in fid], 'outcome': k['outcome']}
@@ -490,11 +500,13 @@ def build_model(g, contract_text, facts_b, claims_b, sources_b, lib):
         if sp['layer'] == 'bridge':
             bfacts += [fid[x] for x in sp.get('_fact_refs_dropped', []) if x in fid]
     bid = UID('bridge', 'C-0002④')
-    m['bridges'][bid] = {'bridge_id': bid, 'label': 'C-0002 ④', 'bridge_type': 'CONCEPT_BRIDGE', 'event_id': EVENT,
+    m['bridges'][bid] = {'bridge_id': bid, 'label': 'C-0002 ④', 'bridge_type': 'CONCEPT_BRIDGE', 'event_id': EVENT_ID,
                          'concept_id': UID('concept', 'C-0002'), 'concept_version': ver['C-0002'], 'slot': '④',
                          'from_event': None, 'facts': list(dict.fromkeys(bfacts))}
     # 패키지 — `_` 를 떼고 refs 를 층별 Ref 로. 대기 span 은 브리지만 채운다 (나머지는 콘텐츠 몫이라 비워 둔다)
     pkg = strip_underscore(g)
+    by_code = {e['code']: k for k, e in m['events'].items()}
+    pkg['event_ref'] = by_code.get(pkg['event_ref'], pkg['event_ref'])     # 골든은 아직 code 를 적는다 → UUID (§18)
     idx = VC.parts(lib)
     pending = []
     for (lid, spans), (_, gspans) in zip(VC.level_spans(pkg), VC.level_spans(g)):
@@ -526,7 +538,7 @@ def build_model(g, contract_text, facts_b, claims_b, sources_b, lib):
                       inputs=[{'key': x['key'], 'what': x['what'], 'value': x['value'],
                                'fact': fid[x['refs'][0]] if x.get('refs') else None} for x in v['derived_from']])
         tes.append(te)
-    m['record'] = {'package': pkg, 'authoring': {'time_expressions': tes, 'storylines': [{'storyline_id': IRAN, 'version': 1}],
+    m['record'] = {'package': pkg, 'authoring': {'time_expressions': tes, 'storylines': [{'storyline_id': IRAN_ID, 'version': 1}],
                                                  'notes': [g.get('_published_at_basis', '')]}}
     m['pending'] = pending
     m['concept_codes'] = {UID('concept', c['code']): c['code'] for c in lib['concepts']}
@@ -586,6 +598,12 @@ def check_model(m, lib, publish=False):
     for k, n in seen.items():
         if n > 1:
             E('KEY_DUP', f'키 {k} 가 {n}번')
+    codes = Counter(x['code'] for kind in ('events', 'storylines') for x in m[kind].values())
+    for c, n in codes.items():
+        if n > 1:
+            E('CODE_DUP', f'code {c} 가 {n}번 — 전체에서 유일해야 한다 (§2.1 · D27)')
+    if pkg.get('event_ref') not in m['events']:
+        E('EVENT_REF', f'패키지 event_ref {pkg.get("event_ref")!r} 가 Event 의 키(UUID)가 아니다 — code 는 참조에 쓰지 않는다 (§2.2 · D27)')
     owner_labels = Counter((f['event_id'] or f['storyline_id'], f['label']) for f in F.values())
     for (o, lab), n in owner_labels.items():
         if n > 1:
@@ -755,7 +773,7 @@ def check_model(m, lib, publish=False):
     for sid in sorted({F[k]['storyline_id'] for k in reach_f if F[k]['storyline_id']}):
         cur = m['storylines'][sid]['version']
         if pins.get(sid) != cur:
-            P('STORYLINE_STALE', f'{sid}: 핀 {pins.get(sid)} ≠ 최신 {cur} (불변식 13 · §9.4)')
+            P('STORYLINE_STALE', f'{m["storylines"][sid]["code"]}: 핀 {pins.get(sid)} ≠ 최신 {cur} (불변식 13 · §9.4)')
     # 19 · 20 · 21 — 인용
     for lv in pkg['levels']:
         for i, s in enumerate(lv['slides']):

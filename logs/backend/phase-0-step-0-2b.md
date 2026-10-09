@@ -421,3 +421,145 @@ DERIVED 18 중 이것 하나만 날 단위라 깨진다. 나머지(주 · 달 ·
 3. **숙련 3장 "9월 초"** — 붙은 사실들(F35 · F36)은 브리프에서 T-1(9/15)이다. "초"와 15일이 맞는지는 출처를 찾을 때 볼 것 (D23 #25)
 4. **골든의 claim span 이 DC-B(방어용)를 3 번 가리킨다** — 방어용은 "우리가 주장할 claim 이 아니라"고 브리프가 썼다. 층은 `claim` 이 맞다(해석). 글이 "증거는 없다" 쪽으로 쓰였는지는 게이트 3
 5. **§5.5 원문 리터럴 대조는 언어가 다른 두 글 사이다** — 사실 문장은 한국어, 원문은 영어. 원문을 보관해 대 본 적이 없어 미확인으로 남겼다. 원문 보관을 처음 할 때 가장 먼저 부딪힐 곳이다
+
+---
+
+## B-0.2b 게이트 반영 · 2026-10-09 · **D27** (판정 2026-10-03 · PM, 도윤 위임)
+
+위 표의 "_open-N" · "게이트 전" 표시는 게이트 전 기록이다. 판정은 아래와 같다.
+
+| # | 판정 (D27) | 반영 |
+|---|---|---|
+| _open-1 | (a) `fact_type` 은 7값으로 닫는다 | 계약 §3.2 · §3.3 — SELF_LIMIT → OFFICIAL_LIMIT("기관이 스스로 밝힌 한계") · HISTORICAL_CONTEXT → OFFICIAL_ACTION(1차 조치 기록) · FACT · METHOD · MECHANISM · S05 → 말한 기관의 OFFICIAL_CLAIM. §3.3 표에 _open 표시가 없다 — 검사가 7값 또는 "행마다" · "나눈다"만 받는다 |
+| _open-2 | (a) 발행하려면 Fact 마다 1차 출처 | §4.3 · 불변식 9. "1차 = 그 사실을 만들었거나 측정한 주체의 자료" |
+| _open-3 | Fact · Claim · Bridge · Source = UUID + `label`. **Event · Storyline 도 UUID + `code`** (추천을 뒤집음) | §1 (`EventId` · `StorylineId` = UUID, Event · Storyline 에 `code`) · §2.1 · §2.2 · §9.1 · §9.3 · §9.4 · §13 · 불변식 1 · §18. ARTICLE_PACKAGE §1 · §6 의 `event_ref` 문구 + CHANGELOG |
+| — | "도출하며 판단한 것" 표 — 수용 | §16 표에 적음 |
+| — | §16 → "판정됨 → D27" · CHANGELOG | 함 |
+| — | 레인 | §17 — "9월 초" · "3주 뒤" · 개전일(C-2 를 합침) → C-3 / 해석 5 · DC-D · DC-E · DC-A 둘째 답 · DC-C 범위 → C-5 / 원문 위치 25 · 공개 시점 증명 9 → 파이프라인(손으로 안 한다). 64 건을 누가 채우는지 표로 |
+| — | 독자 글 1건 (도윤 승인) | 아래 |
+
+### 독자 글 수정 1건 — 입문 7장 대조
+`세 명만\n“올리자”고 반대` → `세 명만\n올리자고 반대` (따옴표 두 글자만. 줄바꿈 · 층 fact · refs F28 그대로)
+- `fixtures/fomc-2026-09.article.json` — span `text` 와 그 블록의 정규 텍스트(`text == linearize(block)`) 두 곳
+- `fixtures/invalid/*.json` 2건 — 같은 두 곳을 고쳐 "골든 + 위반 1개"를 유지 (아래 verify-article: 골든과 다른 곳 1군데씩)
+- `scripts/compare-reader-text.py` — 허용된 차이 1 → 2건. 그 밖의 차이는 여전히 실패 (selftest-verify-article 통과)
+- `logs/correction-log.csv` 1행 — stage 게이트(0.2b) · error_type 레이어 혼입 · source_of_catch 0.2b 인용 검사 · time_spent_min 비움
+- 계약 §10.2 — 본문 따옴표 후보 4 → 3, 고친 1건을 기록
+
+### Event · Storyline 을 UUID 로 — 검사에 더한 것
+- 계약 검사: `EventId` · `StorylineId` 가 UUID · Event · Storyline 에 `code` · 판정 안 된 `_open-N` 이 남지 않음(`CONTRACT_OPEN_LEFT`)
+- 시험 사본: 사건 · 스토리라인 키를 시험용 UUID 로, 골든 `event_ref`("FOMC-20260916" = code)를 그 UUID 로 옮김. `EVENT_REF`(패키지가 code 를 참조에 씀) · `CODE_DUP`(code 겹침)
+- 망가뜨린 사본 80 → 86. 새로 넣은 것:
+```
+PASS  [contract] §5.2 — FactType 에 BACKGROUND 추가 (D27 이 닫은 7값을 연다) → ['CONTRACT_ENUM']
+PASS  [contract] D27 — Event.code 삭제 (사람이 부르는 이름이 없다) → ['CONTRACT_FIELD']
+PASS  [contract] D27 — EventId 를 다시 문자열로 (초안의 추천) → ['CONTRACT_FIELD']
+PASS  [contract] D27 — §3.3 에 _open-1 표시가 다시 들어옴 → ['CONTRACT_OPEN_LEFT', 'CONTRACT_TYPE_MAP']
+PASS  [contract] D27 — §16 의 _open-2 행에서 "판정됨" 삭제 → ['CONTRACT_OPEN_LEFT']
+PASS  [model] D27 — 패키지 event_ref 가 code 문자열 ("FOMC-20260916") — 브리지의 사건과도 어긋난다 → ['BRIDGE_EVENT', 'EVENT_REF']
+PASS  [model] D27 — 두 사건이 같은 code → ['CODE_DUP']
+PASS  [publish] 불변식 9 — F03 출처가 2차뿐 (D27 — 1차 필수) → ['FACT_NO_PRIMARY']
+```
+
+### 검증 — 전부 다시 돌림 (2026-10-09)
+
+**`python3 scripts/verify-data-model.py`** — 64 건은 그대로다 (채우는 것은 C-3 · C-5 · 파이프라인)
+```
+verify-data-model
+  계약   docs/contract/DATA_MODEL.md
+  실물   브리프 3 — 사실 타입 30종 · FOMC 사실 38 · DC 5
+         골든 — 대기 13 ({'Bridge': 2, 'DerivedClaim': 5, 'Fact 승격': 1, 'Fact 출처': 5}) · 시간 조각 29 ({'DERIVED': 18, 'VOLATILE': 11}) · 인용 2
+         끊긴 F 연결 — DC 있는 claim 17 · 대기 claim 4 · bridge 2 · 그 밖 1
+  시험 사본 — Fact 38 · Claim 5 · Bridge 1 · Source 8 · 시간 조각 29
+         발행 검사에서 막히는 것 64 — CHECK_NO_FACTS 1 · CLAIM_UNCHECKED 2 · DERIVED_INPUT_NO_FACT 4 · DERIVED_UNVERIFIED 1 · FACT_NOT_YET_PUBLIC 9 · FACT_NO_PRIMARY 9 · FACT_NO_SOURCE_SPAN 25 · QUOTE_NO_COMMON_SOURCE 2 · REFS_PENDING 11
+
+
+OK
+```
+`--report` 의 본문 따옴표 절 — 4 → 3
+```
+게이트 3 후보 — 본문 따옴표 (§10.2)
+  basic 3장 concept ['C-0002']  '“라면이 2000원이다”는 그냥 가격입니다.'
+  basic 3장 concept ['C-0002']  '“라면값이 작년보다 5% 올랐다”는 오르는 속도예요.'
+  basic 6장 claim   ['DC-C']  '연준이 던진 질문은 “물가가 나빠졌는가”가 아니었습니다.'
+```
+**`python3 scripts/selftest-verify-data-model.py`** (끝 3줄. 전체 88줄 PASS — 원본 2 + 사본 86)
+```
+PASS  [publish] ARTICLE_PACKAGE §6.2 — 대기 span 이 발행에 남음 → ['REFS_PENDING']
+
+사본 86개 · OK
+```
+처음 돌렸을 때 1 개가 기대와 달랐다: "CHANGELOG B-0.2b 행 삭제" 사본이 통과했다 — 이번에 B-0.2b 행이 둘이 됐는데 사본이 첫 행만 지웠다. 전부 지우게 고쳤다 (검사는 맞았다).
+
+**`python3 scripts/verify-article.py`** — 골든 + invalid 2건
+```
+PASS  fixtures/fomc-2026-09.article.json
+   WARN  0.2 대기 13 span — Bridge 2 · DerivedClaim 5 · Fact 승격 1 · Fact 출처 5
+   WARN  basic[7] blocks/0/paragraphs/0/body "반년 넘게": DERIVED 출처 ['war_start'] 가 브리프 밖
+   WARN  advanced[4] blocks/0/paragraphs/0/body "201일째": DERIVED 불변식 검증 불가 — 개전일이 브리프에 없고 기사 안 출처("2월 말")는 기간이다. 2/28 이면 201, 2/21 이면 208
+   WARN  advanced[4] blocks/0/paragraphs/0/body "201일째": DERIVED 출처 ['war_start'] 가 브리프 밖
+PASS  fixtures/invalid/derived-from-volatile.json  — 거부 기대 DERIVED_FROM_VOLATILE
+   검출: ['DERIVED_FROM_VOLATILE']
+   DERIVED_FROM_VOLATILE: basic[6] blocks/1/paragraphs/1/body "3주 뒤에": 출처 ['minutes'] 가 STABLE 이 아니다 — D8 규칙 4: VOLATILE 로 강등해야 한다
+   골든과 다른 곳 1군데: ['/levels/0/slides/6/_volatility/2/derived_from/0/volatility']
+PASS  fixtures/invalid/volatile-missing-asof.json  — 거부 기대 VOLATILE_MISSING_AS_OF
+   검출: ['VOLATILE_MISSING_AS_OF']
+   VOLATILE_MISSING_AS_OF: basic[3] blocks/0/paragraphs/1/body "지금 미국은 3%대": VOLATILE 인데 as_of 가 없다 (D8)
+   골든과 다른 곳 1군데: ['/levels/0/slides/3/_volatility/0/as_of']
+
+OK
+```
+**`python3 scripts/selftest-verify-article.py`** (끝 3줄)
+```
+  → 전부 기대대로
+
+OK
+```
+**`python3 scripts/compare-reader-text.py`**
+```
+옛 골든 c46871d → 새 골든 fixtures/fomc-2026-09.article.json
+  레벨 2 · 슬라이드 14 · 독자 글 단위 115개 · 3294자 대조
+  허용된 차이 2/2건 (그 밖의 차이는 전부 실패):
+    basic[6] blocks/0 0.body: '세 명만\n“올리자”고 반대' → '세 명만\n올리자고 반대'  (D27 · 0.2b 인용 검사 — 바꿔 말한 것에 발언 표시(따옴표)를 단 것. 따옴표만 뺐다. 도윤 승인)
+    basic[7] blocks/1 p0: '연준이 “확신이 없다”고 말한' → '연준이 확신이 없다고 본'  (D23 · 0.1b PM 검수 #16 — 해석에 원문 표시(따옴표)를 단 것. 도윤 승인 2026-09-29)
+  계약이 버리는 것 (대조 밖): end_actions 2개 · teaser 기호 · 눈금 · modifier · style
+
+OK — 독자 글 불변
+```
+**`python3 scripts/verify-concept-identity.py`** (끝 4줄) · **selftest** (끝 1줄)
+```
+  WARN  LIB_USED_IN_DRIFT: C-0006: 재사용 표는 FOMC-20260916 에서 생성이라는데 used_in 은 없음 — 저장하지 않고 계산한다 (§12)
+  WARN  GOLD_UNPINNED: concept span 21 의 ref 22개가 버전 · part 없는 "C-XXXX" — 브리지 검사는 글자 대조로 대신했다. ConceptRef 로 이전 전 (§16)
+
+OK
+OK
+```
+**`python3 scripts/verify-contract-coverage.py`** (끝 3줄) — ARTICLE_PACKAGE `event_ref` 문구를 고친 뒤
+```
+PASS  10. D22 — Level.label 제거 · 이란 전망 문장 claim · 이란 규칙 범위
+
+OK
+```
+**`python3 scripts/verify-observed.py`** (끝 1줄) · **`diff-observed-article.py`** (끝 2줄 — 관측 대비 바뀐 단위가 11/18 → 12/19, 이번 1건)
+```
+PASS — 슬라이드 수·순서·본문 텍스트가 원본 HTML과 일치
+요약: 본문이 바뀐 슬라이드 [('basic', 2), ('basic', 3), ('basic', 4), ('basic', 6), ('basic', 7), ('advanced', 3)]
+      - 단위 12개 / + 단위 19개 (슬라이드 삭제 0)
+```
+**`python3 scripts/lint-concepts.py`** — exit 1 = "1 걸림", C-1 이 판정한 ANALOGY 오탐 그대로. 회귀 아님
+```
+hits
+  C-0002 ANALOGY   L73   지금  계기판 숫자가 지금 오르는 속도고, 연준이 맞추려는 눈금이 2예요.
+  1 hits
+```
+**`pnpm typecheck`** exit 0 · **`pnpm test`** exit 0 (끝 2줄)
+```
+apps/web test:   44 passed (2.5m)
+apps/web test: Done
+```
+`pnpm test` 가 `logs/frontend/F-2a/` 스크린샷 · 영상 13 개를 다시 썼다 — `git checkout` 으로 되돌렸고 이 커밋에 없다.
+
+### 고치지 않은 것 · 남은 것
+- 골든 refs · `event_ref` 는 아직 옛 모양("F31" · "FOMC-20260916")이다. UUID 로 옮기는 것은 0.2m
+- 이 로그 앞부분(게이트 전 기록)은 그대로 두었다 — "게이트에서 먼저 볼 것" 5 번(“올리자”)은 위에서 고쳤고, 4 번(레인 없는 대기)은 C-3 이 맡는다
+- ARTICLE_PACKAGE 의 남은 "→ 0.2" 문구 · §1 `published_at: Date` · §12-6 "대기 7" 은 이번에도 범위 밖 (계약 §18)

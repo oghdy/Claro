@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.2a 완료 (2026-09-30 · D25) — 이어서 0.2b**
+**Phase 0 / Step 0.2b 완료 (2026-10-09 · D27) — 이어서 0.2c**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -13,7 +13,7 @@
 | 0.1a | ARTICLE_PACKAGE.md 작성 | 계약 1 | S3 | ☑ 2026-09-29 · D20 |
 | 0.1b | 골든을 계약에 맞춰 재작성 (+게이지 → 대조) | 골든 v2 · invalid 재생성 · 검증 스크립트 | 새 세션 | ☑ 2026-09-29 · D23 (`logs/backend/phase-0-step-0-1b.md`) |
 | 0.2a | CONCEPT_IDENTITY.md — 되돌리기 가장 어려운 계약 | 계약 3 | 새 세션 | ☑ 2026-09-30 · D25 (`logs/backend/phase-0-step-0-2a.md`) |
-| 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☐ 프롬프트 준비됨 · 게이트 |
+| 0.2b | DATA_MODEL.md — Fact · Source · 시간 · volatility · Claim · Bridge · Storyline · Event | 계약 2 | 새 세션 | ☑ 2026-10-09 · D27 (`logs/backend/phase-0-step-0-2b.md`) |
 | 0.2c | 관찰 기록 — knowledge_evidence · reading_plan_log · probe · correction_log. **F-3 전에** | 계약 2 추가 | — | ☐ |
 | 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | — | ☐ 0.2c 뒤 |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ◐ 프론트 결정 2026-09-29 · 백엔드는 0.2 뒤 |
@@ -505,8 +505,8 @@ ARTICLE_PACKAGE 는 이것들을 ID 로만 가리켰다. 이 계약이 그 주�
 - [x] 대기 13 분류 (계약으로 풀림 / 콘텐츠 대기) — 계약 §17. 이 계약으로 3 · 콘텐츠 10 (레인 없는 것 2)
 - [x] 0.2m 이전 작업 목록 — 계약 §18 + `verify-data-model.py --report`
 - [x] 검증 스크립트 + 망가뜨린 사본, 기존 검사 회귀 없음 — `scripts/verify-data-model.py` · `scripts/selftest-verify-data-model.py` (사본 80)
-- [ ] **게이트**
-- [ ] 완료일:
+- [x] **게이트** — D27 (2026-10-03). 반영: fact_type 7값 · 1차 출처 필수 · Event · Storyline 도 UUID + code · 레인(C-3 · C-5 · 파이프라인) · 독자 글 1건(“올리자”)
+- [x] 완료일: 2026-10-09
 
 ---
 
@@ -676,5 +676,5 @@ docs/development-backend.md 0.2a 체크 + 완료일
   `scripts/verify-article.py` 도 `date.fromisoformat` 으로 날짜만 받는다
 - JSON 에는 `Date` 가 없으니 문자열 모양(날짜만 `YYYY-MM-DD` 인지, 시각 · 시간대가 붙는지)을 계약에 적어 달라. D6(발행 시각 정책, OPEN)과 묶일 수 있다
 - 프론트는 지금 이 값을 읽지 않는다(계산 없음, D12). `packages/contract` 는 비어 있지 않은 문자열로만 받는다 — 막히는 것 없음
-- **→ 0.2b 답 (게이트 전)**: `"YYYY-MM-DD"` 날짜만. 어느 날짜 · 어느 시간대로 자를지는 D6 (DATA_MODEL §5.3). `packages/contract` 는 그대로 맞다.
+- **→ 0.2b 답 (D27 수용)**: `"YYYY-MM-DD"` 날짜만. 어느 날짜 · 어느 시간대로 자를지는 D6 (DATA_MODEL §5.3). `packages/contract` 는 그대로 맞다.
   ARTICLE_PACKAGE §1 의 `Date` 표기는 이번 수정 범위 밖이라 남아 있다
