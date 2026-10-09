@@ -10,7 +10,7 @@
                  세 브리프의 모든 사실 타입이 §3.3 표에 있다. 공식 op 표 = 실물 7개
   B. 로그        0.2b 로그 머리 요약에 질문 10개가 [계약 반영 / _open / 미확인] 과 근거를 갖는다
   C. 골든        지금 모양(`_` 주석)이 이 계약으로 잃는 것 없이 옮겨지는가 —
-                 R-1 날짜 모양 · 대기 13 = §17 표 · 끊긴 F 연결 ⊆ 브리프 DC 근거 · VOLATILE as_of 가 사실마다 하나 ·
+                 R-1 날짜 모양 · 대기 어휘(need) 와 층 · 끊긴 F 연결 ⊆ 브리프 DC 근거 · VOLATILE as_of 가 사실마다 하나 ·
                  시간 조각이 그 글에 한 번 · 인용 출처 표시 ⊇ body refs · 인용 body 에 따옴표 없음
   D. 시험 사본   골든 + FOMC 브리프를 이 계약 모양으로 **메모리 안에서** 옮기고(시험용 UUID) 불변식을 돌린다.
                  지금 검사는 통과해야 하고, 발행 검사에서 막히는 것은 WARN 으로 센다 (§18 — 0.2m · 콘텐츠가 채울 것).
@@ -87,6 +87,8 @@ FOREIGN_TYPES = ('Concept', 'ConceptVersion', 'ConceptRef', 'ConceptAlias', 'Con
 NO_REAL_SECTIONS = ('3.2', '4.2', '4.4', '8.2', '9.2')
 TYPE_MARKERS = ('행마다', '나눈다')                      # D27 — _open-1 은 닫혔다. 7값이거나 이 둘이어야 한다
 MARKS = ('계약 반영', '_open', '미확인')
+# 대기 어휘 → 붙을 수 있는 층 (ARTICLE_PACKAGE §6.2 · 불변식 25)
+PENDING_NEEDS = {'Bridge': {'bridge'}, 'DerivedClaim': {'claim'}, 'Fact 출처': {'fact'}, 'Fact 승격': {'fact'}}
 
 
 def ts_aliases(text):
@@ -148,17 +150,6 @@ def type_map(text):
 def op_table(text):
     _, body = sec_by_num(text, '6.4')
     return {m.group(1) for cells in table_rows(body) for m in [re.match(r'^`(\w+)`$', cells[0])] if m}
-
-
-def pending_table(text):
-    """§17 표 → [(레벨, 장, 글, layer, need)]"""
-    _, body = sec_by_num(text, '17.')
-    out = []
-    for cells in table_rows(body):
-        if len(cells) >= 5 and cells[0].isdigit():
-            lv, n = cells[1].split()
-            out.append((lv, int(n), cells[2], cells[3], cells[4]))
-    return out
 
 
 def brief_types():
@@ -354,22 +345,15 @@ def check_golden(g, contract_text, facts, claims):
     # R-1 — published_at 은 날짜만 (§5.3)
     if not (isinstance(g.get('published_at'), str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', g['published_at'])):
         E('GOLD_PUBLISHED_AT_SHAPE', f'published_at={g.get("published_at")!r} — "YYYY-MM-DD" 여야 한다 (§5.3 · R-1)')
-    # 대기 = §17 표
+    # 대기 — 어휘와 층만 본다 (불변식 25). 목록 · 수는 실물에서 센다 — 계약 글과 대조하지 않는다 (0.2m-a)
     pend = [(lid, n, sp['text'], sp['layer'], sp['_refs_pending'].get('need'), path)
             for lid, n, path, sp in golden_spans(g) if isinstance(sp.get('_refs_pending'), dict)]
-    table = pending_table(contract_text)
-    left = list(pend)
-    for row in table:
-        lv, n, txt, layer, need = row
-        prefix = VA.strip_tags(txt.replace('…', '')).strip()
-        hit = next((p for p in left if p[0] == lv and p[1] == n and p[3] == layer and p[4] == need
-                    and VA.strip_tags(p[2]).strip().startswith(prefix)), None)
-        if hit:
-            left.remove(hit)
-        else:
-            E('GOLD_PENDING_TABLE', f'§17 행 {lv} {n} "{txt[:20]}" {layer}/{need} 가 골든 대기에 없다')
-    for p in left:
-        E('GOLD_PENDING_TABLE', f'골든 대기 {p[0]} {p[1]} "{p[2][:20]}" {p[3]}/{p[4]} 가 §17 표에 없다')
+    for lid, n, txt, layer, need, path in pend:
+        if need not in PENDING_NEEDS:
+            E('GOLD_PENDING_NEED', f'{lid} {n}장 "{txt[:20]}": need {need!r} 가 대기 어휘 {sorted(PENDING_NEEDS)} 밖이다 (불변식 25)')
+        elif layer not in PENDING_NEEDS[need]:
+            E('GOLD_PENDING_NEED', f'{lid} {n}장 "{txt[:20]}": {layer} 층에 need {need!r} — 층과 맞지 않는다 (불변식 25)')
+    rep['pending_list'] = pend
     rep['pending'] = Counter(p[4] for p in pend)
     # 끊긴 F 연결 — DC 있는 claim span 은 그 DC 의 브리프 근거 안이어야 잃는 것이 없다 (§7.2)
     for lid, n, path, sp in golden_spans(g):
@@ -865,6 +849,9 @@ def report_out(rep, model, fb):
     print('\n골든 VOLATILE → Fact.as_of (§6.2)')
     for f, a in sorted(rep['as_of'].items()):
         print(f'  {f} as_of {a}')
+    print(f'\n골든 대기 span {len(rep["pending_list"])} — 실물에서 센다 (불변식 25)')
+    for lid, n, t, layer, need, _ in rep['pending_list']:
+        print(f'  {lid:<8} {n}장 {layer:<6} {need:<12} "{VA.strip_tags(t).strip()[:36]}"')
     print('\n끊긴 F 연결 — 대기 claim (C-5 근거 후보) · bridge (Bridge.facts) · 그 밖')
     for lid, n, t, d in rep['dropped_pending']:
         print(f'  claim  {lid} {n}장 {d}  "{t[:30]}"')

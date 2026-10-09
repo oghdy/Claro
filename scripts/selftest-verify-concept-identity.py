@@ -61,6 +61,26 @@ def lib_in(code, old, new):
     return f
 
 
+def bump_version(code):
+    """그 개념의 `version` 줄을 한 버전 올린다 — 글자가 아니라 자리(메타 줄)로 찾는다. 라이브러리 버전이 올라도 사본이 만들어진다"""
+    def f(lib):
+        blk = concept_block(lib, code)
+        m = re.search(r'^- `version`: v(\d+) \((\d{4}-\d{2}-\d{2})\)$', blk, re.M)
+        assert m, f'{code}: version 줄이 없다'
+        return lib.replace(blk, blk.replace(m.group(), f'- `version`: v{int(m.group(1)) + 1} ({m.group(2)})', 1))
+    return f
+
+
+def drop_field_body(code, field):
+    """그 개념의 **FIELD** 머리 바로 아래 인용 블록(본문)을 지운다 — 문안 글자에 기대지 않는다"""
+    def f(lib):
+        blk = concept_block(lib, code)
+        m = re.search(rf'^(\*\*{field}\*\*[^\n]*\n)((?:>[^\n]*\n)+)', blk, re.M)
+        assert m, f'{code}: {field} 본문이 없다'
+        return lib.replace(blk, blk.replace(m.group(), m.group(1), 1))
+    return f
+
+
 def gold_slide(fn):
     def f(g):
         g = copy.deepcopy(g)
@@ -148,12 +168,12 @@ CASES = [
     ('§13-3 — canonical_name 겹침', 'library',
      lambda t: sub(t, '### C-0009 · `FEDERAL_VS_STATE`', '### C-0009 · `POLICY_STATEMENT_VS_RULE`'), {'LIB_DUP'}),
     ('§13-4 — status ACTIVE', 'library', lib_in('C-0007', '`status`: CANONICAL', '`status`: ACTIVE'), {'LIB_STATUS'}),
-    ('§13-5 — C-0002 v4, CHANGELOG 에 v4 없음', 'library',
-     lib_in('C-0002', '`version`: v3 (2026-09-29)', '`version`: v4 (2026-09-30)'), {'LIB_VERSION'}),
+    ('§13-5 — C-0002 버전을 하나 올림, CHANGELOG 에 그 버전 없음', 'library',
+     bump_version('C-0002'), {'LIB_VERSION'}),
     ('§13-5 — CHANGELOG 에서 C-0005 v2 줄 삭제 (v2 이력 빠짐)', 'library',
      lambda t: sub(t, ' · C-0005 v2 — REFRESHER 교체', ' · REFRESHER 교체'), {'LIB_VERSION'}),
     ('§13-7 — C-0009 REFRESHER 본문 삭제', 'library',
-     lib_in('C-0009', '> 연방과 주는 권한이 달라서 규제 강도가 다를 수 있습니다.\n', ''), {'LIB_MISSING'}),
+     drop_field_body('C-0009', 'REFRESHER'), {'LIB_MISSING'}),
     ('§13-8 — 🔗 슬롯이 없는 단계 뒤 (③ → ⑤ 바로 다음)', 'library',
      lib_in('C-0002', '③ 바로 다음에', '⑤ 바로 다음에'), {'LIB_BRIDGE_SLOT'}),
     ('§13-8 — 🔗 브리지 메모 통째 삭제 → 비유가 없는 ④ 를 요구', 'library',
@@ -210,7 +230,8 @@ CASES = [
      set_ref(1, 3, ['blocks', 1, 'paragraphs', 1, 'body', 0], part='FULL'), {'GOLD_PART_MISMATCH'}),
     ('§13-12 — 그 버전에 없는 part (헤드라인에 "FULL:⑤")', 'mgold',
      set_ref(0, 2, ['headline', 0], part='FULL:⑤'), {'GOLD_PART_UNKNOWN'}),
-    ('§13-12 — 없는 버전 (C-0002@4)', 'mgold', set_ref(0, 2, ['headline', 0], version=4), {'GOLD_REF_VERSION'}),
+    ('§13-12 — 없는 버전 (C-0002 의 지금 버전 + 1)', 'mgold', set_ref(0, 2, ['headline', 0], version=CUR['C-0002'] + 1),
+     {'GOLD_REF_VERSION'}),
     ('§13-12 — 풀 수 없는 concept_id', 'mgold',
      set_ref(0, 2, ['headline', 0], concept_id='00000000-0000-0000-0000-000000000000'), {'GOLD_REF_UNKNOWN'}),
     ('§3.2 — ConceptRef 에 part 필드가 없다', 'mgold', set_ref(0, 2, ['headline', 0]), {'GOLD_REF_SHAPE'}),

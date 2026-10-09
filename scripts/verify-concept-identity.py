@@ -167,6 +167,7 @@ META = re.compile(r'^- `(\w+)`: (.*)$')
 PROP = re.compile(r'^\*\*명제\*\*: (.*)$')
 FIELD_H = re.compile(r'^\*\*([A-Z]+)\*\*(.*)$')
 CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩'
+NOTE_MARKS = ('⚠️', '🚨', '🔗')
 STATUS = REQUIRED_ENUMS[('Concept', 'status')]
 
 
@@ -217,7 +218,9 @@ def parse_library(text):
                 block.append(clean(lines[i]))
                 i += 1
             body = [b for b in block if b]
-            if field and blocks_since == 0:
+            # 필드 머리 다음 첫 인용 블록이 본문이다. 단 메모 표시(⚠️ · 🚨 · 🔗)로 시작하면 본문이 아니라 메모다 —
+            # 본문이 빠진 개념에서 운영 노트를 본문으로 읽지 않는다 (0.2m-a: C-0009 REFRESHER 를 지워도 통과하던 구멍)
+            if field and blocks_since == 0 and not (body and body[0].startswith(NOTE_MARKS)):
                 cur['fields'][field]['body'] = body
             elif body:
                 cur['notes'].append({'field': field, 'lines': body})
