@@ -5,13 +5,14 @@
 //   2  open_questions.length == slides.length − 1, text 비어 있지 않음
 //   3  다른 슬라이드를 가리키는 필드 없음 — 계약에 없는 필드는 전부 실패라서 함께 잡힌다
 //   4  모든 블록에 type · text, 원형이면 text == linearize(block)
-//   6  모든 span 에 layer (5개 중 하나), refs 는 문자열 목록
+//   6  모든 span 에 layer (5개 중 하나), refs 는 그 층의 Ref 목록 — concept 층은 ConceptRef { concept_id, version, part },
+//      나머지 층은 UUID 문자열 (DATA_MODEL §2.2 · CONCEPT_IDENTITY §3.2). 모양만 본다
 //   7  인라인 서식은 <b> 와 \n 뿐, <b> 는 span 을 넘지 않는다
 //   8  emphasized 항목을 <b> 로 통째 감싸지 않는다
 //
 // 확인하지 않는 것
 //   5  원형 목록 밖 type — 실패가 아니라 경고. 프론트는 text 로 그린다 (§7.9 · D14)
-//   6  refs 개수 — 프론트는 layer 만 읽는다(§6.2). refs 의 뜻과 개수는 0.2 · 백엔드 발행 검사
+//   6  refs 개수 · 가리킨 것이 있는가 — 프론트는 layer 만 읽는다(§6.2). 백엔드 발행 검사가 본다
 //   9  시간 필드 — 계약에 없는 필드는 3 에서 이미 실패
 //   10 `_` 필드 — 픽스처 주석이다. 무시하고, 돌려주는 패키지에서는 뺀다
 import { inlineFormatProblem } from "./inline";
@@ -38,6 +39,21 @@ export type ValidationResult =
 type Obj = Record<string, unknown>;
 
 const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== null && !Array.isArray(v);
+
+/** ConceptRef 의 모양 — 필드 셋이 정확히 있고 다른 필드는 없다 */
+function isConceptRef(r: unknown): boolean {
+  if (!isObj(r)) return false;
+  const keys = Object.keys(r);
+  return (
+    keys.length === 3 &&
+    typeof r.concept_id === "string" &&
+    !!r.concept_id &&
+    typeof r.version === "number" &&
+    Number.isInteger(r.version) &&
+    r.version >= 1 &&
+    (r.part === null || (typeof r.part === "string" && !!r.part))
+  );
+}
 
 /** `_` 로 시작하는 필드를 전부 뺀 사본 (§9-10) */
 export function stripAnnotations<T>(v: T): T {
@@ -112,7 +128,11 @@ export function validateArticlePackage(input: unknown): ValidationResult {
       if (p) E(p.includes("넘는다") ? "BOLD_CROSSES_SPAN" : "INLINE_FORMAT", path, `${p} — ${JSON.stringify(text.slice(0, 30))}`);
     }
     if (!(LAYERS as readonly unknown[]).includes(layer)) E("SPAN_LAYER", path, `layer=${JSON.stringify(layer)}`);
-    if (!Array.isArray(refs) || refs.some((r) => typeof r !== "string")) E("SPAN_REFS", path, "refs 가 문자열 목록이 아니다");
+    if (!Array.isArray(refs)) E("SPAN_REFS", path, "refs 가 목록이 아니다");
+    else if (layer === "concept") {
+      if (!refs.every(isConceptRef)) E("SPAN_REFS", path, "concept 층의 Ref 는 ConceptRef { concept_id, version, part } 다 (CONCEPT_IDENTITY §3.2)");
+    } else if (refs.some((r) => typeof r !== "string" || !r))
+      E("SPAN_REFS", path, `${String(layer)} 층의 Ref 는 UUID 문자열 하나다 (DATA_MODEL §2.2)`);
   }
 
   function emphasized(it: Obj, fields: string[], path: string) {

@@ -1,8 +1,28 @@
 // docs/contract/ARTICLE_PACKAGE.md §1 · §7 을 코드로 옮긴 것. 원본은 그 문서다.
 // 계약에 없는 필드를 여기서 만들지 않는다. 바꿔야 할 게 보이면 docs/development-backend.md "계약 변경 요청".
 
-/** 0.2 가 모양을 정한다. 지금은 문자열 ID 로만 다룬다 (§1). */
-export type Ref = string;
+// 참조 — 원소 모양은 span 의 층이 정한다 (§6 표 · DATA_MODEL §2.2 · CONCEPT_IDENTITY §3.2).
+// 프론트는 refs 를 읽지 않는다 — layer 만 있으면 그린다 (§6). 여기서는 모양만 안다.
+export type UUID = string;
+
+/** Fact 의 UUID. label("F31")은 참조에 쓰지 않는다 */
+export type FactRef = UUID;
+/** DerivedClaim 의 UUID */
+export type ClaimRef = UUID;
+/** Bridge 의 UUID */
+export type BridgeRef = UUID;
+/** Event 의 UUID. code("FOMC-20260916")가 아니다 (D27) */
+export type EventRef = UUID;
+
+/** 개념의 한 버전 · 한 문안. part 가 null 이면 문안을 옮기지 않은 언급이다 (D25) */
+export interface ConceptRef {
+  concept_id: UUID;
+  version: number;
+  part: string | null;
+}
+
+/** fact · claim · bridge 층의 Ref 는 UUID 하나, concept 층의 Ref 는 ConceptRef */
+export type Ref = FactRef | ClaimRef | BridgeRef | ConceptRef;
 
 export type Layer = "fact" | "claim" | "concept" | "bridge" | "writing";
 
@@ -12,7 +32,7 @@ export const LAYERS: readonly Layer[] = ["fact", "claim", "concept", "bridge", "
 export interface Span {
   text: string;
   layer: Layer;
-  /** writing 이면 [], 나머지는 1개 이상 (픽스처의 0.2 대기만 예외 — §6.2) */
+  /** writing 이면 [], 나머지는 1개 이상 (픽스처의 대기만 예외 — §6.2). 원소 모양은 layer 가 정한다 */
   refs: Ref[];
 }
 
@@ -24,7 +44,7 @@ export type LevelId = "basic" | "intermediate" | "advanced";
 export const LEVEL_IDS: readonly LevelId[] = ["basic", "intermediate", "advanced"];
 
 export interface ArticlePackage {
-  event_ref: Ref;
+  event_ref: EventRef;
   title: string;
   lang: "ko";
   published_at: string;

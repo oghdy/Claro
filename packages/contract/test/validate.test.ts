@@ -93,6 +93,36 @@ describe("위반은 거부한다", () => {
     expect(codes(d)).toEqual(["SPAN_LAYER"]);
   });
 
+  it("refs 는 층이 정한 모양이다 — concept 층은 ConceptRef, 나머지는 UUID 문자열 (§6 · DATA_MODEL §2.2)", () => {
+    // 골든: 입문 3장 헤드라인은 concept 층, 입문 1장 헤드라인은 fact 층
+    const concept = (d: any) => d.levels[0].slides[2].headline[0];
+    const fact = (d: any) => d.levels[0].slides[0].headline[0];
+    expect(concept(golden()).layer).toBe("concept");
+    expect(fact(golden()).layer).toBe("fact");
+    expect(concept(golden()).refs[0]).toEqual({ concept_id: expect.any(String), version: expect.any(Number), part: null });
+    expect(typeof fact(golden()).refs[0]).toBe("string");
+
+    const cases: [string, (d: any) => void][] = [
+      ["concept 층에 옛 문자열 \"C-0002\"", (d) => (concept(d).refs = ["C-0002"])],
+      ["ConceptRef 에 part 가 없다", (d) => delete concept(d).refs[0].part],
+      ["ConceptRef 에 계약에 없는 필드", (d) => (concept(d).refs[0].code = "C-0002")],
+      ["ConceptRef 의 version 이 문자열", (d) => (concept(d).refs[0].version = "4")],
+      ["ConceptRef 의 version 이 0", (d) => (concept(d).refs[0].version = 0)],
+      ["fact 층에 ConceptRef 객체", (d) => (fact(d).refs = [{ concept_id: "x", version: 1, part: null }])],
+      ["fact 층에 숫자", (d) => (fact(d).refs = [31])],
+      ["refs 가 목록이 아니다", (d) => (fact(d).refs = "F01")],
+    ];
+    for (const [name, mutate] of cases) {
+      const d = golden();
+      mutate(d);
+      expect(codes(d), name).toEqual(["SPAN_REFS"]);
+    }
+    // part 는 문자열이거나 null — 문안 이름이 맞는지는 백엔드 검사(CONCEPT_IDENTITY 불변식 12)가 본다
+    const ok = golden();
+    concept(ok).refs[0].part = "FULL:②";
+    expect(codes(ok)).toEqual([]);
+  });
+
   it("emphasized 항목을 <b> 로 또 감쌈 → EMPHASIZED_DOUBLE (§9-8)", () => {
     const d = golden();
     // 골든에서 emphasized 가 있는 첫 항목을 찾아 value 를 통째 굵게
