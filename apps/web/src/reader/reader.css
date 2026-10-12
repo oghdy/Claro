@@ -1,0 +1,186 @@
+/* 읽는 화면 (D26). 값은 토큰(@claro/tokens → layout.tsx 가 :root 에 CSS 변수로 싣는다)에서 온다.
+   색은 바탕 · 면 두 단계 · 글 세 단계뿐이다. 뜻에 따라 바뀌는 색 없음 (D20).
+   움직임은 Motion 이 한다 (Reader.tsx · motions.ts). 여기서 움직이는 것은 누름 반응과 "아래에 더" 뿐이다 */
+:root:has(.reader) body { background: var(--c-bg); }
+.reader {
+  position: fixed; inset: 0; display: flex; flex-direction: column;
+  background: var(--c-bg); color: var(--c-ink);
+  font-family: var(--font); letter-spacing: var(--track-body);
+  word-break: keep-all; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+}
+/* :where — 아래의 버튼 규칙(.r-ask 등)이 글자 크기를 정할 수 있게 무게를 0 으로 둔다 */
+:where(.reader) button { font: inherit; letter-spacing: inherit; color: inherit; cursor: pointer; margin: 0; -webkit-tap-highlight-color: transparent; }
+.reader button:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+
+/* 위쪽 줄 — 장수 + 지나온 길 · 레벨 · 층. 진행 막대는 없다 */
+.r-bar { flex: none; width: 100%; max-width: var(--column); margin: 0 auto; padding: 12px 14px 8px; }
+.r-row { display: flex; align-items: center; }
+.r-where { display: flex; align-items: baseline; gap: 7px; margin-right: auto; border: 0; border-radius: var(--r-control); padding: 8px 11px; background: var(--c-surface); }
+.r-where[aria-expanded="true"] { background: var(--c-surface2); }
+.r-count { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.r-where-label { font-size: 12px; font-weight: 600; color: var(--c-faint); }
+.r-levels { display: flex; gap: 2px; padding: 2px; border-radius: var(--r-control); background: var(--c-surface); }
+.r-levels button { border: 0; background: none; font-size: var(--t-ui-size); font-weight: var(--t-ui-weight); padding: 5px 11px; border-radius: var(--r-chip); color: var(--c-faint); }
+.r-levels button[aria-pressed="true"] { background: var(--c-surface2); color: var(--c-ink); }
+.r-lens { margin-left: 8px; border: 0; border-radius: var(--r-control); padding: 9px 12px; line-height: 1; background: var(--c-surface); font-size: var(--t-ui-size); font-weight: var(--t-ui-weight); color: var(--c-faint); }
+.r-lens[aria-pressed="true"] { background: var(--c-ink); color: var(--c-bg); }
+.r-legend { margin: 8px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--c-muted); }
+
+/* 장 — 같은 자리에 겹쳐 있고 지금 장만 보인다. 옆으로 움직이는 것이 없다 */
+.r-stage { position: relative; flex: 1; min-height: 0; display: flex; justify-content: center; }
+.r-deck { flex: 1; max-width: var(--column); min-height: 0; display: grid; overflow: hidden; }
+.r-card {
+  grid-area: 1 / 1; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; touch-action: pan-y pinch-zoom;
+  opacity: 0; pointer-events: none; outline: none;
+}
+.r-card[data-active], .r-card[data-leaving] { opacity: 1; }
+.r-card[data-active] { pointer-events: auto; z-index: 1; }
+.r-leave { min-height: 100%; display: flex; flex-direction: column; padding: var(--s-page-top) var(--s-page-x) calc(var(--s-page-bottom) + env(safe-area-inset-bottom)); }
+
+/* 이 장의 머리 = 방금 누른 물음. 버튼 안의 글자와 글자 · 폭이 같다 — 그래서 올라오는 동안 줄바꿈이 안 바뀐다 */
+.r-asked { position: relative; margin-bottom: var(--s-asked-after); padding-bottom: var(--s-asked-rule); }
+.r-asked-fly {
+  position: relative; z-index: 2; margin: 0; width: calc(100% - var(--s-ask-pad) * 2 - var(--s-ask-gap) - var(--s-ask-arrow));
+  font-size: var(--t-ask-size); font-weight: var(--t-ask-weight); line-height: var(--t-ask-line); color: var(--c-ink);
+}
+.r-asked-text { position: relative; }
+.r-asked-rule { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--c-rule); transform-origin: left center; }
+/* 버튼의 하얀 면 — 평소엔 걷혀 있다. 물음이 올라오는 동안에만 Reader 가 편다. 글자는 머리와 같은 글(data-q)을 그 위에 겹쳐 그린다 */
+.r-asked-plate {
+  position: absolute; z-index: 1; left: calc(var(--s-ask-pad) * -1); top: calc(var(--s-ask-pad) * -1);
+  width: calc(100% + var(--s-ask-pad) * 2 + var(--s-ask-gap) + var(--s-ask-arrow));
+  clip-path: inset(0% 0% 100% 0%); pointer-events: none;
+}
+.r-asked-plate::before { content: attr(data-q); flex: 1; }
+
+/* 물음 = 다음으로 가는 유일한 길 */
+.r-ask, .r-asked-plate {
+  display: flex; align-items: center; gap: var(--s-ask-gap); box-sizing: border-box; text-align: left;
+  border: 0; border-radius: var(--r-ask); padding: var(--s-ask-pad); background: var(--c-ask-face); color: var(--c-ask-ink);
+  font-size: var(--t-ask-size); font-weight: var(--t-ask-weight); line-height: var(--t-ask-line);
+}
+.r-ask { width: 100%; }
+.r-ask-q { flex: 1; }
+.r-ask-arrow::before, .r-asked-plate::after { content: "↓"; flex: none; display: block; width: var(--s-ask-arrow); text-align: center; font-size: 18px; }
+.r-ask-arrow { flex: none; }
+.r-ask:active { opacity: 0.86; }
+/* 끝자리 — 짧은 장에서는 화면 아래쪽에 선다. 끝이 화면에 나오기 전에는 누를 수 없다 */
+.r-end { position: relative; margin-top: auto; padding-top: var(--s-end-before); pointer-events: none; }
+.r-card[data-ended] .r-end { pointer-events: auto; }
+.r-end-mark { position: absolute; left: 0; top: var(--s-end-before); width: 1px; height: 40px; }
+.r-last { display: flex; flex-direction: column; gap: 10px; }
+.r-reread { justify-content: center; text-align: center; }
+.r-restart { justify-content: center; background: var(--c-surface2); color: var(--c-ink); }
+/* 마지막 장 — 지나온 물음 전부 */
+.r-path { margin-bottom: 8px; padding-top: 18px; border-top: 1px solid var(--c-rule); }
+.r-path p { margin: 0 0 8px; font-size: var(--t-label-size); font-weight: var(--t-label-weight); color: var(--c-faint); }
+.r-path ol { margin: 0; padding-left: 1.3em; font-size: var(--t-note-size); line-height: 1.75; color: var(--c-muted); }
+
+/* 글 */
+.r-slide [data-layer] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.r-kicker { width: fit-content; margin: 0 0 var(--s-kicker-after); padding: 4px 9px; border-radius: var(--r-chip); background: var(--c-surface); font-size: var(--t-kicker-size); font-weight: var(--t-kicker-weight); color: var(--c-muted); }
+.r-headline { margin: 0 0 var(--s-headline-after); font-size: var(--t-headline-size); line-height: var(--t-headline-line); font-weight: var(--t-headline-weight); letter-spacing: var(--track-headline); }
+.r-blocks { display: flex; flex-direction: column; gap: var(--s-block); }
+.r-prose { display: flex; flex-direction: column; gap: var(--s-para); }
+.r-p { margin: 0; font-size: var(--t-body-size); line-height: var(--t-body-line); }
+.r-p[data-weight="secondary"] { font-size: var(--t-secondary-size); line-height: var(--t-secondary-line); color: var(--c-muted); }
+/* callout — 멈추고 짚는 문단. 자료(대조 · 인용 · 표)의 면과 구분되게 왼쪽 선으로 */
+.r-p[data-weight="callout"] { border-left: 2px solid var(--c-ink); padding: 2px 0 2px 14px; }
+.r-p[data-weight="conclusion"] { font-size: var(--t-conclusion-size); line-height: var(--t-conclusion-line); font-weight: var(--t-conclusion-weight); padding-top: 6px; }
+
+.r-quote { margin: 0; padding: var(--s-card-pad) 15px; border-radius: var(--r-card); background: var(--c-surface); }
+.r-attr { font-size: var(--t-kicker-size); font-weight: 600; color: var(--c-muted); margin-bottom: 6px; }
+.r-qbody { margin: 0; font-size: var(--t-quote-size); line-height: var(--t-quote-line); }
+
+.r-list { margin: 0; padding: 4px 0 0; list-style: none; display: flex; flex-direction: column; }
+.r-li { position: relative; padding: 0 0 14px 22px; display: flex; flex-direction: column; font-size: var(--t-item-size); line-height: var(--t-item-line); }
+/* 순서 목록 — 선과 점. 간격은 순서만 뜻한다 — 등간격 (D20). 모든 점이 같다 */
+.r-li::before { content: ""; position: absolute; left: 3px; top: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--c-muted); }
+.r-list[data-ordered] .r-li:not(:last-child)::after { content: ""; position: absolute; left: 6px; top: 17px; bottom: 0; width: 1px; background: var(--c-rule); }
+.r-li-label { font-size: var(--t-label-size); font-weight: var(--t-label-weight); color: var(--c-muted); }
+.r-li[data-emphasized] .r-li-body { font-weight: 700; }
+
+.r-contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.r-c { padding: 13px 13px 14px; border-radius: var(--r-card); background: var(--c-surface); }
+.r-c-label { font-size: var(--t-kicker-size); font-weight: 600; color: var(--c-muted); }
+.r-c-value { font-size: var(--t-value-size); line-height: var(--t-value-line); font-weight: var(--t-value-weight); margin-top: 4px; letter-spacing: var(--track-value); font-variant-numeric: tabular-nums; }
+.r-c-body { font-size: 13.5px; line-height: 1.5; margin-top: 5px; }
+.r-c[data-emphasized] .r-c-value, .r-c[data-emphasized] .r-c-body { font-weight: 800; }
+
+.r-sheet { margin: 0; border-radius: var(--r-card); background: var(--c-surface); padding: 2px var(--s-card-pad); }
+.r-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; }
+.r-row + .r-row { border-top: 1px solid var(--c-rule); }
+.r-row dt { font-size: 13px; line-height: 1.45; color: var(--c-muted); }
+.r-row dd { margin: 0; font-size: var(--t-sheet-value-size); font-weight: var(--t-sheet-value-weight); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* 안내 — 첫 장 글 아래에 한 줄 */
+.r-tip { margin: 18px 0 0; font-size: var(--t-label-size); color: var(--c-faint); }
+
+/* 지나온 길 */
+.r-trail { position: absolute; z-index: 10; top: 0; left: 0; right: 0; max-width: var(--column); margin: 0 auto; max-height: 100%; overflow-y: auto; padding: 6px 14px 14px; background: var(--c-bg); border-bottom: 1px solid var(--c-rule); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5); }
+.r-trail ol { list-style: none; margin: 0; padding: 0; }
+.r-trail li + li { border-top: 1px solid var(--c-rule); }
+.r-trail button { width: 100%; display: flex; align-items: baseline; gap: 10px; text-align: left; border: 0; background: none; padding: 13px 4px; font-size: 15px; line-height: 1.45; color: var(--c-muted); }
+.r-trail-n { flex: none; min-width: 1.2em; font-size: 12px; font-weight: 600; color: var(--c-faint); font-variant-numeric: tabular-nums; }
+.r-trail-t { flex: 1; }
+.r-trail li[aria-current] button { color: var(--c-ink); font-weight: 700; }
+.r-trail-here { flex: none; font-size: 11.5px; font-weight: 600; color: var(--c-faint); }
+
+.r-more {
+  position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; padding: 26px 0 12px; text-align: center; pointer-events: none;
+  font-size: 12px; font-weight: 600; color: var(--c-muted); background: linear-gradient(to bottom, transparent, var(--c-bg) 55%);
+  opacity: 0; transition: opacity var(--m-panel);
+}
+.r-more[data-show] { opacity: 1; }
+
+/* 누른 문장 — 모든 층이 같은 표시(밑줄). 무엇인지는 아래 글이 말한다 */
+.reader [data-layer][data-selected] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; background: var(--c-surface2); border-radius: 3px; }
+.r-sheet-word { flex: none; font-size: 15px; color: var(--c-ink); }
+.r-sheet-close { margin-left: auto; font-size: 18px; line-height: 1; color: var(--c-faint); }
+div.r-sheet {
+  position: absolute; z-index: 12; left: 12px; right: 12px; bottom: 12px; max-width: calc(var(--column) - 24px); margin: 0 auto;
+  display: flex; align-items: baseline; gap: 10px; padding: 14px 16px; border-radius: var(--r-ask);
+  background: var(--c-surface2); font-size: var(--t-note-size); line-height: var(--t-note-line); color: var(--c-muted); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* 층 꼬리표 — 층이 바뀌는 자리에만. 모든 층이 같은 모양 · 같은 색, 다른 건 글자뿐 (D20). 글자는 copy.ts 에서 온다 (--w-*) */
+.reader[data-layers="on"] .r-slide [data-layer]:not([data-layer="writing"])::before {
+  display: inline-block; margin-right: 0.35em; padding: 2px 4px; vertical-align: 0.15em;
+  font-size: var(--t-tag-size); font-weight: var(--t-tag-weight); line-height: var(--t-tag-line); letter-spacing: 0; color: var(--c-muted);
+  border: 1px solid var(--c-faint); border-radius: var(--r-tag);
+}
+.reader[data-layers="on"] .r-slide [data-layer="fact"]::before { content: var(--w-fact); }
+.reader[data-layers="on"] .r-slide [data-layer="claim"]::before { content: var(--w-claim); }
+.reader[data-layers="on"] .r-slide [data-layer="concept"]::before { content: var(--w-concept); }
+.reader[data-layers="on"] .r-slide [data-layer="bridge"]::before { content: var(--w-bridge); }
+/* 같은 층이 이어지면 첫 문장에만 */
+.reader[data-layers="on"] .r-slide [data-layer="fact"] + [data-layer="fact"]::before, .reader[data-layers="on"] .r-slide [data-layer="claim"] + [data-layer="claim"]::before, .reader[data-layers="on"] .r-slide [data-layer="concept"] + [data-layer="concept"]::before, .reader[data-layers="on"] .r-slide [data-layer="bridge"] + [data-layer="bridge"]::before { content: none; }
+/* 대조 · 표 · 목록 — 라벨과 값 · 글이 같은 층이면 라벨에만 붙인다. 층이 다르면 둘 다 붙는다 */
+.reader[data-layers="on"] .r-c:has(.r-c-label [data-layer="fact"]) .r-c-value [data-layer="fact"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-label [data-layer="fact"]) .r-c-body [data-layer="fact"]::before,
+.reader[data-layers="on"] .r-row:has(dt [data-layer="fact"]) dd [data-layer="fact"]::before,
+.reader[data-layers="on"] .r-li:has(.r-li-label [data-layer="fact"]) .r-li-body [data-layer="fact"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-value [data-layer="fact"]) .r-c-body [data-layer="fact"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-label [data-layer="claim"]) .r-c-value [data-layer="claim"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-label [data-layer="claim"]) .r-c-body [data-layer="claim"]::before,
+.reader[data-layers="on"] .r-row:has(dt [data-layer="claim"]) dd [data-layer="claim"]::before,
+.reader[data-layers="on"] .r-li:has(.r-li-label [data-layer="claim"]) .r-li-body [data-layer="claim"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-value [data-layer="claim"]) .r-c-body [data-layer="claim"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-label [data-layer="concept"]) .r-c-value [data-layer="concept"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-label [data-layer="concept"]) .r-c-body [data-layer="concept"]::before,
+.reader[data-layers="on"] .r-row:has(dt [data-layer="concept"]) dd [data-layer="concept"]::before,
+.reader[data-layers="on"] .r-li:has(.r-li-label [data-layer="concept"]) .r-li-body [data-layer="concept"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-value [data-layer="concept"]) .r-c-body [data-layer="concept"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-label [data-layer="bridge"]) .r-c-value [data-layer="bridge"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-label [data-layer="bridge"]) .r-c-body [data-layer="bridge"]::before,
+.reader[data-layers="on"] .r-row:has(dt [data-layer="bridge"]) dd [data-layer="bridge"]::before,
+.reader[data-layers="on"] .r-li:has(.r-li-label [data-layer="bridge"]) .r-li-body [data-layer="bridge"]::before,
+.reader[data-layers="on"] .r-c:has(.r-c-value [data-layer="bridge"]) .r-c-body [data-layer="bridge"]::before { content: none; }
+
+@media (min-width: 700px) {
+  .r-stage { padding: 12px 0 20px; }
+  .r-deck { border-radius: var(--r-frame); box-shadow: 0 0 0 1px var(--c-rule); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .r-more { transition: none; }
+}

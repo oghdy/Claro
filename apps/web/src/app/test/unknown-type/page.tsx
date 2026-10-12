@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { parseArticlePackage } from "@claro/contract";
-import { ArticleReader } from "../../../components/ArticleReader";
 import { loadRaw } from "../../../lib/load";
+import { Reader } from "../../../reader/Reader";
+import "../../../reader/reader.css";
 
 export const metadata: Metadata = { title: "Claro — 테스트: 모르는 type" };
 
@@ -20,5 +21,5 @@ function build(): unknown {
 }
 
 export default function Page() {
-  return <ArticleReader pkg={parseArticlePackage(build())} />;
+  return <Reader pkg={parseArticlePackage(build())} />;
 }
