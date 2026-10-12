@@ -347,8 +347,10 @@ def check_origin(store, record, contract_text, fb, records_text):
                 E('BRIEF_TEXT', f'{lab}: claim_text 가 브리프와 다르다 — 브리프는 원천이다. 옮기기만 한다\n         브리프 {b["text"]!r}\n         저장소 {labels[lab]["claim_text"]!r}')
             continue
         parts = [f for l, f in labels.items() if re.fullmatch(re.escape(lab) + '[a-z]', l)]
-        if not parts:
-            E('BRIEF_MISSING', f'{lab}: 브리프 사실이 저장소에 없다 (나눈 것도 없다)')
+        # 1차 구절이 없어 사실에서 내린 것 (D33 C-6 검수) — `_not_facts` 에 브리프 글자 그대로, 까닭과 함께 있으면 버린 것이 아니다
+        dropped = any(x.get('label') == lab and x.get('text') == b['text'] and (x.get('why') or '').strip() for x in store.get('_not_facts', []))
+        if not parts and not dropped:
+            E('BRIEF_MISSING', f'{lab}: 브리프 사실이 저장소에 없다 (나눈 것도, `_not_facts` 에 글자 그대로 내린 것도 없다)')
         for f in parts:
             if f.get('_brief_text', f['claim_text']) not in b['text'] or '_split_of' not in f:
                 E('BRIEF_TEXT', f'{f["label"]}: 나눈 사실의 claim_text 는 브리프 {lab} 글의 부분이어야 한다 (§3.3 "나눈다")')
@@ -368,14 +370,14 @@ def check_origin(store, record, contract_text, fb, records_text):
         if ln.strip():
             e_ = json.loads(ln)
             for t_ in e_.get('targets', []):
-                if t_.get('kind') == 'CLAIM':        # 교정 기록의 어휘에 GOAL 이 없다 — 요점은 CLAIM + 요점 label 로 적는다
+                if t_.get('kind') in ('GOAL', 'CLAIM'):   # 51 ~ 54행은 어휘에 GOAL 이 없던 때라 CLAIM + 요점 label 로 적혔다 (원장은 안 고친다). 그 뒤는 GOAL
                     goal_fix[t_.get('code')] += e_.get('what_i_changed', '') + '\n'
     for g in store['goals']:
         src_ = g.get('_brief_statement', g['statement'])
         if src_ not in brief_text:
             E('BRIEF_TEXT', f'Goal {g["label"]}: 요점 문장이 브리프 §5 에 글자 그대로 없다 — {src_[:40]!r}')
         elif '_brief_statement' in g and (g['statement'] == src_ or g['statement'] not in goal_fix[g['label']]):
-            E('BRIEF_TEXT', f'Goal {g["label"]}: 브리프와 다른 요점 문장인데 글이 그대로거나, 교정 기록(target CLAIM {g["label"]})의 what_i_changed 에 그 문장이 글자 그대로 없다 — 고른 글자만 받는다')
+            E('BRIEF_TEXT', f'Goal {g["label"]}: 브리프와 다른 요점 문장인데 글이 그대로거나, 교정 기록(target GOAL {g["label"]})의 what_i_changed 에 그 문장이 글자 그대로 없다 — 고른 글자만 받는다')
     # 1차 구절 — 기록에 글자 그대로
     fid = {f['fact_id']: f['label'] for f in store['facts']}
     for x in store['fact_sources']:

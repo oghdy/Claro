@@ -59,6 +59,10 @@ def b_(fn):
     return f
 
 
+def notfact(st, label):
+    return next(x for x in st['_not_facts'] if x['label'] == label)
+
+
 def sfact(st, label):
     return next(f for f in st['facts'] if f['label'] == label)
 
@@ -258,9 +262,15 @@ CASES = [
     ('원천 — 브리프 사실 F01 의 글자를 고침 (3.75~4.00% → 3.75~4.0%)', 'bundle',
      b_(lambda g, r, st: (lambda f: f.__setitem__('claim_text', f['claim_text'].replace('4.00%', '4.0%')))(sfact(st, 'F01'))),
      {'BRIEF_TEXT'}),
-    ('원천 — 브리프의 틀린 숫자를 저장소에서 슬쩍 고침 (F36 90% → 60%)', 'bundle',
-     b_(lambda g, r, st: (lambda f: f.__setitem__('claim_text', f['claim_text'].replace('90%', '60%')))(sfact(st, 'F36'))),
-     {'BRIEF_TEXT'}),
+    ('원천 — 사실에서 내린 F36 의 글을 `_not_facts` 에서 슬쩍 고침 (90% → 60%)', 'bundle',
+     b_(lambda g, r, st: (lambda x: x.__setitem__('text', x['text'].replace('90%', '60%')))(notfact(st, 'F36'))),
+     {'BRIEF_TEXT', 'BRIEF_MISSING'}),
+    ('원천 — 사실에서 내린 F36 의 기록을 지움 (조용히 버리지 않는다)', 'bundle',
+     b_(lambda g, r, st: st['_not_facts'].remove(notfact(st, 'F36'))), {'BRIEF_MISSING'}),
+    ('원천 — 사실에서 내린 F36 에 까닭이 없다', 'bundle',
+     b_(lambda g, r, st: notfact(st, 'F36').__setitem__('why', ' ')), {'BRIEF_MISSING'}),
+    ('원천 — 나누고 내린 뒷절(F29b)의 기록을 지움', 'bundle',
+     b_(lambda g, r, st: st['_not_facts'].remove(notfact(st, 'F29b'))), {'BRIEF_MISSING'}),
     ('원천 — 나눈 사실 F29a 를 다듬어 씀 (동결 → 동결함. F32a 는 C-6 이 교정 기록을 남기고 고쳤다)', 'bundle',
      b_(lambda g, r, st: (lambda f: f.__setitem__('claim_text', f['claim_text'].replace('동결', '동결함')))(sfact(st, 'F29a'))),
      {'BRIEF_TEXT'}),
