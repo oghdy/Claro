@@ -47,6 +47,7 @@ FINDINGS 의 "미정" · "보류" · "결정 필요"는 원천이 아니다.
 
 ## 같은 작업 트리에서 여러 세션이 동시에 일한다
 - `git add -A` · `git add .` 금지. **파일을 하나씩 지정**한다. 커밋 전 `git status` 로 남의 미커밋 파일을 확인하고 건드리지 않는다
+- **커밋도 파일을 지정한다: `git commit -m "…" -- <파일들>`.** 그냥 `git commit` 은 스테이지에 올라가 있는 것을 전부 싣는다 — 다른 세션이 `git rm` · `git mv` · `git add` 해 둔 것까지 (2026-10-12 에 실제로 일어났다)
 - `git stash` · `git pull --rebase --autostash` · `git checkout -- <폴더>` · `git reset --hard` 금지 — 다른 세션이 고치는 중인 파일을 치우거나 되돌린다.
   push 가 거절되면 `git pull --no-rebase` (merge) 로 받는다
 - 교정 기록은 `logs/correction-log.jsonl` 에 쓴다. `logs/correction-log.csv` 는 얼렸다
