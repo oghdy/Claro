@@ -809,3 +809,143 @@ $ python3 scripts/selftest-verify-article.py              # 기대 · 실제 줄
 
 OK
 ```
+
+
+---
+
+## B-0.2n-a · 2026-10-12 · D33 반영
+
+커밋: `f278d24` (1/2 — Goal 타입 · 키 이름 먼저) · 이 커밋 (2/2)
+
+### 한 것
+
+| D33 | 반영 |
+|---|---|
+| m1 | DATA_MODEL §19 — 판정됨 (수용) |
+| m2 (a) | `authoring` 을 ConceptVersion 에서 **Concept** 으로 옮겼다 — CONCEPT_IDENTITY §1 · §3.1 · §4.2 · §5.1, `concept-library.json` 13개. ConceptVersion 은 독자가 보는 문안과 명제의 스냅숏. 문안 0자 (`compare-concept-text` 44 단위 · 2661자 · 차이 0) |
+| m3 | 칸 없음. 불변식 6 에 "그 개념의 독자 기록이 0 일 때만 명제를 바꿀 수 있다" · 원장 확인은 0.4 |
+| m4 · m5 · m6 · m7 | "미룸 (D33)" + 다시 보는 때 — m4 FTC 기사(C-0010 을 쓰는 첫 패키지) · m5 D31 에서 물음이 개념을 겨누기로 하면 그 전 · m6 파이프라인 스테이지 1 설계 · m7 스토리라인 stale 검사 설계. 타입 · 칸은 만들지 않았다 |
+| **m8** | **Goal 타입** — DATA_MODEL §1 · §7.4 · 불변식 27 · 28. `Goal { goal_id, label, event_id, kind: COMMON · DEEP, statement, claims: ClaimRef[] }` · 참조는 `GoalRef = Goal.goal_id`. `store.json` 의 `goals` 4개 |
+| 판단 6 | DC-I · DC-J 의 "다른 이유는?" → SCOPED |
+| DC-B | 근거에서 F36 을 빼고 F42 · F43 |
+| 브리프 | 맨 위에 한 줄. 본문 불변 — 브리프 ↔ 저장소 대조 통과 |
+
+### Goal — 요점도 반증을 통과해야 한다는 것을 계약이 어떻게 보나
+
+**실물에서 답이 나왔다: 요점의 판정은 저장하지 않고, 가리킨 해석의 판정에서 나온다** (불변식 28).
+- 브리프 §5 의 요점 넷이 전부 해석을 가리킨다 — Deep 은 괄호로 적혀 있고(A = DC-A + DC-B · B = DC-D · C = DC-E), Common 은 D27 이 "DC-C 가 이 기사의 Common Goal"이라 했다
+- C-5 가 실제로 그렇게 판정했다: "Common Goal 은 서는가"(§4)를 DC-C 의 반증 기록으로 답했고, 8월 CPI 물음이 UNRESOLVED 인 동안 "조건부", SCOPED 가 되자 "선다"였다. selftest 에 그 실물을 넣었다 — DC-C 의 그 물음을 미결로 되돌리면 `GOAL_UNCHECKED`
+- Deep A 는 방어용 해석(DC-B · 미결)을 품는데 §7.3 표대로 방어용은 발행 가능이라 요점이 선다
+- **기계가 못 보는 것** (§7.4 에 적음 · 게이트 3): 해석을 좁혔을 때 요점 문장이 따라 좁혀졌는가. 실물 하나가 걸려 있다 — **Deep C "고용 데이터가 겉보기만큼 단순하지 않다"는 브리프 그대로인데 DC-E 는 "취업자 수는 달마다 크게 움직인다"로 좁혀졌다.** 문장은 고치지 않았다 (C-5 가 Deep Goal 문장을 좁힌 기록이 없다). C-6 또는 PM
+
+### 판단한 것
+
+1. **DC-I · DC-J 의 SCOPED 답에 사실 F07 을 달았다.** SCOPED 는 답이 된 사실이 1개 이상이어야 발행한다(불변식 23). C-5 로그의 그 답은 "발행 시점 근거 없음"이라 사실이 없었다. D33 의 이유("문장이 이미 이유의 **하나**다")를 받치는 발행 시점 구절이 성명문의 "owing, **in part**, to geopolitical developments"(F07)이고, 같은 해석의 물음 1 이 이미 그 구절로 "하나"를 댔다. 답의 글은 로그 그대로 두고 `_note` 에 적었다. 달지 않으면 `CHECK_NO_FACTS` 2건이 남는다
+2. **Common Goal 의 문장** — 브리프 문장에서 "그 이유가" → "연준이 든 이유가" 한 곳만 바꿨다 (C-5 §4 가 낸 그대로). 검사가 그 한 곳만 허용한다. Deep 셋은 브리프 글자 그대로
+3. **Goal 의 `label`** — "COMMON" · "DEEP-A" · "DEEP-B" · "DEEP-C" (브리프의 A · B · C)
+4. **요점에서 역산한 개념 목록 · 등급(브리프 §5 의 KC 표)은 옮기지 않았다** — 이름이 라이브러리와 1:1 이 아니다. DATA_MODEL §15 미확인
+5. **비유 한계선(`limits`)은 버전 안에 두었다** — 독자에게 안 보이지만 비유와 한 단위다(확정 §4.4). 한계선만 고치는 경우는 실물이 없어 미확인으로 적었다. 브리지 슬롯 · 비유의 `requires` 도 버전 안 (독자가 보는 순서를 정한다)
+6. 브리프 머리 줄은 제목 위에 인용 한 줄로 넣었다
+
+### 발행 검사에서 막히는 것 — 61 → 56. 독자에게 닿는 것 5 → **1**
+
+남은 하나: **F44 "9월 회의록은 10/7 에 공개됨"** — 가장 이른 출처가 발행 뒤다. 닿는 문장은 입문 7장 "회의 내부 기록은 3주 뒤에 공개돼요." · 숙련 3장 "3주 뒤 회의록". D33: 그대로 둔다 (사실은 맞다 · 증명은 파이프라인).
+기계 검증용 55 — 원문 위치 49 (F36 이 근거에서 빠져 하나 줄었다) · 공개 시점 증명 4 · 인용 위치 2.
+
+### 알아야 할 것
+
+- **`verify-observation` 이 지금 FAIL 이다 (28건 `CORR_CHECK`) — 이 세션의 것이 아니다.** 작업 트리에 `logs/correction-log.jsonl` 이 고쳐진 채로 있다(0.2n-b 가 `check` 칸을 채우는 중으로 보인다). 그 파일 · 검사는 건드리지 않았고 커밋에 넣지 않았다. Goal 커밋(`f278d24`)을 만들 때는 OK 였다
+- 작업 트리의 `logs/frontend` 그림 116개와 `packages/tokens` 3파일도 다른 세션(F-2b)이 바꾼 것이다 — 넣지 않았다. 아래 `git diff --stat` 에 보이는 것이 그것이다. 이 세션은 apps · packages 를 건드리지 않았다
+- `pnpm -s typecheck` · `pnpm -s test` 는 돌리지 않았다 — 패키지 파일(`fomc-2026-09.article.json`)이 그대로이고, 다른 세션이 e2e 를 돌리는 중이라 포트가 겹친다
+- invalid `volatile-missing-asof` 는 저장소 사본이라 다시 만들었다 (골든과 1곳 차이 유지)
+
+### 검증
+
+```
+$ python3 scripts/verify-article.py | tail -4
+   VOLATILE_MISSING_AS_OF: advanced slides/1/blocks/0/paragraphs/0/body "7월 근원 PCE는 전년 대비 3.3%": 사실 F31 이 VOLATILE 인데 as_of 가 없다 (D8 · DATA_MODEL §6.2)
+   골든과 다른 곳 1군데: ['/facts/29/as_of']
+
+OK
+
+$ python3 scripts/verify-contract-coverage.py | tail -4
+PASS  9. D20 — 레벨 어휘 · 층 판정 규칙 · 0.2 대기 표시(§6 · §9) · 척도 미확인
+PASS  10. D22 — Level.label 제거 · 이란 전망 문장 claim · 이란 규칙 범위
+
+OK
+
+$ python3 scripts/verify-concept-identity.py | tail -4
+  WARN  LIB_USED_IN_DRIFT: C-0004: 재사용 표는 FOMC-20260916 에서 생성이라는데 used_in 은 없음 — 저장하지 않고 계산한다 (§12)
+  WARN  LIB_USED_IN_DRIFT: C-0006: 재사용 표는 FOMC-20260916 에서 생성이라는데 used_in 은 없음 — 저장하지 않고 계산한다 (§12)
+
+OK
+
+$ python3 scripts/verify-data-model.py --report   # 머리 + 막히는 것
+verify-data-model
+  계약   docs/contract/DATA_MODEL.md
+  원천   브리프 3 — 사실 타입 30종 · FOMC 사실 38 · 1차 구절 기록 3 파일
+  저장소 fixtures/store.json — Fact 62 (브리프에서 39 · 새로 23) · FactSource 78 (1차 구절 69) · Source 31 · DerivedClaim 10 · Goal 4 · Bridge 1 · Event 1 · Storyline 1
+  골든   대기 span 0 · 시간 조각 30 ({'DERIVED': 17, 'VOLATILE': 13}) · 인용 2 · 스토리라인 핀 1 · 저작 메모 25
+  발행 검사에서 막히는 것 56 — 독자에게 닿는 것 1 · 기계 검증용 55
+         FACT_NOT_YET_PUBLIC 1 · FACT_NO_SOURCE_SPAN 49 · FACT_PUBLIC_UNPROVEN 4 · QUOTE_SPAN_MISSING 2
+
+발행 검사에서 막히는 것 — 독자에게 닿는 것: 1
+  FACT_NOT_YET_PUBLIC 1
+    Fact F44: 가장 이른 출처가 발행일 뒤다 (불변식 11 · §5.3)
+
+발행 검사에서 막히는 것 — 기계 검증용 — 파이프라인이 채운다 (D27): 55
+  FACT_NO_SOURCE_SPAN 49
+    Fact F01: 원문 위치(FactSource + SourceDocument)가 없다 (불변식 8 · §5.5)
+    Fact F02: 원문 위치(FactSource + SourceDocument)가 없다 (불변식 8 · §5.5)
+    Fact F03: 원문 위치(FactSource + SourceDocument)가 없다 (불변식 8 · §5.5)
+    Fact F04: 원문 위치(FactSource + SourceDocument)가 없다 (불변식 8 · §5.5)
+    … 45개 더
+  FACT_PUBLIC_UNPROVEN 4
+    Fact F03: 출처의 공개 시점이 발행일 앞인지 증명되지 않는다 — 정밀도가 모자라다 (불변식 11 · §5.2)
+    Fact F37b: 출처의 공개 시점이 발행일 앞인지 증명되지 않는다 — 정밀도가 모자라다 (불변식 11 · §5.2)
+    Fact F43: 출처의 공개 시점이 발행일 앞인지 증명되지 않는다 — 정밀도가 모자라다 (불변식 11 · §5.2)
+    Fact IR06: 출처의 공개 시점이 발행일 앞인지 증명되지 않는다 — 정밀도가 모자라다 (불변식 11 · §5.2)
+  QUOTE_SPAN_MISSING 2
+    basic 6장 인용: 공통 Source 는 있으나 원문 위치(span)가 없다 — 어느 구간인지 기계가 모른다 (불변식 19)
+    advanced 2장 인용: 공통 Source 는 있으나 원문 위치(span)가 없다 — 어느 구간인지 기계가 모른다 (불변식 19)
+
+
+OK
+
+$ python3 scripts/selftest-verify-article.py | tail -1
+OK
+$ python3 scripts/selftest-verify-concept-identity.py | tail -1
+OK
+$ python3 scripts/selftest-verify-data-model.py | tail -1
+사본 110개 · OK
+$ python3 scripts/compare-concept-text.py | tail -1
+OK — 44 단위 · 2661자 · 다른 것 0
+$ python3 scripts/compare-reader-text.py | tail -1
+OK — 등록 안 된 차이 0 (허용된 차이 밖의 독자 글 불변)
+$ python3 scripts/lint-concepts.py | tail -1
+  1 hits
+$ python3 scripts/compare-reader-text.py --before 409dc05 | tail -3
+  독자 글 단위 117개 · 3378자 · span 127개(경계 · 층) · 블록 text 28개 대조
+
+OK — 차이 0
+$ python3 scripts/selftest-verify-data-model.py | grep -i "goal\|요점"
+PASS  [bundle] §7.4 — 요점 문장을 고쳐 씀 (브리프에 없는 글) → ['BRIEF_TEXT']
+PASS  [bundle] §7.4 — Common Goal 을 좁히기 전 문장으로 되돌림 ("그 이유가") → ['BRIEF_TEXT']
+PASS  [bundle] §1 — Goal 에 판정을 저장 (verdict 칸) → ['STORE_SHAPE']
+PASS  [model] 불변식 27 — COMMON 요점이 둘 (Deep B 를 COMMON 으로) → ['GOAL_COMMON']
+PASS  [model] 불변식 27 — COMMON 요점이 없다 → ['GOAL_COMMON']
+PASS  [model] 불변식 27 — 요점이 가리키는 해석이 없다 (claims 비움) → ['GOAL_CLAIMS']
+PASS  [model] 불변식 27 — 요점이 Fact 를 가리킴 (해석이 아니다) → ['GOAL_CLAIMS']
+PASS  [model] 불변식 27 — kind 가 어휘 밖 (BLOCKING) → ['GOAL_KIND']
+PASS  [publish] 불변식 23 — DC-D 반증 기록 없음 (브리프 실물 그대로) → ['CLAIM_UNCHECKED', 'GOAL_UNCHECKED']
+PASS  [publish] 불변식 23 — ASSERTED DC-C 에 미결 반증 → ['CLAIM_UNCHECKED', 'GOAL_UNCHECKED']
+PASS  [publish] 불변식 28 — Common Goal 이 선 해석(DC-C)에 미결 반증 → 요점도 서지 않는다 (C-5 1차의 실물) → ['CLAIM_UNCHECKED', 'GOAL_UNCHECKED']
+PASS  [publish] 통과해야 한다 — 불변식 28: Deep A 의 방어용 해석(DC-B)은 미결이어도 요점이 선다 → 통과
+$ git diff --stat HEAD -- apps packages docs/contract/OBSERVATION.md logs/correction-log.csv   # (빈 출력)
+ packages/tokens/package.json  |   5 +-
+ packages/tokens/src/index.ts  |   2 -
+ packages/tokens/src/values.ts | 123 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 127 insertions(+), 3 deletions(-)
+$ git diff HEAD -- docs/findings/fomc-2026-09-brief.md | grep "^[+-][^+-]"
++> 이 브리프는 2026-09 의 원천 기록이다. C-3 · C-5 (2026-10)가 사실 여럿을 바로잡았다 — 정본은 fixtures/store.json 이다.
+```

@@ -4,7 +4,7 @@
     "task": "B-0.2m-a",
     "date": "2026-10-09",
     "contract": "docs/contract/CONCEPT_IDENTITY.md §16",
-    "note": "개념 13개에 concept_id(UUID)를 발급했다. code · 문안 · 버전은 md 그대로다 — scripts/verify-concept-identity.py 가 md 와 글자 단위로 댄다. 버전마다 지금 문안 한 벌(현재 버전)만 옮겼다. 옛 버전 문안은 옮기지 않았다 (§14) — 이력 줄은 _version_history 에."
+    "note": "개념 13개에 concept_id(UUID)를 발급했다. code · 문안 · 버전은 md 그대로다 — scripts/verify-concept-identity.py 가 md 와 글자 단위로 댄다. 버전마다 지금 문안 한 벌(현재 버전)만 옮겼다. 옛 버전 문안은 옮기지 않았다 (§14) — 이력 줄은 _version_history 에. 2026-10-12 (D33 · 0.2n-a): 저작 메모(authoring)를 버전에서 개념으로 옮겼다 — ConceptVersion 은 독자가 보는 문안과 명제의 스냅숏이다. 문안은 0자 바뀜."
   },
   "concepts": [
     {
@@ -15,7 +15,12 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 1,
-      "domain": "MONETARY"
+      "domain": "MONETARY",
+      "authoring": {
+        "notes": [],
+        "reuse_expected": null,
+        "first_source": "연준 공개 설명자료"
+      }
     },
     {
       "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
@@ -25,7 +30,19 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 4,
-      "domain": "MONETARY"
+      "domain": "MONETARY",
+      "authoring": {
+        "notes": [
+          "FULL 머리: 개념 3단계(①②③). 기사가 ④ 를 브리지로 붙여 **독자에게는 반드시 4단계로** 제시한다",
+          "ANALOGY 머리: ⚠️ 조건부 사용",
+          "🔗 **④ 지금 상태 — 브리지 몫. 기사가 붙인다**\n③ 바로 다음에, 현재 상승률을 ③ 의 목표와 견주는 한두 문장을 붙인다. 시점이 붙은 사실이라 Concept 에 두지 않는다(§4.3).\n①②③ 다음 ④ — 이 순서가 2026-09-18 독자 검증을 통과한 흐름이다. ④ 를 빼거나 앞으로 옮기지 않는다.\nv1 의 ④ 문안은 골든 입문 4장(`fixtures/fomc-2026-09.article.json` · `levels[0].slides[3]` · `blocks[0].paragraphs[1]`)에 있다.",
+          "운영 노트: FULL ②③ 은 연준이라고 적는다 — 다른 중앙은행 기사에는 그대로 쓰지 않는다. 검증된 독자 글이라 고치지 않았다. (D32)",
+          "운영 노트: ③ 의 주장(연준의 목표는 2%)은 C-0012 의 명제이기도 하다. ③ 은 검증된 4단계 흐름의 한 단계라 이 FULL 에 둔다. (D32 · 1-2 안 1)",
+          "🚨 **이 비유는 ①②③ 과 기사의 ④ 브리지를 먼저 제시한 뒤에만 쓴다.**\n2026-09-18 실제 독자 검증에서, 4단계를 건너뛰고 속도계부터 제시하자 이해되지 않았다.\n원인은 비유가 틀려서가 아니라 **한 문장에 세 가지가 겹쳐 있었기 때문**이다:\n수준/속도 구분 + 자동차 비유 + 목표와 현재 비교.\n4단계로 풀자 바로 이해됐다."
+        ],
+        "reuse_expected": null,
+        "first_source": null
+      }
     },
     {
       "concept_id": "d1cb023e-06b3-4dff-8cc1-0efddbba7cc1",
@@ -35,7 +52,15 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 2,
-      "domain": "MONETARY"
+      "domain": "MONETARY",
+      "authoring": {
+        "notes": [
+          "운영 노트: 골든의 `C-0003` 참조 3개(입문 4장 헤드라인 · 대조표 2)는 전부 \"연준 2%\"를 가리킨다 — v2 부터 그 주장은 C-0012 다. 참조를 옮기는 것은 0.2m. (D32)",
+          "운영 노트: v2 FULL · REFRESHER 는 독자 검증을 거치지 않았다. 화면에 처음 나가는 기사에서 게이트 4 로 본다. (D32)"
+        ],
+        "reuse_expected": null,
+        "first_source": null
+      }
     },
     {
       "concept_id": "70b67e38-ab9d-4c51-91ab-65eb36c08549",
@@ -45,7 +70,12 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 1,
-      "domain": "MONETARY"
+      "domain": "MONETARY",
+      "authoring": {
+        "notes": [],
+        "reuse_expected": null,
+        "first_source": null
+      }
     },
     {
       "concept_id": "4b3796d2-cbee-4c2e-93d2-1a8ea8830723",
@@ -55,7 +85,14 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 3,
-      "domain": "MONETARY"
+      "domain": "MONETARY",
+      "authoring": {
+        "notes": [
+          "운영 노트: 이 개념을 설명하지 않고 12와 18을 나란히 쓰면 독자가 반드시 멈춘다. (2026-07 초안에서 실제 발생)\n대안: 점도표 인원수를 아예 쓰지 않고 **중앙값 비교**로 대체하면 이 개념 자체가 불필요해진다. Core에서는 이쪽을 권장."
+        ],
+        "reuse_expected": null,
+        "first_source": null
+      }
     },
     {
       "concept_id": "c02833e0-c337-4df6-ab2b-ff4abc6de0e4",
@@ -65,7 +102,14 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 1,
-      "domain": "MONETARY"
+      "domain": "MONETARY",
+      "authoring": {
+        "notes": [
+          "운영 노트: 전망(SEP)과 표결은 다른 것이라는 구분이 이 개념의 핵심이다. 둘을 함께 다루는 기사에서는 C-0005와 세트로 필요."
+        ],
+        "reuse_expected": null,
+        "first_source": null
+      }
     },
     {
       "concept_id": "3f4654c4-476b-45d2-9de2-1bb26756bfbb",
@@ -75,7 +119,12 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 1,
-      "domain": "REGULATORY"
+      "domain": "REGULATORY",
+      "authoring": {
+        "notes": [],
+        "reuse_expected": "모든 규제 사건",
+        "first_source": null
+      }
     },
     {
       "concept_id": "80da6279-1af5-49e7-a563-8e8ba030d7aa",
@@ -85,7 +134,12 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 2,
-      "domain": "REGULATORY"
+      "domain": "REGULATORY",
+      "authoring": {
+        "notes": [],
+        "reuse_expected": "모든 규제 사건",
+        "first_source": null
+      }
     },
     {
       "concept_id": "b579aa4c-266a-4f79-8936-530da7b7da4e",
@@ -95,7 +149,15 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 2,
-      "domain": "REGULATORY"
+      "domain": "REGULATORY",
+      "authoring": {
+        "notes": [
+          "운영 노트: 스크루웜(브리프)에서 재사용된 것이 이 주장이다 — 연방 USDA · 텍사스 재난선포 · 플로리다 긴급규칙이 따로 움직인다. \"누가 더 강한가\"는 C-0013.",
+          "운영 노트: v2 FULL 둘째 문장 · REFRESHER 는 독자 검증을 거치지 않았다. 화면에 처음 나가는 기사에서 게이트 4 로 본다. (D32)"
+        ],
+        "reuse_expected": "규제·법원 사건 다수",
+        "first_source": null
+      }
     },
     {
       "concept_id": "655496b9-1eb0-40ec-9f9d-83f219216e99",
@@ -105,7 +167,17 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 2,
-      "domain": "REGULATORY"
+      "domain": "REGULATORY",
+      "authoring": {
+        "notes": [
+          "BOUNDARY 머리: 반드시 함께 제시. FULL 을 쓰든 REFRESHER 를 쓰든 둘 다와 (Q-C2 · D32)",
+          "🚨 **용어 충돌 경고**\n`dynamic pricing`이 두 가지 정반대 의미로 쓰인다.\n— 일반 용례: 수요·공급에 따른 변동 (우버 할증). **이 개념이 아님**\n— 메릴랜드 HB 895: 개인화 가격을 가리키는 법률 용어. **이 개념임**\n현재 alias 구조는 \"같은 것의 다른 이름\"만 표현할 수 있고 **\"다른 것의 같은 이름\"을 표현하지 못한다.**\n→ 스키마에 `conflicting_alias` 필드가 필요하다는 것이 이번에 확인됨.",
+          "운영 노트: BOUNDARY 를 REFRESHER 와도 함께 내는 이유 — \"안다\"고 답한 독자가 가장 위험한 개념이다. `dynamic pricing` 을 우버 할증으로 아는 독자가 그렇게 답한다. (D32)",
+          "운영 노트: alias \"personalized algorithmic pricing(뉴욕 용례)\" 가 지불 의향 추정을 요건으로 하는지 **미확인 — FTC 기사 1차 대조 때** 본다. 그때까지 alias 는 그대로. (Q-C3 · D32)"
+        ],
+        "reuse_expected": null,
+        "first_source": null
+      }
     },
     {
       "concept_id": "4f666a99-911d-4672-8661-a990822f4c9f",
@@ -115,7 +187,17 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 1,
-      "domain": "MONETARY"
+      "domain": "MONETARY",
+      "authoring": {
+        "notes": [
+          "운영 노트: C-0002 v3 명제의 뒷절이었다. 2026-10-09 에 떼어 냈다 (D25 · D32). alias 는 없다 — 이 주장을 부르는 이름이 실물에 없다.",
+          "운영 노트: FULL 의 6% · 4% 는 가정이다. 일부러 실제 값과 멀게 잡았다 — 기사의 실제 상승률로 바꿔 쓰지 않는다. 실제 값은 브리지의 몫이다.",
+          "운영 노트: \"속도가 줄어도 값은 계속 오른다\"는 넣지 않는다. 다른 주장이다 — 넣으면 이 개념이 다시 둘을 묶는다.",
+          "운영 노트: FULL · REFRESHER 는 독자 검증을 거치지 않았다. 화면에 처음 나가는 기사에서 게이트 4 로 본다. (D32)"
+        ],
+        "reuse_expected": null,
+        "first_source": null
+      }
     },
     {
       "concept_id": "5941edb1-5d98-40d1-ba09-c25d372d5568",
@@ -125,7 +207,15 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 1,
-      "domain": "MONETARY"
+      "domain": "MONETARY",
+      "authoring": {
+        "notes": [
+          "운영 노트: C-0003 v1 명제의 둘째 문장이었다. 2026-10-09 에 떼어 냈다 (D25 · D32). FULL 은 C-0003 v1 FULL 첫 문장, REFRESHER 는 C-0003 v1 REFRESHER 그대로다.",
+          "운영 노트: 같은 주장을 C-0002 FULL ③ 도 말한다 (검증된 4단계 흐름). 골든 입문 4장의 참조를 이리로 옮기는 것은 0.2m. (D32)"
+        ],
+        "reuse_expected": null,
+        "first_source": null
+      }
     },
     {
       "concept_id": "0184b978-b7e9-4798-9104-0b1b8ef6014e",
@@ -135,7 +225,15 @@
       "status": "CANONICAL",
       "merged_into": null,
       "version": 1,
-      "domain": "REGULATORY"
+      "domain": "REGULATORY",
+      "authoring": {
+        "notes": [
+          "운영 노트: 연방법이 주법을 막는 영역의 기사에는 쓰지 않는다. (D32)",
+          "운영 노트: C-0009 v1 명제의 뒷절이었다. 2026-10-09 에 떼어 냈다 (D25 · D32). FULL 은 C-0009 v1 FULL 둘째 · 셋째 문장에서 맨 앞 \"그래서\"만 뺀 것이다."
+        ],
+        "reuse_expected": null,
+        "first_source": null
+      }
     }
   ],
   "versions": [
@@ -165,12 +263,7 @@
         }
       ],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [],
-        "reuse_expected": null,
-        "first_source": "연준 공개 설명자료"
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
@@ -221,19 +314,7 @@
           "need": "현재 상승률을 ③ 의 목표와 견주는 한두 문장",
           "why": "2026-09-18 독자 검증 통과 흐름"
         }
-      ],
-      "authoring": {
-        "notes": [
-          "FULL 머리: 개념 3단계(①②③). 기사가 ④ 를 브리지로 붙여 **독자에게는 반드시 4단계로** 제시한다",
-          "ANALOGY 머리: ⚠️ 조건부 사용",
-          "🔗 **④ 지금 상태 — 브리지 몫. 기사가 붙인다**\n③ 바로 다음에, 현재 상승률을 ③ 의 목표와 견주는 한두 문장을 붙인다. 시점이 붙은 사실이라 Concept 에 두지 않는다(§4.3).\n①②③ 다음 ④ — 이 순서가 2026-09-18 독자 검증을 통과한 흐름이다. ④ 를 빼거나 앞으로 옮기지 않는다.\nv1 의 ④ 문안은 골든 입문 4장(`fixtures/fomc-2026-09.article.json` · `levels[0].slides[3]` · `blocks[0].paragraphs[1]`)에 있다.",
-          "운영 노트: FULL ②③ 은 연준이라고 적는다 — 다른 중앙은행 기사에는 그대로 쓰지 않는다. 검증된 독자 글이라 고치지 않았다. (D32)",
-          "운영 노트: ③ 의 주장(연준의 목표는 2%)은 C-0012 의 명제이기도 하다. ③ 은 검증된 4단계 흐름의 한 단계라 이 FULL 에 둔다. (D32 · 1-2 안 1)",
-          "🚨 **이 비유는 ①②③ 과 기사의 ④ 브리지를 먼저 제시한 뒤에만 쓴다.**\n2026-09-18 실제 독자 검증에서, 4단계를 건너뛰고 속도계부터 제시하자 이해되지 않았다.\n원인은 비유가 틀려서가 아니라 **한 문장에 세 가지가 겹쳐 있었기 때문**이다:\n수준/속도 구분 + 자동차 비유 + 목표와 현재 비교.\n4단계로 풀자 바로 이해됐다."
-        ],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      ]
     },
     {
       "concept_id": "d1cb023e-06b3-4dff-8cc1-0efddbba7cc1",
@@ -252,15 +333,7 @@
       "refresher": "중앙은행은 목표로 삼는 물가 상승률을 정해 두고, 그에 비춰 금리를 판단합니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [
-          "운영 노트: 골든의 `C-0003` 참조 3개(입문 4장 헤드라인 · 대조표 2)는 전부 \"연준 2%\"를 가리킨다 — v2 부터 그 주장은 C-0012 다. 참조를 옮기는 것은 0.2m. (D32)",
-          "운영 노트: v2 FULL · REFRESHER 는 독자 검증을 거치지 않았다. 화면에 처음 나가는 기사에서 게이트 4 로 본다. (D32)"
-        ],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "70b67e38-ab9d-4c51-91ab-65eb36c08549",
@@ -279,12 +352,7 @@
       "refresher": "FOMC는 연준에서 금리를 결정하는 기구입니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "4b3796d2-cbee-4c2e-93d2-1a8ea8830723",
@@ -303,14 +371,7 @@
       "refresher": "표결은 투표권자 12명이 하고, 전망은 투표권과 관계없이 참가자들이 냅니다. 그래서 두 숫자가 다릅니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [
-          "운영 노트: 이 개념을 설명하지 않고 12와 18을 나란히 쓰면 독자가 반드시 멈춘다. (2026-07 초안에서 실제 발생)\n대안: 점도표 인원수를 아예 쓰지 않고 **중앙값 비교**로 대체하면 이 개념 자체가 불필요해진다. Core에서는 이쪽을 권장."
-        ],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "c02833e0-c337-4df6-ab2b-ff4abc6de0e4",
@@ -329,14 +390,7 @@
       "refresher": "참가자 각자의 금리 전망을 모아 공개하는 자료입니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [
-          "운영 노트: 전망(SEP)과 표결은 다른 것이라는 구분이 이 개념의 핵심이다. 둘을 함께 다루는 기사에서는 C-0005와 세트로 필요."
-        ],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "3f4654c4-476b-45d2-9de2-1bb26756bfbb",
@@ -355,12 +409,7 @@
       "refresher": "기관은 법이 준 권한 안에서만 움직일 수 있습니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [],
-        "reuse_expected": "모든 규제 사건",
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "80da6279-1af5-49e7-a563-8e8ba030d7aa",
@@ -379,12 +428,7 @@
       "refresher": "기관 문서에는 구속력 있는 규칙도 있고, 방침을 알리는 문서도 있습니다. 방침 문서는 그 자체로는 누구도 구속하지 않아요.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [],
-        "reuse_expected": "모든 규제 사건",
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "b579aa4c-266a-4f79-8936-530da7b7da4e",
@@ -403,15 +447,7 @@
       "refresher": "미국에서는 연방과 주가 각자의 권한으로 같은 사안을 따로 다룰 수 있습니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [
-          "운영 노트: 스크루웜(브리프)에서 재사용된 것이 이 주장이다 — 연방 USDA · 텍사스 재난선포 · 플로리다 긴급규칙이 따로 움직인다. \"누가 더 강한가\"는 C-0013.",
-          "운영 노트: v2 FULL 둘째 문장 · REFRESHER 는 독자 검증을 거치지 않았다. 화면에 처음 나가는 기사에서 게이트 4 로 본다. (D32)"
-        ],
-        "reuse_expected": "규제·법원 사건 다수",
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "655496b9-1eb0-40ec-9f9d-83f219216e99",
@@ -439,17 +475,7 @@
           "applies": true
         }
       ],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [
-          "BOUNDARY 머리: 반드시 함께 제시. FULL 을 쓰든 REFRESHER 를 쓰든 둘 다와 (Q-C2 · D32)",
-          "🚨 **용어 충돌 경고**\n`dynamic pricing`이 두 가지 정반대 의미로 쓰인다.\n— 일반 용례: 수요·공급에 따른 변동 (우버 할증). **이 개념이 아님**\n— 메릴랜드 HB 895: 개인화 가격을 가리키는 법률 용어. **이 개념임**\n현재 alias 구조는 \"같은 것의 다른 이름\"만 표현할 수 있고 **\"다른 것의 같은 이름\"을 표현하지 못한다.**\n→ 스키마에 `conflicting_alias` 필드가 필요하다는 것이 이번에 확인됨.",
-          "운영 노트: BOUNDARY 를 REFRESHER 와도 함께 내는 이유 — \"안다\"고 답한 독자가 가장 위험한 개념이다. `dynamic pricing` 을 우버 할증으로 아는 독자가 그렇게 답한다. (D32)",
-          "운영 노트: alias \"personalized algorithmic pricing(뉴욕 용례)\" 가 지불 의향 추정을 요건으로 하는지 **미확인 — FTC 기사 1차 대조 때** 본다. 그때까지 alias 는 그대로. (Q-C3 · D32)"
-        ],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "4f666a99-911d-4672-8661-a990822f4c9f",
@@ -468,17 +494,7 @@
       "refresher": "물가 상승률이 내려오고 있어도, 목표보다는 여전히 높을 수 있습니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [
-          "운영 노트: C-0002 v3 명제의 뒷절이었다. 2026-10-09 에 떼어 냈다 (D25 · D32). alias 는 없다 — 이 주장을 부르는 이름이 실물에 없다.",
-          "운영 노트: FULL 의 6% · 4% 는 가정이다. 일부러 실제 값과 멀게 잡았다 — 기사의 실제 상승률로 바꿔 쓰지 않는다. 실제 값은 브리지의 몫이다.",
-          "운영 노트: \"속도가 줄어도 값은 계속 오른다\"는 넣지 않는다. 다른 주장이다 — 넣으면 이 개념이 다시 둘을 묶는다.",
-          "운영 노트: FULL · REFRESHER 는 독자 검증을 거치지 않았다. 화면에 처음 나가는 기사에서 게이트 4 로 본다. (D32)"
-        ],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "5941edb1-5d98-40d1-ba09-c25d372d5568",
@@ -497,15 +513,7 @@
       "refresher": "연준의 물가 목표는 2%입니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [
-          "운영 노트: C-0003 v1 명제의 둘째 문장이었다. 2026-10-09 에 떼어 냈다 (D25 · D32). FULL 은 C-0003 v1 FULL 첫 문장, REFRESHER 는 C-0003 v1 REFRESHER 그대로다.",
-          "운영 노트: 같은 주장을 C-0002 FULL ③ 도 말한다 (검증된 4단계 흐름). 골든 입문 4장의 참조를 이리로 옮기는 것은 0.2m. (D32)"
-        ],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      "bridge_slots": []
     },
     {
       "concept_id": "0184b978-b7e9-4798-9104-0b1b8ef6014e",
@@ -524,15 +532,7 @@
       "refresher": "주는 연방보다 더 강한 규제를 두기도 합니다.",
       "analogies": [],
       "boundary": [],
-      "bridge_slots": [],
-      "authoring": {
-        "notes": [
-          "운영 노트: 연방법이 주법을 막는 영역의 기사에는 쓰지 않는다. (D32)",
-          "운영 노트: C-0009 v1 명제의 뒷절이었다. 2026-10-09 에 떼어 냈다 (D25 · D32). FULL 은 C-0009 v1 FULL 둘째 · 셋째 문장에서 맨 앞 \"그래서\"만 뺀 것이다."
-        ],
-        "reuse_expected": null,
-        "first_source": null
-      }
+      "bridge_slots": []
     }
   ],
   "aliases": [

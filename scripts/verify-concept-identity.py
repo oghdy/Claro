@@ -566,8 +566,9 @@ def check_store(store, lib, library_text, contract_text):
         for k, t in NESTED_TYPES.items():
             for j, o in enumerate(v.get(k) or []):
                 shape(o, t, f'versions[{i}].{k}[{j}]')
-        if isinstance(v.get('authoring'), dict):
-            shape(v['authoring'], 'Authoring', f'versions[{i}].authoring')
+    for i, c in enumerate(store['concepts']):            # 저작 메모는 버전 밖 — 개념에 붙는다 (D33)
+        if isinstance(c.get('authoring'), dict):
+            shape(c['authoring'], 'Authoring', f'concepts[{i}].authoring')
     if errs:
         return errs, warns
     if 'used_in' in json.dumps(store, ensure_ascii=False):

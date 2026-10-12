@@ -2163,8 +2163,9 @@
         "2eef7bcc-b2f4-4f7f-bd90-d4e6250ac5a3",
         "9ecc823c-6a68-4517-b605-886cb06782f4",
         "145f189e-e7e3-4af3-9d8e-13cdb1ace448",
-        "67eedb99-5aae-4800-8414-5818d667f398",
-        "2a581a55-8680-422c-b8a7-07567edda78f"
+        "2a581a55-8680-422c-b8a7-07567edda78f",
+        "72049212-d079-4b12-ae31-76b0d63c0c1d",
+        "860d094f-d9a9-4159-ae6a-a48d7447cfdf"
       ],
       "checks": [
         {
@@ -2178,7 +2179,7 @@
         }
       ],
       "_origin": "브리프 §4 DC-B · logs/content/golden-correction-2026-10.md §2 DC-B",
-      "_basis_note": "브리프의 근거 그대로다. F36(\"90% 이상\")은 [못 찾음] M-1 이고 F32 는 발언 부분(F32a)만 사실이다 — 근거를 고쳐 적지 않았다 (C-5: \"N2 를 DC-B 의 경로 서술로 묶는 길도 있다 — 0.2m 판단\". 묶지 않았다)"
+      "_basis_note": "D33 — 브리프의 근거에서 F36(\"90% 이상\" · 출처 [못 찾음] M-1)을 빼고 잰 쪽의 수치 F42 · F43 (CME 66% · ~58%)을 넣었다. 브리프 §4 DC-B 의 글은 그대로다 (F36 → 시장 90% 반영). F32 는 발언 부분(F32a)이다"
     },
     {
       "claim_id": "1dfa9d89-68c2-45af-9d0e-a726dd989903",
@@ -2614,9 +2615,11 @@
           "slot": null,
           "recollected": false,
           "answer": "발행 시점 근거 없음. 발행 뒤 MIN-09 는 \"surging AI-related investments\"를 같이 든다",
-          "facts": [],
-          "outcome": "UNRESOLVED",
-          "_note": "로그에 outcome 이 적혀 있지 않다. \"발행 시점 근거 없음\"을 UNRESOLVED 로 옮겼다 (0.2m-a — C-5 가 \"없음\"을 그렇게 적은 방식대로)"
+          "facts": [
+            "d8918a89-70ef-496b-93a1-751d5a13c206"
+          ],
+          "outcome": "SCOPED",
+          "_note": "D33 — SCOPED. 문장이 이미 \"이유의 하나\"(큰 변수)다. 다른 이유가 있다는 것은 이 문장의 반증이 아니라 범위다. 답의 사실은 성명문의 \"owing, in part, to geopolitical developments\"(F07) — \"in part\"가 다른 이유가 있음을 말한다 (0.2n-a 가 달았다. C-5 로그는 \"발행 시점 근거 없음\"이라고만 적었고 outcome 이 없었다)"
         }
       ],
       "_origin": "logs/content/golden-correction-2026-10.md §2 \"도출 안 된 해석 5개\" — 그 로그 안의 가칭 N4"
@@ -2661,9 +2664,11 @@
           "slot": null,
           "recollected": false,
           "answer": "발행 시점 근거 없음. 발행 뒤 MIN-09 는 \"surging AI-related investments\"를 같이 든다",
-          "facts": [],
-          "outcome": "UNRESOLVED",
-          "_note": "로그에 outcome 이 적혀 있지 않다. \"발행 시점 근거 없음\"을 UNRESOLVED 로 옮겼다 (0.2m-a — C-5 가 \"없음\"을 그렇게 적은 방식대로)"
+          "facts": [
+            "d8918a89-70ef-496b-93a1-751d5a13c206"
+          ],
+          "outcome": "SCOPED",
+          "_note": "D33 — SCOPED. 문장이 이미 \"이유의 하나\"(큰 변수)다. 다른 이유가 있다는 것은 이 문장의 반증이 아니라 범위다. 답의 사실은 성명문의 \"owing, in part, to geopolitical developments\"(F07) — \"in part\"가 다른 이유가 있음을 말한다 (0.2n-a 가 달았다. C-5 로그는 \"발행 시점 근거 없음\"이라고만 적었고 outcome 이 없었다)"
         }
       ],
       "_origin": "logs/content/golden-correction-2026-10.md §2 \"도출 안 된 해석 5개\" — 그 로그 안의 가칭 N5 — \"근거 · 물음: N4 와 같다. '물가의 큰 부분'(비중)은 SCOPED → '전망의 큰 변수'\"",

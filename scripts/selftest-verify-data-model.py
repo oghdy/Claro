@@ -415,7 +415,7 @@ CASES = [
      {'CLAIM_UNCHECKED', 'GOAL_UNCHECKED'}),
     ('불변식 28 — Common Goal 이 선 해석(DC-C)에 미결 반증 → 요점도 서지 않는다 (C-5 1차의 실물)', 'publish',
      m_(lambda m: m['claims'][CID['DC-C']]['checks'][3].__setitem__('outcome', 'UNRESOLVED')), {'CLAIM_UNCHECKED', 'GOAL_UNCHECKED'}),
-    ('불변식 28 — Deep A 의 방어용 해석(DC-B)은 미결이어도 요점이 선다', 'publish',
+    ('통과해야 한다 — 불변식 28: Deep A 의 방어용 해석(DC-B)은 미결이어도 요점이 선다', 'publish',
      m_(lambda m: m['claims'][CID['DC-B']]['checks'][0].__setitem__('facts', [])), set()),
     ('불변식 23 — DC-A 반증 답에 사실 없음 (브리프 실물: "셋 다 투표권자")', 'publish',
      m_(lambda m: m['claims'][CID['DC-A']]['checks'][0].__setitem__('facts', [])), {'CHECK_NO_FACTS'}),
@@ -465,7 +465,7 @@ def main():
         got = run(target, mutate)
         ok = got == want
         fails += not ok
-        tag = '빈틈' if not want else ''
+        tag = '빈틈' if not want and name.startswith('빈틈') else ''
         print(f'{"PASS" if ok else "FAIL"}  [{target}] {name} → {sorted(got) or "통과"}' + (f'  (기대 {sorted(want)})' if not ok else '')
               + (f'  {tag}' if tag and ok else ''))
     print(f'\n사본 {len(CASES)}개 · ' + ('OK' if not fails else f'{fails}개 실패'))
