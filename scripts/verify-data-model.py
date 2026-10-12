@@ -28,6 +28,8 @@ LIBRARY = os.path.join(ROOT, 'docs/content/concept-library.md')
 # 저장소의 1차 구절(`_passage`)이 글자 그대로 있어야 하는 기록 — 구절을 지어내지 못하게 한다
 RECORDS = [os.path.join(ROOT, p) for p in ('logs/content/source-check-2026-10.md', 'docs/findings/storyline-iran-war.md',
                                            'logs/content/golden-correction-2026-10.md')]
+# 발행 전에 고친 사실(`_brief_text`)은 교정 기록에 그 사실을 가리킨 줄이 있어야 한다 (C-6 · DATA_MODEL §2.3)
+CORRECTIONS = os.path.join(ROOT, 'logs/correction-log.jsonl')
 BRIEFS = {
     'FOMC': os.path.join(ROOT, 'docs/findings/fomc-2026-09-brief.md'),
     'FTC': os.path.join(ROOT, 'docs/findings/ftc-personalized-pricing-brief.md'),
@@ -330,19 +332,25 @@ def check_origin(store, record, contract_text, fb, records_text):
         shape(p, 'StorylinePin', f'record.authoring.storylines[{i}]')
     if errs:
         return errs
-    # 브리프 사실 — 글자 그대로. 나눈 것(`_split_of`)은 브리프 글의 부분 문자열이다. 브리프의 F 는 전부 어딘가에 있다
+    # 브리프 사실 — 글자 그대로. 나눈 것(`_split_of`)은 브리프 글의 부분 문자열이다. 브리프의 F 는 전부 어딘가에 있다.
+    # 발행 전에 1차 구절대로 고친 사실(C-6 · §2.3)은 브리프 글을 `_brief_text` 에 그대로 남기고, 교정 기록에 그 사실을 가리킨 줄이 있어야 한다
     labels = {f['label']: f for f in store['facts']}
     notf = ' '.join(x.get('label', '') for x in store.get('_not_facts', []))
+    corrected = {t_.get('code') for ln in open(CORRECTIONS, encoding='utf-8') if ln.strip()
+                 for t_ in json.loads(ln).get('targets', []) if t_.get('kind') == 'FACT'}
+    for f in store['facts']:
+        if '_brief_text' in f and (f['_brief_text'] == f['claim_text'] or f['label'] not in corrected):
+            E('BRIEF_TEXT', f'{f["label"]}: 브리프와 다르게 고친 사실(`_brief_text`)인데 글이 그대로거나 교정 기록(target FACT {f["label"]})이 없다 — 슬쩍 고치지 않는다')
     for lab, b in sorted(fb.items()):
         if lab in labels:
-            if labels[lab]['claim_text'] != b['text']:
+            if labels[lab].get('_brief_text', labels[lab]['claim_text']) != b['text']:
                 E('BRIEF_TEXT', f'{lab}: claim_text 가 브리프와 다르다 — 브리프는 원천이다. 옮기기만 한다\n         브리프 {b["text"]!r}\n         저장소 {labels[lab]["claim_text"]!r}')
             continue
         parts = [f for l, f in labels.items() if re.fullmatch(re.escape(lab) + '[a-z]', l)]
         if not parts:
             E('BRIEF_MISSING', f'{lab}: 브리프 사실이 저장소에 없다 (나눈 것도 없다)')
         for f in parts:
-            if f['claim_text'] not in b['text'] or '_split_of' not in f:
+            if f.get('_brief_text', f['claim_text']) not in b['text'] or '_split_of' not in f:
                 E('BRIEF_TEXT', f'{f["label"]}: 나눈 사실의 claim_text 는 브리프 {lab} 글의 부분이어야 한다 (§3.3 "나눈다")')
         if len(parts) == 1 and lab not in notf:
             E('BRIEF_MISSING', f'{lab}: 나눈 절이 하나뿐인데 나머지 절이 `_not_facts` 에 적혀 있지 않다 — 조용히 버리지 않는다')

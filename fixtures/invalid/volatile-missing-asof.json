@@ -18,7 +18,7 @@
       "logs/content/golden-correction-2026-10.md",
       "409dc05:fixtures/fomc-2026-09.article.json"
     ],
-    "note": "골든 FOMC 기사가 가리키는 것의 저장소. 브리프 사실 F01~F38 의 claim_text 는 브리프 글자 그대로다 (검사가 댄다). `_passage` 는 C-3 기록에 있는 1차 구절 그대로다 (검사가 댄다) — 원문 위치(span_start · span_end)는 문서를 저장한 뒤 파이프라인이 채운다 (D27). SourceDocument · SourceRegistry · SlotCheck 는 실물이 없어 비어 있다"
+    "note": "골든 FOMC 기사가 가리키는 것의 저장소. 브리프 사실 F01~F38 의 claim_text 는 브리프 글자 그대로다 (검사가 댄다) — 단 C-6 이 1차 구절대로 고친 것은 브리프 글을 `_brief_text` 에 남기고 `_c6` 에 까닭을 적었다 (교정 기록 logs/correction-log.jsonl · target FACT). `_passage` 는 C-3 기록에 있는 1차 구절 그대로다 (검사가 댄다) — 원문 위치(span_start · span_end)는 문서를 저장한 뒤 파이프라인이 채운다 (D27). SourceDocument · SourceRegistry · SlotCheck 는 실물이 없어 비어 있다"
   },
   "events": [
     {
@@ -549,7 +549,7 @@
     {
       "fact_id": "2fbd1b96-68c2-4826-ae5e-d742ee836b39",
       "label": "F09",
-      "claim_text": "고용 증가가 노동력 증가와 보조를 맞췄고 실업률은 거의 변하지 않음",
+      "claim_text": "고용 증가가 노동력과 보조를 맞췄고 실업률은 거의 변하지 않음",
       "fact_type": "OFFICIAL_CLAIM",
       "actor": "FOMC 성명문",
       "volatility": "STABLE",
@@ -561,7 +561,9 @@
       "extraction_model": null,
       "extraction_version": null,
       "_brief_type": "OFFICIAL_ASSESSMENT",
-      "_c3": "C-3 — [일치]. 원문은 \"the workforce\"(노동력)다. \"노동력 증가\"는 브리프가 보탠 말"
+      "_c3": "C-3 — [일치]. 원문은 \"the workforce\"(노동력)다. \"노동력 증가\"는 브리프가 보탠 말",
+      "_brief_text": "고용 증가가 노동력 증가와 보조를 맞췄고 실업률은 거의 변하지 않음",
+      "_c6": "C-6 — 원문 \"kept pace with the workforce\" 대로. \"노동력 증가\"의 \"증가\"는 브리프가 보탠 말이다 (C-3 E)"
     },
     {
       "fact_id": "c2068a6c-b6c5-4374-9475-3841d546deca",
@@ -614,7 +616,7 @@
     {
       "fact_id": "8f9fe956-b6b8-4add-85a3-15e68735112f",
       "label": "F13",
-      "claim_text": "2027년에 추가 인상을 찍은 dot은 8개뿐. 4명은 오히려 인하 전망",
+      "claim_text": "2027년 말 정책금리 전망(점도표)은 4.375%에 8명, 4.125%에 6명, 3.625%에 3명, 3.125%에 1명",
       "fact_type": "OFFICIAL_CLAIM",
       "actor": "FOMC 참가자 (SEP)",
       "volatility": "STABLE",
@@ -626,7 +628,9 @@
       "extraction_model": null,
       "extraction_version": null,
       "_brief_type": "POLICY_OUTLOOK",
-      "_c3": "C-3 D-4 — 숫자는 일치. \"추가 인상을 찍은 dot 은 8개뿐\"이라는 말은 [다름]: 점도표는 사람을 잇지 않는다. 2027년 말 4.375% 에 8명이고, 그중 최대 4명은 2026년 말에 이미 그 자리다"
+      "_c3": "C-3 D-4 — 숫자는 일치. \"추가 인상을 찍은 dot 은 8개뿐\"이라는 말은 [다름]: 점도표는 사람을 잇지 않는다. 2027년 말 4.375% 에 8명이고, 그중 최대 4명은 2026년 말에 이미 그 자리다",
+      "_brief_text": "2027년에 추가 인상을 찍은 dot은 8개뿐. 4명은 오히려 인하 전망",
+      "_c6": "C-6 — C-3 D-4 대로 고쳤다. 점도표는 금리 수준별 참가자 수만 말한다 — 누가 \"추가로\" 올렸는지는 말하지 않는다. \"4명은 인하\"는 3.625 · 3.125 를 인상 뒤 목표범위(F01)와 견준 것이라 글에서 뺐다"
     },
     {
       "fact_id": "dc28b2c9-46b2-4e22-8b36-f631ee5193f9",
@@ -923,7 +927,7 @@
     {
       "fact_id": "a5fd0cb1-6762-47d2-b94e-3b34160edb28",
       "label": "F34",
-      "claim_text": "연설 직후 2년물 금리가 4.22%→4.30%로 상승",
+      "claim_text": "2년물 국채 금리 종가는 8/27 4.20% 에서 연설 당일(8/28) 4.34% 로 상승",
       "fact_type": "MEASUREMENT",
       "actor": null,
       "volatility": "STABLE",
@@ -935,12 +939,14 @@
       "extraction_model": null,
       "extraction_version": null,
       "_brief_type": "MARKET_CONTEXT",
-      "_c3": "C-3 D-11 — [다름]. 재무부 종가는 8/27 4.20% → 8/28 4.34%. 4.22 → 4.30 의 출처를 못 찾았다 — 출처 없음"
+      "_c3": "C-3 D-11 — [다름]. 재무부 종가는 8/27 4.20% → 8/28 4.34%. 4.22 → 4.30 의 출처를 못 찾았다 — 출처 없음",
+      "_brief_text": "연설 직후 2년물 금리가 4.22%→4.30%로 상승",
+      "_c6": "C-6 — C-3 D-11 대로 고쳤다. 기록에 있는 것은 재무부 종가뿐이다. \"연설 직후\" · 4.22 → 4.30 은 출처가 없다. 출처(TSY)를 붙였다"
     },
     {
       "fact_id": "c6210f38-14b0-412a-adba-0b4f16c1f3da",
       "label": "F35",
-      "claim_text": "회의 직전 10년물 금리는 4.6% 이상. 7월 회의 대비 약 40bp, 연초 대비 1%p 이상 상승",
+      "claim_text": "회의 전날(9/15) 10년물 국채 금리는 5.00%. 7월 회의일(7/29) 4.67%보다 33bp, 연초(1/2) 4.19%보다 81bp 높음",
       "fact_type": "MEASUREMENT",
       "actor": null,
       "volatility": "VOLATILE",
@@ -953,7 +959,9 @@
       "extraction_version": null,
       "_brief_type": "MARKET_CONTEXT",
       "_as_of_basis": "브리프 F35 시점 T-1",
-      "_c3": "C-3 D-3 · D-9 · D-10 — \"4.6% 이상\"은 참이지만 크게 낮춰 말했다(9/15 5.00%). \"연초 대비 1%p 이상\"은 [다름](0.81%p) · \"약 40bp\"는 기준일에 따라 33~39bp"
+      "_c3": "C-3 D-3 · D-9 · D-10 — \"4.6% 이상\"은 참이지만 크게 낮춰 말했다(9/15 5.00%). \"연초 대비 1%p 이상\"은 [다름](0.81%p) · \"약 40bp\"는 기준일에 따라 33~39bp",
+      "_brief_text": "회의 직전 10년물 금리는 4.6% 이상. 7월 회의 대비 약 40bp, 연초 대비 1%p 이상 상승",
+      "_c6": "C-6 — C-3 D-3 · D-9 · D-10 대로 고쳤다. 값은 TSY 표의 9/15 · 7/29 · 1/2 줄이고 차는 그 뺄셈이다 (7/28 4.61 을 기준으로 하면 39bp)"
     },
     {
       "fact_id": "67eedb99-5aae-4800-8414-5818d667f398",
@@ -971,7 +979,8 @@
       "extraction_version": null,
       "_brief_type": "MARKET_EXPECTATION",
       "_as_of_basis": "브리프 F36 시점 T-1. 근거가 없다 — 잰 쪽(CME)의 9/15 수치는 [못 찾음] (C-3 M-1)",
-      "_c3": "C-3 M-1 — [못 찾음]. 잰 쪽(CME)이 남긴 것은 8/31 66% · 회의 전 주 ~58% (→ F42 · F43). \"90\"은 9/16 기자의 말이다 — 출처 없음"
+      "_c3": "C-3 M-1 — [못 찾음]. 잰 쪽(CME)이 남긴 것은 8/31 66% · 회의 전 주 ~58% (→ F42 · F43). \"90\"은 9/16 기자의 말이다 — 출처 없음",
+      "_c6": "C-6 — 고치지 않았다. 맞출 1차 구절이 기록에 없다 (9/15 수치 [못 찾음]). 가리키는 곳이 없다 (DC-B 근거에서 빠졌다 · D33). Fact 로 남길지는 물음으로 올렸다"
     },
     {
       "fact_id": "9e4cc097-b259-4dc5-a54e-fe4c6da095d4",
@@ -1027,7 +1036,7 @@
     {
       "fact_id": "a7190147-d750-4c11-8979-f9820692f849",
       "label": "F32a",
-      "claim_text": "8/28 Jackson Hole에서 Warsh는 여름 지표가 나아졌지만 기저 추세 개선을 뜻하진 않는다고 말하며",
+      "claim_text": "8/28 Jackson Hole에서 Warsh는 올여름 PCE · CPI 수치가 예상보다 나았지만 기저 추세가 의미 있게 나아졌음을 말해 주지는 않는다고 말함",
       "fact_type": "OFFICIAL_CLAIM",
       "actor": "Warsh 의장 (잭슨홀 연설)",
       "volatility": "STABLE",
@@ -1039,12 +1048,14 @@
       "extraction_model": null,
       "extraction_version": null,
       "_brief_type": "POLICY_SIGNAL",
-      "_split_of": "F32 — 발언 부분. 뒷부분(\"이전보다 명확한 인상 가능성 신호를 보냄\")은 사실이 아니다 (_not_facts)"
+      "_split_of": "F32 — 발언 부분. 뒷부분(\"이전보다 명확한 인상 가능성 신호를 보냄\")은 사실이 아니다 (_not_facts)",
+      "_brief_text": "8/28 Jackson Hole에서 Warsh는 여름 지표가 나아졌지만 기저 추세 개선을 뜻하진 않는다고 말하며",
+      "_c6": "C-6 — 원문은 \"better than expected\"(예상보다 나았다)다. 브리프의 \"나아졌지만\"은 \"예상보다\"를 뺐다 (C-3 D-6 과 같은 자리 · DC-C 물음 3 이 이 낱말에 선다). C-3 은 이 절을 [일치]로 판정했다 — C-6 의 판단이다. 끝의 \"말하며\"는 나누면서 남은 꼬리였다"
     },
     {
       "fact_id": "d9d59c06-cc15-46f4-ab20-3ad81064c142",
       "label": "F37b",
-      "claim_text": "회의 당일 경유 가격이 최고치 기록",
+      "claim_text": "EIA 주간 조사(9/14)에서 경유 소매가격은 $6.285 — 1994년에 시작된 시리즈의 그때까지 최고치(명목). 종전 기록(2022-06-20 $5.810)은 9/7 주에 이미 넘었음",
       "fact_type": "MEASUREMENT",
       "actor": null,
       "volatility": "VOLATILE",
@@ -1058,7 +1069,9 @@
       "_brief_type": "EXTERNAL_SHOCK",
       "_split_of": "F37 — 측정 부분. 앞부분(\"이란 전쟁으로 연료 가격이 급등\")은 누구의 주장인지 없는 인과다 (_not_facts). 소유 SL-iran-war (도윤 관찰 2026-09-21)",
       "_as_of_basis": "EIA-D 주간 조사일 9/14 (C-3 D-7 · P8 · P20). 브리프 F37 의 T0(9/16) 당일 수치는 [못 찾음] M-3",
-      "_c3": "C-3 D-7 · I-2 — \"회의 당일\"은 [다름]. EIA 는 주 1회(월요일) 잰다. 9/14 조사값 $6.285 가 당시 사상 최고(명목)였다. 기록은 9/7 주에 이미 깨졌고 9/21 주에 다시 깨졌다. 골든은 \"회의가 열린 주\"로 쓴다 (P8 · P20)"
+      "_c3": "C-3 D-7 · I-2 — \"회의 당일\"은 [다름]. EIA 는 주 1회(월요일) 잰다. 9/14 조사값 $6.285 가 당시 사상 최고(명목)였다. 기록은 9/7 주에 이미 깨졌고 9/21 주에 다시 깨졌다. 골든은 \"회의가 열린 주\"로 쓴다 (P8 · P20)",
+      "_brief_text": "회의 당일 경유 가격이 최고치 기록",
+      "_c6": "C-6 — C-3 D-7 대로 고쳤다. EIA 는 주 1회(월요일) 잰다 — \"회의 당일\"의 값은 [못 찾음] M-3"
     },
     {
       "fact_id": "a8853f71-0ab2-49b1-b530-a0cd9c3fa079",
@@ -1428,7 +1441,7 @@
     {
       "fact_id": "cb0a66db-635c-4bd3-9219-92ce9ab5233f",
       "label": "IR06",
-      "claim_text": "Brent 현물가(달러/배럴)는 개전 뒤 크게 오르내렸다: 2/27 71.32 · 4/6 주 138.21 · 7/2 68.53 · 7/23 105.32 · 8/26 87.77 · 9/15 130.80",
+      "claim_text": "Brent 현물가(달러/배럴): 개전 직전 2/27 71.32 → 4/6 주 138.21 → 7/2 68.53 → 7/23 105.32 → 8/26 87.77 → 9/15 130.80",
       "fact_type": "MEASUREMENT",
       "actor": null,
       "volatility": "STABLE",
@@ -1439,7 +1452,8 @@
       "storyline_version": 1,
       "extraction_model": null,
       "extraction_version": null,
-      "_origin": "브리프에 없다. docs/findings/storyline-iran-war.md 의 1차 구절에서 만들었다 (0.2m-a). 출처가 전쟁 당사자다 — 이란 쪽 1차는 없다 (I-4)"
+      "_origin": "브리프에 없다. docs/findings/storyline-iran-war.md 의 1차 구절에서 만들었다 (0.2m-a). 출처가 전쟁 당사자다 — 이란 쪽 1차는 없다 (I-4)",
+      "_c6": "C-6 — 값은 그대로. \"개전 뒤\"를 뺐다(2/27 은 개전 직전 값이다 — storyline-iran-war.md §4). \"크게 오르내렸다\"는 잰 값이 아니라 읽은 말이라 뺐다 (MEASUREMENT)"
     }
   ],
   "fact_sources": [
@@ -1785,6 +1799,14 @@
       "_passage": "Both nonfarm payroll employment (-23,000) and the unemployment rate (4.1 percent) changed little in July"
     },
     {
+      "fact_id": "9ecc823c-6a68-4517-b605-886cb06782f4",
+      "source_id": "d57af835-6c57-461b-a90f-81afaad1a5c6",
+      "section": null,
+      "span_start": null,
+      "span_end": null,
+      "_passage": "the number of people on temporary layoff increased by 153,000 to 921,000 in July"
+    },
+    {
       "fact_id": "145f189e-e7e3-4af3-9d8e-13cdb1ace448",
       "source_id": "753cb767-5ad7-4261-8d8b-6011f44711d7",
       "section": null,
@@ -1807,6 +1829,15 @@
       "span_start": null,
       "span_end": null,
       "_passage": "Here is my standard: We must be confident that underlying inflation is moving to our objective, clearly and at sufficient speed. Otherwise, we have work to do."
+    },
+    {
+      "fact_id": "a5fd0cb1-6762-47d2-b94e-3b34160edb28",
+      "source_id": "637a6e29-5b4e-4fdb-8f5a-919087e44acf",
+      "section": null,
+      "span_start": null,
+      "span_end": null,
+      "_passage": "8/27 4.20% → 8/28 4.34%",
+      "_note": "구절이 아니라 C-3 이 표(2 Yr 열)에서 읽은 값이다 (D-11)"
     },
     {
       "fact_id": "c6210f38-14b0-412a-adba-0b4f16c1f3da",
@@ -2283,7 +2314,7 @@
         }
       ],
       "_origin": "브리프 §4 DC-C · statement 는 D29-3 이 받은 좁힌 문장 (logs/content/golden-correction-2026-10.md \"## 2차 반영\" 반증 기록) · 반증 기록 §2 DC-C + \"## 2차\" §1",
-      "_goal": "이 기사의 Common Goal 이 이 해석이다 (브리프 §5 · D27). Goal 을 가리키는 타입은 계약에 없다"
+      "_goal": "이 기사의 Common Goal 이 이 해석이다 (브리프 §5 · D27). 가리키는 쪽은 goals 의 COMMON 이다 (D33 · §7.4)"
     },
     {
       "claim_id": "2a690658-15d5-45bb-b552-1ba10e93a807",
@@ -2480,12 +2511,15 @@
           "question": "월별 수치로도 그런가?",
           "slot": null,
           "recollected": false,
-          "answer": "7월 근원 3.3 하나뿐. 6월 · 8월 수치 없음",
+          "answer": "근원 PCE 는 7월 3.3 하나뿐이다. 소비자물가는 6~8월 석 달 치가 있고 한쪽으로 읽히지 않는다 — 식품 · 에너지 제외 1년 상승률은 2.6 → 2.5 → 2.4 로 내려왔고, 전체 1년 상승률은 3.5 → 3.4 → 3.4, 전체 한 달 상승률은 -0.4 → 0.1 → 0.4 로 빨라졌다. 6월 · 8월 PCE 는 없음",
           "facts": [
-            "145f189e-e7e3-4af3-9d8e-13cdb1ace448"
+            "145f189e-e7e3-4af3-9d8e-13cdb1ace448",
+            "2ca58282-7d3e-457e-b1f5-c2a226535965",
+            "2c9954e7-cdc0-4270-99f2-e3feb0969a4c",
+            "205b056f-bd9b-423a-ad1a-60f3d9ffd9e8"
           ],
           "outcome": "SCOPED",
-          "_note": "\"의장의 평가로\". C-5 1차의 기록이다 — 그 뒤 C-3b 가 6~8월 CPI 를 모았으나(F46 · F47 · F41) 이 물음은 다시 적히지 않았다"
+          "_note": "\"의장의 평가로\". C-6 — C-5 1차의 답(\"6월 · 8월 수치 없음\")을 C-3b 가 모은 6~8월 소비자물가(F46 · F47 · F41)에 맞췄다. outcome 은 그대로 SCOPED — 수치가 한쪽으로 읽히지 않으므로 문장은 여전히 의장의 평가로 한정한다. 8월 수치(9/11)는 의장의 8/28 말 뒤에 나왔고, 의장은 9/16 에 같은 평가를 되풀이했다 (F24)"
         }
       ],
       "_origin": "logs/content/golden-correction-2026-10.md §2 \"도출 안 된 해석 5개\" — 그 로그 안의 가칭 N1"
@@ -2721,7 +2755,7 @@
         "670f9a6f-4bf0-4028-9956-f6e0cac2c2f9"
       ],
       "_origin": "docs/findings/fomc-2026-09-brief.md §5 Deep Goals C — 브리프 글자 그대로",
-      "_note": "DC-E 는 C-5 에서 \"취업자 수는 달마다 크게 움직인다 …\"로 좁혀졌다. 이 요점 문장은 브리프 그대로다 — 맞는지는 사람이 본다 (DATA_MODEL §7.4)"
+      "_note": "DC-E 는 C-5 에서 \"취업자 수는 달마다 크게 움직인다 …\"로 좁혀졌다. 이 요점 문장은 브리프 그대로다 — 맞는지는 사람이 본다 (DATA_MODEL §7.4). 해석에 맞춘 안은 logs/content/store-correction-2026-10.md §3 (C-6) — 도윤이 고른다. 문장은 아직 브리프 그대로다"
     }
   ],
   "bridges": [
