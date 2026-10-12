@@ -7,23 +7,23 @@
 //     - 그 단위가 **실제로 보인다** — 투명 · 감춤 · 크기 0 · inert 가 아니다 (등장 효과가 끝난 뒤)
 //     - 누른 물음이 다음 장의 머리에 글자 그대로 있다. 그 밖에 그려진 글자는 정해진 UI 문구뿐이다
 //     - 지금 장 말고는 전부 감춰져 있고 inert 다
-//   움직임 안(a · b · c)마다, 그리고 움직임 줄이기 설정에서도 같아야 한다.
+//   움직임이 켜져 있을 때와 움직임 줄이기 설정일 때 — 둘 다 같아야 한다.
 import { expect, test } from "@playwright/test";
 import { golden, goldenUnits } from "./golden";
-import { MOBILE_SE, MOTIONS, NAMES, ask, openLevel, readSlide, readToEnd, settled } from "./reader";
+import { MOBILE_SE, NAMES, ask, openLevel, readSlide, readToEnd, settled } from "./reader";
 
 const plain = (s: string) => s.replace(/<\/?b>/g, "");
 const TIP = "문장을 누르면 그 문장이 사실인지 해석인지 보여요";
 
-for (const mode of [...MOTIONS, "줄임"] as const)
+for (const mode of ["켬", "줄임"] as const)
   for (const lv of golden().levels) {
     test(`${NAMES[lv.id]} · 움직임 ${mode} — 화면 글이 골든과 문자 단위로 같다`, async ({ browser }) => {
       test.setTimeout(120_000);
       const ctx = await browser.newContext({ viewport: MOBILE_SE, isMobile: true, hasTouch: true, reducedMotion: mode === "줄임" ? "reduce" : "no-preference" });
       const page = await ctx.newPage();
       const cdp = await ctx.newCDPSession(page);
-      await openLevel(page, lv.id, mode === "줄임" ? "" : `?m=${mode}`);
-      await expect(page.locator(".reader")).toHaveAttribute("data-motion", mode === "줄임" ? "none" : mode);
+      await openLevel(page, lv.id);
+      await expect(page.locator(".reader")).toHaveAttribute("data-motion", mode === "줄임" ? "none" : "on");
 
       const want = goldenUnits(lv);
       const others = golden().levels.filter((l: any) => l.id !== lv.id).map((l: any) => `${NAMES[l.id]}으로 다시 읽기`);

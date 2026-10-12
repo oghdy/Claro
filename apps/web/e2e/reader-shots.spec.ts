@@ -1,7 +1,7 @@
-// 본 화면 스크린샷 (375×667 · 375×812 · 1440×900) + 움직임 안마다 넘어가는 모습 영상 (375×667) → logs/frontend/F-2b/
+// 본 화면 스크린샷 (375×667 · 375×812 · 1440×900) + 넘어가는 모습 영상 (375×667) → logs/frontend/F-2b/
 import { test } from "@playwright/test";
 import path from "node:path";
-import { DESKTOP, MOBILE_SE, MOBILE_X, MOTIONS, ask, card, goTo, openLevel, readToEnd, swipe } from "./reader";
+import { DESKTOP, MOBILE_SE, MOBILE_X, ask, card, goTo, openLevel, readToEnd, swipe } from "./reader";
 
 const OUT = path.join(import.meta.dirname, "../../../logs/frontend/F-2b");
 const SIZES = { se: MOBILE_SE, x: MOBILE_X, desktop: DESKTOP };
@@ -46,8 +46,8 @@ for (const [size, vp] of Object.entries(SIZES)) {
   });
 }
 
-for (const m of MOTIONS)
-  test(`영상 움직임 ${m} — 375×667, 입문 1 → 5장 · 지나온 길로 돌아가기`, async ({ browser }) => {
+{
+  test("영상 — 375×667, 입문 1 → 5장 · 지나온 길로 돌아가기", async ({ browser }) => {
     test.setTimeout(120_000);
     const ctx = await browser.newContext({
       viewport: MOBILE_SE, isMobile: true, hasTouch: true, deviceScaleFactor: 2,
@@ -55,7 +55,7 @@ for (const m of MOTIONS)
     });
     const page = await ctx.newPage();
     const cdp = await ctx.newCDPSession(page);
-    await openLevel(page, "basic", `?m=${m}`);
+    await openLevel(page, "basic");
     for (let i = 0; i < 4; i++) {
       await page.waitForTimeout(1100);
       await readToEnd(page, cdp, i);
@@ -71,5 +71,6 @@ for (const m of MOTIONS)
     await page.waitForTimeout(1200);
     const video = page.video()!;
     await ctx.close();
-    await video.saveAs(path.join(OUT, `motion-${m}-375x667.webm`));
+    await video.saveAs(path.join(OUT, "motion-375x667.webm"));
   });
+}

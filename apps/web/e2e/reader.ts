@@ -6,13 +6,12 @@ export const NAMES: Record<string, string> = { basic: "입문", intermediate: "�
 export const MOBILE_SE = { width: 375, height: 667 };
 export const MOBILE_X = { width: 375, height: 812 };
 export const DESKTOP = { width: 1440, height: 900 };
-export const MOTIONS = ["a", "b", "c"] as const;
 
 export const card = (page: Page, i: number) => page.locator(`.r-card[data-slide-index="${i}"]`);
 export const count = (page: Page) => page.locator(".r-count");
 
-export async function openLevel(page: Page, level: string, query = "") {
-  await page.goto(`/${query}`);
+export async function openLevel(page: Page, level: string) {
+  await page.goto("/");
   if (level !== "basic") await page.getByRole("button", { name: NAMES[level], exact: true }).click();
   await page.locator(`.r-deck[data-level="${level}"]`).waitFor();
   await page.evaluate(() => document.fonts.ready);

@@ -1,4 +1,4 @@
-import { color, font, layout, motion, radius, space, type } from "./values";
+import { color, effect, font, layout, motion, radius, space, type } from "./values";
 
 // 토큰 → CSS 변수. 웹만 쓴다. 이름: --c-* 색 · --t-{이름}-{size|line|weight} 글자 · --s-* 간격 · --r-* 모서리 · --m-* 움직임.
 // 값을 여기서 다시 적지 않는다 — 전부 values.ts 에서 온다.
@@ -18,5 +18,6 @@ export function cssVariables(): string {
   out.push(["--column", `${layout.column}px`]);
   for (const [k, v] of Object.entries(motion.duration)) out.push([`--m-${k}`, `${v}ms`]);
   for (const [k, v] of Object.entries(motion.ease)) out.push([`--m-ease-${k}`, `cubic-bezier(${v.join(", ")})`]);
+  out.push(["--press-scale", `${effect.pressScale}`]);
   return `:root{${out.map(([k, v]) => `${k}:${v}`).join(";")}}`;
 }

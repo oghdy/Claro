@@ -7,7 +7,7 @@ import type { ArticlePackage, Layer, Level, LevelId } from "@claro/contract";
 import { radius } from "@claro/tokens";
 import { LEVEL_NAMES } from "../lib/levels";
 import { COPY, LAYER_EXPLAIN, LAYER_LEGEND, LAYER_SHEET_WORD, LAYER_WORD } from "./copy";
-import { ASK_IN, CHOREOGRAPHY, DEFAULT_MOTION, LAST_REST, PANEL, type Choreography, type MotionId } from "./motions";
+import { ASK_IN, CHOREOGRAPHY, LAST_REST, PANEL, type Choreography } from "./motions";
 import { SlideView } from "./SlideView";
 
 // 읽는 화면 — "물음을 따라가는 여정" (D26 · 도윤 결정).
@@ -33,20 +33,20 @@ export type ReaderMoment =
 // 꼬리표 글자는 CSS 가 그린다 — 낱말은 copy.ts 한 곳에서 온다
 const WORD_VARS = Object.fromEntries(Object.entries(LAYER_WORD).map(([k, v]) => [`--w-${k}`, JSON.stringify(v)])) as CSSProperties;
 
-// 버튼의 하얀 면 — 다 보임 / 위쪽 · 아래쪽 끝으로 걷힘
+// 버튼의 하얀 면 — 다 보임 / 아래쪽 끝으로 걷힘
 const SHOWN = `inset(0% 0% 0% 0% round ${radius.ask}px)`;
-const DRAINED = { top: `inset(0% 0% 100% 0% round ${radius.ask}px)`, bottom: `inset(100% 0% 0% 0% round ${radius.ask}px)` };
+const DRAINED = `inset(100% 0% 0% 0% round ${radius.ask}px)`;
 
 export function Reader({
-  pkg, motionId = DEFAULT_MOTION, onMoment,
+  pkg, onMoment,
 }: {
-  pkg: ArticlePackage; motionId?: MotionId; onMoment?: (m: ReaderMoment) => void;
+  pkg: ArticlePackage; onMoment?: (m: ReaderMoment) => void;
 }) {
   const [levelId, setLevelId] = useState<LevelId>(pkg.levels[0]!.id);
   const [tags, setTags] = useState(false);
   const level = pkg.levels.find((l) => l.id === levelId)!;
   // 움직임 줄이기 설정이면 전환 · 등장 없이 바로
-  const choreo = useReducedMotion() ? null : CHOREOGRAPHY[motionId];
+  const choreo = useReducedMotion() ? null : CHOREOGRAPHY;
   const still = choreo ? "" : ":still";
   const sink = useRef(onMoment);
   sink.current = onMoment;
@@ -60,7 +60,7 @@ export function Reader({
   }
 
   return (
-    <div className="reader" data-layers={tags ? "on" : "off"} data-motion={choreo ? motionId : "none"} style={WORD_VARS}>
+    <div className="reader" data-layers={tags ? "on" : "off"} data-motion={choreo ? "on" : "none"} style={WORD_VARS}>
       <Journey key={level.id + still} pkg={pkg} level={level} choreo={choreo} tags={tags} onTags={setTags} onLevel={switchLevel} notice={notice} />
     </div>
   );
@@ -157,6 +157,10 @@ function Journey({
     setTrail(false);
     reach(i); // 물음을 눌러 넘어간다 = 이 장을 끝냈다 (OBSERVATION §5.4). 키보드로 버튼에 먼저 닿았을 때도
     const from = cards.current[i]!, to = cards.current[i + 1]!;
+    // 눌려서 작아진 버튼을 제 크기로 돌려놓고 잰다 — 물음은 제 크기의 자리에서 출발한다
+    const pressed = from.querySelector<HTMLElement>(".r-ask")!;
+    pressed.style.transition = "none";
+    pressed.style.transform = "none";
     const at = from.querySelector(".r-ask-q")!.getBoundingClientRect();
     revealed.current[i + 1] = false;
     flushSync(() => {
@@ -167,7 +171,7 @@ function Journey({
     });
     to.scrollTop = 0;
     to.focus({ preventScroll: true });
-    if (!choreo) return;
+    if (!choreo) return pressed.removeAttribute("style");
 
     busy.current = true;
     const deck = to.parentElement!;
@@ -183,12 +187,11 @@ function Journey({
     plate.style.clipPath = SHOWN;
     rule.style.transform = "scaleX(0)";
     btn.style.opacity = "0";
-    const leaveY = choreo.leave.y === "follow" ? -dy : choreo.leave.y;
     const moves = [
       animate(fly, { transform: [start, "translate(0px, 0px)"] }, choreo.travel),
-      animate(plate, { clipPath: [SHOWN, DRAINED[choreo.drain.toward]] }, choreo.drain.transition),
+      animate(plate, { clipPath: [SHOWN, DRAINED] }, choreo.drain),
       animate(rule, { transform: ["scaleX(0)", "scaleX(1)"] }, choreo.rule),
-      animate(old, { opacity: [1, 0], transform: ["translateY(0px)", `translateY(${leaveY}px)`] }, choreo.leave.transition),
+      animate(old, { opacity: [1, 0], transform: ["translateY(0px) scale(1)", `translateY(${choreo.leave.y}px) scale(${choreo.leave.scale})`] }, choreo.leave.transition),
     ];
     Promise.all(moves).then(() => {
       flushSync(() => setLeaving(null));
@@ -230,7 +233,10 @@ function Journey({
 
   // 덩이(kicker · 제목 · 블록)가 나타나는 모양. 줄임 설정이면 처음부터 다 보인다
   const item: Variants = choreo
-    ? { hidden: { opacity: 0, y: choreo.enter.y }, shown: { opacity: 1, y: 0, transition: choreo.enter.transition } }
+    ? {
+        hidden: { opacity: 0, y: choreo.enter.y, filter: `blur(${choreo.enter.blur}px)` },
+        shown: { opacity: 1, y: 0, filter: "blur(0px)", transition: choreo.enter.transition },
+      }
     : { hidden: { opacity: 1, y: 0 }, shown: { opacity: 1, y: 0, transition: { duration: 0 } } };
   const body: Variants = {
     hidden: {},
