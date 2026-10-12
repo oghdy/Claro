@@ -30,7 +30,7 @@ docs/FINDINGS.md 는 통째로 읽지 마라 (43KB). 필요한 절만 그때그�
 ```
 Phase 0 — 계약 확정 (구현 전 기반 문서)
 
-백엔드  0.0a ✅ → 0.0b ✅ → 0.1a ✅ → 0.1b ✅ → 0.2a ✅ → 0.2b ✅ → 0.2c ✅ → 0.2m ✅ → 0.2n
+백엔드  0.0a ✅ → 0.0b ✅ → 0.1a ✅ → 0.1b ✅ → 0.2a ✅ → 0.2b ✅ → 0.2c ✅ → 0.2m ✅ → 0.2n ✅ → D1 백엔드
          역산      골든      화면계약   골든재작성  개념계약   데이터계약  관찰기록      이전
 프론트                                  F-1 ✅ → F-2a ✅ → D26 ✅ → F-2b (열림) ────────┐
                                         정확히    디자인탐색          디자인확정        │
@@ -41,13 +41,12 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 그 뒤: D1 백엔드 스택 → 0.4 스키마 구현 → Phase 1 (파이프라인 A 반자동 + 게이트 4)
 ```
 
-## 세션 상태 — 2026-10-09 밤. 이전(0.2m)이 끝났다 (D33)
+## 세션 상태 — 2026-10-12. Phase 0 의 계약 · 이전이 끝났다. 남은 것: C-6 · F-2b · D31 · D1 백엔드
 | 세션 | 커밋 | 상태 |
 |---|---|---|
-| **0.2n-a** 게이트 반영 — 요점(Goal) 타입 · 저작 메모를 버전 밖으로 | — | **지시문 준비됨** (`development-backend.md` "Step 0.2n"). 0.2m-a 세션에 |
-| **0.2n-b** 게이트 반영 — "장의 끝" 사건 · 교정 기록 jsonl · Probe → 요점 | — | **지시문 준비됨** (같은 곳). 0.2m-b 세션에. a 가 키 이름을 먼저 커밋 |
-| **F-2b** 디자인 확정 | — | **프롬프트 준비됨 — 지금 보낸다** (`development-frontend.md`). 게이트 = 도윤이 실제 폰에서 봄 + 물을 것 7개 |
-| **C-6** 저장소 사실의 글 교정 | — | **프롬프트 준비됨** (`development-content.md`). **0.2n-a 커밋 뒤** (같은 파일 store.json) |
+| **F-2b** 디자인 확정 | — | **도는 중** (2026-10-12 — apps/web · packages/tokens 미커밋 파일 있음. 건드리지 마라). 게이트 = 도윤이 실제 폰에서 봄 + 물을 것 7개 |
+| **C-6** 저장소 사실의 글 교정 | — | **프롬프트 준비됨 — 지금 보낸다** (`development-content.md`). DEEP-C 요점 문장 안도 여기서 |
+| ✅ 0.2n-a · 0.2n-b | `26a61ff` · `d260749` | 닫힘 (D33 반영 확인). Goal 타입 · `SLIDE_END_SHOWN` · jsonl |
 | ✅ 0.2m-a · 0.2m-b | `03b6c3c` · `4107393` | 닫힘 (D33). 검사 12종 전부 통과 |
 | ✅ C-5 · C-4 · 0.2c · C-3b · F-2a | | 닫힘 (D29 · D32 · D30 · D26) |
 
@@ -57,7 +56,7 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 라이브러리는 `docs/content/concept-library.json` 이 저장소, md 는 사람이 읽고 쓰는 면 (md 문안을 고치고 저장소에 새 버전을 안 만들면 검사가 실패한다).
 교정 기록은 `logs/correction-log.jsonl` (CSV 는 얼린다 — 0.2n-b).
 
-**발행에서 막히는 것 61 — 독자에게 닿는 것 5.** 0.2n-a(판단 6 · DC-B 근거) 뒤 F44 "3주 뒤" 공개 시점 증명만 남을 것이다 (사실은 맞다 — 그대로 둔다, D33).
+**발행에서 막히는 것 56 — 독자에게 닿는 것 1** (F44 "3주 뒤" 공개 시점 증명. 사실은 맞다 — 그대로 둔다, D33).
 
 **적어둔 것**: 입문 5장 제목이 비유를 개념보다 먼저 낸다 (§4.4 — 게이트 3 에서 볼 것) · `time_spent_min` 42행 전부 비었다 · 미룬 _open 넷 (m4 FTC 때 · m5 D31 때 · m6 파이프라인 1 때 · m7 stale 검사 때).
 
@@ -109,7 +108,7 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 - PM 이 틀렸으면 한 문장으로 인정하고 고친다. 길게 사과하지 않는다
 
 ## 커밋 규칙
-- **같은 작업 트리에서 다른 세션이 동시에 일한다.** `git add -A` 금지. 파일을 하나씩 지정한다
+- **같은 작업 트리에서 다른 세션이 동시에 일한다.** `git add -A` · stash · autostash · 폴더 단위 checkout 금지 (CLAUDE.md 에도 있다). 파일을 하나씩 지정한다
 - 커밋 전 `git status` 로 남의 미커밋 파일을 확인하고 건드리지 않는다
 - 커밋 뒤 push. 메시지 끝에 attribution 줄 (시스템 안내를 따른다)
 
@@ -135,9 +134,9 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 | 위 검사의 자체 시험 | `python3 scripts/selftest-verify-concept-identity.py` | exit 0 |
 | 개념 린트 ② (시간 지시어) | `python3 scripts/lint-concepts.py` | **exit 1, 1 hit** — C-0002 ANALOGY "지금" = 알려진 오탐. 정상이다 |
 | observed → 골든 차이 | `python3 scripts/diff-observed-article.py` | 참고용 출력 |
-| OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 90 + 계산 1 |
+| OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 106 + 계산 2 |
 | 라이브러리 md ↔ 저장소 | `python3 scripts/compare-concept-text.py` | 차이 0 |
-| DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 사본 100 |
+| DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 사본 110 |
 | 프론트 | `pnpm -s typecheck` · `pnpm -s test` | 통과 (계약 14 · 화면 7). e2e 는 이 Mac 의 Chrome 을 쓴다 |
 
 빨간불 없음 (2026-10-09 · D33). `compare-reader-text` 는 옛 골든(`c46871d`) 대비 허용 차이 29, 이전 전후 차이 0.
