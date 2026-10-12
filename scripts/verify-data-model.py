@@ -57,6 +57,7 @@ REQUIRED_FIELDS = {
                        'commercial_use', 'attribution_required', 'terms_url', 'last_reviewed_at'),   # §5.1
     'DerivedClaim': ('claim_id', 'label', 'event_id', 'statement', 'kind', 'basis', 'checks'),
     'CounterCheck': ('question', 'slot', 'recollected', 'answer', 'facts', 'outcome'),           # §7.2
+    'Goal': ('goal_id', 'label', 'event_id', 'kind', 'statement', 'claims'),                    # 확정 §7.3 · D33
     'Bridge': ('bridge_id', 'label', 'bridge_type', 'event_id', 'concept_id', 'concept_version', 'slot',
                'from_event', 'facts'),
     'Event': ('event_id', 'code', 'title', 'occurred_at', 'storyline_id'),                     # code — D27
@@ -76,6 +77,7 @@ REQUIRED_ENUMS = {
     ('Bridge', 'bridge_type'): {'CONCEPT_BRIDGE', 'STORY_BRIDGE'},                             # §4.1
     ('SlotCheck', 'status'): {'FOUND', 'NOT_EXTRACTED', 'SOURCE_UNAVAILABLE', 'NOT_APPLICABLE', 'STORYLINE_STALE'},
     ('Source', 'kind'): {'PRIMARY', 'SECONDARY'},                                              # §5.1
+    ('Goal', 'kind'): {'COMMON', 'DEEP'},                                                      # 확정 §7.3
     ('DerivedClaim', 'kind'): {'ASSERTED', 'DEFENSIVE'},                                       # 실물 DC-B
     ('CounterCheck', 'outcome'): {'NOT_REFUTED', 'SCOPED', 'UNRESOLVED'},                      # 실물 DC-A · C · B
 }
@@ -290,7 +292,7 @@ def count_in(text, frag):
 # ── C. 원천 — 저장소가 옮기기만 했는가 ───────────────────────────────────────
 STORE_TYPES = {'events': 'Event', 'storylines': 'Storyline', 'storyline_versions': 'StorylineVersion', 'sources': 'Source',
                'source_documents': 'SourceDocument', 'source_registry': 'SourceRegistry', 'facts': 'Fact',
-               'fact_sources': 'FactSource', 'claims': 'DerivedClaim', 'bridges': 'Bridge', 'slot_checks': 'SlotCheck'}
+               'fact_sources': 'FactSource', 'claims': 'DerivedClaim', 'goals': 'Goal', 'bridges': 'Bridge', 'slot_checks': 'SlotCheck'}
 
 
 def check_origin(store, record, contract_text, fb, records_text):
@@ -350,6 +352,14 @@ def check_origin(store, record, contract_text, fb, records_text):
     for x in store.get('_not_facts', []):
         if not any(x['text'] in b['text'] for b in fb.values()):
             E('BRIEF_TEXT', f'_not_facts {x.get("label")}: 브리프에 없는 글이다')
+    # 요점 — 브리프 §5 의 글 그대로. 좁힌 문장은 브리프 글(`_brief_statement`)에서 어디를 바꿨는지가 보여야 한다
+    brief_text = open(BRIEFS['FOMC'], encoding='utf-8').read()
+    for g in store['goals']:
+        src_ = g.get('_brief_statement', g['statement'])
+        if src_ not in brief_text:
+            E('BRIEF_TEXT', f'Goal {g["label"]}: 요점 문장이 브리프 §5 에 글자 그대로 없다 — {src_[:40]!r}')
+        elif '_brief_statement' in g and g['statement'] != src_.replace('그 이유가', '연준이 든 이유가'):
+            E('BRIEF_TEXT', f'Goal {g["label"]}: 좁힌 문장이 승인된 것(D29-3 — "그 이유가" → "연준이 든 이유가")과 다르다')
     # 1차 구절 — 기록에 글자 그대로
     fid = {f['fact_id']: f['label'] for f in store['facts']}
     for x in store['fact_sources']:
@@ -387,7 +397,7 @@ def load_model(b):
          'sources': {s_['source_id']: s_ for s_ in st['sources']},
          'documents': {d['source_id']: d['text'] for d in st['source_documents']},
          'registry': {r['source']: r for r in st['source_registry']},
-         'claims': {c['claim_id']: c for c in st['claims']}, 'bridges': {x['bridge_id']: x for x in st['bridges']},
+         'claims': {c['claim_id']: c for c in st['claims']}, 'goals': {g['goal_id']: g for g in st['goals']}, 'bridges': {x['bridge_id']: x for x in st['bridges']},
          'events': {e['event_id']: e for e in st['events']}, 'storylines': {x['storyline_id']: x for x in st['storylines']},
          'storyline_versions': st['storyline_versions'], 'slots': st['slot_checks']}
     m['pending'] = [(lid, path, sp['layer'], sp['_refs_pending'].get('need')) for lid, n, path, sp in golden_spans(pkg)
@@ -451,7 +461,7 @@ def check_model(m, lib, publish=False):
         E('RECORD_KEY', f'ArticleRecord 의 article_id {aid!r} · article_version {av!r} — UUID 와 양의 정수 (불변식 26)')
     # 1 — 키 · label
     seen = Counter()
-    for kind, key in (('facts', 'fact_id'), ('claims', 'claim_id'), ('bridges', 'bridge_id'), ('sources', 'source_id')):
+    for kind, key in (('facts', 'fact_id'), ('claims', 'claim_id'), ('bridges', 'bridge_id'), ('sources', 'source_id'), ('goals', 'goal_id')):
         for k, v in m[kind].items():
             if k != v[key]:
                 E('KEY_MISMATCH', f'{kind} {k} 의 {key} 가 {v[key]}')
@@ -540,6 +550,29 @@ def check_model(m, lib, publish=False):
             for k in c['checks']:
                 if k['outcome'] in ('NOT_REFUTED', 'SCOPED') and not k['facts']:
                     P('CHECK_NO_FACTS', f'{w}: 반증 "{k["question"][:24]}" 의 답에 사실이 없다 (§7.3)')
+    # 27 · 28 — Goal (확정 §7.3 · D33). 판정은 가리킨 해석에서 나온다 (§7.4)
+    G = m.get('goals', {})
+    for ev, n in Counter(g['event_id'] for g in G.values() if g['kind'] == 'COMMON').items():
+        if n != 1:
+            E('GOAL_COMMON', f'사건 {ev} 에 COMMON 요점이 {n}개 — 정확히 하나 (불변식 27)')
+    for ev in m['events']:
+        if G and not any(g['event_id'] == ev and g['kind'] == 'COMMON' for g in G.values()) and any(g['event_id'] == ev for g in G.values()):
+            E('GOAL_COMMON', f'사건 {ev} 에 COMMON 요점이 없다 (불변식 27)')
+    for (ev, lab), n in Counter((g['event_id'], g['label']) for g in G.values()).items():
+        if n > 1:
+            E('LABEL_DUP', f'{ev} 안에 요점 label {lab} 가 {n}번')
+    for g in G.values():
+        w = f'Goal {g["label"]}'
+        if g['kind'] not in ('COMMON', 'DEEP'):
+            E('GOAL_KIND', f'{w}: kind={g["kind"]!r} (§7.4)')
+        if g['event_id'] not in m['events']:
+            E('GOAL_CLAIMS', f'{w}: 사건 {g["event_id"]} 이 없다')
+        if not g['claims'] or any(c not in C or C[c]['event_id'] != g['event_id'] for c in g['claims']):
+            E('GOAL_CLAIMS', f'{w}: claims 는 1개 이상이고 전부 같은 사건의 DerivedClaim 이다 (불변식 27)')
+            continue
+        bad = [C[c]['label'] for c in g['claims'] if verdict(C[c]) is None]
+        if bad:
+            P('GOAL_UNCHECKED', f'{w}: 가리킨 해석 {bad} 의 판정이 안 나온다 — 요점이 반증을 통과하지 못했다 (불변식 28 · 확정 §7.3)')
     # 한 판 안에서 한 개념은 한 버전이다 (CONCEPT_IDENTITY 불변식 12 · OBSERVATION §4.2 가 기대는 것)
     pinned = defaultdict(set)
     for lid, spans in VC.level_spans(pkg):
@@ -694,7 +727,7 @@ def check_model(m, lib, publish=False):
 
 # ── 실행 ────────────────────────────────────────────────────────────────────
 # 발행 검사에서 막히는 것을 둘로 가른다 (D27) — 독자에게 닿는 것 / 기계 검증용(파이프라인)
-READER_FACING = ('REFS_PENDING', 'FACT_NO_PRIMARY', 'FACT_NOT_YET_PUBLIC', 'CLAIM_UNCHECKED', 'CHECK_NO_FACTS',
+READER_FACING = ('REFS_PENDING', 'FACT_NO_PRIMARY', 'FACT_NOT_YET_PUBLIC', 'CLAIM_UNCHECKED', 'GOAL_UNCHECKED', 'CHECK_NO_FACTS',
                  'DERIVED_UNVERIFIED', 'DERIVED_INPUT_NO_FACT', 'QUOTE_NO_COMMON_SOURCE', 'STORYLINE_STALE', 'BRIDGE_CONCEPT')
 MACHINE_ONLY = ('FACT_NO_SOURCE_SPAN', 'FACT_PUBLIC_UNPROVEN', 'QUOTE_SPAN_MISSING', 'QUOTE_NOT_ALLOWED')
 
@@ -742,7 +775,7 @@ def main():
     nb = sum(1 for f in st['facts'] if '_brief_type' in f)
     print(f'  저장소 {os.path.relpath(VA.STORE, ROOT)} — Fact {len(st["facts"])} (브리프에서 {nb} · 새로 {len(st["facts"]) - nb}) · '
           f'FactSource {len(st["fact_sources"])} (1차 구절 {sum(1 for x in st["fact_sources"] if "_passage" in x)}) · Source {len(st["sources"])} · '
-          f'DerivedClaim {len(st["claims"])} · Bridge {len(st["bridges"])} · Event {len(st["events"])} · Storyline {len(st["storylines"])}')
+          f'DerivedClaim {len(st["claims"])} · Goal {len(st["goals"])} · Bridge {len(st["bridges"])} · Event {len(st["events"])} · Storyline {len(st["storylines"])}')
     if model:
         auth = model['record']['authoring']
         vol = Counter(t['class'] for t in auth['time_expressions'])

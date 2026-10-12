@@ -29,6 +29,7 @@ FID = {f['label']: k for k, f in BASE['facts'].items()}
 FID.update(F32=FID['F32a'], F37=FID['F37b'])            # 브리프의 이름 → 나눈 뒤 (DATA_MODEL §3.3)
 CID = {c['label']: k for k, c in BASE['claims'].items()}
 BID = next(iter(BASE['bridges']))
+GID = {g['label']: k for k, g in BASE['goals'].items()}
 EVENT_ID, IRAN_ID = next(iter(BASE['events'])), next(iter(BASE['storylines']))
 EVENT_CODE = BASE['events'][EVENT_ID]['code']
 CONCEPT_ID = {code: k for k, code in BASE['concept_codes'].items()}
@@ -273,6 +274,11 @@ CASES = [
     ('원천 — 1차 구절을 지어냄', 'bundle',
      b_(lambda g, r, st: st['fact_sources'][0].__setitem__('_passage', 'The Committee judged that inflation had worsened.')),
      {'PASSAGE_NOT_IN_RECORD'}),
+    ('§7.4 — 요점 문장을 고쳐 씀 (브리프에 없는 글)', 'bundle',
+     b_(lambda g, r, st: st['goals'][1].__setitem__('statement', '7월의 소수 의견이 9월에 위원회를 설득했다')), {'BRIEF_TEXT'}),
+    ('§7.4 — Common Goal 을 좁히기 전 문장으로 되돌림 ("그 이유가")', 'bundle',
+     b_(lambda g, r, st: st['goals'][0].__setitem__('statement', st['goals'][0]['_brief_statement'])), {'BRIEF_TEXT'}),
+    ('§1 — Goal 에 판정을 저장 (verdict 칸)', 'bundle', b_(lambda g, r, st: st['goals'][0].__setitem__('verdict', 'VALID')), {'STORE_SHAPE'}),
     ('§1 — Fact 에 계약에 없는 필드 (source)', 'bundle', b_(lambda g, r, st: sfact(st, 'F01').__setitem__('source', 'S1')),
      {'STORE_SHAPE'}),
     ('§1 — Fact 에서 actor 삭제', 'bundle', b_(lambda g, r, st: sfact(st, 'F24').pop('actor')), {'STORE_SHAPE'}),
@@ -342,6 +348,15 @@ CASES = [
      m_(lambda m: [r.__setitem__('version', 3) for _, spans in V.VC.level_spans(m['record']['package']) for _, sp in spans
                    if sp['layer'] == 'concept' for r in sp['refs'] if r['concept_id'] == CONCEPT_ID['C-0002']]),
      {'BRIDGE_CONCEPT'}),
+    ('불변식 27 — COMMON 요점이 둘 (Deep B 를 COMMON 으로)', 'model',
+     m_(lambda m: m['goals'][GID['DEEP-B']].__setitem__('kind', 'COMMON')), {'GOAL_COMMON'}),
+    ('불변식 27 — COMMON 요점이 없다', 'model', m_(lambda m: m['goals'].pop(GID['COMMON'])), {'GOAL_COMMON'}),
+    ('불변식 27 — 요점이 가리키는 해석이 없다 (claims 비움)', 'model',
+     m_(lambda m: m['goals'][GID['COMMON']].__setitem__('claims', [])), {'GOAL_CLAIMS'}),
+    ('불변식 27 — 요점이 Fact 를 가리킴 (해석이 아니다)', 'model',
+     m_(lambda m: m['goals'][GID['DEEP-C']].__setitem__('claims', [FID['F30']])), {'GOAL_CLAIMS'}),
+    ('불변식 27 — kind 가 어휘 밖 (BLOCKING)', 'model', m_(lambda m: m['goals'][GID['DEEP-A']].__setitem__('kind', 'BLOCKING')),
+     {'GOAL_KIND'}),
     ('불변식 22 — DC-C basis 비움', 'model', m_(lambda m: m['claims'][CID['DC-C']].__setitem__('basis', [])), {'CLAIM_NO_BASIS'}),
     ('불변식 18 — 브리지 facts 비움 (F31 을 품지 않은 브리지)', 'model',
      m_(lambda m: m['bridges'][BID].__setitem__('facts', [])), {'BRIDGE_NO_FACTS'}),
@@ -393,11 +408,15 @@ CASES = [
     ('불변식 13 — 핀 없음', 'publish', m_(lambda m: m['record']['authoring'].__setitem__('storylines', [])),
      {'STORYLINE_STALE'}),
     ('불변식 23 — DC-D 반증 기록 없음 (브리프 실물 그대로)', 'publish',
-     m_(lambda m: m['claims'][CID['DC-D']].__setitem__('checks', [])), {'CLAIM_UNCHECKED'}),
+     m_(lambda m: m['claims'][CID['DC-D']].__setitem__('checks', [])), {'CLAIM_UNCHECKED', 'GOAL_UNCHECKED'}),
     ('불변식 23 — ASSERTED DC-C 에 미결 반증', 'publish',
      m_(lambda m: m['claims'][CID['DC-C']]['checks'].append({'question': '시험', 'slot': None, 'recollected': False,
                                                             'answer': '', 'facts': [], 'outcome': 'UNRESOLVED'})),
-     {'CLAIM_UNCHECKED'}),
+     {'CLAIM_UNCHECKED', 'GOAL_UNCHECKED'}),
+    ('불변식 28 — Common Goal 이 선 해석(DC-C)에 미결 반증 → 요점도 서지 않는다 (C-5 1차의 실물)', 'publish',
+     m_(lambda m: m['claims'][CID['DC-C']]['checks'][3].__setitem__('outcome', 'UNRESOLVED')), {'CLAIM_UNCHECKED', 'GOAL_UNCHECKED'}),
+    ('불변식 28 — Deep A 의 방어용 해석(DC-B)은 미결이어도 요점이 선다', 'publish',
+     m_(lambda m: m['claims'][CID['DC-B']]['checks'][0].__setitem__('facts', [])), set()),
     ('불변식 23 — DC-A 반증 답에 사실 없음 (브리프 실물: "셋 다 투표권자")', 'publish',
      m_(lambda m: m['claims'][CID['DC-A']]['checks'][0].__setitem__('facts', [])), {'CHECK_NO_FACTS'}),
     ('불변식 17 — 개전일이 월 정밀도 ("201일째" 증명 못 함)', 'publish',

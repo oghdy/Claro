@@ -7,6 +7,7 @@
 | 2026-09-30 | 초안 — 브리프 3건 사실 표 · FOMC DC-A~E · 골든 `_` 주석(대기 13 · 끊긴 F 연결 · `_volatility` · `_attribution_refs`) · FINDINGS §4.1 §5 §6.2 §7.1 §7.2 §9.2 확정에서 도출. **게이트 전** | B-0.2b |
 | 2026-10-09 | 게이트 반영 (D27) — `fact_type` 7값으로 닫음(딱 맞지 않던 세 무리의 행선지 확정) · 발행하려면 Fact 마다 1차 출처 · Event · Storyline 도 UUID + `code` · §16 판정됨 · §17 레인(C-3 · C-5 · 파이프라인) · 독자 글 1건(“올리자” 따옴표) 반영 | B-0.2b |
 | 2026-10-09 | D30 반영 — ArticleRecord 에 `article_id`(UUID) · `article_version`(정수). 불변 · 짝이 유일 (불변식 26). 무엇이 새 판을 만드나는 미확인. 골든 발급은 0.2m (검사 WARN) | B-0.2c |
+| 2026-10-12 | D33 반영 — **Goal 타입** (§1 · §7.4 · 불변식 27 · 28. 키는 `goal_id`, 참조는 GoalRef) · §19 _open-m1 수용 · m6 · m7 미룸 · m8 판정됨 | B-0.2n-a |
 | 2026-10-09 | 골든 · 브리프를 이 모양으로 옮겼다 (§18) — `fixtures/store.json` · `fomc-2026-09.record.json` · 패키지의 참조를 층별 Ref 로. 계약에 더한 것: "닿는 Fact"의 뜻과 불변식 11 이 반증 답의 사실에도 걸린다는 것(§7.3 · §14) · `_source_note` 의 행선지(§11) · §15 대체 관계 줄(자리 없음) · §17 대기 21 이 풀린 기록 · §19 _open-m6 ~ m8. 타입은 안 바뀜 | B-0.2m-a |
 | 2026-10-09 | 계약이 살아 있는 실물의 글자 · 수를 적지 않게 — §17 대기 표는 날짜 붙은 기록으로, 불변식 25 는 어휘 · 층만 (목록 · 수는 검사가 실물에서 센다). 잠정 적용 → §19 _open-m1 | B-0.2m-a |
 
@@ -34,9 +35,9 @@
 
 ## 0. 범위
 
-**이 계약이 주인인 것** — Fact · FactSource · Source · SourceDocument · SourceRegistry · DerivedClaim · CounterCheck · Bridge ·
+**이 계약이 주인인 것** — Fact · FactSource · Source · SourceDocument · SourceRegistry · DerivedClaim · CounterCheck · Goal · Bridge ·
 Event · Storyline · StorylineVersion · TimeExpression · ArticleRecord · ArticleAuthoring · SlotCheck,
-그리고 참조 모양 FactRef · ClaimRef · BridgeRef · SourceRef · EventRef · StorylineRef.
+그리고 참조 모양 FactRef · ClaimRef · BridgeRef · SourceRef · EventRef · StorylineRef · GoalRef.
 
 **안 넣는 것**
 - Concept 과 그 참조(ConceptRef) · 브리지 자리(BridgeSlot) → CONCEPT_IDENTITY. 여기서는 가리키기만 한다
@@ -62,6 +63,7 @@ ClaimRef     = UUID                // DerivedClaim.claim_id
 BridgeRef    = UUID                // Bridge.bridge_id
 SourceRef    = UUID                // Source.source_id — 패키지에는 나오지 않는다
 EventRef     = EventId
+GoalRef      = UUID                // Goal.goal_id — 패키지에는 나오지 않는다. 물음(OBSERVATION Probe)이 이것으로 가리킨다 (D33)
 StorylineRef = StorylineId
 
 FactType = "OFFICIAL_ACTION" | "OFFICIAL_CLAIM" | "OFFICIAL_LIMIT" | "MEASUREMENT"
@@ -138,6 +140,15 @@ CounterCheck {
   answer:      string
   facts:       FactRef[]            // 답이 된 사실. NOT_REFUTED · SCOPED 는 발행하려면 1개 이상
   outcome:     "NOT_REFUTED" | "SCOPED" | "UNRESOLVED"
+}
+
+Goal {                              // 요점 — 독자가 이 기사에서 얻어야 하는 것 (확정 §7.3 · D33). 독자 글이 아니다
+  goal_id:   UUID
+  label:     string                 // "COMMON" · "DEEP-A". 사건 안에서 유일 (실물: 브리프 §5 의 A · B · C)
+  event_id:  EventId
+  kind:      "COMMON" | "DEEP"      // 확정 §7.3. COMMON 은 사건마다 정확히 하나 — 모든 레벨이 닿아야 하는 한 문장
+  statement: string                 // 한 문장. 반증을 거친 뒤의 것 (좁혔으면 좁힌 문장)
+  claims:    ClaimRef[]             // 1개 이상. 이 요점이 서 있는 해석 — 요점의 판정은 여기서 나온다 (§7.4)
 }
 
 Bridge {                            // 연결 (확정 §4.1). 글이 아니다 — 문장은 기사가 쓴다
@@ -528,6 +539,30 @@ FTC 는 A~E 중 방어용 1(D), 스크루웜은 A~D 중 방어용 2(C · D). 모
   발행 뒤에 나온 문서로 답이 바뀌면 그것은 새 사실이고 스토리라인에 붙는다 (확정 §9.2).
   **실물**: DC-A 둘째 물음(7월 반대자 셋의 9월 표) — 이름으로 답하는 문서는 9월 회의록(10/7)뿐이다. C-3b 가 발행 전 문서 셋(1월 회의록 · 7월 성명문 · 9월 성명문)에서 이끌어낸 답으로 다시 적었고, 그 답은 통과한다
 
+### 7.4 Goal — 요점 (D33)
+
+**원천** — 확정 §7.3 (Common Goal 은 모든 뷰가 닿아야 하는 한 문장 · Deep Goal 은 심화 뷰의 보조 목표 · POST probe 는 Common Goal 에서만 나온다 · **Goal 자체가 반증을 통과해야 한다**) 와
+실물 — FOMC 브리프 §5 (Common 1 · Deep 3).
+
+| 브리프 §5 | `kind` | `claims` | 브리프가 적은 것 |
+|---|---|---|---|
+| Common Goal | COMMON | DC-C | D27 "DC-C 는 이 기사의 Common Goal 이다" · D29-3 (문장을 좁힘) |
+| Deep A | DEEP | DC-A · DC-B | "(DC-A + DC-B)" |
+| Deep B | DEEP | DC-D | "(DC-D)" |
+| Deep C | DEEP | DC-E | "(DC-E)" |
+
+- **요점은 해석을 가리킨다.** 실물 넷이 전부 그렇다 — 브리프가 Deep 마다 DC 를 괄호로 적었고, Common Goal 은 DC-C 가 주장하는 것을 독자 쪽에서 말한 문장이다("…라는 것을 이해한다")
+- **요점의 판정은 저장하지 않는다. 가리킨 해석의 판정에서 나온다** (§7.3 과 같은 방식 · 불변식 28).
+  실물이 그렇게 했다: C-5 는 "Common Goal 은 서는가"를 DC-C 의 반증 기록으로 답했다 — 8월 CPI 물음이 UNRESOLVED 인 동안 Goal 은 "조건부"였고, 그 물음이 SCOPED 가 되자 "선다"가 됐다 (`golden-correction-2026-10.md` §4 · "2차" §1).
+  Goal 에 반증 기록을 따로 두면 같은 물음을 두 곳에 적게 된다
+  - 가리킨 해석이 전부 발행 가능(VALID · VALID WITH SCOPE · 방어용)이면 요점이 선다. 하나라도 "검사 안 됨"이면 요점도 서지 않는다
+  - Deep A 는 방어용 해석(DC-B · 미결)을 품는다 — "인과를 단정하지 않는다"가 그 요점의 일부다. §7.3 표대로 방어용은 발행 가능이다
+- **`statement` 는 해석의 문장과 다른 글이다.** 해석은 "연준이 든 이유는 … 였다", 요점은 "… 라는 것을 이해한다". 해석을 좁히면 요점 문장도 따라 좁힌다(D29-3) — 따라갔는지는 사람이 본다 (게이트 3). 기계는 가리킨 해석이 있는지만 본다
+- **한 해석이 좁혀진 범위와 요점 문장이 맞는지** 도 사람이 본다. 실물: Deep C "고용 데이터가 겉보기만큼 단순하지 않다"는 브리프 그대로이고, DC-E 는 C-5 에서 "취업자 수는 달마다 크게 움직인다"로 좁혀졌다
+- COMMON 은 사건마다 정확히 하나 (확정 §7.3 "한 문장" · 불변식 27). 사건이 아니라 기사(판)마다 요점이 달라지는 경우는 **실물 없음** — 한 사건에 기사가 둘인 적이 없다
+- 요점에서 역산한 개념 목록과 등급(확정 §7.4 · §7.5 — 브리프 §5 의 KC 표)은 옮기지 않았다 — **미확인**. 브리프의 KC 이름이 라이브러리의 개념과 1:1 이 아니다 (`FED_FUNDS_TARGET_ROLE` · `BASIS_POINT` 는 라이브러리에 없다)
+- 패키지는 요점을 싣지 않는다. 가리키는 쪽은 물음이다 → OBSERVATION (GoalRef)
+
 ---
 
 ## 8. Bridge (질문 6)
@@ -757,6 +792,10 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 25. 대기 span 의 `need` 는 §17 의 네 값 중 하나이고 층과 맞는다 (기계). 대기는 픽스처에서만 (ARTICLE_PACKAGE §6.2).
     **대기의 목록 · 수는 계약에 적지 않는다 — 검사가 실물에서 센다** (`verify-article.py` WARN · `verify-data-model.py --report`). 0.2m-a · §19 _open-m1
 
+**Goal (D33)**
+27. `kind` 는 COMMON · DEEP. 사건마다 COMMON 이 정확히 하나. `label` 은 사건 안에서 유일. `claims` 는 1개 이상이고 전부 같은 사건의 DerivedClaim 이다 (기계)
+28. (발행) 가리킨 해석이 전부 발행 가능한 판정이다 (§7.3) — 아니면 요점이 반증을 통과하지 못한 것이다 (확정 §7.3 · 기계)
+
 **ArticleRecord**
 26. `article_id` 는 UUID, `article_version` 은 양의 정수 (기계: 시험 사본). 둘 다 발행 뒤 바뀌지 않고 둘의 짝은 전체에서 유일하다 (0.4).
     골든에 두 칸이 없는 동안은 WARN — 0.2m 대기 (D30)
@@ -783,7 +822,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 | 대체(supersede) 관계 — **틀린** Fact 를 새 Fact 가 대신한다는 기록 | OBSERVATION §9 Replacement |
 | **값이 바뀐** VOLATILE 사실의 앞뒤를 잇는 기록 (48건 → 52건) | **자리가 없다.** 틀린 것이 아니라서 OBSERVATION §9 는 받지 않는다. 실물 1 — 7월 취업자 수 F30(8/7 발표 -23,000) → F39(9/4 발표 +21,000). 저장소에서는 두 사실의 주석에 글로만 이어져 있다 → §19 _open-m7 |
 | FactSource 의 1차 구절을 적을 칸 | D27 은 "C-3 이 구절을 적고 위치는 파이프라인이 채운다"고 했는데 구절의 자리가 타입에 없다. 저장소는 픽스처 주석 `_passage` 로 두었다 → §19 _open-m6 |
-| 요점(Comprehension Goal)을 가리키는 타입 | 확정 §7.3 과 브리프 §5 의 실물이 있으나 타입이 없다. OBSERVATION 의 물음이 요점을 못 가리킨다 → §19 _open-m8 |
+| 요점에서 역산한 개념 목록 · 등급 (확정 §7.4 · §7.5) | Goal 타입은 생겼다 (§7.4 · D33). 브리프 KC 표는 옮기지 않았다 — 이름이 라이브러리와 1:1 이 아니다 |
 | 살아 있는 페이지(달력 · 금리 표 · 가격 시리즈)의 `published_at` | 읽은 판이 언제 공개됐는지 기록이 없다. 저장소는 아는 만큼만 적었다(해 · 달) — 그런 출처에 선 사실은 공개 시점이 증명되지 않는다 (불변식 11). 파이프라인이 문서를 저장하면 그때의 판이 Source 가 된다 (§4.1) |
 | 무엇이 기사의 새 판(`article_version`)을 만드나 | 판이 둘인 실물이 없다 (§11 · D30) |
 | ArticleRecord 의 저장 키 | D1 백엔드 OPEN |
