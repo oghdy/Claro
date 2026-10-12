@@ -1,0 +1,804 @@
+{
+  "id": "6c7cc5ad-4bd8-41c6-824f-58fca92c1b28",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.article_record": {
+      "name": "article_record",
+      "schema": "",
+      "columns": {
+        "article_id": {
+          "name": "article_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "article_version": {
+          "name": "article_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "package": {
+          "name": "package",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authoring": {
+          "name": "authoring",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "article_record_article_id_article_version_pk": {
+          "name": "article_record_article_id_article_version_pk",
+          "columns": [
+            "article_id",
+            "article_version"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "article_record_version_positive": {
+          "name": "article_record_version_positive",
+          "value": "\"article_version\" >= 1"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.knowledge_evidence": {
+      "name": "knowledge_evidence",
+      "schema": "",
+      "columns": {
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "concept_id": {
+          "name": "concept_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_version": {
+          "name": "content_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "evidence_type": {
+          "name": "evidence_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "interaction_id": {
+          "name": "interaction_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "probe_id": {
+          "name": "probe_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "article_id": {
+          "name": "article_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "article_version": {
+          "name": "article_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "content_block_id": {
+          "name": "content_block_id",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "exposure_context": {
+          "name": "exposure_context",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "model_version": {
+          "name": "model_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "knowledge_evidence_one_per_target": {
+          "name": "knowledge_evidence_one_per_target",
+          "columns": [
+            {
+              "expression": "interaction_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "concept_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"evidence_type\" = 'PROBE_RESPONSE'",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "knowledge_evidence_article_fk": {
+          "name": "knowledge_evidence_article_fk",
+          "tableFrom": "knowledge_evidence",
+          "tableTo": "article_record",
+          "columnsFrom": [
+            "article_id",
+            "article_version"
+          ],
+          "columnsTo": [
+            "article_id",
+            "article_version"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "knowledge_evidence_evidence_type": {
+          "name": "knowledge_evidence_evidence_type",
+          "value": "\"evidence_type\" in ('PROBE_RESPONSE', 'SELF_REPORT_KNOWN')"
+        },
+        "knowledge_evidence_position": {
+          "name": "knowledge_evidence_position",
+          "value": "\"position\" is null or \"position\" in ('PRE', 'POST', 'DELAYED')"
+        },
+        "knowledge_evidence_article_pair": {
+          "name": "knowledge_evidence_article_pair",
+          "value": "(\"article_id\" is null) = (\"article_version\" is null)"
+        },
+        "knowledge_evidence_probe_by_type": {
+          "name": "knowledge_evidence_probe_by_type",
+          "value": "(\"evidence_type\" = 'PROBE_RESPONSE' and \"probe_id\" is not null and \"position\" is not null) or (\"evidence_type\" = 'SELF_REPORT_KNOWN' and \"probe_id\" is null)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.probe": {
+      "name": "probe",
+      "schema": "",
+      "columns": {
+        "probe_id": {
+          "name": "probe_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_on": {
+          "name": "created_on",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "goal_ref": {
+          "name": "goal_ref",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "targets": {
+          "name": "targets",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prompt": {
+          "name": "prompt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "choices": {
+          "name": "choices",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "correct_choice": {
+          "name": "correct_choice",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "probe_probe_id_version_pk": {
+          "name": "probe_probe_id_version_pk",
+          "columns": [
+            "probe_id",
+            "version"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "probe_version_from_one": {
+          "name": "probe_version_from_one",
+          "value": "\"version\" >= 1"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.probe_exposure": {
+      "name": "probe_exposure",
+      "schema": "",
+      "columns": {
+        "exposure_id": {
+          "name": "exposure_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "probe_id": {
+          "name": "probe_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "probe_version": {
+          "name": "probe_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "probe_type": {
+          "name": "probe_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "plan_id": {
+          "name": "plan_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shown_at_loc": {
+          "name": "shown_at_loc",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "shown_at": {
+          "name": "shown_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "probe_exposure_plan_id_reading_plan_log_plan_id_fk": {
+          "name": "probe_exposure_plan_id_reading_plan_log_plan_id_fk",
+          "tableFrom": "probe_exposure",
+          "tableTo": "reading_plan_log",
+          "columnsFrom": [
+            "plan_id"
+          ],
+          "columnsTo": [
+            "plan_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "probe_exposure_probe_fk": {
+          "name": "probe_exposure_probe_fk",
+          "tableFrom": "probe_exposure",
+          "tableTo": "probe",
+          "columnsFrom": [
+            "probe_id",
+            "probe_version"
+          ],
+          "columnsTo": [
+            "probe_id",
+            "version"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "probe_exposure_probe_type": {
+          "name": "probe_exposure_probe_type",
+          "value": "\"probe_type\" in ('DIAGNOSTIC', 'ACTIVE', 'AUDIT', 'COMPREHENSION')"
+        },
+        "probe_exposure_position": {
+          "name": "probe_exposure_position",
+          "value": "\"position\" in ('PRE', 'POST', 'DELAYED')"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.probe_response": {
+      "name": "probe_response",
+      "schema": "",
+      "columns": {
+        "interaction_id": {
+          "name": "interaction_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "exposure_id": {
+          "name": "exposure_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "responded_at": {
+          "name": "responded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "response": {
+          "name": "response",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_correct": {
+          "name": "is_correct",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "probe_response_exposure_id_probe_exposure_exposure_id_fk": {
+          "name": "probe_response_exposure_id_probe_exposure_exposure_id_fk",
+          "tableFrom": "probe_response",
+          "tableTo": "probe_exposure",
+          "columnsFrom": [
+            "exposure_id"
+          ],
+          "columnsTo": [
+            "exposure_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "probe_response_one_per_exposure": {
+          "name": "probe_response_one_per_exposure",
+          "nullsNotDistinct": false,
+          "columns": [
+            "exposure_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "identity.reader": {
+      "name": "reader",
+      "schema": "identity",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.reading_event": {
+      "name": "reading_event",
+      "schema": "",
+      "columns": {
+        "event_id": {
+          "name": "event_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reading_id": {
+          "name": "reading_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "plan_id": {
+          "name": "plan_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "seq": {
+          "name": "seq",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "occurred_at": {
+          "name": "occurred_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slide_index": {
+          "name": "slide_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "from_plan_id": {
+          "name": "from_plan_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "reading_event_end_shown_once": {
+          "name": "reading_event_end_shown_once",
+          "columns": [
+            {
+              "expression": "plan_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "slide_index",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"type\" = 'SLIDE_END_SHOWN'",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "reading_event_plan_id_reading_plan_log_plan_id_fk": {
+          "name": "reading_event_plan_id_reading_plan_log_plan_id_fk",
+          "tableFrom": "reading_event",
+          "tableTo": "reading_plan_log",
+          "columnsFrom": [
+            "plan_id"
+          ],
+          "columnsTo": [
+            "plan_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reading_event_from_plan_id_reading_plan_log_plan_id_fk": {
+          "name": "reading_event_from_plan_id_reading_plan_log_plan_id_fk",
+          "tableFrom": "reading_event",
+          "tableTo": "reading_plan_log",
+          "columnsFrom": [
+            "from_plan_id"
+          ],
+          "columnsTo": [
+            "plan_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "reading_event_reading_seq": {
+          "name": "reading_event_reading_seq",
+          "nullsNotDistinct": false,
+          "columns": [
+            "reading_id",
+            "seq"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "reading_event_type": {
+          "name": "reading_event_type",
+          "value": "\"type\" in ('SLIDE_ENTERED', 'SLIDE_END_SHOWN', 'LEVEL_SWITCHED', 'CLOSED')"
+        },
+        "reading_event_seq_from_zero": {
+          "name": "reading_event_seq_from_zero",
+          "value": "\"seq\" >= 0"
+        },
+        "reading_event_slide_index_by_type": {
+          "name": "reading_event_slide_index_by_type",
+          "value": "(\"type\" in ('SLIDE_ENTERED', 'SLIDE_END_SHOWN')) = (\"slide_index\" is not null) and (\"slide_index\" is null or \"slide_index\" >= 0)"
+        },
+        "reading_event_from_plan_by_type": {
+          "name": "reading_event_from_plan_by_type",
+          "value": "(\"type\" = 'LEVEL_SWITCHED') = (\"from_plan_id\" is not null)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.reading_plan_log": {
+      "name": "reading_plan_log",
+      "schema": "",
+      "columns": {
+        "plan_id": {
+          "name": "plan_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reading_id": {
+          "name": "reading_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "article_id": {
+          "name": "article_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "article_version": {
+          "name": "article_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level": {
+          "name": "level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level_chosen_by": {
+          "name": "level_chosen_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "estimator_version": {
+          "name": "estimator_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "selected_blocks": {
+          "name": "selected_blocks",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "skipped_blocks": {
+          "name": "skipped_blocks",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "block_decisions": {
+          "name": "block_decisions",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "narrative_form": {
+          "name": "narrative_form",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "probe_plan": {
+          "name": "probe_plan",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reading_plan_log_article_fk": {
+          "name": "reading_plan_log_article_fk",
+          "tableFrom": "reading_plan_log",
+          "tableTo": "article_record",
+          "columnsFrom": [
+            "article_id",
+            "article_version"
+          ],
+          "columnsTo": [
+            "article_id",
+            "article_version"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "reading_plan_log_reading_level": {
+          "name": "reading_plan_log_reading_level",
+          "nullsNotDistinct": false,
+          "columns": [
+            "reading_id",
+            "level"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "reading_plan_log_level": {
+          "name": "reading_plan_log_level",
+          "value": "\"level\" in ('basic', 'intermediate', 'advanced')"
+        },
+        "reading_plan_log_level_chosen_by": {
+          "name": "reading_plan_log_level_chosen_by",
+          "value": "\"level_chosen_by\" in ('DEFAULT', 'READER')"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "identity": "identity"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
