@@ -39,5 +39,10 @@ test("순간 — 장이 바뀐다 · 끝이 화면에 나왔다(마지막 장 �
   await settled(page, 1);
   await page.waitForTimeout(600);
   expect((await moments()).slice(9)).toEqual(["slide advanced 1"]);
+  // 새로고침 — 되살린 자리가 지금 장으로 한 번 나온다. 이미 끝을 본 장의 end 는 다시 나오지 않는다 (같은 열람이다 — D33)
+  await page.reload();
+  await settled(page, 1);
+  await page.waitForTimeout(1500);
+  expect(await moments()).toEqual(["slide advanced 1"]);
   await ctx.close();
 });

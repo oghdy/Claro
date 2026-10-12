@@ -43,8 +43,7 @@ test("지나온 길: 지나온 물음만 보이고, 누르면 그 자리로 돌�
   }
   await expect(count(page)).toHaveText("4/9");
   await page.locator(".r-where").tap();
-  const kicker = await card(page, 0).locator('[data-u="kicker"]').innerText();
-  await expect(page.locator(".r-trail li .r-trail-t")).toHaveText([kicker, ...qs]); // 첫 장 + 지나온 물음 셋. 아직 안 간 물음은 없다
+  await expect(page.locator(".r-trail li .r-trail-t")).toHaveText(["시작", ...qs]); // 첫 장("시작") + 지나온 물음 셋. 아직 안 간 물음은 없다
   await expect(page.locator(".r-trail li[aria-current]")).toContainText("지금 여기");
   await page.locator(".r-trail li").nth(1).locator("button").tap();
   await expect(count(page)).toHaveText("2/9");
@@ -98,14 +97,57 @@ test("마지막 장: 물음 버튼이 없다. 요점 문장 다음에 지나온 
   await ctx.close();
 });
 
-test("레벨을 바꾸면 그 레벨의 1장부터 (B5 그대로 — 도윤에게 묻는 중)", async ({ page }) => {
+test("레벨을 바꾸면: 처음 가는 레벨은 1장, 돌아온 레벨은 읽던 자리", async ({ page }) => {
   await openLevel(page, "basic");
   for (let i = 0; i < 3; i++) await ask(page, i, false);
   await expect(count(page)).toHaveText("4/9");
   await page.getByRole("button", { name: "숙련", exact: true }).click();
   await expect(count(page)).toHaveText("1/5");
+  for (let i = 0; i < 2; i++) await ask(page, i, false);
   await page.getByRole("button", { name: "입문", exact: true }).click();
-  await expect(count(page)).toHaveText("1/9");
+  await expect(count(page)).toHaveText("4/9");
+  await settled(page, 3);
+  // 돌아온 자리 — 지나온 물음이 머리에 있고, 지나온 길도 그대로다
+  const q3 = await card(page, 2).locator('[data-u="oq"]').innerText();
+  await expect(card(page, 3).locator(".r-asked-text")).toHaveText(q3);
+  await page.locator(".r-where").click();
+  await expect(page.locator(".r-trail li")).toHaveCount(4);
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "숙련", exact: true }).click();
+  await expect(count(page)).toHaveText("3/5");
+});
+
+test("새로고침하면 읽던 자리(레벨 · 레벨별 장)를 되살린다. 같은 탭 안에서만 — 새 탭은 1장부터", async ({ browser }) => {
+  const ctx = await browser.newContext(phone);
+  const page = await ctx.newPage();
+  const cdp = await ctx.newCDPSession(page);
+  await openLevel(page, "basic");
+  for (let i = 0; i < 2; i++) (await readToEnd(page, cdp, i), await ask(page, i));
+  await page.getByRole("button", { name: "숙련", exact: true }).tap();
+  for (let i = 0; i < 3; i++) (await readToEnd(page, cdp, i), await ask(page, i));
+  await expect(count(page)).toHaveText("4/5");
+
+  await page.reload();
+  await expect(page.locator('.r-deck[data-level="advanced"]')).toBeVisible();
+  await expect(count(page)).toHaveText("4/5");
+  await settled(page, 3);
+  // 되살린 장은 글이 보이고, 긴 장(숙련 4장)이라 물음 버튼은 여전히 내려야 나온다. 지나온 장은 끝을 본 것으로 남아 있다
+  await expect(card(page, 3).locator(".r-headline")).toHaveCSS("opacity", "1");
+  expect(await card(page, 2).getAttribute("data-ended")).toBe("");
+  expect(await card(page, 3).getAttribute("data-ended")).toBeNull();
+  await readToEnd(page, cdp, 3);
+  // 다른 레벨의 자리도 살아 있다
+  await page.getByRole("button", { name: "입문", exact: true }).tap();
+  await expect(count(page)).toHaveText("3/9");
+  await page.reload();
+  await expect(count(page)).toHaveText("3/9");
+
+  // 새 탭(같은 브라우저) — 1장부터
+  const other = await ctx.newPage();
+  await openLevel(other, "basic");
+  await expect(count(other)).toHaveText("1/9");
+  await expect(other.locator('.r-deck[data-level="basic"]')).toBeVisible();
+  await ctx.close();
 });
 
 test("키보드: 물음 버튼은 Tab 으로 닿고 Enter 로 눌린다. 감춰 둔 장으로는 들어가지 않는다. ← 는 한 장 뒤로", async ({ page }) => {
@@ -142,7 +184,7 @@ test("층: 버튼을 켜면 글자 꼬리표, 문장을 누르면 설명. 층마
   const tag = (layer: string) => card(page, 1).locator(`.r-slide [data-layer="${layer}"]`).first().evaluate((e) => { const s = getComputedStyle(e, "::before"); return { content: s.content, color: s.color, border: s.borderColor, bg: s.backgroundColor }; });
   expect((await tag("claim")).content).toBe("none");
   await page.getByRole("button", { name: "층", exact: true }).click();
-  await expect(page.locator(".r-legend")).toHaveText("사실 — 출처에 있는 것 · 해석 — Claro 가 끌어낸 것 · 개념 — 배경 설명 · 연결 — 개념을 오늘 일에 잇는 말");
+  await expect(page.locator(".r-legend")).toHaveText("사실 — 출처에 있는 것 · 해석 — Claro 가 끌어낸 것 · 개념 — 배경 설명 · 연결 — 개념을 이 뉴스에 잇는 말");
   const [claim, fact] = [await tag("claim"), await tag("fact")];
   expect([claim.content, fact.content]).toEqual(['"해석"', '"사실"']);
   expect({ ...claim, content: "" }, "꼬리표는 글자만 다르다").toEqual({ ...fact, content: "" });
@@ -150,6 +192,19 @@ test("층: 버튼을 켜면 글자 꼬리표, 문장을 누르면 설명. 층마
   await expect(page.locator(".r-sheet")).toHaveText("해석사실들에서 Claro 가 끌어낸 해석이에요.×");
   await page.keyboard.press("Escape");
   await expect(page.locator(".r-sheet")).toHaveCount(0);
+  // 표시가 없는 글(writing)은 눌러도 아무것도 뜨지 않는다
+  const writing = card(page, 1).locator('.r-slide [data-layer="writing"]').first();
+  expect(await writing.evaluate((e) => getComputedStyle(e, "::before").content)).toBe("none");
+  await writing.click();
+  await page.waitForTimeout(400);
+  await expect(page.locator(".r-sheet")).toHaveCount(0);
+  expect(await writing.getAttribute("data-selected")).toBeNull();
+  // 연결(bridge) — "이 뉴스"
+  await page.getByRole("button", { name: "층", exact: true }).click();
+  for (let i = 1; i < 3; i++) await ask(page, i, false);
+  await page.waitForTimeout(900);
+  await card(page, 3).locator('.r-slide [data-layer="bridge"]').first().click();
+  await expect(page.locator(".r-sheet")).toHaveText("연결개념을 이 뉴스에 잇는 문장이에요.×");
 });
 
 test("움직임 줄이기 설정이면 전환 없이 바로 바뀐다. 물음 버튼은 그래도 다 읽었을 때 나온다", async ({ browser }) => {

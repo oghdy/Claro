@@ -80,7 +80,7 @@
 .r-path ol { margin: 0; padding-left: 1.3em; font-size: var(--t-note-size); line-height: 1.75; color: var(--c-muted); }
 
 /* 글 */
-.r-slide [data-layer] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.r-slide [data-layer]:not([data-layer="writing"]) { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 /* kicker — 이 장이 이야기의 어디쯤인지 부르는 이름표. 밝은 글자 + 한 단계 밝은 면으로 눈에 들어오게. 색으로 뜻을 싣지 않는다 (D20) */
 .r-kicker { width: fit-content; margin: 0 0 var(--s-kicker-after); padding: 5px 11px; border-radius: var(--r-chip); background: var(--c-surface2); font-size: var(--t-kicker-size); line-height: var(--t-kicker-line); font-weight: var(--t-kicker-weight); color: var(--c-ink); }
 .r-headline { margin: 0 0 var(--s-headline-after); font-size: var(--t-headline-size); line-height: var(--t-headline-line); font-weight: var(--t-headline-weight); letter-spacing: var(--track-headline); }

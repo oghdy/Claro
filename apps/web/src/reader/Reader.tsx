@@ -1,13 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { flushSync } from "react-dom";
 import { AnimatePresence, animate, motion, type Variants } from "motion/react";
-import type { ArticlePackage, Layer, Level, LevelId } from "@claro/contract";
+import type { ArticlePackage, Level, LevelId } from "@claro/contract";
 import { radius } from "@claro/tokens";
 import { LEVEL_NAMES } from "../lib/levels";
-import { COPY, LAYER_EXPLAIN, LAYER_LEGEND, LAYER_SHEET_WORD, LAYER_WORD } from "./copy";
+import { COPY, LAYER_EXPLAIN, LAYER_LEGEND, LAYER_WORD, type Tagged } from "./copy";
 import { ASK_IN, CHOREOGRAPHY, LAST_REST, PANEL, type Choreography } from "./motions";
+import { loadPlace, savePlace, type LevelPlace, type Place } from "./place";
 import { SlideView } from "./SlideView";
 
 // 읽는 화면 — "물음을 따라가는 여정" (D26 · 도윤 결정).
@@ -44,6 +45,12 @@ export function Reader({
 }) {
   const [levelId, setLevelId] = useState<LevelId>(pkg.levels[0]!.id);
   const [tags, setTags] = useState(false);
+  // 읽던 자리 — 레벨마다. 이 화면이 살아 있는 동안은 여기에, 새로고침을 넘어서는 place.ts 가 든다
+  const places = useRef<Place["at"]>({});
+  /** 되살린 횟수 — 바뀌면 Journey 를 되살린 자리에서 새로 그린다 */
+  const [restored, setRestored] = useState(0);
+  /** 저장된 자리를 찾아봤다 — 그 전의 첫 그림(1장)은 아직 "지금 장"이 아니다. 순간으로 내지 않는다 */
+  const [live, setLive] = useState(false);
   const level = pkg.levels.find((l) => l.id === levelId)!;
   // 움직임 줄이기 설정이면 전환 · 등장 없이 바로
   const choreo = useReducedMotion() ? null : CHOREOGRAPHY;
@@ -52,16 +59,32 @@ export function Reader({
   sink.current = onMoment;
   const notice = useCallback((m: ReaderMoment) => sink.current?.(m), []);
 
-  // 레벨을 바꾸면 그 레벨의 1장부터 (B5 그대로 — 읽던 자리를 기억할지는 도윤에게 묻는 중. F-2b 물음 4)
+  // 새로고침 — 같은 탭에서 읽던 자리(레벨 · 레벨별 장)를 되살린다. 서버는 모른다: 1장으로 그려 보내고, 브라우저에서 첫 그림 전에 맞춘다
+  useLayoutEffect(() => {
+    const saved = loadPlace(pkg);
+    setLive(true);
+    if (!saved) return;
+    places.current = saved.at;
+    setLevelId(saved.level);
+    setRestored((k) => k + 1);
+  }, [pkg]);
+
+  // 레벨을 바꾸면 — 처음 가는 레벨은 1장, 돌아온 레벨은 읽던 자리. 레벨끼리 장의 대응은 없다 (계약 §3) — 만들지 않는다
   function switchLevel(to: LevelId) {
     if (to === levelId) return;
     notice({ kind: "level", from: levelId, to });
     setLevelId(to);
+    savePlace(pkg, { level: to, at: places.current });
   }
+
+  const keep = useCallback((id: LevelId, place: LevelPlace) => {
+    places.current = { ...places.current, [id]: place };
+    savePlace(pkg, { level: id, at: places.current });
+  }, [pkg]);
 
   return (
     <div className="reader" data-layers={tags ? "on" : "off"} data-motion={choreo ? "on" : "none"} style={WORD_VARS}>
-      <Journey key={level.id + still} pkg={pkg} level={level} choreo={choreo} tags={tags} onTags={setTags} onLevel={switchLevel} notice={notice} />
+      <Journey key={`${level.id}${still}:${restored}`} pkg={pkg} level={level} start={places.current[level.id]} onPlace={keep} live={live} choreo={choreo} tags={tags} onTags={setTags} onLevel={switchLevel} notice={notice} />
     </div>
   );
 }
@@ -82,25 +105,27 @@ function useReducedMotion(): boolean {
 const flags = (n: number, first = false) => Array.from({ length: n }, (_, i) => first && i === 0);
 
 function Journey({
-  pkg, level, choreo, tags, onTags, onLevel, notice,
+  pkg, level, start, onPlace, live, choreo, tags, onTags, onLevel, notice,
 }: {
-  pkg: ArticlePackage; level: Level; choreo: Choreography | null; tags: boolean;
+  pkg: ArticlePackage; level: Level; start: LevelPlace | undefined; onPlace: (id: LevelId, place: LevelPlace) => void; live: boolean;
+  choreo: Choreography | null; tags: boolean;
   onTags: (v: boolean) => void; onLevel: (id: LevelId) => void; notice: (m: ReaderMoment) => void;
 }) {
   const n = level.slides.length;
-  const [idx, setIdx] = useState(0);
+  // 읽던 자리에서 시작한다 (돌아온 레벨 · 새로고침). 없으면 1장. 지나온 장은 이미 읽은 것이다 — 글이 나타나 있고 끝을 봤다
+  const [idx, setIdx] = useState(start?.idx ?? 0);
   const [leaving, setLeaving] = useState<number | null>(null);
   /** 장마다 — 몇 번째로 나타나는가 (0 = 아직 안 열렸다) · 나타나기 전에 기다릴 시간(초) */
-  const [runs, setRuns] = useState(() => flags(n, true).map(Number));
+  const [runs, setRuns] = useState(() => flags(n).map((_, i) => Number(i <= (start?.idx ?? 0))));
   const [waits, setWaits] = useState(() => flags(n).map(Number));
   /** 장마다 — 끝이 화면에 나왔다 */
-  const [ended, setEnded] = useState(() => flags(n));
+  const [ended, setEnded] = useState(() => start?.ended ?? flags(n));
   const [trail, setTrail] = useState(false);
   const [more, setMore] = useState(false);
-  const [sel, setSel] = useState<Layer | null>(null);
+  const [sel, setSel] = useState<Tagged | null>(null);
   const cards = useRef<(HTMLElement | null)[]>([]);
   const revealed = useRef(flags(n)); // 글이 다 나타났다
-  const reached = useRef(flags(n)); // ended 와 같은 값 — 사건을 한 번만 내려고 따로 든다
+  const reached = useRef([...ended]); // ended 와 같은 값 — 사건을 한 번만 내려고 따로 든다
   const busy = useRef(false);
   const selRef = useRef<HTMLElement | null>(null);
   const others = pkg.levels.filter((l) => l.id !== level.id);
@@ -130,7 +155,18 @@ function Journey({
     notice({ kind: "slide", level: level.id, index: k });
   }, [level.id, notice]);
 
-  useEffect(() => notice({ kind: "slide", level: level.id, index: 0 }), [level.id, notice]);
+  // 열자마자 — 지금 장을 알린다 (첫 장, 또는 되살린 자리). 한 번만
+  const first = useRef(idx);
+  useEffect(() => {
+    if (live) notice({ kind: "slide", level: level.id, index: first.current });
+  }, [live, level.id, notice]);
+  // 자리가 바뀔 때마다 맡긴다 (저장은 place.ts 한 곳).
+  // 시작한 자리 그대로면 맡기지 않는다 — 되살리기 전의 첫 그림(1장)이 저장된 자리를 덮지 않게
+  const began = useRef({ idx, ended });
+  useEffect(() => {
+    if (idx === began.current.idx && ended === began.current.ended) return;
+    onPlace(level.id, { idx, ended });
+  }, [level.id, idx, ended, onPlace]);
 
   function closeSheet() {
     selRef.current?.removeAttribute("data-selected");
@@ -208,7 +244,8 @@ function Journey({
   }
 
   function onTap(e: React.MouseEvent) {
-    const el = (e.target as HTMLElement).closest<HTMLElement>(".r-slide [data-layer]");
+    // 표시가 없는 글(writing — 질문 · 이어 주는 말)은 눌러도 아무것도 뜨지 않는다
+    const el = (e.target as HTMLElement).closest<HTMLElement>('.r-slide [data-layer]:not([data-layer="writing"])');
     selRef.current?.removeAttribute("data-selected");
     if (!el || selRef.current === el) {
       selRef.current = null;
@@ -217,7 +254,7 @@ function Journey({
     }
     el.setAttribute("data-selected", "");
     selRef.current = el;
-    setSel(el.dataset.layer as Layer);
+    setSel(el.dataset.layer as Tagged);
   }
 
   useEffect(() => {
@@ -248,8 +285,8 @@ function Journey({
   };
   const panel = choreo ? PANEL : { duration: 0 };
 
-  // 지나온 길 — 첫 장은 물음 없이 시작하므로 그 장의 kicker 로 부른다 (임시 — F-2b 물음 3)
-  const stops = level.slides.slice(0, idx + 1).map((s, k) => (k === 0 ? s.kicker : level.open_questions[k - 1]!.text));
+  // 지나온 길 — 첫 장은 물음 없이 시작한다. "시작" 이라고 부른다 (도윤 · 2026-10-12)
+  const stops = level.slides.slice(0, idx + 1).map((_, k) => (k === 0 ? COPY.start : level.open_questions[k - 1]!.text));
 
   return (
     <>
@@ -407,7 +444,7 @@ function Journey({
               exit={{ opacity: 0, y: choreo ? 12 : 0 }}
               transition={panel}
             >
-              <b className="r-sheet-word">{LAYER_SHEET_WORD[sel]}</b>
+              <b className="r-sheet-word">{LAYER_WORD[sel]}</b>
               <span>{LAYER_EXPLAIN[sel]}</span>
               <span className="r-sheet-close" aria-hidden="true">
                 ×

@@ -2,26 +2,25 @@ import type { Layer, LevelId } from "@claro/contract";
 import { LEVEL_NAMES } from "../lib/levels";
 
 // 읽는 화면이 독자에게 하는 말 — 전부 여기 있다. 기사 글(골든)이 아닌 글자는 이 파일에서만 나온다.
-// ⚠ 아직 아무도 검토하지 않았다 (D26 PM 검수 메모). 도윤이 고르면 여기만 고친다 — logs/frontend/F-2b.md 의 표와 같은 글이다.
+// 층의 말은 도윤이 봤다 (2026-10-12 — 꼬리표 넷 그대로 · "오늘 일" → "이 뉴스" · writing 은 눌러도 안 뜬다). 그 밖의 UI 문구는 아직 아무도 안 봤다.
 
-/** 층을 부르는 말 (§8.4 "이건 원문 / 이건 해석"). 좋다/나쁘다가 아니라 "어디서 왔나"만 말한다. writing 은 꼬리표가 없다 */
-export const LAYER_WORD: Record<Exclude<Layer, "writing">, string> = {
+/** 꼬리표가 붙는 층. writing(사실 주장이 없는 글 — 질문 · 이어 주는 말)은 꼬리표도 없고, 눌러도 아무것도 뜨지 않는다 */
+export type Tagged = Exclude<Layer, "writing">;
+
+/** 층을 부르는 말 (§8.4 "이건 원문 / 이건 해석"). 좋다/나쁘다가 아니라 "어디서 왔나"만 말한다 */
+export const LAYER_WORD: Record<Tagged, string> = {
   fact: "사실",
   claim: "해석",
   concept: "개념",
   bridge: "연결",
 };
 
-/** 문장을 눌렀을 때 아래에 뜨는 글 — 앞의 낱말 */
-export const LAYER_SHEET_WORD: Record<Layer, string> = { ...LAYER_WORD, writing: "글" };
-
-/** 문장을 눌렀을 때 아래에 뜨는 글 — 설명 */
-export const LAYER_EXPLAIN: Record<Layer, string> = {
+/** 문장을 눌렀을 때 아래에 뜨는 글 — 꼬리표 낱말 뒤에 붙는 설명 */
+export const LAYER_EXPLAIN: Record<Tagged, string> = {
   fact: "출처에 적혀 있는 사실이에요.",
   claim: "사실들에서 Claro 가 끌어낸 해석이에요.",
   concept: "뉴스를 읽기 위한 배경 개념 설명이에요.",
-  bridge: "개념을 오늘 일에 잇는 문장이에요.",
-  writing: "사실을 주장하지 않는 글이에요 — 질문이나 이어 주는 말.",
+  bridge: "개념을 이 뉴스에 잇는 문장이에요.",
 };
 
 /** "층" 을 켰을 때 위에 뜨는 한 줄 */
@@ -29,12 +28,14 @@ export const LAYER_LEGEND: [word: string, gloss: string][] = [
   [LAYER_WORD.fact, "출처에 있는 것"],
   [LAYER_WORD.claim, "Claro 가 끌어낸 것"],
   [LAYER_WORD.concept, "배경 설명"],
-  [LAYER_WORD.bridge, "개념을 오늘 일에 잇는 말"],
+  [LAYER_WORD.bridge, "개념을 이 뉴스에 잇는 말"],
 ];
 
 export const COPY = {
   /** 위쪽 줄 */
   trail: "지나온 길",
+  /** 지나온 길에서 첫 장을 부르는 말 — 첫 장은 물음 없이 시작한다 */
+  start: "시작",
   layers: "층",
   levelsLabel: "설명 수준",
   /** 지나온 길에서 지금 자리 */
