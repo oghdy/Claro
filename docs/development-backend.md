@@ -549,8 +549,8 @@ PM 이 이 목록만 검수한다.
 ## Step 0.2m-b — 교정 기록 이전 · OBSERVATION 을 D26 에 맞춘다 (0.2c 세션에 이어서)
 
 - [x] 초안 2026-10-09 — `logs/backend/phase-0-step-0-2m-b.md`. verify-observation 다시 통과(행이 늘어도 안 깨진다) · 42행을 `logs/correction-log.jsonl` 로 · D26 반영
-- [ ] **게이트** — _open 5개 (OBSERVATION §16: 마지막 장을 끝까지 읽었는지 · 새로고침 · 시험 줄 · 교정 기록 파일 · 이름 있는 사람 검사)
-- [ ] 완료일:
+- [x] **게이트** — D33 (2026-10-09). _open-6 ~ 10 모두 (a). 반영 0.2n-b (2026-10-12): `SLIDE_END_SHOWN` · 열람은 화면을 따른다 · 시험 표시 없음 · jsonl 이 원본(CSV 얼림) · `check` = 절차 이름 · Probe `goal_ref`
+- [x] 완료일: 2026-10-12
 
 ### 보낼 것 (복붙) — 기존 0.2c 세션에. 닫혔으면 새 세션에 "먼저 읽을 것" 한 줄을 붙여서
 

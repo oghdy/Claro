@@ -9,8 +9,8 @@
                  probe 를 놓을 자리를 정하는 칸이 없다. 다른 계약의 타입을 다시 정의하지 않았다. 실물 없는 절에 "실물 없음".
                  계약이 실물이라고 적은 수(§4.2 골든 · §8 CSV)가 실물과 같다
   B. 로그        0.2c 로그 머리 요약에 질문 8개가 [계약 반영 / _open / 미확인] 과 근거를 갖는다
-  C. 교정 기록   옮긴 파일(logs/correction-log.jsonl)에 불변식 20 · 21 을 돌리고, 원본 CSV 와 글이 한 글자도 다르지 않은지 본다.
-                 CSV 에 행이 더 생긴 것은 FAIL 이 아니라 WARN 이다 (아직 안 옮긴 행). CSV 가 줄거나 옛 행이 바뀌면 FAIL.
+  C. 교정 기록   원본(logs/correction-log.jsonl — D33)에 불변식 20 · 21 을 돌리고, 얼린 CSV 와 옮긴 줄의 글이 한 글자도 다르지 않은지 본다.
+                 CSV 에 새 행이 생기면 FAIL (얼렸다). CSV 가 줄거나 옛 행이 바뀌어도 FAIL. jsonl 에 새 줄이 느는 것은 정상이다.
                  계약 §8 의 집계는 "1~N행" 기준의 날짜 붙은 기록이다 — 그 N행만 견준다. 원장은 덧붙이기만 하므로 행이 늘어도 안 깨진다
   D. 시험 원장   독자 기록은 실물이 한 줄도 없다. 골든을 읽는 가짜 독자 하나의 원장을 메모리 안에서 만들어 불변식 1 ~ 19 를 돌린다.
                  가짜 독자 · 가짜 물음은 검사를 시험하려는 것이다 — 관찰이 아니다. 파일로 남기지 않는다
@@ -58,7 +58,7 @@ REQUIRED_FIELDS = {
     'ProbeExposure': ('exposure_id', 'user_id', 'session_id', 'probe_id', 'probe_version', 'probe_type', 'position',
                       'plan_id', 'shown_at'),
     'ProbeResponse': ('interaction_id', 'exposure_id', 'user_id', 'responded_at'),
-    'Probe': ('probe_id', 'version', 'targets', 'prompt'),
+    'Probe': ('probe_id', 'version', 'goal_ref', 'targets', 'prompt'),              # goal_ref — D33 m8
     'ArticleRef': ('article_id', 'article_version'),
     'SlideLoc': ('slide_index', 'block_index'),
     # 실물 CSV 8열 + 확정 §10.3
@@ -74,7 +74,7 @@ PROBE_TYPES = {'DIAGNOSTIC', 'ACTIVE', 'AUDIT', 'COMPREHENSION'}             # �
 DECISIONS = {'SKIP', 'REFRESHER', 'FULL'}                                    # 확정 §9.4
 GATES = {'GATE_1', 'GATE_2', 'GATE_3', 'GATE_4'}                             # 확정 §10.2
 CATCH_CONFIRMED = {'BACKGROUND_KNOWLEDGE', 'SOURCE_RECHECK', 'PLAIN_READING', 'OTHER_READER'}   # 확정 §10.3
-EVENT_TYPES = {'SLIDE_ENTERED', 'LEVEL_SWITCHED', 'CLOSED'}
+EVENT_TYPES = {'SLIDE_ENTERED', 'SLIDE_END_SHOWN', 'LEVEL_SWITCHED', 'CLOSED'}      # SLIDE_END_SHOWN — D33
 CSV_HEADER = ['date', 'event_id', 'stage', 'error_type', 'what_was_wrong', 'what_i_changed', 'source_of_catch', 'time_spent_min']
 LEDGERS = ('ReadingPlanLog', 'ReadingEvent', 'KnowledgeEvidence', 'ProbeExposure', 'ProbeResponse', 'Probe')
 # 값을 매기는 칸 — 원장은 사실만 (확정 §9.4)
@@ -85,6 +85,8 @@ PERSONAL = re.compile(r'(?:^|_)(name|email|phone|device|ip|addr|address|agent|ac
 DIRECTION = re.compile(r'NEXT|PREV|BACK|FORWARD|UP\b|DOWN|LEFT|RIGHT|SWIPE|SCROLL|direction|gesture|delta', re.I)
 # 놓을 자리 (D18 OPEN) — 물음과 계획에는 자리 칸이 없다
 PLACEMENT = re.compile(r'slide|loc|slot|place|after|before|where', re.I)
+# 시험 · 실제를 가르는 칸 (D33 — 줄에 표시를 두지 않는다)
+TEST_FLAG = re.compile(r'(?:^|_)(test|env|environment|mode|debug|sandbox|real|synthetic)(?:$|_)', re.I)
 NO_REAL_TITLES = ('probe', 'Replacement')
 MARKS = ('계약 반영', '_open', '미확인')
 
@@ -184,21 +186,33 @@ def check_contract(text, others_text, devcontent_text, csv_text, gold, lib, entr
         for f, expr in fields.items():
             if t in LEDGERS and VALUATION.search(f):
                 errs.append(('CONTRACT_VALUATION', f'{t}.{f} — 원장에 값을 매기는 칸을 두지 않는다 (확정 §9.4)'))
+            if t in LEDGERS and TEST_FLAG.search(f):
+                errs.append(('CONTRACT_TEST_FLAG', f'{t}.{f} — 줄에 시험 · 실제 표시를 두지 않는다 (§3 · D33)'))
             if PERSONAL.search(f):
                 errs.append(('CONTRACT_PERSONAL', f'{t}.{f} — 사람을 알아볼 칸을 두지 않는다 (§3)'))
             if t == 'ReadingEvent' and (DIRECTION.search(f) or any(DIRECTION.search(v) for v in re.findall(r'"([^"]+)"', expr))):
                 errs.append(('CONTRACT_DIRECTION', f'ReadingEvent.{f} — 방향 · 손짓에 기대는 칸이나 값 (D26 OPEN)'))
             if t in ('Probe', 'ProbePlanItem', 'ProbeTarget') and (PLACEMENT.search(f) or 'SlideLoc' in expr):
                 errs.append(('CONTRACT_PROBE_PLACEMENT', f'{t}.{f} — probe 를 놓을 자리를 정하지 않는다 (D18 OPEN)'))
-    foreign, record = set(), {}
+    foreign, record, goal = set(), {}, None
     for o in others_text:
         ot = VC.ts_types(o)
         foreign |= set(ot)
         record = ot.get('ArticleRecord', record)
+        goal = ot.get('Goal', goal)
+    # Probe.goal_ref 의 짝 — DATA_MODEL 의 Goal 과 GoalRef (D33 m8)
+    if 'GoalRef' not in types.get('Probe', {}).get('goal_ref', ''):
+        errs.append(('CONTRACT_PAIR', 'Probe.goal_ref 가 GoalRef 가 아니다 (§6.1 · D33)'))
+    if goal is None or 'goal_id' not in goal or not any(re.search(r'^GoalRef\s*=', o, re.M) for o in others_text):
+        errs.append(('CONTRACT_PAIR', 'Probe.goal_ref 의 짝(Goal.goal_id · GoalRef)이 DATA_MODEL 에 없다 (§6.1 · D33)'))
     # ArticleRef 의 짝 — DATA_MODEL 의 ArticleRecord 가 같은 이름의 두 칸을 갖는다 (D30)
     for f in types.get('ArticleRef', {}):
         if f not in record:
             errs.append(('CONTRACT_PAIR', f'ArticleRef.{f} 의 짝이 DATA_MODEL ArticleRecord 에 없다 (§10 · D30)'))
+    # 이름 붙인 모양(Name = …)도 한 파일에만. UUID 는 계약마다 적는 바탕 글자라 뺀다
+    named = lambda s: {m for b in re.findall(r'```ts\n(.*?)```', s, re.S) for m in re.findall(r'^(\w+)\s*=', b, re.M)} - {'UUID'}
+    for n in sorted(named(text) & set().union(*(named(o) for o in others_text))):
+        errs.append(('CONTRACT_FOREIGN_TYPE', f'{n} 는 다른 계약이 정의한 이름이다 — 한 타입은 한 파일에만'))
     for t in types:
         if t in foreign:
             errs.append(('CONTRACT_FOREIGN_TYPE', f'{t} 는 다른 계약의 타입이다 — 한 타입은 한 파일에만'))
@@ -331,26 +345,27 @@ def load_entries(jsonl_text):
 
 
 def check_migration(rows, entries):
-    """옮긴 파일 ↔ 원본 CSV. 글은 한 글자도 다르지 않다. -> (errs, warns)"""
+    """얼린 CSV ↔ 원본 jsonl (D33). CSV 에서 옮긴 줄(`_row`)은 글이 한 글자도 다르지 않다. CSV 에 새 행이 생기면 실패. -> (errs, warns)"""
     errs, warns = [], []
-    if len(entries) > len(rows):
-        errs.append(('MIGRATION_ROWS', f'옮긴 파일 {len(entries)}행 > CSV {len(rows)}행 — CSV 에서 행이 사라졌다 (원장은 덧붙이기만 한다)'))
-    elif len(entries) < len(rows):
-        warns.append(('MIGRATION_BEHIND', f'CSV {len(rows)}행 가운데 {len(rows) - len(entries)}행이 아직 안 옮겨졌다 ({len(entries) + 1}행부터)'))
+    moved = [e for e in entries if '_row' in e]
+    if [e.get('_row') for e in entries[:len(moved)]] != list(range(1, len(moved) + 1)):
+        errs.append(('MIGRATION_ROWS', 'CSV 에서 옮긴 줄(`_row`)이 파일 머리에 CSV 행 순서 그대로 있지 않다'))
+    if len(rows) > len(moved):
+        errs.append(('CSV_FROZEN', f'얼린 CSV 에 새 행이 생겼다 ({len(rows)}행 > 옮긴 {len(moved)}행) — 새 교정은 jsonl 에 쓴다 (D33)'))
+    elif len(rows) < len(moved):
+        errs.append(('MIGRATION_ROWS', f'CSV {len(rows)}행 < 옮긴 {len(moved)}행 — 얼린 CSV 에서 행이 사라졌다'))
     pairs = (('date', 'date'), ('event_id', 'event_code'), ('error_type', 'error_type'), ('what_was_wrong', 'what_was_wrong'),
              ('what_i_changed', 'what_i_changed'), ('source_of_catch', 'catch_note'))
-    for i, (r, e) in enumerate(zip(rows, entries), 1):
+    for i, (r, e) in enumerate(zip(rows, moved), 1):
         for a, b in pairs:
             if r[a] != (e.get(b) or ''):
                 errs.append(('MIGRATION_TEXT', f'{i}행 {b} 가 CSV 의 {a} 와 글자가 다르다'))
-        if e.get('_row') != i:
-            errs.append(('MIGRATION_ROWS', f'옮긴 파일 {i}번째 줄의 _row 가 {e.get("_row")} — CSV 행 순서 그대로여야 한다'))
     ids = [e.get('correction_id') for e in entries]
     if len(set(ids)) != len(ids):
         errs.append(('MIGRATION_ROWS', 'correction_id 가 겹친다'))
     n = sum(1 for e in entries if e.get('_draft'))
     if n:
-        warns.append(('CORR_DRAFT', f'{n}행의 gate · occasion · targets · caught_by 가 초안이다 — 사람이 확인한다 (`_draft`)'))
+        warns.append(('CORR_DRAFT', f'{n}행의 gate · occasion · targets · caught_by · check 가 초안이다 — 사람이 확인한다 (`_draft`)'))
     n = sum(1 for e in entries for rp in e['replacements'] if rp.get('_pending'))
     if n:
         warns.append(('REPL_PENDING', f'Replacement {n}건이 concept_id 대기 (`_pending`)'))
@@ -393,8 +408,8 @@ def check_corrections(entries, types, enums, store=None):
         for t in e['targets']:
             if t['kind'] not in enums['target_kind']:
                 errs.append(('CORR_TARGET', f'{i}행 target kind "{t["kind"]}"'))
-        if (e['caught_by'] == 'AUTOMATED_CHECK') != bool(e['check']):
-            errs.append(('CORR_CHECK', f'{i}행 caught_by {e["caught_by"]} · check {e["check"]!r} (불변식 20)'))
+        if (e['caught_by'] == 'AUTOMATED_CHECK' and not e['check']) or (e['check'] is not None and not str(e['check']).strip()):
+            errs.append(('CORR_CHECK', f'{i}행 caught_by {e["caught_by"]} · check {e["check"]!r} — 기계 검사면 절차 이름이 반드시 있다. 빈 글은 이름이 아니다 (불변식 20)'))
         if e['after_publication'] and not e['replacements']:
             errs.append(('CORR_PUBLISHED', f'{i}행 발행 뒤 교정인데 무엇이 대신하는지 없다 (불변식 20)'))
         for rp in e['replacements']:
@@ -459,17 +474,20 @@ def build_ledger(gold, lib, store=None):
                 'narrative_form': None, 'probe_plan': []}
     plans = [plan('basic', 'DEFAULT', '2026-10-20T01:00:00Z'), plan('advanced', 'READER', '2026-10-20T01:04:00Z')]
     # 입문 1~4장 → 숙련으로 바꿔 끝까지 → 입문으로 돌아와 떠났던 4장 → 닫음
-    steps = [('SLIDE_ENTERED', 'basic', i, None) for i in range(4)] + [('LEVEL_SWITCHED', 'advanced', None, 'basic')] \
-        + [('SLIDE_ENTERED', 'advanced', i, None) for i in range(package['levels']['advanced'])] \
+    # 장에 들어갈 때마다 그 장의 끝이 나왔다 (D26 — 물음 버튼이 나와야 다음 장으로 간다). 돌아온 4장은 끝이 이미 나왔던 장이다
+    visit = lambda lid, i: [('SLIDE_ENTERED', lid, i, None), ('SLIDE_END_SHOWN', lid, i, None)]
+    steps = sum((visit('basic', i) for i in range(4)), []) + [('LEVEL_SWITCHED', 'advanced', None, 'basic')] \
+        + sum((visit('advanced', i) for i in range(package['levels']['advanced'])), []) \
         + [('LEVEL_SWITCHED', 'basic', None, 'advanced'), ('SLIDE_ENTERED', 'basic', 3, None), ('CLOSED', 'basic', None, None)]
     events = [{'event_id': UID('rev', n), 'user_id': U, 'session_id': S, 'reading_id': R, 'plan_id': P[lid], 'seq': n,
                'occurred_at': f'2026-10-20T01:{n:02d}:00Z', 'type': t, 'slide_index': i,
                'from_plan_id': P[frm] if frm else None} for n, (t, lid, i, frm) in enumerate(steps)]
     c2, c3 = cid['C-0002'], cid['C-0003']
-    probes = [{'probe_id': UID('probe', 'X'), 'version': 1, 'created_on': '2026-10-19', 'event_id': None,
+    probes = [{'probe_id': UID('probe', 'X'), 'version': 1, 'created_on': '2026-10-19', 'event_id': None, 'goal_ref': None,
                'targets': [{'concept_id': c2, 'version': concepts[c2]['version']}, {'concept_id': c3, 'version': concepts[c3]['version']}],
                'prompt': '시험', 'choices': ['가', '나'], 'correct_choice': 0},
-              {'probe_id': UID('probe', 'G'), 'version': 1, 'created_on': '2026-10-19', 'event_id': None, 'targets': [],
+              {'probe_id': UID('probe', 'G'), 'version': 1, 'created_on': '2026-10-19', 'event_id': None,
+               'goal_ref': UID('goal', 'common'), 'targets': [],
                'prompt': '시험 — 요점', 'choices': None, 'correct_choice': None}]
 
     def exposure(key, probe, pos, lid, sess, at):
@@ -506,7 +524,11 @@ def reading_summary(L, reading_id):
     for e in entered:
         lv = plans[e['plan_id']]['level']
         furthest[lv] = max(furthest[lv], e['slide_index'])
+    ended = {(plans[e['plan_id']]['level'], e['slide_index']) for e in evs if e['type'] == 'SLIDE_END_SHOWN'}
+    stopped = (plans[entered[-1]['plan_id']]['level'], entered[-1]['slide_index']) if entered else None
     return {
+        'completed_to_end': any((lv, n - 1) in ended for lv, n in L['package']['levels'].items()),   # 마지막 장의 끝이 나왔다
+        'stopped_end_shown': stopped in ended,                                                      # 멈춘 장의 끝이 나온 뒤였나
         'completed': any(i == L['package']['levels'][lv] - 1 for lv, i in furthest.items()),
         'stopped_at': (plans[entered[-1]['plan_id']]['level'], entered[-1]['slide_index']) if entered else None,
         'furthest': dict(furthest),
@@ -554,7 +576,7 @@ def check_ledger(L, types, enums):
         evs.sort(key=lambda e: e['seq'])
         if [e['seq'] for e in evs] != list(range(len(evs))):
             errs.append(('EVENT_SEQ', 'seq 가 0부터 1씩이 아니다 (불변식 8)'))
-        cur, expect_enter = None, False
+        cur, expect_enter, here, ended = None, False, None, set()
         for n, e in enumerate(evs):
             p = plans.get(e['plan_id'])
             if e['type'] not in enums['event_type']:
@@ -574,12 +596,20 @@ def check_ledger(L, types, enums):
                     errs.append(('EVENT_SLIDE', f'seq {e["seq"]} slide_index {e["slide_index"]} — 그 레벨의 범위 밖 (불변식 9)'))
                 if e['plan_id'] != cur:
                     errs.append(('EVENT_CURRENT_PLAN', f'seq {e["seq"]} — 지금 plan 이 아닌 plan 의 사건이다 (불변식 9)'))
+                here = e['slide_index']
+            elif e['type'] == 'SLIDE_END_SHOWN':
+                # 지금 장의 끝이 나왔다 — 지금 plan · 지금 장이고, (plan · 장)마다 한 번 (불변식 22)
+                if e['from_plan_id'] is not None or e['plan_id'] != cur or e['slide_index'] is None or e['slide_index'] != here:
+                    errs.append(('EVENT_END', f'seq {e["seq"]} — 끝이 나온 장({e["slide_index"]})이 지금 장({here})이 아니다 (불변식 22)'))
+                elif (e['plan_id'], e['slide_index']) in ended:
+                    errs.append(('EVENT_END', f'seq {e["seq"]} — 같은 plan 의 같은 장에 끝이 두 번 나왔다 (불변식 22)'))
+                ended.add((e['plan_id'], e['slide_index']))
             elif e['type'] == 'LEVEL_SWITCHED':
                 frm = plans.get(e['from_plan_id'])
                 if e['slide_index'] is not None or not frm or e['from_plan_id'] != cur or frm['reading_id'] != rid \
                         or frm['level'] == p['level']:
                     errs.append(('EVENT_SWITCH', f'seq {e["seq"]} — 지금 plan 에서 같은 열람의 다른 레벨 plan 으로 (불변식 10)'))
-                cur, expect_enter = e['plan_id'], True
+                cur, expect_enter, here = e['plan_id'], True, None
             elif e['type'] == 'CLOSED' and n != len(evs) - 1:
                 errs.append(('EVENT_CLOSED', f'seq {e["seq"]} — CLOSED 뒤에 사건이 있다 (불변식 11)'))
         if expect_enter:
@@ -672,11 +702,17 @@ def run(contract_text, log_text, csv_text, jsonl_text, gold, library_text, other
         e, warns = check_migration(rows, entries)
         errs += e
     errs += check_corrections(entries, types, enums, store)
+    known = {r[0].strip('`') for r in table_rows(sec_by_num(contract_text, '8.4')[1])}
+    unknown = sorted({e['check'] for e in entries if e['check']} - known)
+    if unknown:
+        warns.append(('CHECK_NAME_UNKNOWN', f'계약 §8.4 이름 표에 없는 check {unknown} — 같은 절차가 두 이름으로 갈리지 않았는지 본다'))
+
     ledger = build_ledger(gold, lib, store)
     errs += check_ledger(ledger, types, enums)
     s = reading_summary(ledger, ledger['plans'][0]['reading_id'])
     # 입문 4장에서 숙련으로 바꿨다가 돌아온 독자 — 전환이 이탈로 읽히지 않는다 (§5.3)
-    if not (s['completed'] and s['stopped_at'] == ('basic', 3) and s['switched_from'] == ['basic', 'advanced']):
+    if not (s['completed'] and s['completed_to_end'] and s['stopped_at'] == ('basic', 3) and s['stopped_end_shown']
+            and s['switched_from'] == ['basic', 'advanced']):
         errs.append(('SUMMARY', f'시험 열람의 계산이 기대와 다르다: {s}'))
     return errs, entries, ledger, s, warns
 
@@ -690,8 +726,9 @@ def main():
     types = VC.ts_types(read(CONTRACT))
     print('verify-observation')
     print(f'  계약   docs/contract/OBSERVATION.md — 타입 {len(types)} · 칸 {sum(len(f) for f in types.values())}')
-    print(f'  실물   correction-log.jsonl {len(entries)}행 (CSV 에서 옮김) — '
+    print(f'  실물   correction-log.jsonl {len(entries)}행 (원본. 얼린 CSV 에서 옮긴 것 {sum(1 for e in entries if "_row" in e)}) — '
           f'gate {dict(Counter(str(e["gate"]) for e in entries))} · caught_by {dict(Counter(e["caught_by"] for e in entries))}')
+    print(f'         check {dict(Counter(str(e["check"]) for e in entries))}')
     print(f'         target {dict(Counter(t["kind"] for e in entries for t in e["targets"]))} · '
           f'Replacement {sum(len(e["replacements"]) for e in entries)} · 유형 {dict(Counter(e["error_type"] for e in entries))} · '
           f'time_spent_min 적힌 행 {sum(1 for e in entries if e["time_spent_min"] is not None)}')
@@ -701,6 +738,7 @@ def main():
     print(f'  시험 원장 (가짜 독자 1) — plan {len(ledger["plans"])} · 읽기 사건 {len(ledger["events"])} · 물음 {len(ledger["probes"])} · '
           f'노출 {len(ledger["exposures"])} · 응답 {len(ledger["responses"])} · 증거 {len(ledger["evidence"])}')
     print(f'         계산 — 완독 {s["completed"]} · 멈춘 장 {s["stopped_at"]} · 가장 멀리 {s["furthest"]} · 전환으로 떠난 레벨 {s["switched_from"]}')
+    print(f'              끝이 나온 완독 {s["completed_to_end"]} · 멈춘 장의 끝이 나온 뒤였나 {s["stopped_end_shown"]}')
     if '--report' in sys.argv:
         print('\ncorrection-log.jsonl — 행마다 (gate · occasion · targets · caught_by 는 초안. 사람이 확인한다)')
         for i, e in enumerate(entries, 1):

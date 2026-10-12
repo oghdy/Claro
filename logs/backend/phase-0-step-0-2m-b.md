@@ -367,3 +367,112 @@ PASS  [contract] §4.2 — 어느 커밋의 골든인지 안 적음 → ['CONTRA
 - ~~jsonl 의 `_pending` 6건~~ — 채웠다
 - 게이트 — _open 5개 그대로 (계약 §16)
 - 사람 확인 — jsonl 42행의 `_draft`
+
+
+---
+
+## B-0.2n-b · 2026-10-12 — 게이트 반영 (D33)
+
+0.2m-b 는 통과했고 _open-6 ~ 10 은 모두 추천 (a) 로 정해졌다. 계약에 열린 _open 이 없다.
+
+### 프론트가 새 사건을 내려면 화면에 필요한 것 — 한 줄
+**화면이 물음 버튼(마지막 장은 끝 묶음)을 내보내는 바로 그 판정에서 `SLIDE_END_SHOWN` 을 한 plan 의 한 장에 한 번 낸다** — B5 는 그 판정(`check` → `data-ready`)을 이미 갖고 있고 마지막 장도 같은 길을 탄다. 본 화면(F-1)에는 그 판정이 없다(스크롤로 넘긴다).
+
+### 반영한 것
+
+| # | D33 | 계약 | 검사 |
+|---|---|---|---|
+| 1 | 읽기 사건 하나를 더한다 — 장마다 "이 장의 끝이 화면에 나왔다" | `ReadingEvent.type` 에 `SLIDE_END_SHOWN`. §5.1 · §5.2 · **§5.4 "닿았다 ≠ 끝이 나왔다 ≠ 읽었다"** · 불변식 22 | 불변식 22 (`EVENT_END`) · 시험 원장에 장마다 · 계산 둘 |
+| 2 | 열람은 화면을 따른다 | §4.1 — 자리를 되살리면 같은 열람, 1장부터면 새 열람. 되살릴지는 F-2b | 기계로 볼 것이 없다 (화면이 없다) |
+| 3 | 줄에 표시를 두지 않는다 | §3 · 불변식 2 — 시험 경로는 기록하지 않고 실제 독자는 배정표의 `user_id` | 원장 타입에 시험 표시 칸이 있으면 실패 (`CONTRACT_TEST_FLAG`) |
+| 4 | jsonl 이 원본. CSV 는 얼린다 | §15 · `logs/correction-log.csv.FROZEN.md` (CSV 에는 머리말을 적을 방법이 없다) | **CSV 에 새 행 → 실패** (`CSV_FROZEN`). jsonl 에 새 줄(`_row` 없음)은 정상 |
+| 5 | `check` = 잡은 절차의 이름 | §8.3 · **§8.4 이름 표** · 불변식 20 · 타입 주석 | 기계 검사면 필수, 그 밖엔 선택. 빈 글 실패. 표에 없는 이름은 WARN |
+| 6 | Probe 가 요점을 가리킨다 | `Probe.goal_ref: GoalRef | null` · §6.1 · §10 · 불변식 23. "미확인"이던 세 줄을 고쳤다 | DATA_MODEL 에 Goal(`goal_id`)과 GoalRef 가 있는가 (`CONTRACT_PAIR`) |
+| 7 | §12 를 지금 상태로 | 닫힌 것 7 · 화면(F-2b)에 남은 것 6 · 운영(D31)에 남은 것 5 | — |
+
+### 스스로 정한 것 — 뒤집을 수 있다
+| 무엇 | 어떻게 | 왜 |
+|---|---|---|
+| **한 행을 두 절차가 잡았을 때** (지시: "실물 10행을 보고 정해라") | **`check` 는 그 문장을 먼저 건 절차 하나.** 10행은 `check` = `반증 검사`, `caught_by` = `SOURCE_RECHECK` | 실물 10행의 글이 전부 "반증 검사 … + 1차 원문 대조"다 — 반증 물음이 걸었고 1차 원문이 답을 줬다. `check`(어느 절차)와 `caught_by`(무엇으로 가렸나)가 서로 다른 것을 적으므로 **모양을 안 바꾸고** 둘 다 남는다. D33 이 바란 것 — D28 의 발견과 D29 의 발견이 따로 세어진다 — 이 그대로 된다: `1차 원문 대조` 15 · `반증 검사` 10. 모양이 안 바뀌어 _open 으로 올리지 않았다 |
+| 27행 ("1차 원문 대조 … · DC-D 반증 기록") | `check` = `1차 원문 대조` | 글의 순서대로 — 원문 대조가 먼저다. 사람이 확인한다 |
+| 1~14행 가운데 대조 7 · 읽다가 3 | `check` null | S1 역산 · C-1 판정은 한 번뿐인 일이었다. 되풀이할 이름 있는 절차가 아니다 |
+| 사건 이름 | `SLIDE_END_SHOWN` | "읽었다"로 읽히지 않는 이름. 화면에 **나왔다**까지만 말한다 |
+| 한 plan 의 한 장에 한 번 | 불변식 22 | B5 의 `data-ready` 가 장마다 한 번 붙고 떼지 않는다. 지나온 길로 돌아온 장은 끝이 이미 나왔던 장이다 |
+| "처음 가는 장 앞에는 앞 장의 끝이 나왔다" | 불변식으로 **안 올렸다** (§13) | D26 의 화면에서는 따라 나오지만 본 화면이 아직 스크롤로 넘긴다 |
+| 절차 이름 | 지시가 적은 글자 그대로 (`반증 검사` · `1차 원문 대조` · `D15 선형 읽기 점검`) + 기존 `lint-1` · `lint-2` · `quote-check` | 한글과 영문이 섞였다. 맞추려면 한쪽을 바꿔야 한다 — 정하지 않았다 |
+| 칸 이름 `goal_ref` | 0.2n-a `f278d24` — 키는 `goal_id`, 참조 모양은 `GoalRef` ("물음이 이것으로 가리킨다") | 패키지의 `event_ref: EventRef` 와 같은 방식 |
+
+### 완독 · 멈춘 장 계산이 어떻게 달라졌나
+- **완독은 그대로다** — 마지막 장에 닿은 것 (확정 §8.3)
+- 새로 나오는 계산 둘: **끝이 나온 완독**(마지막 장의 `SLIDE_END_SHOWN` 이 있다) · **멈춘 장에서 끝이 나왔나**(물음 버튼이 나온 뒤에 안 눌렀나, 읽다 말았나)
+- 칸으로 두지 않는다 — 전과 같이 사건에서 계산한다
+
+### 산출
+| 파일 | 내용 |
+|---|---|
+| `docs/contract/OBSERVATION.md` | 위 표. CHANGELOG · 머리말 · §16 "판정됨 → D33" |
+| `logs/correction-log.jsonl` | `check` 28행 채움 (`1차 원문 대조` 15 · `반증 검사` 10 · `D15 선형 읽기 점검` 3). **글 0자 변경** — `what_was_wrong` · `what_i_changed` · `catch_note` 를 CSV 와 견줘 42/42 같다. `_draft` 는 남겼다 (D33) |
+| `logs/correction-log.csv.FROZEN.md` | 새 파일. 한 줄 |
+| `scripts/verify-observation.py` · `selftest-verify-observation.py` | 사본 90 → 106, 계산 1 → 2 |
+
+`logs/correction-log.csv` 는 그대로다 (`git diff` 0줄). 다른 계약 · 골든 · 저장소 · `apps/` · `packages/` 는 고치지 않았다.
+
+### 다른 곳에 남은 것 — 고치지 않았다
+| 어디 | 무엇 |
+|---|---|
+| `docs/development-content.md` "correction_log" 절 | 아직 "`logs/correction-log.csv`. 게이트에서 개입할 때마다 1줄"이라고 적혀 있다. 콘텐츠 세션이 이 절대로 CSV 에 쓰면 검사가 실패한다 — **C-6 이 FACT 교정을 쓰기 전에 고쳐야 한다** |
+| 같은 절 | 새 줄을 쓰는 사람이 채울 칸이 늘었다 — `caught_by`(여섯 값) · `check`(§8.4 이름) · `targets` · `gate` · `occasion`. 그 절에 없다 |
+| `time_spent_min` | 42행 전부 null |
+
+### 검증
+
+**1. `python3 scripts/verify-observation.py`** — exit 0 (WARN 1)
+```
+verify-observation
+  계약   docs/contract/OBSERVATION.md — 타입 15 · 칸 106
+  실물   correction-log.jsonl 42행 (원본. 얼린 CSV 에서 옮긴 것 42) — gate {'None': 40, 'GATE_3': 2} · caught_by {'ARTIFACT_COMPARE': 10, 'PLAIN_READING': 3, 'AUTOMATED_CHECK': 4, 'SOURCE_RECHECK': 25}
+         check {'None': 10, 'lint-1': 2, 'lint-2': 1, 'quote-check': 1, '1차 원문 대조': 15, '반증 검사': 10, 'D15 선형 읽기 점검': 3}
+         target {'ARTICLE': 37, 'CONCEPT': 7} · Replacement 6 · 유형 {'압축': 7, '오독 미방어': 3, '시점 앵커 누락': 1, '축약 변질': 3, '레이어 혼입': 9, '원문 불일치': 14, '팩트 누락': 5} · time_spent_min 적힌 행 0
+  골든   basic block_decisions — C-0001@1 FULL · C-0002@4 FULL · C-0005@3 SKIP · C-0012@1 SKIP
+  골든   advanced block_decisions — C-0001@1 SKIP · C-0002@4 SKIP · C-0005@3 REFRESHER · C-0012@1 SKIP
+  시험 원장 (가짜 독자 1) — plan 2 · 읽기 사건 22 · 물음 2 · 노출 3 · 응답 2 · 증거 3
+         계산 — 완독 True · 멈춘 장 ('basic', 3) · 가장 멀리 {'basic': 3, 'advanced': 4} · 전환으로 떠난 레벨 ['basic', 'advanced']
+              끝이 나온 완독 True · 멈춘 장의 끝이 나온 뒤였나 True
+
+  WARN  CORR_DRAFT: 42행의 gate · occasion · targets · caught_by · check 가 초안이다 — 사람이 확인한다 (`_draft`)
+OK
+```
+
+**2. `python3 scripts/selftest-verify-observation.py`** — exit 0. 사본 106 (계약 31 · 로그 2 · CSV 6 · jsonl 4 · 교정 기록 17 · 시험 원장 44 · 다른 계약 2) + 계산 2. 이번에 넣거나 바꾼 사본과 마지막 줄 (실패 행 0):
+```
+PASS  [contract] D33 — 읽기 사건에서 SLIDE_END_SHOWN 삭제 → ['CONTRACT_ENUM', 'EVENT_TYPE']
+PASS  [contract] D33 — 읽기 사건에 기준값 칸 (visible_threshold) → ['CONTRACT_VALUATION']
+PASS  [contract] D33 — 줄에 시험 표시 칸 (is_test) → ['CONTRACT_TEST_FLAG']
+PASS  [contract] D33 — Probe 에서 goal_ref 삭제 → ['CONTRACT_FIELD', 'CONTRACT_PAIR', 'LEDGER_FIELD']
+PASS  [contract] D33 — GoalRef 를 여기서 다시 정의 → ['CONTRACT_FOREIGN_TYPE']
+PASS  [contract] §8.4 — 원장의 절차 이름이 표에 없다 — WARN 만 (통과해야 한다) → 통과
+PASS  [others] D33 — DATA_MODEL 의 Goal 에 goal_id 가 없다 → ['CONTRACT_PAIR']
+PASS  [csv] CSV — 얼린 CSV 에 새 행 (D33) → ['CSV_FROZEN']
+PASS  [jsonl] jsonl — 새 교정을 jsonl 에 덧붙임 (`_row` 없음) — 통과해야 한다 → 통과
+PASS  [jsonl] jsonl — 새 줄이 기계 검사인데 절차 이름이 없다 → ['CORR_CHECK']
+PASS  [corr] 사람이 돌린 절차에 이름 (D33) — 통과해야 한다 → 통과
+PASS  [corr] check 가 빈 글 → ['CORR_CHECK']
+PASS  [ledger] 불변식 22 — 지금 장이 아닌 장의 끝이 나왔다 (2장에 있는데 4장의 끝) → ['EVENT_END']
+PASS  [ledger] 불변식 22 — 같은 장의 끝이 두 번 → ['EVENT_END']
+PASS  [ledger] 불변식 22 — 끝이 나온 장을 안 적음 → ['EVENT_END']
+PASS  [ledger] 불변식 22 — 전환 직후(아직 어느 장에도 안 들어감)에 끝이 나왔다 → ['EVENT_END', 'EVENT_SWITCH']
+PASS  [ledger] 끝이 나온 사건이 하나도 없다 (화면이 안 냄) — 원장은 맞다. 계산이 "끝이 안 나왔다"를 말한다 → 통과
+PASS  [ledger] 읽기 사건에 머문 시간 칸 → ['LEDGER_FIELD']
+PASS  [계산] 입문 4장에서 숙련으로 바꾸고 끝 → 멈춘 장 ('advanced', 0) · 입문은 "바꿨다"(['basic']) · 입문에서 가장 멀리 3
+PASS  [계산] 끝이 나온 사건이 없다 → 완독 True · 끝이 나온 완독 False · 멈춘 장의 끝이 나온 뒤였나 False
+사본 106개 + 계산 2 · OK
+```
+
+**3. 다른 검사** — 돌리지 않았다. 0.2n-a 가 같은 시간에 DATA_MODEL · CONCEPT_IDENTITY · 저장소를 고치는 중이다 (작업 트리에 그 세션의 고치는 중인 파일이 있었다).
+`verify-observation` 은 DATA_MODEL 의 Goal 을 읽는다 — `f278d24` 에서 확인했다.
+
+### 남은 일
+- 사람 확인 — jsonl 42행의 `_draft` (`gate` · `occasion` · `targets` · `caught_by` · `check`)
+- PM — development-content "correction_log" 절 (C-6 전에)
+- F-2b — 계약 §12 "남았다 — 화면" 여섯
+- D31 — 계약 §12 "남았다 — 운영" 다섯

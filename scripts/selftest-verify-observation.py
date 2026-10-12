@@ -25,6 +25,7 @@ GOLD = json.load(open(V.GOLDEN, encoding='utf-8'))
 LIB = V.VC.parse_library(LIBT)
 TYPES, ENUMS = V.enums_from(CONTRACT)
 ENTRIES = V.load_entries(JSONLT)
+NEW_LINE = json.dumps({k: v for k, v in dict(ENTRIES[7], correction_id=V.UID('correction', 'new'), date='2026-10-12', replacements=[]).items() if not k.startswith('_')}, ensure_ascii=False) + '\n'
 LEDGER = V.build_ledger(GOLD, LIB, STORE)
 
 
@@ -64,9 +65,15 @@ def pre_after_explanation(L):
         v['position'] = 'PRE'
 
 
+def no_end_events(L):
+    L['events'] = [e for e in L['events'] if e['type'] != 'SLIDE_END_SHOWN']
+    for i, e in enumerate(L['events']):
+        e['seq'] = i
+
+
 def switch_is_not_dropout(L):
-    # 숙련으로 바꾼 뒤의 사건을 다 지운다 — 입문 4장에서 바꾸고 끝. 그래도 원장은 맞다. 계산이 "바꿨다"를 말한다
-    L['events'] = L['events'][:6]
+    # 숙련 1장에 들어간 것까지만 남긴다 (끝은 아직 안 나왔다) — 입문 4장에서 바꾸고 끝. 그래도 원장은 맞다. 계산이 "바꿨다"를 말한다
+    L['events'] = L['events'][:10]
 
 
 CASES = [
@@ -83,7 +90,7 @@ CASES = [
     ('user_concept_state 를 정의', 'contract', sub('ProbeTarget { concept_id: UUID, version: integer }', 'ProbeTarget { concept_id: UUID, version: integer }\nUserConceptState { user_id: UUID, concept_id: UUID }'), {'CONTRACT_FOREIGN_TYPE'}),
     ('다른 계약의 타입을 다시 정의 (ConceptRef)', 'contract', sub('ProbeTarget { concept_id: UUID, version: integer }', 'ConceptRef { concept_id: UUID, version: integer }\nProbeTarget { concept_id: UUID, version: integer }'), {'CONTRACT_FOREIGN_TYPE'}),
     ('독자 기기 칸 (device_id)', 'contract', sub('  session_id:        UUID          // 한 번 앉아서', '  device_id:         string\n  session_id:        UUID          // 한 번 앉아서'), {'CONTRACT_PERSONAL'}),
-    ('D26 — 읽기 사건에 방향 값 (SWIPED_UP)', 'contract', sub('"SLIDE_ENTERED" | "LEVEL_SWITCHED" | "CLOSED"', '"SLIDE_ENTERED" | "SWIPED_UP" | "LEVEL_SWITCHED" | "CLOSED"'), {'CONTRACT_DIRECTION', 'CONTRACT_ENUM'}),
+    ('D26 — 읽기 사건에 방향 값 (SWIPED_UP)', 'contract', sub('"SLIDE_END_SHOWN" | "LEVEL_SWITCHED" | "CLOSED"', '"SLIDE_END_SHOWN" | "SWIPED_UP" | "LEVEL_SWITCHED" | "CLOSED"'), {'CONTRACT_DIRECTION', 'CONTRACT_ENUM'}),
     ('D26 — 읽기 사건에 방향 칸 (direction)', 'contract', sub('  slide_index:  integer | null     // SLIDE_ENTERED', '  direction:    string\n  slide_index:  integer | null     // SLIDE_ENTERED'), {'CONTRACT_DIRECTION'}),
     ('D18 — 계획에 놓을 자리 (after_slide)', 'contract', sub('probe_type: ProbeType, position: Position }', 'probe_type: ProbeType, position: Position, after_slide: integer }'), {'CONTRACT_PROBE_PLACEMENT'}),
     ('D18 — 물음에 놓을 자리 (SlideLoc)', 'contract', sub('  prompt:         string', '  home:           SlideLoc\n  prompt:         string'), {'CONTRACT_PROBE_PLACEMENT'}),
@@ -94,14 +101,23 @@ CASES = [
     ('§8.2 — 어느 행까지의 집계인지 안 적음', 'contract', sub('| 실물 값 | 행 (1~14행) |', '| 실물 값 | 행 |'), {'CONTRACT_SNAPSHOT'}),
     ('§8.3 — 옮긴 파일과 다른 수', 'contract', sub('| 확정 §10.3 | 25 —', '| 확정 §10.3 | 24 —'), {'CONTRACT_REAL_MISMATCH'}),
     ('§4.2 — 골든과 다른 decision (C-0012 입문 FULL)', 'contract', sub('| C-0012 | **SKIP** —', '| C-0012 | **FULL** —'), {'CONTRACT_REAL_MISMATCH'}),
+    ('D33 — 읽기 사건에서 SLIDE_END_SHOWN 삭제', 'contract', sub('"SLIDE_ENTERED" | "SLIDE_END_SHOWN" | "LEVEL_SWITCHED"', '"SLIDE_ENTERED" | "LEVEL_SWITCHED"'), {'CONTRACT_ENUM', 'EVENT_TYPE'}),
+    ('D33 — 읽기 사건에 기준값 칸 (visible_threshold)', 'contract', sub('  from_plan_id: UUID | null        // LEVEL_SWITCHED', '  visible_threshold: number\n  from_plan_id: UUID | null        // LEVEL_SWITCHED'), {'CONTRACT_VALUATION'}),
+    ('D33 — 줄에 시험 표시 칸 (is_test)', 'contract', sub('  seq:          integer            // 한 열람', '  is_test:      boolean\n  seq:          integer            // 한 열람'), {'CONTRACT_TEST_FLAG'}),
+    ('D33 — Probe 에서 goal_ref 삭제', 'contract', sub('  goal_ref:       GoalRef | null', '  goal:           string | null'), {'CONTRACT_FIELD', 'CONTRACT_PAIR', 'LEDGER_FIELD'}),
+    ('D33 — GoalRef 를 여기서 다시 정의', 'contract', sub('Position  = "PRE"', 'GoalRef = UUID\nPosition  = "PRE"'), {'CONTRACT_FOREIGN_TYPE'}),
+    ('§8.4 — 원장의 절차 이름이 표에 없다 — WARN 만 (통과해야 한다)', 'contract', sub('| `반증 검사` | 해석', '| `반증검사` | 해석'), set()),
     ('CHANGELOG 행 삭제', 'contract', lambda t: t.replace(' | B-0.2c |', ' | PM |'), {'CONTRACT_CHANGELOG'}),
+    ('D33 — DATA_MODEL 의 Goal 에 goal_id 가 없다', 'others', lambda o: [x.replace('  goal_id:   UUID', '  key:       UUID') for x in o], {'CONTRACT_PAIR'}),
     ('D30 — DATA_MODEL ArticleRecord 에서 article_version 이 사라짐', 'others', lambda o: [x.replace('  article_version: integer          // D30', '  edition:         integer          // D30') for x in o], {'CONTRACT_PAIR'}),
     # ── 로그 ──
     ('로그 — 질문 3 행 삭제', 'log', lambda t: '\n'.join(l for l in t.splitlines() if not l.startswith('| 3 |')), {'LOG_QUESTION'}),
     ('로그 — 질문 6 표시 삭제', 'log', lambda t: '\n'.join(l.replace('계약 반영', '반영').replace('_open', 'open').replace('미확인', '모름') if l.startswith('| 6 |') else l for l in t.splitlines()), {'LOG_QUESTION'}),
     # ── 교정 기록 CSV (실물) ──
     ('CSV — 열 이름이 바뀜', 'csv', sub('source_of_catch,time_spent_min', 'caught,time_spent_min'), {'CSV_HEADER', 'CONTRACT_CSV_COLUMN'}),
-    ('CSV — 행이 늘었다 (아직 안 옮김) — 통과해야 한다. WARN 만', 'csv', lambda t: t + '2026-10-10,FOMC-20260916,새 게이트,압축,x,y,z,\n', set()),
+    ('CSV — 얼린 CSV 에 새 행 (D33)', 'csv', lambda t: t + '2026-10-10,FOMC-20260916,새 게이트,압축,x,y,z,\n', {'CSV_FROZEN'}),
+    ('jsonl — 새 교정을 jsonl 에 덧붙임 (`_row` 없음) — 통과해야 한다', 'jsonl', lambda t: t + NEW_LINE, set()),
+    ('jsonl — 새 줄이 기계 검사인데 절차 이름이 없다', 'jsonl', lambda t: t + NEW_LINE.replace('"check": "lint-1"', '"check": null'), {'CORR_CHECK'}),
     ('CSV — 옮긴 행의 글자 하나가 바뀜', 'csv', sub('속도계 비유가 C-0002 4단계 없이', '속도계 비유가 C-0002 네 단계 없이'), {'MIGRATION_TEXT'}),
     ('CSV — 마지막 행이 사라짐', 'csv', lambda t: '\n'.join(t.rstrip('\n').split('\n')[:-1]) + '\n', {'MIGRATION_ROWS'}),
     ('CSV — 옛 행(3행)이 사라짐', 'csv', lambda t: t.replace(next(l for l in t.split('\n') if 'FOMC-19' in l) + '\n', ''), {'MIGRATION_ROWS', 'MIGRATION_TEXT', 'CONTRACT_REAL_MISMATCH'}),
@@ -110,7 +126,8 @@ CASES = [
     ('CSV — 9종에 없는 유형', 'csv', sub('FOMC-20260916,writing,압축,', 'FOMC-20260916,writing,문장 어색,'), {'CSV_ERROR_TYPE', 'MIGRATION_TEXT'}),
     # ── 옮긴 교정 기록 (불변식 20 · 21) ──
     ('기계 검사가 잡았는데 check 가 없다', 'corr', m_(lambda E: E[7].update(check=None)), {'CORR_CHECK'}),
-    ('사람이 잡았는데 check 가 있다', 'corr', m_(lambda E: E[5].update(check='lint-1')), {'CORR_CHECK'}),
+    ('사람이 돌린 절차에 이름 (D33) — 통과해야 한다', 'corr', m_(lambda E: E[5].update(check='반증 검사')), set()),
+    ('check 가 빈 글', 'corr', m_(lambda E: E[5].update(check=' ')), {'CORR_CHECK'}),
     ('targets 가 비었다', 'corr', m_(lambda E: E[0].update(targets=[])), {'CORR_TARGET'}),
     ('계약에 없는 칸 (severity)', 'corr', m_(lambda E: E[0].update(severity='high')), {'CORR_FIELD'}),
     ('gate 값이 넷 밖 (GATE_5)', 'corr', m_(lambda E: E[5].update(gate='GATE_5')), {'CORR_ENUM'}),
@@ -129,7 +146,7 @@ CASES = [
     # ── 시험 원장 (불변식 1 ~ 19) ──
     ('증거 줄에 값을 매기는 칸 (weight)', 'ledger', m_(lambda L: L['evidence'][0].update(weight=2)), {'LEDGER_FIELD'}),
     ('plan 에 독자 이름 칸', 'ledger', m_(lambda L: L['plans'][0].update(reader_name='x')), {'LEDGER_FIELD'}),
-    ('읽기 사건에 방향 칸', 'ledger', m_(lambda L: ev(L, 1).update(direction='up')), {'LEDGER_FIELD'}),
+    ('읽기 사건에 방향 칸', 'ledger', m_(lambda L: ev(L, 2).update(direction='up')), {'LEDGER_FIELD'}),
     ('패키지에 없는 레벨 (intermediate)', 'ledger', m_(lambda L: plan(L, 'advanced').update(level='intermediate')), {'PLAN_LEVEL', 'EVENT_SLIDE'}),
     ('한 열람에 같은 레벨 plan 둘', 'ledger', m_(lambda L: L['plans'].append(dict(plan(L, 'basic'), plan_id=V.UID('plan', 'dup'), level_chosen_by='READER', created_at='2026-10-20T01:30:00Z'))), {'PLAN_DUPLICATE'}),
     ('정적 레벨인데 selected_blocks 를 채움', 'ledger', m_(lambda L: plan(L, 'basic').update(selected_blocks=[])), {'PLAN_STATIC'}),
@@ -139,14 +156,20 @@ CASES = [
     ('decision 값이 셋 밖 (PARTIAL)', 'ledger', m_(lambda L: plan(L, 'basic')['block_decisions'][0].update(decision='PARTIAL')), {'PLAN_DECISIONS'}),
     ('바꿔서 연 레벨이 DEFAULT', 'ledger', m_(lambda L: plan(L, 'advanced').update(level_chosen_by='DEFAULT')), {'PLAN_DEFAULT'}),
     ('한 열람의 plan 이 다른 판을 가리킴', 'ledger', m_(lambda L: plan(L, 'advanced').update(article_version=2)), {'PLAN_READING'}),
-    ('seq 가 건너뜀', 'ledger', m_(lambda L: ev(L, 12).update(seq=20)), {'EVENT_SEQ'}),
-    ('레벨에 없는 장 (입문 10장)', 'ledger', m_(lambda L: ev(L, 3).update(slide_index=9)), {'EVENT_SLIDE'}),
-    ('SLIDE_ENTERED 에 slide_index 가 없다', 'ledger', m_(lambda L: ev(L, 2).update(slide_index=None)), {'EVENT_SLIDE'}),
-    ('전환 없이 다른 레벨의 사건', 'ledger', m_(lambda L: ev(L, 2).update(plan_id=plan(L, 'advanced')['plan_id'])), {'EVENT_CURRENT_PLAN'}),
-    ('같은 레벨로 전환', 'ledger', m_(lambda L: ev(L, 4).update(from_plan_id=plan(L, 'advanced')['plan_id'])), {'EVENT_SWITCH'}),
-    ('전환 바로 다음이 SLIDE_ENTERED 가 아니다', 'ledger', m_(lambda L: (L['events'].__delitem__(slice(5, 10)), [e.update(seq=i) for i, e in enumerate(L['events'])])), {'EVENT_SWITCH'}),
-    ('CLOSED 뒤에 사건', 'ledger', m_(lambda L: L['events'].append(dict(ev(L, 11), event_id=V.UID('rev', 13), seq=13))), {'EVENT_CLOSED'}),
-    ('계약에 없는 사건 (SWIPED_UP)', 'ledger', m_(lambda L: ev(L, 2).update(type='SWIPED_UP')), {'EVENT_TYPE'}),
+    ('seq 가 건너뜀', 'ledger', m_(lambda L: ev(L, 21).update(seq=30)), {'EVENT_SEQ'}),
+    ('레벨에 없는 장 (입문 10장)', 'ledger', m_(lambda L: ev(L, 6).update(slide_index=9)), {'EVENT_SLIDE', 'EVENT_END'}),
+    ('SLIDE_ENTERED 에 slide_index 가 없다', 'ledger', m_(lambda L: ev(L, 4).update(slide_index=None)), {'EVENT_SLIDE', 'EVENT_END'}),
+    ('전환 없이 다른 레벨의 사건', 'ledger', m_(lambda L: ev(L, 4).update(plan_id=plan(L, 'advanced')['plan_id'])), {'EVENT_CURRENT_PLAN'}),
+    ('같은 레벨로 전환', 'ledger', m_(lambda L: ev(L, 8).update(from_plan_id=plan(L, 'advanced')['plan_id'])), {'EVENT_SWITCH'}),
+    ('전환 바로 다음이 SLIDE_ENTERED 가 아니다', 'ledger', m_(lambda L: (L['events'].__delitem__(slice(9, 19)), [e.update(seq=i) for i, e in enumerate(L['events'])])), {'EVENT_SWITCH'}),
+    ('CLOSED 뒤에 사건', 'ledger', m_(lambda L: L['events'].append(dict(ev(L, 20), event_id=V.UID('rev', 22), seq=22))), {'EVENT_CLOSED'}),
+    ('계약에 없는 사건 (SWIPED_UP)', 'ledger', m_(lambda L: ev(L, 2).update(type='SWIPED_UP')), {'EVENT_TYPE', 'EVENT_END'}),
+    ('불변식 22 — 지금 장이 아닌 장의 끝이 나왔다 (2장에 있는데 4장의 끝)', 'ledger', m_(lambda L: ev(L, 3).update(slide_index=3)), {'EVENT_END'}),
+    ('불변식 22 — 같은 장의 끝이 두 번', 'ledger', m_(lambda L: (L['events'].insert(21, dict(ev(L, 7), event_id=V.UID('rev', 99))), [e.update(seq=i) for i, e in enumerate(L['events'])])), {'EVENT_END'}),
+    ('불변식 22 — 끝이 나온 장을 안 적음', 'ledger', m_(lambda L: ev(L, 1).update(slide_index=None)), {'EVENT_END'}),
+    ('불변식 22 — 전환 직후(아직 어느 장에도 안 들어감)에 끝이 나왔다', 'ledger', m_(lambda L: ev(L, 9).update(type='SLIDE_END_SHOWN')), {'EVENT_END', 'EVENT_SWITCH'}),
+    ('끝이 나온 사건이 하나도 없다 (화면이 안 냄) — 원장은 맞다. 계산이 "끝이 안 나왔다"를 말한다', 'ledger', m_(no_end_events), set()),
+    ('읽기 사건에 머문 시간 칸', 'ledger', m_(lambda L: ev(L, 1).update(dwell_ms=900)), {'LEDGER_FIELD'}),
     ('없는 물음 판을 가리키는 노출', 'ledger', m_(lambda L: L['exposures'][2].update(probe_version=2)), {'EXPOSURE_PROBE'}),
     ('유형이 넷 밖 (QUIZ)', 'ledger', m_(lambda L: L['exposures'][2].update(probe_type='QUIZ')), {'EXPOSURE_ENUM'}),
     ('노출의 유형이 계획과 다르다', 'ledger', m_(lambda L: plan(L, 'basic')['probe_plan'].append({'probe_id': L['exposures'][0]['probe_id'], 'probe_version': 1, 'probe_type': 'AUDIT', 'position': 'POST'})), {'EXPOSURE_PLAN'}),
@@ -201,10 +224,17 @@ def main():
     # 레벨 전환은 이탈이 아니다 — 계산이 그렇게 말하는가 (§5.3)
     L = m_(switch_is_not_dropout)(LEDGER)
     s = V.reading_summary(L, L['plans'][0]['reading_id'])
-    ok = s['switched_from'] == ['basic'] and s['stopped_at'] == ('advanced', 0) and s['furthest']['basic'] == 3 and not s['completed']
+    ok = s['switched_from'] == ['basic'] and s['stopped_at'] == ('advanced', 0) and s['furthest']['basic'] == 3 and not s['completed'] \
+        and not s['stopped_end_shown']
     fails += not ok
     print(f'{"PASS" if ok else "FAIL"}  [계산] 입문 4장에서 숙련으로 바꾸고 끝 → 멈춘 장 {s["stopped_at"]} · 입문은 "바꿨다"({s["switched_from"]}) · 입문에서 가장 멀리 {s["furthest"]["basic"]}')
-    print(f'\n사본 {len(CASES)}개 + 계산 1 · ' + ('OK' if not fails else f'{fails}개 실패'))
+    # 끝이 나온 사건이 없으면 — 완독이지만 끝이 나온 완독은 아니다 (§5.2)
+    L = m_(no_end_events)(LEDGER)
+    s = V.reading_summary(L, L['plans'][0]['reading_id'])
+    ok = s['completed'] and not s['completed_to_end'] and not s['stopped_end_shown']
+    fails += not ok
+    print(f'{"PASS" if ok else "FAIL"}  [계산] 끝이 나온 사건이 없다 → 완독 {s["completed"]} · 끝이 나온 완독 {s["completed_to_end"]} · 멈춘 장의 끝이 나온 뒤였나 {s["stopped_end_shown"]}')
+    print(f'\n사본 {len(CASES)}개 + 계산 2 · ' + ('OK' if not fails else f'{fails}개 실패'))
     return 1 if fails else 0
 
 
