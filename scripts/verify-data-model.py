@@ -360,14 +360,22 @@ def check_origin(store, record, contract_text, fb, records_text):
     for x in store.get('_not_facts', []):
         if not any(x['text'] in b['text'] for b in fb.values()):
             E('BRIEF_TEXT', f'_not_facts {x.get("label")}: 브리프에 없는 글이다')
-    # 요점 — 브리프 §5 의 글 그대로. 좁힌 문장은 브리프 글(`_brief_statement`)에서 어디를 바꿨는지가 보여야 한다
+    # 요점 — 브리프 §5 의 글 그대로. 고친 문장은 브리프 글을 `_brief_statement` 에 남기고, 교정 기록에 그 요점을 가리킨 줄이 있어야 하며
+    # 그 줄의 what_i_changed 에 지금 문장이 글자 그대로 있어야 한다 (도윤이 고른 글자만 받는다 — C-6 · D33)
     brief_text = open(BRIEFS['FOMC'], encoding='utf-8').read()
+    goal_fix = defaultdict(str)
+    for ln in open(CORRECTIONS, encoding='utf-8'):
+        if ln.strip():
+            e_ = json.loads(ln)
+            for t_ in e_.get('targets', []):
+                if t_.get('kind') == 'CLAIM':        # 교정 기록의 어휘에 GOAL 이 없다 — 요점은 CLAIM + 요점 label 로 적는다
+                    goal_fix[t_.get('code')] += e_.get('what_i_changed', '') + '\n'
     for g in store['goals']:
         src_ = g.get('_brief_statement', g['statement'])
         if src_ not in brief_text:
             E('BRIEF_TEXT', f'Goal {g["label"]}: 요점 문장이 브리프 §5 에 글자 그대로 없다 — {src_[:40]!r}')
-        elif '_brief_statement' in g and g['statement'] != src_.replace('그 이유가', '연준이 든 이유가'):
-            E('BRIEF_TEXT', f'Goal {g["label"]}: 좁힌 문장이 승인된 것(D29-3 — "그 이유가" → "연준이 든 이유가")과 다르다')
+        elif '_brief_statement' in g and (g['statement'] == src_ or g['statement'] not in goal_fix[g['label']]):
+            E('BRIEF_TEXT', f'Goal {g["label"]}: 브리프와 다른 요점 문장인데 글이 그대로거나, 교정 기록(target CLAIM {g["label"]})의 what_i_changed 에 그 문장이 글자 그대로 없다 — 고른 글자만 받는다')
     # 1차 구절 — 기록에 글자 그대로
     fid = {f['fact_id']: f['label'] for f in store['facts']}
     for x in store['fact_sources']:

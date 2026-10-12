@@ -2707,47 +2707,54 @@
       "label": "COMMON",
       "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
       "kind": "COMMON",
-      "statement": "연준이 3년 만에 금리를 올렸는데, 연준이 든 이유가 \"물가가 갑자기 나빠져서\"가 아니라 \"물가가 충분히 빠르게 내려가고 있다는 확신을 얻지 못해서\"라는 것을 이해한다.",
+      "statement": "연준이 3년 만에 금리를 올렸는데, 연준이 든 이유가 \"물가가 갑자기 나빠져서\"가 아니라 \"물가가 오르는 속도가 충분히 빠르게 목표로 내려가고 있다는 확신을 얻지 못해서\"라는 것을 이해한다.",
       "claims": [
         "1dfa9d89-68c2-45af-9d0e-a726dd989903"
       ],
-      "_origin": "docs/findings/fomc-2026-09-brief.md §5 Common Goal. 문장은 C-5 가 좁힌 것이다 — \"그 이유가\" → \"연준이 든 이유가\" (golden-correction-2026-10.md §4 · D29-3). 그 밖의 글자는 브리프 그대로",
-      "_brief_statement": "연준이 3년 만에 금리를 올렸는데, 그 이유가 \"물가가 갑자기 나빠져서\"가 아니라 \"물가가 충분히 빠르게 내려가고 있다는 확신을 얻지 못해서\"라는 것을 이해한다."
+      "_origin": "docs/findings/fomc-2026-09-brief.md §5 Common Goal. 문장은 C-5 가 좁힌 것이다 — \"그 이유가\" → \"연준이 든 이유가\" (golden-correction-2026-10.md §4 · D29-3). 그 뒤 C-6 이 \"물가가 … 내려가고\" → \"물가가 오르는 속도가 … 목표로 내려가고\"",
+      "_brief_statement": "연준이 3년 만에 금리를 올렸는데, 그 이유가 \"물가가 갑자기 나빠져서\"가 아니라 \"물가가 충분히 빠르게 내려가고 있다는 확신을 얻지 못해서\"라는 것을 이해한다.",
+      "_c6": "C-6 요점 반영 (D33 \"C-6 검수\" · 도윤 선택 2026-10-12) — 안은 logs/content/store-correction-2026-10.md §3. 교정 기록 target CLAIM COMMON"
     },
     {
       "goal_id": "77f2285d-5b37-442c-aeee-f15b0aa55beb",
       "label": "DEEP-A",
       "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
       "kind": "DEEP",
-      "statement": "7월에 소수였던 의견이 9월에 전원이 된 경로를 이해한다 — 단, 인과를 단정하지 않는다",
+      "statement": "7월에 셋뿐이던 인상 표가 9월 표결에서 전원이 되기까지의 순서를 이해한다 — 단, 인과를 단정하지 않는다",
       "claims": [
         "80ba71b4-5db3-4e02-af1a-fb1fc25fbffc",
-        "61bceae5-e0d8-4c08-9afc-779d4a466396"
+        "61bceae5-e0d8-4c08-9afc-779d4a466396",
+        "1feac34b-27d9-49b6-9244-98c903d0d462"
       ],
-      "_origin": "docs/findings/fomc-2026-09-brief.md §5 Deep Goals A — 브리프 글자 그대로"
+      "_origin": "docs/findings/fomc-2026-09-brief.md §5 Deep Goals A. 브리프 글은 `_brief_statement`",
+      "_brief_statement": "7월에 소수였던 의견이 9월에 전원이 된 경로를 이해한다 — 단, 인과를 단정하지 않는다",
+      "_c6": "C-6 요점 반영 (D33 \"C-6 검수\" · 도윤 선택 2026-10-12) — 안은 logs/content/store-correction-2026-10.md §3. 교정 기록 target CLAIM DEEP-A"
     },
     {
       "goal_id": "8b65c092-face-4cf6-a751-a47e436359da",
       "label": "DEEP-B",
       "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
       "kind": "DEEP",
-      "statement": "한 번 올리는 것과 인상 사이클을 시작하는 것은 다르다",
+      "statement": "참가자 전망(중앙값)으로는 이번 인상이 긴 인상 사이클의 시작이 아니다 — 올해 한 번 더, 내년은 같은 자리",
       "claims": [
         "2a690658-15d5-45bb-b552-1ba10e93a807"
       ],
-      "_origin": "docs/findings/fomc-2026-09-brief.md §5 Deep Goals B — 브리프 글자 그대로"
+      "_origin": "docs/findings/fomc-2026-09-brief.md §5 Deep Goals B. 브리프 글은 `_brief_statement`",
+      "_brief_statement": "한 번 올리는 것과 인상 사이클을 시작하는 것은 다르다",
+      "_c6": "C-6 요점 반영 (D33 \"C-6 검수\" · 도윤 선택 2026-10-12) — 안은 logs/content/store-correction-2026-10.md §3. 교정 기록 target CLAIM DEEP-B"
     },
     {
       "goal_id": "d2a7b255-4ceb-46ea-9786-24c35ad57376",
       "label": "DEEP-C",
       "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
       "kind": "DEEP",
-      "statement": "고용 데이터가 겉보기만큼 단순하지 않다",
+      "statement": "취업자 수는 달마다 크게 움직여서, 한 달 숫자만으로는 고용이 좋아졌는지 나빠졌는지 읽기 어렵다",
       "claims": [
         "670f9a6f-4bf0-4028-9956-f6e0cac2c2f9"
       ],
-      "_origin": "docs/findings/fomc-2026-09-brief.md §5 Deep Goals C — 브리프 글자 그대로",
-      "_note": "DC-E 는 C-5 에서 \"취업자 수는 달마다 크게 움직인다 …\"로 좁혀졌다. 이 요점 문장은 브리프 그대로다 — 맞는지는 사람이 본다 (DATA_MODEL §7.4). 해석에 맞춘 안은 logs/content/store-correction-2026-10.md §3 (C-6) — 도윤이 고른다. 문장은 아직 브리프 그대로다"
+      "_origin": "docs/findings/fomc-2026-09-brief.md §5 Deep Goals C. 브리프 글은 `_brief_statement`",
+      "_brief_statement": "고용 데이터가 겉보기만큼 단순하지 않다",
+      "_c6": "C-6 요점 반영 (D33 \"C-6 검수\" · 도윤 선택 2026-10-12) — 안은 logs/content/store-correction-2026-10.md §3. 교정 기록 target CLAIM DEEP-C"
     }
   ],
   "bridges": [

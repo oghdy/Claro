@@ -285,6 +285,8 @@ CASES = [
      b_(lambda g, r, st: st['goals'][1].__setitem__('statement', '7월의 소수 의견이 9월에 위원회를 설득했다')), {'BRIEF_TEXT'}),
     ('§7.4 — Common Goal 을 좁히기 전 문장으로 되돌림 ("그 이유가")', 'bundle',
      b_(lambda g, r, st: st['goals'][0].__setitem__('statement', st['goals'][0]['_brief_statement'])), {'BRIEF_TEXT'}),
+    ('§7.4 — 고른 요점 문장에서 한 낱말을 바꿈 (DEEP-C 읽기 어렵다 → 읽을 수 없다)', 'bundle',
+     b_(lambda g, r, st: st['goals'][3].__setitem__('statement', st['goals'][3]['statement'].replace('읽기 어렵다', '읽을 수 없다'))), {'BRIEF_TEXT'}),
     ('§1 — Goal 에 판정을 저장 (verdict 칸)', 'bundle', b_(lambda g, r, st: st['goals'][0].__setitem__('verdict', 'VALID')), {'STORE_SHAPE'}),
     ('§1 — Fact 에 계약에 없는 필드 (source)', 'bundle', b_(lambda g, r, st: sfact(st, 'F01').__setitem__('source', 'S1')),
      {'STORE_SHAPE'}),

@@ -205,3 +205,49 @@ D33: 그대로 둔다 (사실은 맞다 · 증명은 파이프라인). 기계 �
 - 독자 글 · 요점 문장 · 계약 · 브리프 · 라이브러리 수정
 - F36 의 처분 · 요점 문장 고르기 · 반증 답 넷을 사실에 맞춰 넓히기 (§2 끝)
 - 새 사실 조사. 1차 문서를 다시 열지 않았다 — 기준은 C-3 · C-3b 가 적어 둔 구절이다
+
+---
+
+## C-6 요점 반영 · 2026-10-12 · D33 "C-6 검수" — 도윤이 고른 넷
+
+| 요점 | 전 | 후 |
+|---|---|---|
+| COMMON | …연준이 든 이유가 "물가가 갑자기 나빠져서"가 아니라 "**물가가 충분히 빠르게 내려가고** 있다는 확신을 얻지 못해서"라는 것을 이해한다. | …"**물가가 오르는 속도가 충분히 빠르게 목표로 내려가고** 있다는 확신을 얻지 못해서"라는 것을 이해한다. |
+| DEEP-A | 7월에 소수였던 의견이 9월에 전원이 된 경로를 이해한다 — 단, 인과를 단정하지 않는다 | 7월에 셋뿐이던 인상 표가 9월 표결에서 전원이 되기까지의 순서를 이해한다 — 단, 인과를 단정하지 않는다 · `claims` DC-A · DC-B · **DC-G** |
+| DEEP-B | 한 번 올리는 것과 인상 사이클을 시작하는 것은 다르다 | 참가자 전망(중앙값)으로는 이번 인상이 긴 인상 사이클의 시작이 아니다 — 올해 한 번 더, 내년은 같은 자리 |
+| DEEP-C | 고용 데이터가 겉보기만큼 단순하지 않다 | 취업자 수는 달마다 크게 움직여서, 한 달 숫자만으로는 고용이 좋아졌는지 나빠졌는지 읽기 어렵다 (안 A) |
+
+- 브리프 글은 넷 다 `_brief_statement` 에 있다 (검사가 브리프 §5 와 댄다). COMMON 의 `_brief_statement` 는 전부터 있던 브리프 글 그대로다 — D29-3 의 "연준이 든 이유가"는 새 문장에 그대로 있다
+- 독자 글 · 계약 · 브리프 · 사실은 건드리지 않았다. F36 · F29b 그대로
+
+### 알아야 할 것
+
+1. **교정 기록의 target 어휘에 요점이 없다 — `CLAIM` 으로 적었다.** `kind: "CLAIM"` · `code` = 요점의 label ("COMMON" · "DEEP-A" …) · `where` 에 "요점이다 — 어휘에 GOAL 이 없어 CLAIM 으로 적었다". 해석의 label (DC-A …)과 겹치지 않아 가를 수는 있다. `GOAL` 을 어휘에 넣을지는 백엔드 (OBSERVATION §1 CorrectionTarget)
+2. **검사를 푼 방식 — 사실 때보다 한 겹 좁다.** `_brief_statement` 가 있는 요점은 ① 문장이 브리프와 달라야 하고 ② 교정 기록에 그 요점을 가리킨 줄이 있어야 하며 ③ **그 줄의 `what_i_changed` 에 지금 문장이 글자 그대로 있어야** 통과한다.
+   요점은 물음을 만드는 문장이라 도윤이 고른 글자만 받게 했다 — 기록만 있으면 아무 글이나 통과하는 것을 막는다. 전에 있던 "그 이유가 → 연준이 든 이유가 한 곳만 허용"은 이 규칙이 대신한다. 망가뜨린 사본 1 추가 (112 → 113)
+3. **계약 글 한 곳이 실물과 달라졌다 — 고치지 않았다 (계약은 백엔드).** DATA_MODEL §7.4 표의 "Deep A | DC-A · DC-B" 와 "실물: Deep C … 브리프 그대로이고" 줄. 저장소는 이제 Deep A 가 DC-G 도 가리키고 Deep C 는 좁혀졌다. 검사는 이 표를 저장소와 대지 않아 통과한다 → 백엔드 묶음에
+4. **DEEP-A 가 DC-G 를 품어도 요점은 선다** — DC-G 는 ASSERTED 이고 물음 셋이 SCOPED · NOT_REFUTED · NOT_REFUTED 라 VALID WITH SCOPE 다 (`GOAL_UNCHECKED` 없음)
+5. 교정 기록 51 ~ 54행 (4줄): `error_type` Goal 왜곡 · `caught_by` ARTIFACT_COMPARE · `check` null — 요점을 해석과 나란히 놓고 보는 절차에 아직 이름이 없다 (DATA_MODEL §7.4 가 "사람이 본다"고만 적는다). `time_spent_min` 1 씩 — 이번에도 어림이다 (반영 세션 약 5분)
+
+### 검증
+
+```
+$ python3 scripts/verify-data-model.py | tail -1                →  OK
+$ python3 scripts/verify-data-model.py --report | sed -n '6,7p'
+  발행 검사에서 막히는 것 56 — 독자에게 닿는 것 1 · 기계 검증용 55
+         FACT_NOT_YET_PUBLIC 1 · FACT_NO_SOURCE_SPAN 49 · FACT_PUBLIC_UNPROVEN 4 · QUOTE_SPAN_MISSING 2
+$ python3 scripts/selftest-verify-data-model.py | tail -1       →  사본 113개 · OK
+PASS  [bundle] §7.4 — 요점 문장을 고쳐 씀 (브리프에 없는 글) → ['BRIEF_TEXT']
+PASS  [bundle] §7.4 — Common Goal 을 좁히기 전 문장으로 되돌림 ("그 이유가") → ['BRIEF_TEXT']
+PASS  [bundle] §7.4 — 고른 요점 문장에서 한 낱말을 바꿈 (DEEP-C 읽기 어렵다 → 읽을 수 없다) → ['BRIEF_TEXT']
+$ python3 scripts/verify-article.py | tail -1                   →  OK  (invalid 사본 다시 만듦 · 골든과 다른 곳 1군데)
+$ python3 scripts/verify-observation.py | tail -3
+  WARN  CORR_DRAFT: 42행의 gate · occasion · targets · caught_by · check 가 초안이다 — 사람이 확인한다 (`_draft`)
+  WARN  CHECK_NAME_UNKNOWN: 계약 §8.4 이름 표에 없는 check ['사실 글 ↔ 1차 구절 대조'] — 같은 절차가 두 이름으로 갈리지 않았는지 본다
+OK
+$ python3 scripts/compare-reader-text.py | tail -1              →  OK — 등록 안 된 차이 0 (허용된 차이 밖의 독자 글 불변)
+$ python3 scripts/compare-concept-text.py | tail -1             →  OK — 44 단위 · 2661자 · 다른 것 0
+verify-concept-identity · verify-contract-coverage · verify-observed · selftest-verify-article · selftest-verify-observation (106 + 2) · selftest-verify-concept-identity  →  전부 OK
+lint-concepts  →  1 hits (알려진 오탐 그대로)
+```
+`pnpm` typecheck · test · e2e 는 이번에도 돌리지 않았다 (apps · packages 불변).
