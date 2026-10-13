@@ -30,7 +30,7 @@ docs/FINDINGS.md 는 통째로 읽지 마라 (43KB). 필요한 절만 그때그�
 ```
 Phase 0 — 계약 확정 (구현 전 기반 문서)
 
-백엔드  0.0a ✅ → 0.0b ✅ → 0.1a ✅ → 0.1b ✅ → 0.2a ✅ → 0.2b ✅ → 0.2c ✅ → 0.2m ✅ → 0.2n ✅ → D1 ✅ → 0.4a ✅ → 0.4b ✅ → 0.4c
+백엔드  0.0a ✅ → 0.0b ✅ → 0.1a ✅ → 0.1b ✅ → 0.2a ✅ → 0.2b ✅ → 0.2c ✅ → 0.2m ✅ → 0.2n ✅ → D1 ✅ → 0.4a ✅ → 0.4b ✅ → 0.4c ✅ (배포)
          역산      골든      화면계약   골든재작성  개념계약   데이터계약  관찰기록      이전
 프론트                                  F-1 ✅ → F-2a ✅ → D26 ✅ → F-2b ✅ ──────────────┐
                                         정확히    디자인탐색          디자인확정        │
@@ -41,10 +41,11 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 그 뒤: 0.4a 스키마 → 0.4b API · 기록 연결 → F-3 → Phase 1 (파이프라인 A 반자동 + 게이트 4)
 ```
 
-## 세션 상태 — 2026-10-12. Phase 0 의 계약 · 이전이 끝났다. 남은 것: 0.4c 배포 · **D31 (물음 · 운영) — 도윤과 정할 차례** · 물음 화면 · 배포 전 기기 확인
+## 세션 상태 — 2026-10-12. Phase 0 의 계약 · 이전이 끝났다. 남은 것: **D31 (물음 · 운영)** → 물음 화면 (+ 검색 차단 · `/test` 닫기) → 게이트 4 → F-3. 기기 확인 (안드로이드 · 오래된 아이폰 · 다른 메신저)
 | 세션 | 커밋 | 상태 |
 |---|---|---|
-| **0.4c** 실제 Postgres · 배포 | — | **지시문 준비됨** (`development-backend.md`). 0.4b 세션에 이어서. **도윤: Supabase · Vercel 프로젝트** — 없어도 코드 부분(1 ~ 3)은 시작한다 |
+| **D31 — F-3 설계** | — | **도윤과 정할 차례.** PM 추천을 올렸다 (2026-10-13 대화). 정해지면 물음 화면 Step 프롬프트 |
+| ✅ 0.4c | `c7717ae` ~ `40c0a5d` | 닫힘 (D36). **배포됨 https://claro-lime-one.vercel.app** · 도윤이 실제 아이폰 (카카오톡 안 · Safari)에서 읽었고 원장에 남았다 |
 | ✅ 0.4b | `d1b5e92` | 닫힘 (D35). 읽으면 원장에 남는다 — 이 컴퓨터 · PGlite. 실제 폰 · 실제 Postgres 는 0.4c |
 | ✅ 0.4a | `0d54f88` ~ `d9df0e2` | 닫힘 (D34). `packages/db` · 잔일 여섯 |
 | ✅ F-2b | `16254d0` ~ `85c89d0` | 닫힘 (D26 닫힘 절). 도윤이 실제 아이폰에서 봤다. 본 화면 = B5 + 움직임 A. 테스트 19/19 (PM 재실행 — `pnpm test` 가 `logs/frontend/F-2b` 그림을 바꾼다. 파일을 지정해 되돌린다) |
@@ -141,7 +142,7 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 | OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 106 + 계산 2 |
 | 라이브러리 md ↔ 저장소 | `python3 scripts/compare-concept-text.py` | 차이 0 |
 | DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 사본 110 |
-| 프론트 · DB | `pnpm -s typecheck` · `pnpm -s test` | 통과 (계약 40 · db 84 · 화면 37). 포트: 개발 3100 · 테스트 3101 · 폰 3200. 테스트가 `logs/frontend/F-2b` 그림 · 영상을 다시 찍는다 — 파일을 지정해 되돌린다 |
+| 프론트 · DB | `pnpm -s typecheck` · `pnpm -s test` | 통과 (계약 40 · db 101 · 화면 42). 실제 Postgres 로: `CLARO_TEST_PG=postgres://localhost:5432 pnpm test`. 배포된 원장 보기: `pnpm --filter @claro/web deploy:ledger` (도윤의 `.env.deploy` 필요). 포트: 개발 3100 · 테스트 3101 · 폰 3200. 테스트가 `logs/frontend/F-2b` 그림 · 영상을 다시 찍는다 — 파일을 지정해 되돌린다 |
 
 빨간불 없음 (2026-10-09 · D33). `compare-reader-text` 는 옛 골든(`c46871d`) 대비 허용 차이 29, 이전 전후 차이 0.
 
