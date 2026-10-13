@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.5 — 코드 끝 (2026-10-13 · 물음의 화면: 동의 · 물음 넷 · 흐름 셋 (Claro · 일반 기사 · 며칠 뒤) · 응답과 증거를 한 거래로 · 검색 차단 · 배포에서 /test 닫기. PGlite · Postgres 18 에서 db 101 · 화면 56 통과). 배포는 도윤과 같이 — 아직. _open 7 — `logs/backend/phase-0-step-0-5.md`**
+**Phase 0 / Step 0.5 — 끝, 게이트 대기 (2026-10-13 · 물음의 화면 배포됨 https://claro-lime-one.vercel.app · 도윤이 아이폰에서 세 흐름을 끝까지: Claro (R-00) · 일반 기사 (T-00) · 며칠 뒤 — 노출 · 응답 · 증거가 원장에 남았다. 남은 _open 4 — `logs/backend/phase-0-step-0-5.md`). 다음: 0.5 게이트 → F-3 (도윤이 실제 독자를 올린다)**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
