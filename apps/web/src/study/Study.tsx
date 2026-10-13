@@ -267,15 +267,8 @@ export function ClaroStudy({ pkg, article }: { pkg: ArticlePackage; article: Art
     case "post":
       return <Questions user_id={user_id} position="POST" kicker={STUDY.after} state={state} update={update} planId={planId} onDone={() => go("done")} />;
     case "done":
-      return (
-        <Thanks note={STUDY.thanksNow}>
-          <button type="button" className="s-skip" onClick={() => go("reread")}>
-            {STUDY.reread}
-          </button>
-        </Thanks>
-      );
-    case "reread":
-      return <RecordedReader pkg={pkg} article={article} user_id={user_id} />;
+      // 기사로 돌아가는 길을 두지 않는다 — 며칠 뒤 같은 물음을 다시 묻는다 (D37 "0.5 코드" 판정 2)
+      return <Thanks note={STUDY.thanksNow} />;
     default:
       return (
         <RecordedReader

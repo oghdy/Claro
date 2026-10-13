@@ -34,7 +34,6 @@ export const STUDY = {
   thanks: "고맙습니다",
   thanksNow: "답이 잘 전해졌어요. 며칠 뒤에 같은 물음을 한 번 더 여쭤볼게요.",
   thanksLater: "여기까지예요. 도와주셔서 큰 힘이 됐어요.",
-  reread: "기사 다시 보기",
   /** 그 밖 */
   preparing: "준비 중이에요",
   preparingNote: "곧 열릴 거예요. 조금 뒤에 다시 열어 주세요.",

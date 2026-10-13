@@ -16,8 +16,9 @@ export const ASKS: Record<Position, { ask: ProbeLabel[]; probe_type: ProbeType }
  * 남의 기사 글을 우리 화면에 싣지 않는다 — 주소로만 보낸다 (새 탭). `title` 은 링크에 적을 말이다 (비우면 "기사 읽으러 가기")
  */
 export const OUTSIDE_ARTICLE: { url: string; title: string } = {
-  // 앞의 환경 변수는 테스트만 쓴다 (빌드할 때 굳는다 — e2e/database.ts). 도윤은 뒤의 "" 에 주소를 적는다
-  url: process.env.NEXT_PUBLIC_CLARO_TEST_OUTSIDE_URL || "",
+  // 앞의 환경 변수는 테스트만 쓴다 (빌드할 때 굳는다 — e2e/database.ts). 실제 주소는 그 뒤에 적는다 — 비우면("") 흐름이 닫힌다
+  // 더팩트 2026-09-17 — 같은 사건(9월 FOMC 금리 인상)의 국내 기사. 도윤이 골랐다 (D37 "0.5 코드" 판정 4)
+  url: process.env.NEXT_PUBLIC_CLARO_TEST_OUTSIDE_URL || "https://news.tf.co.kr/read/world/2366861.htm",
   title: "",
 };
 

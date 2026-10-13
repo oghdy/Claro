@@ -115,7 +115,7 @@ test("데이터베이스가 죽은 채 첫 화면을 연다 → 기사는 뜬다
   await ctx.close();
 });
 
-test("배포(Vercel) 빌드 — /test/* 가 닫혀 있다 · /api/peek 가 없다 · 검색을 막는다 · 바깥 기사가 안 정해졌으면 일반 기사 흐름은 '준비 중'", async ({ browser }) => {
+test("배포(Vercel) 빌드 — /test/* 가 닫혀 있다 · /api/peek 가 없다 · 검색을 막는다 · 일반 기사 흐름은 바깥 기사의 링크만 싣는다", async ({ browser }) => {
   test.setTimeout(240_000);
   // 배포와 같은 빌드를 따로 만든다 (VERCEL=1 · 테스트용 바깥 기사 주소 없이)
   const vercel = { ...env, VERCEL: "1", CLARO_DIST: ".next-test-vercel", NEXT_PUBLIC_CLARO_TEST_OUTSIDE_URL: "" };
@@ -129,8 +129,13 @@ test("배포(Vercel) 빌드 — /test/* 가 닫혀 있다 · /api/peek 가 없�
   for (const path of ["/", "/news", "/again"]) expect(await (await fetch(`${BASE}${path}`)).text(), path).toMatch(/<meta name="robots" content="noindex, nofollow[^"]*"/);
   const page = await (await browser.newContext(phone)).newPage();
   await page.goto(`${BASE}/news?r=${READERS.news}`);
-  await expect(page.locator(".s-title")).toHaveText("준비 중이에요");
-  await expect(page.locator(".s-go")).toHaveCount(0); // 동의도 받지 않는다
+  // 바깥 기사가 정해졌다 (study/flows.ts) — 흐름이 열려 있다: 안내부터. 링크는 그 주소로, 새 창으로
+  await expect(page.locator(".s-title")).toHaveText("읽기 전에 알려 드려요");
+  await page.locator(".s-go").tap();
+  await page.locator(".s-skip").tap();
+  await expect(page.locator("a.s-out")).toHaveAttribute("href", "https://news.tf.co.kr/read/world/2366861.htm");
+  await expect(page.locator("a.s-out")).toHaveAttribute("target", "_blank");
+  expect(await page.locator("body").innerText(), "남의 기사 글을 싣지 않는다 — 링크와 안내뿐").toBe("아래 기사를 읽고 돌아와 주세요\n\n기사는 새 창에서 열려요. 다 읽은 뒤 이 화면으로 돌아와 아래를 눌러 주세요.\n\n기사 읽으러 가기\n다 읽었어요");
   await page.context().close();
 });
 
