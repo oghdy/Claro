@@ -17,7 +17,24 @@ export const READERS = {
   robot: id(12), // 미리보기 로봇 — 열고, 기다리고, 떠난다
   twin: id(13), // 탭을 복제한다
   dbdown: id(14), // 데이터베이스가 죽은 채 첫 화면을 연다
+  study: id(15), // Claro 무리의 흐름 — 동의 · 읽기 전 물음 · 기사 · 직후 물음
+  news: id(16), // 일반 기사 무리의 흐름
+  again: id(17), // 며칠 뒤
+  shy: id(18), // 동의 화면에서 멈춘다
+  noconsent: id(19), // 동의 없이 API 를 직접 부른다
+  two: id(20), // 다른 브라우저로 다시 연다
+  draft: id(21), // 쓰던 답 · 새로고침
 } as const;
+
+/** 동의를 미리 넣어 두는 독자 — API 를 직접 부르는 테스트 (화면을 거치지 않는다) */
+export const CONSENTED = [id(8)];
+
+/** 테스트용 데이터베이스에만 넣는 물음 둘 — target 이 둘인 물음 (불변식 16 을 보려고. F-3 의 물음 넷에는 없다) */
+export const TEST_PROBES = {
+  /** target 둘 — 둘 다 맞는 개념 · 버전 */
+  TWO: "e2e00000-0000-4000-8000-0000000a0001",
+  /** target 둘 — 둘째가 없는 버전 (v99) */
+  BAD: "e2e00000-0000-4000-8000-0000000a0002",} as const;
 
 /** 대응표에 없는 user_id */
 export const STRANGER = id(999);

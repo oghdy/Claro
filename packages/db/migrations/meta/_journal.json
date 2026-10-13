@@ -50,6 +50,20 @@
       "when": 1791881183431,
       "tag": "0006_api_role",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791883914174,
+      "tag": "0007_consent",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791883914640,
+      "tag": "0008_consent_rules",
+      "breakpoints": true
     }
   ]
 }

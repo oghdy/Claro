@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { GOLDEN_RECORD, loadPackage, loadRaw } from "../lib/load";
-import { RecordedReader } from "../reader/RecordedReader";
+import { ClaroStudy } from "../study/Study";
 import "../reader/reader.css";
+import "../study/study.css";
 
 // **기사는 빌드할 때 싣는다 — 첫 화면은 데이터베이스를 읽지 않는다** (D35: 데이터베이스가 죽어도 기사는 뜬다).
 // 판은 불변이라 요청마다 읽을 이유가 없다. 이 페이지는 정적이다: 빌드가 픽스처에서 패키지와 판의 키를 읽어 HTML 에 넣는다.
@@ -27,7 +28,7 @@ export default function Page() {
       <noscript>
         <style>{".reader .r-card *, .reader .r-end { opacity: 1 !important; transform: none !important; filter: none !important; }"}</style>
       </noscript>
-      <RecordedReader pkg={a.package} article={{ article_id: a.article_id, article_version: a.article_version }} />
+      <ClaroStudy pkg={a.package} article={{ article_id: a.article_id, article_version: a.article_version }} />
     </>
   );
 }

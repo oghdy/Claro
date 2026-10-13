@@ -78,9 +78,14 @@ describe("테이블 전체", () => {
   it("원장은 대응표를 가리키지 않는다 — identity 로 가는 FK 가 없다", async () => {
     const r = await t.client.query(
       `select 1 from information_schema.constraint_column_usage u join information_schema.table_constraints c using (constraint_schema, constraint_name)
-       where c.constraint_type = 'FOREIGN KEY' and u.table_schema = 'identity'`,
+       where c.constraint_type = 'FOREIGN KEY' and u.table_schema = 'identity' and c.table_schema <> 'identity'`,
     );
     expect(r.rows).toHaveLength(0);
+    // identity 안에서는 가리킨다 — 동의(identity.consent)는 대응표의 독자를 가리킨다. 둘 다 원장이 아니다
+    const inside = await t.client.query<{ table_name: string }>(
+      "select table_name from information_schema.table_constraints where constraint_type = 'FOREIGN KEY' and table_schema = 'identity'",
+    );
+    expect(inside.rows.map((x) => x.table_name)).toEqual(["consent"]);
   });
 
   it("원장 어디에도 사람을 알아볼 칸 · 값을 매기는 칸 · 시험 표시 칸이 없다 (불변식 2 · §7.1 — verify-observation 과 같은 낱말)", async () => {
@@ -112,7 +117,7 @@ describe("테이블 전체", () => {
       `select c.relname, c.relrowsecurity from pg_class c join pg_namespace n on n.oid = c.relnamespace
        where c.relkind = 'r' and n.nspname in ('public', 'identity')`,
     );
-    expect(r.rows).toHaveLength(TABLES.length + 1);
+    expect(r.rows).toHaveLength(TABLES.length + 2); // + identity.reader · identity.consent
     expect(r.rows.filter((x) => !x.relrowsecurity)).toEqual([]);
     // 정책은 API 전용 역할(claro_api)에게만 있다 — 읽기 · 넣기. 다른 역할(화면 키의 anon · authenticated 포함)에게 준 정책은 없다
     const policies = await t.client.query<{ tablename: string; cmd: string; roles: string }>(
@@ -120,7 +125,8 @@ describe("테이블 전체", () => {
     );
     expect(policies.rows.every((p) => p.roles === "claro_api")).toBe(true);
     expect(policies.rows.map((p) => `${p.tablename} ${p.cmd}`)).toEqual([
-      ...["article_record", "knowledge_evidence", "probe", "probe_exposure", "probe_response"].flatMap((x) => [`${x} INSERT`, `${x} SELECT`]),
+      "article_record INSERT", "article_record SELECT", "consent INSERT", "consent SELECT",
+      ...["knowledge_evidence", "probe", "probe_exposure", "probe_response"].flatMap((x) => [`${x} INSERT`, `${x} SELECT`]),
       "reader SELECT",
       ...["reading_event", "reading_plan_log"].flatMap((x) => [`${x} INSERT`, `${x} SELECT`]),
     ]);

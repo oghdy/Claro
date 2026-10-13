@@ -1,4 +1,4 @@
-// 독자 하나를 대응표(identity.reader)에 올리고, 그 독자의 링크를 낸다.   pnpm --filter @claro/web reader R-07
+// 독자 하나를 대응표(identity.reader)에 올리고, 그 독자의 링크 셋(읽기 · 일반 기사 · 며칠 뒤)을 낸다.   pnpm --filter @claro/web reader R-07
 //   - user_id 는 여기서 만든 뜻 없는 UUID 다. 사람 · 기기에서 계산하지 않는다 (OBSERVATION §3)
 //   - 이름표는 **사람을 알아볼 수 없는 부호**만 받는다 ("R-07"). 이름 · 연락처를 넣지 않는다 — 누가 R-07 인지는 저장소 · 데이터베이스 밖에 (D34)
 //   - 같은 이름표가 이미 있으면 새로 만들지 않고 그 링크를 다시 낸다
@@ -8,6 +8,7 @@ import { networkInterfaces } from "node:os";
 import { reader } from "@claro/db";
 import { eq } from "drizzle-orm";
 import { db } from "../src/server/db";
+import { PATHS } from "../src/study/flows";
 
 const labels = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const port = process.env.CLARO_PORT ?? "3200";
@@ -22,6 +23,7 @@ const d = await db();
 for (const label of labels) {
   let [row] = await d.select().from(reader).where(eq(reader.label, label));
   if (!row) [row] = await d.insert(reader).values({ user_id: randomUUID(), label }).returning();
-  console.log(`${label}  ${site}/?r=${row!.user_id}`);
+  // 링크 셋 — 무리는 주소가 가른다. 어느 독자에게 어느 링크를 보냈는지는 도윤의 명단에 적는다 (데이터베이스에 무리를 적지 않는다 — D37)
+  console.log(`${label}\n  읽기 (Claro)     ${site}${PATHS.claro}?r=${row!.user_id}\n  일반 기사        ${site}${PATHS.news}?r=${row!.user_id}\n  며칠 뒤 (공통)   ${site}${PATHS.again}?r=${row!.user_id}`);
 }
 process.exit(0);

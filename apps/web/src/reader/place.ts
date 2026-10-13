@@ -49,14 +49,7 @@ export function savePlace(pkg: ArticlePackage, place: Place): void {
 }
 
 // ── 열람 — 읽기 기록(record.ts)이 새로고침을 넘어 이어 가는 것 (OBSERVATION §4.1 · D33 · D34)
-// 같은 탭에서 되살리면 같은 열람이다: 같은 reading_id · 이어지는 seq · 같은 plan · 이미 적은 "끝"은 다시 적지 않는다 · 못 보낸 줄은 그대로 쥐고 있다.
-
-/** 아직 못 보낸 줄 — 보낼 순서대로. row 는 서버가 받는 모양 그대로다 */
-export interface Unsent {
-  kind: "plan" | "event";
-  id: string;
-  row: Record<string, unknown>;
-}
+// 같은 탭에서 되살리면 같은 열람이다: 같은 reading_id · 이어지는 seq · 같은 plan · 이미 적은 "끝"은 다시 적지 않는다. 못 보낸 줄은 아래 "보낼 줄"이 쥔다.
 
 export interface ReadingState {
   reading_id: string;
@@ -68,11 +61,6 @@ export interface ReadingState {
   at: { level: LevelId; index: number } | null;
   /** 끝이 나왔다고 이미 적은 장 — 레벨마다 */
   ended: Partial<Record<LevelId, number[]>>;
-  unsent: Unsent[];
-  /** 서버가 "기록하지 않는 독자"라고 답했다 — 이 열람은 더 보내지 않는다 */
-  off: boolean;
-  /** 사람이 이 화면에 손을 댄 적이 있다 (터치 · 휠 · 키 · 클릭) — 그 전에는 한 줄도 보내지 않는다 (D35) */
-  touched: boolean;
 }
 
 /** 판의 키 — 패키지가 아니라 ArticleRecord 의 것이다 */
@@ -101,7 +89,7 @@ export function loadReading(a: ArticleKey): ReadingState | null {
   try {
     const raw = window.sessionStorage.getItem(readingKey(a));
     const s = raw ? (JSON.parse(raw) as ReadingState) : null;
-    return s && typeof s.reading_id === "string" && Number.isInteger(s.seq) && Array.isArray(s.unsent) ? s : null;
+    return s && typeof s.reading_id === "string" && Number.isInteger(s.seq) ? s : null;
   } catch {
     return null;
   }
@@ -112,5 +100,72 @@ export function saveReading(a: ArticleKey, state: ReadingState): void {
     window.sessionStorage.setItem(readingKey(a), JSON.stringify(state));
   } catch {
     /* 기억하지 못할 뿐이다 — 새로고침하면 새 열람이 된다 */
+  }
+}
+
+// ── 보낼 줄 — 아직 서버에 못 보낸 것 (study/outbox.ts). 탭 하나에 줄 하나다: 동의 · plan · 읽기 사건 · 물음을 보여줬다 · 답했다가 **일어난 순서대로** 선다.
+// 순서가 뜻이 있다 — 동의가 먼저 가야 나머지를 받고, plan 이 그것을 가리키는 줄보다 먼저 가야 한다. 새로고침을 넘어 쥐고 있는다
+
+/** 아직 못 보낸 줄. row 는 서버가 받는 모양 그대로다 */
+export interface Unsent {
+  kind: "consent" | "plan" | "event" | "exposure" | "response";
+  id: string;
+  row: Record<string, unknown>;
+}
+
+export interface OutboxState {
+  unsent: Unsent[];
+  /** 서버가 "기록하지 않는 독자"라고 답했다 — 더 보내지 않는다 */
+  off: boolean;
+  /** 사람이 이 화면에 손을 댄 적이 있다 (터치 · 휠 · 키 · 누르기) — 그 전에는 한 줄도 보내지 않는다 (D35) */
+  touched: boolean;
+}
+
+const OUTBOX = "claro:outbox";
+
+export function loadOutbox(): OutboxState {
+  try {
+    const s = JSON.parse(window.sessionStorage.getItem(OUTBOX) ?? "null") as OutboxState | null;
+    if (s && Array.isArray(s.unsent)) return s;
+  } catch {
+    /* 아래로 */
+  }
+  return { unsent: [], off: false, touched: false };
+}
+
+export function saveOutbox(state: OutboxState): void {
+  try {
+    window.sessionStorage.setItem(OUTBOX, JSON.stringify(state));
+  } catch {
+    /* 기억하지 못할 뿐이다 — 이 화면이 살아 있는 동안은 쥐고 있다 */
+  }
+}
+
+// ── 물음의 흐름 — 어디까지 왔나 (study/). 주소(흐름)마다 따로 든다. 쓰던 답도 여기에 — 새로고침에 잃지 않게
+export interface StudyState {
+  /** 흐름의 어느 화면인가 — 뜻은 흐름이 정한다 (study/Study.tsx) */
+  stage: string;
+  /** 지금 보여주고 있는 물음 — 같은 화면을 다시 그려도 같은 노출이다 (다시 적지 않는다) */
+  showing: { probe_id: string; position: string; exposure_id: string; draft: string } | null;
+  /** 이 탭에서 이미 보여준 물음 — "probe_id@position" */
+  asked: string[];
+}
+
+const studyKey = (flow: string, user_id: string) => `claro:study:${flow}:${user_id}`;
+
+export function loadStudy(flow: string, user_id: string): StudyState | null {
+  try {
+    const s = JSON.parse(window.sessionStorage.getItem(studyKey(flow, user_id)) ?? "null") as StudyState | null;
+    return s && typeof s.stage === "string" && Array.isArray(s.asked) ? s : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveStudy(flow: string, user_id: string, state: StudyState): void {
+  try {
+    window.sessionStorage.setItem(studyKey(flow, user_id), JSON.stringify(state));
+  } catch {
+    /* 위와 같다 */
   }
 }

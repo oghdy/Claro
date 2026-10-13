@@ -39,3 +39,37 @@ export const PLAN_FIELDS = [
   "estimator_version", "selected_blocks", "skipped_blocks", "block_decisions", "narrative_form", "probe_plan",
 ];
 export const EVENT_FIELDS = ["event_id", "user_id", "session_id", "reading_id", "plan_id", "seq", "occurred_at", "type", "slide_index", "from_plan_id"];
+
+/** 물음 쪽 — 그 독자의 동의 · 노출 · 응답 · 증거. 보여준 순서대로 */
+export interface PeekStudy {
+  consents: Record<string, any>[];
+  exposures: Record<string, any>[];
+  responses: Record<string, any>[];
+  evidence: Record<string, any>[];
+  probes: Record<string, any>[];
+  readings: PeekReading[];
+}
+export async function study(request: APIRequestContext, user_id: string, base = ""): Promise<PeekStudy> {
+  const res = await request.get(`${base}/api/peek?user_id=${user_id}`);
+  expect(res.status(), "/api/peek").toBe(200);
+  return res.json();
+}
+
+/** 화면이 아직 못 보낸 줄의 수 (보낼 줄 — study/outbox.ts) */
+export const unsent = (page: import("@playwright/test").Page) =>
+  page.evaluate(() => (JSON.parse(sessionStorage.getItem("claro:outbox") ?? "null")?.unsent ?? []).length as number);
+
+/**
+ * 독자의 링크로 기사에 들어간다 — 독자처럼: 안내를 읽고 "시작할게요"를 누르고, 읽기 전 물음은 건너뛴다. 이미 지나온 화면이면(새로고침 · 복제) 그대로 기사다.
+ * 누르는 것이 곧 "사람이 손을 댔다"이다 (D35)
+ */
+export async function enter(page: import("@playwright/test").Page, user_id: string, base = "") {
+  await page.goto(`${base}/?r=${user_id}`);
+  await page.locator(".study, .r-deck").first().waitFor();
+  if (await page.locator(".study").isVisible()) {
+    await page.locator(".s-go").click(); // 알겠어요, 시작할게요
+    await page.locator(".s-skip").click(); // 읽기 전 물음 — 건너뛰기
+  }
+  await page.locator(".r-deck").waitFor();
+  await page.evaluate(() => document.fonts.ready);
+}

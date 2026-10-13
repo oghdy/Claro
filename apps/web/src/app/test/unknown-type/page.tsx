@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { parseArticlePackage } from "@claro/contract";
 import { loadRaw } from "../../../lib/load";
 import { Reader } from "../../../reader/Reader";
@@ -20,6 +21,8 @@ function build(): unknown {
   return { ...raw, levels: [{ ...basic, slides }] };
 }
 
+// 배포(Vercel)에서는 닫는다 — 빌드할 때 404 로 굳는다 (D36). 테스트는 이 컴퓨터의 빌드로 돈다
 export default function Page() {
+  if (process.env.VERCEL) notFound();
   return <Reader pkg={parseArticlePackage(build())} />;
 }

@@ -1,0 +1,63 @@
+/* 물음의 화면 (D37) — 기사 화면(reader.css)과 같은 토큰: 다크 · 같은 글자 · 같은 물음 버튼. 뜻에 따라 바뀌는 색이 없다 (맞았다 · 틀렸다를 보여주지 않는다) */
+:root:has(.study) body { background: var(--c-bg); }
+/* 번호가 있는 링크로 열면 누구인지 알 때까지 첫 그림(기사)을 가려 둔다 — 동의 화면 앞에 기사가 번쩍이지 않게 (layout.tsx) */
+html[data-gate] body { background: var(--c-bg); }
+html[data-gate] body > * { visibility: hidden; }
+
+.study {
+  position: fixed; inset: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain;
+  background: var(--c-bg); color: var(--c-ink);
+  font-family: var(--font); letter-spacing: var(--track-body);
+  word-break: keep-all; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+}
+.s-page {
+  width: 100%; max-width: var(--column); margin: 0 auto; min-height: 100%;
+  display: flex; flex-direction: column; gap: var(--s-block);
+  padding: calc(var(--s-page-top) + 22px) var(--s-page-x) calc(var(--s-page-bottom) + env(safe-area-inset-bottom));
+}
+.s-kicker { margin: 0; font-size: var(--t-kicker-size); font-weight: var(--t-kicker-weight); line-height: var(--t-kicker-line); color: var(--c-muted); }
+.s-title, .s-prompt { margin: 0; font-size: var(--t-headline-size); font-weight: var(--t-headline-weight); line-height: var(--t-headline-line); letter-spacing: var(--track-headline); }
+.s-prompt { font-size: var(--t-conclusion-size); font-weight: var(--t-conclusion-weight); line-height: var(--t-conclusion-line); }
+.s-text { margin: 0; font-size: var(--t-body-size); line-height: var(--t-body-line); color: var(--c-ink); }
+.s-title + .s-text { margin-top: 2px; }
+.s-question { display: flex; flex-direction: column; gap: var(--s-block); scroll-margin-top: 14px; }
+
+.study button, .study textarea, .study a { font: inherit; letter-spacing: inherit; -webkit-tap-highlight-color: transparent; }
+.study button { cursor: pointer; margin: 0; }
+.study button:focus-visible, .study textarea:focus-visible, .study a:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+
+/* 보기 — 고른 것은 면이 바뀐다. 색으로 옳고 그름을 말하지 않는다 */
+.s-choices { display: flex; flex-direction: column; gap: 10px; }
+.s-choice {
+  width: 100%; text-align: left; border: 1px solid var(--c-rule); border-radius: var(--r-ask); padding: 15px 16px;
+  background: var(--c-surface); color: var(--c-ink); font-size: var(--t-body-size); line-height: 1.5;
+}
+.s-choice[aria-pressed="true"] { background: var(--c-ink); color: var(--c-bg); border-color: var(--c-ink); font-weight: 600; }
+
+/* 쓰는 칸 — 글자는 16px 보다 크다 (아이폰이 화면을 키우지 않는다) */
+.s-write {
+  display: block; width: 100%; resize: vertical; min-height: 132px; border: 1px solid var(--c-rule); border-radius: var(--r-ask); padding: 14px 16px;
+  background: var(--c-surface); color: var(--c-ink); font-size: var(--t-body-size); line-height: var(--t-body-line);
+}
+.s-write::placeholder { color: var(--c-faint); }
+
+/* 앞으로 가는 버튼 — 기사의 물음 버튼과 같은 면 */
+.s-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.s-go {
+  width: 100%; border: 0; border-radius: var(--r-ask); padding: var(--s-ask-pad); background: var(--c-ask-face); color: var(--c-ask-ink);
+  font-size: var(--t-ask-size); font-weight: var(--t-ask-weight); line-height: var(--t-ask-line); text-align: center;
+  transition: transform var(--m-press) var(--m-ease-out), opacity var(--m-press);
+}
+.s-go:active { transform: scale(var(--press-scale)); opacity: 0.92; }
+.s-go:disabled { background: var(--c-surface2); color: var(--c-faint); cursor: default; transform: none; opacity: 1; }
+.s-skip { align-self: center; border: 0; background: none; padding: 12px 16px; font-size: var(--t-note-size); color: var(--c-muted); }
+.s-out {
+  display: block; border: 1px solid var(--c-rule); border-radius: var(--r-ask); padding: 15px 16px; background: var(--c-surface);
+  color: var(--c-ink); font-size: var(--t-body-size); font-weight: 600; text-decoration: underline; text-underline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-go { transition: none; }
+  .s-go:active { transform: none; }
+}
+/* 기사의 마지막 장에 더해지는 길 — 물음 버튼과 같은 모양, 글은 가운데 */
+.r-to-questions { justify-content: center; text-align: center; }

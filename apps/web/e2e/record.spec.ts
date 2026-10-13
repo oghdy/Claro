@@ -2,7 +2,7 @@
 // 독자는 링크로 온다 (`/?r=<user_id>`). 테스트마다 다른 독자를 쓴다 (e2e/readers.ts).
 // 장에서 멈출 때마다 끝까지 내린다 (readToEnd) — 짧은 장은 열자마자 끝이 나오고 긴 장은 내려야 나온다. 그 차이가 줄 수를 흔들지 않게.
 import { expect, test, type Page } from "@playwright/test";
-import { EVENT_FIELDS, PLAN_FIELDS, lines, readings, settledLedger } from "./ledger";
+import { EVENT_FIELDS, PLAN_FIELDS, enter, lines, readings, settledLedger, study, unsent } from "./ledger";
 import { READERS, STRANGER } from "./readers";
 import { MOBILE_SE, ask, card, count, readToEnd, settled } from "./reader";
 
@@ -11,19 +11,17 @@ const GOLDEN = { article_id: "6f4080a5-bada-412a-b870-bc5d16fe88b3", article_ver
 const visit = (lv: string, i: number) => [`ENTERED ${lv} ${i}`, `END ${lv} ${i}`];
 const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 
-/** 연다. 기록은 사람이 처음 손을 댄 뒤부터 간다 (D35) — 그래서 열자마자 키 하나를 누른다 (아무 일도 하지 않는 키). `hand: false` 면 손을 대지 않는다 */
-async function open(page: Page, reader: string | null, path = "/", hand = true) {
+/** 독자의 링크로 기사에 들어간다 (동의 · 읽기 전 물음을 지나서). 링크가 없으면 그냥 연다 */
+async function open(page: Page, reader: string | null, path = "/") {
+  if (reader && path === "/") return enter(page, reader);
   await page.goto(reader ? `${path}?r=${reader}` : path);
   await page.locator(".r-deck").waitFor();
   await page.evaluate(() => document.fonts.ready);
-  if (hand) await page.keyboard.press("Shift");
 }
-const unsent = (page: Page) =>
-  page.evaluate(() => JSON.parse(sessionStorage.getItem(Object.keys(sessionStorage).find((k) => k.startsWith("claro:reading:"))!)!).unsent.length);
 /** 화면이 서버로 보낸 요청 — /api 로 간 것만 */
 function apiCalls(page: Page): string[] {
   const calls: string[] = [];
-  page.on("request", (r) => new URL(r.url()).pathname.startsWith("/api/") && calls.push(`${r.method()} ${new URL(r.url()).pathname}`));
+  page.on("request", (r) => new URL(r.url()).pathname.startsWith("/api/") && calls.push(`${r.method()} ${new URL(r.url()).pathname.replace(/readers\/.*/, "readers/…")}`));
   return calls;
 }
 
@@ -196,9 +194,9 @@ test("서버가 답하지 않는다 → 화면은 기다리지 않는다. 못 �
   await ctx.close();
 });
 
-test("링크 없이 읽는다 → 서버를 부르지 않는다. 원장 0줄. 대응표에 없는 번호는 한 번 묻고 그만둔다", async ({ browser, request }) => {
+test("링크 없이 읽는다 → 서버를 부르지 않는다. 원장 0줄. 대응표에 없는 번호는 누구인지 한 번 묻고(쓰지 않는다) 지금처럼 기사만 뜬다", async ({ browser, request }) => {
   test.setTimeout(90_000);
-  for (const [who, link, want] of [["번호 없음", null, []], ["모양이 다른 번호", "R-07", []], ["대응표에 없는 번호", STRANGER, ["POST /api/plans"]]] as const) {
+  for (const [who, link, want] of [["번호 없음", null, []], ["모양이 다른 번호", "R-07", []], ["대응표에 없는 번호", STRANGER, ["GET /api/readers/…"]]] as const) {
     const ctx = await browser.newContext(phone);
     const page = await ctx.newPage();
     const cdp = await ctx.newCDPSession(page);
@@ -215,39 +213,52 @@ test("링크 없이 읽는다 → 서버를 부르지 않는다. 원장 0줄. �
   expect(await readings(request, STRANGER)).toEqual([]);
 });
 
-test("미리보기 로봇 — 연다 · 기다린다 · 떠난다 → API 요청 0 · 원장 0줄. 사람이 손을 대면 쥐고 있던 줄이 그때 간다 (D35)", async ({ browser, request }) => {
-  test.setTimeout(90_000);
-  // 스크립트까지 돌리는 로봇: 화면이 다 그려지고 첫 장의 끝도 나온다. 손은 대지 않는다
+test("미리보기 로봇 — 연다 · 기다린다 · 떠난다 → 원장에 쓰는 요청 0 · 원장 0줄 (동의 화면에서 멈춘다 — D37)", async ({ browser, request }) => {
+  test.setTimeout(60_000);
+  // 스크립트까지 돌리는 로봇: 화면이 그려진다. 등록된 독자의 링크라 안내가 뜬다. 손은 대지 않는다
   const bot = await browser.newContext({ viewport: { width: 1200, height: 630 } });
   const page = await bot.newPage();
   const calls = apiCalls(page);
-  await open(page, READERS.robot, "/", false);
-  await page.waitForTimeout(5000);
-  expect(await unsent(page), "화면은 줄을 만들어 쥐고 있다 (plan · 1장에 들어옴 · 1장의 끝)").toBe(3);
-  // 스크립트가 흉내 낸 입력 · 화면을 내리는 스크립트는 손이 아니다
+  await page.goto(`/?r=${READERS.robot}`);
+  await page.locator(".study").waitFor();
+  await page.waitForTimeout(4000);
   await page.evaluate(() => {
     for (const type of ["pointerdown", "touchstart", "wheel", "keydown", "click"]) window.dispatchEvent(new Event(type, { bubbles: true }));
-    document.querySelector(".r-card[data-active]")!.scrollTo(0, 400);
     window.scrollTo(0, 400);
     window.dispatchEvent(new Event("online"));
   });
-  await page.waitForTimeout(2500);
-  await page.goto("about:blank"); // 떠난다 — pagehide
   await page.waitForTimeout(1500);
+  await page.goto("about:blank"); // 떠난다 — pagehide
+  await page.waitForTimeout(1000);
   await bot.close();
-  expect(calls, "로봇이 연 화면에서 나간 요청").toEqual([]);
-  expect(await readings(request, READERS.robot)).toEqual([]);
+  expect(calls, "로봇이 연 화면에서 나간 요청 — 누구인지 묻는 것 하나 (읽기만)").toEqual(["GET /api/readers/…"]);
+  const s = await study(request, READERS.robot);
+  expect([s.consents.length, s.exposures.length, s.responses.length, s.readings.length]).toEqual([0, 0, 0, 0]);
+});
 
-  // 같은 링크를 사람이 연다 — 한동안 읽기만 하다가(요청 0) 처음 손을 댄다
+test("사람이 처음 손을 댄 뒤부터 보낸다 (D35) — 동의한 독자가 새 창으로 다시 열어도, 손대기 전에는 쥐고만 있다", async ({ browser, request }) => {
+  test.setTimeout(90_000);
+  const first = await browser.newContext(phone);
+  await enter(await first.newPage(), READERS.robot); // 동의 · 읽기 전 물음을 지나 기사로
+  await settledLedger(request, READERS.robot, 2);
+  await first.close();
+
+  // 같은 링크를 새 창으로 — 이미 동의했고 읽기 전 물음도 지났으니 기사가 바로 뜬다. 한동안 읽기만 한다
   const ctx = await browser.newContext(phone);
-  const human = await ctx.newPage();
-  const sent = apiCalls(human);
-  await open(human, READERS.robot, "/", false);
-  await human.waitForTimeout(3000);
-  expect(sent).toEqual([]);
+  const page = await ctx.newPage();
+  const sent = apiCalls(page);
+  await page.goto(`/?r=${READERS.robot}`);
+  await page.locator(".r-deck").waitFor();
+  await page.waitForTimeout(3500);
+  expect(sent).toEqual(["GET /api/readers/…"]);
+  expect(await unsent(page), "화면은 줄을 만들어 쥐고 있다 (plan · 1장에 들어옴 · 1장의 끝)").toBe(3);
+  await page.evaluate(() => window.dispatchEvent(new Event("pointerdown"))); // 스크립트가 흉내 낸 입력은 손이 아니다
+  await page.waitForTimeout(800);
+  expect(sent).toEqual(["GET /api/readers/…"]);
   const touched = Date.now();
-  await human.touchscreen.tap(187, 30);
-  const r = await settledLedger(request, READERS.robot, 2);
+  await page.touchscreen.tap(187, 30);
+  await expect.poll(async () => (await readings(request, READERS.robot)).map((r) => r.events.length)).toEqual([2, 2]);
+  const r = (await readings(request, READERS.robot))[1]!;
   expect(lines(r)).toEqual(visit("basic", 0));
   expect(Date.parse(r.events[0]!.occurred_at), "시각은 일어난 때다 — 손을 댄 때가 아니다").toBeLessThan(touched - 2000);
   expect(r.check).toEqual({ conforms: true, issues: [], missing_seq: [] });
@@ -318,7 +329,7 @@ test("/test 경로는 API 를 부르지 않는다 — 대응표에 있는 독자
     for (let i = 0; i < 2; i++) (await readToEnd(page, cdp, i), await ask(page, i));
     await page.waitForTimeout(2000);
     expect(calls, path).toEqual([]);
-    expect(await page.evaluate(() => Object.keys(sessionStorage).filter((k) => /reading|session/.test(k))), `${path} — 열람 · 세션을 만들지도 않는다`).toEqual([]);
+    expect(await page.evaluate(() => Object.keys(sessionStorage).filter((k) => /reading|session|outbox|study/.test(k))), `${path} — 열람 · 세션 · 보낼 줄을 만들지도 않는다`).toEqual([]);
     await page.close();
   }
   expect(await readings(request, READERS.testRoute)).toEqual([]);
@@ -378,8 +389,8 @@ test.describe("망가뜨린 화면", () => {
     let lost = 0;
     await page.route("**/api/**", async (route) => {
       const body = route.request().postData() ?? "";
-      sent.push(...[...body.matchAll(/"(?:event_id|plan_id)":"([0-9a-f-]{36})"/g)].map((m) => m[1]!).filter((id, i, a) => a.indexOf(id) === i));
-      if (lost >= 3) return route.continue();
+      sent.push(...[...body.matchAll(/"(?:event_id|plan_id|consent_id|exposure_id)":"([0-9a-f-]{36})"/g)].map((m) => m[1]!).filter((id, i, a) => a.indexOf(id) === i));
+      if (route.request().method() !== "POST" || lost >= 3) return route.continue();
       lost++;
       await route.fetch();
       return route.abort("connectionreset");
@@ -389,7 +400,7 @@ test.describe("망가뜨린 화면", () => {
     await ask(page, 0);
     await readToEnd(page, cdp, 1);
     const r = await settledLedger(request, READERS.twice, 4, 45_000);
-    await expect.poll(() => page.evaluate(() => JSON.parse(sessionStorage.getItem(Object.keys(sessionStorage).find((k) => k.startsWith("claro:reading:"))!)!).unsent.length), { timeout: 45_000 }).toBe(0);
+    await expect.poll(() => unsent(page), { timeout: 45_000 }).toBe(0);
     const twice = sent.filter((id, i) => sent.indexOf(id) !== i);
     expect(twice.length, "같은 줄이 두 번 이상 갔다").toBeGreaterThan(0);
     expect(lines(r)).toEqual([...visit("basic", 0), ...visit("basic", 1)]);

@@ -9,7 +9,7 @@
     "start": "next start -p 3100",
     "typecheck": "tsc -p .",
     "test": "playwright test",
-    "phone": "export CLARO_DIST=.next-phone CLARO_PGLITE_DIR=.data/phone CLARO_PEEK=1 DATABASE_URL= && tsx scripts/seed.ts && tsx scripts/reader.ts R-00 && next build && next start -p 3200 -H 0.0.0.0",
+    "phone": "export CLARO_DIST=.next-phone CLARO_PGLITE_DIR=.data/phone CLARO_PEEK=1 DATABASE_URL= && tsx scripts/seed.ts && tsx scripts/probes.ts && tsx scripts/reader.ts R-00 && next build && next start -p 3200 -H 0.0.0.0",
     "seed": "tsx scripts/seed.ts",
     "reader": "tsx scripts/reader.ts",
     "ledger": "node scripts/ledger.mjs",
@@ -19,7 +19,11 @@
     "deploy:reader": "tsx --env-file=.env.deploy scripts/reader.ts",
     "deploy:verify": "tsx --env-file=.env.deploy scripts/verify-database.ts",
     "deploy:ledger": "tsx --env-file=.env.deploy scripts/ledger-db.ts",
-    "deploy:role": "tsx --env-file=.env.deploy scripts/api-role.ts"
+    "deploy:role": "tsx --env-file=.env.deploy scripts/api-role.ts",
+    "probes": "tsx scripts/probes.ts",
+    "deploy:probes": "tsx --env-file=.env.deploy scripts/probes.ts",
+    "answers": "tsx scripts/answers.ts",
+    "deploy:answers": "tsx --env-file=.env.deploy scripts/answers.ts"
   },
   "dependencies": {
     "@claro/contract": "workspace:*",

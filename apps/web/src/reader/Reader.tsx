@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 import { AnimatePresence, animate, motion, type Variants } from "motion/react";
 import type { ArticlePackage, Level, LevelId } from "@claro/contract";
@@ -39,9 +39,11 @@ const SHOWN = `inset(0% 0% 0% 0% round ${radius.ask}px)`;
 const DRAINED = `inset(100% 0% 0% 0% round ${radius.ask}px)`;
 
 export function Reader({
-  pkg, onMoment,
+  pkg, onMoment, after,
 }: {
   pkg: ArticlePackage; onMoment?: (m: ReaderMoment) => void;
+  /** 마지막 장의 끝 묶음에 더할 것 — 물음으로 가는 길 (study/). 없으면 화면은 그대로다 */
+  after?: ReactNode;
 }) {
   const [levelId, setLevelId] = useState<LevelId>(pkg.levels[0]!.id);
   const [tags, setTags] = useState(false);
@@ -84,7 +86,7 @@ export function Reader({
 
   return (
     <div className="reader" data-layers={tags ? "on" : "off"} data-motion={choreo ? "on" : "none"} style={WORD_VARS}>
-      <Journey key={`${level.id}${still}:${restored}`} pkg={pkg} level={level} start={places.current[level.id]} onPlace={keep} live={live} choreo={choreo} tags={tags} onTags={setTags} onLevel={switchLevel} notice={notice} />
+      <Journey key={`${level.id}${still}:${restored}`} pkg={pkg} level={level} start={places.current[level.id]} onPlace={keep} live={live} choreo={choreo} tags={tags} onTags={setTags} onLevel={switchLevel} notice={notice} after={after} />
     </div>
   );
 }
@@ -105,8 +107,9 @@ function useReducedMotion(): boolean {
 const flags = (n: number, first = false) => Array.from({ length: n }, (_, i) => first && i === 0);
 
 function Journey({
-  pkg, level, start, onPlace, live, choreo, tags, onTags, onLevel, notice,
+  pkg, level, start, onPlace, live, choreo, tags, onTags, onLevel, notice, after,
 }: {
+  after?: ReactNode;
   pkg: ArticlePackage; level: Level; start: LevelPlace | undefined; onPlace: (id: LevelId, place: LevelPlace) => void; live: boolean;
   choreo: Choreography | null; tags: boolean;
   onTags: (v: boolean) => void; onLevel: (id: LevelId) => void; notice: (m: ReaderMoment) => void;
@@ -389,6 +392,7 @@ function Journey({
                             </ol>
                           </div>
                         )}
+                        {after}
                         {others.map((l) => (
                           <button key={l.id} type="button" className="r-ask r-reread" onClick={() => onLevel(l.id)}>
                             <span className="r-ask-q">{COPY.reread(l.id)}</span>

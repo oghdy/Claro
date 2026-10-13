@@ -213,6 +213,16 @@ export const reader = identity.table("reader", {
   created_at: timestamptz().notNull().default(sql`now()`),
 });
 
+// ── 동의 — 독자가 안내를 읽고 "시작할게요"를 눌렀다는 사실과 때 (D37). **원장이 아니다** — 계약(OBSERVATION)의 타입이 아니고, 원장의 줄은 이 표를 가리키지 않는다.
+// 누르기 전에는 아무것도 기록하지 않는다: API 는 이 표에 줄이 없는 독자의 plan · 사건 · 노출 · 응답을 받지 않는다.
+// 무리(Claro · 일반 기사)를 적는 칸이 없다 — 주소가 가르고, 누가 어느 무리인지는 도윤의 명단에만 있다 (D37 · D30)
+export const consent = identity.table("consent", {
+  consent_id: uuid().primaryKey(), // 화면이 만든다 — 같은 누름을 다시 보내도 한 줄이다
+  user_id: uuid().notNull().references(() => reader.user_id),
+  notice_version: integer().notNull(), // 어느 안내문을 보고 눌렀나 — 안내문의 글자가 바뀌면 수를 올린다 (apps/web/src/study/copy.ts)
+  consented_at: timestamptz().notNull(), // 누른 때 — 기기의 시각 (보낸 때가 아니다)
+});
+
 /** 계약 타입 이름 → 테이블 */
 export const LEDGER_TABLES = {
   ReadingPlanLog: readingPlanLog,

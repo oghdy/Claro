@@ -1,6 +1,6 @@
 # packages/db — Supabase 에 올릴 때
 
-**올렸다** (2026-10-13) — Supabase: 마이그레이션 7 · 골든 한 판 · API 전용 역할 · 시험 독자 R-00 (§4 통과). Vercel: https://claro-lime-one.vercel.app 올릴 때 이 문서를 본다 — 맨 앞의 §0 부터. 올린 결과는 `logs/backend/phase-0-step-0-4c.md` 에 적는다.
+**올렸다** (2026-10-13) — Supabase · Vercel: https://claro-lime-one.vercel.app. 0.5 (물음 화면)에서 마이그레이션이 아홉이 됐고 물음 넷이 더해진다 — 올린 결과는 `logs/backend/phase-0-step-0-5.md` 올릴 때 이 문서를 본다 — 맨 앞의 §0 부터. 올린 결과는 `logs/backend/phase-0-step-0-4c.md` 에 적는다.
 PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. Supabase 에서 확인한 것은 `logs/backend/phase-0-step-0-4c.md` 의 표에 있다.
 
 비밀 값(접속 문자열 · 키)은 저장소에 넣지 않는다. 이 문서에는 **이름만** 있다.
@@ -45,13 +45,15 @@ PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. Supabase 에서 확인�
 
 | 차례 | 명령 | 무엇 |
 |---|---|---|
-| 1 | `pnpm --filter @claro/web deploy:migrate` | 마이그레이션 일곱을 한 번에 (§1). 대상의 서버 이름 · 데이터베이스 이름과 적용된 개수를 낸다 |
-| 2 | `pnpm --filter @claro/web deploy:verify` | §4 "올린 뒤 확인"을 그대로 돌린다 — 테이블 8 · RLS · 정책 0 · 화면 키의 권한 0 · 덧붙이기만 |
+| 1 | `pnpm --filter @claro/web deploy:migrate` | 마이그레이션 아홉을 한 번에 (§1). 대상의 서버 이름 · 데이터베이스 이름과 적용된 개수를 낸다 |
+| 2 | `pnpm --filter @claro/web deploy:verify` | §4 "올린 뒤 확인"을 그대로 돌린다 — 테이블 9 · RLS · 정책은 API 역할의 17개뿐 · 화면 키의 권한 0 · 덧붙이기만 |
 | 3 | (대시보드) Data API 에서 schema 빼기 | §2 의 겹 3. 프로젝트를 만들 때 Data API 를 껐으면 이미 된 것이다 — 꺼져 있는지만 본다 |
 | 4 | `pnpm --filter @claro/web deploy:seed` | 골든 한 판 (있으면 아무것도 안 한다) |
-| 5 | `pnpm --filter @claro/web deploy:reader R-00` | 시험 독자 하나. 링크를 낸다 (`CLARO_SITE` 가 앞에 붙는다) |
+| 4-2 | `pnpm --filter @claro/web deploy:probes` | 물음 넷 (판 1 · D37). 넣기 전에 요점 · 개념을 확인한다 (불변식 23 · 18). 있으면 아무것도 안 한다 — 글자가 다르면 멈춘다 |
+| 5 | `pnpm --filter @claro/web deploy:reader R-00` | 독자 하나를 올리고 **링크 셋**을 낸다 — 읽기 (Claro 무리) · 일반 기사 무리 · 며칠 뒤 (공통). `CLARO_SITE` 가 앞에 붙는다. 어느 독자에게 어느 링크를 보냈는지는 명단에 (데이터베이스에 무리를 적지 않는다) |
 | 6 | `pnpm --filter @claro/web deploy:role` | API 전용 역할에 새 비밀번호를 걸고 그 접속 값을 `apps/web/.env.vercel` 에 쓴다 (화면에는 안 낸다). 그 값으로 붙어 읽기는 되고 고치기 · 지우기 · 트리거 끄기는 안 되는 것을 본다. **다시 돌리면 비밀번호가 바뀐다** — Vercel 의 값도 다시 넣는다 |
 | 7 | Vercel 에 `DATABASE_URL` (`.env.vercel` 의 값)을 넣고 배포 | |
+| 볼 때 | `pnpm --filter @claro/web deploy:answers` (`… deploy:answers R-03` 한 사람) | **독자의 답** — 독자마다 동의한 때 · 물음마다 언제 어느 위치에서 보여줬나 · 답 (쓴 글은 그대로) · 답하지 않음. 쓴 답을 가리는 것은 사람의 일이다 — 판정을 적는 칸은 없다 |
 | 볼 때 | `pnpm --filter @claro/web deploy:ledger` | 원장에 남은 것 — 열람마다 plan · 사건 · 완독 · 끝이 나온 완독 · 멈춘 장 · 계약에 맞는가 |
 
 **배포된 화면이 보여주는 판 = 빌드할 때의 `fixtures/` 다.** 그 판이 데이터베이스에 없으면 (`deploy:seed` 를 안 돌렸으면) plan 이 `PLAN_ARTICLE` 로 거부되고 기록이 한 줄도 안 남는다 — 읽기는 된다.
@@ -64,7 +66,7 @@ PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. Supabase 에서 확인�
 
 ## 1. 마이그레이션 — 적용 순서
 
-`migrations/meta/_journal.json` 의 순서대로, **일곱 다**, 한 번에. 명령: `pnpm --filter @claro/web deploy:migrate` (`apps/web/src/server/db.ts` 의 `migrateDatabase`).
+`migrations/meta/_journal.json` 의 순서대로, **아홉 다**, 한 번에. 명령: `pnpm --filter @claro/web deploy:migrate` (`apps/web/src/server/db.ts` 의 `migrateDatabase`).
 
 | 순서 | 파일 | 무엇 | 어떻게 만들었나 |
 |---|---|---|---|
@@ -75,6 +77,8 @@ PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. Supabase 에서 확인�
 | 5 | `0004_plan_reading_level_unique.sql` | D35 — (열람 · 레벨) 유일 제약을 뗀다 (탭을 복제하면 같은 열람 · 같은 레벨의 plan 이 둘 온다) | `pnpm generate` |
 | 6 | `0005_reading_plan_accepts.sql` | D35 — plan 을 넣을 때 보는 것을 **모양 · 참조**(있는 판 · 그 판의 레벨)만 남긴다. 불변식 3 · 5 · 7 은 넣을 때 보지 않는다 | 손으로 썼다 (`create or replace`) |
 | 7 | `0006_api_role.sql` | API 전용 역할 `claro_api` (로그인 없이 만든다) · 원장 · 판에 넣기 · 읽기 권한과 그 역할만의 RLS 정책 15개 · 대응표는 읽기만 | 손으로 썼다 |
+| 8 | `0007_consent.sql` | `identity.consent` — 동의를 눌렀다는 사실과 때 (D37). **원장이 아니다** | `pnpm generate` |
+| 9 | `0008_consent_rules.sql` | 그 표의 RLS · API 역할의 넣기 · 읽기 (정책 2 — 모두 17) · 화면 키의 권한 거두기 | 손으로 썼다 |
 
 - **0001 · 0003 까지만 적용된 상태로 두지 않는다.** 그 상태의 원장은 빈 `seq` · 계약과 다른 순서의 사건(0001 까지) · 복제된 탭의 plan(0003 까지)을 **거부한다** — 화면이 보낸 관찰이 사라진다 (D34)
 - **0000 만 적용된 상태로 두지 않는다.** 그 사이의 원장은 고칠 수 있고 지울 수 있다. 둘을 같은 실행에서 적용한다 (Drizzle 의 migrator 는 저널에 있는 것을 전부 적용한다)
@@ -89,7 +93,7 @@ Supabase 는 `public` 의 테이블을 Data API (PostgREST)로 내놓고, 화면
 
 | 겹 | 무엇 | 어디서 |
 |---|---|---|
-| 1 | **RLS 를 켜고, 정책은 API 전용 역할(`claro_api`)에게만 준다** (읽기 · 넣기 — `0006`). 화면 키의 역할에게는 정책이 하나도 없다 — 한 줄도 못 읽고 못 쓴다 | `0001` · `0006`. 테스트가 본다 (RLS 켜짐 8 · 정책 15 전부 `claro_api`) |
+| 1 | **RLS 를 켜고, 정책은 API 전용 역할(`claro_api`)에게만 준다** (읽기 · 넣기 — `0006`). 화면 키의 역할에게는 정책이 하나도 없다 — 한 줄도 못 읽고 못 쓴다 | `0001` · `0006`. 테스트가 본다 (RLS 켜짐 9 · 정책 17 전부 `claro_api`) |
 | 2 | **`anon` · `authenticated` 의 권한을 거둔다** — 테이블 8개와 schema `identity` | `0001` 이 한다 (그 역할이 있을 때만. PGlite 에는 없어서 **이 줄은 한 번도 실행된 적이 없다**) |
 | 3 | **Data API 가 내놓는 schema 에서 뺀다** — `identity` 는 넣지 않는다. 우리는 Data API 를 쓰지 않으므로 `public` 도 빼거나 Data API 를 끈다 | Supabase 대시보드 (Project Settings → API). **사람이 한다** |
 
@@ -145,6 +149,13 @@ begin; update article_record set article_version = article_version; rollback;   
 - 독자를 올리는 길은 `apps/web/scripts/reader.ts` 다 (`deploy:reader`). 부호 모양(글자 1 ~ 3 + `-` + 숫자)이 아니면 거부한다. 데이터베이스는 `label` 의 글을 막지 않는다 — SQL 로 직접 넣을 때는 사람이 지킨다
 - 이 표에 없는 `user_id` 의 줄은 API 가 **기록하지 않는다** (읽기는 된다). 독자에게 주는 링크는 `…/?r=<user_id>` 다 — 주소에 들어가는 것은 뜻 없는 UUID 뿐이다
 - 로그인(Supabase Auth)을 붙일 때 다시 본다 — 그때는 계정 ↔ `user_id` 가 이 자리에 온다 (D1)
+
+### 동의 `identity.consent` (D37)
+
+- 칸은 넷이다: `consent_id` (화면이 만든다 — 같은 누름을 다시 보내도 한 줄) · `user_id` · `notice_version` (어느 안내문을 보고 눌렀나) · `consented_at` (누른 때). **무리를 적는 칸이 없다**
+- 원장이 아니다 — 계약(OBSERVATION)의 타입이 아니고 원장의 줄은 이 표를 가리키지 않는다. **API 는 이 표에 줄이 없는 독자의 plan · 사건 · 노출 · 응답을 받지 않는다** ("동의 전에는 기록하지 않는다")
+- 동의를 거두는 길은 화면에 없다. 누가 그만두겠다고 하면 도윤이 주인의 접속으로 그 독자의 줄을 지운다 (이 표는 지울 수 있다. 원장의 줄은 지울 수 없다 — 그 독자의 줄을 분석에서 뺀다)
+- 안내문의 글자를 바꾸면 `apps/web/src/study/copy.ts` 의 `NOTICE_VERSION` 과 `server/study.ts` 의 `NOTICE_VERSIONS` 를 올린다
 
 ## 7. 원장에 남은 것 보기
 

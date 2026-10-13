@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.4c — 끝, 게이트 대기 (2026-10-13 · 배포됨 https://claro-lime-one.vercel.app · Supabase 마이그레이션 7 · API 전용 역할 · 도윤이 아이폰에서 R-00 으로 끝까지 읽음: 사건 29줄 · 완독 · 계약에 맞는다 · 카카오톡 미리보기 뒤 원장 0줄 — `logs/backend/phase-0-step-0-4c.md`). 다음: 0.4c 게이트 → 물음(probe) 화면은 D31 · D18 을 정한 뒤**
+**Phase 0 / Step 0.5 — 코드 끝 (2026-10-13 · 물음의 화면: 동의 · 물음 넷 · 흐름 셋 (Claro · 일반 기사 · 며칠 뒤) · 응답과 증거를 한 거래로 · 검색 차단 · 배포에서 /test 닫기. PGlite · Postgres 18 에서 db 101 · 화면 56 통과). 배포는 도윤과 같이 — 아직. _open 7 — `logs/backend/phase-0-step-0-5.md`**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
