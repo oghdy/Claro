@@ -51,17 +51,19 @@ export async function appendArticle(db: Db, record: ArticleRecord): Promise<void
  * 그 줄은 틀린 것이 아니라 못 넣은 것이라 다시 넣어야 한다.
  */
 export function ledgerRejection(e: unknown): string | null {
-  type PgError = { message?: string; code?: string; constraint?: string; column?: string; cause?: unknown };
+  // 오류의 칸 이름이 드라이버마다 다르다 — PGlite 는 constraint · column, postgres.js 는 constraint_name · column_name (B-0.4c 가 실제 Postgres 에서 봤다)
+  type PgError = { message?: string; code?: string; constraint?: string; constraint_name?: string; column?: string; column_name?: string; cause?: unknown };
   if (e instanceof LedgerRejected) return e.code;
   let err = e as PgError;
   while (err?.cause && !err.code) err = err.cause as PgError; // Drizzle 은 Postgres 의 오류를 cause 에 싼다
   const m = /^([A-Z][A-Z_]+): /.exec(err?.message ?? "");
   if (m && err.code === "P0001") return m[1]!; // 트리거의 raise exception
   if (err?.code === "42703") return "LEDGER_FIELD"; // 없는 칸
-  if (err?.code === "23514") return `CHECK ${err.constraint}`;
-  if (err?.code === "23503") return `FK ${err.constraint}`;
-  if (err?.code === "23505") return `UNIQUE ${err.constraint}`;
-  if (err?.code === "23502") return `NOT_NULL ${err.column}`;
+  const constraint = err?.constraint ?? err?.constraint_name;
+  if (err?.code === "23514") return `CHECK ${constraint}`;
+  if (err?.code === "23503") return `FK ${constraint}`;
+  if (err?.code === "23505") return `UNIQUE ${constraint}`;
+  if (err?.code === "23502") return `NOT_NULL ${err.column ?? err.column_name}`;
   if (err?.code === "22P02" || err?.code === "22007" || err?.code === "22003") return "LEDGER_SHAPE"; // 값의 글자가 그 타입이 아니다
   return null;
 }

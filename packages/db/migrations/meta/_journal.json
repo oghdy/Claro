@@ -29,6 +29,20 @@
       "when": 1791868837454,
       "tag": "0003_reading_event_accepts",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791878151223,
+      "tag": "0004_plan_reading_level_unique",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791878164872,
+      "tag": "0005_reading_plan_accepts",
+      "breakpoints": true
     }
   ]
 }

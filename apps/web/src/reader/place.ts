@@ -71,6 +71,8 @@ export interface ReadingState {
   unsent: Unsent[];
   /** 서버가 "기록하지 않는 독자"라고 답했다 — 이 열람은 더 보내지 않는다 */
   off: boolean;
+  /** 사람이 이 화면에 손을 댄 적이 있다 (터치 · 휠 · 키 · 클릭) — 그 전에는 한 줄도 보내지 않는다 (D35) */
+  touched: boolean;
 }
 
 /** 판의 키 — 패키지가 아니라 ArticleRecord 의 것이다 */

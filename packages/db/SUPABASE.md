@@ -1,58 +1,69 @@
 # packages/db — Supabase 에 올릴 때
 
-**아직 올리지 않았다.** Supabase 프로젝트가 없다 (D1 "도윤이 할 것"). 이 문서는 **0.4c (배포)** 가 올릴 때 볼 것이다 — 맨 앞의 §0 부터.
-0.4b 는 외부 DB 없이 끝났다: API 와 화면이 PGlite 위에서 끝에서 끝까지 돈다 (`logs/backend/phase-0-step-0-4b.md`).
-아래는 PGlite(프로세스 안 Postgres)에서만 돌려 본 것이다 — **실제 Supabase 에서 확인한 것은 하나도 없다.** 올린 뒤 "올린 뒤 확인" 절을 그대로 돌린다.
+**아직 올리지 않았다** (2026-10-13 — Supabase 프로젝트는 비어 있다). 올릴 때 이 문서를 본다 — 맨 앞의 §0 부터. 올린 결과는 `logs/backend/phase-0-step-0-4c.md` 에 적는다.
+PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. **실제 Supabase 에서 확인한 것은 아직 하나도 없다** — 올린 뒤 §4 를 그대로 돌린다.
 
 비밀 값(접속 문자열 · 키)은 저장소에 넣지 않는다. 이 문서에는 **이름만** 있다.
 
 ---
 
-## 0. 0.4c (배포)에 필요한 것 — 한눈에
+## 0. 배포 — 한눈에 (0.4c · 지금 코드 기준)
 
-**도윤이 만들어야 하는 것** (계정이 필요하다 — 세션이 못 한다)
+**무엇이 어디서 도나**
 
-| 무엇 | 어디서 | 그다음 |
+| 무엇 | 어디 | 데이터베이스에 기대나 |
 |---|---|---|
-| Supabase 프로젝트 하나 | supabase.com — 안 쓰는 프로젝트를 멈추거나 지우거나 유료로 (D1) | 접속 문자열 둘을 받는다: 직접 연결(마이그레이션용) · 풀러(서버용). **채팅 · 저장소에 붙이지 않는다** — Vercel 과 자기 컴퓨터의 `.env` 에만 |
-| Data API 에서 schema 빼기 | Supabase 대시보드 → Project Settings → API | §2 의 겹 3. `identity` 는 넣지 않는다. `public` 도 뺀다 (우리는 Data API 를 쓰지 않는다) |
-| Vercel 프로젝트 하나 | vercel.com — 이 저장소를 잇는다. Root Directory = `apps/web` | 환경 변수 `DATABASE_URL` 을 넣는다 (아래) |
-| 독자의 이름표 ↔ 사람 | **저장소 · 데이터베이스 밖** (종이 · 자기 메모) | 데이터베이스에는 부호만 들어간다 ("R-07" — §6) |
+| 기사 화면 (`/`) | Vercel — **정적 페이지.** 빌드할 때 `fixtures/` 에서 패키지와 판의 키를 읽어 HTML 에 싣는다 | **아니다.** 데이터베이스가 죽어도 뜬다 (D35) |
+| 기록 API (`/api/plans` · `/api/events`) · `/api/articles/…` | Vercel 의 서버 함수 (서울 `icn1` — `apps/web/vercel.json`) | 그렇다 — `DATABASE_URL`. 죽어 있으면 5xx 로 답하고, 화면은 줄을 쥐고 있다가 다시 보낸다 |
+| `/api/peek` | **배포에 없다** (Vercel 에서는 언제나 404) | — |
+| 마이그레이션 · 골든 넣기 · 독자 올리기 · 올린 뒤 확인 · 원장 보기 | **도윤의 컴퓨터** — `apps/web/.env.deploy` 의 접속 값으로 | 그렇다 |
 
-**환경 변수 — 이름만**
+**도윤이 만드는 것** (계정이 필요하다)
+
+| 무엇 | 어디서 |
+|---|---|
+| Supabase 프로젝트 | 만들었다 (organization "Claro" · 프로젝트 "Claro" · 서울). Data API 꺼짐 · automatic RLS 켜짐 |
+| `apps/web/.env.deploy` | 자기 컴퓨터에. 저장소에 안 들어간다 (`.gitignore` 의 `.env.*`). **`.env` 라는 이름을 쓰지 않는다** — Next 가 `.env` 를 스스로 읽어서, 개발 서버 · 테스트 서버가 배포된 데이터베이스에 쓰게 된다 |
+| Vercel 프로젝트 | 이 저장소를 잇는다. Root Directory = `apps/web` |
+| 독자의 이름표 ↔ 사람 | **저장소 · 데이터베이스 밖** (§6) |
+
+**환경 변수 — 이름만. 값은 이 문서 · 저장소 · 채팅 어디에도 적지 않는다**
 
 | 이름 | 무엇 | 어디에 |
 |---|---|---|
-| `DATABASE_URL` | 서버(API · 페이지)가 쓰는 접속 문자열 | Vercel 의 환경 변수. `NEXT_PUBLIC_` 을 붙이지 않는다 |
-| `DATABASE_MIGRATE_URL` | 마이그레이션 · 골든 넣기 · 독자 올리기에 쓰는 직접 연결 | 그것을 돌리는 컴퓨터의 `.env` 에만 |
-| `CLARO_PGLITE_DIR` | PGlite 폴더 — 개발 · 테스트에서만 | 배포에는 없다 |
-| `CLARO_PEEK` | `1` 이면 `/api/peek` 가 원장을 내어 준다 — 이 컴퓨터에서만 | **배포에 넣지 않는다.** 넣어도 Vercel 에서는 꺼져 있다 (`VERCEL` 이 있으면 404) |
+| `DATABASE_URL` | Postgres 접속 문자열. 코드가 읽는 곳은 `apps/web/src/server/db.ts` 하나다 | **Vercel** 의 환경 변수 (Production) — 거래 방식 풀러(Transaction pooler · 포트 6543). **`.env.deploy`** — 세션 방식 풀러(Session pooler · 포트 5432) |
+| `DATABASE_MIGRATE_URL` | 마이그레이션만 다른 접속으로 돌릴 때. 없으면 `DATABASE_URL` 을 쓴다 | `.env.deploy` — 안 넣어도 된다 |
+| `CLARO_SITE` | 독자 링크의 앞부분 (배포된 주소). 비밀이 아니다 | `.env.deploy` |
+| `CLARO_PGLITE_DIR` | PGlite 폴더 — 개발 · 테스트 · `pnpm phone` 에서만. `DATABASE_URL` 이 없을 때만 본다 | 배포에는 없다 |
+| `CLARO_PEEK` | `1` 이면 `/api/peek` 가 원장을 내어 준다 — 이 컴퓨터에서만 | **배포에 넣지 않는다.** 넣어도 Vercel 에서는 404 다 (테스트가 지킨다) |
 
-**적용 순서**
+- 접속 문자열은 풀러의 것을 쓴다. Supabase 의 직접 연결(`db.<프로젝트>.supabase.co`)은 IPv6 뿐이라 집 · Vercel 에서 안 닿을 수 있다
+- 거래 방식 풀러는 준비된 문장을 못 쓴다 — `db.ts` 가 `prepare: false` 로 연다. 마이그레이션은 거래 방식 풀러로 돌리지 않는다
+- `DATABASE_URL` 도 `CLARO_PGLITE_DIR` 도 없으면 서버는 데이터베이스를 열지 않고 실패한다 (5xx) — 조용히 임시 폴더에 쓰지 않는다
 
-1. Supabase 프로젝트를 만든다 → 접속 문자열을 `.env` 에 (`DATABASE_MIGRATE_URL`)
-2. 마이그레이션 넷을 한 번에 적용한다 (§1) → §4 "올린 뒤 확인"을 그대로 돌린다
-3. Data API 에서 schema 를 뺀다 (§2 겹 3) · `alter default privileges` (§2)
-4. 골든 한 판을 넣는다 (`pnpm --filter @claro/web seed` — 접속을 바꾼 뒤) · 독자를 올린다 (`… reader R-01 R-02 …`) → 독자별 링크가 나온다
-5. Vercel 에 `DATABASE_URL` 을 넣고 배포한다 → 독자 링크 하나로 읽어 보고, 원장에 줄이 남았는지 SQL 로 본다 (§7)
+**명령 — 전부 `.env.deploy` 를 읽는다. 접속 값은 출력하지 않는다**
 
-**0.4c 가 코드에서 고칠 곳** (0.4b 가 남긴 것)
+| 차례 | 명령 | 무엇 |
+|---|---|---|
+| 1 | `pnpm --filter @claro/web deploy:migrate` | 마이그레이션 여섯을 한 번에 (§1). 대상의 서버 이름 · 데이터베이스 이름과 적용된 개수를 낸다 |
+| 2 | `pnpm --filter @claro/web deploy:verify` | §4 "올린 뒤 확인"을 그대로 돌린다 — 테이블 8 · RLS · 정책 0 · 화면 키의 권한 0 · 덧붙이기만 |
+| 3 | (대시보드) Data API 에서 schema 빼기 | §2 의 겹 3. 프로젝트를 만들 때 Data API 를 껐으면 이미 된 것이다 — 꺼져 있는지만 본다 |
+| 4 | `pnpm --filter @claro/web deploy:seed` | 골든 한 판 (있으면 아무것도 안 한다) |
+| 5 | `pnpm --filter @claro/web deploy:reader R-00` | 시험 독자 하나. 링크를 낸다 (`CLARO_SITE` 가 앞에 붙는다) |
+| 6 | Vercel 에 `DATABASE_URL` 을 넣고 배포 | |
+| 볼 때 | `pnpm --filter @claro/web deploy:ledger` | 원장에 남은 것 — 열람마다 plan · 사건 · 완독 · 끝이 나온 완독 · 멈춘 장 · 계약에 맞는가 |
 
-| 곳 | 무엇 |
-|---|---|
-| `apps/web/src/server/db.ts` 의 `open()` — **접속은 이 한 곳이다** | PGlite 대신 Postgres 드라이버로 열고 `DATABASE_URL` 을 읽는다. 여기서 마이그레이션을 돌리지 않는다. 드라이버 · 풀러는 §5 |
-| 마이그레이션을 돌리는 명령 | 없다 (PGlite 는 열 때 스스로 돌린다). `DATABASE_MIGRATE_URL` 로 `migrate` 를 돌리는 스크립트 하나 |
-| `apps/web/src/server/golden.ts` · `lib/load.ts` | 화면이 보여줄 판의 키를 `fixtures/` 에서 **요청마다** 읽는다 (`process.cwd()/../../fixtures`). Vercel 의 서버 묶음에 그 폴더가 실리는지 확인해야 한다 — 안 실리면 키를 다른 곳에서 얻는다 (어느 기사를 보여줄지는 아직 정한 적이 없다) |
-| `apps/web/scripts/reader.ts` 가 내는 링크 | 지금은 `http://<이 컴퓨터의 주소>:3200/?r=…` 다. 배포 주소로 |
-| `pnpm phone` | 그대로 둔다 — 이 컴퓨터의 PGlite 로 폰에서 읽어 보는 길이다 |
+**배포된 화면이 보여주는 판 = 빌드할 때의 `fixtures/` 다.** 그 판이 데이터베이스에 없으면 (`deploy:seed` 를 안 돌렸으면) plan 이 `PLAN_ARTICLE` 로 거부되고 기록이 한 줄도 안 남는다 — 읽기는 된다.
+판을 바꿔 배포하면 seed 도 다시 돌린다 (새 판이 덧붙는다. 옛 판은 그대로 있다).
 
-**돌려 보지 않은 것** — PGlite 한 곳에서만 돌렸다. 실제 Postgres 에서 여러 접속이 동시에 쓰는 경우 · 서버리스에서 접속이 늘어나는 경우 · `0001` 의 권한 거두기는 본 적이 없다 (§5)
+**돌려 본 것 · 안 돌려 본 것** — PGlite 와 이 Mac 의 Postgres 18 (Postgres.app)에서 `packages/db` 테스트 전부와 화면의 끝에서 끝까지 테스트를 돌렸다 (`logs/backend/phase-0-step-0-4c.md` 의 표).
+`0001` 의 "anon · authenticated 권한 거두기"는 그 역할이 있는 Supabase 에서 처음 실행된다 — `deploy:verify` 가 결과를 본다.
 
 ---
 
 ## 1. 마이그레이션 — 적용 순서
 
-`migrations/meta/_journal.json` 의 순서대로, **넷 다**, 한 번에.
+`migrations/meta/_journal.json` 의 순서대로, **여섯 다**, 한 번에. 명령: `pnpm --filter @claro/web deploy:migrate` (`apps/web/src/server/db.ts` 의 `migrateDatabase`).
 
 | 순서 | 파일 | 무엇 | 어떻게 만들었나 |
 |---|---|---|---|
@@ -60,11 +71,13 @@
 | 2 | `0001_ledger_rules.sql` | 고치기 · 지우기 · 비우기를 막는 트리거 · 넣을 때의 불변식 검사 · RLS 켜기 · anon / authenticated 권한 거두기 | 손으로 썼다 (`drizzle-kit generate --custom`) |
 | 3 | `0002_reading_event_end_index.sql` | D34 — "한 plan 의 한 장에 끝은 한 번"의 부분 유일 색인을 뗀다 (같은 장의 끝이 두 번 와도 받는다) | `pnpm generate` |
 | 4 | `0003_reading_event_accepts.sql` | D34 — 읽기 사건을 넣을 때 보는 것을 **참조**(그 열람 · 독자 · 세션의 plan 인가)만 남긴다. `seq` 순서 · 지금 plan · 지금 장 · 전환 다음 · CLOSED 뒤는 넣을 때 보지 않는다 | 손으로 썼다 (`create or replace`) |
+| 5 | `0004_plan_reading_level_unique.sql` | D35 — (열람 · 레벨) 유일 제약을 뗀다 (탭을 복제하면 같은 열람 · 같은 레벨의 plan 이 둘 온다) | `pnpm generate` |
+| 6 | `0005_reading_plan_accepts.sql` | D35 — plan 을 넣을 때 보는 것을 **모양 · 참조**(있는 판 · 그 판의 레벨)만 남긴다. 불변식 3 · 5 · 7 은 넣을 때 보지 않는다 | 손으로 썼다 (`create or replace`) |
 
-- **0001 까지만 적용된 상태로 두지 않는다.** 그 상태의 원장은 빈 `seq` · 계약과 다른 순서의 사건을 **거부한다** — 화면이 보낸 관찰이 사라진다 (D34)
+- **0001 · 0003 까지만 적용된 상태로 두지 않는다.** 그 상태의 원장은 빈 `seq` · 계약과 다른 순서의 사건(0001 까지) · 복제된 탭의 plan(0003 까지)을 **거부한다** — 화면이 보낸 관찰이 사라진다 (D34)
 - **0000 만 적용된 상태로 두지 않는다.** 그 사이의 원장은 고칠 수 있고 지울 수 있다. 둘을 같은 실행에서 적용한다 (Drizzle 의 migrator 는 저널에 있는 것을 전부 적용한다)
 - 적용은 Drizzle 의 migrator 로 (`drizzle-orm/<드라이버>/migrator` 의 `migrate` 또는 `drizzle-kit migrate`). 적용한 것은 `drizzle.__drizzle_migrations` 에 남는다. Supabase 대시보드의 SQL 편집기에 붙여 넣지 않는다 — 저널과 어긋난다
-- 마이그레이션은 **직접 연결**로 돌린다 (거래 방식 풀러를 거치지 않는다). 어느 드라이버를 쓸지는 0.4c 가 정한다 — 이 패키지에는 테스트용 PGlite 만 있다
+- 마이그레이션은 **직접 연결**로 돌린다 (거래 방식 풀러를 거치지 않는다). 드라이버는 postgres.js 다 (0.4c). Supabase 에서는 세션 방식 풀러(5432)로 돌린다 — 직접 연결은 IPv6 뿐이다
 - **이미 적용한 마이그레이션 파일은 고치지 않는다.** 스키마를 바꾸려면 `src/schema.ts` 를 고치고 `pnpm generate` 로 새 파일을 만든다. 트리거 · 함수를 바꾸려면 새 `--custom` 파일에서 `create or replace` 한다
 - 확장 기능은 쓰지 않는다. UUID 는 쓰는 쪽이 만들어 넣는다 (기본값이 없다 — 테스트가 본다)
 
@@ -92,16 +105,12 @@ alter default privileges in schema public revoke all on tables from anon, authen
 
 ## 3. 환경 변수 — 이름만
 
-| 이름 | 무엇 | 어디에 |
-|---|---|---|
-| `DATABASE_URL` | API 가 쓰는 Postgres 접속 문자열 | 서버만 (Vercel 환경 변수). 화면 번들에 안 들어간다 |
-| `DATABASE_MIGRATE_URL` | 마이그레이션을 돌릴 때 쓰는 직접 연결 | 마이그레이션을 돌리는 곳만. 배포된 서버에는 필요 없다 |
-
-- 이름은 이 문서가 붙인 것이다. 0.4c 가 바꿔도 된다 — 아직 읽는 코드가 없다 (`drizzle.config.ts` 는 접속하지 않는다)
-- Supabase Auth 의 값(프로젝트 주소 · anon 키)은 로그인을 붙일 때 생긴다. F-3 은 로그인 없이 독자별 링크다 (D1) — 지금은 없다
-- `.env` 는 `.gitignore` 에 있다. 예시 파일을 만들지 않았다
+§0 의 표로 옮겼다. `.env` · `.env.*` 는 `.gitignore` 에 있다. 예시 파일은 만들지 않았다 — 이름은 §0 에, 값은 도윤의 손에만 있다.
+Supabase Auth 의 값(프로젝트 주소 · anon 키)은 로그인을 붙일 때 생긴다. F-3 은 로그인 없이 독자별 링크다 (D1) — 지금은 없다.
 
 ## 4. 올린 뒤 확인 — 그대로 돌린다
+
+`pnpm --filter @claro/web deploy:verify` 가 아래를 돌리고 OK / FAIL 로 낸다 (`apps/web/scripts/verify-database.ts`). 손으로 돌리려면:
 
 ```sql
 -- 테이블 8 · RLS 전부 켜짐 · 정책 0
@@ -119,19 +128,19 @@ begin; update article_record set article_version = article_version; rollback;   
 
 그리고 화면에 들어가는 키로 Data API 를 불러 본다 — `article_record` · `reading_event` 가 **읽히지도 않아야** 한다.
 
-## 5. 0.4c 가 정할 것 (0.4b 는 외부 DB 없이 끝났다 — 여기서 정하지 않았다)
+## 5. 0.4c 가 정한 것 · 남긴 것
 
-- **API 가 어느 역할로 접속하나.** 지금 설계로는 테이블 주인이다 (RLS 를 안 탄다). 주인이 아닌 전용 역할에 `insert` · `select` 만 주면 트리거를 끌 수 없어 한 겹이 더 생긴다 — 대신 마이그레이션과 API 의 접속이 갈린다
-- **드라이버와 풀러** — 서버리스(Vercel)에서 거래 방식 풀러를 쓰면 준비된 문장을 못 쓴다
-- ~~`identity.reader` 를 같은 데이터베이스에 두는 것~~ → **D34: 둔다. 단 이름표는 부호만** (§6)
-- Postgres 판 — 쓰는 기능은 plpgsql · json / jsonb · 부분 유일 색인 · 트리거뿐이라 판을 타지 않을 것으로 보지만 **PGlite 한 곳에서만 돌렸다**
+- **드라이버와 풀러** — postgres.js · `prepare: false` · 접속은 인스턴스마다 3개까지. Vercel 은 거래 방식 풀러로 붙는다
+- **API 가 어느 역할로 접속하나 — 정하지 않았다.** Supabase 가 주는 접속 문자열의 역할(`postgres` — 테이블 주인)로 붙는다. RLS 를 안 타고, 트리거를 끌 수 있는 역할이다.
+  주인이 아닌 전용 역할에 `insert` · `select` 만 주면 한 겹이 더 생긴다 — 로그의 _open
+- Postgres 판 — PGlite 0.5.8 과 Postgres 18.2 에서 같은 테스트가 통과했다. Supabase 의 판은 올릴 때 본다 (로그의 표)
 
 ## 6. 대응표 `identity.reader` — 이름표는 사람을 알아볼 수 없는 부호다 (D34)
 
 - 칸은 셋이다: `user_id` (뜻 없는 UUID) · `label` · `created_at`. **`label` 에는 부호만 넣는다** — "R-07". 이름 · 별명 · 전화번호 · 메일 · 소속을 넣지 않는다
 - **누가 R-07 인지는 저장소에도 데이터베이스에도 두지 않는다** (OBSERVATION §3 · D30). 도윤이 따로 갖고 있는다
 - 지키려는 것: 원장의 백업 · 덤프를 받은 사람이 독자가 누구인지 모른다. 같은 데이터베이스라 이 표도 같은 백업에 실린다 — 그래서 여기에 사람을 알아볼 값이 있으면 안 된다
-- 독자를 올리는 길은 `apps/web/scripts/reader.ts` 다. 부호 모양(글자 1 ~ 3 + `-` + 숫자)이 아니면 거부한다. 데이터베이스는 `label` 의 글을 막지 않는다 — SQL 로 직접 넣을 때는 사람이 지킨다
+- 독자를 올리는 길은 `apps/web/scripts/reader.ts` 다 (`deploy:reader`). 부호 모양(글자 1 ~ 3 + `-` + 숫자)이 아니면 거부한다. 데이터베이스는 `label` 의 글을 막지 않는다 — SQL 로 직접 넣을 때는 사람이 지킨다
 - 이 표에 없는 `user_id` 의 줄은 API 가 **기록하지 않는다** (읽기는 된다). 독자에게 주는 링크는 `…/?r=<user_id>` 다 — 주소에 들어가는 것은 뜻 없는 UUID 뿐이다
 - 로그인(Supabase Auth)을 붙일 때 다시 본다 — 그때는 계정 ↔ `user_id` 가 이 자리에 온다 (D1)
 
@@ -140,7 +149,7 @@ begin; update article_record set article_version = article_version; rollback;   
 | 어디 | 어떻게 |
 |---|---|
 | 이 컴퓨터 (PGlite) | `pnpm --filter @claro/web phone` 으로 켜고 폰에서 읽은 뒤, 다른 터미널에서 **`pnpm --filter @claro/web ledger`** — 열람마다 plan · 사건 · 완독 · 멈춘 장 · 계약에 맞는가. PGlite 는 한 프로세스만 열어서, 켜져 있는 서버에게 묻는다 (`/api/peek` · `CLARO_PEEK=1` 일 때만) |
-| Supabase | SQL 편집기에서 읽는다 (읽기만 — 고치기 · 지우기는 트리거가 막는다). `/api/peek` 는 배포에 없다 |
+| Supabase | **`pnpm --filter @claro/web deploy:ledger`** — 같은 모양으로 낸다 (데이터베이스를 바로 읽는다. 읽기만). 대시보드의 Table Editor · SQL 편집기로 봐도 된다. `/api/peek` 는 배포에 없다 |
 
 ```sql
 -- 열람마다 사건을 순서대로

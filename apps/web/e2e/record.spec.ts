@@ -11,11 +11,15 @@ const GOLDEN = { article_id: "6f4080a5-bada-412a-b870-bc5d16fe88b3", article_ver
 const visit = (lv: string, i: number) => [`ENTERED ${lv} ${i}`, `END ${lv} ${i}`];
 const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 
-async function open(page: Page, reader: string | null, path = "/") {
+/** 연다. 기록은 사람이 처음 손을 댄 뒤부터 간다 (D35) — 그래서 열자마자 키 하나를 누른다 (아무 일도 하지 않는 키). `hand: false` 면 손을 대지 않는다 */
+async function open(page: Page, reader: string | null, path = "/", hand = true) {
   await page.goto(reader ? `${path}?r=${reader}` : path);
   await page.locator(".r-deck").waitFor();
   await page.evaluate(() => document.fonts.ready);
+  if (hand) await page.keyboard.press("Shift");
 }
+const unsent = (page: Page) =>
+  page.evaluate(() => JSON.parse(sessionStorage.getItem(Object.keys(sessionStorage).find((k) => k.startsWith("claro:reading:"))!)!).unsent.length);
 /** 화면이 서버로 보낸 요청 — /api 로 간 것만 */
 function apiCalls(page: Page): string[] {
   const calls: string[] = [];
@@ -209,6 +213,98 @@ test("링크 없이 읽는다 → 서버를 부르지 않는다. 원장 0줄. �
     await ctx.close();
   }
   expect(await readings(request, STRANGER)).toEqual([]);
+});
+
+test("미리보기 로봇 — 연다 · 기다린다 · 떠난다 → API 요청 0 · 원장 0줄. 사람이 손을 대면 쥐고 있던 줄이 그때 간다 (D35)", async ({ browser, request }) => {
+  test.setTimeout(90_000);
+  // 스크립트까지 돌리는 로봇: 화면이 다 그려지고 첫 장의 끝도 나온다. 손은 대지 않는다
+  const bot = await browser.newContext({ viewport: { width: 1200, height: 630 } });
+  const page = await bot.newPage();
+  const calls = apiCalls(page);
+  await open(page, READERS.robot, "/", false);
+  await page.waitForTimeout(5000);
+  expect(await unsent(page), "화면은 줄을 만들어 쥐고 있다 (plan · 1장에 들어옴 · 1장의 끝)").toBe(3);
+  // 스크립트가 흉내 낸 입력 · 화면을 내리는 스크립트는 손이 아니다
+  await page.evaluate(() => {
+    for (const type of ["pointerdown", "touchstart", "wheel", "keydown", "click"]) window.dispatchEvent(new Event(type, { bubbles: true }));
+    document.querySelector(".r-card[data-active]")!.scrollTo(0, 400);
+    window.scrollTo(0, 400);
+    window.dispatchEvent(new Event("online"));
+  });
+  await page.waitForTimeout(2500);
+  await page.goto("about:blank"); // 떠난다 — pagehide
+  await page.waitForTimeout(1500);
+  await bot.close();
+  expect(calls, "로봇이 연 화면에서 나간 요청").toEqual([]);
+  expect(await readings(request, READERS.robot)).toEqual([]);
+
+  // 같은 링크를 사람이 연다 — 한동안 읽기만 하다가(요청 0) 처음 손을 댄다
+  const ctx = await browser.newContext(phone);
+  const human = await ctx.newPage();
+  const sent = apiCalls(human);
+  await open(human, READERS.robot, "/", false);
+  await human.waitForTimeout(3000);
+  expect(sent).toEqual([]);
+  const touched = Date.now();
+  await human.touchscreen.tap(187, 30);
+  const r = await settledLedger(request, READERS.robot, 2);
+  expect(lines(r)).toEqual(visit("basic", 0));
+  expect(Date.parse(r.events[0]!.occurred_at), "시각은 일어난 때다 — 손을 댄 때가 아니다").toBeLessThan(touched - 2000);
+  expect(r.check).toEqual({ conforms: true, issues: [], missing_seq: [] });
+  await ctx.close();
+});
+
+test("탭을 복제한다 → 두 탭이 같은 열람 번호 · 같은 seq 를 쓴다. plan 은 둘 다 남고(D35), seq 가 겹친 사건은 나중 것이 거부된다", async ({ browser, request }) => {
+  test.setTimeout(120_000);
+  const ctx = await browser.newContext(phone);
+  const a = await ctx.newPage();
+  const cdpA = await ctx.newCDPSession(a);
+  await open(a, READERS.twin);
+  await readToEnd(a, cdpA, 0);
+  await ask(a, 0);
+  await readToEnd(a, cdpA, 1);
+  await settledLedger(request, READERS.twin, 4);
+  // 복제 — 브라우저는 새 탭에 이 탭의 sessionStorage 를 베껴 준다
+  const copied = await a.evaluate(() => JSON.stringify(sessionStorage));
+  const b = await ctx.newPage();
+  await b.addInitScript((dump) => {
+    if (!sessionStorage.length) for (const [k, v] of Object.entries(JSON.parse(dump) as Record<string, string>)) sessionStorage.setItem(k, v);
+  }, copied);
+  const cdpB = await ctx.newCDPSession(b);
+  await open(b, READERS.twin);
+  await settled(b, 1); // 같은 자리가 되살아났다
+
+  // 탭 A 가 먼저 3장으로 (seq 4 · 5) — 그다음 탭 B 도 3장으로 (같은 seq 4 · 5 — 거부된다)
+  await a.bringToFront();
+  await ask(a, 1);
+  await readToEnd(a, cdpA, 2);
+  await settledLedger(request, READERS.twin, 6);
+  await b.bringToFront();
+  await ask(b, 1);
+  await readToEnd(b, cdpB, 2);
+  await expect.poll(() => unsent(b)).toBe(0);
+  // 탭 B 가 숙련으로 (seq 6 · 7 · 8 — 남는다. 숙련 plan 하나)
+  await b.getByRole("button", { name: "숙련", exact: true }).tap();
+  await b.locator('.r-deck[data-level="advanced"]').waitFor();
+  await readToEnd(b, cdpB, 0);
+  await settledLedger(request, READERS.twin, 9);
+  // 탭 A 도 숙련으로 (다른 plan_id 의 숙련 plan. seq 6 · 7 · 8 은 겹쳐 거부) → 2장으로 (seq 9 — **남는다.** 그 줄이 가리키는 plan 이 거부되지 않았다)
+  await a.bringToFront();
+  await a.getByRole("button", { name: "숙련", exact: true }).tap();
+  await a.locator('.r-deck[data-level="advanced"]').waitFor();
+  await readToEnd(a, cdpA, 0);
+  await ask(a, 0);
+  const r = await settledLedger(request, READERS.twin, 10);
+  await expect.poll(() => unsent(a)).toBe(0);
+
+  expect(r.plans.map((p) => p.level)).toEqual(["basic", "advanced", "advanced"]);
+  expect(r.events.map((e) => e.seq)).toEqual(range(10));
+  const advOfA = r.plans[2]!.plan_id;
+  expect(r.events[9]).toMatchObject({ type: "SLIDE_ENTERED", slide_index: 1, plan_id: advOfA }); // 탭 A 의 줄 — plan 이 남아 있어 이 줄도 남았다
+  expect(r.check.conforms).toBe(false);
+  expect(r.check.issues.map((i) => i.code)).toContain("PLAN_DUPLICATE");
+  // 잃은 것: 탭 B 의 seq 4 · 5 와 탭 A 의 seq 6 · 7 · 8 — 다섯 줄. 서버 로그에 UNIQUE reading_event_reading_seq 로만 남는다
+  await ctx.close();
 });
 
 test("/test 경로는 API 를 부르지 않는다 — 대응표에 있는 독자의 링크로 열어도", async ({ browser, request }) => {

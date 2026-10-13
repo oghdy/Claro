@@ -1,0 +1,1 @@
+ALTER TABLE "reading_plan_log" DROP CONSTRAINT "reading_plan_log_reading_level";

@@ -4,7 +4,10 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { stripAnnotations, type ArticleRecord } from "@claro/contract";
 import { PGlite } from "@electric-sql/pglite";
-import { ledgerRejection } from "../src";
+import { drizzle as drizzlePg } from "drizzle-orm/postgres-js";
+import { migrate as migratePg } from "drizzle-orm/postgres-js/migrator";
+import postgres from "postgres";
+import { ledgerRejection, type Db } from "../src";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 
@@ -13,10 +16,37 @@ const readJson = (rel: string) => JSON.parse(readFileSync(path(rel), "utf-8"));
 
 export const MIGRATIONS = fileURLToPath(new URL("../migrations", import.meta.url));
 
-export async function freshDb() {
-  const client = new PGlite();
-  const db = drizzle(client);
-  await migrate(db, { migrationsFolder: MIGRATIONS });
+/** 테스트가 쓰는 접속 — 거래를 여러 호출에 걸쳐 쓴다 (begin … rollback). 그래서 접속은 하나다 */
+export interface TestClient {
+  query<T = Record<string, unknown>>(q: string, params?: unknown[]): Promise<{ rows: T[] }>;
+  exec(q: string): Promise<unknown>;
+}
+
+/**
+ * 테스트용 데이터베이스. 기본은 프로세스 안의 Postgres (PGlite) — 외부 DB · 접속 값이 없다.
+ * `CLARO_TEST_PG` (예: postgres://localhost:5432 — 데이터베이스 이름 없이)가 있으면 **실제 Postgres** 에서 돈다 (B-0.4c):
+ * 테스트 파일마다 `claro_test_<n>` 데이터베이스를 쓴다 — 없으면 만들고, 안을 비우고, 마이그레이션을 전부 적용한다. 다른 데이터베이스는 건드리지 않는다
+ */
+export async function freshDb(): Promise<{ client: TestClient; db: Db }> {
+  const base = process.env.CLARO_TEST_PG;
+  if (!base) {
+    const client = new PGlite();
+    const db = drizzle(client);
+    await migrate(db, { migrationsFolder: MIGRATIONS });
+    return { client, db };
+  }
+  const name = `claro_test_${process.env.VITEST_POOL_ID ?? "0"}`;
+  const admin = postgres(`${base}/postgres`, { max: 1, onnotice: () => {} });
+  if (!(await admin`select 1 from pg_database where datname = ${name}`).length) await admin.unsafe(`create database ${name}`);
+  await admin.end();
+  const sql = postgres(`${base}/${name}`, { max: 1, onnotice: () => {} });
+  await sql.unsafe("drop schema if exists public cascade; drop schema if exists identity cascade; drop schema if exists drizzle cascade; create schema public");
+  const db = drizzlePg(sql);
+  await migratePg(db, { migrationsFolder: MIGRATIONS });
+  const client: TestClient = {
+    query: async (q, params = []) => ({ rows: (await sql.unsafe(q, params as never[])) as never }),
+    exec: (q) => sql.unsafe(q),
+  };
   return { client, db };
 }
 
@@ -81,7 +111,7 @@ export const ORDER: [keyof Ledger, string][] = [
 ];
 
 /** 줄이 가진 칸을 그대로 SQL 로 — ORM 을 거치지 않는다. 계약에 없는 칸을 데이터베이스가 어떻게 받는지 보려면 이렇게 넣어야 한다 */
-export async function insertRaw(client: PGlite, table: string, row: Row): Promise<void> {
+export async function insertRaw(client: TestClient, table: string, row: Row): Promise<void> {
   const keys = Object.keys(row);
   const values = keys.map((k) => (row[k] !== null && typeof row[k] === "object" ? JSON.stringify(row[k]) : row[k]));
   await client.query(
@@ -90,7 +120,7 @@ export async function insertRaw(client: PGlite, table: string, row: Row): Promis
   );
 }
 
-export async function insertLedger(client: PGlite, L: Ledger): Promise<void> {
+export async function insertLedger(client: TestClient, L: Ledger): Promise<void> {
   for (const [key, table] of ORDER) for (const row of L[key]) await insertRaw(client, table, row);
 }
 
@@ -100,7 +130,7 @@ export function reason(e: unknown): string {
 }
 
 /** 되돌리는 거래 안에서 해 본다. 거부되면 까닭을, 받으면 null 을 돌려준다 */
-export async function attempt(client: PGlite, fn: () => Promise<void>): Promise<string | null> {
+export async function attempt(client: TestClient, fn: () => Promise<void>): Promise<string | null> {
   await client.exec("begin");
   try {
     await fn();

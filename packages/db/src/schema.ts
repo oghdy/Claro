@@ -66,7 +66,7 @@ export const readingPlanLog = pgTable(
       columns: [t.article_id, t.article_version],
       foreignColumns: [articleRecord.article_id, articleRecord.article_version],
     }),
-    unique("reading_plan_log_reading_level").on(t.reading_id, t.level), // 불변식 3
+    // (열람 · 레벨)마다 하나(불변식 3)는 넣을 때 막지 않는다 — plan 이 거부되면 그 레벨의 사건이 전부 따라 거부된다 (D35). 읽을 때 본다 (src/check.ts)
     check("reading_plan_log_level", oneOf("level", LEVEL_IDS)),
     check("reading_plan_log_level_chosen_by", oneOf("level_chosen_by", LEVEL_CHOSEN_BY)),
   ],

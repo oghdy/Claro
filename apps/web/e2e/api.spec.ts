@@ -4,6 +4,7 @@
 //   기록하지 않는다: 대응표에 없는 user_id · user_id 없는 줄
 import { randomUUID } from "node:crypto";
 import { expect, test, type APIRequestContext } from "@playwright/test";
+import { golden } from "./golden";
 import { lines, readings } from "./ledger";
 import { READERS, STRANGER } from "./readers";
 
@@ -53,9 +54,23 @@ test("plan — block_decisions 는 서버가 계산한다. 화면이 보낸 값�
   expect((await postPlan(request, { ...R.plan("basic", "READER"), level_chosen_by: "SYSTEM" })).code).toBe("LEDGER_FIELD");
   expect((await postPlan(request, { ...R.plan("basic", "READER"), created_at: "어제" })).code).toBe("LEDGER_FIELD");
   expect((await postPlan(request, { ...R.plan("basic", "READER"), reader_name: "x" })).code).toBe("LEDGER_FIELD");
-  expect((await postPlan(request, R.plan("advanced", "READER"))).code).toBe("PLAN_DUPLICATE"); // 같은 열람 · 같은 레벨에 다른 plan
+  // 같은 열람 · 같은 레벨에 다른 plan (탭 복제) — 받는다. plan 이 거부되면 그 plan 의 사건이 전부 따라 거부된다 (D35). 읽을 때 PLAN_DUPLICATE
+  expect(await postPlan(request, R.plan("advanced", "READER"))).toEqual({ status: "stored" });
+  expect((await mine(request, R.reading_id))!.check.issues.map((i) => i.code)).toEqual(["PLAN_DUPLICATE"]);
+  // 뜻이 틀린 plan (불변식 7 — 첫 plan 이 아닌데 DEFAULT) 도 받는다
+  expect(await postPlan(request, R.plan("basic", "DEFAULT"))).toEqual({ status: "stored" });
+  expect((await mine(request, R.reading_id))!.check.issues.map((i) => i.code)).toEqual(["PLAN_DUPLICATE", "PLAN_DEFAULT"]);
   expect((await request.post("/api/plans", { data: Buffer.from("{"), headers: { "content-type": "application/json" } })).status()).toBe(400);
-  expect((await mine(request, R.reading_id))!.plans).toHaveLength(1);
+  expect((await mine(request, R.reading_id))!.plans).toHaveLength(3);
+});
+
+test("화면이 보여주는 기사(빌드할 때 실은 것)와 데이터베이스의 판이 같은 글이다", async ({ request }) => {
+  const strip = (o: any): any => (Array.isArray(o) ? o.map(strip) : o && typeof o === "object" ? Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith("_")).map(([k, v]) => [k, strip(v)])) : o);
+  const inDb = (await (await request.get(`/api/articles/${GOLDEN.article_id}/1`)).json()).package;
+  expect(JSON.stringify(inDb)).toBe(JSON.stringify(strip(golden())));
+  // 화면의 판의 키 — 정적 페이지가 실은 것. 데이터베이스의 판과 같은 키다
+  const html = await (await request.get("/")).text();
+  expect(html).toContain(GOLDEN.article_id);
 });
 
 test("사건 — seq 를 건너뛴다 · 뒤바뀌어 온다 · 같은 사건이 두 번 온다 → 받는다", async ({ request }) => {

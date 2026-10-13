@@ -14,6 +14,9 @@ export const READERS = {
   skip: id(9), // 화면이 seq 를 건너뛴다
   twice: id(10), // 화면이 같은 사건을 두 번 보낸다
   still: id(11), // 움직임 줄이기
+  robot: id(12), // 미리보기 로봇 — 열고, 기다리고, 떠난다
+  twin: id(13), // 탭을 복제한다
+  dbdown: id(14), // 데이터베이스가 죽은 채 첫 화면을 연다
 } as const;
 
 /** 대응표에 없는 user_id */

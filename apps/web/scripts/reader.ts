@@ -2,7 +2,7 @@
 //   - user_id 는 여기서 만든 뜻 없는 UUID 다. 사람 · 기기에서 계산하지 않는다 (OBSERVATION §3)
 //   - 이름표는 **사람을 알아볼 수 없는 부호**만 받는다 ("R-07"). 이름 · 연락처를 넣지 않는다 — 누가 R-07 인지는 저장소 · 데이터베이스 밖에 (D34)
 //   - 같은 이름표가 이미 있으면 새로 만들지 않고 그 링크를 다시 낸다
-// 서버가 꺼져 있을 때 돌린다 (PGlite 는 한 프로세스만 연다)
+// PGlite 면 서버가 꺼져 있을 때 돌린다 (한 프로세스만 연다). 배포된 데이터베이스에는 `deploy:reader` 로 (.env.deploy 를 읽는다)
 import { randomUUID } from "node:crypto";
 import { networkInterfaces } from "node:os";
 import { reader } from "@claro/db";
@@ -15,11 +15,13 @@ if (!labels.length || labels.some((l) => !/^[A-Z]{1,3}-\d{1,4}$/.test(l))) {
   console.error('이름표는 부호만 받는다 — 글자 1~3 + "-" + 숫자 (예: R-07). 사람을 알아볼 값을 넣지 않는다');
   process.exit(1);
 }
+// 링크의 앞부분 — 배포된 주소(CLARO_SITE)가 있으면 그것, 없으면 이 컴퓨터의 주소 (같은 공유기의 폰에서 연다)
 const lan = Object.values(networkInterfaces()).flat().find((n) => n && n.family === "IPv4" && !n.internal)?.address ?? "localhost";
+const site = (process.env.CLARO_SITE ?? `http://${lan}:${port}`).replace(/\/$/, "");
 const d = await db();
 for (const label of labels) {
   let [row] = await d.select().from(reader).where(eq(reader.label, label));
   if (!row) [row] = await d.insert(reader).values({ user_id: randomUUID(), label }).returning();
-  console.log(`${label}  http://${lan}:${port}/?r=${row!.user_id}`);
+  console.log(`${label}  ${site}/?r=${row!.user_id}`);
 }
 process.exit(0);

@@ -8,6 +8,8 @@ import type { ReaderMoment } from "./Reader";
 //   - 순간이 오면 줄을 만들어 쥐고(저장소에도) 바로 돌아간다. 보내는 것은 그 뒤에, 따로 한다
 //   - 서버가 느리거나 죽었으면 쥐고 있다가 다시 보낸다. 같은 줄을 두 번 보내도 된다 — 서버는 같은 event_id 를 성공으로 받는다
 //   - seq · occurred_at · event_id · plan_id · reading_id · session_id 는 여기서 만든다. 일어난 순서를 아는 것은 기기다 (D34)
+// **사람이 처음 손을 댄 뒤부터 보낸다 (D35).** 터치 · 휠 · 키 · 클릭 — 그 전의 줄은 쥐고 있다가 그때 같이 보낸다. 손을 대지 않고 떠나면 0줄이다.
+//   메신저의 미리보기 로봇이 링크를 열면 화면이 그려지고 "1장에 들어왔다"가 생긴다 — 로봇은 손을 대지 않는다. 그 줄이 원장에 가지 않게 한다
 // 링크에 독자 번호가 없으면 기록기가 없다 — 서버를 부르지 않는다. 시험 경로(/test)는 이 파일을 쓰지 않는다.
 // 계약에 없는 것은 적지 않는다: 방향 · 손짓 · 머문 시간 · 어떻게 왔는지.
 
@@ -42,7 +44,7 @@ export function createRecorder(pkg: ArticlePackage, article: ArticleKey): Record
   if (!user_id) return null;
   const session_id = sessionId(uuid);
   // 같은 탭에서 되살린 열람이면 이어 간다. 아니면 새 열람이다
-  const state: ReadingState = loadReading(article) ?? { reading_id: uuid(), seq: 0, plans: {}, at: null, ended: {}, unsent: [], off: false };
+  const state: ReadingState = loadReading(article) ?? { reading_id: uuid(), seq: 0, plans: {}, at: null, ended: {}, unsent: [], off: false, touched: false };
   /** 이 화면을 그리기 전에 이미 적은 "끝" — 되살린 뒤 같은 장의 끝을 다시 적지 않는다 */
   const endedBefore = new Set(Object.entries(state.ended).flatMap(([lv, is]) => is!.map((i) => `${lv}/${i}`)));
   const keep = () => saveReading(article, state);
@@ -113,7 +115,7 @@ export function createRecorder(pkg: ArticlePackage, article: ArticleKey): Record
 
   /** 쥐고 있는 줄을 앞에서부터 보낸다. plan 이 그것을 가리키는 사건보다 먼저 간다 */
   async function flush() {
-    if (sending || state.off || !state.unsent.length) return;
+    if (sending || state.off || !state.touched || !state.unsent.length) return;
     sending = true;
     clearTimeout(timer);
     try {
@@ -143,6 +145,19 @@ export function createRecorder(pkg: ArticlePackage, article: ArticleKey): Record
       sending = false;
     }
   }
+
+  // 사람이 손을 댔다 — 그때부터 보낸다. 브라우저가 만든 입력만 친다 (스크립트가 흉내 낸 것은 isTrusted 가 아니다).
+  // scroll 은 듣지 않는다: 화면이 스스로 올려놓는 것(장을 넘길 때)도 scroll 이다. 사람이 글을 내리는 길은 터치 · 휠 · 키 · 끌기라 아래 넷에 다 걸린다
+  const HANDS = ["pointerdown", "touchstart", "wheel", "keydown"] as const;
+  function hand(e: Event) {
+    if (!e.isTrusted) return;
+    for (const type of HANDS) window.removeEventListener(type, hand, true);
+    if (state.touched) return;
+    state.touched = true;
+    keep();
+    setTimeout(flush, 0);
+  }
+  if (!state.touched) for (const type of HANDS) window.addEventListener(type, hand, { capture: true, passive: true });
 
   // 다시 보낼 때 — 연결이 돌아왔다 · 화면으로 돌아왔다 · 화면을 떠난다(떠나면서 한 번 더. keepalive 라 떠난 뒤에도 간다)
   window.addEventListener("online", flush);

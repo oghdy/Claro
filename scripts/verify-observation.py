@@ -545,7 +545,8 @@ def check_ledger(L, types, enums):
                       ('ProbeExposure', 'exposures'), ('ProbeResponse', 'responses'), ('KnowledgeEvidence', 'evidence')):
         for row in L[key]:
             keys_ok(kind, row, types, errs, 'LEDGER_FIELD')
-    # plan (불변식 3 ~ 7)
+    # plan (불변식 3 ~ 7) — 3 · 5 · 7 (PLAN_DUPLICATE · PLAN_READING · PLAN_STATIC · PLAN_DEFAULT)도 **읽을 때 보는 검사다 (D35).**
+    # 원장은 그것을 어긴 plan 도 받는다: plan 이 거부되면 그 plan 을 가리키는 사건이 전부 따라 거부되기 때문이다. 넣을 때 막는 것은 모양 · 참조(있는 판 · 그 판의 레벨) · 유일
     by_reading = defaultdict(list)
     for p in L['plans']:
         by_reading[p['reading_id']].append(p)
@@ -566,8 +567,8 @@ def check_ledger(L, types, enums):
             errs.append(('PLAN_DUPLICATE', '한 열람에 같은 레벨의 plan 이 둘이다 (불변식 3)'))
         if len({(p['user_id'], p['session_id'], p['article_id'], p['article_version']) for p in ps}) != 1:
             errs.append(('PLAN_READING', '한 열람의 plan 들이 다른 독자 · 세션 · 판을 가리킨다 (불변식 3)'))
-        first = min(ps, key=lambda p: p['created_at'])
-        if any(p['level_chosen_by'] == 'DEFAULT' and p is not first for p in ps):
+        first = min(p['created_at'] for p in ps)               # 같은 순간의 plan 이 둘이면 어느 쪽도 첫 plan 으로 친다 (check.ts 와 같은 말)
+        if any(p['level_chosen_by'] == 'DEFAULT' and p['created_at'] > first for p in ps):
             errs.append(('PLAN_DEFAULT', '첫 plan 이 아닌데 DEFAULT 다 (불변식 7)'))
     # 읽기 사건 (불변식 8 ~ 11 · 22) — **읽을 때 보는 검사다 (D34).** 원장은 이것을 어긴 줄도 받는다: 넣을 때 막는 것은 모양 · 참조 · 덧붙이기만이다.
     # 여기서 나오는 EVENT_SEQ · EVENT_SLIDE · EVENT_CURRENT_PLAN · EVENT_SWITCH · EVENT_CLOSED · EVENT_END 는 "이 열람이 계약에 맞지 않는다"는 뜻이지

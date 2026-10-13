@@ -2,10 +2,8 @@
 // 픽스처는 한 개체를 두 파일에 둔다 (DATA_MODEL §11): record 파일(판의 키 · 저작 데이터) + 패키지 파일. 이어 붙이고 `_` 주석을 뺀다 — 발행물에는 없다
 import { stripAnnotations, type ArticleRecord } from "@claro/contract";
 import { appendArticle, type Db } from "@claro/db";
-import { loadRaw } from "../lib/load";
+import { GOLDEN_RECORD, loadRaw } from "../lib/load";
 import { readArticle } from "./ledger";
-
-export const GOLDEN_RECORD = "fomc-2026-09.record.json";
 
 /** 골든 판의 키 */
 export function goldenKey(): { article_id: string; article_version: number } {

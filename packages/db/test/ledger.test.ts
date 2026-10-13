@@ -144,13 +144,13 @@ const VERDICT: Record<string, Verdict> = {
   "plan 에 독자 이름 칸": no("LEDGER_FIELD"),
   "읽기 사건에 방향 칸": no("LEDGER_FIELD"),
   "패키지에 없는 레벨 (intermediate)": no("PLAN_LEVEL"),
-  "한 열람에 같은 레벨 plan 둘": no("PLAN_DUPLICATE"),
-  "정적 레벨인데 selected_blocks 를 채움": no("PLAN_STATIC"),
-  "정적 레벨인데 reason 이 다름": no("PLAN_STATIC"),
+  "한 열람에 같은 레벨 plan 둘": read("PLAN_DUPLICATE"), // D35 — plan 의 뜻(불변식 3 · 5 · 7)도 읽을 때 본다
+  "정적 레벨인데 selected_blocks 를 채움": read("PLAN_STATIC"),
+  "정적 레벨인데 reason 이 다름": read("PLAN_STATIC"),
   "숙련 plan 이 C-0002 를 FULL 로 적음 (패키지는 SKIP)": read("PLAN_DECISIONS"), // 불변식 6 — 넣을 때는 안 본다. API 는 서버가 계산해서 쓴다
   "SKIP 인 개념을 목록에서 뺌": read("PLAN_DECISIONS"), // 불변식 6 — 위와 같다
   "decision 값이 셋 밖 (PARTIAL)": no("PLAN_DECISIONS"),
-  "바꿔서 연 레벨이 DEFAULT": no("PLAN_DEFAULT"),
+  "바꿔서 연 레벨이 DEFAULT": read("PLAN_DEFAULT"),
   "한 열람의 plan 이 다른 판을 가리킴": no("PLAN_ARTICLE"), // 그 판(v2)이 없다. 있는 판이면 PLAN_READING — 아래에 따로
   "seq 가 건너뜀": read("EVENT_SEQ"), // D34 — 빈 seq 는 "사건이 하나 사라졌다"는 사실로 남는다
   "레벨에 없는 장 (입문 10장)": read("EVENT_END", "EVENT_SLIDE"),
@@ -186,7 +186,10 @@ const VERDICT: Record<string, Verdict> = {
   "입문 4장에서 숙련으로 바꾸고 끝 — 원장은 맞다": read(), // 맞는 원장
 };
 /** 읽을 때 보는 검사가 내는 CODE — 파이썬 check_ledger 와 같은 이름 */
-const READ_CODES = ["EVENT_SEQ", "EVENT_SLIDE", "EVENT_CURRENT_PLAN", "EVENT_SWITCH", "EVENT_CLOSED", "EVENT_END", "PLAN_DECISIONS"];
+const READ_CODES = [
+  "EVENT_SEQ", "EVENT_SLIDE", "EVENT_CURRENT_PLAN", "EVENT_SWITCH", "EVENT_CLOSED", "EVENT_END",
+  "PLAN_DECISIONS", "PLAN_DUPLICATE", "PLAN_READING", "PLAN_STATIC", "PLAN_DEFAULT",
+];
 
 describe("파이썬 selftest 의 망가뜨린 원장 44개 — 넣을 때 막는 것 / 읽을 때 잡는 것 / 아무도 못 잡는 것 (D34)", () => {
   let got: Record<string, Verdict>;
@@ -207,13 +210,13 @@ describe("파이썬 selftest 의 망가뜨린 원장 44개 — 넣을 때 막는
     expect(got).toEqual(VERDICT);
   });
 
-  it("44 = 넣을 때 막는 것 26 + 읽을 때 잡는 것 11 + 아무도 못 잡는 것 4 + 맞는 원장 3", () => {
+  it("44 = 넣을 때 막는 것 22 + 읽을 때 잡는 것 15 + 아무도 못 잡는 것 4 + 맞는 원장 3", () => {
     const wrong = T.cases.filter((c) => c.python_codes.length > 0);
     const caughtAtRead = accepted().filter((c) => c.read.length > 0);
     const nobody = accepted().filter((c) => c.python_codes.length > 0 && c.read.length === 0);
     expect([T.cases.length, wrong.length]).toEqual([44, 41]);
-    expect(wrong.filter((c) => got[c.name]!.insert !== null)).toHaveLength(26);
-    expect(caughtAtRead).toHaveLength(11);
+    expect(wrong.filter((c) => got[c.name]!.insert !== null)).toHaveLength(22);
+    expect(caughtAtRead).toHaveLength(15);
     // 아무도 못 잡는 넷 — 불변식 16 (빠짐없이) · 18 (개념이 leaf · MERGED 아님 · 있는 버전). 전부 증거 줄의 것이다. 증거를 쓰는 길은 아직 없다
     expect(nobody.map((c) => c.python_codes.join("+")).sort()).toEqual([
       "EVIDENCE_CONCEPT+EVIDENCE_TARGETS", "EVIDENCE_CONCEPT+EVIDENCE_TARGETS", "EVIDENCE_TARGETS", "EVIDENCE_VERSION",
@@ -225,8 +228,8 @@ describe("파이썬 selftest 의 망가뜨린 원장 44개 — 넣을 때 막는
     for (const c of accepted()) expect(c.read, c.name).toEqual(c.python_codes.filter((code) => READ_CODES.includes(code)).sort());
   });
 
-  it("넣을 때 막는 것은 모양 · 참조 · 덧붙이기만이다 — 읽기 사건의 뜻(불변식 8 의 순서 · 9 · 10 · 11 · 22)으로 거부한 사본이 없다", () => {
-    const meaning = /^EVENT_(SEQ|SLIDE|CURRENT_PLAN|SWITCH|CLOSED|END)$/;
+  it("넣을 때 막는 것은 모양 · 참조 · 덧붙이기만이다 — 읽기 사건의 뜻(불변식 8 의 순서 · 9 · 10 · 11 · 22) · plan 의 뜻(3 · 5 · 7)으로 거부한 사본이 없다", () => {
+    const meaning = /^(EVENT_(SEQ|SLIDE|CURRENT_PLAN|SWITCH|CLOSED|END)|PLAN_(DUPLICATE|READING|STATIC|DEFAULT))$/;
     expect(Object.values(got).filter((v) => v.insert !== null && meaning.test(v.insert))).toEqual([]);
   });
 
@@ -325,12 +328,32 @@ describe("망가뜨린 것 — 전부 거부", () => {
     const fk = await t.client.query<{ conname: string }>("select conname from pg_constraint where contype = 'f' and conrelid = 'reading_plan_log'::regclass");
     expect(fk.rows.map((r) => r.conname)).toEqual(["reading_plan_log_article_fk"]);
   });
-  it("한 열람의 plan 이 다른 (있는) 판을 가리킴 → PLAN_READING", async () => {
+  it("한 열람의 plan 이 다른 (있는) 판을 가리킴 → 받는다. 읽을 때 PLAN_READING (D35)", async () => {
     await t.client.exec("begin");
     try {
       await appendArticle(t.db, { ...goldenRecord(), article_version: 2 });
       await insertRaw(t.client, "reading_plan_log", T.ledger.plans[0]!);
-      await expect(insertRaw(t.client, "reading_plan_log", { ...T.ledger.plans[1]!, article_version: 2 })).rejects.toThrow(/PLAN_READING/);
+      await insertRaw(t.client, "reading_plan_log", { ...T.ledger.plans[1]!, article_version: 2 });
+      const check = await checkReading(t.db, T.ledger.plans[0]!.reading_id as string);
+      expect(check!.issues.map((i) => i.code)).toEqual(["PLAN_READING"]);
+    } finally {
+      await t.client.exec("rollback");
+    }
+  });
+  it("plan 이 뜻으로 거부되지 않으니 그 plan 의 사건이 따라 거부되지 않는다 — 같은 열람 · 같은 레벨에 plan 둘 (탭 복제)", async () => {
+    // 복제된 탭이 같은 열람에서 숙련을 따로 열었다: 숙련 plan 이 둘이고, 사건은 저마다 제 plan 을 가리킨다
+    const L = edit((L) => {
+      const twin = { ...L.plans[1]!, plan_id: nowhere, created_at: "2026-10-20T01:04:30Z" };
+      L.plans.push(twin);
+      L.events.push({ ...L.events[9]!, event_id: "0d0e0000-0000-4000-8000-000000000009", plan_id: twin.plan_id, seq: 22 });
+    });
+    await t.client.exec("begin");
+    try {
+      await insertLedger(t.client, L);
+      const n = (await t.client.query<{ n: number }>("select count(*)::int as n from reading_event")).rows[0]!.n;
+      const check = await checkReading(t.db, L.plans[0]!.reading_id as string);
+      expect(n).toBe(23);
+      expect(check!.issues.map((i) => i.code)).toContain("PLAN_DUPLICATE");
     } finally {
       await t.client.exec("rollback");
     }
