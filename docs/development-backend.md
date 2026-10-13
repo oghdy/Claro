@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.4c — 1 ~ 3 끝 (2026-10-13 · D35 반영 · 실제 Postgres 18 에서 db 85 · 화면 42 통과 · 배포 준비), 4 (배포)는 도윤과 같이 진행 중 — `logs/backend/phase-0-step-0-4c.md`**
+**Phase 0 / Step 0.4c — 끝, 게이트 대기 (2026-10-13 · 배포됨 https://claro-lime-one.vercel.app · Supabase 마이그레이션 7 · API 전용 역할 · 도윤이 아이폰에서 R-00 으로 끝까지 읽음: 사건 29줄 · 완독 · 계약에 맞는다 · 카카오톡 미리보기 뒤 원장 0줄 — `logs/backend/phase-0-step-0-4c.md`). 다음: 0.4c 게이트 → 물음(probe) 화면은 D31 · D18 을 정한 뒤**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -19,7 +19,7 @@
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ☑ 프론트 2026-09-29 · 백엔드 2026-10-12 |
 | 0.4a | 스키마 — 독자 기록 원장 + 기사 한 판 (F-3 최소). `packages/db` | Drizzle 스키마 · 검사 | 새 세션 | ☑ 2026-10-12 게이트 대기 (`logs/backend/phase-0-step-0-4a.md`) |
 | 0.4b | D34 반영 + API (Next.js) + 화면이 읽기 사건을 보낸다. 외부 DB 없이 끝까지 | 기록이 남는 화면 | 새 세션 | ☑ 2026-10-13 게이트 대기 (`logs/backend/phase-0-step-0-4b.md`) |
-| 0.4c | 배포 — Supabase · Vercel. 도윤의 계정 필요 | F-3 에 쓸 서버 | — | ◐ 1 ~ 3 ☑ 2026-10-13 · 4 (배포) 진행 중 (`logs/backend/phase-0-step-0-4c.md`) |
+| 0.4c | 배포 — Supabase · Vercel. 도윤의 계정 필요 | F-3 에 쓸 서버 | — | ☑ 2026-10-13 게이트 대기 (`logs/backend/phase-0-step-0-4c.md`) |
 
 > **순서**: 0.2a → 0.2b → 0.2c. 0.2b 의 Concept 참조가 0.2a 에 기댄다.
 > 0.2c 는 F-3(실제 독자 테스트) 전에 끝나야 한다 — 기록하지 않은 관찰은 복구 불가 (FINDINGS §9.4).

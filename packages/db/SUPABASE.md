@@ -1,6 +1,6 @@
 # packages/db — Supabase 에 올릴 때
 
-**데이터베이스는 올렸다** (2026-10-13 — 마이그레이션 7 · 골든 한 판 · API 전용 역할. §4 통과). Vercel 은 아직이다. 올릴 때 이 문서를 본다 — 맨 앞의 §0 부터. 올린 결과는 `logs/backend/phase-0-step-0-4c.md` 에 적는다.
+**올렸다** (2026-10-13) — Supabase: 마이그레이션 7 · 골든 한 판 · API 전용 역할 · 시험 독자 R-00 (§4 통과). Vercel: https://claro-lime-one.vercel.app 올릴 때 이 문서를 본다 — 맨 앞의 §0 부터. 올린 결과는 `logs/backend/phase-0-step-0-4c.md` 에 적는다.
 PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. Supabase 에서 확인한 것은 `logs/backend/phase-0-step-0-4c.md` 의 표에 있다.
 
 비밀 값(접속 문자열 · 키)은 저장소에 넣지 않는다. 이 문서에는 **이름만** 있다.
