@@ -4,5 +4,10 @@
 // DATABASE_URL 을 반드시 정한다 (PGlite 면 빈 값) — 서버가 .env 파일의 접속 값을 집어 쓰는 일이 없게
 export function testDatabase(use: string): Record<string, string> {
   const pg = process.env.CLARO_TEST_PG;
-  return pg ? { DATABASE_URL: `${pg}/claro_test_${use}`, CLARO_PGLITE_DIR: "" } : { DATABASE_URL: "", CLARO_PGLITE_DIR: `.data/test-${use}` };
+  if (!pg) return { DATABASE_URL: "", CLARO_PGLITE_DIR: `.data/test-${use}` };
+  // 서버는 배포에서처럼 API 전용 역할(claro_api — 넣기 · 읽기만)로 붙는다. 데이터베이스를 만들고 채우는 것(e2e/setup-db.ts)만 주인으로 한다
+  const api = new URL(`${pg}/claro_test_${use}`);
+  api.username = "claro_api";
+  api.password = "claro_test";
+  return { DATABASE_URL: api.href, CLARO_TEST_OWNER_URL: `${pg}/claro_test_${use}`, CLARO_PGLITE_DIR: "" };
 }

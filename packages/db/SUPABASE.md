@@ -1,7 +1,7 @@
 # packages/db — Supabase 에 올릴 때
 
-**아직 올리지 않았다** (2026-10-13 — Supabase 프로젝트는 비어 있다). 올릴 때 이 문서를 본다 — 맨 앞의 §0 부터. 올린 결과는 `logs/backend/phase-0-step-0-4c.md` 에 적는다.
-PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. **실제 Supabase 에서 확인한 것은 아직 하나도 없다** — 올린 뒤 §4 를 그대로 돌린다.
+**데이터베이스는 올렸다** (2026-10-13 — 마이그레이션 7 · 골든 한 판 · API 전용 역할. §4 통과). Vercel 은 아직이다. 올릴 때 이 문서를 본다 — 맨 앞의 §0 부터. 올린 결과는 `logs/backend/phase-0-step-0-4c.md` 에 적는다.
+PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. Supabase 에서 확인한 것은 `logs/backend/phase-0-step-0-4c.md` 의 표에 있다.
 
 비밀 값(접속 문자열 · 키)은 저장소에 넣지 않는다. 이 문서에는 **이름만** 있다.
 
@@ -31,7 +31,7 @@ PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. **실제 Supabase 에�
 
 | 이름 | 무엇 | 어디에 |
 |---|---|---|
-| `DATABASE_URL` | Postgres 접속 문자열. 코드가 읽는 곳은 `apps/web/src/server/db.ts` 하나다 | **Vercel** 의 환경 변수 (Production) — 거래 방식 풀러(Transaction pooler · 포트 6543). **`.env.deploy`** — 세션 방식 풀러(Session pooler · 포트 5432) |
+| `DATABASE_URL` | Postgres 접속 문자열. 코드가 읽는 곳은 `apps/web/src/server/db.ts` 하나다 | **`.env.deploy`** — 테이블 주인(`postgres`)의 것. 세션 방식 풀러(Session pooler · 포트 5432). 도윤의 컴퓨터에만 있다. **Vercel** 의 환경 변수 (Production) — **API 전용 역할(`claro_api`)의 것.** 거래 방식 풀러(6543). `deploy:role` 이 만들어 `apps/web/.env.vercel` 에 써 준다 — 주인의 값을 Vercel 에 넣지 않는다 |
 | `DATABASE_MIGRATE_URL` | 마이그레이션만 다른 접속으로 돌릴 때. 없으면 `DATABASE_URL` 을 쓴다 | `.env.deploy` — 안 넣어도 된다 |
 | `CLARO_SITE` | 독자 링크의 앞부분 (배포된 주소). 비밀이 아니다 | `.env.deploy` |
 | `CLARO_PGLITE_DIR` | PGlite 폴더 — 개발 · 테스트 · `pnpm phone` 에서만. `DATABASE_URL` 이 없을 때만 본다 | 배포에는 없다 |
@@ -45,12 +45,13 @@ PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. **실제 Supabase 에�
 
 | 차례 | 명령 | 무엇 |
 |---|---|---|
-| 1 | `pnpm --filter @claro/web deploy:migrate` | 마이그레이션 여섯을 한 번에 (§1). 대상의 서버 이름 · 데이터베이스 이름과 적용된 개수를 낸다 |
+| 1 | `pnpm --filter @claro/web deploy:migrate` | 마이그레이션 일곱을 한 번에 (§1). 대상의 서버 이름 · 데이터베이스 이름과 적용된 개수를 낸다 |
 | 2 | `pnpm --filter @claro/web deploy:verify` | §4 "올린 뒤 확인"을 그대로 돌린다 — 테이블 8 · RLS · 정책 0 · 화면 키의 권한 0 · 덧붙이기만 |
 | 3 | (대시보드) Data API 에서 schema 빼기 | §2 의 겹 3. 프로젝트를 만들 때 Data API 를 껐으면 이미 된 것이다 — 꺼져 있는지만 본다 |
 | 4 | `pnpm --filter @claro/web deploy:seed` | 골든 한 판 (있으면 아무것도 안 한다) |
 | 5 | `pnpm --filter @claro/web deploy:reader R-00` | 시험 독자 하나. 링크를 낸다 (`CLARO_SITE` 가 앞에 붙는다) |
-| 6 | Vercel 에 `DATABASE_URL` 을 넣고 배포 | |
+| 6 | `pnpm --filter @claro/web deploy:role` | API 전용 역할에 새 비밀번호를 걸고 그 접속 값을 `apps/web/.env.vercel` 에 쓴다 (화면에는 안 낸다). 그 값으로 붙어 읽기는 되고 고치기 · 지우기 · 트리거 끄기는 안 되는 것을 본다. **다시 돌리면 비밀번호가 바뀐다** — Vercel 의 값도 다시 넣는다 |
+| 7 | Vercel 에 `DATABASE_URL` (`.env.vercel` 의 값)을 넣고 배포 | |
 | 볼 때 | `pnpm --filter @claro/web deploy:ledger` | 원장에 남은 것 — 열람마다 plan · 사건 · 완독 · 끝이 나온 완독 · 멈춘 장 · 계약에 맞는가 |
 
 **배포된 화면이 보여주는 판 = 빌드할 때의 `fixtures/` 다.** 그 판이 데이터베이스에 없으면 (`deploy:seed` 를 안 돌렸으면) plan 이 `PLAN_ARTICLE` 로 거부되고 기록이 한 줄도 안 남는다 — 읽기는 된다.
@@ -63,7 +64,7 @@ PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. **실제 Supabase 에�
 
 ## 1. 마이그레이션 — 적용 순서
 
-`migrations/meta/_journal.json` 의 순서대로, **여섯 다**, 한 번에. 명령: `pnpm --filter @claro/web deploy:migrate` (`apps/web/src/server/db.ts` 의 `migrateDatabase`).
+`migrations/meta/_journal.json` 의 순서대로, **일곱 다**, 한 번에. 명령: `pnpm --filter @claro/web deploy:migrate` (`apps/web/src/server/db.ts` 의 `migrateDatabase`).
 
 | 순서 | 파일 | 무엇 | 어떻게 만들었나 |
 |---|---|---|---|
@@ -73,6 +74,7 @@ PGlite 와 이 Mac 의 Postgres 18 에서 돌려 봤다. **실제 Supabase 에�
 | 4 | `0003_reading_event_accepts.sql` | D34 — 읽기 사건을 넣을 때 보는 것을 **참조**(그 열람 · 독자 · 세션의 plan 인가)만 남긴다. `seq` 순서 · 지금 plan · 지금 장 · 전환 다음 · CLOSED 뒤는 넣을 때 보지 않는다 | 손으로 썼다 (`create or replace`) |
 | 5 | `0004_plan_reading_level_unique.sql` | D35 — (열람 · 레벨) 유일 제약을 뗀다 (탭을 복제하면 같은 열람 · 같은 레벨의 plan 이 둘 온다) | `pnpm generate` |
 | 6 | `0005_reading_plan_accepts.sql` | D35 — plan 을 넣을 때 보는 것을 **모양 · 참조**(있는 판 · 그 판의 레벨)만 남긴다. 불변식 3 · 5 · 7 은 넣을 때 보지 않는다 | 손으로 썼다 (`create or replace`) |
+| 7 | `0006_api_role.sql` | API 전용 역할 `claro_api` (로그인 없이 만든다) · 원장 · 판에 넣기 · 읽기 권한과 그 역할만의 RLS 정책 15개 · 대응표는 읽기만 | 손으로 썼다 |
 
 - **0001 · 0003 까지만 적용된 상태로 두지 않는다.** 그 상태의 원장은 빈 `seq` · 계약과 다른 순서의 사건(0001 까지) · 복제된 탭의 plan(0003 까지)을 **거부한다** — 화면이 보낸 관찰이 사라진다 (D34)
 - **0000 만 적용된 상태로 두지 않는다.** 그 사이의 원장은 고칠 수 있고 지울 수 있다. 둘을 같은 실행에서 적용한다 (Drizzle 의 migrator 는 저널에 있는 것을 전부 적용한다)
@@ -87,7 +89,7 @@ Supabase 는 `public` 의 테이블을 Data API (PostgREST)로 내놓고, 화면
 
 | 겹 | 무엇 | 어디서 |
 |---|---|---|
-| 1 | **RLS 를 켜고 정책을 하나도 두지 않는다** — 테이블 8개 전부. 정책이 없으면 주인이 아닌 역할은 한 줄도 못 읽고 못 쓴다 | `0001` 이 한다. 테스트가 본다 (RLS 켜짐 8 · 정책 0) |
+| 1 | **RLS 를 켜고, 정책은 API 전용 역할(`claro_api`)에게만 준다** (읽기 · 넣기 — `0006`). 화면 키의 역할에게는 정책이 하나도 없다 — 한 줄도 못 읽고 못 쓴다 | `0001` · `0006`. 테스트가 본다 (RLS 켜짐 8 · 정책 15 전부 `claro_api`) |
 | 2 | **`anon` · `authenticated` 의 권한을 거둔다** — 테이블 8개와 schema `identity` | `0001` 이 한다 (그 역할이 있을 때만. PGlite 에는 없어서 **이 줄은 한 번도 실행된 적이 없다**) |
 | 3 | **Data API 가 내놓는 schema 에서 뺀다** — `identity` 는 넣지 않는다. 우리는 Data API 를 쓰지 않으므로 `public` 도 빼거나 Data API 를 끈다 | Supabase 대시보드 (Project Settings → API). **사람이 한다** |
 
@@ -98,10 +100,10 @@ Supabase 는 `public` 의 테이블을 Data API (PostgREST)로 내놓고, 화면
 alter default privileges in schema public revoke all on tables from anon, authenticated;
 ```
 
-- **정책을 "임시로" 더하지 않는다.** 정책이 하나라도 생기면 화면이 원장을 직접 쓸 수 있다. 계약 검사는 API 한 곳에서 일어나야 한다 (D1)
+- **`claro_api` 밖의 역할에 정책을 "임시로" 더하지 않는다.** `anon` · `authenticated` 에 정책이 하나라도 생기면 화면이 원장을 직접 쓸 수 있다. 계약 검사는 API 한 곳에서 일어나야 한다 (D1)
 - **화면 코드에 들어가면 안 되는 것**: 접속 문자열 · service_role 키. 둘 다 RLS 를 건너뛴다. `NEXT_PUBLIC_` 으로 시작하는 이름에 넣지 않는다
 - **RLS 는 테이블 주인과 service_role 을 막지 않는다.** 그 둘에게서 원장을 지키는 것은 트리거다 — 고치기 · 지우기 · 비우기는 **어느 역할이든** 거부된다.
-  트리거도 주인은 끌 수 있다 (`alter table … disable trigger`). 그것까지 막으려면 API 가 주인이 아닌 역할로 접속해야 한다 → 아래 "0.4c 가 정할 것"
+  트리거도 주인은 끌 수 있다 (`alter table … disable trigger`). 그래서 **배포된 서버는 주인이 아닌 역할(`claro_api`)로 접속한다** — 그 역할은 트리거를 끌 수 없다 (§5)
 
 ## 3. 환경 변수 — 이름만
 
@@ -131,8 +133,8 @@ begin; update article_record set article_version = article_version; rollback;   
 ## 5. 0.4c 가 정한 것 · 남긴 것
 
 - **드라이버와 풀러** — postgres.js · `prepare: false` · 접속은 인스턴스마다 3개까지. Vercel 은 거래 방식 풀러로 붙는다
-- **API 가 어느 역할로 접속하나 — 정하지 않았다.** Supabase 가 주는 접속 문자열의 역할(`postgres` — 테이블 주인)로 붙는다. RLS 를 안 타고, 트리거를 끌 수 있는 역할이다.
-  주인이 아닌 전용 역할에 `insert` · `select` 만 주면 한 겹이 더 생긴다 — 로그의 _open
+- **API 는 전용 역할 `claro_api` 로 접속한다** (D35 "0.4c 1 ~ 3" 판정). 넣기 · 읽기만 된다. 고치기 · 지우기 · 비우기는 권한이 없고, 주인이 아니라 트리거를 끌 수도 테이블을 바꿀 수도 없다. 대응표에는 쓰지 못한다.
+  역할은 `0006` 이 만들고 비밀번호는 `deploy:role` 이 건다. 마이그레이션 · 골든 넣기 · 독자 올리기는 주인(`.env.deploy`)이 한다 — 그 값은 도윤의 컴퓨터를 떠나지 않는다
 - Postgres 판 — PGlite 0.5.8 과 Postgres 18.2 에서 같은 테스트가 통과했다. Supabase 의 판은 올릴 때 본다 (로그의 표)
 
 ## 6. 대응표 `identity.reader` — 이름표는 사람을 알아볼 수 없는 부호다 (D34)

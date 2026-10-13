@@ -107,13 +107,22 @@ describe("테이블 전체", () => {
     expect(tr.rows[0]!.n).toBe(TABLES.length);
   });
 
-  it("모든 테이블에 RLS 가 켜져 있고 정책이 없다 — API 의 역할(주인) 말고는 못 읽고 못 쓴다", async () => {
+  it("모든 테이블에 RLS 가 켜져 있고 정책은 API 전용 역할의 것뿐이다 — 그 역할과 주인 말고는 못 읽고 못 쓴다", async () => {
     const r = await t.client.query<{ relname: string; relrowsecurity: boolean }>(
       `select c.relname, c.relrowsecurity from pg_class c join pg_namespace n on n.oid = c.relnamespace
        where c.relkind = 'r' and n.nspname in ('public', 'identity')`,
     );
     expect(r.rows).toHaveLength(TABLES.length + 1);
     expect(r.rows.filter((x) => !x.relrowsecurity)).toEqual([]);
-    expect((await t.client.query("select 1 from pg_policies where schemaname in ('public', 'identity')")).rows).toHaveLength(0);
+    // 정책은 API 전용 역할(claro_api)에게만 있다 — 읽기 · 넣기. 다른 역할(화면 키의 anon · authenticated 포함)에게 준 정책은 없다
+    const policies = await t.client.query<{ tablename: string; cmd: string; roles: string }>(
+      "select tablename, cmd, array_to_string(roles, ',') as roles from pg_policies where schemaname in ('public', 'identity') order by 1, 2",
+    );
+    expect(policies.rows.every((p) => p.roles === "claro_api")).toBe(true);
+    expect(policies.rows.map((p) => `${p.tablename} ${p.cmd}`)).toEqual([
+      ...["article_record", "knowledge_evidence", "probe", "probe_exposure", "probe_response"].flatMap((x) => [`${x} INSERT`, `${x} SELECT`]),
+      "reader SELECT",
+      ...["reading_event", "reading_plan_log"].flatMap((x) => [`${x} INSERT`, `${x} SELECT`]),
+    ]);
   });
 });

@@ -469,3 +469,58 @@ describe("누가 어느 user_id 인가 — 원장 밖", () => {
     }
   });
 });
+
+describe("API 전용 역할 (claro_api) — 넣기 · 읽기만. 트리거를 끌 수 없다 (0006)", () => {
+  /** 그 역할이 되어 해 본다. 되면 "ok", 안 되면 Postgres 의 오류 코드 (42501 = 권한이 없다 · 주인이 아니다) */
+  const asApi = async (q: string, seed = true): Promise<string> => {
+    await t.client.exec("begin");
+    try {
+      if (seed) await insertLedger(t.client, T.ledger);
+      await t.client.exec("set local role claro_api");
+      await t.client.query(q);
+      return "ok";
+    } catch (e) {
+      let err = e as { code?: string; cause?: unknown };
+      while (err.cause && !err.code) err = err.cause as typeof err;
+      return err.code ?? String(e);
+    } finally {
+      await t.client.exec("rollback");
+    }
+  };
+  const tables = ["article_record", ...READER_LEDGERS.map((k) => getTableName(LEDGER_TABLES[k]))];
+
+  it("원장을 넣을 수 있다 — 시험 원장 전부가 그 역할로 들어간다 (트리거도 그 역할로 돈다)", async () => {
+    await t.client.exec("begin");
+    try {
+      await t.client.exec("set local role claro_api");
+      await insertLedger(t.client, T.ledger);
+      const n = (await t.client.query<{ n: number }>("select count(*)::int as n from reading_event")).rows[0]!.n;
+      expect(n).toBe(22);
+      expect((await t.client.query("select 1 from article_record")).rows).toHaveLength(1);
+      expect((await t.client.query("select 1 from identity.reader")).rows).toHaveLength(0);
+    } finally {
+      await t.client.exec("rollback");
+    }
+  });
+  it.each(tables)("%s — 고치기 · 지우기 · 비우기는 권한이 없다", async (table) => {
+    expect(await asApi(`update ${table} set ${table === "article_record" ? "article_version" : table === "probe" ? "version" : table === "probe_response" ? "interaction_id" : table === "probe_exposure" ? "exposure_id" : table === "reading_plan_log" ? "plan_id" : "event_id"} = null`)).toBe("42501");
+    expect(await asApi(`delete from ${table}`)).toBe("42501");
+    expect(await asApi(`truncate ${table} cascade`)).toBe("42501");
+  });
+  it.each(tables)("%s — 트리거를 끌 수 없다 · 테이블을 바꿀 수 없다 · 정책을 더할 수 없다 (주인이 아니다)", async (table) => {
+    expect(await asApi(`alter table ${table} disable trigger all`, false)).toBe("42501");
+    expect(await asApi(`alter table ${table} disable row level security`, false)).toBe("42501");
+    expect(await asApi(`alter table ${table} add column note text`, false)).toBe("42501");
+    expect(await asApi(`create policy x on ${table} for update to claro_api using (true)`, false)).toBe("42501");
+    expect(await asApi(`drop table ${table} cascade`, false)).toBe("42501");
+  });
+  it("대응표에는 쓰지 못한다 — 독자를 올리는 것은 주인이다. 다른 역할이 되지도 못한다", async () => {
+    expect(await asApi("insert into identity.reader (user_id, label) values ('0d0e0000-0000-4000-8000-000000000001', 'X-1')", false)).toBe("42501");
+    expect(await asApi("update identity.reader set label = 'x'", false)).toBe("42501");
+    expect(await asApi("create table public.side (x int)", false)).toBe("42501");
+    const attrs = await t.client.query<Record<string, boolean>>(
+      "select rolsuper, rolcreaterole, rolcreatedb, rolbypassrls, rolinherit from pg_roles where rolname = 'claro_api'",
+    );
+    expect(Object.values(attrs.rows[0]!)).toEqual([false, false, false, false, false]);
+  });
+});

@@ -9,6 +9,8 @@ import { db, migrateDatabase } from "../src/server/db";
 import { seedGolden } from "../src/server/golden";
 import { READERS } from "./readers";
 
+// 실제 Postgres 면 여기서는 주인으로 붙는다 (서버는 claro_api 로 붙는다 — e2e/database.ts)
+if (process.env.CLARO_TEST_OWNER_URL) process.env.DATABASE_URL = process.env.CLARO_TEST_OWNER_URL;
 const url = process.env.DATABASE_URL;
 if (url) {
   const name = new URL(url).pathname.slice(1);
@@ -20,6 +22,9 @@ if (url) {
   await sql.unsafe("drop schema if exists public cascade; drop schema if exists identity cascade; drop schema if exists drizzle cascade; create schema public");
   await sql.end();
   await migrateDatabase();
+  const login = postgres(url, { max: 1, onnotice: () => {} });
+  await login.unsafe("alter role claro_api login password 'claro_test'"); // 테스트용 값이다. 이 Mac 의 Postgres 에서만
+  await login.end();
 } else {
   const dir = process.env.CLARO_PGLITE_DIR;
   if (!dir || !/^\.data\/test/.test(dir)) throw new Error("CLARO_PGLITE_DIR 이 .data/test… 가 아니다 — 테스트용 폴더만 지운다");

@@ -18,7 +18,8 @@
     "deploy:seed": "tsx --env-file=.env.deploy scripts/seed.ts",
     "deploy:reader": "tsx --env-file=.env.deploy scripts/reader.ts",
     "deploy:verify": "tsx --env-file=.env.deploy scripts/verify-database.ts",
-    "deploy:ledger": "tsx --env-file=.env.deploy scripts/ledger-db.ts"
+    "deploy:ledger": "tsx --env-file=.env.deploy scripts/ledger-db.ts",
+    "deploy:role": "tsx --env-file=.env.deploy scripts/api-role.ts"
   },
   "dependencies": {
     "@claro/contract": "workspace:*",
