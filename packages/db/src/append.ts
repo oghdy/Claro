@@ -45,3 +45,23 @@ export async function appendArticle(db: Db, record: ArticleRecord): Promise<void
   if (!r.ok) throw new LedgerRejected("ARTICLE_PACKAGE", r.errors.map((e) => `${e.code} ${e.path}`).join(" · "));
   await db.insert(articleRecord).values(record);
 }
+
+/**
+ * 원장이 줄을 거부한 까닭 — 트리거가 낸 CODE, 아니면 Postgres 의 제약 이름. **거부가 아닌 실패**(접속이 끊겼다 등)면 null 이다 —
+ * 그 줄은 틀린 것이 아니라 못 넣은 것이라 다시 넣어야 한다.
+ */
+export function ledgerRejection(e: unknown): string | null {
+  type PgError = { message?: string; code?: string; constraint?: string; column?: string; cause?: unknown };
+  if (e instanceof LedgerRejected) return e.code;
+  let err = e as PgError;
+  while (err?.cause && !err.code) err = err.cause as PgError; // Drizzle 은 Postgres 의 오류를 cause 에 싼다
+  const m = /^([A-Z][A-Z_]+): /.exec(err?.message ?? "");
+  if (m && err.code === "P0001") return m[1]!; // 트리거의 raise exception
+  if (err?.code === "42703") return "LEDGER_FIELD"; // 없는 칸
+  if (err?.code === "23514") return `CHECK ${err.constraint}`;
+  if (err?.code === "23503") return `FK ${err.constraint}`;
+  if (err?.code === "23505") return `UNIQUE ${err.constraint}`;
+  if (err?.code === "23502") return `NOT_NULL ${err.column}`;
+  if (err?.code === "22P02" || err?.code === "22007" || err?.code === "22003") return "LEDGER_SHAPE"; // 값의 글자가 그 타입이 아니다
+  return null;
+}

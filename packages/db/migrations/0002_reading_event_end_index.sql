@@ -1,0 +1,1 @@
+DROP INDEX "reading_event_end_shown_once";

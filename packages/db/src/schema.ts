@@ -3,7 +3,8 @@
 // - 원장 타입마다 테이블 하나. **칸 이름은 계약 그대로다** — 더하지도 빼지도 바꾸지도 않았다 (src/contract-check.ts 가 컴파일 때, 테스트가 실행 때 댄다)
 // - 계약 안에서 다른 타입에 담기는 모양(BlockDecision · ProbePlanItem · ProbeTarget · SlideLoc · ExposureContext)은 그 칸에 jsonb 로 담는다
 // - 닫힌 값은 @claro/contract 의 목록에서 CHECK 를 만든다 — 값 목록을 여기 다시 적지 않는다
-// - 여러 줄을 봐야 하는 불변식 · 담긴 모양 · "덧붙이기만"은 migrations/0001_ledger_rules.sql 의 트리거가 지킨다
+// - 담긴 모양 · 가리키는 것이 있는가 · "덧붙이기만"은 migrations 의 트리거가 지킨다 (0001 · 0003).
+//   읽기 사건의 뜻(순서가 계약대로인가)은 넣을 때 막지 않는다 — 읽을 때 src/check.ts 가 열람마다 본다 (D34)
 // - 지식 상태 · 가중치 · 임계값을 담는 테이블은 없다 (FINDINGS §9.4 · §9.6). 완독 · 멈춘 장도 칸이 아니다 — src/summary.ts 가 원장에서 센다
 import type {
   ArticleAuthoring, ArticlePackage, BlockDecision, ExposureContext, LevelId, Position, ProbePlanItem, ProbeTarget, ProbeType,
@@ -87,13 +88,12 @@ export const readingEvent = pgTable(
     from_plan_id: uuid().references(() => readingPlanLog.plan_id),
   },
   (t) => [
-    unique("reading_event_reading_seq").on(t.reading_id, t.seq), // 불변식 8
-    uniqueIndex("reading_event_end_shown_once") // 불변식 22 — 한 plan 의 한 장에 많아야 한 번
-      .on(t.plan_id, t.slide_index)
-      .where(sql.raw(`"type" = 'SLIDE_END_SHOWN'`)),
+    // (열람 · seq)는 유일하기만 하면 된다 — 빈 곳 · 뒤바뀐 도착 순서를 받는다 (D34). "0부터 1씩"은 읽을 때 본다 (src/check.ts)
+    unique("reading_event_reading_seq").on(t.reading_id, t.seq),
     check("reading_event_type", oneOf("type", READING_EVENT_TYPES)),
     check("reading_event_seq_from_zero", sql.raw(`"seq" >= 0`)),
-    // slide_index 는 SLIDE_ENTERED · SLIDE_END_SHOWN 일 때만, from_plan_id 는 LEVEL_SWITCHED 일 때만 (§1 · 불변식 9 · 10 · 22)
+    // 모양 — slide_index 는 SLIDE_ENTERED · SLIDE_END_SHOWN 일 때만, from_plan_id 는 LEVEL_SWITCHED 일 때만 (§1 의 칸 주석).
+    // 사건의 뜻(불변식 9 · 10 · 11 · 22 — 지금 plan · 지금 장 · 전환 다음 · 끝은 한 번)은 넣을 때 거부하지 않는다 (D34)
     check(
       "reading_event_slide_index_by_type",
       sql.raw(`("type" in ('SLIDE_ENTERED', 'SLIDE_END_SHOWN')) = ("slide_index" is not null) and ("slide_index" is null or "slide_index" >= 0)`),
@@ -209,7 +209,7 @@ export const knowledgeEvidence = pgTable(
 export const identity = pgSchema("identity");
 export const reader = identity.table("reader", {
   user_id: uuid().primaryKey(),
-  label: text().notNull(), // 사람이 붙인 이름표
+  label: text().notNull(), // 사람을 알아볼 수 없는 부호 ("R-07"). 이름 · 연락처를 담지 않는다 — 누가 R-07 인지는 저장소 · 데이터베이스 밖에 (D34)
   created_at: timestamptz().notNull().default(sql`now()`),
 });
 

@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.4a — 끝, 게이트 대기 (2026-10-12 · `packages/db`: 원장 여섯 + 기사 한 판 · 덧붙이기만 · 불변식은 데이터베이스가 · 계약 ↔ 테이블 검사. _open 6 — `logs/backend/phase-0-step-0-4a.md`). 다음: 0.4a 게이트 → 0.4b (API)**
+**Phase 0 / Step 0.4b — 끝, 게이트 대기 (2026-10-13 · D34 반영: 원장은 받고 검사는 읽을 때 · API (`apps/web` Route Handlers) · 화면이 읽기 사건을 보낸다 · PGlite 로 끝에서 끝까지. _open 7 — `logs/backend/phase-0-step-0-4b.md`). 다음: 0.4b 게이트 → 0.4c (배포 — `packages/db/SUPABASE.md` §0)**
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -18,7 +18,7 @@
 | 0.2m | 이전 — 라이브러리 · 골든을 계약 모양으로. UUID 발급, 참조를 객체로, 프론트 검증기(`validate.ts:115` 문자열만 받음) 수정. **F-3 전에** | 라이브러리 v · 골든 v3 | 새 세션 (a) · 0.2c 세션 (b) | ◐ a ☑ 2026-10-09 게이트 대기 (`logs/backend/phase-0-step-0-2m-a.md`) · b `5c8ced4` |
 | 0.3 | D1 기술 스택 결정 | DECISIONS D1 | 세션 아님 | ☑ 프론트 2026-09-29 · 백엔드 2026-10-12 |
 | 0.4a | 스키마 — 독자 기록 원장 + 기사 한 판 (F-3 최소). `packages/db` | Drizzle 스키마 · 검사 | 새 세션 | ☑ 2026-10-12 게이트 대기 (`logs/backend/phase-0-step-0-4a.md`) |
-| 0.4b | D34 반영 + API (Next.js) + 화면이 읽기 사건을 보낸다. 외부 DB 없이 끝까지 | 기록이 남는 화면 | 새 세션 | ☐ 프롬프트 준비됨 |
+| 0.4b | D34 반영 + API (Next.js) + 화면이 읽기 사건을 보낸다. 외부 DB 없이 끝까지 | 기록이 남는 화면 | 새 세션 | ☑ 2026-10-13 게이트 대기 (`logs/backend/phase-0-step-0-4b.md`) |
 | 0.4c | 배포 — Supabase · Vercel. 도윤의 계정 필요 | F-3 에 쓸 서버 | — | ☐ 0.4b 뒤 |
 
 > **순서**: 0.2a → 0.2b → 0.2c. 0.2b 의 Concept 참조가 0.2a 에 기댄다.
@@ -480,6 +480,8 @@ Claro 의 화면이 읽기 기록을 남기게 한다 (Step 0.4b). 독자가 기
   - logs/backend/phase-0-step-0-4b.md · development-backend.md 체크
   커밋: B-0.4b [GATE] → push. `git commit -m … -- <파일들>` (파일을 지정해서)
 ```
+
+- [x] 완료일: 2026-10-13 (게이트 대기 — `logs/backend/phase-0-step-0-4b.md`)
 
 ---
 

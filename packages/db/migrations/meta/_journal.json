@@ -15,6 +15,20 @@
       "when": 1791786727582,
       "tag": "0001_ledger_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791868831739,
+      "tag": "0002_reading_event_end_index",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791868837454,
+      "tag": "0003_reading_event_accepts",
+      "breakpoints": true
     }
   ]
 }

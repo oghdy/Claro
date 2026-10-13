@@ -38,8 +38,11 @@ def main():
             continue
         L = mutate(S.LEDGER)
         cases.append({'name': name, 'python_codes': sorted(want), 'ledger': L, 'summary': summary(L) if not want else None})
+    # 골든에서 계산한 block_decisions (§4.2) — 저장소의 실제 concept_id 로. TS 의 deriveBlockDecisions 가 같은 값을 내는지 댄다 (B-0.4b)
+    real = {c['code']: c['concept_id'] for c in S.STORE['concepts']}
+    decisions = {lid: {real[code]: list(v) for code, v in d.items()} for lid, d in V.derive_decisions(S.GOLD, S.LIB, S.STORE).items()}
     json.dump({'article_id': V.ARTICLE_ID, 'article_version': V.ARTICLE_V, 'ledger': S.LEDGER, 'summary': summary(S.LEDGER),
-               'cases': cases}, sys.stdout, ensure_ascii=False)
+               'decisions': decisions, 'concept_ids': {V.UID('concept', code): cid for code, cid in real.items()}, 'cases': cases}, sys.stdout, ensure_ascii=False)
     return 0
 
 

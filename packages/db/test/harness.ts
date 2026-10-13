@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { stripAnnotations, type ArticleRecord } from "@claro/contract";
 import { PGlite } from "@electric-sql/pglite";
+import { ledgerRejection } from "../src";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 
@@ -48,6 +49,8 @@ export interface Ledger {
 export interface Trial {
   ledger: Ledger;
   summary: PySummary;
+  /** 파이썬 derive_decisions 가 골든에서 낸 값 — 레벨 → concept_id → [decision, version] */
+  decisions: Record<string, Record<string, [string, number]>>;
   cases: { name: string; python_codes: string[]; ledger: Ledger; summary: PySummary | null }[];
 }
 export interface PySummary {
@@ -59,10 +62,11 @@ export interface PySummary {
   switched_from: string[];
 }
 
-/** 파이썬 검사의 시험 원장(가짜 독자 하나)과 망가뜨린 사본. 판의 키만 골든의 것으로 바꾼다 — 원장이 실제 판을 가리키게 */
+/** 파이썬 검사의 시험 원장(가짜 독자 하나)과 망가뜨린 사본. 판의 키와 개념의 키만 실제 것으로 바꾼다 — 원장이 실제 판 · 실제 개념을 가리키게 */
 export function trial(): Trial {
-  const out = execFileSync("python3", [path("scripts/export-trial-ledger.py")], { encoding: "utf-8", maxBuffer: 256 * 1024 * 1024 });
-  const { article_id } = JSON.parse(out) as { article_id: string };
+  let out = execFileSync("python3", [path("scripts/export-trial-ledger.py")], { encoding: "utf-8", maxBuffer: 256 * 1024 * 1024 });
+  const { article_id, concept_ids } = JSON.parse(out) as { article_id: string; concept_ids: Record<string, string> };
+  for (const [made, real] of Object.entries(concept_ids)) out = out.replaceAll(made, real);
   return JSON.parse(out.replaceAll(article_id, goldenRecord().article_id));
 }
 
@@ -90,19 +94,9 @@ export async function insertLedger(client: PGlite, L: Ledger): Promise<void> {
   for (const [key, table] of ORDER) for (const row of L[key]) await insertRaw(client, table, row);
 }
 
-/** 거부한 까닭 — 트리거가 낸 CODE, 아니면 Postgres 의 제약 이름 */
+/** 거부한 까닭 — 트리거가 낸 CODE, 아니면 Postgres 의 제약 이름 (src 의 ledgerRejection). 거부가 아닌 실패면 그 오류의 글 */
 export function reason(e: unknown): string {
-  type PgError = { message?: string; code?: string; constraint?: string; column?: string; cause?: unknown };
-  let err = e as PgError;
-  while (err.cause && !err.code) err = err.cause as PgError; // Drizzle 은 Postgres 의 오류를 cause 에 싼다
-  const m = /^([A-Z][A-Z_]+): /.exec(err.message ?? "");
-  if (m) return m[1]!;
-  if (err.code === "42703") return "LEDGER_FIELD"; // 없는 칸
-  if (err.code === "23514") return `CHECK ${err.constraint}`;
-  if (err.code === "23503") return `FK ${err.constraint}`;
-  if (err.code === "23505") return `UNIQUE ${err.constraint}`;
-  if (err.code === "23502") return `NOT_NULL ${err.column}`;
-  return `${err.code} ${err.message}`;
+  return ledgerRejection(e) ?? `실패 ${(e as Error)?.message}`;
 }
 
 /** 되돌리는 거래 안에서 해 본다. 거부되면 까닭을, 받으면 null 을 돌려준다 */

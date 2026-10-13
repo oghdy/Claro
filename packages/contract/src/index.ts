@@ -5,3 +5,4 @@ export { validateArticlePackage, parseArticlePackage, stripAnnotations, type Iss
 export * from "./describe";
 export * from "./data-model";
 export * from "./observation";
+export { deriveBlockDecisions } from "./decisions";

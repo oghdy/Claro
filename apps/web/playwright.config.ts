@@ -9,8 +9,9 @@ export default defineConfig({
   reporter: [["list"]],
   use: { baseURL: `http://localhost:${PORT}`, channel: "chrome" },
   webServer: {
-    command: `next build && next start -p ${PORT}`,
-    env: { CLARO_DIST: ".next-test" },
+    // 원장도 테스트 것을 따로 쓴다 (.data/test — 매번 새로 만든다: 골든 한 판 + 테스트의 독자들). CLARO_PEEK: 테스트가 원장에 남은 것을 읽는다
+    command: `tsx e2e/setup-db.ts && next build && next start -p ${PORT}`,
+    env: { CLARO_DIST: ".next-test", CLARO_PGLITE_DIR: ".data/test", CLARO_PEEK: "1" },
     url: `http://localhost:${PORT}`,
     reuseExistingServer: false,
     timeout: 180_000,

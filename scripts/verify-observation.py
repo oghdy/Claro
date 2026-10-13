@@ -12,7 +12,8 @@
   C. 교정 기록   원본(logs/correction-log.jsonl — D33)에 불변식 20 · 21 을 돌리고, 얼린 CSV 와 옮긴 줄의 글이 한 글자도 다르지 않은지 본다.
                  CSV 에 새 행이 생기면 FAIL (얼렸다). CSV 가 줄거나 옛 행이 바뀌어도 FAIL. jsonl 에 새 줄이 느는 것은 정상이다.
                  계약 §8 의 집계는 "1~N행" 기준의 날짜 붙은 기록이다 — 그 N행만 견준다. 원장은 덧붙이기만 하므로 행이 늘어도 안 깨진다
-  D. 시험 원장   독자 기록은 실물이 한 줄도 없다. 골든을 읽는 가짜 독자 하나의 원장을 메모리 안에서 만들어 불변식 1 ~ 19 를 돌린다.
+  D. 시험 원장   독자 기록은 실물이 한 줄도 없다. 골든을 읽는 가짜 독자 하나의 원장을 메모리 안에서 만들어 불변식 1 ~ 19 · 22 를 돌린다.
+                 읽기 사건의 불변식(8 ~ 11 · 22)은 원장이 넣을 때 거부하는 조건이 아니라 **읽을 때 보는 열람의 성질**이다 (D34).
                  가짜 독자 · 가짜 물음은 검사를 시험하려는 것이다 — 관찰이 아니다. 파일로 남기지 않는다
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
@@ -568,14 +569,16 @@ def check_ledger(L, types, enums):
         first = min(ps, key=lambda p: p['created_at'])
         if any(p['level_chosen_by'] == 'DEFAULT' and p is not first for p in ps):
             errs.append(('PLAN_DEFAULT', '첫 plan 이 아닌데 DEFAULT 다 (불변식 7)'))
-    # 읽기 사건 (불변식 8 ~ 11)
+    # 읽기 사건 (불변식 8 ~ 11 · 22) — **읽을 때 보는 검사다 (D34).** 원장은 이것을 어긴 줄도 받는다: 넣을 때 막는 것은 모양 · 참조 · 덧붙이기만이다.
+    # 여기서 나오는 EVENT_SEQ · EVENT_SLIDE · EVENT_CURRENT_PLAN · EVENT_SWITCH · EVENT_CLOSED · EVENT_END 는 "이 열람이 계약에 맞지 않는다"는 뜻이지
+    # "이 줄은 원장에 없어야 한다"가 아니다. 같은 판정이 packages/db/src/check.ts checkReading 에 있다 — 테스트가 망가뜨린 원장으로 둘을 댄다
     by_r = defaultdict(list)
     for e in L['events']:
         by_r[e['reading_id']].append(e)
     for rid, evs in by_r.items():
         evs.sort(key=lambda e: e['seq'])
         if [e['seq'] for e in evs] != list(range(len(evs))):
-            errs.append(('EVENT_SEQ', 'seq 가 0부터 1씩이 아니다 (불변식 8)'))
+            errs.append(('EVENT_SEQ', 'seq 가 0부터 1씩이 아니다 — 온전한 열람이 아니다 (불변식 8)'))
         cur, expect_enter, here, ended = None, False, None, set()
         for n, e in enumerate(evs):
             p = plans.get(e['plan_id'])
