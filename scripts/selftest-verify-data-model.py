@@ -12,7 +12,7 @@
 
 "빈틈" 행은 망가뜨렸는데 **못 잡는 것**이 기대값이다 — 계약이 게이트 3 으로 넘긴 것을 실제로 보인다.
 """
-import copy, importlib.util, json, os, re, sys, uuid
+import copy, importlib.util, json, os, re, sys, tempfile, uuid
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 spec = importlib.util.spec_from_file_location('vdm', os.path.join(ROOT, 'scripts/verify-data-model.py'))
@@ -165,9 +165,16 @@ def only_source(m, fact_label, sid):
 
 
 def unspan(m, fact_label):
+    # P-1 부터 실물 span 도 있다 (ST-09 · JH …) — SYN 만이 아니라 그 사실의 원문 위치를 전부 지운다
     for x in m['fact_sources']:
-        if x['fact_id'] == FID[fact_label] and x['source_id'] == SYN:
+        if x['fact_id'] == FID[fact_label]:
             x['span_start'] = x['span_end'] = None
+
+
+def all_registry(m, **kv):
+    # P-1 부터 실물 권리 행이 있다 — 인용 원문(JH · federalreserve.gov)도 함께 바꿔야 불변식 20 을 시험한다
+    for r in m['registry'].values():
+        r.update(kv)
 
 
 def second_bridge(m):
@@ -180,6 +187,106 @@ def second_bridge(m):
 def bump_storyline(m):
     m['storylines'][IRAN_ID]['version'] = 2
     m['storyline_versions'].append({'storyline_id': IRAN_ID, 'version': 2, 'created_at': '2026-09-16', 'change': '시험'})
+
+
+# ── E. 원문 (P-1) — 저장소 · 가져온 기록의 사본을 망가뜨린다 ──────────────────
+FETCH0 = V.load_fetch()
+SRC = {x['label']: x['source_id'] for x in BUNDLE['store']['sources']}
+
+
+def d_(fn):
+    """fn(store, fetch) — 사본만 고친다"""
+    def f(pair):
+        st, fe = copy.deepcopy(pair)
+        fn(st, fe)
+        return st, fe
+    return f
+
+
+def fsrow(st, fact, src):
+    fid = next(f['fact_id'] for f in st['facts'] if f['label'] == fact)
+    return next(x for x in st['fact_sources'] if x['fact_id'] == fid and x['source_id'] == SRC[src])
+
+
+def fsrec(fe, fact, src):
+    return next(x for x in fe['spans'] if x['fact'] == fact and x['source'] == src)
+
+
+def doc(st, label):
+    return next(d for d in st['source_documents'] if d['source_id'] == SRC[label])
+
+
+def drec(fe, label):
+    return next(d for d in fe['documents'] if d['label'] == label)
+
+
+def shift(o, k):
+    o['span_start'] += k
+    o['span_end'] += k
+
+
+def rehash(st, fe, label):
+    t = doc(st, label)['text']
+    drec(fe, label).update(text_sha256=V.sha256_text(t), text_length=len(t))
+
+
+def as_cache(st, fe, label, text):
+    """권리 미확인 원문 하나가 캐시에 저장됐다고 친다 (CME-2 — 실제로는 못 가져왔다)"""
+    drec(fe, label).update(status='STORED', text_in='cache', text_sha256=V.sha256_text(text), text_length=len(text))
+
+
+CACHE_TEXT = "x Markets are currently pricing a ~58% probability of a 25bp hike at next week's meeting y"
+
+
+def cme_span(st, fe):
+    as_cache(st, fe, 'CME-2', CACHE_TEXT)
+    r = fsrow(st, 'F43', 'CME-2')
+    r.update(span_start=2, span_end=len(CACHE_TEXT) - 2)
+    fsrec(fe, 'F43', 'CME-2').update(result='FOUND', span_start=2, span_end=len(CACHE_TEXT) - 2)
+
+
+DOC_CASES = [
+    ('P-1 — span 을 한 글자 밀기 (F01 · ST-09, 기록도 같이 밀어 둠)', None,
+     d_(lambda st, fe: (shift(fsrow(st, 'F01', 'ST-09'), 1), shift(fsrec(fe, 'F01', 'ST-09'), 1))), {'SPAN_TEXT_MISMATCH'}),
+    ('P-1 — span 을 한 글자 밀기 (저장소만 — 기록과도 어긋난다)', None,
+     d_(lambda st, fe: shift(fsrow(st, 'F33', 'JH'), -1)), {'SPAN_TEXT_MISMATCH', 'FETCH_RECORD_STALE'}),
+    ('P-1 — 기록의 해시를 바꿈 (ST-09)', None,
+     d_(lambda st, fe: drec(fe, 'ST-09').__setitem__('text_sha256', '0' * 64)), {'SOURCE_DOC_HASH'}),
+    ('P-1 — 저장한 원문의 한 글자를 바꿈 (span 밖 — 해시가 잡는다)', None,
+     d_(lambda st, fe: doc(st, 'ST-09').__setitem__('text', '#' + doc(st, 'ST-09')['text'][1:])), {'SOURCE_DOC_HASH'}),
+    ('P-1 — FactSource 가 없는 Source 를 가리킴', None,
+     d_(lambda st, fe: fsrow(st, 'F02', 'ST-09').__setitem__('source_id', UID('source', 'gone'))), {'SOURCE_UNKNOWN', 'FETCH_RECORD_STALE'}),
+    ('P-1 — 없는 Source 의 원문', None,
+     d_(lambda st, fe: st['source_documents'].append({'source_id': UID('source', 'gone'), 'text': 'x'})), {'SOURCE_UNKNOWN'}),
+    ('P-1 — 권리 미확인(CME) 전문을 저장소에 넣음', None,
+     d_(lambda st, fe: st['source_documents'].append({'source_id': SRC['CME-2'], 'text': CACHE_TEXT})),
+     {'SOURCE_DOC_NOT_STORABLE', 'SOURCE_DOC_UNRECORDED'}),
+    ('P-1 — 연방 정부 원문인데 권리 행이 can_store 가 아님', None,
+     d_(lambda st, fe: next(r for r in st['source_registry'] if r['source'] == 'bea.gov').__setitem__('can_store', None)),
+     {'SOURCE_DOC_NOT_STORABLE'}),
+    ('P-1 — 구절이 글에 두 번 (F02 구절을 글 끝에 덧붙이고 해시도 맞춤)', None,
+     d_(lambda st, fe: (doc(st, 'ST-09').__setitem__('text', doc(st, 'ST-09')['text'] + '\nby a 12 – 0 vote'), rehash(st, fe, 'ST-09'))),
+     {'SPAN_NOT_UNIQUE'}),
+    ('P-1 — span 이 글 밖', None,
+     d_(lambda st, fe: fsrow(st, 'F10', 'ST-09').__setitem__('span_end', 10 ** 7)), {'SPAN_RANGE', 'FETCH_RECORD_STALE'}),
+    ('P-1 — span_start 만 있다', None,
+     d_(lambda st, fe: fsrow(st, 'F10', 'ST-09').__setitem__('span_end', None)), {'SPAN_SHAPE', 'FETCH_RECORD_STALE'}),
+    ('P-1 — 원문이 없는 Source(S3 preliminary)에 span 을 손으로 채움', None,
+     d_(lambda st, fe: fsrow(st, 'F21', 'S3').update(span_start=0, span_end=5)), {'SPAN_NO_DOCUMENT'}),
+    ('P-1 — 가져온 기록이 없다', None, lambda pair: (copy.deepcopy(pair[0]), None), {'FETCH_RECORD_MISSING', 'SOURCE_DOC_UNRECORDED'}),
+    ('P-1 — 권리 미확인 원문이 캐시에만 있는데 이 기계에 없다 (WARN)', 'empty', d_(cme_span), {'SOURCE_TEXT_NOT_HERE'}),
+    ('P-1 — 캐시의 원문이 기록의 해시와 다르다', 'wrong', d_(cme_span), {'SOURCE_DOC_HASH'}),
+    ('통과해야 한다 — 캐시의 원문이 맞고 span 도 맞다', 'right', d_(cme_span), set()),
+]
+
+
+def run_docs(cache, mutate):
+    st, fe = mutate((BUNDLE['store'], FETCH0))
+    with tempfile.TemporaryDirectory() as d:
+        if cache in ('wrong', 'right'):
+            open(os.path.join(d, 'CME-2.txt'), 'w', encoding='utf-8').write(CACHE_TEXT if cache == 'right' else CACHE_TEXT + '!')
+        errs, held, _ = V.check_documents(st, fe, cache_dir=d)
+    return codes(errs) | codes(held)
 
 
 # (이름, 대상, 망가뜨리기, 기대 code 집합)
@@ -196,7 +303,7 @@ CASES = [
     ('§5.3 — Source.ingested_at 삭제', 'contract',
      lambda c: sub(c, '  ingested_at:  TimePoint           // 확정 §5.3. Claro 가 수집한 때\n', ''), {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     ('§5.1 — SourceRegistry.can_quote 삭제', 'contract',
-     lambda c: sub(c, '  can_quote:            boolean | null\n', ''), {'CONTRACT_FIELD'}),
+     lambda c: sub(c, '  can_quote:            boolean | null\n', ''), {'CONTRACT_FIELD', 'STORE_SHAPE'}),   # P-1 부터 권리 행이 있다 — 저장소 행도 계약과 어긋난다
     ('§5.2 — FactType 에 BACKGROUND 추가 (D27 이 닫은 7값을 연다)', 'contract',
      lambda c: sub(c, '| "COURT_RULING" | "COMPANY_DISCLOSURE" | "INDEPENDENT_OBSERVATION"',
                    '| "COURT_RULING" | "COMPANY_DISCLOSURE" | "INDEPENDENT_OBSERVATION" | "BACKGROUND"'), {'CONTRACT_ENUM'}),
@@ -257,6 +364,9 @@ CASES = [
      lambda l: re.sub(r'^\| 4 \|.*$', lambda m: re.sub(r'계약 반영|_open|미확인', '—', m.group()), l, count=1, flags=re.M),
      {'LOG_QUESTION'}),
     # ── C. 원천 · 골든 한 벌 (0.2m-a)
+    ('P-1 — 저장소의 span 을 한 글자 밀면 검사 전체가 FAIL (F33 · 인용 원문)', 'bundle',
+     b_(lambda g, r, st: (lambda x: (x.__setitem__('span_start', x['span_start'] + 1), x.__setitem__('span_end', x['span_end'] + 1)))(
+         fsrow(st, 'F33', 'JH'))), {'SPAN_TEXT_MISMATCH', 'FETCH_RECORD_STALE'}),
     ('R-1 — published_at 에 시각', 'bundle', b_(lambda g, r, st: g.__setitem__('published_at', '2026-09-16T14:00:00-04:00')),
      {'GOLD_PUBLISHED_AT_SHAPE', 'PUBLISHED_AT_SHAPE'}),
     ('원천 — 브리프 사실 F01 의 글자를 고침 (3.75~4.00% → 3.75~4.0%)', 'bundle',
@@ -446,9 +556,9 @@ CASES = [
      m_(lambda m: (span_at(m, 'basic', 'slides/5/blocks/1/body/1').__setitem__('refs', [FID['F32']]),
                    only_source(m, 'F32', add_source(m, 'OTHER')))), {'QUOTE_NO_COMMON_SOURCE'}),
     ('불변식 20 — 원문 발행처가 인용 불가', 'publish',
-     m_(lambda m: m['registry']['synthetic'].__setitem__('can_quote', False)), {'QUOTE_NOT_ALLOWED'}),
+     m_(lambda m: all_registry(m, can_quote=False)), {'QUOTE_NOT_ALLOWED'}),
     ('불변식 20 — 권리 검토 안 된 발행처 (null)', 'publish',
-     m_(lambda m: m['registry']['synthetic'].__setitem__('can_quote', None)), {'QUOTE_NOT_ALLOWED'}),
+     m_(lambda m: all_registry(m, can_quote=None)), {'QUOTE_NOT_ALLOWED'}),
     ('ARTICLE_PACKAGE §6.2 — 대기 span 이 발행에 남음', 'publish',
      m_(lambda m: (span_at(m, 'basic', 'slides/7/blocks/0/paragraphs/0/body/0').__setitem__('refs', []),
                    m['pending'].append(('basic', 'slides/7/blocks/0/paragraphs/0/body/0', 'fact', 'Fact 출처')))),
@@ -487,7 +597,15 @@ def main():
         tag = '빈틈' if not want and name.startswith('빈틈') else ''
         print(f'{"PASS" if ok else "FAIL"}  [{target}] {name} → {sorted(got) or "통과"}' + (f'  (기대 {sorted(want)})' if not ok else '')
               + (f'  {tag}' if tag and ok else ''))
-    print(f'\n사본 {len(CASES)}개 · ' + ('OK' if not fails else f'{fails}개 실패'))
+    got = run_docs(None, lambda p: p)
+    fails += bool(got)
+    print(f'{"PASS" if not got else "FAIL"}  원본 원문 · span (P-1) → {sorted(got) or "통과"}')
+    for name, cache, mutate, want in DOC_CASES:
+        got = run_docs(cache, mutate)
+        ok = got == want
+        fails += not ok
+        print(f'{"PASS" if ok else "FAIL"}  [docs] {name} → {sorted(got) or "통과"}' + (f'  (기대 {sorted(want)})' if not ok else ''))
+    print(f'\n사본 {len(CASES) + len(DOC_CASES)}개 · ' + ('OK' if not fails else f'{fails}개 실패'))
     return 1 if fails else 0
 
 

@@ -10,7 +10,8 @@
       "logs/content/golden-correction-2026-10.md",
       "409dc05:fixtures/fomc-2026-09.article.json"
     ],
-    "note": "골든 FOMC 기사가 가리키는 것의 저장소. 브리프 사실 F01~F38 의 claim_text 는 브리프 글자 그대로다 (검사가 댄다) — 단 C-6 이 1차 구절대로 고친 것은 브리프 글을 `_brief_text` 에 남기고 `_c6` 에 까닭을 적었다 (교정 기록 logs/correction-log.jsonl · target FACT). `_passage` 는 C-3 기록에 있는 1차 구절 그대로다 (검사가 댄다) — 원문 위치(span_start · span_end)는 문서를 저장한 뒤 파이프라인이 채운다 (D27). SourceDocument · SourceRegistry · SlotCheck 는 실물이 없어 비어 있다 · B-0.4a 잔일 (2026-10-12): F36 · F29b 는 1차 구절이 없어 `_not_facts` 로 내렸다 (D33 C-6 검수). F40 · F46 · F47 · F41 · F48 의 글은 반증 답이 쓰는 값만큼 넓혔다 (C-6 로그 §2 — 앞의 글은 `_text_before_0_4a`)"
+    "note": "골든 FOMC 기사가 가리키는 것의 저장소. 브리프 사실 F01~F38 의 claim_text 는 브리프 글자 그대로다 (검사가 댄다) — 단 C-6 이 1차 구절대로 고친 것은 브리프 글을 `_brief_text` 에 남기고 `_c6` 에 까닭을 적었다 (교정 기록 logs/correction-log.jsonl · target FACT). `_passage` 는 C-3 기록에 있는 1차 구절 그대로다 (검사가 댄다) — 원문 위치(span_start · span_end)는 문서를 저장한 뒤 파이프라인이 채운다 (D27). SourceDocument · SourceRegistry · SlotCheck 는 실물이 없어 비어 있다 · B-0.4a 잔일 (2026-10-12): F36 · F29b 는 1차 구절이 없어 `_not_facts` 로 내렸다 (D33 C-6 검수). F40 · F46 · F47 · F41 · F48 의 글은 반증 답이 쓰는 값만큼 넓혔다 (C-6 로그 §2 — 앞의 글은 `_text_before_0_4a`)",
+    "p1": "P-1 (2026-10-30 · packages/pipeline): 원문을 저장했다 — SourceDocument 는 옆 파일 fixtures/store.documents.json (연방 정부 저작물만) · source_registry 채움 · 1차 구절을 원문에서 찾아 fact_sources 의 span_start · span_end 를 채움 (못 찾은 것은 null 그대로) · OMO published_at (`_published_at_basis`). 가져온 기록 · 못 가져온 까닭 · 구절마다 결과는 packages/pipeline/data/fomc-2026-09.sources.json. 위 note 의 \"SourceDocument · SourceRegistry … 비어 있다\" 는 그 전의 말이다"
   },
   "events": [
     {
@@ -182,9 +183,10 @@
       "url": "https://www.federalreserve.gov/monetarypolicy/openmarket.htm",
       "kind": "PRIMARY",
       "language": "en",
-      "published_at": "2026",
+      "published_at": "2026-09-16",
       "ingested_at": "2026-10-09",
-      "_note": "살아 있는 페이지다 — 읽은 판(2026-10)의 공개 시점은 증명되지 않았다. published_at 은 아는 만큼만 적었다 (DATA_MODEL §5.2). 읽은 판에는 2026-09-17 발효 줄이 있다 — 발행일(9/16) 뒤의 판이다"
+      "_note": "살아 있는 페이지다 — 읽은 판(2026-10)의 공개 시점은 증명되지 않았다. published_at 은 아는 만큼만 적었다 (DATA_MODEL §5.2). 읽은 판에는 2026-09-17 발효 줄이 있다 — 발행일(9/16) 뒤의 판이다",
+      "_published_at_basis": "P-1: 저장한 글(2026-10-30 가져옴)에 \"Last Update: September 16, 2026\" 가 있다 — 이 판이 2026-09-16 에 나왔다. 앞 값 \"2026\" (해까지만). 응답 머리 Last-Modified 도 Wed, 16 Sep 2026 18:13:03 GMT (= 14:13 EDT, 성명 14:00 뒤). 이 판에 2026 \"September 17 | 25 | 0 | 3.75-4.00\" 줄이 있다 — C-3 이 10/09 에 읽은 판(_note)과 같은 판으로 보인다"
     },
     {
       "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
@@ -407,7 +409,112 @@
     }
   ],
   "source_documents": [],
-  "source_registry": [],
+  "source_registry": [
+    {
+      "source": "federalreserve.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-1 파이프라인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-10-30",
+      "_basis": "17 U.S.C. §105 — Board of Governors of the Federal Reserve System 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    },
+    {
+      "source": "bls.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-1 파이프라인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-10-30",
+      "_basis": "17 U.S.C. §105 — U.S. Bureau of Labor Statistics (Department of Labor) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    },
+    {
+      "source": "bea.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-1 파이프라인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-10-30",
+      "_basis": "17 U.S.C. §105 — U.S. Bureau of Economic Analysis (Department of Commerce) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    },
+    {
+      "source": "home.treasury.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-1 파이프라인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-10-30",
+      "_basis": "17 U.S.C. §105 — U.S. Department of the Treasury 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    },
+    {
+      "source": "cmegroup.com",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-1 파이프라인)",
+      "can_ingest": null,
+      "can_store": null,
+      "can_quote": null,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": null,
+      "_basis": "권리 미확인 — 미국 연방 정부가 아니다. 전문은 git 밖 캐시(packages/pipeline/.cache/text)에만 둔다. git 에는 서지 · 해시 · span 만 (P-1)"
+    },
+    {
+      "source": "whitehouse.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-1 파이프라인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-10-30",
+      "_basis": "17 U.S.C. §105 — The White House (Executive Office of the President) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    },
+    {
+      "source": "centcom.mil",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-1 파이프라인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-10-30",
+      "_basis": "17 U.S.C. §105 — U.S. Central Command (Department of Defense) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    },
+    {
+      "source": "eia.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-1 파이프라인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-10-30",
+      "_basis": "17 U.S.C. §105 — U.S. Energy Information Administration (Department of Energy) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    }
+  ],
   "facts": [
     {
       "fact_id": "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
@@ -1426,16 +1533,16 @@
       "fact_id": "1cea9178-b1c2-4ddc-a1d7-4ec0d3ebdbdb",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 7661,
+      "span_end": 7756,
       "_passage": "raise the target range for the federal funds rate by 1/4 percentage point to 3-3/4 to 4 percent"
     },
     {
       "fact_id": "da2c3453-63c1-4a7b-bb8b-0b3eda48c0d6",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 7618,
+      "span_end": 7634,
       "_passage": "by a 12 – 0 vote"
     },
     {
@@ -1451,64 +1558,64 @@
       "fact_id": "1952dd61-951e-4a3a-ae6d-e33cb4bb2720",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 8251,
+      "span_end": 8338,
       "_passage": "Today's policy action will support a timelier return to the Committee's 2 percent goal."
     },
     {
       "fact_id": "3cc43f4c-cd4b-454c-aec1-53fc4eda36c3",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 7808,
+      "span_end": 7899,
       "_passage": "The Committee is continuing its policy of maintaining ample reserves in the banking system."
     },
     {
       "fact_id": "5b1591b0-7006-4df6-aa72-9a7ab13ab81f",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 7900,
+      "span_end": 7947,
       "_passage": "Economic activity is expanding at a solid pace."
     },
     {
       "fact_id": "d8918a89-70ef-496b-93a1-751d5a13c206",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 7948,
+      "span_end": 8066,
       "_passage": "While uncertainty remains elevated owing, in part, to geopolitical developments, domestic spending has been resilient."
     },
     {
       "fact_id": "cbe23bc3-58e4-4ac8-bc91-82517337aaed",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 8067,
+      "span_end": 8131,
       "_passage": "Productivity growth is strong, and capital investment is robust."
     },
     {
       "fact_id": "2fbd1b96-68c2-4826-ae5e-d742ee836b39",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 8132,
+      "span_end": 8222,
       "_passage": "Job gains have kept pace with the workforce, and the unemployment rate has changed little."
     },
     {
       "fact_id": "c2068a6c-b6c5-4374-9475-3841d546deca",
       "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 8223,
+      "span_end": 8250,
       "_passage": "Inflation remains elevated."
     },
     {
       "fact_id": "8dfe73f2-8da6-418b-b660-46d97eea3c39",
       "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
       "section": "표 1",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 10297,
+      "span_end": 10345,
       "_passage": "Federal funds rate | 4.1 | 4.1 | 3.9 | 3.6 | 3.2"
     },
     {
@@ -1533,16 +1640,16 @@
       "fact_id": "dc28b2c9-46b2-4e22-8b36-f631ee5193f9",
       "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
       "section": "표 1",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 10297,
+      "span_end": 10345,
       "_passage": "Federal funds rate | 4.1 | 4.1 | 3.9 | 3.6 | 3.2"
     },
     {
       "fact_id": "6fbd4e50-707b-4a33-80dc-e27b33d982da",
       "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
       "section": "표 1",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 9779,
+      "span_end": 9822,
       "_passage": "PCE inflation | 3.7 | 2.3 | 2.1 | 2.0 | 2.0"
     },
     {
@@ -1566,8 +1673,8 @@
       "fact_id": "310e4806-f7c0-4a4a-a4a3-a1eee96872e6",
       "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
       "section": "표 1",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 9505,
+      "span_end": 9552,
       "_passage": "Unemployment rate | 4.1 | 4.1 | 4.1 | 4.1 | 4.2"
     },
     {
@@ -1583,16 +1690,16 @@
       "fact_id": "a2675416-6931-4a07-9233-0583118addf7",
       "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
       "section": "표 1",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 9230,
+      "span_end": 9278,
       "_passage": "Change in real GDP | 2.3 | 2.4 | 2.2 | 2.1 | 2.0"
     },
     {
       "fact_id": "f206d4eb-ef0d-4fbc-9c0a-743b433ad92d",
       "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
       "section": "표 1",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 9779,
+      "span_end": 9822,
       "_passage": "PCE inflation | 3.7 | 2.3 | 2.1 | 2.0 | 2.0"
     },
     {
@@ -1607,16 +1714,16 @@
       "fact_id": "eb2fca0f-5853-4006-941c-06132cb20f6d",
       "source_id": "92c191a3-3005-46ee-a8f6-0a50c9f78c13",
       "section": "3쪽",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 4346,
+      "span_end": 4462,
       "_passage": "It reflects the views of my colleagues on the Committee, but, as in June, I have not offered a projection of my own."
     },
     {
       "fact_id": "eb2fca0f-5853-4006-941c-06132cb20f6d",
       "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
       "section": "표 1 주",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 12002,
+      "span_end": 12100,
       "_passage": "Eighteen participants submitted information in conjunction with the September 15–16, 2026, meeting"
     },
     {
@@ -1631,8 +1738,8 @@
       "fact_id": "9d04ff04-bdb7-4a03-abdf-093e2fa4f205",
       "source_id": "92c191a3-3005-46ee-a8f6-0a50c9f78c13",
       "section": "3쪽",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 3896,
+      "span_end": 3992,
       "_passage": "The Committee's unanimous vote shows our resolve to achieve price stability on a timelier basis."
     },
     {
@@ -1647,8 +1754,8 @@
       "fact_id": "fb624268-f0e6-4426-80a3-347062739629",
       "source_id": "92c191a3-3005-46ee-a8f6-0a50c9f78c13",
       "section": "11쪽",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 20163,
+      "span_end": 20239,
       "_passage": "Stable prices have been the problem for now more than five and a half years."
     },
     {
@@ -1679,8 +1786,8 @@
       "fact_id": "0b52011f-f322-41af-9745-751a1b393ca6",
       "source_id": "92c191a3-3005-46ee-a8f6-0a50c9f78c13",
       "section": "2쪽",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 2500,
+      "span_end": 2598,
       "_passage": "This summer's inflation readings do not tell me that underlying trends have meaningfully improved."
     },
     {
@@ -1695,8 +1802,8 @@
       "fact_id": "b9d7fffb-052b-4b78-ae36-d7434a3f7e65",
       "source_id": "92c191a3-3005-46ee-a8f6-0a50c9f78c13",
       "section": "2쪽",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 2108,
+      "span_end": 2283,
       "_passage": "Unemployment claims, on a four-week moving average, are running at levels consistent with full employment. So the labor side of the Fed's congressional remit is in good shape."
     },
     {
@@ -1711,8 +1818,8 @@
       "fact_id": "2a581a55-8680-422c-b8a7-07567edda78f",
       "source_id": "92c191a3-3005-46ee-a8f6-0a50c9f78c13",
       "section": "6쪽",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 10820,
+      "span_end": 10967,
       "_passage": "a good majority of my colleagues seven weeks ago thought seven weeks is a good investment. It's a way to buy time so we could make a wise decision."
     },
     {
@@ -1735,16 +1842,16 @@
       "fact_id": "f0ff74bd-58fb-4137-9952-ac7f8e215d05",
       "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 8374,
+      "span_end": 8580,
       "_passage": "Voting against the monetary policy action were Beth M. Hammack, Neel Kashkari, and Lorie K. Logan, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting."
     },
     {
       "fact_id": "52f405b4-9ef6-4811-b11c-440f450bc057",
       "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 7656,
+      "span_end": 7734,
       "_passage": "maintain the target range for the federal funds rate at 3-1/2 to 3-3/4 percent"
     },
     {
@@ -1767,24 +1874,24 @@
       "fact_id": "145f189e-e7e3-4af3-9d8e-13cdb1ace448",
       "source_id": "753cb767-5ad7-4261-8d8b-6011f44711d7",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 2678,
+      "span_end": 2765,
       "_passage": "Excluding food and energy, the PCE price index increased 3.3 percent from one year ago."
     },
     {
       "fact_id": "a7190147-d750-4c11-8979-f9820692f849",
       "source_id": "aca51380-f654-4d32-90ab-8d0dfa576ec1",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 25790,
+      "span_end": 25932,
       "_passage": "And while this summer's PCE and CPI readings were better than expected, they do not tell me that underlying trends have meaningfully improved."
     },
     {
       "fact_id": "2eef7bcc-b2f4-4f7f-bd90-d4e6250ac5a3",
       "source_id": "aca51380-f654-4d32-90ab-8d0dfa576ec1",
       "section": "\"The Economy Today\" 절의 끝, \"Conclusion\" 바로 앞 문단",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 27970,
+      "span_end": 28129,
       "_passage": "Here is my standard: We must be confident that underlying inflation is moving to our objective, clearly and at sufficient speed. Otherwise, we have work to do."
     },
     {
@@ -1882,8 +1989,8 @@
       "fact_id": "362b4708-241c-4b1e-b982-ade7267aff68",
       "source_id": "72bd0450-f24f-4b1f-b492-098490886d27",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 25621,
+      "span_end": 25754,
       "_passage": "Many participants noted that the recent re-escalation of the conflict in the Middle East significantly clouded the inflation outlook."
     },
     {
@@ -1962,8 +2069,8 @@
       "fact_id": "afef45ae-0cfc-41cd-a591-bde58226bb75",
       "source_id": "0eac88de-b3d5-49da-a3e1-1733ed4144a7",
       "section": "Annual Organizational Matters",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 7895,
+      "span_end": 8055,
       "_passage": "advices of the election of the following members and alternate members of the Federal Open Market Committee for a term beginning January 27, 2026, were received",
       "_note": "명단에 Beth M. Hammack · Lorie K. Logan · Neel Kashkari 가 있다 (C-3b §3). 셋에게 각각 대리 위원이 있다"
     },
@@ -1989,16 +2096,16 @@
       "fact_id": "357a45ff-7015-4c12-8b11-ec5361003bf9",
       "source_id": "aca51380-f654-4d32-90ab-8d0dfa576ec1",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 24356,
+      "span_end": 24442,
       "_passage": "When labor supply is barely growing, monthly job gains are naturally going to run low."
     },
     {
       "fact_id": "bf696ae1-827e-4354-80a6-0db54f027538",
       "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
       "section": "표 1",
-      "span_start": null,
-      "span_end": null,
+      "span_start": 9779,
+      "span_end": 9822,
       "_passage": "PCE inflation | 3.7 | 2.3 | 2.1 | 2.0 | 2.0"
     },
     {
@@ -2013,24 +2120,24 @@
       "fact_id": "20d1ee80-4b4f-4e62-806b-53e35d56440d",
       "source_id": "72bd0450-f24f-4b1f-b492-098490886d27",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 12376,
+      "span_end": 12451,
       "_passage": "higher energy and input costs stemming from the conflict in the Middle East"
     },
     {
       "fact_id": "e32c7581-e6fc-43a7-9ece-6ca1260bf2e8",
       "source_id": "a75e9af7-9e33-4d8e-a90d-b506afc30c60",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 4058,
+      "span_end": 4231,
       "_passage": "On February 28, the President of the United States ordered the Joint Force to execute Operation Epic Fury with the direction to accomplish three distinct military objectives"
     },
     {
       "fact_id": "b54874a8-9b1e-49da-9706-876ec948f8c2",
       "source_id": "a75e9af7-9e33-4d8e-a90d-b506afc30c60",
       "section": null,
-      "span_start": null,
-      "span_end": null,
+      "span_start": 3348,
+      "span_end": 3482,
       "_passage": "Iran has now agreed to a ceasefire and reopening the Strait of Hormuz as the Trump Administration negotiates a broader peace agreement"
     },
     {

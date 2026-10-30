@@ -39,6 +39,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GOLDEN = os.path.join(ROOT, 'fixtures/fomc-2026-09.article.json')
 RECORD = os.path.join(ROOT, 'fixtures/fomc-2026-09.record.json')
 STORE = os.path.join(ROOT, 'fixtures/store.json')
+# 저장소의 SourceDocument(원문 전문)는 옆 파일에 둔다 (P-1) — store.json 을 사람이 읽을 크기로 두려고. 읽을 때 store.source_documents 에 붙인다
+STORE_DOCS = os.path.join(ROOT, 'fixtures/store.documents.json')
 CONCEPTS = os.path.join(ROOT, 'docs/content/concept-library.json')
 GOLDEN_SET = {os.path.basename(p): p for p in (GOLDEN, RECORD, STORE)}
 UUID_RE = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
@@ -126,7 +128,10 @@ def load_bundle(replace=None):
     record = get(RECORD)
     pkg_name = record.get('_package', os.path.basename(GOLDEN))
     package = replace[pkg_name] if pkg_name in replace else read_json(os.path.join(ROOT, 'fixtures', pkg_name))
-    return {'package': package, 'record': record, 'store': get(STORE), 'concepts': read_json(CONCEPTS)}
+    store = get(STORE)
+    if os.path.exists(STORE_DOCS) or os.path.basename(STORE_DOCS) in replace:
+        store = dict(store, source_documents=store['source_documents'] + get(STORE_DOCS)['source_documents'])
+    return {'package': package, 'record': record, 'store': store, 'concepts': read_json(CONCEPTS)}
 
 
 # ---------------------------------------------------------------- 선형화 (계약 §7.3 ~ §7.7)

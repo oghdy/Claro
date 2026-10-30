@@ -14,10 +14,14 @@
                  `_passage`(1차 구절)가 C-3 기록 · 스토리라인 문서에 글자 그대로 있다 · 개체 필드가 계약 타입과 같다
   D. 모델        골든 한 벌(article · record · store) + 개념 저장소를 계약 모양 그대로 읽어 불변식을 돌린다.
                  지금 검사는 통과해야 하고, 발행 검사에서 막히는 것은 WARN 으로 센다 — 콘텐츠 · 파이프라인이 채울 것
+  E. 원문 (P-1)  저장한 원문(SourceDocument)이 가져온 기록(packages/pipeline/data/*.sources.json)의 해시와 같다 ·
+                 원문은 권리가 can_store 인 발행처 것만 저장소에 있다 · span 이 있는 FactSource 는 있는 Source 를 가리키고
+                 그 글의 span 이 1차 구절(`_passage`)과 맞으며(packages/pipeline/match-rules.json 규칙) 그 구절이 글에 한 번만 있다.
+                 권리 미확인 원문은 git 밖 캐시에만 — 이 기계에 없으면 WARN(SOURCE_TEXT_NOT_HERE), 해시가 다르면 FAIL
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
 """
-import calendar, copy, datetime as dt, importlib.util, json, os, re, sys, uuid
+import calendar, copy, datetime as dt, hashlib, importlib.util, json, os, re, sys, uuid
 from collections import Counter, defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,6 +32,10 @@ LIBRARY = os.path.join(ROOT, 'docs/content/concept-library.md')
 # 저장소의 1차 구절(`_passage`)이 글자 그대로 있어야 하는 기록 — 구절을 지어내지 못하게 한다
 RECORDS = [os.path.join(ROOT, p) for p in ('logs/content/source-check-2026-10.md', 'docs/findings/storyline-iran-war.md',
                                            'logs/content/golden-correction-2026-10.md')]
+# P-1 — 원문을 가져온 기록 · 구절 맞추기 규칙 (파이프라인과 같은 파일) · 권리 미확인 원문의 캐시 (git 밖)
+FETCH = os.path.join(ROOT, 'packages/pipeline/data/fomc-2026-09.sources.json')
+MATCH_RULES = os.path.join(ROOT, 'packages/pipeline/match-rules.json')
+TEXT_CACHE = os.path.join(ROOT, 'packages/pipeline/.cache/text')
 # 발행 전에 고친 사실(`_brief_text`)은 교정 기록에 그 사실을 가리킨 줄이 있어야 한다 (C-6 · DATA_MODEL §2.3)
 CORRECTIONS = os.path.join(ROOT, 'logs/correction-log.jsonl')
 BRIEFS = {
@@ -407,13 +415,141 @@ def golden_report(pkg, store):
     return rep
 
 
+# ── E. 원문 (P-1) ────────────────────────────────────────────────────────────
+_RULES = json.load(open(MATCH_RULES, encoding='utf-8'))
+_WS = set(_RULES['whitespace'])
+_SAME = {ch: g[0] for g in _RULES['same'] for ch in g}
+
+
+def canon(t):
+    """match-rules.json — 공백 묶음 = 공백 하나 · 따옴표 모양만 같게. 파이프라인 src/match.ts 의 canon 과 같다 (위치는 코드 포인트)"""
+    out, ws = [], False
+    for ch in t:
+        if ch in _WS:
+            if not ws:
+                out.append(' ')
+            ws = True
+            continue
+        ws = False
+        out.append(_SAME.get(ch, ch))
+    return ''.join(out)
+
+
+def occurrences(hay, needle):
+    n, i = 0, hay.find(needle)
+    while i != -1:
+        n += 1
+        i = hay.find(needle, i + 1)
+    return n
+
+
+def sha256_text(t):
+    return hashlib.sha256(t.encode('utf-8')).hexdigest()
+
+
+def load_fetch():
+    return json.load(open(FETCH, encoding='utf-8')) if os.path.exists(FETCH) else None
+
+
+def check_documents(store, fetch, cache_dir=TEXT_CACHE):
+    """-> (errs, held, texts). texts = {source_id: 글} — 저장소의 원문 + 이 기계의 캐시에 있는 권리 미확인 원문 (해시가 맞는 것만)"""
+    errs, held, texts = [], [], {}
+    E = lambda c, m: errs.append((c, m))
+    S = {x['source_id']: x for x in store['sources']}
+    lab = lambda sid: S.get(sid, {}).get('label', sid)
+    reg = {r['source']: r for r in store['source_registry']}
+    F = {f['fact_id']: f['label'] for f in store['facts']}
+    if fetch is None:
+        if store['source_documents'] or any(isinstance(x.get('span_start'), int) for x in store['fact_sources']):
+            E('FETCH_RECORD_MISSING', f'원문 · span 이 있는데 가져온 기록 {os.path.relpath(FETCH, ROOT)} 가 없다 — 어디서 언제 가져온 글인지 모른다')
+        fetch = {'documents': [], 'spans': []}
+    recs = {}
+    for d in fetch.get('documents', []):
+        if d['source_id'] not in S:
+            E('SOURCE_UNKNOWN', f'가져온 기록의 {d.get("label")}: 없는 Source {d["source_id"]}')
+        recs[d['source_id']] = d
+    for sid, n in Counter(d['source_id'] for d in store['source_documents']).items():
+        if n > 1:
+            E('SOURCE_DOC_DUP', f'SourceDocument {lab(sid)} 가 {n}번 — Source 하나에 원문 하나 (store.json · store.documents.json 을 합친 것)')
+    for d in store['source_documents']:
+        sid, t = d['source_id'], d['text']
+        if sid not in S:
+            E('SOURCE_UNKNOWN', f'SourceDocument {sid}: 없는 Source 의 원문이다')
+            continue
+        w = f'SourceDocument {lab(sid)}'
+        if reg.get(S[sid]['publisher'], {}).get('can_store') is not True:
+            E('SOURCE_DOC_NOT_STORABLE', f'{w}: 발행처 {S[sid]["publisher"]} 가 can_store 가 아니다 — 권리 미확인 전문을 공개 저장소에 두지 않는다 (P-1 · §4.4)')
+        r = recs.get(sid)
+        if not r or r.get('status') != 'STORED' or r.get('text_in') != 'store.documents.json':
+            E("SOURCE_DOC_UNRECORDED", f"{w}: 가져온 기록에 저장소 원문(store.documents.json)으로 적혀 있지 않다")
+        elif sha256_text(t) != r.get('text_sha256') or len(t) != r.get('text_length'):
+            E('SOURCE_DOC_HASH', f'{w}: 글의 sha256 · 길이가 가져온 기록과 다르다 — 한 번 보관한 원문은 바뀌지 않는다 (§4.1)')
+        texts[sid] = t
+    for sid, r in recs.items():
+        if r.get('status') == 'STORED' and r.get('text_in') == 'cache':
+            if sid in texts:
+                E('SOURCE_DOC_NOT_STORABLE', f'{r["label"]}: 캐시에만 두는 원문이 저장소에도 있다')
+                continue
+            p = os.path.join(cache_dir, re.sub(r'[^\w.-]', '_', r['label']) + '.txt')
+            t = open(p, encoding='utf-8').read() if os.path.exists(p) else None
+            if t is None:
+                held.append(('SOURCE_TEXT_NOT_HERE', f'{r["label"]}: 권리 미확인 원문이 이 기계의 캐시에 없다 — 해시 · span 을 대 볼 수 없다 (p1 을 돌리면 생긴다)'))
+            elif sha256_text(t) != r.get('text_sha256'):
+                E('SOURCE_DOC_HASH', f'{r["label"]}: 캐시의 글이 가져온 기록의 해시와 다르다')
+            else:
+                texts[sid] = t
+    canon_texts = {}
+    for x in store['fact_sources']:
+        w = f'FactSource {F.get(x["fact_id"], x["fact_id"])} · {lab(x["source_id"])}'
+        if x['source_id'] not in S:
+            E('SOURCE_UNKNOWN', f'{w}: 없는 Source {x["source_id"]} 를 가리킨다')
+            continue
+        a, b = x.get('span_start'), x.get('span_end')
+        if (a is None) != (b is None) or any(v is not None and type(v) is not int for v in (a, b)):
+            E('SPAN_SHAPE', f'{w}: span_start · span_end 는 둘 다 정수이거나 둘 다 null')
+            continue
+        if a is None:
+            continue
+        t = texts.get(x['source_id'])
+        if t is None:
+            r = recs.get(x['source_id'], {})
+            if r.get('text_in') == 'cache':
+                continue                                   # 위에서 SOURCE_TEXT_NOT_HERE
+            E('SPAN_NO_DOCUMENT', f'{w}: span 이 있는데 그 Source 의 원문이 없다 (불변식 8)')
+            continue
+        if not 0 <= a < b <= len(t):
+            E('SPAN_RANGE', f'{w}: span {a}–{b} 가 글(길이 {len(t)}) 밖이다')
+            continue
+        p_ = x.get('_passage')
+        if p_ is None:
+            continue
+        if canon(t[a:b]) != canon(p_):
+            E('SPAN_TEXT_MISMATCH', f'{w}: span {a}–{b} 의 글이 1차 구절과 다르다 — 글 {t[a:b][:40]!r} · 구절 {p_[:40]!r}')
+            continue
+        ct = canon_texts.setdefault(x['source_id'], canon(t))
+        n = occurrences(ct, canon(p_))
+        if n != 1:
+            E('SPAN_NOT_UNIQUE', f'{w}: 1차 구절이 그 글에 {n}번 있다 — 여럿이면 위치를 고르지 않는다')
+    # 가져온 기록의 구절 결과와 저장소의 span 이 같다 (기록은 파이프라인이 쓴다 — 손으로 고친 span 이 기록과 어긋나면 FAIL)
+    key = {}
+    for x in store['fact_sources']:
+        if x.get('_passage') is not None:
+            key.setdefault((F.get(x['fact_id']), lab(x['source_id']), x['_passage']), []).append(x)
+    for sp in fetch.get('spans', []):
+        rows = key.get((sp['fact'], sp['source'], sp['passage']), [])
+        want = (sp['span_start'], sp['span_end']) if sp['result'] == 'FOUND' else (None, None)
+        if not rows or any((r_.get('span_start'), r_.get('span_end')) != want for r_ in rows):
+            E('FETCH_RECORD_STALE', f'{sp["fact"]} · {sp["source"]}: 저장소의 span 이 가져온 기록({sp["result"]} {want})과 다르다')
+    return errs, held, texts
+
+
 # ── D. 모델 ──────────────────────────────────────────────────────────────────
 def load_model(b):
     """골든 한 벌 → check_model 이 읽는 모양. 옮기지 않는다 — 파일에 있는 그대로다 (0.2m-a)"""
     st, rec, pkg = b['store'], b['record'], b['package']
     m = {'facts': {f['fact_id']: f for f in st['facts']}, 'fact_sources': st['fact_sources'],
          'sources': {s_['source_id']: s_ for s_ in st['sources']},
-         'documents': {d['source_id']: d['text'] for d in st['source_documents']},
+         'documents': {**{d['source_id']: d['text'] for d in st['source_documents']}, **b.get('_cache_texts', {})},
          'registry': {r['source']: r for r in st['source_registry']},
          'claims': {c['claim_id']: c for c in st['claims']}, 'goals': {g['goal_id']: g for g in st['goals']}, 'bridges': {x['bridge_id']: x for x in st['bridges']},
          'events': {e['event_id']: e for e in st['events']}, 'storylines': {x['storyline_id']: x for x in st['storylines']},
@@ -747,7 +883,7 @@ def check_model(m, lib, publish=False):
 # 발행 검사에서 막히는 것을 둘로 가른다 (D27) — 독자에게 닿는 것 / 기계 검증용(파이프라인)
 READER_FACING = ('REFS_PENDING', 'FACT_NO_PRIMARY', 'FACT_NOT_YET_PUBLIC', 'CLAIM_UNCHECKED', 'GOAL_UNCHECKED', 'CHECK_NO_FACTS',
                  'DERIVED_UNVERIFIED', 'DERIVED_INPUT_NO_FACT', 'QUOTE_NO_COMMON_SOURCE', 'STORYLINE_STALE', 'BRIDGE_CONCEPT')
-MACHINE_ONLY = ('FACT_NO_SOURCE_SPAN', 'FACT_PUBLIC_UNPROVEN', 'QUOTE_SPAN_MISSING', 'QUOTE_NOT_ALLOWED')
+MACHINE_ONLY = ('FACT_NO_SOURCE_SPAN', 'FACT_PUBLIC_UNPROVEN', 'QUOTE_SPAN_MISSING', 'QUOTE_NOT_ALLOWED', 'SOURCE_TEXT_NOT_HERE')
 
 
 def run(contract_text, log_text, bundle, lib_text, records_text=None):
@@ -761,7 +897,15 @@ def run(contract_text, log_text, bundle, lib_text, records_text=None):
     e = check_origin(bundle['store'], bundle['record'], contract_text, fb, records_text)
     errs += e
     model = None
-    if not e:                                           # 모양이 깨졌으면 모델을 읽지 않는다
+    rep['fetch'] = bundle['fetch'] if 'fetch' in bundle else load_fetch()
+    doc_held = []
+    if not e:
+        de, doc_held, texts = check_documents(bundle['store'], rep['fetch'])
+        errs += de
+        e = e + de
+        bundle = dict(bundle, _cache_texts={k: v for k, v in texts.items()
+                                            if k not in {d['source_id'] for d in bundle['store']['source_documents']}})
+    if not e:                                           # 모양 · 원문이 깨졌으면 모델을 읽지 않는다
         pkg = bundle['package']
         if not (isinstance(pkg.get('published_at'), str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', pkg['published_at'])):
             errs.append(('GOLD_PUBLISHED_AT_SHAPE', f'published_at={pkg.get("published_at")!r} — "YYYY-MM-DD" 여야 한다 (§5.3 · R-1)'))
@@ -776,7 +920,7 @@ def run(contract_text, log_text, bundle, lib_text, records_text=None):
         model = load_model(bundle)
         me, held = check_model(model, lib)
         errs += me
-        rep['held'] = held
+        rep['held'] = doc_held + held
     return errs, warns, rep, model, lib
 
 
@@ -815,6 +959,16 @@ def main():
 
 
 def report_out(rep, model):
+    fr = rep.get('fetch')
+    if fr:
+        docs, spans = fr['documents'], fr['spans']
+        st = Counter(d['status'] for d in docs)
+        res = Counter(x['result'] for x in spans)
+        print(f'\n원문 · span (P-1 — {os.path.relpath(FETCH, ROOT)})')
+        print(f'  Source {len(docs)} — 저장 {st["STORED"]} (저장소 {sum(d["text_in"] == "store.documents.json" for d in docs)} · 캐시만 {sum(d["text_in"] == "cache" for d in docs)}) · '
+              f'못 가져옴 {st["NOT_FETCHED"]} · 살아 있는 페이지 {sum(d["live"] for d in docs if d["status"] == "STORED")}')
+        print(f'  1차 구절 {len(spans)} — 찾음 {res["FOUND"]} · 못 찾음 {res["NOT_FOUND"]} · 여럿 {res["MULTIPLE"]} · 원문 없음 {res["NO_DOCUMENT"]}')
+        print(f'  추출 {fr.get("extractor")} · 맞추기 {fr.get("match_rules")}')
     print(f'\n골든 대기 span {len(rep["pending_list"])} — 실물에서 센다 (불변식 25)')
     for lid, n, t, layer, need, _ in rep['pending_list']:
         print(f'  {lid:<8} {n}장 {layer:<6} {need:<12} "{VA.strip_tags(t).strip()[:36]}"')
