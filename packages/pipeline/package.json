@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "p1": "node src/p1.ts",
+    "p2": "node src/pack.ts",
     "test": "vitest run",
     "typecheck": "tsc -p ."
   },

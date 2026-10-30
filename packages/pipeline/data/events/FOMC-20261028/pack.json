@@ -1,0 +1,556 @@
+{
+  "_what": "P-2 소스 팩 목록 — 사건 하나 = 목록 하나. 사람(작업 세션)이 쓴다. packages/pipeline/src/pack.ts 가 이 목록을 받아 가져오고 · 뽑고 · 해시를 내어 같은 폴더의 store.json · store.documents.json · fetch.json 을 쓴다. 사실 · 해석 · 요점은 없다 (P-3 이후). 주소는 전부 실제로 확인한 것만 — url_basis 에 어떻게 확인했나. 기사 · 블로그는 길잡이로만 썼고 출처로 넣지 않았다 (D27)",
+  "event": {
+    "code": "FOMC-20261028",
+    "title": "2026-10-28 FOMC",
+    "occurred_at": "2026-10-28",
+    "storyline_code": null,
+    "_gate1": "도윤 (게이트 1 · 2026-10-30) — docs/development-pipeline.md P-2"
+  },
+  "slots_basis": "docs/findings/fomc-2026-09-brief.md §3 Coverage Schema (통화정책형 15) — 슬롯 이름은 그대로 옮겼다. 슬롯을 고치는 일 · 상태 코드를 매기는 일은 P-4 다",
+  "slots": [
+    "현재 정책결정",
+    "표결",
+    "반대표 방향",
+    "직전 회의 결정",
+    "직전 정책 전망",
+    "현재 물가 평가",
+    "실제 물가 수치",
+    "고용·성장",
+    "인상 논리",
+    "외부 충격",
+    "시장 기대",
+    "위원회 향후 전망",
+    "커뮤니케이션 변화",
+    "역사적 희소성",
+    "다음 일정"
+  ],
+  "items": [
+    {
+      "label": "ST-10",
+      "group": "회의",
+      "title": "Federal Reserve issues FOMC statement (2026-10-28)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+      "slots": [
+        "현재 정책결정",
+        "표결",
+        "반대표 방향",
+        "현재 물가 평가",
+        "고용·성장",
+        "외부 충격",
+        "커뮤니케이션 변화"
+      ],
+      "why": "이 회의의 결정 · 표결 · 반대자와 반대 방향 · 위원회의 경제 평가. 9월 성명(ST-09)과 견주면 커뮤니케이션 변화",
+      "url_basis": "연준 달력 페이지(CAL)의 October 27-28 줄 · 보도자료 RSS(feeds/press_monetary.xml) 첫 항목",
+      "published_at": "2026-10-28T14:00-04:00",
+      "published_evidence": "October 28, 2026\nFederal Reserve issues FOMC statement\nFor release at 2:00 p.m. EDT"
+    },
+    {
+      "label": "IMPL-10",
+      "group": "회의",
+      "title": "Implementation Note issued October 28, 2026",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a1.htm",
+      "slots": [
+        "현재 정책결정"
+      ],
+      "why": "결정을 시행하는 금리들 (IORB · ON RRP · 할인율) — 9월 팩의 S4 와 같은 자리",
+      "url_basis": "ST-10 본문의 링크 \"Implementation Note issued October 28, 2026\" · CAL",
+      "published_at": "2026-10-28",
+      "published_evidence": "Press Release\nOctober 28, 2026\nImplementation Note issued October 28, 2026"
+    },
+    {
+      "label": "PC-10",
+      "group": "회의",
+      "title": "Transcript of Chairman Warsh's Press Conference, October 28, 2026 (PRELIMINARY)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20261028.pdf",
+      "slots": [
+        "인상 논리",
+        "현재 물가 평가",
+        "고용·성장",
+        "외부 충격",
+        "시장 기대",
+        "위원회 향후 전망",
+        "커뮤니케이션 변화"
+      ],
+      "why": "의장이 결정을 어떻게 설명했나 — 9월 팩의 S3 자리. 받은 판은 PRELIMINARY (첫 줄). FINAL 이 나오면 다른 Source 다 (DATA_MODEL §4.1 — 9월 S3 와 같은 일)",
+      "url_basis": "기자회견 페이지 fomcpresconf20261028.htm 의 소스에 이 주소가 주석으로 있다 (화면 링크는 아직 없다). 2026-10-30 GET 200 application/pdf",
+      "published_at": "2026-10",
+      "published_evidence": "October 28, 2026 Chairman Warsh’s Press Conference PRELIMINARY",
+      "published_note": "공개 시각을 글이 말하지 않는다 — 첫 줄은 회견 날짜다. 응답 머리 Last-Modified 2026-10-29 15:22 GMT 는 파일이 바뀐 때일 뿐. 아는 만큼만 (달까지)"
+    },
+    {
+      "label": "PCP-10",
+      "group": "회의",
+      "title": "October 27-28, 2026 FOMC Meeting — Press Conference page",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomcpresconf20261028.htm",
+      "slots": [],
+      "why": "녹취가 이 회의의 것이라는 연결 (페이지가 성명 · 시행 노트의 공개 시각을 적는다). 녹취 링크가 아직 화면에 없다는 기록",
+      "url_basis": "CAL 의 October 27-28 줄 \"Press Conference\"",
+      "published_at": "2026-10-28",
+      "published_evidence": "Last Update: October 28, 2026",
+      "published_note": "살아 있는 페이지 — FINAL 녹취 링크가 붙으면 바뀐다. Last Update 는 이 판의 날짜",
+      "live": true
+    },
+    {
+      "label": "MIN-09",
+      "group": "사이",
+      "title": "Minutes of the Federal Open Market Committee, September 15-16, 2026",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20260916.htm",
+      "slots": [
+        "직전 회의 결정",
+        "직전 정책 전망",
+        "시장 기대",
+        "외부 충격",
+        "위원회 향후 전망"
+      ],
+      "why": "9월 회의의 실제 논의 · 시장 데스크 기록 — 9월 브리프 \"아직 없는 것\" 첫 줄. 10/7 공개라 이번 사건에는 쓸 수 있다",
+      "url_basis": "CAL 의 September 15-16 줄 \"Minutes: PDF | HTML (Released October 07, 2026)\" · 보도자료 RSS 2026-10-07",
+      "published_at": "2026-10-07",
+      "published_evidence": "Last Update: October 07, 2026"
+    },
+    {
+      "label": "DR-MIN-0916",
+      "group": "사이",
+      "title": "Minutes of the Board's discount rate meetings on August 17, September 9, and September 16, 2026",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261013a.htm",
+      "slots": [
+        "위원회 향후 전망"
+      ],
+      "why": "지역 연은 이사회들이 할인율을 어떻게 요청했나 — 위원회 바깥의 연준 안 성향. 슬롯이 꼭 맞지 않는다 (Unslotted 후보)",
+      "url_basis": "보도자료 RSS(feeds/press_monetary.xml) 2026-10-13",
+      "published_at": "2026-10-13T14:00-04:00",
+      "published_evidence": "October 13, 2026\nMinutes of the Board's discount rate meetings on August 17, September 9, and September 16, 2026\nFor release at 2:00 p.m. EDT"
+    },
+    {
+      "label": "BB-10",
+      "group": "사이",
+      "title": "Beige Book — October 2026",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/beigebook202610.htm",
+      "slots": [
+        "현재 물가 평가",
+        "고용·성장",
+        "외부 충격"
+      ],
+      "why": "회의 2주 전 12개 지역의 경기 · 물가 · 고용 보고. 9월 팩에는 없던 종류 (Unslotted 후보 — 슬롯은 겹친다)",
+      "url_basis": "연준 Beige Book 페이지(beige-book-default.htm)의 목록 · \"October 14, 2026\"",
+      "published_at": "2026-10-14",
+      "published_evidence": "Last Update: October 14, 2026"
+    },
+    {
+      "label": "SP-BARR-0929",
+      "group": "사이",
+      "title": "Barr, Economic Conditions and Monetary Policy (2026-09-29)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/speech/barr20260929a.htm",
+      "slots": [
+        "위원회 향후 전망"
+      ],
+      "why": "투표권 있는 이사의 정책 발언 (회의 사이)",
+      "url_basis": "연준 2026 연설 목록(newsevents/2026-speeches.htm) · RSS feeds/speeches_and_testimony.xml",
+      "published_at": "2026-09-29",
+      "published_evidence": "Last Update: September 29, 2026"
+    },
+    {
+      "label": "SP-COOK-0930",
+      "group": "사이",
+      "title": "Cook, The Dual Mandate in Rural America (2026-09-30)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/speech/cook20260930a.htm",
+      "slots": [
+        "반대표 방향",
+        "위원회 향후 전망"
+      ],
+      "why": "10월 반대자(Cook)의 회의 전 공개 발언",
+      "url_basis": "연준 2026 연설 목록 · RSS",
+      "published_at": "2026-09-30",
+      "published_evidence": "Last Update: September 30, 2026"
+    },
+    {
+      "label": "SP-COOK-0928",
+      "group": "사이",
+      "title": "Cook, An Update on AI and the Economy (2026-09-28)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/speech/cook20260928a.htm",
+      "slots": [
+        "반대표 방향",
+        "위원회 향후 전망"
+      ],
+      "why": "10월 반대자(Cook)의 회의 전 공개 발언 — 정책을 말했는지는 글의 낱말 수로만 적는다 (fetch.json policy_terms)",
+      "url_basis": "연준 2026 연설 목록 · RSS",
+      "published_at": "2026-09-28",
+      "published_evidence": "Last Update: September 28, 2026"
+    },
+    {
+      "label": "SP-JEF-1001",
+      "group": "사이",
+      "title": "Jefferson, The U.S. Economy and Monetary Policy (2026-10-01)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/speech/jefferson20261001a.htm",
+      "slots": [
+        "위원회 향후 전망"
+      ],
+      "why": "부의장의 정책 발언 (회의 사이)",
+      "url_basis": "연준 2026 연설 목록 · RSS",
+      "published_at": "2026-10-01",
+      "published_evidence": "Last Update: October 01, 2026"
+    },
+    {
+      "label": "SP-WAL-1008",
+      "group": "사이",
+      "title": "Waller, The Signaling Value of the Summary of Economic Projections (2026-10-08)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/speech/waller20261008a.htm",
+      "slots": [
+        "커뮤니케이션 변화",
+        "위원회 향후 전망"
+      ],
+      "why": "이사가 점도표(SEP)의 신호를 말한 연설 — 9월 기사의 뼈대가 점도표였다",
+      "url_basis": "연준 2026 연설 목록 · RSS",
+      "published_at": "2026-10-08",
+      "published_evidence": "Last Update: October 08, 2026"
+    },
+    {
+      "label": "SP-HAM-1012",
+      "group": "사이",
+      "title": "Hammack, Trimming the Sails: Communicating My Reaction Function (2026-10-12)",
+      "publisher": "clevelandfed.org",
+      "url": "https://www.clevelandfed.org/collections/speeches/2026/sp-20261012-trimming-the-sails-communicating-my-reaction-function",
+      "slots": [
+        "반대표 방향",
+        "위원회 향후 전망"
+      ],
+      "why": "10월 반대자(Hammack · 클리블랜드 연은 총재)의 회의 전 정책 발언. 지역 연은 — 권리 미확인 (FINDINGS §5.1)",
+      "url_basis": "클리블랜드 연은 연설 목록(clevelandfed.org/collections/speeches)",
+      "published_at": "2026-10-12",
+      "published_evidence": "Cleveland, Ohio, October 12, 2026",
+      "published_note": "글이 적은 것은 연설한 날 (인용 표기 줄). 올린 때는 글에 없다"
+    },
+    {
+      "label": "SP-LOG-1001",
+      "group": "사이",
+      "title": "Logan, Opening remarks for moderated conversation at Voices of the Eleventh District (2026-10-01)",
+      "publisher": "dallasfed.org",
+      "url": "https://www.dallasfed.org/news/speeches/logan/2026/lkl261001",
+      "slots": [
+        "위원회 향후 전망",
+        "반대표 방향"
+      ],
+      "why": "7월 반대자(Logan · 댈러스 연은)의 회의 사이 정책 발언. 지역 연은 — 권리 미확인",
+      "url_basis": "댈러스 연은 연설 RSS(dallasfed.org/rss/speeches) 2026-10-01",
+      "published_at": "2026-10-01",
+      "published_evidence": "Lorie Logan\nOctober 01, 2026",
+      "published_note": "글이 적은 것은 연설한 날. 올린 때는 글에 없다"
+    },
+    {
+      "label": "SP-WIL-0922",
+      "group": "사이",
+      "title": "Williams, Do You Remember? (New York Fed, 2026-09)",
+      "publisher": "newyorkfed.org",
+      "url": "https://www.newyorkfed.org/newsevents/speeches/2026/wil260922",
+      "slots": [
+        "위원회 향후 전망"
+      ],
+      "why": "부위원장(Williams · 뉴욕 연은)의 회의 사이 발언 — 정책을 말했는지는 낱말 수로만. 지역 연은 — 권리 미확인",
+      "url_basis": "뉴욕 연은 연설 목록(newyorkfed.org/newsevents/speeches/index)",
+      "published_at": "2026-09-22",
+      "published_evidence": "Do You Remember?\nSeptember 22, 2026",
+      "published_note": "글이 적은 것은 연설한 날. 올린 때는 글에 없다"
+    },
+    {
+      "label": "SP-WIL-0929",
+      "group": "사이",
+      "title": "Williams, Unwavering Dedication (New York Fed, 2026-09)",
+      "publisher": "newyorkfed.org",
+      "url": "https://www.newyorkfed.org/newsevents/speeches/2026/wil260929",
+      "slots": [
+        "위원회 향후 전망"
+      ],
+      "why": "같음",
+      "url_basis": "뉴욕 연은 연설 목록",
+      "published_at": "2026-09-29",
+      "published_evidence": "Unwavering Dedication\nSeptember 29, 2026",
+      "published_note": "글이 적은 것은 연설한 날. 올린 때는 글에 없다"
+    },
+    {
+      "label": "BLS-09",
+      "group": "사이",
+      "title": "The Employment Situation — September 2026 (2026-10-02)",
+      "publisher": "bls.gov",
+      "url": "https://www.bls.gov/news.release/archives/empsit_10022026.htm",
+      "slots": [
+        "고용·성장"
+      ],
+      "why": "회의 사이 유일한 고용 1차 발표 (10월분은 11월). 7월 수치의 두 번째 수정도 여기 (C-3 D-1)",
+      "url_basis": "C-3 기록(logs/content/source-check-2026-10.md) 의 BLS-09 — C-3 이 브라우저로 직접 열었다",
+      "skip": "BLS — 요청하지 않았다. P-1 에서 같은 User-Agent 가 403 ('bot activity that doesn't conform to BLS usage policy is prohibited') · D40 P1-d 는 도윤이 정한다. 막힌 곳을 다시 두드리지 않는다"
+    },
+    {
+      "label": "CPI-09",
+      "group": "사이",
+      "title": "Consumer Price Index — September 2026 (2026-10-14)",
+      "publisher": "bls.gov",
+      "url": "https://www.bls.gov/news.release/archives/cpi_10142026.htm",
+      "slots": [
+        "실제 물가 수치"
+      ],
+      "why": "회의 사이의 소비자물가 1차 발표. 9월 팩에서는 8월 CPI 가 NOT_EXTRACTED 였다",
+      "url_basis": "웹 검색 결과의 bls.gov 주소 (제목 \"Consumer Price Index News Release - 2026 M09 Results\") — 직접 열지 않았다",
+      "skip": "BLS — 요청하지 않았다 (BLS-09 와 같음)"
+    },
+    {
+      "label": "PPI-09",
+      "group": "사이",
+      "title": "Producer Price Index — September 2026 (2026-10-15)",
+      "publisher": "bls.gov",
+      "url": "https://www.bls.gov/news.release/archives/ppi_10152026.htm",
+      "slots": [
+        "실제 물가 수치",
+        "외부 충격"
+      ],
+      "why": "생산자물가 1차 발표 — 9월 팩의 PPI-08 자리",
+      "url_basis": "웹 검색 결과의 bls.gov 주소 (제목 \"Producer Price Index News Release - 2026 M09 Results\") — 직접 열지 않았다",
+      "skip": "BLS — 요청하지 않았다 (BLS-09 와 같음)"
+    },
+    {
+      "label": "BEA-08",
+      "group": "사이",
+      "title": "Personal Income and Outlays, August 2026 (BEA, 2026-09-30)",
+      "publisher": "bea.gov",
+      "url": "https://www.bea.gov/news/2026/personal-income-and-outlays-august-2026",
+      "slots": [
+        "실제 물가 수치"
+      ],
+      "why": "연준 목표가 재는 물가(PCE · 근원 PCE)의 회의 사이 1차 발표. 연간 개편이 같이 들어갔다 (C-3 메모 \"9/30 BEA 방법 개편\")",
+      "url_basis": "웹 검색 결과의 bea.gov 주소 · 같은 발표의 PDF pi0826.pdf (\"EMBARGOED UNTIL RELEASE AT 8:30 a.m. EDT, Wednesday, September 30, 2026\")",
+      "published_at": "2026-09-30T08:30-04:00",
+      "published_evidence": "EMBARGOED UNTIL RELEASE AT 8:30 a.m. EDT, Wednesday, September 30, 2026\nBEA 26–43"
+    },
+    {
+      "label": "BEA-GDP-2Q3",
+      "group": "사이",
+      "title": "GDP (Third Estimate), Industries, Corporate Profits, State GDP, and State Personal Income, 2nd Quarter 2026",
+      "publisher": "bea.gov",
+      "url": "https://www.bea.gov/news/2026/gdp-third-estimate-industries-corporate-profits-state-gdp-and-state-personal-income-2nd",
+      "slots": [
+        "고용·성장"
+      ],
+      "why": "성장의 회의 사이 1차 발표 (2분기 확정치)",
+      "url_basis": "웹 검색 결과의 bea.gov 주소",
+      "published_at": "2026-09-30T08:30-04:00",
+      "published_evidence": "EMBARGOED UNTIL RELEASE AT 8:30 a.m. EDT, Wednesday, September 30, 2026\nBEA 26—42"
+    },
+    {
+      "label": "ST-09",
+      "group": "직전",
+      "title": "Federal Reserve issues FOMC statement (2026-09-16)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+      "slots": [
+        "직전 회의 결정",
+        "커뮤니케이션 변화"
+      ],
+      "why": "직전 회의의 결정 · 표결. 문장을 ST-10 과 견준다 — 9월 팩에서 NOT_EXTRACTED 였던 슬롯",
+      "url_basis": "P-1 이 저장한 Source ST-09 와 같은 주소"
+    },
+    {
+      "label": "SEP-09",
+      "group": "직전",
+      "title": "September 16, 2026: FOMC Projections materials, accessible version",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomcprojtabl20260916.htm",
+      "slots": [
+        "직전 정책 전망",
+        "위원회 향후 전망"
+      ],
+      "why": "10월 회의는 SEP 회의가 아니다 (CAL 의 * 표시) — 회의 때 가장 최근의 전망 · 점도표가 9월 것이다",
+      "url_basis": "P-1 이 저장한 Source SEP-09 와 같은 주소"
+    },
+    {
+      "label": "PC-09",
+      "group": "직전",
+      "title": "Transcript of Chairman Warsh's Press Conference, September 16, 2026 (FINAL)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/mediacenter/files/FOMCpresconf20260916.pdf",
+      "slots": [
+        "직전 회의 결정",
+        "커뮤니케이션 변화"
+      ],
+      "why": "직전 회의 의장 설명 — 10월 설명과 견준다",
+      "url_basis": "P-1 이 저장한 Source PC-09 와 같은 주소"
+    },
+    {
+      "label": "OMO",
+      "group": "살아 있는 표",
+      "title": "Open Market Operations — target rate history",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/openmarket.htm",
+      "live": true,
+      "slots": [
+        "역사적 희소성",
+        "직전 회의 결정"
+      ],
+      "why": "목표 금리 변경 이력 — 동결이면 표에 새 줄이 없다는 것 자체를 이 판으로 확인",
+      "url_basis": "P-1 Source OMO 와 같은 주소"
+    },
+    {
+      "label": "CAL",
+      "group": "살아 있는 표",
+      "title": "Meeting calendars and information",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "live": true,
+      "slots": [
+        "다음 일정"
+      ],
+      "why": "다음 회의(12/8-9 · SEP 동반) · 9월 회의록 공개일",
+      "url_basis": "P-1 Source CAL 과 같은 주소"
+    },
+    {
+      "label": "TSY",
+      "group": "살아 있는 표",
+      "title": "Daily Treasury Par Yield Curve Rates 2026",
+      "publisher": "home.treasury.gov",
+      "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026",
+      "live": true,
+      "slots": [
+        "시장 기대"
+      ],
+      "why": "회의 사이 · 회의 당일의 국채 금리 (시장 쪽 1차 측정). 확률(FedWatch)은 아니다",
+      "url_basis": "P-1 Source TSY 와 같은 주소"
+    },
+    {
+      "label": "EIA-B",
+      "group": "살아 있는 표",
+      "title": "Europe Brent Spot Price FOB (daily)",
+      "publisher": "eia.gov",
+      "url": "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=RBRTE&f=D",
+      "live": true,
+      "slots": [
+        "외부 충격"
+      ],
+      "why": "유가 — 9/16 뒤의 값 (스토리라인 문서 \"발행일 이후의 전개\")",
+      "url_basis": "P-1 Source EIA-B 와 같은 주소 (리다이렉트 → dnav/pet/hist/RBRTED.htm)"
+    },
+    {
+      "label": "EIA-D",
+      "group": "살아 있는 표",
+      "title": "Weekly U.S. No 2 Diesel Retail Prices",
+      "publisher": "eia.gov",
+      "url": "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=EMD_EPD2D_PTE_NUS_DPG&f=W",
+      "live": true,
+      "slots": [
+        "외부 충격"
+      ],
+      "why": "경유값 — 9/21 주 6.529 뒤의 값",
+      "url_basis": "P-1 Source EIA-D 와 같은 주소"
+    },
+    {
+      "label": "TSY-IR-1008",
+      "group": "스토리라인",
+      "title": "Operation Economic Outcast Neutralizes Iranian Regime's Remaining Shadow Fleet Network (Treasury, 2026-10-08)",
+      "publisher": "home.treasury.gov",
+      "url": "https://home.treasury.gov/news/press-releases/sb0653",
+      "slots": [
+        "외부 충격"
+      ],
+      "why": "SL-iran-war 9/16 뒤 — 미국 정부의 대이란 조치 (전쟁 당사자의 문서 · FINDINGS §5.2)",
+      "url_basis": "웹 검색으로 찾고 2026-10-30 GET 200 — 본문 \"October 8, 2026\"",
+      "published_at": "2026-10-08",
+      "published_evidence": "Remaining Shadow Fleet Network\nOctober 8, 2026"
+    },
+    {
+      "label": "TSY-IR-1021",
+      "group": "스토리라인",
+      "title": "Operation Economic Outcast Targets Iran's Shadow Fleet Networks (Treasury, 2026-10-21)",
+      "publisher": "home.treasury.gov",
+      "url": "https://home.treasury.gov/news/press-releases/sb0664",
+      "slots": [
+        "외부 충격"
+      ],
+      "why": "같음",
+      "url_basis": "웹 검색으로 찾고 2026-10-30 GET 200 — 본문 \"October 21, 2026\"",
+      "published_at": "2026-10-21",
+      "published_evidence": "Shadow Fleet Networks\nOctober 21, 2026"
+    },
+    {
+      "label": "CC-1005",
+      "group": "스토리라인",
+      "title": "CENTCOM Maintains Strict Enforcement of U.S. Blockade Against Iran",
+      "publisher": "centcom.mil",
+      "url": "https://www.centcom.mil/MEDIA/PUBLIC-RELEASES/Article/4619553/centcom-maintains-strict-enforcement-of-us-blockade-against-iran/",
+      "slots": [
+        "외부 충격"
+      ],
+      "why": "SL-iran-war 9/16 뒤 — 해상 봉쇄가 이어지고 있다는 미국 쪽 발표 (날짜는 검색 결과의 표시 — 문서로 확인 못 함)",
+      "url_basis": "웹 검색 결과의 centcom.mil 주소 (allowed_domains centcom.mil)"
+    },
+    {
+      "label": "CC-1010",
+      "group": "스토리라인",
+      "title": "U.S. Forces Disable Cargo Vessel Attempting to Violate Blockade",
+      "publisher": "centcom.mil",
+      "url": "https://www.centcom.mil/MEDIA/PUBLIC-RELEASES/Article/4623817/us-forces-disable-cargo-vessel-attempting-to-violate-blockade/",
+      "slots": [
+        "외부 충격"
+      ],
+      "why": "같음",
+      "url_basis": "웹 검색 결과의 centcom.mil 주소"
+    }
+  ],
+  "empty": [
+    {
+      "slot": "시장 기대",
+      "what": "회의 직전 시장의 금리 확률 (CME FedWatch)",
+      "why": "CME 는 자동 수집을 약관으로 금한다 (D40 P1-e). 다른 1차 측정(확률)을 못 찾았다. 국채 금리(TSY)는 있다"
+    },
+    {
+      "slot": "반대표 방향",
+      "what": "반대자 본인의 설명 (Hammack · Cook 의 10월 표결 성명)",
+      "why": "2026-10-30 현재 클리블랜드 연은 연설 목록 · 연준 보도자료 RSS 에 없다. 4월 · 7월에는 Hammack 이 회의 뒤 금요일에 성명을 냈다 (sp-20260501 · sp-20260731) — 오늘(10/30 금) 뒤에 나올 수 있다. 기자회견 녹취(PC-10)에 질문이 있을 수 있다"
+    },
+    {
+      "slot": "위원회 향후 전망",
+      "what": "Kashkari · Paulson 의 회의 사이 정책 발언 1차 문서",
+      "why": "Kashkari 는 10/1 인터뷰 보도뿐 — 연은이 낸 글을 못 찾았다. Paulson 은 9 ~ 10월 연설을 못 찾았다. 미니애폴리스 연은 목록은 스크립트로 그려져 정직한 GET 으로 안 보인다"
+    },
+    {
+      "slot": "외부 충격",
+      "what": "이란 쪽 · 중재국 · 유엔의 1차 문서",
+      "why": "9월과 같다 (storyline-iran-war.md \"아직 없는 것\"). 국무부(state.gov)는 정직한 User-Agent 에 403 — 10/8 국무부 팩트시트는 주소도 못 얻었다"
+    },
+    {
+      "slot": "외부 충격",
+      "what": "CENTCOM 10/25 '사령관 호르무즈 방문' 발표",
+      "why": "보도로만 확인. centcom.mil 주소를 못 찾았다"
+    }
+  ],
+  "seen_not_included": [
+    {
+      "what": "회의 뒤 · 발행 전의 1차 발표 — BEA GDP 3분기 속보치 (gdp-advance-estimate-3rd-quarter-2026) · BEA 9월 개인소득 · 지출",
+      "why": "회의(10/28) 뒤에 나왔다. 회의가 알 수 없던 것이다 — 기사가 쓸지는 P-4 · 게이트 2 가 본다. 가져오지 않았다"
+    },
+    {
+      "what": "연준 이사 연설 중 감독 · 결제 · 기술 주제 — Bowman 9/18 ×2 · 9/29 · 10/1 · 10/6 · 10/14 · Waller 9/29(결제) · 10/1(FRED · AI) · Barr 9/23(주거비) · Jefferson 9/22(할인창구)",
+      "why": "제목이 통화정책이 아니다. 열지 않았다 — 제목만으로 뺐다는 것을 적어 둔다"
+    },
+    {
+      "what": "백악관 행정명령 14436 'Implementing the Lindsey O. Graham Sanctioning Russia and Iran Act of 2026' (2026-10)",
+      "why": "검색 요약상 러시아 관세가 중심이다. 이 사건의 슬롯과 멀다 — 열지 않았다"
+    },
+    {
+      "what": "백악관 'President Trump's Iran Agreement Is America First in Action' (2026-06) · whitehouse.gov/releases/2026/06/president-trumps-iran-agreement-is-america-first-in-action/",
+      "why": "9/16 앞의 문서다 — 이번 팩이 아니라 9월 스토리라인 I-1(\"4월 휴전이 한 번\")의 1차 후보. 열지 않았다"
+    },
+    {
+      "what": "Kashkari 10/1 · Logan 10/1 · Kashkari 의 금리 확률 언급 보도 (Reuters · FXStreet · Kitco 등)",
+      "why": "보도는 길잡이일 뿐 출처가 아니다 (D27)"
+    }
+  ]
+}
