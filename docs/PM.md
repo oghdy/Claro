@@ -47,7 +47,8 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 
 | 작업 | 커밋 | 상태 |
 |---|---|---|
-| **P-1** 원문 저장 · 해시 · span (FOMC 골든의 출처 31 · 구절 69) | — | **도는 중** (서브에이전트, 2026-10-30). 로그 `logs/pipeline/P-1.md` |
+| **P-2** 사건 선정 + 1차 자료 | — | 다음. 도윤: 사건 고르기 (게이트 1) · BLS 연락처 (D40) |
+| ✅ P-1 원문 저장 · span | `ae6faf4` | 닫힘 (D40). 원문 17 (연방 정부만) · span 34 · 기계 검증용 55 → 26 |
 | F-3 (실제 독자) | — | **미룸** (D39) — 파이프라인의 첫 기사로. 화면 · 물음 · 기록은 배포된 채 (D38) |
 | ✅ Phase 0 전부 · 0.4a ~ 0.5 | ~ `339a872` | 닫힘. 배포 https://claro-lime-one.vercel.app |
 
@@ -134,6 +135,7 @@ Phase 0 — 계약 확정 (구현 전 기반 문서)
 | OBSERVATION | `python3 scripts/verify-observation.py` · `selftest-verify-observation.py` | exit 0 · 사본 106 + 계산 2 |
 | 라이브러리 md ↔ 저장소 | `python3 scripts/compare-concept-text.py` | 차이 0 |
 | DATA_MODEL | `python3 scripts/verify-data-model.py` · `selftest-verify-data-model.py` | exit 0 · 사본 110 |
+| 파이프라인 P-1 | `pnpm --filter @claro/pipeline p1` (`--check` 다시 돌려 같은지) | 17/17 같은 해시 · span 차이 0 |
 | 프론트 · DB | `pnpm -s typecheck` · `pnpm -s test` | 통과 (계약 40 · db 101 · 화면 42). 실제 Postgres 로: `CLARO_TEST_PG=postgres://localhost:5432 pnpm test`. 배포된 원장 보기: `pnpm --filter @claro/web deploy:ledger` (도윤의 `.env.deploy` 필요). 포트: 개발 3100 · 테스트 3101 · 폰 3200. 테스트가 `logs/frontend/F-2b` 그림 · 영상을 다시 찍는다 — 파일을 지정해 되돌린다 |
 
 빨간불 없음 (2026-10-09 · D33). `compare-reader-text` 는 옛 골든(`c46871d`) 대비 허용 차이 29, 이전 전후 차이 0.
