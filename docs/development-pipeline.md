@@ -8,7 +8,7 @@
 정치는 D46 (공식 발언만 · 동기 해석 안 함 · 필요할 때만 · 양쪽). **그동안 잔일 W-1 ~ W-5 (D47)** — 아래 "잔일 Step". **도는 중: W-4 (Opus)** · W-3 · W-2 · W-1 닫힘 (D48 · D49 · D50). 회의록 날 명령: `pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10` (마른 실행) → `--go` (logs/pipeline/W-1.md ①).
 사건 폴더: `packages/pipeline/data/events/FOMC-20261028/` (p3 · p4 · p5 · bls) · 스토리라인 `packages/pipeline/data/storylines/SL-iran-war/v2.json`
 명령: `pnpm --filter @claro/pipeline p1 | p2 <code> | p3 | p4 | p5` (각각 `--check` 로 다시 돌려 같은지). 검사: `scripts/verify-source-pack · verify-fact-graph · verify-coverage · verify-claims .py`
-비용 장부 23.43 달러 (P-1 ~ P-5 16.70 + W-2 6.73 · W-3 0 · 크레딧 약 103 달러에서 · 콘솔 월 한도 권장 30 달러). 키: `packages/pipeline/.env.pipeline` (git 무시)
+비용 장부 23.43 달러 · **목표 기사 한 편 ≤ 3 달러 (D51)** (P-1 ~ P-5 16.70 + W-2 6.73 · W-3 0 · 크레딧 약 103 달러에서 · 콘솔 월 한도 권장 30 달러). 키: `packages/pipeline/.env.pipeline` (git 무시)
 서브에이전트 모델은 PM 이 고른다 (D47): 기준 · 설계 = Fable · 분명한 일 = Opus.
 
 ## 원칙 (FINDINGS 확정에서)
@@ -16,6 +16,7 @@
 - **제일 지루하고 제일 안 틀리는 것부터** (§10.4): 소스 수집 · 저장 · 해시 · span → Coverage 슬롯 → Deep Fact Graph 초안 → Derived Claim · 반증 후보 → Goal 후보 → 집필. **집필이 마지막이다**
 - 각 단계는 정해진 JSON 만 받고 JSON 만 낸다. 실패하면 그 단계만 다시. LLM 이 이전 결과를 임의로 고치지 못한다 (§3.2)
 - **구절이 원문에 있다 ≠ 그 구절에서 이 글이 나온다 (D42).** 표 · 시계열은 코드가 읽는다 · 수량어는 대응표대로 · 사실 추출은 Opus
+- **API 비용 (D51)**: 기사 한 편 ≤ 3 달러 목표 · 급하지 않은 부르기는 배치 · 실험은 결정에 필요한 만큼 (지시마다 재기 상한) · 결과를 바꾸는 절감은 잰 뒤
 - **검사는 겹으로 (D49)**: ① 코드 (수 · 날짜 · 수량어 · 표의 칸) ② 의미 대조 (주체 · 범위 · 인과 · 조건 · 시점 — Opus medium) ③ 값 대조 (같은 수를 다른 1차와) ④ 사람 (게이트 3). 한 겹이 다른 겹을 대신하지 않는다
 - 1차 출처 필수 (D27). 원문 대조는 필수 (§5.5) — FOMC 골든에서 손으로 한 번 돌리자 틀린 사실 8건이 나왔다 (D28)
 - 출력은 계약 모양이다 (`docs/contract/*`). 지금까지 만든 검사(`scripts/*.py` · `packages/*` 테스트)가 파이프라인의 결과에도 그대로 돈다
@@ -48,7 +49,8 @@
 | W-3 | BLS 지수 → 변화율 (BLS 방식 그대로 · 9월 골든 대조) · API 비용 0 | Opus | ☑ 2026-11-11 — **닫힘 (D48)** (`logs/pipeline/W-3.md` · `bls-rates` 명령 · 10월 계산 18 (9월 · 8월 × 측정 9 — 9월 CPI 1년 전 3.7% · 근원 2.6% · 취업자 +60천) + 9월 54 · **9월 골든 대조 34: CPI 23/23 같음 · PPI 3 · 취업자 3 다름 (받은 날 판 — 고쳐진 시리즈)** · 연준 인용 9/9 같음 · **계약 자리 없음 → 그래프 0 · 계산 기록 `bls/rates.json` · _open W3-a (추천: 계산된 수 타입 — W-4)** · 9월 CPI 회의 전 공개 미확인 (W3-c · 10/1 셧다운 F217) · 검사 verify-bls-rates · 사본 18) |
 | W-1 | 회의록 다시 돌리기 한 번에 (+ `bls-rates` · W3-c 체크포인트) · 해석 한 문장 검사 (P5-e) · `p1 --check` · 상한 2 달러 | Opus | ☑ 2026-11-11 — **닫힘 (D50)** (`logs/pipeline/W-1.md` · **`rerun <code> --doc <LABEL>` (기본 마른 실행 · `--go` 로 돈다)** — 수집 → 추출 · 묶음 → bls-rates → 붙이기 · Unslotted → 해석 · 반증, 단계마다 verify-* · 실패하면 멈춤 · 바뀐 것만 부름. **마른 시험 (WH-COOK-1007 을 새 문서인 척): 다섯 단계 끝까지 · 모델 0 · 전부 `--check` 같다** · 회의록 날 예상 부르기 6 · 대략 $2.9 · P-5 판 `p5-derive/2` · `p5-counter/2` (부르지 않음 — 한 문장 · "주장은 남기고 범위를 단다" · 회의록 = `[뒤 · 회의 기록]` (after 갈래 아님 · p3 판 그대로) · 체크포인트) · 한 문장 검사 CL_SENTENCE (/1 은 WARN 13 — 해석 원래 문장도 11/14 가 두 문장 이상) · W3-c = `checkpoints.json` (반증 부르기에 같이) · `p1 --check` 못 가져옴 13 요청 0 · 비용 $0 · _open W1-a (llm.ts STEP 을 그날 바꾼다) ~ j) |
 | W-4 | 계약 잔일 — 가져온 기록 (P1-a · J5) · **계산된 수 타입 (W3-a · D48)** · §7.3 줄 (P5-c · D50 규칙) · 스토리라인 판 → 사건 사실 (P5-b) · API 0 | Opus | ⏳ 도는 중 (2026-11-11) |
-| W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + **판 올려 10월 사실 다시 뽑기 (≈ 3.5 달러 · D50)** + W1-a (rerun 이 단계 · 상한을 받게) + W2-b (`w2-entail/2` · Opus medium 다시 잼) + F046 · F449 확인 + 끝에 `rerun --pretend-new` | Opus | ☐ W-4 뒤 |
+| W-6 | **API 비용 줄이기 (D51)** — 장부 분석 · 배치 (값이 반) · 캐시가 먹는지 · effort · 보내는 양 (안) · 정답이 있는 곳에서 작게 잼 (상한 4 달러) · W1-a · 목표 한 편 ≤ 3 달러 | Opus | ☐ W-4 뒤 |
+| W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + **판 올려 10월 사실 다시 뽑기 (W-6 의 배치 길로 ≈ 1.8 달러 · D50 · D51)** + W2-b (`w2-entail/2` · Opus medium 다시 잼) + F046 · F449 확인 + 끝에 `rerun --pretend-new` | Opus | ☐ W-6 뒤 |
 
 **도윤이 준비할 것 (P-3 전)**: Claude API 키 — 비밀 값이다. 채팅에 붙이지 않고 `apps/web/.env.deploy` 처럼 git 밖 파일에. 사용 한도를 걸어 둔다.
 
@@ -61,6 +63,49 @@
 - P-3b 잔일: 영어 수 낱말이 글에 남음 (P3b-c) · 표의 창에 스토리라인 시작일 (P3b-d) · CAL 일정 줄 (P3b-e — P-4 에서 S05.d · S15.a 가 이것 때문에 NOT_EXTRACTED · P4-f) · bp · %p 표기 차이로 안 묶임 (P3b-f) · P3-e · f · g
 - `p1 --check` 가 못 가져온 문서를 다시 요청한다 — P-2 방식으로 맞춘다 (D41)
 - 남은 기계 검증용 26: 못 가져온 문서(BLS 7 · CENTCOM 3 · CME 2 …)에만 기댄 사실 13 + 표기 때문에 못 찾은 10
+
+## W-6 · API 비용 줄이기
+
+### 서브에이전트 지시 (Opus · W-4 뒤에 보낸다)
+```
+너는 Claro 프로젝트의 작업 세션이다. Step W-6 (API 비용 줄이기)을 맡는다. PM(나)이 검수하고 도윤에게 보고한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라.
+
+## 왜
+도윤: "API 비용을 잘 쓸 수 있게 해야 한다. 처음엔 유저가 많이 모이지 않는다." (D51)
+지금 기사 한 편 몫이 약 6 ~ 7 달러 (P-7 집필 빼고). 장부(`packages/pipeline/data/p3-calls.jsonl`)를 보면 **출력 토큰(생각 토큰 포함)이 돈의 대부분**이다 — P-3b 출력 18만 토큰 ≈ 3.6 달러 / 5.07. P-5 는 입력 56만 토큰 (그래프 전체를 여러 번 보낸다).
+목표: **품질을 지키면서 기사 한 편 ≤ 3 달러** (P-7 빼고). 품질은 이미 있는 정답으로 잰다 — 정답 없이 싼 쪽으로 옮기지 않는다 (D2).
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D2 · D42 · D43 · D47 · D49 · D50 · **D51**
+- docs/development-pipeline.md · logs/pipeline/P-3b.md (9월 골든 비교 방법) · W-2.md (시험 묶음) · W-1.md (rerun)
+- packages/pipeline/src/llm.ts · p3.ts · p4.ts · p5.ts · w2.ts · rerun.ts · data/p3-calls.jsonl (장부)
+- **claude-api 스킬을 먼저 불러라** — Message Batches · prompt caching · effort 의 지금 사용법 (모델마다 다르다. 추측하지 마라)
+
+## 할 일
+1. **장부 분석** — 단계별 · 호출별로 돈이 어디로 가나 (입력 · 캐시 · 출력). 기사 한 편 몫을 단계별로 표로
+2. **배치 (Message Batches · 값이 반)** — 급하지 않은 부르기를 배치로 보내는 길을 llm.ts 에 (결과는 지금처럼 저장 → 그 뒤는 결정적). rerun 의 기본을 배치로 하되 `--now` 로 즉시도 되게. 마른 실행이 배치 예상 비용을 보여 주게
+3. **캐싱** — 같은 앞부분(지시 · 스키마 · 그래프)을 여러 번 보내는 곳에 캐시가 실제로 먹는지 장부의 cache_read 로 확인하고, 안 먹으면 까닭(앞부분이 바뀌는 것)을 고친다. 특히 P-5 (그래프를 여러 번)
+4. **보내는 양 줄이기** — P-5 가 그래프 전체를 보내야 하나? 해석 · 반증에 필요한 사실만 보내는 안 (슬롯 표 · 대표 사실). 이건 품질에 닿는다 — 안을 내고, 바꿀 거면 아래 5 로 잰다
+5. **effort · 모델 재기 (작게)** — 단계마다 지금 effort 가 필요한지. 정답이 있는 곳에서만 잰다:
+   - 사실 추출: 9월 골든 비교 (P-3b 방법) — 문서 몇 개 표본으로. effort 낮춤 · 배치가 결과를 바꾸는지
+   - 의미 대조: W-2 시험 묶음 — Opus low vs medium · Sonnet 5.5 medium
+   - P-4 · P-5 는 정답이 없다 — effort 만, 앞 결과와 나란히 놓고 사람이 볼 표로 (바꾸지 말고 안만)
+   - **재기에 쓰는 돈 상한 4 달러.** 바꾸는 판정은 PM 이 한다 — 표와 추천만
+6. **새 기본값은 PM 판정 뒤** — 이 Step 에서는 배치 · 캐시 수리처럼 결과를 바꾸지 않는 것만 기본으로 켠다. effort · 모델 · 보내는 양 바꾸기는 안 + 잰 결과까지
+7. llm.ts 의 STEP 상수 · 상한을 부르는 쪽이 넘기게 (W1-a) — rerun 이 단계 이름 · 상한을 받게
+
+## 하지 말 것
+- 그래프 · 해석을 손으로 고치기 · 10월 사건 전체 다시 뽑기 (W-5 가 한다 — 이 Step 이 만든 배치 길로)
+- fixtures · 골든 · 라이브러리 · apps/web · packages/db · 계약 수정 · docs/PM.md 읽기
+판단이 필요하면 _open 으로 적고 그 부분만 멈춘다.
+
+## 끝낼 때
+- 로그 `logs/pipeline/W-6.md` — 맨 앞에 ① 기사 한 편 몫 표 (지금 → 배치 · 캐시 뒤 → 안을 다 받으면) ② 잰 결과 (품질 · 비용) ③ 켠 것 / 안으로만 둔 것 ④ 비용 ⑤ _open. "작업 세션 모델: Opus 5.5" 를 적어라
+- 검사: 파이썬 검사 전부 · `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 그림은 하나씩 `git checkout -- <파일>`) · `rerun FOMC-20261028 --doc WH-COOK-1007 --pretend-new --go` 끝까지 (모델 0) · 새 검사 + 망가뜨린 사본
+- docs/development-pipeline.md 의 W-6 줄 · 커밋 접두사 `W-6` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard 금지
+- **나(PM)에게**: 25줄 안쪽 한국어 요약 — 커밋 · 한 편 몫 (전 → 후) · 잰 결과 · 추천 · 비용 · _open
+```
 
 ## W-4 · 계약 잔일
 
