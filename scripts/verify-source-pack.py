@@ -10,6 +10,7 @@
   B. 목록     pack.json 항목마다 기록이 정확히 하나 · 저장한 것만 Source 가 된다 · 슬롯은 목록의 슬롯 이름 · 요청하지 않기로 한 항목(skip)은
               요청 기록이 없다 (D40 — 막힌 곳을 다시 두드리지 않는다) · 막힌 것은 까닭이 있다
   C. 원문     저장한 글의 sha256 · 길이 = 기록 · 권리가 can_store 가 아닌 발행처의 전문은 저장소에 없다 (공개 저장소) ·
+              전문을 git 에 두는 권리는 STORABLE_RIGHTS 셋 (연방 · 공공누리 제1유형 · 한국 법령 — E2-1) · 목록의 hold_text 항목은 캐시에만 (PACK_DOC_HELD) ·
               P-1 과 같은 글이면 fixtures/store.documents.json 의 그 글이고 Source 행이 P-1 행과 칸마다 같다 ·
               권리 미확인 원문은 git 밖 캐시 — 이 기계에 없으면 WARN, 해시가 다르면 FAIL ·
               W-4 — SourceDocument 가 계약 칸 그대로 (PACK_SHAPE) · 가져온 기록 칸(sha256 · fetched_url · fetched_at · extractor)이 글 · fetch.json 과 같다 (불변식 29 · PACK_DOC_HASH · PACK_DOC_RECORD) ·
@@ -27,6 +28,8 @@ CONTRACT = os.path.join(ROOT, 'docs/contract/DATA_MODEL.md')
 P1_STORE = os.path.join(ROOT, 'fixtures/store.json')
 P1_DOCS = os.path.join(ROOT, 'fixtures/store.documents.json')
 CACHE = os.path.join(ROOT, 'packages/pipeline/.cache/events')
+# 전문을 git 에 둘 수 있는 권리 (packages/pipeline/src/rights.ts STORABLE 과 같다 — E2-1 · D53)
+STORABLE_RIGHTS = ('US_FEDERAL_17USC105', 'KOGL_TYPE1', 'KR_STATUTE')
 SOURCE_FIELDS = ('source_id', 'label', 'title', 'publisher', 'url', 'kind', 'language', 'published_at', 'ingested_at')
 EMPTY_IN_P2 = ('facts', 'fact_sources', 'claims', 'goals', 'bridges', 'slot_checks', 'storylines', 'storyline_versions', 'source_documents')
 
@@ -192,8 +195,10 @@ def check(b, contract_text, p1_store, p1_docs):
         if x['status'] != 'STORED':
             continue
         w = f'{code} {lab}'
-        if x.get('rights') != 'US_FEDERAL_17USC105' and x.get('text_in') != 'cache':
+        if x.get('rights') not in STORABLE_RIGHTS and x.get('text_in') != 'cache':
             E('PACK_DOC_NOT_STORABLE', f'{w}: 권리 미확인 문서의 전문은 캐시에만 (text_in {x.get("text_in")!r})')
+        if items.get(lab, {}).get('hold_text') and x.get('text_in') != 'cache':
+            E('PACK_DOC_HELD', f'{w}: 목록이 전문을 캐시에만 두라고 한다 (hold_text — 제3자 글) · text_in {x.get("text_in")!r}')
         if x.get('text_in') == 'store.documents.json' and lab not in texts:
             E('PACK_DOC_MISSING', f'{w}: 기록은 store.documents.json 에 있다고 하는데 없다')
         if x.get('text_in') == 'fixtures/store.documents.json':

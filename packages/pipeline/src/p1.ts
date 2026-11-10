@@ -42,7 +42,7 @@ type DocRecord = {
   status: "STORED" | "NOT_FETCHED";
   why: string | null;                 // 못 가져온 까닭
   fetch: Omit<Fetched, "raw_sha256" | "raw_bytes"> & { raw_sha256: string; raw_bytes: number } | null;
-  kind: "HTML" | "PDF" | null;
+  kind: "HTML" | "PDF" | "HWP" | null;
   extractor: string | null;
   text_sha256: string | null;         // SourceDocument.text 의 UTF-8 바이트 sha256
   text_length: number | null;         // 코드 포인트 수
@@ -190,7 +190,7 @@ async function main() {
       continue;
     }
     const rec: DocRecord = {
-      ...base, status: "STORED", fetch: meta, kind: ex.kind, extractor: EXTRACTOR, text_sha256: sha256(ex.text), text_length: cpLength(ex.text),
+      ...base, status: "STORED", fetch: meta, kind: ex.kind, extractor: ex.extractor, text_sha256: sha256(ex.text), text_length: cpLength(ex.text),
       pdf_page_starts: ex.pages ? ex.pages.map((u) => cpLength(ex.text.slice(0, u))) : null, text_in: rights === "US_FEDERAL_17USC105" ? "store.documents.json" : "cache",
     };
     if (CHECK) {

@@ -21,7 +21,7 @@ import { randomUUID } from "node:crypto";
 import { EXTRACTOR, extract, sha256, sourceDocument } from "./extract.ts";
 import { USER_AGENT, fetchOnce, type Fetched } from "./fetch.ts";
 import { cpLength } from "./match.ts";
-import { registryRow, rightsOf, type Rights } from "./rights.ts";
+import { canStore, registryRow, rightsOf, type Rights } from "./rights.ts";
 import { ROBOTS_VERSION, robotsAllows, type RobotsRecord } from "./robots.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -47,8 +47,9 @@ export type PackItem = {
   kind?: "PRIMARY" | "SECONDARY";
   language?: string;
   role?: "record";               // 이 사건 회의의 기록 (회의록) — 회의 뒤 공개 · 회의 안의 논의. pack.ts 는 읽지 않는다 · P-5 프롬프트의 [뒤 · 회의 기록] (W-1)
+  hold_text?: string;             // 권리가 git 을 허락해도 전문을 캐시에만 두는 까닭 (문서 안의 긴 제3자 글 — E2-1). 판정은 PM
 };
-export type Pack = { event: { code: string; title: string; occurred_at: string | null; storyline_code: string | null }; slots: string[]; items: PackItem[] } & Record<string, unknown>;
+export type Pack = { event: { code: string; title: string; occurred_at: string | null; storyline_code: string | null }; slots: string[]; items: PackItem[]; count_terms?: string[] } & Record<string, unknown>;
 
 export const SOURCE_FIELDS = ["source_id", "label", "title", "publisher", "url", "kind", "language", "published_at", "ingested_at"] as const; // DATA_MODEL §1 Source
 
@@ -61,7 +62,7 @@ export type PackDoc = {
   why: string | null;
   robots: { ok: boolean; why: string } | null;
   fetch: Fetched | null;
-  kind: "HTML" | "PDF" | null;
+  kind: "HTML" | "PDF" | "HWP" | null;
   extractor: string | null;
   text_sha256: string | null;
   text_length: number | null;
@@ -74,8 +75,9 @@ export type PackDoc = {
   policy_terms: Record<string, number> | null;   // 글에 그 낱말이 몇 번 — 판단이 아니라 셈 (연설이 정책을 말했나를 사람이 보려고)
 };
 
+// 셀 낱말 — pack.json count_terms (사건마다. E2-1). 없으면 P-2 (FOMC) 의 낱말
 const POLICY_TERMS = ["monetary policy", "federal funds rate", "policy rate", "inflation", "FOMC"];
-const countTerms = (t: string) => Object.fromEntries(POLICY_TERMS.map((w) => [w, t.toLowerCase().split(w.toLowerCase()).length - 1]));
+const countTerms = (t: string, terms: string[]) => Object.fromEntries(terms.map((w) => [w, t.toLowerCase().split(w.toLowerCase()).length - 1]));
 
 const safe = (label: string) => label.replace(/[^\w.-]/g, "_");
 function cache(code: string, ...parts: string[]) {
@@ -160,7 +162,9 @@ async function main() {
       : old.text_in === "store.documents.json" ? storedText.get(old.source_id!)
       : old.text_in === "fixtures/store.documents.json" ? p1Text.get(old.source_id!)
       : existsSync(cachedTextPath(code, it.label)) ? readFileSync(cachedTextPath(code, it.label), "utf8") : undefined;
-    if (old?.status === "STORED" && kept != null && !CHECK) {
+    // 권리 · hold_text 가 바뀌어 원문 자리(git ↔ 캐시)가 달라져야 하면 기록을 그대로 쓰지 않는다 — 캐시 바이트로 다시 뽑아 자리를 옮긴다 (E2-1)
+    const placeMoved = old?.status === "STORED" && (old.text_in === "cache") !== (!canStore(rights) || !!it.hold_text);
+    if (old?.status === "STORED" && kept != null && !CHECK && !placeMoved) {
       if (sha256(kept) !== old.text_sha256) throw new Error(`${it.label}: 저장된 글의 해시가 기록과 다르다 — 원문이 바뀌었다`);
       docs.push(old);
       texts.set(it.label, kept);
@@ -198,14 +202,21 @@ async function main() {
       docs.push({ ...base, robots: { ok: true, why: rb.why }, fetch: meta, why: blockedWhy(meta, got.bytes) });
       continue;
     }
-    const ex = await extract(got.bytes, meta.content_type);
+    let ex: Awaited<ReturnType<typeof extract>>;
+    try {
+      ex = await extract(got.bytes, meta.content_type);
+    } catch (e) {
+      // 받았지만 읽지 못하는 형식 (E2-1 — 전에는 HTML 로 풀어 깨진 글을 저장했다). 받은 바이트는 캐시에 있다
+      docs.push({ ...base, robots: { ok: true, why: rb.why }, fetch: meta, why: `받았으나 뽑지 못함 — ${(e as Error).message}` });
+      continue;
+    }
     const h = sha256(ex.text);
     const p1same = p1.documents.find((d) => d.url === it.url && d.status === "STORED" && d.text_sha256 === h) ?? null;
     const rec: PackDoc = {
-      ...base, robots: { ok: true, why: rb.why }, status: "STORED", fetch: meta, kind: ex.kind, extractor: EXTRACTOR, text_sha256: h, text_length: cpLength(ex.text),
+      ...base, robots: { ok: true, why: rb.why }, status: "STORED", fetch: meta, kind: ex.kind, extractor: ex.extractor, text_sha256: h, text_length: cpLength(ex.text),
       pdf_page_starts: ex.pages ? ex.pages.map((u) => cpLength(ex.text.slice(0, u))) : null, first_line: ex.text.split("\n", 1)[0] ?? "",
-      text_in: rights !== "US_FEDERAL_17USC105" ? "cache" : p1same && p1Text.has(p1same.source_id) ? "fixtures/store.documents.json" : "store.documents.json",
-      source_id: p1same?.source_id ?? prevSid.get(it.label) ?? randomUUID(), same_as_p1: p1same?.label ?? null, policy_terms: countTerms(ex.text),
+      text_in: !canStore(rights) || it.hold_text ? "cache" : p1same && p1Text.has(p1same.source_id) ? "fixtures/store.documents.json" : "store.documents.json",
+      source_id: p1same?.source_id ?? prevSid.get(it.label) ?? randomUUID(), same_as_p1: p1same?.label ?? null, policy_terms: countTerms(ex.text, pack.count_terms ?? POLICY_TERMS),
     };
     if (CHECK) {
       const want = old?.text_sha256 ?? null;
@@ -299,7 +310,7 @@ async function main() {
   const documents = sources.filter((s) => docs.find((d) => d.label === s.label)!.text_in === "store.documents.json").map((s) => sourceDocument(s.source_id as string, texts.get(s.label as string)!, docs.find((d) => d.label === s.label)!));
   writeFileSync(STORE, JSON.stringify(store, null, 2) + "\n");
   writeFileSync(DOCS, JSON.stringify({
-    _what: `${code} 의 SourceDocument (DATA_MODEL §1) — 원문 전문 + 가져온 기록의 칸 (sha256 · 가져온 주소 · 때 · 뽑은 방법 — W-4 P1-a). 미국 연방 정부 저작물만 (17 U.S.C. §105 · store.json source_registry). 권리 미확인 원문은 git 밖 캐시에만. pack.ts 가 쓴다 — 손으로 고치지 않는다`,
+    _what: `${code} 의 SourceDocument (DATA_MODEL §1) — 원문 전문 + 가져온 기록의 칸 (sha256 · 가져온 주소 · 때 · 뽑은 방법 — W-4 P1-a). ${documents.every((d) => docs.find((x) => x.source_id === d.source_id)?.rights === "US_FEDERAL_17USC105") ? "미국 연방 정부 저작물만 (17 U.S.C. §105 · store.json source_registry)" : "권리가 git 을 허락하는 발행처의 것만 — 미국 연방 정부 (17 U.S.C. §105) · 공공누리 제1유형 · 한국 법령 (저작권법 제7조) (store.json source_registry · D53). 제3자 글이 긴 문서(hold_text)는 빼고"}. 권리 미확인 원문은 git 밖 캐시에만. pack.ts 가 쓴다 — 손으로 고치지 않는다`,
     source_documents: documents,
   }, null, 2) + "\n");
   const n = (f: (d: PackDoc) => boolean) => docs.filter(f).length;

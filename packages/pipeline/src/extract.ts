@@ -9,9 +9,15 @@
 //   공백 정리   (둘 다) 줄바꿈이 아닌 모든 공백 글자(NBSP · 탭 · 얇은 공백 …)를 보통 공백으로 → 줄마다 공백 묶음을 하나로 · 앞뒤 공백을 떼고 →
 //               빈 줄은 버린다 → 줄은 "\n" 하나로 잇는다. 글 끝에 줄바꿈을 두지 않는다. 유니코드 정규화(NFC 등)는 하지 않는다 — 글자를 바꾸지 않는다
 //
+//   HWP  → 글   (E2-1) 한글 5.0 바이너리 — hwp.ts (HWP_EXTRACTOR). 문단마다 한 줄. 같은 공백 정리
+//   그 밖       ZIP(HWPX · DOCX …) · 다른 CFB · 알 수 없는 바이너리는 **오류** — 전에는 HTML 로 풀어 깨진 글을 조용히 저장할 수 있었다 (E2-1)
+//
+// 뽑은 방법의 이름은 종류마다: HTML · PDF = EXTRACTOR (그대로 — 이 둘의 출력은 바뀌지 않았다) · HWP = HWP_EXTRACTOR. extract() 가 함께 돌려준다
+//
 // 따옴표 모양 · 대시 · 줄임표는 **바꾸지 않는다.** 원문 글자 그대로다. 구절 맞추기의 규칙은 match.ts (match-rules.json) 에 따로 있다.
 import { createHash } from "node:crypto";
 import { parseDocument } from "htmlparser2";
+import { HWP_EXTRACTOR, hwpToRawText, isCfb } from "./hwp.ts";
 
 export const EXTRACTOR = "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)";
 
@@ -123,12 +129,27 @@ export function isPdf(bytes: Uint8Array, contentType: string | null): boolean {
   return (contentType ?? "").toLowerCase().includes("application/pdf") || new TextDecoder("latin1").decode(bytes.slice(0, 5)) === "%PDF-";
 }
 
-export async function extract(bytes: Uint8Array, contentType: string | null): Promise<{ kind: "HTML" | "PDF"; text: string; pages: number[] | null }> {
+export type Extracted = { kind: "HTML" | "PDF" | "HWP"; text: string; pages: number[] | null; extractor: string };
+
+/** 바이너리인데 우리가 읽지 않는 형식 — HTML 로 풀지 않는다 (E2-1) */
+function unsupportedBinary(bytes: Uint8Array, contentType: string | null): string | null {
+  const head = new TextDecoder("latin1").decode(bytes.slice(0, 4));
+  if (head === "PK\u0003\u0004") return "ZIP 묶음 (HWPX · DOCX · XLSX · ZIP …) — 읽는 코드가 없다";
+  const ct = (contentType ?? "").toLowerCase();
+  if (/^(image|audio|video)\//.test(ct)) return `Content-Type ${ct}`;
+  if (bytes.slice(0, 1024).includes(0) && !/text\/|html|xml|json/.test(ct)) return `알 수 없는 바이너리 (Content-Type ${ct || "없음"} · 앞 1KB 에 NUL)`;
+  return null;
+}
+
+export async function extract(bytes: Uint8Array, contentType: string | null): Promise<Extracted> {
   if (isPdf(bytes, contentType)) {
     const r = await pdfToText(bytes);
-    return { kind: "PDF", text: r.text, pages: r.pages };
+    return { kind: "PDF", text: r.text, pages: r.pages, extractor: EXTRACTOR };
   }
-  return { kind: "HTML", text: htmlToText(decodeHtml(bytes, contentType)), pages: null };
+  if (isCfb(bytes)) return { kind: "HWP", text: tidy(hwpToRawText(bytes)), pages: null, extractor: HWP_EXTRACTOR };
+  const bad = unsupportedBinary(bytes, contentType);
+  if (bad) throw new Error(`뽑지 않는다 — ${bad}`);
+  return { kind: "HTML", text: htmlToText(decodeHtml(bytes, contentType)), pages: null, extractor: EXTRACTOR };
 }
 
 export const sha256 = (b: Uint8Array | string): string => createHash("sha256").update(b).digest("hex");
