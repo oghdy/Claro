@@ -7,6 +7,7 @@
     "p1": "node src/p1.ts",
     "p2": "node src/pack.ts",
     "bls": "node src/bls.ts",
+    "bls-rates": "node src/bls-rates.ts",
     "p3": "node src/p3.ts",
     "p4": "node src/p4.ts",
     "p5": "node src/p5.ts",

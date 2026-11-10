@@ -1,0 +1,1098 @@
+{
+  "_what": "FOMC-20261028 의 BLS 변화율 · 증감 — bls-rates.ts 가 쓴다 (손으로 고치지 않는다). 계산 기록이다: 계약에 자리가 없어 (W-3 _open W3-a) 사실 그래프 · coverage · claims 는 이 파일을 읽지 않는다",
+  "version": "bls-rates/1",
+  "event": "FOMC-20261028",
+  "note": "회의 직전 지표 — 9월 (그 앞 달 8월). 9월 값이 회의(10/28) 전에 공개됐는지는 이 응답이 증명하지 못한다 (P4-k). 9월 고용 보고서는 Waller 10/8 (F231) · Hammack 10/12 (F265 실업률 4.2%) 연설이 말한다. 9월 CPI · PPI 는 회의 전 공개를 말하는 1차가 그래프에 없다 — Waller 10/8 은 10/1 에 시작된 정부 셧다운으로 공식 통계가 끊겼다고 말했다 (F217)",
+  "source": {
+    "file": "packages/pipeline/data/events/FOMC-20261028/bls/bls.json",
+    "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+    "label": "BLS-API-1110",
+    "fetched_at": "2026-11-10T08:24:04.458Z",
+    "text_sha256": "7907a08413d3b42c28e8fbe3a660400bc10dc3393e878690ed50f20c656c9360"
+  },
+  "vintage": "API 값은 받은 날(2026-11-10)의 판이다 — 첫 발표(회의 때 위원들이 본 값)와 다를 수 있다. 계산값마다 쓴 지수 · 각주를 inputs 에 적었다. 고치지 않는다",
+  "rule": "전월 대비 = 계절조정 · 1년 전 대비 = 계절조정 안 함 · (지금/전 − 1) × 100 · 발표된 지수 그대로 정확한 십진 계산 · 소수 한 자리 반올림 (0.05 → 0.1) · 증감 = 수준의 차 (천 명)",
+  "measures": [
+    {
+      "key": "CPI_ALL_1M",
+      "ko": "CPI-U 전체 · 전월 대비",
+      "series": "CUSR0000SA0",
+      "op": "pct_change",
+      "lag": 1,
+      "unit": "%",
+      "basis": "계절조정 지수"
+    },
+    {
+      "key": "CPI_ALL_12M",
+      "ko": "CPI-U 전체 · 1년 전 대비",
+      "series": "CUUR0000SA0",
+      "op": "pct_change",
+      "lag": 12,
+      "unit": "%",
+      "basis": "계절조정 안 한 지수"
+    },
+    {
+      "key": "CPI_CORE_1M",
+      "ko": "CPI-U 식품·에너지 제외 · 전월 대비",
+      "series": "CUSR0000SA0L1E",
+      "op": "pct_change",
+      "lag": 1,
+      "unit": "%",
+      "basis": "계절조정 지수"
+    },
+    {
+      "key": "CPI_CORE_12M",
+      "ko": "CPI-U 식품·에너지 제외 · 1년 전 대비",
+      "series": "CUUR0000SA0L1E",
+      "op": "pct_change",
+      "lag": 12,
+      "unit": "%",
+      "basis": "계절조정 안 한 지수"
+    },
+    {
+      "key": "CPI_ENERGY_1M",
+      "ko": "CPI-U 에너지 · 전월 대비",
+      "series": "CUSR0000SA0E",
+      "op": "pct_change",
+      "lag": 1,
+      "unit": "%",
+      "basis": "계절조정 지수"
+    },
+    {
+      "key": "PPI_FD_1M",
+      "ko": "PPI 최종수요 · 전월 대비",
+      "series": "WPSFD4",
+      "op": "pct_change",
+      "lag": 1,
+      "unit": "%",
+      "basis": "계절조정 지수"
+    },
+    {
+      "key": "PPI_FD_12M",
+      "ko": "PPI 최종수요 · 1년 전 대비",
+      "series": "WPUFD4",
+      "op": "pct_change",
+      "lag": 12,
+      "unit": "%",
+      "basis": "계절조정 안 한 지수"
+    },
+    {
+      "key": "PAYROLL_1M",
+      "ko": "비농업 취업자 수 · 전월 대비 증감",
+      "series": "CES0000000001",
+      "op": "level_change",
+      "lag": 1,
+      "unit": "천 명",
+      "basis": "계절조정 수준"
+    },
+    {
+      "key": "TEMP_LAYOFF_1M",
+      "ko": "일시해고 실업자 수 · 전월 대비 증감",
+      "series": "LNS13023653",
+      "op": "level_change",
+      "lag": 1,
+      "unit": "천 명",
+      "basis": "계절조정 수준"
+    }
+  ],
+  "months": [
+    "2026-08",
+    "2026-09"
+  ],
+  "rates": [
+    {
+      "label": "RATE-CPI_ALL_1M-2026M08",
+      "measure": "CPI_ALL_1M",
+      "ko": "CPI-U 전체 · 전월 대비",
+      "month": "2026-08",
+      "op": "pct_change",
+      "lag": 1,
+      "value": "0.4",
+      "unit": "%",
+      "unrounded": "0.3960",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUSR0000SA0",
+          "month": "2026-08",
+          "value": "334.131",
+          "footnotes": [],
+          "fact_id": "0249eef8-e23f-41ae-af33-11c1a3d8e0ba",
+          "fact_label": "BLS-CUSR0000SA0-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0",
+          "span_start": 8702,
+          "span_end": 8787,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"334.131\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUSR0000SA0",
+          "month": "2026-07",
+          "value": "332.813",
+          "footnotes": [],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0",
+          "span_start": 8790,
+          "span_end": 8873,
+          "passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"332.813\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_ALL_12M-2026M08",
+      "measure": "CPI_ALL_12M",
+      "ko": "CPI-U 전체 · 1년 전 대비",
+      "month": "2026-08",
+      "op": "pct_change",
+      "lag": 12,
+      "value": "3.4",
+      "unit": "%",
+      "unrounded": "3.3965",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUUR0000SA0",
+          "month": "2026-08",
+          "value": "334.980",
+          "footnotes": [],
+          "fact_id": "44ac2f8c-f7d0-46ed-960c-c0bcfb3548db",
+          "fact_label": "BLS-CUUR0000SA0-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUUR0000SA0",
+          "span_start": 10672,
+          "span_end": 10757,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"334.980\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUUR0000SA0",
+          "month": "2025-08",
+          "value": "323.976",
+          "footnotes": [],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUUR0000SA0",
+          "span_start": 11800,
+          "span_end": 11885,
+          "passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"323.976\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_CORE_1M-2026M08",
+      "measure": "CPI_CORE_1M",
+      "ko": "CPI-U 식품·에너지 제외 · 전월 대비",
+      "month": "2026-08",
+      "op": "pct_change",
+      "lag": 1,
+      "value": "0.3",
+      "unit": "%",
+      "unrounded": "0.2898",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUSR0000SA0L1E",
+          "month": "2026-08",
+          "value": "337.765",
+          "footnotes": [],
+          "fact_id": "bd2dd34b-0e6d-4efb-b1cc-67fb4789aa58",
+          "fact_label": "BLS-CUSR0000SA0L1E-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0L1E",
+          "span_start": 12645,
+          "span_end": 12730,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"337.765\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUSR0000SA0L1E",
+          "month": "2026-07",
+          "value": "336.789",
+          "footnotes": [],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0L1E",
+          "span_start": 12733,
+          "span_end": 12816,
+          "passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"336.789\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_CORE_12M-2026M08",
+      "measure": "CPI_CORE_12M",
+      "ko": "CPI-U 식품·에너지 제외 · 1년 전 대비",
+      "month": "2026-08",
+      "op": "pct_change",
+      "lag": 12,
+      "value": "2.4",
+      "unit": "%",
+      "unrounded": "2.4460",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUUR0000SA0L1E",
+          "month": "2026-08",
+          "value": "338.041",
+          "footnotes": [],
+          "fact_id": "15ad4caa-e2b7-4199-afb3-9bb0ef76c077",
+          "fact_label": "BLS-CUUR0000SA0L1E-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUUR0000SA0L1E",
+          "span_start": 14618,
+          "span_end": 14703,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"338.041\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUUR0000SA0L1E",
+          "month": "2025-08",
+          "value": "329.970",
+          "footnotes": [],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUUR0000SA0L1E",
+          "span_start": 15746,
+          "span_end": 15831,
+          "passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"329.970\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_ENERGY_1M-2026M08",
+      "measure": "CPI_ENERGY_1M",
+      "ko": "CPI-U 에너지 · 전월 대비",
+      "month": "2026-08",
+      "op": "pct_change",
+      "lag": 1,
+      "value": "2.1",
+      "unit": "%",
+      "unrounded": "2.0966",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUSR0000SA0E",
+          "month": "2026-08",
+          "value": "321.148",
+          "footnotes": [],
+          "fact_id": "11d5bc92-f3bc-4e51-ad09-8481b46022e9",
+          "fact_label": "BLS-CUSR0000SA0E-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0E",
+          "span_start": 16589,
+          "span_end": 16674,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"321.148\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUSR0000SA0E",
+          "month": "2026-07",
+          "value": "314.553",
+          "footnotes": [],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0E",
+          "span_start": 16677,
+          "span_end": 16760,
+          "passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"314.553\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-PPI_FD_1M-2026M08",
+      "measure": "PPI_FD_1M",
+      "ko": "PPI 최종수요 · 전월 대비",
+      "month": "2026-08",
+      "op": "pct_change",
+      "lag": 1,
+      "value": "0.5",
+      "unit": "%",
+      "unrounded": "0.4703",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "WPSFD4",
+          "month": "2026-08",
+          "value": "157.662",
+          "footnotes": [
+            "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+          ],
+          "fact_id": "46b40822-ea67-4d50-81c5-9ee451d96aed",
+          "fact_label": "BLS-WPSFD4-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "WPSFD4",
+          "span_start": 18677,
+          "span_end": 18885,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"157.662\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]"
+        },
+        {
+          "role": "from",
+          "series": "WPSFD4",
+          "month": "2026-07",
+          "value": "156.924",
+          "footnotes": [
+            "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+          ],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "WPSFD4",
+          "span_start": 18888,
+          "span_end": 19094,
+          "passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"156.924\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": [
+          "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+        ]
+      }
+    },
+    {
+      "label": "RATE-PPI_FD_12M-2026M08",
+      "measure": "PPI_FD_12M",
+      "ko": "PPI 최종수요 · 1년 전 대비",
+      "month": "2026-08",
+      "op": "pct_change",
+      "lag": 12,
+      "value": "5.6",
+      "unit": "%",
+      "unrounded": "5.6126",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "WPUFD4",
+          "month": "2026-08",
+          "value": "157.855",
+          "footnotes": [
+            "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+          ],
+          "fact_id": "f0bfc757-9d0d-4bcb-a103-f5fae9a0d276",
+          "fact_label": "BLS-WPUFD4-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "WPUFD4",
+          "span_start": 21064,
+          "span_end": 21272,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"157.855\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]"
+        },
+        {
+          "role": "from",
+          "series": "WPUFD4",
+          "month": "2025-08",
+          "value": "149.466",
+          "footnotes": [],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "WPUFD4",
+          "span_start": 22491,
+          "span_end": 22576,
+          "passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"149.466\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": [
+          "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+        ]
+      }
+    },
+    {
+      "label": "RATE-PAYROLL_1M-2026M08",
+      "measure": "PAYROLL_1M",
+      "ko": "비농업 취업자 수 · 전월 대비 증감",
+      "month": "2026-08",
+      "op": "level_change",
+      "lag": 1,
+      "value": "186",
+      "unit": "천 명",
+      "unrounded": null,
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CES0000000001",
+          "month": "2026-08",
+          "value": "159068",
+          "footnotes": [],
+          "fact_id": "d7ddc8ac-e182-480f-acb0-94d1c1926d80",
+          "fact_label": "BLS-CES0000000001-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CES0000000001",
+          "span_start": 377,
+          "span_end": 461,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"159068\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CES0000000001",
+          "month": "2026-07",
+          "value": "158882",
+          "footnotes": [],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CES0000000001",
+          "span_start": 464,
+          "span_end": 546,
+          "passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"158882\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-TEMP_LAYOFF_1M-2026M08",
+      "measure": "TEMP_LAYOFF_1M",
+      "ko": "일시해고 실업자 수 · 전월 대비 증감",
+      "month": "2026-08",
+      "op": "level_change",
+      "lag": 1,
+      "value": "-82",
+      "unit": "천 명",
+      "unrounded": null,
+      "inputs": [
+        {
+          "role": "to",
+          "series": "LNS13023653",
+          "month": "2026-08",
+          "value": "839",
+          "footnotes": [],
+          "fact_id": "ea195d06-19b1-42fe-9fce-e8ccf1f479d7",
+          "fact_label": "BLS-LNS13023653-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "LNS13023653",
+          "span_start": 6641,
+          "span_end": 6722,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"839\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "LNS13023653",
+          "month": "2026-07",
+          "value": "921",
+          "footnotes": [],
+          "fact_id": null,
+          "fact_label": null,
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "LNS13023653",
+          "span_start": 6725,
+          "span_end": 6804,
+          "passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"921\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_ALL_1M-2026M09",
+      "measure": "CPI_ALL_1M",
+      "ko": "CPI-U 전체 · 전월 대비",
+      "month": "2026-09",
+      "op": "pct_change",
+      "lag": 1,
+      "value": "0.6",
+      "unit": "%",
+      "unrounded": "0.6485",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUSR0000SA0",
+          "month": "2026-09",
+          "value": "336.298",
+          "footnotes": [],
+          "fact_id": "73a4100f-abf5-48a7-a522-830354f28750",
+          "fact_label": "BLS-CUSR0000SA0-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0",
+          "span_start": 8595,
+          "span_end": 8699,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"336.298\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUSR0000SA0",
+          "month": "2026-08",
+          "value": "334.131",
+          "footnotes": [],
+          "fact_id": "0249eef8-e23f-41ae-af33-11c1a3d8e0ba",
+          "fact_label": "BLS-CUSR0000SA0-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0",
+          "span_start": 8702,
+          "span_end": 8787,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"334.131\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_ALL_12M-2026M09",
+      "measure": "CPI_ALL_12M",
+      "ko": "CPI-U 전체 · 1년 전 대비",
+      "month": "2026-09",
+      "op": "pct_change",
+      "lag": 12,
+      "value": "3.7",
+      "unit": "%",
+      "unrounded": "3.7377",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUUR0000SA0",
+          "month": "2026-09",
+          "value": "336.940",
+          "footnotes": [],
+          "fact_id": "08603599-f6de-4407-a626-37dba11afb95",
+          "fact_label": "BLS-CUUR0000SA0-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUUR0000SA0",
+          "span_start": 10565,
+          "span_end": 10669,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"336.940\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUUR0000SA0",
+          "month": "2025-09",
+          "value": "324.800",
+          "footnotes": [],
+          "fact_id": "f2447a01-1c32-4cc5-8844-35ca595355a4",
+          "fact_label": "BLS-CUUR0000SA0-2025M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUUR0000SA0",
+          "span_start": 11709,
+          "span_end": 11797,
+          "passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"324.800\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_CORE_1M-2026M09",
+      "measure": "CPI_CORE_1M",
+      "ko": "CPI-U 식품·에너지 제외 · 전월 대비",
+      "month": "2026-09",
+      "op": "pct_change",
+      "lag": 1,
+      "value": "0.3",
+      "unit": "%",
+      "unrounded": "0.3348",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUSR0000SA0L1E",
+          "month": "2026-09",
+          "value": "338.896",
+          "footnotes": [],
+          "fact_id": "872b5ffa-e14d-4492-8295-bfd1c124f2b8",
+          "fact_label": "BLS-CUSR0000SA0L1E-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0L1E",
+          "span_start": 12538,
+          "span_end": 12642,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"338.896\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUSR0000SA0L1E",
+          "month": "2026-08",
+          "value": "337.765",
+          "footnotes": [],
+          "fact_id": "bd2dd34b-0e6d-4efb-b1cc-67fb4789aa58",
+          "fact_label": "BLS-CUSR0000SA0L1E-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0L1E",
+          "span_start": 12645,
+          "span_end": 12730,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"337.765\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_CORE_12M-2026M09",
+      "measure": "CPI_CORE_12M",
+      "ko": "CPI-U 식품·에너지 제외 · 1년 전 대비",
+      "month": "2026-09",
+      "op": "pct_change",
+      "lag": 12,
+      "value": "2.6",
+      "unit": "%",
+      "unrounded": "2.5644",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUUR0000SA0L1E",
+          "month": "2026-09",
+          "value": "339.287",
+          "footnotes": [],
+          "fact_id": "65793986-e24c-4510-a412-8350d912103f",
+          "fact_label": "BLS-CUUR0000SA0L1E-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUUR0000SA0L1E",
+          "span_start": 14511,
+          "span_end": 14615,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"339.287\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUUR0000SA0L1E",
+          "month": "2025-09",
+          "value": "330.804",
+          "footnotes": [],
+          "fact_id": "7395bcd4-1fab-48a1-bde0-ac98c3e81e20",
+          "fact_label": "BLS-CUUR0000SA0L1E-2025M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUUR0000SA0L1E",
+          "span_start": 15655,
+          "span_end": 15743,
+          "passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"330.804\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-CPI_ENERGY_1M-2026M09",
+      "measure": "CPI_ENERGY_1M",
+      "ko": "CPI-U 에너지 · 전월 대비",
+      "month": "2026-09",
+      "op": "pct_change",
+      "lag": 1,
+      "value": "5.2",
+      "unit": "%",
+      "unrounded": "5.1957",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CUSR0000SA0E",
+          "month": "2026-09",
+          "value": "337.834",
+          "footnotes": [],
+          "fact_id": "0c565d69-4415-41db-a7a3-703a6cc58d0e",
+          "fact_label": "BLS-CUSR0000SA0E-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0E",
+          "span_start": 16482,
+          "span_end": 16586,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"337.834\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "CUSR0000SA0E",
+          "month": "2026-08",
+          "value": "321.148",
+          "footnotes": [],
+          "fact_id": "11d5bc92-f3bc-4e51-ad09-8481b46022e9",
+          "fact_label": "BLS-CUSR0000SA0E-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CUSR0000SA0E",
+          "span_start": 16589,
+          "span_end": 16674,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"321.148\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    },
+    {
+      "label": "RATE-PPI_FD_1M-2026M09",
+      "measure": "PPI_FD_1M",
+      "ko": "PPI 최종수요 · 전월 대비",
+      "month": "2026-09",
+      "op": "pct_change",
+      "lag": 1,
+      "value": "1.3",
+      "unit": "%",
+      "unrounded": "1.3434",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "WPSFD4",
+          "month": "2026-09",
+          "value": "159.780",
+          "footnotes": [
+            "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+          ],
+          "fact_id": "b1a51626-9707-481a-83a2-99a2bcde912d",
+          "fact_label": "BLS-WPSFD4-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "WPSFD4",
+          "span_start": 18447,
+          "span_end": 18674,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"159.780\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]"
+        },
+        {
+          "role": "from",
+          "series": "WPSFD4",
+          "month": "2026-08",
+          "value": "157.662",
+          "footnotes": [
+            "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+          ],
+          "fact_id": "46b40822-ea67-4d50-81c5-9ee451d96aed",
+          "fact_label": "BLS-WPSFD4-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "WPSFD4",
+          "span_start": 18677,
+          "span_end": 18885,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"157.662\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": [
+          "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+        ]
+      }
+    },
+    {
+      "label": "RATE-PPI_FD_12M-2026M09",
+      "measure": "PPI_FD_12M",
+      "ko": "PPI 최종수요 · 1년 전 대비",
+      "month": "2026-09",
+      "op": "pct_change",
+      "lag": 12,
+      "value": "6.3",
+      "unit": "%",
+      "unrounded": "6.3378",
+      "inputs": [
+        {
+          "role": "to",
+          "series": "WPUFD4",
+          "month": "2026-09",
+          "value": "159.613",
+          "footnotes": [
+            "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+          ],
+          "fact_id": "e9166b4c-abe9-4d3d-83f2-966bd5920404",
+          "fact_label": "BLS-WPUFD4-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "WPUFD4",
+          "span_start": 20834,
+          "span_end": 21061,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"159.613\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]"
+        },
+        {
+          "role": "from",
+          "series": "WPUFD4",
+          "month": "2025-09",
+          "value": "150.100",
+          "footnotes": [],
+          "fact_id": "c5efafe5-6bb0-480e-be06-7c9d9aebed1d",
+          "fact_label": "BLS-WPUFD4-2025M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "WPUFD4",
+          "span_start": 22400,
+          "span_end": 22488,
+          "passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"150.100\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": [
+          "Preliminary. All indexes are subject to monthly revisions up to four months after original publication."
+        ]
+      }
+    },
+    {
+      "label": "RATE-PAYROLL_1M-2026M09",
+      "measure": "PAYROLL_1M",
+      "ko": "비농업 취업자 수 · 전월 대비 증감",
+      "month": "2026-09",
+      "op": "level_change",
+      "lag": 1,
+      "value": "60",
+      "unit": "천 명",
+      "unrounded": null,
+      "inputs": [
+        {
+          "role": "to",
+          "series": "CES0000000001",
+          "month": "2026-09",
+          "value": "159128",
+          "footnotes": [
+            "preliminary"
+          ],
+          "fact_id": "d2f0fb3b-6103-45a7-b7c3-4509c79a8219",
+          "fact_label": "BLS-CES0000000001-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CES0000000001",
+          "span_start": 256,
+          "span_end": 374,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"159128\",\"footnotes\":[{\"code\":\"P\",\"text\":\"preliminary\"}]"
+        },
+        {
+          "role": "from",
+          "series": "CES0000000001",
+          "month": "2026-08",
+          "value": "159068",
+          "footnotes": [],
+          "fact_id": "d7ddc8ac-e182-480f-acb0-94d1c1926d80",
+          "fact_label": "BLS-CES0000000001-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "CES0000000001",
+          "span_start": 377,
+          "span_end": 461,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"159068\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": [
+          "preliminary"
+        ]
+      }
+    },
+    {
+      "label": "RATE-TEMP_LAYOFF_1M-2026M09",
+      "measure": "TEMP_LAYOFF_1M",
+      "ko": "일시해고 실업자 수 · 전월 대비 증감",
+      "month": "2026-09",
+      "op": "level_change",
+      "lag": 1,
+      "value": "6",
+      "unit": "천 명",
+      "unrounded": null,
+      "inputs": [
+        {
+          "role": "to",
+          "series": "LNS13023653",
+          "month": "2026-09",
+          "value": "845",
+          "footnotes": [],
+          "fact_id": "618e9dc3-1942-4bdb-ab7e-dfd487773246",
+          "fact_label": "BLS-LNS13023653-2026M09",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "LNS13023653",
+          "span_start": 6554,
+          "span_end": 6638,
+          "passage": "\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"845\",\"footnotes\":[{}]"
+        },
+        {
+          "role": "from",
+          "series": "LNS13023653",
+          "month": "2026-08",
+          "value": "839",
+          "footnotes": [],
+          "fact_id": "ea195d06-19b1-42fe-9fce-e8ccf1f479d7",
+          "fact_label": "BLS-LNS13023653-2026M08",
+          "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+          "section": "LNS13023653",
+          "span_start": 6641,
+          "span_end": 6722,
+          "passage": "\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"839\",\"footnotes\":[{}]"
+        }
+      ],
+      "vintage": {
+        "source_label": "BLS-API-1110",
+        "fetched": "2026-11-10",
+        "footnotes": []
+      }
+    }
+  ],
+  "missing": [],
+  "compare": {
+    "against": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json (연준 문서 사실 — 읽기만)",
+    "tally": {
+      "rows": 11,
+      "compared": 9,
+      "match": 9,
+      "differ": 0,
+      "not_compared": 2,
+      "anchor_lost": 0
+    },
+    "rows": [
+      {
+        "against": "F085",
+        "fragment": "7월과 8월에 4.1%",
+        "kind": "level",
+        "series": "LNS14000000",
+        "month": "2026-07",
+        "expected": "4.1",
+        "note": "9월 회의록",
+        "anchored": true,
+        "computed": "4.1",
+        "match": true
+      },
+      {
+        "against": "F085",
+        "fragment": "7월과 8월에 4.1%",
+        "kind": "level",
+        "series": "LNS14000000",
+        "month": "2026-08",
+        "expected": "4.1",
+        "note": "9월 회의록",
+        "anchored": true,
+        "computed": "4.1",
+        "match": true
+      },
+      {
+        "against": "F446",
+        "fragment": "약 4.1%",
+        "kind": "level",
+        "series": "LNS14000000",
+        "month": "2026-08",
+        "expected": "4.1",
+        "note": "9/16 기자회견 — 그때 최신 달은 8월 (8월 고용 9/4 발표 — 골든 F40)",
+        "anchored": true,
+        "computed": "4.1",
+        "match": true
+      },
+      {
+        "against": "F449",
+        "fragment": "2.4%",
+        "kind": "rate",
+        "measure": "CPI_CORE_12M",
+        "month": "2026-08",
+        "expected": "2.4",
+        "note": "9/16 기자회견 — 구절 \"Core PCE and CPI prices are running at about 3.2 and 2.4 percent\". 2.4 는 근원 CPI 1년 전 대비와 같다 (전체 CPI 는 3.4). 사실 글 \"Core PCE 와 CPI 가격\" 은 어느 CPI 인지 흐리다 — 고치지 않는다 (W-2 · P-7 의 의미 대조 몫)",
+        "anchored": true,
+        "computed": "2.4",
+        "match": true
+      },
+      {
+        "against": "F164",
+        "fragment": "8월 4.1%",
+        "kind": "level",
+        "series": "LNS14000000",
+        "month": "2026-08",
+        "expected": "4.1",
+        "note": "Cook 9/28",
+        "anchored": true,
+        "computed": "4.1",
+        "match": true
+      },
+      {
+        "against": "F192",
+        "fragment": "8월에 4.1%",
+        "kind": "level",
+        "series": "LNS14000000",
+        "month": "2026-08",
+        "expected": "4.1",
+        "note": "Jefferson 10/1",
+        "anchored": true,
+        "computed": "4.1",
+        "match": true
+      },
+      {
+        "against": "F283",
+        "fragment": "4.1% 인 실업률",
+        "kind": "level",
+        "series": "LNS14000000",
+        "month": "2026-08",
+        "expected": "4.1",
+        "note": "Logan 10/1 — 구절에 달이 없다. 10/1 의 최신 달을 8월로 본 것은 추정 (9월 고용 발표일은 우리 출처에 없다)",
+        "anchored": true,
+        "computed": "4.1",
+        "match": true
+      },
+      {
+        "against": "F265",
+        "fragment": "4.2% 실업률",
+        "kind": "level",
+        "series": "LNS14000000",
+        "month": "2026-09",
+        "expected": "4.2",
+        "note": "Hammack 10/12 — 구절에 달이 없다. 9월로 본 것은 Waller 10/8 이 9월 고용 보고서를 말했기 때문 (F231)",
+        "anchored": true,
+        "computed": "4.2",
+        "match": true
+      },
+      {
+        "against": "F139",
+        "fragment": "월평균 약 80,000",
+        "kind": "avg",
+        "series": "CES0000000001",
+        "from": "2025-12",
+        "to": "2026-08",
+        "expected": "80",
+        "approx": 10,
+        "note": "Barr 9/29 — \"around 80,000 a month this year\" = 1 ~ 8월 평균 (그때 최신 달 8월). '약' 이라 만 단위로 반올림해 견준다",
+        "anchored": true,
+        "computed": "79.5",
+        "match": true
+      },
+      {
+        "against": "F161",
+        "fragment": "추정 3.8%",
+        "kind": "none",
+        "note": "Cook 9/28 — \"estimated\" · 어느 지수인지 구절이 말하지 않는다 (8월 CPI 1년 전 대비는 3.4 · 근원 2.4 — 같지 않다). BLS 지수의 변화율이 아니라 대조하지 않는다",
+        "anchored": true,
+        "computed": null,
+        "match": null
+      },
+      {
+        "against": "F316",
+        "fragment": "3.7%",
+        "kind": "none",
+        "note": "Williams 9/29 — 어느 지수 · 어느 달인지 구절이 말하지 않는다. 대조하지 않는다",
+        "anchored": true,
+        "computed": null,
+        "match": null
+      }
+    ]
+  }
+}
