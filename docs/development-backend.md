@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 / Step 0.5 — 끝, 게이트 대기 (2026-10-13 · 물음의 화면 배포됨 https://claro-lime-one.vercel.app · 도윤이 아이폰에서 세 흐름을 끝까지: Claro (R-00) · 일반 기사 (T-00) · 며칠 뒤 — 노출 · 응답 · 증거가 원장에 남았다. 남은 _open 4 — `logs/backend/phase-0-step-0-5.md`). 다음: 0.5 게이트 → F-3 (도윤이 실제 독자를 올린다)**
+**Phase 0 끝 (2026-10-13 · D38 — 0.5 게이트 닫음 · 배포 https://claro-lime-one.vercel.app).** F-3 은 미룸 (D39). 지금 일은 파이프라인 레인 — `docs/development-pipeline.md`. 계약 잔일(SourceDocument 해시 · 가져온 때 · §7.3 표 밖 4 · v2 참조 모양)은 그 문서 "잔일"에 모여 있다
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
