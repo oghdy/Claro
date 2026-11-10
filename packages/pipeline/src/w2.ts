@@ -2,6 +2,8 @@
 //
 //     pnpm --filter @claro/pipeline w2 --call --model claude-opus-5-5 [--effort medium] [--only id,id] [--limit N]   # 저장된 출력이 없는 시험 예만 모델을 부른다 → raw/ 에 한 줄씩
 //     pnpm --filter @claro/pipeline w2 --call --model claude-opus-5-5 --preview   # 보기(10월 그래프의 사실 15)만 부른다
+//       (W-6: 기본은 배치 — 값이 반. --now 는 즉시. --step S --budget USD 로 장부의 Step 칸 · 상한을 바꾼다 — 없으면 W-2 · $8.
+//        --raw-dir DIR 이면 출력을 그곳에 (runs.json · report.json 에 넣지 않는다 — W-6 의 재기는 data/w6/w2/raw)
 //     pnpm --filter @claro/pipeline w2                # 저장한 출력에서 report.json 을 짓는다 (모델 안 부름 · 결정적)
 //     pnpm --filter @claro/pipeline w2 --check        # 다시 지어 파일과 글자 단위로 같은지
 //     pnpm --filter @claro/pipeline w2 --show <id>    # 시험 예 하나의 모델 입력을 그대로 본다 (모델 안 부름)
@@ -18,7 +20,7 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } fr
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { sha256 } from "./extract.ts";
-import { PRICE, callJson, requestSha, spentOf } from "./llm.ts";
+import { PRICE, budgetArg, callMany, modeArg, requestSha, spentOf, type Budget, type CallReq, type Mode } from "./llm.ts";
 import { numbersMissing, quantifierProblem } from "./checks.ts";
 import { KINDS, SCHEMA, SYSTEM, VERDICTS, VERSION, WHERES, userMessage, type EvidenceIn, type FactIn, type Issue, type Judgement, type Verdict } from "./w2-prompt.ts";
 
@@ -156,11 +158,13 @@ export type RawLine = {
   case_id: string; model_requested: string; model: string | null; effort: string; prompt_version: string; request_sha256: string; input_sha256: string;
   stop_reason: string | null; usage: unknown; duration_ms: number; cost_usd: number; called_at: string; response_id: string | null; ok: boolean; error: string | null;
   output: string | null;
+  mode?: "batch"; batch_id?: string;   // W-6 — 배치로 받은 출력 (cost_usd 는 배치 값)
 };
 const vtag = (v: string) => v.replace(/\//g, "-");
-export const rawPath = (model: string, effort: string) => join(DIR, "raw", `${model}.${effort}.${vtag(VERSION)}.jsonl`);
-export const readRaw = (model: string, effort: string): RawLine[] =>
-  existsSync(rawPath(model, effort)) ? readFileSync(rawPath(model, effort), "utf8").split("\n").filter(Boolean).map((l) => JSON.parse(l)) : [];
+// rawDir — 저장할 곳 (기본 data/w2/raw). W-6 은 잰 것을 data/w6/w2/raw 에 따로 둔다 (W-2 의 보고서 · 검사에 섞지 않게)
+export const rawPath = (model: string, effort: string, rawDir = join(DIR, "raw")) => join(rawDir, `${model}.${effort}.${vtag(VERSION)}.jsonl`);
+export const readRaw = (model: string, effort: string, rawDir?: string): RawLine[] =>
+  existsSync(rawPath(model, effort, rawDir)) ? readFileSync(rawPath(model, effort, rawDir), "utf8").split("\n").filter(Boolean).map((l) => JSON.parse(l)) : [];
 const reqOf = (model: string, effort: Effort, user: string) => ({ model, effort, system: SYSTEM, user, schema: SCHEMA, max_tokens: MAX_TOKENS });
 
 /** 예 하나의 저장된 출력 — 지금 프롬프트 · 지금 입력과 같은 요청에서 나온 것 가운데 마지막 */
@@ -233,11 +237,10 @@ export const loadRuns = (): Run[] => (existsSync(RUNS_FILE) ? readJson<{ runs: R
 const med = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor((s.length - 1) / 2)]! : 0; };
 const r4 = (x: number) => Number(x.toFixed(4));
 
-export function build() {
+export function build(runs: Run[] = loadRuns(), rawDir?: string) {
   const cs = loadCases();
-  const runs = loadRuns();
   const perRun = runs.map((run) => {
-    const lines = readRaw(run.model, run.effort);
+    const lines = readRaw(run.model, run.effort, rawDir);
     const rows = cs.cases.map((c) => {
       const l = storedFor(lines, c, run.model, run.effort);
       if (!l) return { id: c.id, missing: true as const, preview: c.group === "PREVIEW" };
@@ -292,44 +295,38 @@ export function build() {
 }
 
 // ── 부르기 ───────────────────────────────────────────────────────────────────────────────────────────
-async function call(model: string, effort: Effort, only: string[] | null, limit: number, conc: number, preview: boolean) {
+async function call(model: string, effort: Effort, only: string[] | null, limit: number, conc: number, preview: boolean, mode: Mode, budget: Budget, rawDir?: string) {
   if (!PRICE[model]) throw new Error(`가격을 모르는 모델 ${model}`);
   const cs = loadCases();
-  const lines = readRaw(model, effort);
+  const lines = readRaw(model, effort, rawDir);
   // 보기(PREVIEW)는 --preview 를 줄 때만 부른다 — 모델 · effort 마다 다 돌릴 까닭이 없다
   const todo = cs.cases.filter((c) => (c.group === "PREVIEW") === preview && (!only || only.includes(c.id)) && !storedFor(lines, c, model, effort)).slice(0, limit);
-  console.log(`W-2 · ${model} · effort ${effort} · ${VERSION} — 부를 예 ${todo.length} (묶음 ${cs.cases.length}) · 이 Step 장부 $${spentOf(STEP).toFixed(3)} / 상한 $${BUDGET_USD}`);
-  mkdirSync(join(DIR, "raw"), { recursive: true });
+  console.log(`W-2 · ${model} · effort ${effort} · ${VERSION} — 부를 예 ${todo.length} (묶음 ${cs.cases.length}) · ${mode === "batch" ? "배치" : "즉시"} · Step "${budget.step}" 장부 $${spentOf(budget.step).toFixed(3)} / 상한 $${budget.budget}`);
+  mkdirSync(rawDir ?? join(DIR, "raw"), { recursive: true });
   const runs = loadRuns();
-  if (!runs.some((r) => r.model === model && r.effort === effort)) writeFileSync(RUNS_FILE, JSON.stringify({ _what: "보고서(report.json)에 넣는 모델 · effort — 처음 부른 순서. w2.ts --call 이 더한다", runs: [...runs, { model, effort }] }, null, 2) + "\n");
-  let stop = false, i = 0, inflight = 0;
+  if (todo.length && !rawDir && !runs.some((r) => r.model === model && r.effort === effort)) writeFileSync(RUNS_FILE, JSON.stringify({ _what: "보고서(report.json)에 넣는 모델 · effort — 처음 부른 순서. w2.ts --call 이 더한다", runs: [...runs, { model, effort }] }, null, 2) + "\n");
   // 한 번의 넉넉한 추정 — 입력 4,000 · 출력 3,000 토큰
   const est = (4000 * PRICE[model]!.in + 3000 * PRICE[model]!.out) / 1e6;
-  const one = async (c: Case) => {
-    const inp = inputOf(c);
-    const req = reqOf(model, effort, inp.user);
-    const r = await callJson({ ...req, event: "W-2", source_label: c.id, prompt_version: VERSION, text_sha256: sha256(inp.user), step: STEP });
-    let ok = r.ok, error = r.error;
-    if (ok) { try { JSON.parse(r.text!); } catch { ok = false; error = "출력이 JSON 이 아니다"; } }
-    const line: RawLine = {
-      case_id: c.id, model_requested: model, model: r.model, effort, prompt_version: VERSION, request_sha256: r.request_sha256, input_sha256: sha256(inp.user),
-      stop_reason: r.stop_reason, usage: r.usage, duration_ms: r.duration_ms, cost_usd: Number(r.cost_usd.toFixed(6)), called_at: new Date().toISOString(), response_id: r.response_id, ok, error, output: ok ? r.text : null,
-    };
-    appendFileSync(rawPath(model, effort), JSON.stringify(line) + "\n");
-    const u = r.usage;
-    console.log(`  ${c.id.padEnd(22)} ${ok ? (JSON.parse(r.text!) as Judgement).verdict.padEnd(14) : `실패 ${error}`} ${u ? `입력 ${u.input_tokens}+캐시 ${u.cache_read_input_tokens}/${u.cache_creation_input_tokens} · 출력 ${u.output_tokens}` : ""} · ${(r.duration_ms / 1000).toFixed(1)}초 · $${r.cost_usd.toFixed(4)}`);
-    if (r.fatal) stop = true;
-  };
-  const worker = async () => {
-    while (!stop && i < todo.length) {
-      if (spentOf(STEP) + est * (inflight + 1) > STOP_AT_USD) { stop = true; console.log(`  멈춤 — 장부 $${spentOf(STEP).toFixed(3)} + 추정이 $${STOP_AT_USD} 를 넘는다`); break; }
-      const c = todo[i++]!;
-      inflight++;
-      try { await one(c); } finally { inflight--; }
-    }
-  };
-  await Promise.all(Array.from({ length: conc }, worker));
-  console.log(`끝 — 이 Step 장부 $${spentOf(STEP).toFixed(3)}`);
+  const inputs = todo.map((c) => inputOf(c).user);
+  const reqs: CallReq[] = todo.map((c, i) => ({ ...reqOf(model, effort, inputs[i]!), event: "W-2", source_label: c.id, prompt_version: VERSION, text_sha256: sha256(inputs[i]!), est_usd: est }));
+  await callMany(reqs, {
+    mode, budget, conc,
+    onResult: (r, i) => {
+      const c = todo[i]!;
+      if (r.skipped) return console.log(`  ${c.id.padEnd(22)} 보내지 않음 — ${r.error}`);
+      let ok = r.ok, error = r.error;
+      if (ok) { try { JSON.parse(r.text!); } catch { ok = false; error = "출력이 JSON 이 아니다"; } }
+      const line: RawLine = {
+        case_id: c.id, model_requested: model, model: r.model, effort, prompt_version: VERSION, request_sha256: r.request_sha256, input_sha256: sha256(inputs[i]!),
+        stop_reason: r.stop_reason, usage: r.usage, duration_ms: r.duration_ms, cost_usd: Number(r.cost_usd.toFixed(6)), called_at: new Date().toISOString(), response_id: r.response_id, ok, error, output: ok ? r.text : null,
+        ...(r.mode === "batch" ? { mode: r.mode, batch_id: r.batch_id! } : {}),
+      };
+      appendFileSync(rawPath(model, effort, rawDir), JSON.stringify(line) + "\n");
+      const u = r.usage;
+      console.log(`  ${c.id.padEnd(22)} ${ok ? (JSON.parse(r.text!) as Judgement).verdict.padEnd(14) : `실패 ${error}`} ${u ? `입력 ${u.input_tokens}+캐시 ${u.cache_read_input_tokens}/${u.cache_creation_input_tokens} · 출력 ${u.output_tokens}` : ""} · ${(r.duration_ms / 1000).toFixed(1)}초 · $${r.cost_usd.toFixed(4)}`);
+    },
+  });
+  console.log(`끝 — Step "${budget.step}" 장부 $${spentOf(budget.step).toFixed(3)}`);
 }
 
 function printReport(rep: ReturnType<typeof build>) {
@@ -360,7 +357,8 @@ async function main() {
   if (argv.includes("--call")) {
     const model = opt("--model");
     if (!model) throw new Error("--model 이 필요하다 (W-2 는 모델을 견주는 Step 이다 — 기본값이 없다)");
-    await call(model, (opt("--effort") ?? "medium") as Effort, opt("--only")?.split(",") ?? null, Number(opt("--limit") ?? 1e9), Number(opt("--conc") ?? 4), argv.includes("--preview"));
+    const budget = budgetArg(argv) ?? { step: STEP, budget: BUDGET_USD, stopAt: STOP_AT_USD };
+    await call(model, (opt("--effort") ?? "medium") as Effort, opt("--only")?.split(",") ?? null, Number(opt("--limit") ?? 1e9), Number(opt("--conc") ?? 4), argv.includes("--preview"), modeArg(argv), budget, opt("--raw-dir"));
     return;
   }
   const rep = build();

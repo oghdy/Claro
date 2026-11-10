@@ -2,6 +2,7 @@
 //
 //     pnpm --filter @claro/pipeline p4 FOMC-20261028 --assign-call      # 요소가 붙지 않은 모델 사실만 모델(Opus)에 보낸다 → 출력을 저장 (p4/raw/)
 //     pnpm --filter @claro/pipeline p4 FOMC-20261028 --unslotted-call   # 어느 요소에도 붙지 않은 사실에서 Unslotted 묶음 후보 → 저장
+//       (W-6: --assign-call · --unslotted-call 은 --step S --budget USD 가 있어야 부른다 — 장부의 Step 칸 · 상한. 기본은 배치 (값이 반) · --now 는 즉시)
 //     pnpm --filter @claro/pipeline p4 FOMC-20261028                    # 저장한 출력 + 표 규칙에서 coverage.json · 스토리라인 v2 를 짓는다 (모델 안 부름 · 결정적)
 //     pnpm --filter @claro/pipeline p4 FOMC-20261028 --check            # 다시 지어 파일과 글자 단위로 같은지
 //
@@ -19,7 +20,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { sha256 } from "./extract.ts";
-import { DEFAULT_MODEL, STEP, STOP_AT_USD, PRICE, callJson, spent, spentStep } from "./llm.ts";
+import { DEFAULT_MODEL, PRICE, callMany, modeArg, needBudget, spent, spentOf, type Budget, type CallReq, type Mode } from "./llm.ts";
 import { EVENTS, loadDocs } from "./p3.ts";
 import {
   ASSIGN_SYSTEM, ASSIGN_VERSION, UNSLOTTED_SCHEMA, UNSLOTTED_SYSTEM, UNSLOTTED_VERSION, assignSchema, assignUser, unslottedUser,
@@ -29,7 +30,7 @@ import {
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const R = (...p: string[]) => join(ROOT, ...p);
 const readJson = <T,>(p: string): T => JSON.parse(readFileSync(p, "utf8"));
-const CHUNK = 140;
+export const CHUNK = 140;
 const V2_DATE = "2026-11-10"; // 새 판을 만든 날 (P-4). 짓기가 결정적이어야 해서 고정 — 다시 판을 올리면 새 값
 
 type Fact = Record<string, unknown> & { fact_id: string; label: string; claim_text: string; fact_type: string; actor: string | null; event_at: string | null; _from?: string[]; _table?: unknown };
@@ -45,6 +46,7 @@ type RawAssign = {
   _what: string; event: string; prompt_version: string; model: string; model_requested: string; effort: string; schema_version: string;
   items: { key: string; fact_id: string; claim_sha256: string }[]; input_sha256: string; request_sha256: string; response_id: string; stop_reason: string;
   usage: unknown; duration_ms: number; cost_usd: number; called_at: string; output_sha256: string; output: string;
+  mode?: "batch"; batch_id?: string;   // W-6 — 배치로 받은 출력 (cost_usd 는 배치 값)
 };
 
 const SCHEMA_PATH = R("packages/pipeline/coverage-schema.json");
@@ -52,10 +54,10 @@ const out = (code: string) => join(EVENTS[code]!.out, "..", "p4");
 const graphPath = (code: string) => join(EVENTS[code]!.out, "graph.json");
 const SL_DIR = R("packages/pipeline/data/storylines");
 
-const factDocs = (f: Fact): string[] => (f._from ? [...new Set(f._from.map((k) => k.split("#")[0]!))] : f.label.startsWith("BLS-") ? ["BLS-API-1110"] : []);
-const isTableFact = (f: Fact) => !!f._table || f.label.startsWith("BLS-");
+export const factDocs = (f: Fact): string[] => (f._from ? [...new Set(f._from.map((k) => k.split("#")[0]!))] : f.label.startsWith("BLS-") ? ["BLS-API-1110"] : []);
+export const isTableFact = (f: Fact) => !!f._table || f.label.startsWith("BLS-");
 
-function load(code: string) {
+export function load(code: string) {
   const conf = EVENTS[code];
   if (!conf || conf.kind !== "pack") throw new Error(`P-4 는 소스 팩 사건만 — ${code}`);
   const schema = readJson<Schema>(SCHEMA_PATH);
@@ -74,7 +76,7 @@ function eventSummary(graph: Graph): string {
   const pick = (key: string) => graph.facts.find((f) => f._from?.includes(key))?.claim_text;
   return ["결정 · 표결 · 반대 (10월 성명문 사실 그대로):", pick("ST-10#1"), pick("ST-10#0"), pick("ST-10#11"), pick("ST-10#12")].filter(Boolean).join("\n- ");
 }
-const evCtx = (code: string, graph: Graph) => {
+export const evCtx = (code: string, graph: Graph) => {
   const c = EVENTS[code]!;
   return { code, what: c.what, date: c.date, prev_meeting: c.prev_meeting, summary: eventSummary(graph) };
 };
@@ -86,7 +88,7 @@ function readAssignRaws(code: string): RawAssign[] {
   return readdirSync(d).filter((n) => n.startsWith(`assign.`) && n.endsWith(".json")).sort().map((n) => readJson<RawAssign>(join(d, n)));
 }
 /** fact_id → 모델이 붙인 것 (사실의 글이 같을 때만 — 글이 바뀌면 다시 불러야 한다) */
-function modelAssignments(code: string, graph: Graph, elementIds: string[]) {
+export function modelAssignments(code: string, graph: Graph, elementIds: string[]) {
   const byId = new Map(graph.facts.map((f) => [f.fact_id, f]));
   const got = new Map<string, { elements: string[]; why: string; raw: string }>();
   const problems: string[] = [];
@@ -351,70 +353,70 @@ export function pending(code: string) {
   return { assign: [] as string[], assign_upper_usd, unslotted, unslotted_upper_usd: est(unsUser.length, 4000), built };
 }
 
-async function assignCall(code: string) {
+async function assignCall(code: string, mode: Mode, budget: Budget) {
   const { schema, graph, elementIds } = load(code);
   const { got } = modelAssignments(code, graph, elementIds);
   const todo = graph.facts.filter((f) => !isTableFact(f) && !got.has(f.fact_id));
-  console.log(`p4 ${code} --assign-call — 붙일 모델 사실 ${todo.length} · ${STEP} 에서 쓴 돈 $${spentStep().toFixed(3)}`);
+  console.log(`p4 ${code} --assign-call — 붙일 모델 사실 ${todo.length} · ${mode === "batch" ? "배치" : "즉시"} · Step "${budget.step}" 쓴 돈 $${spentOf(budget.step).toFixed(3)} / 상한 $${budget.budget}`);
   if (!todo.length) return;
   const ev = evCtx(code, graph);
   const chunks: Fact[][] = [];
   for (let i = 0; i < todo.length; i += CHUNK) chunks.push(todo.slice(i, i + CHUNK));
   mkdirSync(join(out(code), "raw"), { recursive: true });
-  const run = async (ch: Fact[]) => {
-    const items = ch.map((f) => ({ key: f.label, fact_id: f.fact_id, claim_sha256: sha256(f.claim_text) }));
-    const user = assignUser(ev, schema.slots, ch.map((f) => ({ key: f.label, doc: factDocs(f).join("+"), event_at: f.event_at, fact_type: f.fact_type, actor: f.actor, claim_text: f.claim_text })));
-    const e = est(user.length, ch.length * 90);
-    if (spentStep() + e > STOP_AT_USD) {
-      console.log(`  멈춤 — ${STEP} $${spentStep().toFixed(2)} + 대략 $${e.toFixed(2)} > $${STOP_AT_USD}`);
-      return;
-    }
-    const r = await callJson({ event: code, source_label: `P4-ASSIGN(${ch[0]!.label}..${ch.at(-1)!.label})`, model: DEFAULT_MODEL, effort: "medium", system: ASSIGN_SYSTEM, user, schema: assignSchema(elementIds), prompt_version: ASSIGN_VERSION, text_sha256: sha256(user), max_tokens: 32000 });
-    if (!r.ok || r.text == null) {
-      console.log(`  실패 — ${r.error}`);
-      return;
-    }
-    const raw: RawAssign = {
-      _what: `P-4 사실 → Coverage 요소 (모델 출력 — p4.ts 가 쓴다 · 손으로 고치지 않는다). items = 보낸 사실 (key = 그때의 label · fact_id · 글의 sha256). 프롬프트 src/p4-prompt.ts ${ASSIGN_VERSION} · 스키마 coverage-schema.json ${schema.version}`,
-      event: code, prompt_version: ASSIGN_VERSION, model: r.model!, model_requested: DEFAULT_MODEL, effort: "medium", schema_version: schema.version,
-      items, input_sha256: sha256(user), request_sha256: r.request_sha256, response_id: r.response_id!, stop_reason: r.stop_reason!,
-      usage: r.usage, duration_ms: r.duration_ms, cost_usd: Number(r.cost_usd.toFixed(6)), called_at: new Date().toISOString(), output_sha256: sha256(r.text), output: r.text,
-    };
-    writeFileSync(join(out(code), "raw", `assign.${sha256(user).slice(0, 12)}.json`), JSON.stringify(raw, null, 2) + "\n");
-    console.log(`  ${ch[0]!.label}..${ch.at(-1)!.label} (${ch.length}) · 출력 ${(r.usage as { output_tokens: number }).output_tokens} · ${(r.duration_ms / 1000).toFixed(0)}초 · $${r.cost_usd.toFixed(3)}`);
-  };
-  await Promise.all(chunks.map(run));
-  console.log(`  ${STEP} 에서 쓴 돈 $${spentStep().toFixed(3)} · 장부 합 $${spent().toFixed(3)}`);
+  const users = chunks.map((ch) => assignUser(ev, schema.slots, ch.map((f) => ({ key: f.label, doc: factDocs(f).join("+"), event_at: f.event_at, fact_type: f.fact_type, actor: f.actor, claim_text: f.claim_text }))));
+  const reqs: CallReq[] = chunks.map((ch, i) => ({
+    event: code, source_label: `P4-ASSIGN(${ch[0]!.label}..${ch.at(-1)!.label})`, model: DEFAULT_MODEL, effort: "medium", system: ASSIGN_SYSTEM, user: users[i]!,
+    schema: assignSchema(elementIds), prompt_version: ASSIGN_VERSION, text_sha256: sha256(users[i]!), max_tokens: 32000, est_usd: est(users[i]!.length, ch.length * 90),
+  }));
+  await callMany(reqs, {
+    mode, budget, conc: reqs.length,
+    onResult: (r, i) => {
+      const ch = chunks[i]!, user = users[i]!;
+      if (r.skipped) return console.log(`  ${ch[0]!.label}..${ch.at(-1)!.label} 보내지 않음 — ${r.error}`);
+      if (!r.ok || r.text == null) return console.log(`  실패 — ${r.error}`);
+      const items = ch.map((f) => ({ key: f.label, fact_id: f.fact_id, claim_sha256: sha256(f.claim_text) }));
+      const raw: RawAssign = {
+        _what: `P-4 사실 → Coverage 요소 (모델 출력 — p4.ts 가 쓴다 · 손으로 고치지 않는다). items = 보낸 사실 (key = 그때의 label · fact_id · 글의 sha256). 프롬프트 src/p4-prompt.ts ${ASSIGN_VERSION} · 스키마 coverage-schema.json ${schema.version}`,
+        event: code, prompt_version: ASSIGN_VERSION, model: r.model!, model_requested: DEFAULT_MODEL, effort: "medium", schema_version: schema.version,
+        items, input_sha256: sha256(user), request_sha256: r.request_sha256, response_id: r.response_id!, stop_reason: r.stop_reason!,
+        usage: r.usage, duration_ms: r.duration_ms, cost_usd: Number(r.cost_usd.toFixed(6)), called_at: new Date().toISOString(), output_sha256: sha256(r.text), output: r.text,
+        ...(r.mode === "batch" ? { mode: r.mode, batch_id: r.batch_id! } : {}),
+      };
+      writeFileSync(join(out(code), "raw", `assign.${sha256(user).slice(0, 12)}.json`), JSON.stringify(raw, null, 2) + "\n");
+      console.log(`  ${ch[0]!.label}..${ch.at(-1)!.label} (${ch.length}) · 출력 ${(r.usage as { output_tokens: number }).output_tokens} · ${(r.duration_ms / 1000).toFixed(0)}초 · $${r.cost_usd.toFixed(3)}${r.mode === "batch" ? " (배치)" : ""}`);
+    },
+  });
+  console.log(`  Step "${budget.step}" 쓴 돈 $${spentOf(budget.step).toFixed(3)} · 장부 합 $${spent().toFixed(3)}`);
 }
 
-async function unslottedCall(code: string) {
+async function unslottedCall(code: string, mode: Mode, budget: Budget) {
   const { unsUser, noSlot } = build(code);
-  const p = join(out(code), "raw", `unslotted.${DEFAULT_MODEL}.${UNSLOTTED_VERSION.replace(/\//g, "-")}.json`);
+  const p = unsPathOf(code);
   if (existsSync(p) && readJson<RawAssign>(p).input_sha256 === sha256(unsUser)) {
     console.log(`p4 ${code} --unslotted-call — 같은 입력의 제안이 저장돼 있다`);
     return;
   }
-  const e = est(unsUser.length, 4000);
-  if (spentStep() + e > STOP_AT_USD) throw new Error(`멈춤 — ${STEP} $${spentStep().toFixed(2)} + 대략 $${e.toFixed(2)}`);
-  const r = await callJson({ event: code, source_label: "P4-UNSLOTTED", model: DEFAULT_MODEL, effort: "medium", system: UNSLOTTED_SYSTEM, user: unsUser, schema: UNSLOTTED_SCHEMA, prompt_version: UNSLOTTED_VERSION, text_sha256: sha256(unsUser), max_tokens: 16000 });
-  if (!r.ok || r.text == null) throw new Error(`실패 — ${r.error}`);
+  const [r] = await callMany([{ event: code, source_label: "P4-UNSLOTTED", model: DEFAULT_MODEL, effort: "medium", system: UNSLOTTED_SYSTEM, user: unsUser, schema: UNSLOTTED_SCHEMA, prompt_version: UNSLOTTED_VERSION, text_sha256: sha256(unsUser), max_tokens: 16000, est_usd: est(unsUser.length, 4000) }], { mode, budget });
+  if (r!.skipped) throw new Error(`멈춤 — ${r!.error}`);
+  if (!r!.ok || r!.text == null) throw new Error(`실패 — ${r!.error}`);
   const raw = {
     _what: `P-4 Unslotted 묶음 후보 (모델 출력 — p4.ts 가 쓴다). 입력 = 어느 요소에도 붙지 않은 모델 사실 (input_sha256). 판정이 아니라 사람이 볼 후보`,
-    event: code, prompt_version: UNSLOTTED_VERSION, model: r.model!, model_requested: DEFAULT_MODEL, effort: "medium", schema_version: "-",
+    event: code, prompt_version: UNSLOTTED_VERSION, model: r!.model!, model_requested: DEFAULT_MODEL, effort: "medium", schema_version: "-",
     items: noSlot.map((f) => ({ key: f.label, fact_id: f.fact_id, claim_sha256: sha256(f.claim_text) })), input_sha256: sha256(unsUser),
-    request_sha256: r.request_sha256, response_id: r.response_id!, stop_reason: r.stop_reason!, usage: r.usage, duration_ms: r.duration_ms,
-    cost_usd: Number(r.cost_usd.toFixed(6)), called_at: new Date().toISOString(), output_sha256: sha256(r.text), output: r.text,
+    request_sha256: r!.request_sha256, response_id: r!.response_id!, stop_reason: r!.stop_reason!, usage: r!.usage, duration_ms: r!.duration_ms,
+    cost_usd: Number(r!.cost_usd.toFixed(6)), called_at: new Date().toISOString(), output_sha256: sha256(r!.text), output: r!.text,
+    ...(r!.mode === "batch" ? { mode: r!.mode, batch_id: r!.batch_id! } : {}),
   };
   writeFileSync(p, JSON.stringify(raw, null, 2) + "\n");
-  console.log(`p4 ${code} --unslotted-call — 사실 ${noSlot.length} · 묶음 ${(JSON.parse(r.text) as { groups: unknown[] }).groups.length} · $${r.cost_usd.toFixed(3)}`);
+  console.log(`p4 ${code} --unslotted-call — 사실 ${noSlot.length} · 묶음 ${(JSON.parse(r!.text) as { groups: unknown[] }).groups.length} · $${r!.cost_usd.toFixed(3)}${r!.mode === "batch" ? " (배치)" : ""}`);
 }
 
 async function main() {
   const argv = process.argv.slice(2);
-  const code = argv.find((a) => !a.startsWith("--"));
+  const code = argv.find((a, i) => !a.startsWith("--") && !["--step", "--budget"].includes(argv[i - 1] ?? ""));
   if (!code) throw new Error("사건 code");
-  if (argv.includes("--assign-call")) return assignCall(code);
-  if (argv.includes("--unslotted-call")) return unslottedCall(code);
+  if (argv.includes("--assign-call")) return assignCall(code, modeArg(argv), needBudget(argv));
+  if (argv.includes("--unslotted-call")) return unslottedCall(code, modeArg(argv), needBudget(argv));
   const { coverage, v2 } = build(code);
   const cBody = JSON.stringify(coverage, null, 2) + "\n";
   const vBody = JSON.stringify(v2, null, 2) + "\n";

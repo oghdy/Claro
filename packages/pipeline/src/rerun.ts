@@ -1,7 +1,10 @@
 // W-1 — 다시 돌리기 한 번에. 새 문서 하나(10월 회의록)를 사건에 더하고 수집 → 사실 추출 → BLS 변화율 → Coverage · 스토리라인 → 해석 · 반증 을 차례로 돈다.
 //
 //     pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10              # 마른 실행 (기본) — 단계마다 무엇을 다시 부르고 무엇을 재사용하나 · 예상 비용. 부르지 않고 쓰지 않는다
-//     pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10 --go         # 돈다 — 단계마다 검사(verify-*) · 검사가 실패하면 거기서 멈춘다 (다음 단계로 넘기지 않는다)
+//     pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10 --go --step W-5 --budget 3   # 돈다 — 단계마다 검사(verify-*) · 검사가 실패하면 거기서 멈춘다 (다음 단계로 넘기지 않는다)
+//
+//     --step 이름 --budget 달러   장부의 Step 칸과 그 Step 의 상한 (W1-a — 부르는 쪽이 정한다). 모델을 부르는 --go 에는 꼭 준다. 마른 실행이 알맞은 값을 보인다
+//     --now                  즉시 부른다. 기본은 배치 (W-6 · D51 — 값이 반 · 단계마다 배치 하나 · 대개 1 시간 안 · 최대 24 시간. 끊겨도 같은 명령을 다시 돌리면 보낸 배치에 다시 붙는다)
 //
 //     --keep-derive          해석 후보를 다시 부르지 않는다 (앞 해석을 반증만 다시). 기본은 다시 부른다 — 새 문서가 "왜" 를 세울 수 있는데, 반증은 해석을 좁힐 뿐 세우지 못한다
 //     --counter unresolved   반증을 UNRESOLVED 물음이 있는 해석만 (--keep-derive 와 함께만). 기본 = 전부 — 새 사실은 어느 해석이든 좁히거나 깰 수 있다
@@ -19,7 +22,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { sha256 } from "./extract.ts";
-import { DEFAULT_MODEL, STEP, STOP_AT_USD, spent, spentStep } from "./llm.ts";
+import { BATCH_FACTOR, DEFAULT_MODEL, budgetArg, modeArg, passArgs, pendingBatches, spent, spentOf, type Budget, type Mode } from "./llm.ts";
 import { EVENTS, extractUpper, pending as p3pending } from "./p3.ts";
 import { pending as p4pending } from "./p4.ts";
 import { readCheckpoints } from "./p5.ts";
@@ -35,11 +38,11 @@ type Item = { label: string; group: string; title: string; publisher: string; ur
 type Doc = { label: string; status: "STORED" | "NOT_FETCHED"; why: string | null; text_sha256: string | null; text_length: number | null };
 type Call = { what: string; cmd: string[]; upper: number | null; last: number | null };
 
-export type Opts = { code: string; doc: string; go: boolean; keepDerive: boolean; counter: "all" | "unresolved"; like: string; pretend: boolean };
+export type Opts = { code: string; doc: string; go: boolean; keepDerive: boolean; counter: "all" | "unresolved"; like: string; pretend: boolean; mode: Mode; budget: Budget | null };
 
 export function parseArgs(argv: string[]): Opts {
   const opt = (k: string) => (argv.includes(k) ? argv[argv.indexOf(k) + 1] : undefined);
-  const valued = new Set(["--doc", "--like", "--counter"]);
+  const valued = new Set(["--doc", "--like", "--counter", "--step", "--budget"]);
   const code = argv.find((a, i) => !a.startsWith("--") && !valued.has(argv[i - 1] ?? ""));
   const doc = opt("--doc");
   if (!code || !EVENTS[code]) throw new Error(`사건 code — ${Object.keys(EVENTS).join(" · ")}`);
@@ -48,13 +51,18 @@ export function parseArgs(argv: string[]): Opts {
   const counter = (opt("--counter") ?? "all") as Opts["counter"];
   if (counter !== "all" && counter !== "unresolved") throw new Error("--counter all | unresolved");
   if (counter === "unresolved" && !argv.includes("--keep-derive")) throw new Error("--counter unresolved 는 --keep-derive 와 함께만 — 해석을 다시 부르면 해석이 새로 나와 전부 반증한다");
-  return { code, doc, go: argv.includes("--go"), keepDerive: argv.includes("--keep-derive"), counter, like: opt("--like") ?? "MIN-09", pretend: argv.includes("--pretend-new") };
+  return { code, doc, go: argv.includes("--go"), keepDerive: argv.includes("--keep-derive"), counter, like: opt("--like") ?? "MIN-09", pretend: argv.includes("--pretend-new"), mode: modeArg(argv), budget: budgetArg(argv) };
 }
 
 // ── 지난 실물 비용 (저장한 모델 출력의 cost_usd) — 추정의 본보기. 청구서가 아니다 ────────────────────────────
 function lastCosts(code: string, like: string) {
   const d = join(PKG, "data/events", code);
-  const rj = (p: string) => (existsSync(p) ? readJson<{ cost_usd: number; items?: unknown[]; claims?: unknown[]; prompt_version: string; called_at: string }>(p) : null);
+  // 저장한 출력의 cost_usd 를 즉시 값으로 (배치로 받은 것은 배치 값이 적혀 있다 — W-6). 추정은 즉시 값에서 낸다
+  const rj = (p: string) => {
+    if (!existsSync(p)) return null;
+    const r = readJson<{ cost_usd: number; mode?: Mode; items?: unknown[]; claims?: unknown[]; prompt_version: string; called_at: string }>(p);
+    return r.mode === "batch" ? { ...r, cost_usd: r.cost_usd / BATCH_FACTOR } : r;
+  };
   const raws = (dir: string, pre: string) => (existsSync(dir) ? readdirSync(dir).filter((n) => n.startsWith(pre) && n.endsWith(".json")).map((n) => rj(join(dir, n))!) : []);
   const likeRaw = raws(join(d, "p3/raw"), `${safe(like)}.${DEFAULT_MODEL}.`).sort((a, b) => a.called_at.localeCompare(b.called_at)).at(-1) ?? null;
   const assigns = raws(join(d, "p4/raw"), "assign.");
@@ -105,26 +113,31 @@ export async function main(argv = process.argv.slice(2)) {
   const would: Call[] = [];   // 마른 시험 — 이 문서가 처음이었다면 불렀을 것
   const plan = (c: Call, reuse: boolean) => {
     would.push(c);
-    if (reuse) return line("재사용", `${c.what} — 저장된 출력 (처음 더하는 문서였다면 부른다 · 상한 ${usd(c.upper)} · 지난 실물 ${usd(c.last)})`);
+    if (reuse) return line("재사용", `${c.what} — 저장된 출력 (처음 더하는 문서였다면 부른다 · 상한 ${usd(c.upper)} · 지난 실물 ${usd(c.last)}${o.mode === "batch" && c.last != null ? ` → 배치 ${usd(c.last * BATCH_FACTOR)}` : ""})`);
     calls.push(c);
-    line("부름", `${c.what} · 상한 ${usd(c.upper)} · 지난 실물 ${usd(c.last)}`);
+    line("부름", `${c.what} · 상한 ${usd(c.upper)} · 지난 실물 ${usd(c.last)}${o.mode === "batch" && c.last != null ? ` → 배치 ${usd(c.last * BATCH_FACTOR)}` : ""}`);
   };
   const call = (c: Call, reuse = false) => {
     plan(c, reuse);
     if (!reuse && o.go) {
-      const rc = run(c.cmd, PKG);
+      if (!o.budget) throw new Stop(`${c.what} — 모델을 부르려면 --step <이름> --budget <달러> (W1-a). 마른 실행이 알맞은 값을 보인다`);
+      const rc = run([...c.cmd, ...passArgs(o.budget, o.mode)], PKG);
       if (rc !== 0) throw new Stop(`${c.what} — exit ${rc}. 멈춘다`);
     }
   };
+  const stepName = o.budget?.step ?? null;
   const before = {
-    spentStep: spentStep(), spent: spent(), graphSha: sha256(readFileSync(join(evd, "p3/graph.json"), "utf8")),
+    spentStep: stepName ? spentOf(stepName) : 0, spent: spent(), graphSha: sha256(readFileSync(join(evd, "p3/graph.json"), "utf8")),
     graph: readJson<{ facts: { fact_id: string; label: string }[] }>(join(evd, "p3/graph.json")),
     coverage: readJson<{ slot_checks: { slot: string; status: string }[] }>(join(evd, "p4/coverage.json")),
     claims: readJson<{ counts: Record<string, unknown>; graph_sha256: string }>(join(evd, "p5/claims.json")),
   };
 
   say(`rerun ${code} --doc ${doc} — ${o.go ? "돈다" : "마른 실행 (부르지 않고 쓰지 않는다 — 돌리려면 --go)"}${o.pretend ? " · 마른 시험 (--pretend-new)" : ""}`);
-  say(`  장부 Step "${STEP}" (src/llm.ts) · 이 Step 에서 쓴 돈 $${before.spentStep.toFixed(2)} · 멈춤 $${STOP_AT_USD} · 장부 합 $${before.spent.toFixed(2)}`);
+  say(`  ${o.budget ? `장부 Step "${o.budget.step}" · 이 Step 에서 쓴 돈 $${before.spentStep.toFixed(2)} · 상한 $${o.budget.budget} (멈춤 $${o.budget.stopAt})` : "장부 Step · 상한 — 아직 안 줌 (--step 이름 --budget 달러 · 모델을 부르는 --go 에 꼭)"} · 장부 합 $${before.spent.toFixed(2)}`);
+  say(`  부르는 길: ${o.mode === "batch" ? "배치 (기본 · 값이 반 · 단계마다 배치 하나 — 대개 1 시간 안 · 최대 24 시간. 끊겨도 같은 명령을 다시 돌리면 보낸 배치에 다시 붙는다)" : "즉시 (--now)"}`);
+  const pend = pendingBatches();
+  if (pend.length) say(`  아직 결과를 받지 않은 배치 ${pend.length}: ${pend.map((b) => `${b.batch_id} (${b.step} · 요청 ${b.requests.length} · ${b.created_at.slice(0, 16)})`).join(" · ")} — 같은 요청이면 다시 붙는다`);
   say(`  판: 해석 ${DERIVE_VERSION} · 반증 ${COUNTER_VERSION}`);
 
   try {
@@ -258,12 +271,21 @@ export async function main(argv = process.argv.slice(2)) {
 
   // ── 마치며 — 무엇을 불렀나 · 무엇이 바뀌었나 · 사람이 볼 것 ───────────────────────────────────────
   say("\n요약");
+  const f = o.mode === "batch" ? BATCH_FACTOR : 1;
   const up = calls.reduce((a, c) => a + (c.upper ?? 0), 0), la = calls.reduce((a, c) => a + (c.last ?? 0), 0);
-  say(`  모델 부르기 ${calls.length}${calls.length ? ` · 지난 실물로 대략 $${la.toFixed(2)}${calls.some((c) => c.upper != null) ? ` · 상한이 셈해진 것만 $${up.toFixed(2)}` : ""}` : ""}`);
-  if (o.pretend) say(`  마른 시험 — ${doc} 가 처음 더하는 문서였다면: 모델 부르기 ${would.length} · 지난 실물로 대략 $${would.reduce((a, c) => a + (c.last ?? 0), 0).toFixed(2)} (이번에는 ${calls.length} — 저장된 출력을 재사용)`);
-  if (!o.go && calls.length && before.spentStep + la > STOP_AT_USD) say(`  ⚠ 장부 Step "${STEP}" 의 멈춤($${STOP_AT_USD})에 걸린다 — 쓴 돈 $${before.spentStep.toFixed(2)} + 대략 $${la.toFixed(2)}. 돌리기 전에 src/llm.ts 의 STEP · 상한을 이 일의 것으로 (사람)`);
+  say(`  모델 부르기 ${calls.length}${calls.length ? ` · 지난 실물(즉시 값)로 대략 $${la.toFixed(2)}${o.mode === "batch" ? ` → 배치 대략 $${(la * f).toFixed(2)}`: ""}${calls.some((c) => c.upper != null) ? ` · 상한이 셈해진 것만 $${(up * f).toFixed(2)}` : ""}` : ""}`);
+  if (o.pretend) {
+    const wl = would.reduce((a, c) => a + (c.last ?? 0), 0);
+    say(`  마른 시험 — ${doc} 가 처음 더하는 문서였다면: 모델 부르기 ${would.length} · 지난 실물(즉시 값)로 대략 $${wl.toFixed(2)}${o.mode === "batch" ? ` → 배치 대략 $${(wl * f).toFixed(2)}` : ""} (이번에는 ${calls.length} — 저장된 출력을 재사용)`);
+  }
+  if (!o.go && calls.length) {
+    // 알맞은 상한 — 배치는 보내기 전에 넉넉한 추정의 누계로 막는다 (상한이 셈해진 것) · 지난 실물의 2 배와 견줘 큰 쪽 · 0.5 달러 단위로 올림
+    const want = Math.ceil(Math.max(up * f, la * f * 2) * 2) / 2;
+    say(`  돌리려면: --go --step <이 일의 Step 이름> --budget ${want}${o.mode === "now" ? " --now" : ""}  (상한 = 넉넉한 추정 누계와 지난 실물 2 배 가운데 큰 쪽 · 사람이 정한다)`);
+    if (o.budget && before.spentStep + la * f > o.budget.stopAt) say(`  ⚠ Step "${o.budget.step}" 의 멈춤($${o.budget.stopAt})에 걸린다 — 쓴 돈 $${before.spentStep.toFixed(2)} + 대략 $${(la * f).toFixed(2)}`);
+  }
   if (o.go) {
-    say(`  쓴 돈: Step "${STEP}" $${(spentStep() - before.spentStep).toFixed(3)} · 장부 합 $${spent().toFixed(2)}`);
+    say(`  쓴 돈: ${stepName ? `Step "${stepName}" $${(spentOf(stepName) - before.spentStep).toFixed(3)} · ` : ""}장부 합 $${spent().toFixed(2)}`);
     const g = readJson<{ facts: { fact_id: string; label: string }[] }>(join(evd, "p3/graph.json"));
     const oldL = new Set(before.graph.facts.map((f) => f.label)), newL = new Set(g.facts.map((f) => f.label));
     const added = [...newL].filter((l) => !oldL.has(l)), gone = [...oldL].filter((l) => !newL.has(l));

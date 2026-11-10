@@ -2,6 +2,7 @@
 //
 //     pnpm --filter @claro/pipeline p5 FOMC-20261028 --derive-call             # 해석 후보 (Opus · p5-derive) → p5/raw/derive.*.json
 //     pnpm --filter @claro/pipeline p5 FOMC-20261028 --counter-call [--only DC-03,DC-07]   # 반증 (Opus · p5-counter · 따로 부른다) → p5/raw/counter.*.json
+//       (W-6: 두 부르기 모두 --step S --budget USD 가 있어야 부른다 — 장부의 Step 칸 · 상한. 기본은 배치 (값이 반) · --now 는 즉시)
 //     pnpm --filter @claro/pipeline p5 FOMC-20261028                           # 저장한 출력에서 p5/claims.json 을 짓는다 (모델 안 부름 · 결정적)
 //     pnpm --filter @claro/pipeline p5 FOMC-20261028 --check                   # 다시 지어 파일과 글자 단위로 같은지
 //
@@ -23,7 +24,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { sha256 } from "./extract.ts";
-import { DEFAULT_MODEL, PRICE, STEP, STOP_AT_USD, callJson, spent, spentStep } from "./llm.ts";
+import { DEFAULT_MODEL, PRICE, callMany, modeArg, needBudget, spent, spentOf, type Budget, type Effort, type Mode } from "./llm.ts";
 import { EVENTS, uuidFrom } from "./p3.ts";
 import {
   COUNTER_SYSTEM, COUNTER_VERSION, DERIVE_SYSTEM, DERIVE_VERSION, P5_COMPAT, counterSchema, counterUser, deriveSchema, deriveUser, exemplarBlock, versionNo,
@@ -35,7 +36,7 @@ const R = (...p: string[]) => join(ROOT, ...p);
 const readJson = <T,>(p: string): T => JSON.parse(readFileSync(p, "utf8"));
 const evDir = (code: string) => R("packages/pipeline/data/events", code);
 const outDir = (code: string) => join(evDir(code), "p5");
-const EFFORT = "high" as const;
+export const EFFORT: Effort = "high";
 
 type Fact = { fact_id: string; label: string; claim_text: string; fact_type: string; actor: string | null; event_at: string | null; _from?: string[] };
 type Graph = { event_id: string; facts: Fact[]; fact_sources: { fact_id: string; source_id: string }[] };
@@ -50,6 +51,7 @@ type Raw = {
   input_sha256: string; request_sha256: string; graph_sha256: string; claims?: { key: string; claim_sha256: string }[]; checkpoints?: { id: string; question_sha256: string }[];
   refs: Record<string, [string, string]>; response_id: string; stop_reason: string; usage: unknown; duration_ms: number; cost_usd: number;
   called_at: string; output_sha256: string; output: string;
+  mode?: "batch"; batch_id?: string;   // W-6 — 배치로 받은 출력 (cost_usd 는 배치 값)
 };
 type DClaim = { key: string; statement: string; kind: "ASSERTED" | "DEFENSIVE"; basis: string[]; question: string; element: string; d5: boolean; d5_why: string | null; note: string | null };
 type CCheck = { question: string; element: string | null; answer: string; facts: string[]; outcome: "NOT_REFUTED" | "SCOPED" | "UNRESOLVED" | "REFUTED"; missing: string | null };
@@ -84,7 +86,7 @@ const cpSha = (k: Checkpoint) => sha256(JSON.stringify([k.id, k.question, k.why]
 // D44 — 정치에 닿는 낱말 (코드의 그물 · 모델 표시를 덮지 않고 더한다)
 export const D5_WORDS = ["정치", "백악관", "대통령", "Trump", "트럼프", "청문", "독립성", "의장 교체", "의장이 바뀌", "취임", "Powell", "중간선거", "선거", "정치적 압력"];
 
-function load(code: string) {
+export function load(code: string) {
   const conf = EVENTS[code];
   if (!conf || conf.kind !== "pack") throw new Error(`P-5 는 소스 팩 사건만 — ${code}`);
   const d = evDir(code);
@@ -121,9 +123,9 @@ function load(code: string) {
   const afterMark = (f: Fact) => (!after(f) ? "" : (docsOf.get(f.fact_id) ?? []).some((l) => recordDocs.has(l)) ? " [뒤 · 회의 기록]" : " [뒤]");
   return { conf, graph, graphText, graph_sha256: sha256(graphText), cov, srcs, v2, pack, golden, firstPub, docsOf, byLabel, after, afterMark, recordDocs, elementIds, elementOf };
 }
-type L = ReturnType<typeof load>;
+export type L = ReturnType<typeof load>;
 
-function ctx(code: string, x: L): Ctx {
+export function ctx(code: string, x: L): Ctx {
   const docs = [...new Map([...x.srcs.values()].map((s) => [s.label, s])).values()]
     .filter((s) => x.graph.fact_sources.some((r) => r.source_id === s.source_id))
     .map((s) => `${s.label} · ${s.title} · ${s.publisher} · ${String(s.published_at).slice(0, 10)}${String(s.published_at).slice(0, 10) > x.conf.date ? (x.recordDocs.has(s.label) ? " [뒤 · 회의 기록]" : " [뒤]") : ""}`).join("\n");
@@ -303,7 +305,8 @@ export function build(code: string) {
 // ── 모델 부르기 ─────────────────────────────────────────────────────────────────────────────────────
 const est = (chars: number, outTok: number) => ((chars / 1.6 + 5000) * PRICE[DEFAULT_MODEL]!.in + outTok * PRICE[DEFAULT_MODEL]!.out) / 1e6;
 
-async function call(code: string, kind: "derive" | "counter", only: string[] | null) {
+/** 부를 요청 (W-6: w6.ts 가 같은 요청을 effort 만 바꿔 잰다 — 그래서 따로 낸다) */
+export function requestOf(code: string, kind: "derive" | "counter", only: string[] | null) {
   const x = load(code);
   const c = ctx(code, x);
   let user: string, system: string, schema: object, version: string, maxTok: number, sentClaims: { key: string; claim_sha256: string }[] | undefined, sentCps: Checkpoint[] = [];
@@ -320,33 +323,38 @@ async function call(code: string, kind: "derive" | "counter", only: string[] | n
     sentCps = readCheckpoints(code).filter((k) => k.status === "OPEN");
     [user, system, schema, version, maxTok] = [counterUser(c, pick.map((d) => ({ key: d.key, statement: d.statement, kind: d.kind, basis: d.basis })), sentCps), COUNTER_SYSTEM, counterSchema(x.elementIds), COUNTER_VERSION, 64000];
   }
-  const e = est(user.length, kind === "derive" ? 12000 : 30000);
-  console.log(`p5 ${code} --${kind}-call — 입력 ${user.length}자 · 대략 $${e.toFixed(2)} · ${STEP} 에서 쓴 돈 $${spentStep().toFixed(3)}`);
-  if (spentStep() + e > STOP_AT_USD) throw new Error(`멈춤 — ${STEP} $${spentStep().toFixed(2)} + 대략 $${e.toFixed(2)} > $${STOP_AT_USD}`);
-  const r = await callJson({ event: code, source_label: kind === "derive" ? "P5-DERIVE" : `P5-COUNTER(${sentClaims!.length})`, model: DEFAULT_MODEL, effort: EFFORT, system, user, schema, prompt_version: version, text_sha256: sha256(user), max_tokens: maxTok });
-  if (!r.ok || r.text == null) throw new Error(`실패 — ${r.error}`);
-  const o = JSON.parse(r.text);
+  return { x, user, system, schema, version, maxTok, sentClaims, sentCps, est_usd: est(user.length, kind === "derive" ? 12000 : 30000) };
+}
+
+async function call(code: string, kind: "derive" | "counter", only: string[] | null, mode: Mode, budget: Budget) {
+  const { x, user, system, schema, version, maxTok, sentClaims, sentCps, est_usd: e } = requestOf(code, kind, only);
+  console.log(`p5 ${code} --${kind}-call — 입력 ${user.length}자 · 대략 $${(e * (mode === "batch" ? 0.5 : 1)).toFixed(2)} (${mode === "batch" ? "배치" : "즉시"}) · Step "${budget.step}" 쓴 돈 $${spentOf(budget.step).toFixed(3)} / 상한 $${budget.budget}`);
+  const [r] = await callMany([{ event: code, source_label: kind === "derive" ? "P5-DERIVE" : `P5-COUNTER(${sentClaims!.length})`, model: DEFAULT_MODEL, effort: EFFORT, system, user, schema, prompt_version: version, text_sha256: sha256(user), max_tokens: maxTok, est_usd: e }], { mode, budget });
+  if (r!.skipped) throw new Error(`멈춤 — ${r!.error}`);
+  if (!r!.ok || r!.text == null) throw new Error(`실패 — ${r!.error}`);
+  const o = JSON.parse(r!.text);
   const labels = kind === "derive" ? (o.claims as DClaim[]).flatMap((d) => d.basis) : [...(o.results as CResult[]).flatMap((y) => y.checks.flatMap((k) => k.facts)), ...((o.checkpoints ?? []) as CPoint[]).flatMap((k) => k.facts)];
   const raw: Raw = {
     _what: `P-5 ${kind === "derive" ? "해석 후보" : "반증"} (모델 출력 — p5.ts 가 쓴다 · 손으로 고치지 않는다). 프롬프트 src/p5-prompt.ts ${version}. refs = 출력이 가리킨 label → 부를 때의 [fact_id, 사실 글 sha256]${kind === "counter" ? " · claims = 보낸 해석의 key 와 [문장 · 종류 · 근거]의 sha256" : ""}`,
-    event: code, kind, prompt_version: version, model: r.model!, model_requested: DEFAULT_MODEL, effort: EFFORT,
-    input_sha256: sha256(user), request_sha256: r.request_sha256, graph_sha256: x.graph_sha256, ...(sentClaims ? { claims: sentClaims } : {}), ...(sentCps.length ? { checkpoints: sentCps.map((k) => ({ id: k.id, question_sha256: cpSha(k) })) } : {}),
-    refs: refsOf(x, labels), response_id: r.response_id!, stop_reason: r.stop_reason!, usage: r.usage, duration_ms: r.duration_ms,
-    cost_usd: Number(r.cost_usd.toFixed(6)), called_at: new Date().toISOString(), output_sha256: sha256(r.text), output: r.text,
+    event: code, kind, prompt_version: version, model: r!.model!, model_requested: DEFAULT_MODEL, effort: EFFORT,
+    input_sha256: sha256(user), request_sha256: r!.request_sha256, graph_sha256: x.graph_sha256, ...(sentClaims ? { claims: sentClaims } : {}), ...(sentCps.length ? { checkpoints: sentCps.map((k) => ({ id: k.id, question_sha256: cpSha(k) })) } : {}),
+    refs: refsOf(x, labels), response_id: r!.response_id!, stop_reason: r!.stop_reason!, usage: r!.usage, duration_ms: r!.duration_ms,
+    cost_usd: Number(r!.cost_usd.toFixed(6)), called_at: new Date().toISOString(), output_sha256: sha256(r!.text), output: r!.text,
+    ...(r!.mode === "batch" ? { mode: r!.mode, batch_id: r!.batch_id! } : {}),
   };
   mkdirSync(join(outDir(code), "raw"), { recursive: true });
   writeFileSync(join(outDir(code), "raw", `${kind}.${sha256(user).slice(0, 12)}.json`), JSON.stringify(raw, null, 2) + "\n");
-  const u = r.usage!;
-  console.log(`  ${r.model} 입력 ${u.input_tokens} · 출력 ${u.output_tokens} · ${(r.duration_ms / 1000).toFixed(0)}초 · $${r.cost_usd.toFixed(3)} · ${STEP} $${spentStep().toFixed(3)} · 장부 $${spent().toFixed(3)}`);
+  const u = r!.usage!;
+  console.log(`  ${r!.model} 입력 ${u.input_tokens} · 출력 ${u.output_tokens} · ${(r!.duration_ms / 1000).toFixed(0)}초 · $${r!.cost_usd.toFixed(3)}${r!.mode === "batch" ? " (배치)" : ""} · Step "${budget.step}" $${spentOf(budget.step).toFixed(3)} · 장부 $${spent().toFixed(3)}`);
 }
 
 async function main() {
   const argv = process.argv.slice(2);
-  const code = argv.find((a) => !a.startsWith("--") && argv[argv.indexOf(a) - 1] !== "--only");
+  const code = argv.find((a, i) => !a.startsWith("--") && !["--only", "--step", "--budget"].includes(argv[i - 1] ?? ""));
   if (!code) throw new Error("사건 code");
   const only = argv.includes("--only") ? argv[argv.indexOf("--only") + 1]!.split(",") : null;
-  if (argv.includes("--derive-call")) return call(code, "derive", null);
-  if (argv.includes("--counter-call")) return call(code, "counter", only);
+  if (argv.includes("--derive-call")) return call(code, "derive", null, modeArg(argv), needBudget(argv));
+  if (argv.includes("--counter-call")) return call(code, "counter", only, modeArg(argv), needBudget(argv));
   const { out, table } = build(code);
   const body = JSON.stringify(out, null, 2) + "\n";
   const p = join(outDir(code), "claims.json");

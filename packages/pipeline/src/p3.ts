@@ -1,7 +1,8 @@
 // P-3 · P-3b — 사실 추출 → Deep Fact Graph 초안 (FINDINGS §7 스테이지 2 · 3). 명령:
 //
-//     pnpm --filter @claro/pipeline p3 FOMC-20261028 --call [--model M] [--effort E] [--only A,B]   # 저장된 출력이 없는 글 문서만 모델을 부른다 → 출력을 저장
-//     pnpm --filter @claro/pipeline p3 FOMC-20261028 --merge-call [--model M]                      # 같은 사실 묶음 후보를 모델에 묻는다 → 출력을 저장
+//     pnpm --filter @claro/pipeline p3 FOMC-20261028 --call --step S --budget USD [--now] [--model M] [--effort E] [--only A,B]   # 저장된 출력이 없는 글 문서만 모델을 부른다 → 출력을 저장
+//     pnpm --filter @claro/pipeline p3 FOMC-20261028 --merge-call --step S --budget USD [--now] [--model M]                      # 같은 사실 묶음 후보를 모델에 묻는다 → 출력을 저장
+//       (W-6: 기본은 배치 — 값이 반 · 끝날 때까지 기다린다. --now 는 즉시. --step · --budget 은 장부의 Step 칸과 상한 — 부르는 쪽이 정한다)
 //     pnpm --filter @claro/pipeline p3 FOMC-20261028 [--model M]                                  # 저장한 출력 + 표에서 그래프를 짓는다 (모델을 부르지 않는다 · 결정적)
 //     pnpm --filter @claro/pipeline p3 FOMC-20261028 --check                                      # 다시 지어 파일과 글자 단위로 같은지 (아무것도 쓰지 않는다)
 //
@@ -34,7 +35,7 @@ import {
   FACT_TYPES, MERGE_SCHEMA, MERGE_SYSTEM, MERGE_VERSION, OUTPUT_SCHEMA, PROMPT_COMPAT, PROMPT_VERSION, SYSTEM_PROMPT,
   mergeUserMessage, userMessage, type EventContext, type MergeItem,
 } from "./p3-prompt.ts";
-import { DEFAULT_MODEL, PRICE, STEP, STOP_AT_USD, callJson, requestSha, spent, spentStep } from "./llm.ts";
+import { DEFAULT_MODEL, PRICE, callMany, modeArg, needBudget, requestSha, spent, spentOf, type Budget, type CallReq, type Mode } from "./llm.ts";
 import { TABLE_RULES, docKind, modelInput, readTables, type TableFact } from "./tables.ts";
 import { CHECK_RULES, koQuantifiers, numbersMissing, passageNumbers, quantifierProblem } from "./checks.ts";
 
@@ -116,6 +117,7 @@ export type RawOut = {
   model_requested: string; model: string; effort: string; request_sha256: string; response_id: string; stop_reason: string;
   usage: unknown; duration_ms: number; cost_usd: number; called_at: string;
   output_sha256: string; output: string | null; output_in: "here" | "cache";
+  mode?: "batch"; batch_id?: string;   // W-6 — 배치로 받은 출력 (cost_usd 는 배치 값). 없으면 즉시
 };
 const vtag = (v: string) => v.replace(/\//g, "-");
 const rawName = (label: string, model: string, version = PROMPT_VERSION) => `${safe(label)}.${model}.${vtag(version)}.json`;
@@ -155,9 +157,11 @@ const MAX_TOKENS = 64000;
 const TABLE_ID_SALT = "p3-extract/2";
 
 // ── ① 모델 ─────────────────────────────────────────────────────────────────────────────────────────────
-const estimate = (model: string, inputChars: number) => ((inputChars / 3 + 5000) * PRICE[model]!.in + 32000 * PRICE[model]!.out) / 1e6;
+// 넉넉한 추정 (즉시 값). 출력은 입력 토큰의 2배 + 4,000 (생각 포함 · 상한 32,000) — W-6: 장부에서 출력이 입력의 2배를 넘은 글 문서는 없다 (P-3b 10월 최대 1.4배).
+// 배치는 보내기 전에 상한을 정해야 해서 이 추정의 누계를 쓴다 — 예전처럼 문서마다 32,000 이면 사건 하나가 실제의 4 배로 잡힌다
+const estimate = (model: string, inputChars: number) => ((inputChars / 3 + 5000) * PRICE[model]!.in + Math.min(32000, (2 * inputChars) / 3 + 4000) * PRICE[model]!.out) / 1e6;
 
-async function callAll(code: string, docs: Doc[], model: string, effort: "low" | "medium" | "high", only: string[] | null) {
+async function callAll(code: string, docs: Doc[], model: string, effort: "low" | "medium" | "high", only: string[] | null, mode: Mode, budget: Budget) {
   const conf = EVENTS[code]!;
   mkdirSync(join(conf.out, "raw"), { recursive: true });
   const queue: Doc[] = [];
@@ -173,33 +177,30 @@ async function callAll(code: string, docs: Doc[], model: string, effort: "low" |
     }
     queue.push(d);
   }
-  let stop = false;
-  const worker = async () => {
-    while (queue.length && !stop) {
-      const d = queue.shift()!;
-      const input = modelInput(d);
-      const est = estimate(model, cpLength(input));
-      if (spentStep() + est > STOP_AT_USD) {
-        console.log(`  ${d.label.padEnd(13)} 멈춤 — ${STEP} 에서 쓴 돈 $${spentStep().toFixed(2)} + 이 문서 대략 $${est.toFixed(2)} > $${STOP_AT_USD}`);
-        stop = true;
-        return;
-      }
-      const user = userMessage(conf, { label: d.label, title: d.title, publisher: d.publisher, published_at: d.published_at, url: d.url, storyline: d.storyline, after: d.after }, input);
-      const r = await callJson({ event: code, source_label: d.label, model, effort, system: SYSTEM_PROMPT, user, schema: OUTPUT_SCHEMA, prompt_version: PROMPT_VERSION, text_sha256: d.text_sha256, max_tokens: MAX_TOKENS });
+  const reqs: CallReq[] = queue.map((d) => {
+    const input = modelInput(d);
+    const user = userMessage(conf, { label: d.label, title: d.title, publisher: d.publisher, published_at: d.published_at, url: d.url, storyline: d.storyline, after: d.after }, input);
+    return { event: code, source_label: d.label, model, effort, system: SYSTEM_PROMPT, user, schema: OUTPUT_SCHEMA, prompt_version: PROMPT_VERSION, text_sha256: d.text_sha256, max_tokens: MAX_TOKENS, est_usd: estimate(model, cpLength(input)) };
+  });
+  if (reqs.length) console.log(`  부를 문서 ${reqs.length} · ${mode === "batch" ? "배치" : "즉시"} · 넉넉한 추정 $${(reqs.reduce((a, r) => a + r.est_usd!, 0) * (mode === "batch" ? 0.5 : 1)).toFixed(2)}`);
+  let fatal = false;
+  await callMany(reqs, {
+    mode, budget, conc: 3,
+    onResult: (r, i) => {
+      const d = queue[i]!;
+      if (r.skipped) return console.log(`  ${d.label.padEnd(13)} 보내지 않음 — ${r.error}`);
       if (!r.ok || r.text == null) {
         console.log(`  ${d.label.padEnd(13)} 실패 — ${r.error}`);
-        if (r.fatal) {
-          stop = true;
-          console.log("  치명적 오류 — 남은 문서를 부르지 않는다");
-        }
-        continue;
+        if (r.fatal && !fatal) { fatal = true; console.log("  치명적 오류 — 다시 부르기 전에 사람이 본다"); }
+        return;
       }
+      const input = modelInput(d);
       const raw: RawOut = {
         _what: `P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts ${PROMPT_VERSION} · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256`,
         event: code, source_label: d.label, source_id: d.source_id, text_sha256: d.text_sha256, input_sha256: sha256(input), prompt_version: PROMPT_VERSION,
         model_requested: model, model: r.model!, effort, request_sha256: r.request_sha256, response_id: r.response_id!, stop_reason: r.stop_reason!,
         usage: r.usage, duration_ms: r.duration_ms, cost_usd: Number(r.cost_usd.toFixed(6)), called_at: new Date().toISOString(),
-        output_sha256: sha256(r.text), output: d.in_git ? r.text : null, output_in: d.in_git ? "here" : "cache",
+        output_sha256: sha256(r.text), output: d.in_git ? r.text : null, output_in: d.in_git ? "here" : "cache", ...(r.mode === "batch" ? { mode: r.mode, batch_id: r.batch_id! } : {}),
       };
       if (!d.in_git) {
         mkdirSync(join(conf.cacheOut, "raw"), { recursive: true });
@@ -207,11 +208,10 @@ async function callAll(code: string, docs: Doc[], model: string, effort: "low" |
       }
       writeFileSync(rawPath(code, d.label, model), JSON.stringify(raw, null, 2) + "\n");
       const u = r.usage!;
-      console.log(`  ${d.label.padEnd(13)} ${r.model} 입력 ${u.input_tokens} (캐시 읽기 ${u.cache_read_input_tokens} · 쓰기 ${u.cache_creation_input_tokens}) · 출력 ${u.output_tokens} · ${(r.duration_ms / 1000).toFixed(0)}초 · $${r.cost_usd.toFixed(3)}`);
-    }
-  };
-  await Promise.all([worker(), worker(), worker()]);
-  console.log(`  ${STEP} 에서 쓴 돈 $${spentStep().toFixed(3)} · 장부 합 $${spent().toFixed(3)}`);
+      console.log(`  ${d.label.padEnd(13)} ${r.model} 입력 ${u.input_tokens} (캐시 읽기 ${u.cache_read_input_tokens} · 쓰기 ${u.cache_creation_input_tokens}) · 출력 ${u.output_tokens} · ${(r.duration_ms / 1000).toFixed(0)}초 · $${r.cost_usd.toFixed(3)}${r.mode === "batch" ? " (배치)" : ""}`);
+    },
+  });
+  console.log(`  Step "${budget.step}" 쓴 돈 $${spentOf(budget.step).toFixed(3)} · 장부 합 $${spent().toFixed(3)}`);
 }
 
 // ── ② 짓기 (결정적) ─────────────────────────────────────────────────────────────────────────────────────
@@ -518,6 +518,9 @@ export function build(code: string, model: string, includeBls: boolean): { graph
 
 const graphPath = (code: string, model: string) => join(EVENTS[code]!.out, model === DEFAULT_MODEL ? "graph.json" : `graph.${model}.json`);
 
+/** 묶음 제안의 넉넉한 추정 — 입력은 사실 목록 전부 · 출력은 짧다 (장부: 출력 941 ~ 2,000 · 생각 포함). 출력 8,000 으로 잡는다 */
+const mergeEstimate = (model: string, inputChars: number) => ((inputChars / 2 + 1000) * PRICE[model]!.in + 8000 * PRICE[model]!.out) / 1e6;
+
 /** 문서 하나를 부를 때 코드가 멈춤 계산에 쓰는 상한 (W-1 · rerun.ts 마른 시험) */
 export const extractUpper = (code: string, label: string, model = DEFAULT_MODEL) => {
   const d = loadDocs(code).docs.find((x) => x.label === label);
@@ -542,10 +545,10 @@ export function pending(code: string, model = DEFAULT_MODEL) {
     const lp = join(conf.out, "labels.json"), gp = graphPath(code, model);
     graph = existsSync(gp) && readFileSync(gp, "utf8") === JSON.stringify(g, null, 2) + "\n" && existsSync(lp) && readFileSync(lp, "utf8") === JSON.stringify(ledger, null, 2) + "\n" ? "same" : "changes";
   }
-  return { extract, merge, merge_upper_usd: estimate(model, cpLength(user)), graph };
+  return { extract, merge, merge_upper_usd: mergeEstimate(model, cpLength(user)), graph };
 }
 
-async function mergeCall(code: string, model: string) {
+async function mergeCall(code: string, model: string, mode: Mode, budget: Budget) {
   const { conf, docs, cands } = collect(code, model);
   const items = mergeItems(cands);
   const user = mergeUserMessage(conf, docs.filter((d) => d.kind !== "TABLE").map((d) => ({ label: d.label, title: d.title })), items);
@@ -554,27 +557,27 @@ async function mergeCall(code: string, model: string) {
     console.log(`p3 ${code} --merge-call — 같은 입력의 제안이 저장돼 있다 — 부르지 않는다`);
     return;
   }
-  const est = estimate(model, cpLength(user));
-  if (spentStep() + est > STOP_AT_USD) {
-    console.log(`p3 ${code} --merge-call — 멈춤 (${STEP} 에서 쓴 돈 $${spentStep().toFixed(2)} + 대략 $${est.toFixed(2)} > $${STOP_AT_USD})`);
+  const est = mergeEstimate(model, cpLength(user));
+  const [r] = await callMany([{ event: code, source_label: "MERGE", model, effort: "medium", system: MERGE_SYSTEM, user, schema: MERGE_SCHEMA, prompt_version: MERGE_VERSION, text_sha256: sha256(user), max_tokens: 32000, est_usd: est }], { mode, budget });
+  if (r!.skipped) {
+    console.log(`p3 ${code} --merge-call — 멈춤 (${r!.error})`);
     return;
   }
-  const r = await callJson({ event: code, source_label: "MERGE", model, effort: "medium", system: MERGE_SYSTEM, user, schema: MERGE_SCHEMA, prompt_version: MERGE_VERSION, text_sha256: sha256(user), max_tokens: 32000 });
-  if (!r.ok || r.text == null) throw new Error(`묶음 제안 실패 — ${r.error}`);
+  if (!r!.ok || r!.text == null) throw new Error(`묶음 제안 실패 — ${r!.error}`);
   const raw: RawOut = {
     _what: `P-3b 같은 사실 묶음 제안 (모델 출력 — p3.ts 가 쓴다 · 손으로 고치지 않는다). 입력 = 구절이 확인되고 검사를 통과한 모델 사실의 key · 문서 · 종류 · actor · event_at · 한국어 글 (input_sha256). 코드가 규칙 R3 로 확정한다`,
     event: code, source_label: "MERGE", source_id: "-", text_sha256: sha256(user), input_sha256: sha256(user), prompt_version: MERGE_VERSION,
-    model_requested: model, model: r.model!, effort: "medium", request_sha256: r.request_sha256, response_id: r.response_id!, stop_reason: r.stop_reason!,
-    usage: r.usage, duration_ms: r.duration_ms, cost_usd: Number(r.cost_usd.toFixed(6)), called_at: new Date().toISOString(),
-    output_sha256: sha256(r.text), output: r.text, output_in: "here",
+    model_requested: model, model: r!.model!, effort: "medium", request_sha256: r!.request_sha256, response_id: r!.response_id!, stop_reason: r!.stop_reason!,
+    usage: r!.usage, duration_ms: r!.duration_ms, cost_usd: Number(r!.cost_usd.toFixed(6)), called_at: new Date().toISOString(),
+    output_sha256: sha256(r!.text), output: r!.text, output_in: "here", ...(r!.mode === "batch" ? { mode: r!.mode, batch_id: r!.batch_id! } : {}),
   };
   writeFileSync(p, JSON.stringify(raw, null, 2) + "\n");
-  console.log(`p3 ${code} --merge-call — ${r.model} · 사실 ${items.length} · 묶음 제안 ${(JSON.parse(r.text) as { groups: unknown[] }).groups.length} · $${r.cost_usd.toFixed(3)}`);
+  console.log(`p3 ${code} --merge-call — ${r!.model} · 사실 ${items.length} · 묶음 제안 ${(JSON.parse(r!.text) as { groups: unknown[] }).groups.length} · $${r!.cost_usd.toFixed(3)}${r!.mode === "batch" ? " (배치)" : ""}`);
 }
 
 async function main() {
   const argv = process.argv.slice(2);
-  const code = argv.find((a) => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.match(/^--(model|effort|only)$/));
+  const code = argv.find((a) => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.match(/^--(model|effort|only|step|budget)$/));
   if (!code || !EVENTS[code]) throw new Error(`사건 code — ${Object.keys(EVENTS).join(" · ")}`);
   const opt = (k: string) => (argv.includes(k) ? argv[argv.indexOf(k) + 1] : undefined);
   const model = opt("--model") ?? DEFAULT_MODEL;
@@ -584,12 +587,13 @@ async function main() {
   const conf = EVENTS[code]!;
   if (argv.includes("--call")) {
     const { docs } = loadDocs(code);
-    console.log(`p3 ${code} --call — ${model} · ${PROMPT_VERSION} · effort ${effort} · 문서 ${only ? only.length : docs.length} · ${STEP} 에서 쓴 돈 $${spentStep().toFixed(3)}`);
-    await callAll(code, docs, model, effort, only);
+    const budget = needBudget(argv), mode = modeArg(argv);
+    console.log(`p3 ${code} --call — ${model} · ${PROMPT_VERSION} · effort ${effort} · 문서 ${only ? only.length : docs.length} · ${mode === "batch" ? "배치" : "즉시"} · Step "${budget.step}" 쓴 돈 $${spentOf(budget.step).toFixed(3)} / 상한 $${budget.budget}`);
+    await callAll(code, docs, model, effort, only, mode, budget);
     return;
   }
   if (argv.includes("--merge-call")) {
-    await mergeCall(code, model);
+    await mergeCall(code, model, modeArg(argv), needBudget(argv));
     return;
   }
   const { graph, cacheSide, ledger } = build(code, model, model === DEFAULT_MODEL && conf.kind === "pack");

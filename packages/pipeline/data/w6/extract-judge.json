@@ -1,0 +1,332 @@
+{
+  "_what": "W-6 — 9월 골든 사실 가운데 표본 문서(JH · MIN-07 · PC-09 · ST-06 · ST-07 · ST-09 · WH-0408)에 저장된 판정 key 가 있는 26 을, 다시 부른 출력(effort low · medium, 둘 다 배치)과 사람이 대 본 판정 (P-3b 방법: w6 --extract-compare 가 구절이 원문에서 겹치는 사실을 추린 뒤 사람이 읽음 · 겹침이 없으면 같은 문서 출력 전체에서 찾음). status 는 compare.json 과 같은 넷 (MISSED_STORED = 원문이 저장돼 있는데 놓침). 판정자: W-6 작업 세션 (Opus 5.5)",
+  "judgements": {
+    "low.batch": {
+      "F01": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#1"
+        ]
+      },
+      "F02": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#0"
+        ]
+      },
+      "F03": {
+        "status": "PARTIAL",
+        "keys": [
+          "ST-09#1"
+        ],
+        "note": "표 OMO 와 함께 — 저장된 판정과 같음"
+      },
+      "F04": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#9"
+        ]
+      },
+      "F05": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#3"
+        ]
+      },
+      "F06": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#4"
+        ]
+      },
+      "F07": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#5"
+        ]
+      },
+      "F08": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#6"
+        ]
+      },
+      "F09": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#7"
+        ]
+      },
+      "F10": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#8"
+        ]
+      },
+      "F20": {
+        "status": "FOUND",
+        "keys": [
+          "PC-09#9"
+        ]
+      },
+      "F21": {
+        "status": "PARTIAL",
+        "keys": [
+          "PC-09#1"
+        ],
+        "note": "만장일치만 — \"결의를 보여준다\" 없음"
+      },
+      "F22": {
+        "status": "MISSED_STORED",
+        "keys": [],
+        "note": "\"5년 넘게\" 사실 없음 (PC-09 사실 12 — medium 38)"
+      },
+      "F23": {
+        "status": "MISSED_STORED",
+        "keys": [],
+        "note": "개별 가격 · 상대가격 사실 없음"
+      },
+      "F24": {
+        "status": "MISSED_STORED",
+        "keys": [],
+        "note": "7주 자료 · 여름 추세 사실 없음"
+      },
+      "F25": {
+        "status": "MISSED_STORED",
+        "keys": [],
+        "note": "실업수당 청구 · 완전고용 부합 없음 (#2 는 실업률 4.1% · 구인)"
+      },
+      "F27": {
+        "status": "MISSED_STORED",
+        "keys": [],
+        "note": "장기 금리 상승 이유 없음"
+      },
+      "F28": {
+        "status": "FOUND",
+        "keys": [
+          "ST-07#0",
+          "ST-07#1",
+          "ST-07#9"
+        ]
+      },
+      "F29a": {
+        "status": "FOUND",
+        "keys": [
+          "ST-06#0",
+          "ST-06#1"
+        ]
+      },
+      "F32a": {
+        "status": "FOUND",
+        "keys": [
+          "JH#10"
+        ]
+      },
+      "F33": {
+        "status": "FOUND",
+        "keys": [
+          "JH#14"
+        ]
+      },
+      "F45": {
+        "status": "FOUND",
+        "keys": [
+          "MIN-07#13"
+        ]
+      },
+      "F52": {
+        "status": "FOUND",
+        "keys": [
+          "JH#14"
+        ],
+        "note": "F33 과 한 사실에 묶여 있다"
+      },
+      "F55": {
+        "status": "MISSED_STORED",
+        "keys": [],
+        "note": "스태프가 든 물가 요인(관세 · 중동 에너지 · AI) 없음"
+      },
+      "IR01": {
+        "status": "FOUND",
+        "keys": [
+          "WH-0408#1"
+        ]
+      },
+      "IR02": {
+        "status": "FOUND",
+        "keys": [
+          "WH-0408#0"
+        ]
+      }
+    },
+    "medium.batch": {
+      "F01": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#1"
+        ]
+      },
+      "F02": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#0"
+        ]
+      },
+      "F03": {
+        "status": "PARTIAL",
+        "keys": [
+          "ST-09#1"
+        ],
+        "note": "저장된 판정과 같음"
+      },
+      "F04": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#9"
+        ]
+      },
+      "F05": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#3"
+        ]
+      },
+      "F06": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#4"
+        ]
+      },
+      "F07": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#5"
+        ]
+      },
+      "F08": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#6"
+        ]
+      },
+      "F09": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#7"
+        ]
+      },
+      "F10": {
+        "status": "FOUND",
+        "keys": [
+          "ST-09#8"
+        ]
+      },
+      "F20": {
+        "status": "FOUND",
+        "keys": [
+          "PC-09#16"
+        ]
+      },
+      "F21": {
+        "status": "PARTIAL",
+        "keys": [
+          "PC-09#2"
+        ],
+        "note": "만장일치만 — 저장된 즉시 출력은 \"결의를 보여준다\" 까지 한 사실"
+      },
+      "F22": {
+        "status": "PARTIAL",
+        "keys": [
+          "PC-09#10"
+        ],
+        "note": "\"5년 넘게\" — 저장된 판정과 같음"
+      },
+      "F23": {
+        "status": "FOUND",
+        "keys": [
+          "PC-09#23",
+          "PC-09#24"
+        ]
+      },
+      "F24": {
+        "status": "PARTIAL",
+        "keys": [
+          "PC-09#27"
+        ],
+        "note": "저장된 판정과 같음"
+      },
+      "F25": {
+        "status": "PARTIAL",
+        "keys": [
+          "PC-09#37"
+        ],
+        "note": "완전고용 부합만 — 실업수당 청구(4주 평균) 사실 없음 · 저장된 즉시 출력은 둘 다"
+      },
+      "F27": {
+        "status": "FOUND",
+        "keys": [
+          "PC-09#34"
+        ]
+      },
+      "F28": {
+        "status": "FOUND",
+        "keys": [
+          "ST-07#0",
+          "ST-07#1",
+          "ST-07#9",
+          "ST-07#10"
+        ]
+      },
+      "F29a": {
+        "status": "FOUND",
+        "keys": [
+          "ST-06#0",
+          "ST-06#1"
+        ]
+      },
+      "F32a": {
+        "status": "FOUND",
+        "keys": [
+          "JH#28"
+        ]
+      },
+      "F33": {
+        "status": "FOUND",
+        "keys": [
+          "JH#33"
+        ]
+      },
+      "F45": {
+        "status": "FOUND",
+        "keys": [
+          "MIN-07#23"
+        ]
+      },
+      "F52": {
+        "status": "FOUND",
+        "keys": [
+          "JH#34"
+        ]
+      },
+      "F55": {
+        "status": "PARTIAL",
+        "keys": [
+          "MIN-07#42"
+        ],
+        "note": "\"관세와 중동 분쟁의 효과가 약해지면서\" — 원인으로 적은 문장(저장된 #29)은 없음"
+      },
+      "IR01": {
+        "status": "FOUND",
+        "keys": [
+          "WH-0408#1"
+        ]
+      },
+      "IR02": {
+        "status": "FOUND",
+        "keys": [
+          "WH-0408#0"
+        ]
+      }
+    }
+  }
+}
