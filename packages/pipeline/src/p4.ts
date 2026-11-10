@@ -328,6 +328,26 @@ export function build(code: string) {
 
 // ── 모델 부르기 ─────────────────────────────────────────────────────────────────────────────────────
 const est = (chars: number, outTok: number) => ((chars / 2.5 + 3000) * PRICE[DEFAULT_MODEL]!.in + outTok * PRICE[DEFAULT_MODEL]!.out) / 1e6;
+const unsPathOf = (code: string) => join(out(code), "raw", `unslotted.${DEFAULT_MODEL}.${UNSLOTTED_VERSION.replace(/\//g, "-")}.json`);
+
+/** 다시 돌리기 (W-1 · rerun.ts) — 지금 그래프에서 모델을 다시 불러야 하는 것. 부르지 않고 쓰지 않는다.
+ *  assign = 요소를 아직 붙이지 않은 모델 사실 (글이 바뀐 사실 포함) · unslotted = 슬롯 밖 사실 목록이 저장한 제안의 입력과 같은가 (assign 이 다 있어야 셀 수 있다) ·
+ *  built = 지금 짓기가 coverage.json · v2.json 과 같은가 */
+export function pending(code: string) {
+  const { schema, graph, elementIds } = load(code);
+  const { got } = modelAssignments(code, graph, elementIds);
+  const todo = graph.facts.filter((f) => !isTableFact(f) && !got.has(f.fact_id));
+  const ev = evCtx(code, graph);
+  const assign_upper_usd = Array.from({ length: Math.ceil(todo.length / CHUNK) }, (_, i) => todo.slice(i * CHUNK, (i + 1) * CHUNK))
+    .reduce((a, ch) => a + est(assignUser(ev, schema.slots, ch.map((f) => ({ key: f.label, doc: factDocs(f).join("+"), event_at: f.event_at, fact_type: f.fact_type, actor: f.actor, claim_text: f.claim_text }))).length, ch.length * 90), 0);
+  if (todo.length) return { assign: todo.map((f) => f.label), assign_upper_usd, unslotted: "unknown" as const, unslotted_upper_usd: null, built: "unknown" as const };
+  const { coverage, v2, unsUser } = build(code);
+  const p = unsPathOf(code);
+  const unslotted = !existsSync(p) ? "missing" as const : readJson<RawAssign>(p).input_sha256 === sha256(unsUser) ? "same" as const : "stale" as const;
+  const cPath = join(out(code), "coverage.json"), vPath = join(SL_DIR, "SL-iran-war", "v2.json");
+  const built = existsSync(cPath) && readFileSync(cPath, "utf8") === JSON.stringify(coverage, null, 2) + "\n" && existsSync(vPath) && readFileSync(vPath, "utf8") === JSON.stringify(v2, null, 2) + "\n" ? "same" as const : "changes" as const;
+  return { assign: [] as string[], assign_upper_usd, unslotted, unslotted_upper_usd: est(unsUser.length, 4000), built };
+}
 
 async function assignCall(code: string) {
   const { schema, graph, elementIds } = load(code);

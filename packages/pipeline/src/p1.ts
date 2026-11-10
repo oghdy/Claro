@@ -2,6 +2,10 @@
 //
 //     pnpm --filter @claro/pipeline p1            # 가져오기(캐시가 없을 때만) → 뽑기 → 해시 → 구절 위치 → store.json · 기록 파일
 //     pnpm --filter @claro/pipeline p1 --check    # 다시 돌려 대 본다: 캐시의 바이트로 다시 뽑고 · 새로 받아 다시 뽑아 해시를 견준다. 아무것도 쓰지 않는다
+//     pnpm --filter @claro/pipeline p1 --retry    # 못 가져온 것을 다시 시도 (사람이 판단해서만)
+//
+// 못 가져옴으로 기록된 문서는 다시 두드리지 않는다 — --check 에서도 (W-1 · D41 · P-2 pack.ts 와 같은 방식). 다시 시도는 --retry 로만.
+// 네트워크로 가기 전에 robots.txt 를 본다 (D40 · P-2 robots.ts). 막히면 받지 않는다 — 우회하지 않는다
 //
 // 쓰는 곳
 //   fixtures/store.json                      source_registry · fact_sources 의 span_start · span_end · (증명된) Source.published_at
@@ -18,6 +22,7 @@ import { EXTRACTOR, extract, sha256 } from "./extract.ts";
 import { fetchOnce, readCached, readCachedText, writeCached, writeCachedText, USER_AGENT, type Fetched } from "./fetch.ts";
 import { RULES, cpLength, locate } from "./match.ts";
 import { registryRow, rightsOf, type Rights } from "./rights.ts";
+import { robotsAllows } from "./robots.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const STORE = join(ROOT, "fixtures/store.json");
@@ -61,6 +66,15 @@ type SpanRecord = {
 
 const args = new Set(process.argv.slice(2));
 const CHECK = args.has("--check");
+const RETRY = args.has("--retry");
+
+/** 기록이 있는 문서를 이번 실행에서 어떻게 다루나 (W-1 · D41 — P-2 pack.ts 와 같은 규칙).
+ *  keep = 저장된 글을 그대로 · recorded = 못 가져옴 기록 그대로 (요청하지 않는다) · fetch = 네트워크로 간다 (캐시가 있으면 캐시 먼저 — getBytes) */
+export function decide(old: { status: "STORED" | "NOT_FETCHED" } | undefined, kept: boolean, f: { check: boolean; retry: boolean }): "keep" | "recorded" | "fetch" {
+  if (old?.status === "STORED" && kept && !f.check) return "keep";
+  if (old?.status === "NOT_FETCHED" && (f.check || !f.retry)) return "recorded"; // --check 는 못 가져온 것을 다시 요청하지 않는다 (예전에는 했다)
+  return "fetch";
+}
 
 const isLive = (s: Source) => (s._note ?? "").includes("살아 있는 페이지");
 
@@ -140,16 +154,28 @@ async function main() {
     }
     const old = prevDoc.get(s.label);
     const kept = storedText.get(s.source_id) ?? (old?.text_in === "cache" ? readCachedText(ROOT, s.label) : null);
-    if (old?.status === "STORED" && kept != null && !CHECK) {
+    const how = decide(old, kept != null, { check: CHECK, retry: RETRY });
+    if (how === "keep") {
       // 이미 저장된 원문 — 바꾸지 않는다. 해시만 다시 댄다
-      if (sha256(kept) !== old.text_sha256) throw new Error(`${s.label}: 저장된 글의 해시가 기록과 다르다 — 원문이 바뀌었다`);
-      docs.push(old);
-      texts.set(s.source_id, kept);
+      if (sha256(kept!) !== old!.text_sha256) throw new Error(`${s.label}: 저장된 글의 해시가 기록과 다르다 — 원문이 바뀌었다`);
+      docs.push(old!);
+      texts.set(s.source_id, kept!);
       continue;
     }
-    if (old && old.status === "NOT_FETCHED" && !CHECK && !args.has("--retry")) {
-      docs.push(old); // 못 가져온 것은 --retry 로만 다시 시도한다 (같은 결과를 내려고)
+    if (how === "recorded") {
+      docs.push(old!); // 못 가져온 것은 --retry 로만 다시 시도한다 (같은 결과를 내려고 · 막힌 곳을 다시 두드리지 않는다 — D40 · D41)
+      if (CHECK) checkLines.push(`  ${s.label.padEnd(8)} 못 가져옴으로 기록됨 — 다시 요청하지 않음 (--retry 로만)`);
       continue;
+    }
+    const cached = readCached(ROOT, s.label);
+    if (!(cached && cached.meta.http_status === 200)) {
+      // 네트워크로 간다 — robots.txt 먼저 (D40)
+      const rb = await robotsAllows(s.url);
+      if (!rb.ok) {
+        docs.push(old ?? { ...base, why: `robots.txt 가 막는다 — ${rb.why}. 우회하지 않는다 (D40)` });
+        if (CHECK) checkLines.push(`  ${s.label.padEnd(8)} robots.txt 가 막는다 — 요청하지 않음 (${rb.why})`);
+        continue;
+      }
     }
     const got = await getBytes(s, false);
     const meta = got.meta;
@@ -172,7 +198,14 @@ async function main() {
       const want = old?.text_sha256 ?? null;
       const same = want === rec.text_sha256;
       checkLines.push(`  ${s.label.padEnd(8)} 캐시 바이트 다시 뽑기  ${same ? "같음" : "다름"}  ${rec.text_sha256!.slice(0, 16)} (기록 ${want?.slice(0, 16)})`);
-      // 2. 새로 받아 다시 뽑는다
+      // 2. 새로 받아 다시 뽑는다 — robots.txt 먼저 (D40)
+      const rb = await robotsAllows(s.url);
+      if (!rb.ok) {
+        checkLines.push(`  ${s.label.padEnd(8)} 새로 받기             robots.txt 가 막는다 — 요청하지 않음 (${rb.why})`);
+        docs.push(old ?? rec);
+        if (kept != null) texts.set(s.source_id, kept);
+        continue;
+      }
       const fresh = await getBytes(s, true);
       if (fresh.meta.http_status !== 200) {
         checkLines.push(`  ${s.label.padEnd(8)} 새로 받기             HTTP ${fresh.meta.http_status}`);
@@ -313,4 +346,4 @@ async function main() {
   if (noStore !== documents.length) throw new Error("source_documents 수가 기록과 다르다");
 }
 
-await main();
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) await main();

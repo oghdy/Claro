@@ -128,6 +128,52 @@ def m_label_dup(b):         # label 겹침
     b['claims']['claims'][1]['label'] = c0(b)['label']
 
 
+def _as_v2(b, kind):         # 저장한 출력의 판을 /2 로 (다시 돌리기 뒤의 모양) — 출력 글은 그대로
+    cj = b['claims']
+    if kind == 'derive':
+        n = cj['derive_raw']
+        b['raws'][n] = dict(b['raws'][n], prompt_version='p5-derive/2')
+        cj['derive_version'] = 'p5-derive/2'
+    else:
+        for n in cj['counter_raws']:
+            b['raws'][n] = dict(b['raws'][n], prompt_version='p5-counter/2')
+        cj['counter_version'] = 'p5-counter/2'
+
+
+def m_sentence_derive(b):   # /2 해석의 문장이 두 문장 (P5-e — DC-02 "…뜻이 아니다. 성명문과 의장은 …")
+    _as_v2(b, 'derive')
+
+
+def m_sentence_narrowed(b):  # /2 반증의 좁힌 문장이 2 ~ 3 문장 (P5-e — DC-01 · DC-12)
+    _as_v2(b, 'counter')
+
+
+def m_sentence_one(b):      # 한 문장으로 고쳐도 손으로 고치면 CL_RAW — 그리고 문장 검사는 지나간다 (거짓 양성 아님을 같이 본다)
+    _as_v2(b, 'counter')
+    for grp in ('claims', 'claims_d5'):
+        for c in b['claims'][grp]:
+            c['statement'] = c['statement'].split('. ')[0].rstrip('.') + '.'
+    errs = V.check(b)
+    assert not any(code == 'CL_SENTENCE' for code, _ in errs), '한 문장인데 CL_SENTENCE'
+
+
+def m_checkpoint_missing(b):  # /2 반증을 썼는데 OPEN 체크포인트(W3-c)의 답이 없다
+    _as_v2(b, 'counter')
+    b['checkpoints'] = [{'id': 'W3-c', 'question': 'q', 'why': 'w', 'status': 'OPEN'}]
+    b['claims'].pop('checkpoints', None)
+
+
+def m_checkpoint_hand(b):   # 체크포인트 답을 손으로 적었다 (반증 출력에 없다)
+    b['checkpoints'] = [{'id': 'W3-c', 'question': 'q', 'why': 'w', 'status': 'OPEN'}]
+    f = b['graph']['facts'][0]
+    b['claims']['checkpoints'] = [{'id': 'W3-c', 'question': 'q', 'status': 'OPEN', 'answer': '9월 CPI 는 회의 전에 나왔다', 'outcome': 'ANSWERED', 'facts': [f['fact_id']], '_labels': [f['label']]}]
+
+
+def m_checkpoint_unknown(b):  # checkpoints.json 에 없는 체크포인트 답
+    b['checkpoints'] = []
+    b['claims']['checkpoints'] = [{'id': 'X-1', 'question': 'q', 'status': 'OPEN', 'answer': 'a', 'outcome': 'UNRESOLVED', 'facts': [], '_labels': [], '_missing': 'm'}]
+
+
 CASES = [
     ('그래프에 없는 근거 사실', m_basis_unknown, 'CL_BASIS'),
     ('근거 없음', m_basis_empty, 'CL_BASIS'),
@@ -148,6 +194,12 @@ CASES = [
     ('모델 출력 고침', m_raw_tamper, 'CL_RAW'),
     ('label 겹침', m_label_dup, 'CL_SHAPE'),
     ('사실에 없는 수 (9월 "90%" 같은)', m_number, 'CL_NUMBER'),
+    ('/2 해석이 두 문장 (P5-e)', m_sentence_derive, 'CL_SENTENCE'),
+    ('/2 좁힌 문장이 2 ~ 3 문장 (P5-e)', m_sentence_narrowed, 'CL_SENTENCE'),
+    ('한 문장으로 손질 — 문장 검사는 통과 · 손으로 고친 것은 CL_RAW', m_sentence_one, 'CL_RAW'),
+    ('/2 반증인데 체크포인트 답 없음 (W3-c)', m_checkpoint_missing, 'CL_CHECKPOINT'),
+    ('체크포인트 답을 손으로', m_checkpoint_hand, 'CL_CHECKPOINT'),
+    ('모르는 체크포인트', m_checkpoint_unknown, 'CL_CHECKPOINT'),
 ]
 
 

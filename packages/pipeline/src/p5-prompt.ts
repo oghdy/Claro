@@ -5,9 +5,26 @@
 // 근거: FINDINGS §4.1 (해석은 사실이 아니다) · §5.2 · §7.2 (반증은 재수집을 트리거) · §7.6 (방어용) · D23 (층 판정) · D29 (좁혀서 참 ≠ 독자 그림) ·
 //       D33-b (발행 뒤 문서에만 기댄 답) · D44 (정치 임시 규칙) · DATA_MODEL §7 (DerivedClaim · CounterCheck)
 // 9월 사람이 쓴 해석 · 반증(fixtures/store.json claims)을 본보기로 넣는다 — 크기와 잘게 나눔을 보라고. 10월 사건의 정답이 아니다 (다른 사건이다)
+//
+// p5-derive/2 · p5-counter/2 (W-1 · 2026-11-11 · **아직 부르지 않았다** — 회의록이 오면 다시 돌리기에서 한 번에 부른다 · D45 · P5-e):
+//   - 한 문장 (P5-e): 해석 statement · 좁힌 문장 둘 다 "마침표 하나". 좁힌 문장은 **주장은 남기고 범위를 단다** — 사실을 나열하지 않는다.
+//     코드 검사가 있다 (p5.ts sentenceCount · verify-claims CL_SENTENCE — /2 출력부터 실패)
+//   - 반대자 줄이 "회의록은 아직" 이라는 그때의 상태를 말하지 않는다 — 상태는 슬롯 표(S03.b · S09.c)가 말한다. 회의록이 반대를 적었으면 회의록이 적은 데까지
+//   - [뒤 · 회의 기록] 표시 — 이 사건 회의의 회의록처럼 회의 뒤에 나왔지만 **회의 안의 논의를 적은** 문서 (pack.json item role "record").
+//     [뒤] (회의 때 알 수 없던 것) 과 다르다. 회의록 사실을 [뒤] 로 읽으면 "왜" 의 1차가 뒤로 밀린다 (W-1 · D33-b 는 발행 시점 검사 — 따로)
+//   - 체크포인트 (반증): 사람이 둔 확인할 물음 (events/<code>/checkpoints.json — 예 W3-c "9월 CPI 가 회의 전에 나왔나") 을 반증 부르기에 같이 보낸다.
+//     해석과 따로 checkpoints 로 답한다
+// 앞 판(/1) 출력은 지금 판으로 다시 부를 때까지 짓기에 쓴다 (P5_COMPAT) — claims.json 의 derive_version · counter_version 이 실제로 쓴 판을 적는다
 
-export const DERIVE_VERSION = "p5-derive/1";
-export const COUNTER_VERSION = "p5-counter/1";
+export const DERIVE_VERSION = "p5-derive/2";
+export const COUNTER_VERSION = "p5-counter/2";
+/** 앞 판 → 그 출력을 짓기에 쓰는 조건 (p5.ts readRaws). 요청이 다르니 "같은 요청" 증명은 없다 — 쓴 판을 claims.json 에 적고, 다시 돌리기에서 지금 판으로 부른다 */
+export const P5_COMPAT: Record<string, string> = {
+  "p5-derive/1": "지금 판(/2) 출력이 없을 때만 — 회의록 다시 돌리기 전까지의 claims.json (P-5 · 2026-11-10)",
+  "p5-counter/1": "지금 판(/2) 출력이 없는 해석만 — 같은 해석을 /2 로 부르면 /2 가 이긴다 (늦게 부른 것)",
+};
+/** 판의 번호 ("p5-counter/2" → 2) */
+export const versionNo = (v: string) => Number(v.split("/").at(-1));
 
 const COMMON_RULES = `## 해석이란 (D23 층 판정)
 - 사실을 바꿔 말하거나 반올림한 것은 해석이 아니다 — 그것은 사실이다. 내지 않는다
@@ -20,10 +37,12 @@ const COMMON_RULES = `## 해석이란 (D23 층 판정)
 - "정치가 결정에 영향을 줬다 / 주지 않았다" 를 우리 판단으로 쓰지 않는다. 의장이 그렇게 말했다는 사실이 있을 뿐이다
 
 ## 반대자
-- 반대자(Cook · Hammack) 본인의 표결 설명은 그래프에 없다 (슬롯 S03.b 비어 있음 · 10월 회의록은 아직). **반대 이유를 지어내지 않는다.** 회의 전 · 뒤 연설은 "그 사람이 그때 그렇게 말했다" 이지 "그래서 반대했다" 가 아니다
+- 반대자 본인의 표결 설명이 그래프에 있는지는 슬롯 표가 말한다 (반대표 방향 S03.b · 이번 회의의 논의 S09.c). **반대 이유를 지어내지 않는다.** 회의 전 · 뒤 연설은 "그 사람이 그때 그렇게 말했다" 이지 "그래서 반대했다" 가 아니다
+- 회의록이 반대를 적었으면 회의록이 적은 데까지만 쓴다 — "회의록에 따르면" 의 범위로 (본인 설명과 섞지 않는다)
 
 ## 때 — 발행 시점
 - 사실 목록의 [뒤] 표시 = 그 사실의 가장 이른 출처가 사건 날짜 뒤에 공개됐다 (회의 뒤 연설 · 받은 날 판 통계). 회의 때 위원들이 알 수 없던 것이다. 해석의 근거로는 회의 때 알 수 있던 사실을 먼저 쓴다
+- [뒤 · 회의 기록] 표시 = 회의 뒤에 공개됐지만 **이 사건 회의 안에서 오간 논의 · 자료를 적은 문서** (이 회의의 회의록). 회의 때 위원들이 말하고 본 것이다 — [뒤] 와 달리 "왜 이렇게 결정했나" 의 1차다. 다만 회의록은 위원회가 적은 요약이다: "회의록에 따르면 ~ 참가자가 ~ 했다" 의 범위로 쓰고, 회의록의 수량어(a few · some · several · many · most)를 그래프의 글 그대로 둔다
 
 ## 쓰지 않는 것
 - 사실 목록에 없는 것 — 네 배경 지식 · 다른 데서 아는 것 · 보도 · 시장의 해석. 사실 label 은 목록에 있는 것만
@@ -40,7 +59,7 @@ ${COMMON_RULES}
 - 독자가 이 사건에서 물을 물음에 답하는 해석 — 특히: 왜 이번엔 금리를 바꾸지 않았나 · 9월(인상)과 무엇이 달라졌나 · 반대 둘은 무엇을 뜻하나 · 앞으로에 대해 위원회가 무엇을 말했나(말하지 않았나) · 물가 · 고용 · 외부 충격이 결정과 어떻게 이어지나
 - **방어용(DEFENSIVE)** 해석도 — 우리 주장이 아니라 독자가 자연스럽게 만들 오독을 막는 것 (예 9월 DC-B "세 명의 반대가 위원회를 움직였다는 증거는 없다"). 과대 · 과소 두 방향을 본다 (§7.6)
 - 한 해석 = 한 주장. 둘을 이어 붙이지 않는다 (9월 본보기의 크기). 숫자를 채우려고 만들지 않는다 — 사실이 받치는 만큼만. 많아야 14
-- statement: 한국어 한 문장. 주어를 분명히 ("연준이 든 이유는 …" · "참가자 전망으로는 …" — 누구의 판단인지가 범위다)
+- statement: 한국어 **한 문장** (마침표 하나). 주어를 분명히 ("연준이 든 이유는 …" · "참가자 전망으로는 …" — 누구의 판단인지가 범위다). 근거 사실을 문장에 나열하지 않는다 — 근거는 basis 에. 문장은 주장이다
 - basis: 이 해석이 기대는 사실 label (1개 이상 · 목록에 있는 것만). 해석의 모든 부분이 근거 사실에서 나와야 한다
 - question: 이 해석이 답하는 독자의 물음 (짧게)
 - element: 그 물음과 가장 가까운 Coverage 요소 id
@@ -74,11 +93,21 @@ ${COMMON_RULES}
 
 ## 좁힌 문장 — 9월의 교훈 (C-5 · D29)
 "좁혀서 참이 되는 문장" 과 "독자가 맞는 그림을 얻는 것" 은 다르다. 9월에 "7월 고용 지표는 엇갈렸다" 로 좁혀 참으로 만들었지만, 발행일에 이미 8월 고용이 나와 있었고 독자는 "고용이 엇갈린다" 는 틀린 그림을 얻을 뻔했다.
-- SCOPED 가 하나라도 있으면 narrowed_statement 에 **좁힌 문장** (한 문장 · 원래 해석의 주장을 지키되 반증이 요구한 범위를 넣는다). 없으면 null
+- SCOPED 가 하나라도 있으면 narrowed_statement 에 **좁힌 문장**. 없으면 null
+  - **한 문장** (마침표 하나). 지난번 좁힌 문장은 2 ~ 3 문장으로 늘어나 사실 나열이 됐고 해석이 사라졌다 (10월 P-5 · P5-e)
+  - **주장은 남기고 범위를 단다**: 원래 해석이 말하던 것(무엇이 · 왜 · 무엇과 달라졌나)을 문장의 뼈대로 두고, 반증이 요구한 범위를 그 문장 안의 한정어로 단다 — 누구의 말인가 ("의장에 따르면" · "회의록에 따르면") · 언제 기준인가 · 어느 지표인가
+  - 범위를 다 달면 주장이 남지 않는다면, 그 해석은 그만큼 약한 것이다 — 사실을 덧붙여 메우지 말고 outcome 과 reader_picture 에 그대로 적는다
+  - 근거 사실 · 수치를 문장에 늘어놓지 않는다 (그것은 물음의 answer 와 facts 에 있다)
 - reader_picture: 좁힌 문장(없으면 원래 문장)을 읽은 독자가 **그래도 잘못 가질 수 있는 그림** 과 그것을 막을 사실 label. 없으면 "없음"
 
+## 체크포인트 — 사람이 둔 확인할 물음
+사용자 메시지에 "확인할 물음" 이 있으면, 해석과 따로 하나씩 그래프에서 답을 찾는다 (checkpoints · id 그대로). 해석의 물음과 같은 규칙:
+  ANSWERED — 사실이 답한다. facts 1개 이상
+  UNRESOLVED — 답할 사실이 그래프에 없다. missing 에 어떤 1차 문서가 답할 수 있는지
+확인할 물음이 없으면 checkpoints 는 빈 배열
+
 ## 출력
-results: 받은 해석마다 하나 (빠짐없이 · key 그대로)`;
+results: 받은 해석마다 하나 (빠짐없이 · key 그대로) · checkpoints: 받은 확인할 물음마다 하나`;
 
 export type ExemplarClaim = { label: string; kind: string; statement: string; checks: { question: string; answer: string; outcome: string; n: number }[] };
 
@@ -123,12 +152,18 @@ export const deriveUser = (c: Ctx) => `${ctxBlock(c)}
 
 이 사건의 해석 후보를 내라.`;
 
-export const counterUser = (c: Ctx, claims: { key: string; statement: string; kind: string; basis: string[] }[]) => `${ctxBlock(c)}
+/** 사람이 둔 확인할 물음 (events/<code>/checkpoints.json 의 OPEN 항목) — 반증 부르기에 같이 보낸다 (W-1 · W3-c) */
+export type Checkpoint = { id: string; question: string; why: string };
+
+export const counterUser = (c: Ctx, claims: { key: string; statement: string; kind: string; basis: string[] }[], checkpoints: Checkpoint[] = []) => `${ctxBlock(c)}
 
 ## 반증할 해석 (key · kind · statement · 근거 사실)
 ${claims.map((x) => `${x.key} (${x.kind}) ${x.statement}\n  근거: ${x.basis.join(" ")}`).join("\n")}
-
-해석마다 반증을 찾아라.`;
+${checkpoints.length ? `
+## 확인할 물음 (사람이 둔 체크포인트 — 해석과 따로 답한다 · id 그대로)
+${checkpoints.map((k) => `${k.id} ${k.question}\n  까닭: ${k.why}`).join("\n")}
+` : ""}
+해석마다 반증을 찾아라.${checkpoints.length ? " 확인할 물음에도 답하라." : ""}`;
 
 const nullable = (t: object) => ({ anyOf: [t, { type: "null" }] });
 
@@ -154,8 +189,18 @@ export function deriveSchema(elementIds: string[]) {
 
 export function counterSchema(elementIds: string[]) {
   return {
-    type: "object", additionalProperties: false, required: ["results"],
+    type: "object", additionalProperties: false, required: ["results", "checkpoints"],
     properties: {
+      checkpoints: {
+        type: "array",
+        items: {
+          type: "object", additionalProperties: false, required: ["id", "answer", "facts", "outcome", "missing"],
+          properties: {
+            id: { type: "string" }, answer: { type: "string" }, facts: { type: "array", items: { type: "string" } },
+            outcome: { type: "string", enum: ["ANSWERED", "UNRESOLVED"] }, missing: nullable({ type: "string" }),
+          },
+        },
+      },
       results: {
         type: "array",
         items: {

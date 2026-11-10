@@ -46,6 +46,7 @@ export type PackItem = {
   published_note?: string;        // 그 날짜가 무엇의 날짜인가 (연설한 날 · 판의 날 …)
   kind?: "PRIMARY" | "SECONDARY";
   language?: string;
+  role?: "record";               // 이 사건 회의의 기록 (회의록) — 회의 뒤 공개 · 회의 안의 논의. pack.ts 는 읽지 않는다 · P-5 프롬프트의 [뒤 · 회의 기록] (W-1)
 };
 export type Pack = { event: { code: string; title: string; occurred_at: string | null; storyline_code: string | null }; slots: string[]; items: PackItem[] } & Record<string, unknown>;
 

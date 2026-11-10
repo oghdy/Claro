@@ -518,6 +518,33 @@ export function build(code: string, model: string, includeBls: boolean): { graph
 
 const graphPath = (code: string, model: string) => join(EVENTS[code]!.out, model === DEFAULT_MODEL ? "graph.json" : `graph.${model}.json`);
 
+/** 문서 하나를 부를 때 코드가 멈춤 계산에 쓰는 상한 (W-1 · rerun.ts 마른 시험) */
+export const extractUpper = (code: string, label: string, model = DEFAULT_MODEL) => {
+  const d = loadDocs(code).docs.find((x) => x.label === label);
+  return d && d.kind !== "TABLE" ? estimate(model, cpLength(modelInput(d))) : null;
+};
+
+/** 다시 돌리기 (W-1 · rerun.ts) — 지금 파일들에서 모델을 다시 불러야 하는 것을 센다. 부르지 않고 쓰지 않는다.
+ *  extract = 저장된 출력을 쓸 수 없는 글 문서 (지금 판 · 앞 판의 같은 요청 — usableRaw) · merge = 묶음 제안의 입력이 지금 사실 목록과 같은가 ·
+ *  graph = 지금 짓기가 graph.json 과 글자 단위로 같은가 (모델 출력이 다 있을 때만 셀 수 있다) */
+export function pending(code: string, model = DEFAULT_MODEL) {
+  const conf = EVENTS[code]!;
+  const { docs } = loadDocs(code);
+  const extract = docs.filter((d) => d.kind !== "TABLE" && !usableRaw(code, d, model)).map((d) => ({ label: d.label, chars: cpLength(modelInput(d)), upper_usd: estimate(model, cpLength(modelInput(d))) }));
+  if (extract.length) return { extract, merge: "unknown" as const, merge_upper_usd: null, graph: "unknown" as const };
+  const { cands, docs: ds } = collect(code, model);
+  const user = mergeUserMessage(conf, ds.filter((d) => d.kind !== "TABLE").map((d) => ({ label: d.label, title: d.title })), mergeItems(cands));
+  const mp = join(conf.out, mergeName(model));
+  const merge = !existsSync(mp) ? "missing" as const : readJson<RawOut>(mp).input_sha256 === sha256(user) ? "same" as const : "stale" as const;
+  let graph: "same" | "changes" | "unknown" = "unknown";
+  if (merge === "same") {
+    const { graph: g, ledger } = build(code, model, model === DEFAULT_MODEL && conf.kind === "pack");
+    const lp = join(conf.out, "labels.json"), gp = graphPath(code, model);
+    graph = existsSync(gp) && readFileSync(gp, "utf8") === JSON.stringify(g, null, 2) + "\n" && existsSync(lp) && readFileSync(lp, "utf8") === JSON.stringify(ledger, null, 2) + "\n" ? "same" : "changes";
+  }
+  return { extract, merge, merge_upper_usd: estimate(model, cpLength(user)), graph };
+}
+
 async function mergeCall(code: string, model: string) {
   const { conf, docs, cands } = collect(code, model);
   const items = mergeItems(cands);

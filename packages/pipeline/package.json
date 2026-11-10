@@ -12,6 +12,7 @@
     "p4": "node src/p4.ts",
     "p5": "node src/p5.ts",
     "w2": "node src/w2.ts",
+    "rerun": "node src/rerun.ts",
     "test": "vitest run",
     "typecheck": "tsc -p ."
   },

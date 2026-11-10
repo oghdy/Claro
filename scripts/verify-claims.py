@@ -17,6 +17,10 @@
   F. 정치     정치 낱말(p5.ts D5_WORDS 와 같은 목록)이 문장 · 물음에 있는 해석은 claims_d5 에 (D44) (CL_D5)
   G. 슬롯     checks 의 slot 은 null 이거나 coverage 의 요소 ("슬롯 이름 / 요소 id 무엇") (CL_SLOT)
   H. 수       statement 의 아라비아 숫자가 근거 · 답의 사실(글 · event_at · as_of)에 있다. "N월" 은 영어 달 이름 · "-NN" 날짜로도 된다 — 해석이 새 수를 만들지 않는다 (CL_NUMBER)
+  I. 한 문장  statement 가 한 문장 (P5-e · W-1) — 그 문장을 낸 출력(좁힌 문장이면 반증 · 아니면 해석)의 판이 /2 부터 실패. 앞 판(/1) 은 WARN 으로 센다 (CL_SENTENCE)
+              문장 수 규칙은 p5.ts sentenceCount 와 같은 뜻을 여기서 따로 짠다: 마침표 · 물음표 · 느낌표 (뒤 따옴표 · 괄호) 다음 공백이나 끝 · 머리글자("D. Cook" · "U.S.")와
+              인용 뒤 조사("'…다.' 고 했다")는 끝이 아니다
+  J. 체크포인트 events/<code>/checkpoints.json 의 OPEN 물음 — /2 반증 출력을 썼으면 claims.json checkpoints 에 답이 있고 반증 출력과 같다 · ANSWERED 는 사실 1개 이상 · UNRESOLVED 는 _missing (CL_CHECKPOINT)
 
 exit 0 OK · 1 FAIL
 """
@@ -26,7 +30,27 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 R = lambda *p: os.path.join(ROOT, *p)
 CODE = 'FOMC-20261028'
 EVENT_DATE = '2026-10-28'
-DERIVE_VERSION, COUNTER_VERSION = 'p5-derive/1', 'p5-counter/1'
+# 짓기에 쓸 수 있는 판 — p5-prompt.ts DERIVE_VERSION · COUNTER_VERSION (지금) + P5_COMPAT (앞 판). claims.json 의 derive_version · counter_version 이 실제로 쓴 판
+DERIVE_VERSIONS, COUNTER_VERSIONS = ('p5-derive/1', 'p5-derive/2'), ('p5-counter/1', 'p5-counter/2')
+vno = lambda v: int(str(v).rsplit('/', 1)[-1])
+_END = re.compile(r'[.!?。]["\'”’)\]]*(?=\s|$)')
+
+
+def sentences(text):
+    """문장 수 (I) — p5.ts sentenceCount 와 같은 뜻 · 따로 짠 것"""
+    t = text.strip()
+    if not t:
+        return 0
+    n = 1
+    for m in _END.finditer(t):
+        if re.search(r'(^|[\s.(])[A-Z]$', t[max(0, m.start() - 3):m.start()]):
+            continue
+        rest = t[m.end():]
+        if re.match(r'\s*(?:이라고|라고|라며|이라는|라는|고|며|는|란)(?=[\s,.]|$)', rest):   # 인용 안의 마침표 — "'…필요하다.' 고 했다"
+            continue
+        if rest.strip():
+            n += 1
+    return n
 D5_WORDS = ["정치", "백악관", "대통령", "Trump", "트럼프", "청문", "독립성", "의장 교체", "의장이 바뀌", "취임", "Powell", "중간선거", "선거", "정치적 압력"]
 sha = lambda s: hashlib.sha256(s.encode('utf-8')).hexdigest()
 
@@ -47,7 +71,9 @@ def load(code=CODE):
     for p in glob.glob(os.path.join(d, 'p5/raw/*.json')):
         raws[os.path.basename(p)[:-5]] = rj(p)
     srcs = {s['source_id']: s for s in rj(os.path.join(d, 'store.json'))['sources'] + rj(os.path.join(d, 'bls/bls.json'))['sources']}
+    cpp = os.path.join(d, 'checkpoints.json')
     return {'claims': rj(os.path.join(d, 'p5/claims.json')), 'graph': json.loads(gt), 'graph_sha256': sha(gt), 'raws': raws,
+            'checkpoints': rj(cpp)['checkpoints'] if os.path.exists(cpp) else [], 'warn': [],
             'coverage': rj(os.path.join(d, 'p4/coverage.json')), 'sources': srcs}
 
 
@@ -178,14 +204,16 @@ def check(b):
         if sha(r['output']) != r['output_sha256']:
             E('CL_RAW', f'{name}: 출력의 sha256 이 기록과 다르다')
     dr = raws.get(cj.get('derive_raw', ''))
-    if not dr or dr.get('prompt_version') != DERIVE_VERSION:
-        E('CL_RAW', f'해석 출력 {cj.get("derive_raw")} 이 없다')
+    if not dr or dr.get('prompt_version') not in DERIVE_VERSIONS or dr.get('prompt_version') != cj.get('derive_version'):
+        E('CL_RAW', f'해석 출력 {cj.get("derive_raw")} 이 없다 (또는 판이 claims.json derive_version 과 다르다)')
         return errs
     dclaims = json.loads(dr['output'])['claims']
     key_of = {f'DC-{i + 1:02d}': d for i, d in enumerate(dclaims)}
-    counters = sorted([raws[n] for n in cj.get('counter_raws', []) if n in raws and raws[n].get('prompt_version') == COUNTER_VERSION], key=lambda r: r['called_at'])
+    counters = sorted([raws[n] for n in cj.get('counter_raws', []) if n in raws and raws[n].get('prompt_version') in COUNTER_VERSIONS], key=lambda r: r['called_at'])
     if len(counters) != len(cj.get('counter_raws', [])):
         E('CL_RAW', '반증 출력 파일이 없다')
+    if counters and ' + '.join(sorted({r['prompt_version'] for r in counters})) != cj.get('counter_version'):
+        E('CL_RAW', f'claims.json counter_version {cj.get("counter_version")!r} 가 쓴 반증 출력의 판과 다르다')
 
     def refs_ok(r, ls, w):
         for l in ls:
@@ -218,6 +246,14 @@ def check(b):
         x, r = res
         if '_statement_before' in c and c['statement'] != (x.get('narrowed_statement') or '').strip():
             E('CL_RAW', f'{w}: 좁힌 문장이 반증 출력과 다르다')
+        # I — 한 문장
+        frm = r['prompt_version'] if '_statement_before' in c else dr['prompt_version']
+        ns = sentences(c['statement'])
+        if ns != 1:
+            if vno(frm) >= 2:
+                E('CL_SENTENCE', f'{w}: 문장이 {ns} 개 — 한 문장이어야 한다 (P5-e · {frm})')
+            else:
+                b['warn'].append(f'{c["label"]} {ns}')
         if len(x['checks']) != len(c['checks']):
             E('CL_RAW', f'{w}: 물음 수가 반증 출력과 다르다')
             continue
@@ -225,6 +261,42 @@ def check(b):
             if (k['question'], k['answer'], k['outcome'], k.get('_labels')) != (o['question'], o['answer'], o['outcome'], [l for l in o['facts'] if l in by_label]):
                 E('CL_RAW', f'{w} 물음 {i + 1}: 반증 출력과 다르다 (손으로 고쳤나)')
             refs_ok(r, o['facts'], f'{w} 물음 {i + 1}')
+
+    # J — 체크포인트 (사람이 둔 확인할 물음 · W3-c)
+    cps = {k['id']: k for k in b['checkpoints']}
+    got = {k.get('id'): k for k in cj.get('checkpoints', [])}
+    for i in got:
+        if i not in cps:
+            E('CL_CHECKPOINT', f'claims.json checkpoints 의 {i} 가 checkpoints.json 에 없다')
+    v2 = [r for r in counters if vno(r['prompt_version']) >= 2]
+    for k in cps.values():
+        a = got.get(k['id'])
+        if a is None:
+            if k.get('status') == 'OPEN' and v2:
+                E('CL_CHECKPOINT', f'체크포인트 {k["id"]} (OPEN) — /2 반증 출력을 썼는데 답이 claims.json 에 없다')
+            continue
+        src = None
+        for r in counters:
+            if not any(y.get('id') == k['id'] for y in r.get('checkpoints', [])):
+                continue
+            for y in json.loads(r['output']).get('checkpoints', []):
+                if y.get('id') == k['id']:
+                    src = (y, r)
+        if not src:
+            E('CL_CHECKPOINT', f'체크포인트 {k["id"]}: 답이 반증 출력에 없다 (손으로 적었나)')
+            continue
+        y, r = src
+        if (a.get('answer'), a.get('outcome'), a.get('_labels')) != (y['answer'], y['outcome'], [l for l in y['facts'] if l in by_label]):
+            E('CL_CHECKPOINT', f'체크포인트 {k["id"]}: 답이 반증 출력과 다르다 (손으로 고쳤나)')
+        if [by_label.get(l, {}).get('fact_id') for l in a.get('_labels', [])] != a.get('facts'):
+            E('CL_CHECKPOINT', f'체크포인트 {k["id"]}: _labels 가 facts 와 다른 사실을 가리킨다')
+        if a.get('outcome') == 'ANSWERED' and not a.get('facts'):
+            E('CL_CHECKPOINT', f'체크포인트 {k["id"]}: ANSWERED 인데 답의 사실이 없다')
+        if a.get('outcome') == 'UNRESOLVED' and not a.get('_missing'):
+            E('CL_CHECKPOINT', f'체크포인트 {k["id"]}: UNRESOLVED 인데 무엇이 답할지(_missing)가 없다')
+        if a.get('outcome') not in ('ANSWERED', 'UNRESOLVED'):
+            E('CL_CHECKPOINT', f'체크포인트 {k["id"]}: outcome {a.get("outcome")!r}')
+        refs_ok(r, y['facts'], f'체크포인트 {k["id"]}')
     return errs
 
 
@@ -241,6 +313,11 @@ def main():
             for x in cj.get(grp, []):
                 outs = [k['outcome'] for k in x['checks']]
                 print(f'    {x["label"]}{" _d5" if grp == "claims_d5" else ""} [{x["kind"]} · {verdict(x["kind"], outs)}] {" ".join(outs)}')
+    if b['warn']:
+        print(f'  WARN CL_SENTENCE: 앞 판(/1) 출력의 문장이 한 문장이 아니다 {len(b["warn"])} — {" · ".join(b["warn"])} (P5-e — 다시 돌리기에서 /2 로 부르면 실패가 된다)')
+    cps = b['checkpoints']
+    if cps:
+        print(f'  체크포인트 {len(cps)}: ' + ' · '.join(f'{k["id"]} {k.get("status")}{" — 답 " + next((a["outcome"] for a in cj.get("checkpoints", []) if a.get("id") == k["id"]), "없음 (/2 반증 전)")}' for k in cps))
     for cde, m in errs:
         print(f'  ERROR {cde}: {m}')
     print('\nFAIL' if errs else '\nOK')
