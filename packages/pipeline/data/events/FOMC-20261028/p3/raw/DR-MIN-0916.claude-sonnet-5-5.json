@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "DR-MIN-0916",
+  "source_id": "daca5b06-6484-40f0-8ddc-b75bfb5eef75",
+  "text_sha256": "34d34ca6577f212d8d155ddfed451386c39c6ad2cfdf2b96515c2dea43cdb5af",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "99481876459bb089ec67c093aa262212c59177f291156509b32e30605c13970b",
+  "response_id": "msg_011Cgtw4GChsKHTHmJi1LcDQ",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 3831,
+    "output_tokens": 453,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 3906,
+  "cost_usd": 0.012565,
+  "called_at": "2026-11-10T08:29:07.485Z",
+  "output_sha256": "a92527afc21148954552486597da7b81a820ce20609bd8509e36e5d7eb746ec6",
+  "output": "{\"facts\":[{\"claim_text\":\"Federal Reserve Board 는 2026-10-13 에 2026-08-17, 2026-09-09, 2026-09-16 에 열린 재할인율 검토·결정 회의의 의사록을 공개함.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-13\",\"passages\":[\"The Federal Reserve Board on Tuesday released the minutes from its recent meetings to review and determine the discount rates provided to depository institutions through the discount window.\",\"Today's minutes cover the Board meetings that occurred on August 17, September 9, and September 16, 2026.\"]},{\"claim_text\":\"Federal Reserve Board 는 재할인율을 정하는 Board 의 과정이 연방공개시장위원회(FOMC)가 연방기금금리 목표 범위를 정하는 과정과 별개라고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Federal Reserve Board (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-13\",\"passages\":[\"The Board's process for setting the discount rate is distinct from the process the Federal Open Market Committee follows in setting the target range for the federal funds rate.\"]}]}",
+  "output_in": "here"
+}

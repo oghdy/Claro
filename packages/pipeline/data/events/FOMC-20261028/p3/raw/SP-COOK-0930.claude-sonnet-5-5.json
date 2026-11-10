@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "SP-COOK-0930",
+  "source_id": "27a2b964-9027-4e75-94d6-27f4472af596",
+  "text_sha256": "4fc6640c6f336440200733d1a879848487908376616bb06001bfed845b88d997",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "b7cf8a353a7b73563dfdad762f5fcc3941fc65d9053b0cbd93b65246e73b1cca",
+  "response_id": "msg_011Cgtw4w9GBuTXHEYYjMRCQ",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 9058,
+    "output_tokens": 1339,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 8609,
+  "cost_usd": 0.031879,
+  "called_at": "2026-11-10T08:29:21.304Z",
+  "output_sha256": "17127f1f1d389cc3a9363eac0b58c52a6574f16218356aacacdb29030ed48e78",
+  "output": "{\"facts\":[{\"claim_text\":\"Cook 이사는 전국적으로 노동시장이 대체로 안정적이며, 실업률은 역사적 기준으로 낮고 신규 실업수당 청구(해고의 대리 지표)는 계속 낮은 수준을 보인다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Nationwide, the labor market is largely stable. Unemployment is low by historical standards, and new claims for unemployment benefits—a proxy for layoffs—continue to trend at low levels.\"]},{\"claim_text\":\"Cook 이사는 최근 몇 년간 채용이 확장기 초반보다 더 완만했지만 여름 동안 고용 증가는 상승 추세였다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Hiring has been more modest in recent years than earlier in the expansion, though employment gains trended up over the summer months.\"]},{\"claim_text\":\"Cook 이사는 인플레이션이 너무 오래 너무 높았으며 전국적으로 5년 넘게 연준의 2% 목표를 웃돌았다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"On a national level, it has exceeded the Fed's 2 percent target for more than five years.\"]},{\"claim_text\":\"Cook 이사는 9월 회의에서 나머지 FOMC 위원들과 함께 금리를 25bp 인상하는 데 찬성했다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"As you know, I voted along with the rest of the FOMC to raise rates 25 basis points at the recent September meeting.\"]},{\"claim_text\":\"Cook 이사는 노동시장의 강점을 지키면서 인플레이션을 목표로 되돌리는 데 전념한다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"I am committed to returning inflation to our objective while preserving the strength in the labor market.\"]},{\"claim_text\":\"Cook 이사는 이 연설의 견해가 자신의 견해이며 연준 이사회나 FOMC 동료들의 견해와 반드시 같지는 않다고 밝힘\",\"fact_type\":\"OFFICIAL_LIMIT\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"The views expressed here are my own and are not necessarily those of my colleagues on the Federal Reserve Board or the Federal Open Market Committee.\"]},{\"claim_text\":\"Cook 이사는 농촌 지역 주택 인플레이션이 2023년 이후 팬데믹 이전 패턴으로 되돌아갔지만 주거비는 전체 인플레이션의 중요한 요인으로 남아 있다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Since 2023, housing inflation in rural areas has reverted toward pre-pandemic patterns; however, housing costs remain a significant driver of overall inflation.\"]}]}",
+  "output_in": "here"
+}

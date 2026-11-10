@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "BB-10",
+  "source_id": "905b8bf0-7cd2-4015-a3b7-d6e1c916a77d",
+  "text_sha256": "67b80429ffd4c38b5954139cbc676277e7f74070c7801e462f8d010dd1b5eeb6",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "73ece97bc7c90aef39fcda38b4b1370fc9488f6292ee8ad4c3a5a63ed45910c1",
+  "response_id": "msg_011Cgtw4Ypb3AKW4zgjDA4J5",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4804,
+    "output_tokens": 816,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 5206,
+  "cost_usd": 0.018141,
+  "called_at": "2026-11-10T08:29:12.693Z",
+  "output_sha256": "f24add3e3c7c61ceaa83d1baf60b83740b63a20f0c727ab61269fd491d4070c9",
+  "output": "{\"facts\":[{\"claim_text\":\"Beige Book 은 12개 연준 지역(District)의 현재 경제 상황에 관한 연준 시스템의 간행물이며, 연 8회 발행된다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"연준 (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"The Beige Book is a Federal Reserve System publication about current economic conditions across the 12 Federal Reserve Districts.\",\"Reports are published eight times per year.\"]},{\"claim_text\":\"연준은 Beige Book 이 직전 보고서 이후 경제 상황의 변화를 설명하기 위한 것이라고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"연준 (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"The Beige Book is intended to characterize the change in economic conditions since the last report.\"]},{\"claim_text\":\"연준은 Beige Book 이 연준 위원들의 견해에 대한 논평이 아니라고 밝힘\",\"fact_type\":\"OFFICIAL_LIMIT\",\"actor\":\"연준 (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"The Beige Book is not a commentary on the views of Federal Reserve officials.\"]},{\"claim_text\":\"연준은 Beige Book 의 정보가 대체로 질적인 정보이며 각 지역의 정보원에서 직접 수집된다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"연준 (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"It characterizes regional economic conditions and prospects based on a variety of mostly qualitative information, gathered directly from each District's sources.\"]},{\"claim_text\":\"Beige Book 2026년 10월 판은 2026-10-14 에 공개된 것으로 표시되어 있음\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"Last Update: October 14, 2026\"]}]}",
+  "output_in": "here"
+}

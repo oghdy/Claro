@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "CAL",
+  "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+  "text_sha256": "de37cd898fb22ee5ea755373bd0eccfee988c7c4774588ca2b4a5eb8cf398535",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "67b444f03613c306a0d369102daf5f2d11157bbeb299f9f39206d8813604b887",
+  "response_id": "msg_011CgtwHEWsiugmtNcaL5ro3",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 7529,
+    "output_tokens": 1186,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 6855,
+  "cost_usd": 0.027291,
+  "called_at": "2026-11-10T08:32:06.422Z",
+  "output_sha256": "579674571fa193f2c94b34f367aeb1d87b1ad49ee1be3bec71749610e7c69126",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 는 연중 정례 회의 8번과 필요에 따라 그 밖의 회의를 연다.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"연준 FOMC 일정 안내 페이지\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"The FOMC holds eight regularly scheduled meetings during the year and other meetings as needed.\"]},{\"claim_text\":\"FOMC 는 정례 회의의 의사록을 정책 결정일로부터 3주 뒤에 공개한다고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"연준 FOMC 일정 안내 페이지\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"The minutes of regularly scheduled meetings are released three weeks after the date of the policy decision.\"]},{\"claim_text\":\"FOMC 는 2026년 9월 회의를 15-16일에 열기로 공표했고, 이 회의에는 성명문, 실행 노트, 기자회견, 경제전망 자료가 딸려 있다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"September\\n15-16*\\nStatement:\\nPDF | HTML\\nImplementation Note\\nPress Conference\\nProjection Materials\"]},{\"claim_text\":\"FOMC 는 2026년 9월 15-16일 회의의 의사록을 2026년 10월 07일에 공개했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-07\",\"passages\":[\"(Released October 07, 2026)\"]},{\"claim_text\":\"FOMC 는 2026년 7월 회의를 28-29일에 열었고, 그 의사록은 2026년 8월 19일에 공개됐다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"(Released August 19, 2026)\"]},{\"claim_text\":\"FOMC 의 2026년 10월 회의는 27-28일로 잡혀 있다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"October\\n27-28\\nStatement:\"]},{\"claim_text\":\"FOMC 의 2026년 12월 회의는 8-9일로 잡혀 있고 경제전망 요약과 연계된 회의로 표시돼 있다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"December\\n8-9*\\n* Meeting associated with a Summary of Economic Projections.\"]},{\"claim_text\":\"FOMC 는 각 회의 날짜가 직전 회의에서 확정되기 전까지는 잠정이라고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"연준 FOMC 일정 안내 페이지\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"Each meeting date is tentative until confirmed at the meeting immediately preceding it.\"]}]}",
+  "output_in": "here"
+}

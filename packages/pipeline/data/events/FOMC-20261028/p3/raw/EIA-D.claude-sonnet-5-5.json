@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "EIA-D",
+  "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+  "text_sha256": "511dab6ffdaab93ea0c5a2084ee53087e2e31f17c3e19a3a21cedbedb4f08c6b",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "a4864210f9f99be13e2198e7da9222b3392c38959af4e8cdc82623f7e7e754aa",
+  "response_id": "msg_011CgtwB3TSFNmhRXbxmHv3z",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 23999,
+    "output_tokens": 949,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 6401,
+  "cost_usd": 0.057861,
+  "called_at": "2026-11-10T08:30:41.896Z",
+  "output_sha256": "c78f025d72a047bc57d1be45f49af96221ffeae068bff64566c6b7a8d81a0458",
+  "output": "{\"facts\":[{\"claim_text\":\"EIA 주간 미국 No 2 디젤 소매가격(갤런당 달러)은 2026-10-26 주에 6.352달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-27\",\"event_at\":\"2026-10-26\",\"passages\":[\"2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |\"]},{\"claim_text\":\"EIA 주간 미국 No 2 디젤 소매가격(갤런당 달러)은 2026-10-19 주에 6.276달러, 2026-10-12 주에 6.179달러, 2026-10-05 주에 6.199달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-27\",\"event_at\":\"2026-10\",\"passages\":[\"2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |\"]},{\"claim_text\":\"EIA 주간 미국 No 2 디젤 소매가격(갤런당 달러)은 직전 회의 주인 2026-09-14 주에 6.285달러, 2026-09-21 주에 6.529달러, 2026-09-28 주에 6.382달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-27\",\"event_at\":\"2026-09\",\"passages\":[\"2026-Sep | 09/07 | 5.967 | 09/14 | 6.285 | 09/21 | 6.529 | 09/28 | 6.382 | |\"]},{\"claim_text\":\"EIA 주간 미국 No 2 디젤 소매가격(갤런당 달러)은 2026-03-02 주에 3.897달러, 2026-03-09 주에 4.859달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-27\",\"event_at\":\"2026-03\",\"passages\":[\"2026-Mar | 03/02 | 3.897 | 03/09 | 4.859 | 03/16 | 5.071 | 03/23 | 5.375 | 03/30 | 5.401\"]},{\"claim_text\":\"EIA 는 이 디젤 소매가격 표의 다음 발표일을 11/3/2026 으로 공표했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"Next Release Date: 11/3/2026\"]}]}",
+  "output_in": "here"
+}

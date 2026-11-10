@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "TSY",
+  "source_id": "637a6e29-5b4e-4fdb-8f5a-919087e44acf",
+  "text_sha256": "64b31f8d45ab55df18cade9579aa730453e9d14f4731781b1e06f69a3d43dd49",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "71851ed892b4e137a374ea001a392d1a6f20019fadc8e523c76ce718ae62b520",
+  "response_id": "msg_011Cgtwaifkc57bZLkqKJrUN",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 36630,
+    "output_tokens": 2275,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 18491,
+  "cost_usd": 0.192766,
+  "called_at": "2026-11-10T08:36:15.263Z",
+  "output_sha256": "79766815a9a3eb6418456862d74df97776584c3a957f502a149c581019d3bcaa",
+  "output": "{\"facts\":[{\"claim_text\":\"미 재무부 국채 파 수익률 곡선 금리는 2026-07-29 (직전 FOMC 회의일)에 3개월 3.83%, 2년 4.22%, 10년 4.67%, 30년 5.20% 였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"07/29/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.73 | 3.80 | 3.83 | 3.83 | 3.91 | 3.97 | 4.04 | 4.22 | 4.29 | 4.37 | 4.51 | 4.67 | 5.21 | 5.20\"]},{\"claim_text\":\"미 재무부 국채 파 수익률 곡선 금리는 2026-08-31 에 3개월 3.91%, 2년 4.34%, 10년 4.75%, 30년 5.25% 였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-08-31\",\"passages\":[\"08/31/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.85 | 3.86 | 3.88 | 3.91 | 3.96 | 3.99 | 4.16 | 4.34 | 4.40 | 4.49 | 4.62 | 4.75 | 5.24 | 5.25\"]},{\"claim_text\":\"미 재무부 국채 파 수익률 곡선 금리는 2026-09-15 (FOMC 회의 첫날)에 3개월 4.11%, 2년 4.67%, 10년 5.00%, 30년 5.36% 였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-15\",\"passages\":[\"09/15/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.93 | 4.00 | 4.06 | 4.11 | 4.19 | 4.17 | 4.39 | 4.67 | 4.76 | 4.83 | 4.91 | 5.00 | 5.40 | 5.36\"]},{\"claim_text\":\"미 재무부 국채 파 수익률 곡선 금리는 2026-09-16 (FOMC 결정일)에 3개월 4.14%, 2년 4.74%, 10년 5.01%, 30년 5.35% 였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"09/16/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.96 | 4.00 | 4.07 | 4.14 | 4.24 | 4.22 | 4.45 | 4.74 | 4.82 | 4.86 | 4.94 | 5.01 | 5.39 | 5.35\"]},{\"claim_text\":\"미 재무부는 파 수익률이 뉴욕 연준이 매 거래일 오후 3시 30분 무렵 얻은 매수 호가 (실거래 아님)에서 산출된다고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"미 재무부 (금리 통계 설명)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"These par yields are derived from indicative, bid-side market price quotations (not actual transactions) obtained by the Federal Reserve Bank of New York at or near 3:30 PM each trading day.\"]}]}",
+  "output_in": "here"
+}

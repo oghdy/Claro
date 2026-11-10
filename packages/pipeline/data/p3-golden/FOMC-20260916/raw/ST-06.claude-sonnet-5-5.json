@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "ST-06",
+  "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+  "text_sha256": "bf3e7cf3024d3bb0bf32a8b19d074296c2cf986d29c2f34ce22cc1b060d1b982",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "c2e29a2a97c69d1c7ac92b2b05bb4d61396ea4c6037d9b8b7283fb8a9c43b79a",
+  "response_id": "msg_011CgtwFKrHwR4Jpgy1HRDLL",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 3945,
+    "output_tokens": 1268,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 7471,
+  "cost_usd": 0.020943,
+  "called_at": "2026-11-10T08:31:41.158Z",
+  "output_sha256": "5f5be6a754e28617926a17618dce01d04cb541ace3d35ab90cb08f93141bd335",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC는 2026-06-17 성명문 승인에서 12-0 표결로 성명 발표를 승인함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-17\",\"passages\":[\"The Federal Open Market Committee approved the following statement for release by a 12 – 0 vote:\"]},{\"claim_text\":\"FOMC는 연방기금금리 목표 범위를 3-1/2~3-3/4%로 유지하기로 결정함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-17\",\"passages\":[\"The Committee decided to maintain the target range for the federal funds rate at 3-1/2 to 3-3/4 percent, in support of the Federal Reserve's dual mandate.\"]},{\"claim_text\":\"FOMC는 은행 시스템에 충분한 지급준비금을 유지하는 정책을 재확인함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-17\",\"passages\":[\"The Committee reaffirmed its policy of maintaining ample reserves in the banking system.\"]},{\"claim_text\":\"FOMC 성명문은 경제활동이 중동 분쟁에서 일부 비롯된 높은 불확실성에도 불구하고 견조한 속도로 확장되고 있다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-17\",\"passages\":[\"Economic activity is expanding at a solid pace despite elevated uncertainty that owes, in part, to the conflict in the Middle East.\"]},{\"claim_text\":\"FOMC 성명문은 생산성 증가와 설비투자가 강하다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-17\",\"passages\":[\"Productivity growth and capital investment are strong.\"]},{\"claim_text\":\"FOMC 성명문은 일자리 증가가 노동력 증가와 보조를 맞췄고 실업률은 거의 변하지 않았다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-17\",\"passages\":[\"Job gains have kept pace with the workforce, and the unemployment rate has changed little.\"]},{\"claim_text\":\"FOMC 성명문은 인플레이션이 2% 목표에 비해 높은 수준이며, 에너지를 포함한 일부 부문의 가격 상승을 이끈 공급 충격을 일부 반영한다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-17\",\"passages\":[\"Inflation remains elevated relative to the Committee's 2 percent goal, in part reflecting supply shocks that have driven price increases in certain sectors, including energy.\"]},{\"claim_text\":\"FOMC 성명문은 위원회가 물가 안정을 달성하겠다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-17\",\"passages\":[\"The Committee will deliver price stability.\"]}]}",
+  "output_in": "here"
+}

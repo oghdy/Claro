@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "BEA-08",
+  "source_id": "b1e36e42-07ba-471d-b3ce-c45a703bdc49",
+  "text_sha256": "95b037f94f1e2c1c514585826709b56813be8ad7b3af86c396928f384f294439",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "d58de2caf400ccae5ded7340a794494b32f8d03964564a2a7f74de2fda969a82",
+  "response_id": "msg_011Cgtw8KUmLRMVdZDTwwg71",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 2571,
+    "output_tokens": 1963,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 11910,
+  "cost_usd": 0.025145,
+  "called_at": "2026-11-10T08:30:10.520Z",
+  "output_sha256": "73e627e109a3698d5188944fe45300a2e5af8da59029cdb052496717fad0009c",
+  "output": "{\"facts\":[{\"claim_text\":\"BEA 는 2026년 8월 개인소득이 $66.6 billion (월율 0.2 percent) 증가했다고 발표함\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-09-30\",\"event_at\":\"2026-08\",\"passages\":[\"Personal income increased $66.6 billion (0.2 percent at a monthly rate) in August\"]},{\"claim_text\":\"2026년 8월 가처분 개인소득(DPI)은 $68.6 billion (0.3 percent) 증가했고, 개인소비지출(PCE)은 $190.8 billion (0.9 percent) 증가함\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-09-30\",\"event_at\":\"2026-08\",\"passages\":[\"Disposable personal income (DPI)—personal income less personal current taxes—increased $68.6 billion (0.3 percent), and personal consumption expenditures (PCE) increased $190.8 billion (0.9 percent).\"]},{\"claim_text\":\"2026년 8월 개인저축은 $990.2 billion 이고 개인저축률은 4.1 percent 였음\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-09-30\",\"event_at\":\"2026-08\",\"passages\":[\"Personal saving was $990.2 billion, and the personal saving rate—personal saving as a percentage of DPI—was 4.1 percent.\"]},{\"claim_text\":\"2026년 8월 실질 PCE 는 $92.8 billion (월율 0.6 percent) 증가함\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-09-30\",\"event_at\":\"2026-08\",\"passages\":[\"Real PCE increased $92.8 billion (0.6 percent at a monthly rate) in August.\"]},{\"claim_text\":\"2026년 8월 PCE 물가지수는 전월 대비 0.3 percent 상승했고, 식품·에너지 제외 지수는 0.2 percent 상승함\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-09-30\",\"event_at\":\"2026-08\",\"passages\":[\"From the preceding month, the PCE price index for August increased 0.3 percent. Excluding food and energy, the PCE price index increased 0.2 percent.\"]},{\"claim_text\":\"2026년 8월 PCE 물가지수는 전년 동월 대비 3.4 percent 상승했고, 식품·에너지 제외 지수는 전년 대비 3.0 percent 상승함\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-09-30\",\"event_at\":\"2026-08\",\"passages\":[\"From the same month one year ago, the PCE price index for August increased 3.4 percent. Excluding food and energy, the PCE price index increased 3.0 percent from one year ago.\"]},{\"claim_text\":\"BEA 는 8월 현재달러 PCE 증가 $190.8 billion 이 재화 지출 $114.1 billion 과 서비스 지출 $76.7 billion 증가를 반영했다고 밝힘\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-09-30\",\"event_at\":\"2026-08\",\"passages\":[\"The $190.8 billion increase in current-dollar PCE in August reflected increases of $114.1 billion in spending on goods and $76.7 billion in spending on services.\"]},{\"claim_text\":\"BEA 는 8월 현재달러 개인소득 증가가 주로 보수와 정부 사회급여의 증가를 반영했다고 설명함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"BEA (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"The increase in current-dollar personal income in August primarily reflected increases in compensation and government social benefits.\"]},{\"claim_text\":\"2026년 7월 대비 8월 월간 변화율은 실질 DPI 가 0.3 에서 0.0, 현재달러 PCE 가 0.1 에서 0.9, PCE 물가지수가 0.1 에서 0.3 이었음\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-09-30\",\"event_at\":\"2026-08\",\"passages\":[\"Real DPI | 0.3 | 0.0\",\"Current-dollar PCE | 0.1 | 0.9\",\"PCE price index | 0.1 | 0.3\"]},{\"claim_text\":\"BEA 는 이번 발표에서 국민경제계정 연례 개정 결과를 제시했고, 개인소득·지출 추정치 개정은 2021년 1월부터 시작된다고 밝힘\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Today’s release presents monthly results from the annual update of the National Economic Accounts. The revisions for estimates of personal income and outlays begin with January 2021.\"]},{\"claim_text\":\"BEA 는 9월 2026 개인소득·지출 다음 발표를 2026-10-29 오전 8:30 EDT 로 공표함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-29\",\"passages\":[\"Next release: October 29, 2026, at 8:30 a.m. EDT\"]}]}",
+  "output_in": "here"
+}

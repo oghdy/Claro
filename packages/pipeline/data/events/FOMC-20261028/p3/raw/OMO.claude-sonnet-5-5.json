@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "OMO",
+  "source_id": "e8d68151-fdec-45c8-ad26-f14cb5ad88c6",
+  "text_sha256": "193a6121a4e628787d9827ba34dab4afce9b2b4e37620dd8f89aea516aeb1a4d",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "872291f2820a69292442871c13ee3dd9a9c981d6d87d116e93ca5cbb5e548fff",
+  "response_id": "msg_011Cgtw9n8RLmdP5V5poxNMz",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 6347,
+    "output_tokens": 1182,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 7771,
+  "cost_usd": 0.024887,
+  "called_at": "2026-11-10T08:30:26.202Z",
+  "output_sha256": "5322e76e1d72b1f4edd11af0130a2608b713d75cf88c684b0b151fbd7f12b7be",
+  "output": "{\"facts\":[{\"claim_text\":\"연준(FOMC)은 2026년 9월 17일 목표 연방기금금리를 25bp 인상해 3.75-4.00%로 정한 것으로 표에 기재됨\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-17\",\"passages\":[\"September 17 | 25 | 0 | 3.75-4.00\"]},{\"claim_text\":\"연준(FOMC)은 2025년 12월 11일 목표 연방기금금리를 25bp 인하해 3.50-3.75%로 정한 것으로 표에 기재됨\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2025-12-11\",\"passages\":[\"December 11 | 0 | 25 | 3.50-3.75\"]},{\"claim_text\":\"연준(FOMC)은 2025년 10월 30일 목표 연방기금금리를 25bp 인하해 3.75-4.00%로 정한 것으로 표에 기재됨\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2025-10-30\",\"passages\":[\"October 30 | 0 | 25 | 3.75-4.00\"]},{\"claim_text\":\"연준(FOMC)은 2025년 9월 18일 목표 연방기금금리를 25bp 인하해 4.00-4.25%로 정한 것으로 표에 기재됨\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2025-09-18\",\"passages\":[\"September 18 | 0 | 25 | 4.00-4.25\"]},{\"claim_text\":\"연준 이사회는 공开시장조작(OMO)이 통화정책 시행에 쓰는 핵심 도구이며 그 단기 목표는 FOMC가 정한다고 설명함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Federal Reserve (Open Market Operations 웹페이지)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"The short-term objective for open market operations is specified by the Federal Open Market Committee (FOMC).\"]},{\"claim_text\":\"연준 이사회는 2021년 이후 연준이 적격 증권을 담보로 하는 국내 상설 레포(SRP) 운영을 해 왔다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Federal Reserve (Open Market Operations 웹페이지)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"Since 2021, Federal Reserve has conducted domestic standing repo (SRP) operations against eligible securities.\"]},{\"claim_text\":\"연준 이사회는 SRP 운영이 금리의 상방 압력을 제한하고 상단을 제공하는 데 도움이 된다고 설명함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Federal Reserve (Open Market Operations 웹페이지)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"SRP operations limit upward pressure and help provide a ceiling on rates to support the monetary policy implementation and smooth market functioning.\"]}]}",
+  "output_in": "here"
+}

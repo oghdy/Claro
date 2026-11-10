@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "EIA-B",
+  "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+  "text_sha256": "29aabdfd9cd46bbd5c74f97bfae0ee071df0a89f29c50af3b2e78c50bc0c5c9a",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "c2950c056491484cc1892077eec6db1ccc9ae9c2c543eff2ac01fe1fa435edea",
+  "response_id": "msg_011CgtwAwjeRA51X6dCWZ7jD",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 92274,
+    "output_tokens": 1879,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 10971,
+  "cost_usd": 0.203711,
+  "called_at": "2026-11-10T08:30:45.140Z",
+  "output_sha256": "d549bb12d66604120f9534ce5b0f1df2d8565c46048ac694d700200d6366f82c",
+  "output": "{\"facts\":[{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 2026-10-26(월)에 배럴당 128.12달러, 2026-10-27(화)에 123.10달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-10-27\",\"passages\":[\"2026 Oct-26 to Oct-30 | 128.12 | 123.10 | | |\"]},{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 2026-10-19(월)~10-23(금)에 각각 배럴당 118.82, 115.22, 117.37, 125.39, 128.30달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-10-23\",\"passages\":[\"2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30\"]},{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 직전 회의 주(2026-09-14~09-18)에 월요일 121.25달러, 화요일 130.80달러, 수요일 127.84달러, 목요일 121.18달러, 금요일 119.66달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-09-18\",\"passages\":[\"2026 Sep-14 to Sep-18 | 121.25 | 130.80 | 127.84 | 121.18 | 119.66\"]},{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 2026-10-05~10-09 주에 배럴당 125.51, 125.44, 126.00, 130.18, 130.03달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-10-09\",\"passages\":[\"2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03\"]},{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 2026-09-28~10-02 주에 배럴당 119.97, 113.96, 115.91, 114.82, 135.51달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-10-02\",\"passages\":[\"2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51\"]},{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 2026-02-23~02-27 주에 배럴당 71.90, 71.21, 70.69, 71.66, 71.32달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-02-27\",\"passages\":[\"2026 Feb-23 to Feb-27 | 71.90 | 71.21 | 70.69 | 71.66 | 71.32\"]},{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 2026-03-02~03-06 주에 배럴당 77.24, 83.28, 81.56, 88.59, 95.74달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-03-06\",\"passages\":[\"2026 Mar- 2 to Mar- 6 | 77.24 | 83.28 | 81.56 | 88.59 | 95.74\"]},{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 2026-04-06~04-10 주 화요일에 138.21달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-04-07\",\"passages\":[\"2026 Apr- 6 to Apr-10 | | 138.21 | 122.11 | 119.03 | 119.07\"]},{\"claim_text\":\"EIA 일별 Europe Brent 현물가(FOB)는 2026-06-29~07-03 주에 배럴당 71.59, 70.46, 69.24, 68.53, 68.68달러로 기록됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-10-28\",\"event_at\":\"2026-07-03\",\"passages\":[\"2026 Jun-29 to Jul- 3 | 71.59 | 70.46 | 69.24 | 68.53 | 68.68\"]},{\"claim_text\":\"EIA는 이 표의 발표일을 10/28/2026, 다음 발표일을 11/4/2026이라고 밝힘\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Release Date: 10/28/2026\",\"Next Release Date: 11/4/2026\"]}]}",
+  "output_in": "here"
+}

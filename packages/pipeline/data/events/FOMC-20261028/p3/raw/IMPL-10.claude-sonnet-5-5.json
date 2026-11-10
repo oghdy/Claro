@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "IMPL-10",
+  "source_id": "97163744-dc67-48de-b273-74e13fa056a9",
+  "text_sha256": "64f2ffebbbbedddfe62cebe874ca0282dabc530a2b6c6dd2dcad6780164e7c0b",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "01c5cef7e20ed2e2c2b94911a7e2000ef64e0e6ded2f3032d75308f8445b3a61",
+  "response_id": "msg_011Cgtw3bou8oJabpJbzbkDQ",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4304,
+    "output_tokens": 1399,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 9025,
+  "cost_usd": 0.022971,
+  "called_at": "2026-11-10T08:29:03.578Z",
+  "output_sha256": "f6a1c22315b40a2077abac30d679440080baaa2f07750489b0b03eff0051c851",
+  "output": "{\"facts\":[{\"claim_text\":\"Board of Governors 는 지급준비금에 지급하는 이자율을 3.90%로 유지하기로 만장일치로 의결했고, 2026-10-29 부터 적용된다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"The Board of Governors of the Federal Reserve System voted unanimously to maintain the interest rate paid on reserve balances at 3.90 percent, effective October 29, 2026.\"]},{\"claim_text\":\"FOMC 는 2026-10-29 부터 연방기금금리를 3-3/4~4% 목표 범위로 유지하도록 공개시장 운영을 하라고 Desk 에 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Undertake open market operations as necessary to maintain the federal funds rate in a target range of 3-3/4 to 4 percent.\"]},{\"claim_text\":\"FOMC 는 Desk 에 상설 익일 환매조건부채권(RP) 운영을 4.0% 금리로 하라고 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Conduct standing overnight repurchase agreement operations at a rate of 4.0 percent.\"]},{\"claim_text\":\"FOMC 는 Desk 에 상설 익일 역환매조건부채권 운영을 제시금리 3.75%, 거래상대방당 하루 $160 billion 한도로 하라고 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Conduct standing overnight reverse repurchase agreement operations at an offering rate of 3.75 percent and with a per-counterparty limit of $160 billion per day.\"]},{\"claim_text\":\"FOMC 는 Desk 에 적절할 때 충분한 수준의 지급준비금을 유지하기 위해 Treasury bills 와 필요하면 잔존만기 3년 이하의 다른 Treasury securities 매입으로 System Open Market Account 보유 증권을 늘리라고 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"When appropriate, increase the System Open Market Account holdings of securities through purchases of Treasury bills and, if needed, other Treasury securities with remaining maturities of 3 years or less to maintain an ample level of reserves.\"]},{\"claim_text\":\"FOMC 는 Desk 에 Treasury securities 보유분의 원금 상환액은 모두 경매에서 만기 연장(roll over)하고, agency securities 보유분의 원금 상환액은 모두 Treasury bills 에 재투자하라고 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Roll over at auction all principal payments from the Federal Reserve's holdings of Treasury securities. Reinvest all principal payments from the Federal Reserve's holdings of agency securities into Treasury bills.\\\"\"]},{\"claim_text\":\"Board of Governors 는 프라이머리 크레디트 금리를 기존 수준인 4.0%로 설정하는 것을 만장일치로 승인했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"the Board of Governors of the Federal Reserve System voted unanimously to approve the establishment of the primary credit rate at the existing level of 4.0 percent.\"]}]}",
+  "output_in": "here"
+}

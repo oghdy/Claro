@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "ST-07",
+  "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+  "text_sha256": "e62f8176863b72bd6081fc1f4b7ac4b3db8e33b8d4f80afdef3b88b2dd5a7ec8",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "808ff15e0a11eb6063a5d978cbce316e24fab01abb598701d027d8117a072384",
+  "response_id": "msg_011CgtwSqr8aoprSpqaBvbjD",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4020,
+    "output_tokens": 1858,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 14755,
+  "cost_usd": 0.053986,
+  "called_at": "2026-11-10T08:34:24.675Z",
+  "output_sha256": "38139eda54f0a87eeda64521ff672a833403ce161317e0e62a95f22e1330dc1b",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 는 2026-07-29 성명문을 9 대 3 표결로 승인함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"The Federal Open Market Committee approved the following statement for release by a 9 – 3 vote:\"]},{\"claim_text\":\"FOMC 는 연방기금금리 목표 범위를 3-1/2~3-3/4% 로 유지하기로 결정함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"The Committee decided to maintain the target range for the federal funds rate at 3-1/2 to 3-3/4 percent, in support of the Federal Reserve's dual mandate.\"]},{\"claim_text\":\"FOMC 성명문은 금리 유지 결정이 연준의 이중 책무를 지원하기 위한 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"The Committee decided to maintain the target range for the federal funds rate at 3-1/2 to 3-3/4 percent, in support of the Federal Reserve's dual mandate.\"]},{\"claim_text\":\"FOMC 는 은행 시스템에 충분한 지준을 유지하는 정책을 계속함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"The Committee is continuing its policy of maintaining ample reserves in the banking system.\"]},{\"claim_text\":\"FOMC 성명문은 중동 분쟁에 일부 기인한 높은 불확실성에도 경제활동이 견조한 속도로 확장하고 있다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"Economic activity is expanding at a solid pace despite elevated uncertainty that owes, in part, to the conflict in the Middle East.\"]},{\"claim_text\":\"FOMC 성명문은 생산성 증가와 자본투자가 강하다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"Productivity growth and capital investment are strong.\"]},{\"claim_text\":\"FOMC 성명문은 일자리 증가가 노동력 증가와 보조를 맞춰 왔고 실업률은 거의 변하지 않았다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"Job gains have kept pace with the workforce, and the unemployment rate has changed little.\"]},{\"claim_text\":\"FOMC 성명문은 인플레이션이 위원회의 2% 목표에 비해 여전히 높으며, 이는 일부 에너지를 포함한 특정 부문의 가격 상승을 이끈 공급 충격을 반영한다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"Inflation remains elevated relative to the Committee's 2 percent goal, in part reflecting supply shocks that have driven price increases in certain sectors, including energy.\"]},{\"claim_text\":\"FOMC 성명문은 위원회가 물가 안정을 달성할 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"The Committee will deliver price stability.\"]},{\"claim_text\":\"Beth M. Hammack, Neel Kashkari, Lorie K. Logan 은 통화정책 결정에 반대표를 던짐\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"Voting against the monetary policy action were Beth M. Hammack, Neel Kashkari, and Lorie K. Logan, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting.\"]},{\"claim_text\":\"반대한 Hammack, Kashkari, Logan 은 이번 회의에서 연방기금금리 목표 범위를 1/4%p 인상하는 것을 선호했다고 성명문은 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-29\",\"passages\":[\"Voting against the monetary policy action were Beth M. Hammack, Neel Kashkari, and Lorie K. Logan, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting.\"]}]}",
+  "output_in": "here"
+}

@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "ST-09",
+  "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
+  "text_sha256": "8d64e5a2e080e62cd18dfd140f4e4dd44ceb51b4e1a1fde093619ce59ace301f",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "cb26fcf19a6e864cde5932301763df0dc8dcefe32e0a4844cb8cfb7c4648d90d",
+  "response_id": "msg_011CgtwRu4adG7sQHFDXYEuq",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 3944,
+    "output_tokens": 1641,
+    "cache_creation_input_tokens": 3729,
+    "cache_read_input_tokens": 0
+  },
+  "duration_ms": 12967,
+  "cost_usd": 0.067241,
+  "called_at": "2026-11-10T08:34:09.918Z",
+  "output_sha256": "f56943a990bf14f33c8e0b99d838e6f9cb526889a4522b19c0ba00bae0c21b5e",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 는 성명문을 12 – 0 표결로 승인함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"The Federal Open Market Committee approved the following statement for release by a 12 – 0 vote:\"]},{\"claim_text\":\"FOMC 는 연방기금금리 목표 범위를 1/4%p 올려 3-3/4~4% 로 정함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"The Committee decided to raise the target range for the federal funds rate by 1/4 percentage point to 3-3/4 to 4 percent, in support of the Federal Reserve's dual mandate.\"]},{\"claim_text\":\"FOMC 성명문은 금리 인상이 연준의 이중 책무를 뒷받침하기 위한 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"The Committee decided to raise the target range for the federal funds rate by 1/4 percentage point to 3-3/4 to 4 percent, in support of the Federal Reserve's dual mandate.\"]},{\"claim_text\":\"FOMC 는 은행 시스템에 충분한 지급준비금을 유지하는 정책을 계속함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"The Committee is continuing its policy of maintaining ample reserves in the banking system.\"]},{\"claim_text\":\"FOMC 성명문은 경제 활동이 견조한 속도로 확장하고 있다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Economic activity is expanding at a solid pace.\"]},{\"claim_text\":\"FOMC 성명문은 부분적으로 지정학적 전개로 인해 불확실성이 여전히 높지만 국내 지출은 탄력적이었다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"While uncertainty remains elevated owing, in part, to geopolitical developments, domestic spending has been resilient.\"]},{\"claim_text\":\"FOMC 성명문은 생산성 증가가 강하고 자본 투자가 견고하다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Productivity growth is strong, and capital investment is robust.\"]},{\"claim_text\":\"FOMC 성명문은 일자리 증가가 노동력 증가와 보조를 맞춰 왔고 실업률은 거의 변하지 않았다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Job gains have kept pace with the workforce, and the unemployment rate has changed little.\"]},{\"claim_text\":\"FOMC 성명문은 인플레이션이 여전히 높다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Inflation remains elevated.\"]},{\"claim_text\":\"FOMC 성명문은 오늘의 정책 조치가 위원회의 2% 목표로 더 시의적절하게 돌아가는 것을 뒷받침할 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Today's policy action will support a timelier return to the Committee's 2 percent goal.\"]},{\"claim_text\":\"FOMC 성명문은 위원회가 물가 안정을 이룰 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"The Committee will deliver price stability.\"]}]}",
+  "output_in": "here"
+}

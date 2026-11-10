@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "TSY-IR-1008",
+  "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+  "text_sha256": "f11f9f44ed6e9a66841ebe2eb3da828bb2f56fa5d8ee430bbf18c88f6c7f0f3f",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "646760927630b540ded922fa7dfd3c9d57695e5eaa9fcba9056396f5a0460807",
+  "response_id": "msg_011CgtwB8Dw2nRcBiJij1uhd",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 8440,
+    "output_tokens": 1447,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 9372,
+  "cost_usd": 0.031723,
+  "called_at": "2026-11-10T08:30:46.071Z",
+  "output_sha256": "52e8f1b35874d3f14b3a9e223a539c627dadb80be9fe9712e9c540964cb5e929",
+  "output": "{\"facts\":[{\"claim_text\":\"미 재무부는 2026-10-08 Operation Economic Outcast 의 일환으로 이란 그림자 선단의 잔여 네트워크를 겨냥한 제재 조치를 발표함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-08\",\"passages\":[\"Today’s action effectively neutralizes the vast majority of Iran’s remaining shadow fleet network.\"]},{\"claim_text\":\"재무부는 2026-10-08 남아시아·동아시아 시장으로 이란산 원유와 석유·석유화학 제품을 운송한 그림자 선단 선박 17척에 대해 조치를 취함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-08\",\"passages\":[\"Treasury today took action against 17 shadow fleet vessels responsible for transporting millions of barrels of Iranian crude oil and petroleum and petrochemical products to a variety of markets in South and East Asia.\"]},{\"claim_text\":\"재무부는 이번 지정이 이란 석유 부문 등을 겨냥한 행정명령(E.O.) 13902 에 따라 이루어진다고 밝힘\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-08\",\"passages\":[\"The designations imposed today are being taken pursuant to Executive Order (E.O.) 13902, which targets the Iranian petroleum sector, among other key sectors of the Iranian economy.\"]},{\"claim_text\":\"OFAC 은 2026-10-08 HAKUNA MATATA 와 PINOCCHIO 두 척을 제재 목록(SDN List)에서 삭제함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-08\",\"passages\":[\"As a part of today’s action, OFAC is also removing two vessels from the sanctions list.\"]},{\"claim_text\":\"Bessent 재무장관은 재무부가 테헤란 정권이 지역에서 전쟁을 벌이는 데 쓰는 자금줄을 말려 죽이고 있다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Bessent 재무장관 (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-08\",\"passages\":[\"“Treasury is starving the tyrannical regime in Tehran of the money it uses to wage war in the region, and we will continue exposing those who enable the regime’s oil sales,” said Secretary of the Treasury Scott Bessent.\"]},{\"claim_text\":\"재무부는 미군 봉쇄의 성과 등으로 이란 정권이 이란의 경제를 안정시킬 선택지가 바닥나고 있다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"미 재무부 (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-08\",\"passages\":[\"the regime is running out of options to stabilize Iran’s failing economy.\"]},{\"claim_text\":\"재무부는 Operation Economic Outcast 가 2026-08-24 Bessent 장관에 의해 발표되었다고 밝힘\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-08-24\",\"passages\":[\"Announced by Secretary Bessent on August 24, 2026 and dubbed Economic D-Day\"]},{\"claim_text\":\"재무부는 선박·기업을 계속 감시·식별하고 제재 회피 시도를 차단할 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"미 재무부 (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-08\",\"passages\":[\"Treasury will continue to monitor, identify, and disrupt any attempts at sanctions evasion.\"]}]}",
+  "output_in": "here"
+}

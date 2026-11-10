@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "BEA-07",
+  "source_id": "753cb767-5ad7-4261-8d8b-6011f44711d7",
+  "text_sha256": "6eeb124647afb60d8052fff07e386c84fdc1a442993fe78bb863e8ebd1ceefdb",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "f0b482afcdf3a96be403d13b592aa44b3ff837fb07af37ab0416d84a745a8ddf",
+  "response_id": "msg_011CgtwHjqV3FqyZx1VQdK6K",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 2813,
+    "output_tokens": 1751,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 9467,
+  "cost_usd": 0.023509,
+  "called_at": "2026-11-10T08:32:15.891Z",
+  "output_sha256": "6432ccc45b8f218c9c4c663ce9ff5fcb015bc2c7e594da117505d45bd62d67e3",
+  "output": "{\"facts\":[{\"claim_text\":\"BEA 는 2026년 7월 개인소득이 전월 대비 1,151억 달러(월율 0.4%) 증가했다고 발표함\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-08-26\",\"event_at\":\"2026-07\",\"passages\":[\"Personal income increased $115.1 billion (0.4 percent at a monthly rate) in July, according to estimates released today by the U.S. Bureau of Economic Analysis (BEA).\"]},{\"claim_text\":\"2026년 7월 가처분소득(DPI)은 1,259억 달러(0.5%), 개인소비지출(PCE)은 363억 달러(0.2%) 증가했다\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-08-26\",\"event_at\":\"2026-07\",\"passages\":[\"Disposable personal income (DPI)—personal income less personal current taxes—increased $125.9 billion (0.5 percent), and personal consumption expenditures (PCE) increased $36.3 billion (0.2 percent).\"]},{\"claim_text\":\"2026년 7월 개인저축은 7,120억 달러이고 개인저축률은 3.0%였다\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-08-26\",\"event_at\":\"2026-07\",\"passages\":[\"Personal saving was $712.0 billion in July, and the personal saving rate—personal saving as a percentage of DPI—was 3.0 percent.\"]},{\"claim_text\":\"2026년 7월 PCE 증가 363억 달러는 서비스 지출 862억 달러 증가와 상품 지출 499억 달러 감소가 겹친 결과다\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-08-26\",\"event_at\":\"2026-07\",\"passages\":[\"The $36.3 billion increase in current-dollar PCE in July reflected an increase of $86.2 billion in spending on services that was partly offset by a decrease of $49.9 billion in spending on goods.\"]},{\"claim_text\":\"2026년 7월 실질 PCE는 13억 달러(월율 0.1% 미만) 증가했다\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-08-26\",\"event_at\":\"2026-07\",\"passages\":[\"Real PCE increased $1.3 billion (less than 0.1 percent at a monthly rate) in July.\"]},{\"claim_text\":\"2026년 7월 PCE 물가지수는 전월 대비 0.2% 상승했고 식품·에너지 제외 지수도 0.2% 상승했다\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-08-26\",\"event_at\":\"2026-07\",\"passages\":[\"From the preceding month, the PCE price index for July increased 0.2 percent. Excluding food and energy, the PCE price index also increased 0.2 percent.\"]},{\"claim_text\":\"2026년 7월 PCE 물가지수는 전년 동월 대비 3.7% 상승했고 식품·에너지 제외 지수는 3.3% 상승했다\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-08-26\",\"event_at\":\"2026-07\",\"passages\":[\"From the same month one year ago, the PCE price index for July increased 3.7 percent. Excluding food and energy, the PCE price index increased 3.3 percent from one year ago.\"]},{\"claim_text\":\"2026년 6월 PCE 물가지수는 전월 대비 -0.1%, 식품·에너지 제외 지수는 0.1%였고 7월은 각각 0.2%, 0.2%였다\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-08-26\",\"event_at\":\"2026-07\",\"passages\":[\"PCE price index | -0.1 | 0.2\",\"PCE price index excluding food and energy | 0.1 | 0.2\"]},{\"claim_text\":\"BEA 는 2026년 국민·산업·지역 계정 연례 개편이 9월 30일 같은 날 시작된다고 공표함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-08-26\",\"passages\":[\"the 2026 annual updates of national, industry, and regional data will begin on the same day for the first time: September 30, 2026.\"]},{\"claim_text\":\"BEA 의 다음 개인소득·지출 발표(2026년 8월분)는 2026년 9월 30일 오전 8시 30분(EDT)으로 예정돼 있다\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-08-26\",\"passages\":[\"Next release: September 30, 2026, at 8:30 a.m. EDT\"]}]}",
+  "output_in": "here"
+}

@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "TSY",
+  "source_id": "637a6e29-5b4e-4fdb-8f5a-919087e44acf",
+  "text_sha256": "64b31f8d45ab55df18cade9579aa730453e9d14f4731781b1e06f69a3d43dd49",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "4b97dd565d502313cd10883bc8000e086442acd565a4e3a4df9807253d2e6700",
+  "response_id": "msg_011CgtwHtFVPytPPYRWZmEze",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 36630,
+    "output_tokens": 1403,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 8488,
+  "cost_usd": 0.087663,
+  "called_at": "2026-11-10T08:32:16.866Z",
+  "output_sha256": "af801363eb6a9587fca6d849c29c95609cd3b315e18c018ef694d44abe38fa95",
+  "output": "{\"facts\":[{\"claim_text\":\"2026-09-16 미 재무부 일별 par yield curve 금리는 1개월 3.96, 3개월 4.14, 6개월 4.22, 1년 4.45, 2년 4.74, 10년 4.94, 30년 5.35 로 공표됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026\",\"event_at\":\"2026-09-16\",\"passages\":[\"09/16/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.96 | 4.00 | 4.07 | 4.14 | 4.24 | 4.22 | 4.45 | 4.74 | 4.82 | 4.86 | 4.94 | 5.01 | 5.39 | 5.35\"]},{\"claim_text\":\"2026-09-15 미 재무부 일별 par yield curve 금리는 1개월 3.93, 3개월 4.11, 1년 4.39, 2년 4.67, 10년 5.00, 30년 5.36 로 공표됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026\",\"event_at\":\"2026-09-15\",\"passages\":[\"09/15/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.93 | 4.00 | 4.06 | 4.11 | 4.19 | 4.17 | 4.39 | 4.67 | 4.76 | 4.83 | 4.91 | 5.00 | 5.40 | 5.36\"]},{\"claim_text\":\"2026-07-29 미 재무부 일별 par yield curve 금리는 1개월 3.73, 3개월 3.83, 1년 4.04, 2년 4.22, 10년 4.67, 30년 5.20 로 공표됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026\",\"event_at\":\"2026-07-29\",\"passages\":[\"07/29/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.73 | 3.80 | 3.83 | 3.83 | 3.91 | 3.97 | 4.04 | 4.22 | 4.29 | 4.37 | 4.51 | 4.67 | 5.21 | 5.20\"]},{\"claim_text\":\"2026-09-10 미 재무부 일별 par yield curve 금리는 1년 4.28, 2년 4.56, 10년 4.95, 30년 5.37 로 공표됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026\",\"event_at\":\"2026-09-10\",\"passages\":[\"09/10/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.91 | 3.93 | 4.01 | 4.00 | 4.11 | 4.07 | 4.28 | 4.56 | 4.63 | 4.75 | 4.84 | 4.95 | 5.39 | 5.37\"]},{\"claim_text\":\"2026-09-09 미 재무부 일별 par yield curve 금리는 1년 4.17, 2년 4.43, 10년 4.83, 30년 5.28 로 공표됨\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026\",\"event_at\":\"2026-09-09\",\"passages\":[\"09/09/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.81 | 3.88 | 3.93 | 3.95 | 4.06 | 4.01 | 4.17 | 4.43 | 4.49 | 4.61 | 4.71 | 4.83 | 5.28 | 5.28\"]}]}",
+  "output_in": "here"
+}

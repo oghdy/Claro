@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "SP-HAM-1012",
+  "source_id": "fa0afc74-0646-482f-ae91-c1f1d6b35904",
+  "text_sha256": "19d360c8f387b08b062f7a61901b4c70c64948550d31cd0d16b849af60cf0eaf",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "0c26c0754e127953e88065b0b4b83bc011ff2541fa497757a530c127f3b69745",
+  "response_id": "msg_011Cgtw6X4jRHdJ5MT26cp17",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 11869,
+    "output_tokens": 4231,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 24405,
+  "cost_usd": 0.066421,
+  "called_at": "2026-11-10T08:29:58.607Z",
+  "output_sha256": "2b6d6c9da4536887d9fe44379d17d34d087fbc6c9eb607b657b52a5ce6f76176",
+  "output": null,
+  "output_in": "cache"
+}

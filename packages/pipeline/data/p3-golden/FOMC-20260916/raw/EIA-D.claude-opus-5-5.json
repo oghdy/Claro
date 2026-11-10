@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "EIA-D",
+  "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+  "text_sha256": "511dab6ffdaab93ea0c5a2084ee53087e2e31f17c3e19a3a21cedbedb4f08c6b",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "4fdb2a6ea8bc7d6889669237d4361740a341fb6bb8fe6af44f31f2e117e33b3d",
+  "response_id": "msg_011CgtwcsFFhiFUzzDcoB2ic",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 23999,
+    "output_tokens": 1355,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 12566,
+  "cost_usd": 0.123842,
+  "called_at": "2026-11-10T08:36:38.461Z",
+  "output_sha256": "67ad9610a803c739bdd23bda0463dcdbf49d4352cb418cfe9f2f4690b0596ac9",
+  "output": "{\"facts\":[{\"claim_text\":\"미국 No 2 경유 주간 소매가격은 2026년 7월 27일로 끝난 주에 갤런당 5.313달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-27\",\"passages\":[\"07/27 | 5.313\"]},{\"claim_text\":\"미국 No 2 경유 주간 소매가격은 2026년 8월 3일로 끝난 주에 갤런당 5.348달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-08-03\",\"passages\":[\"2026-Aug | 08/03 | 5.348\"]},{\"claim_text\":\"미국 No 2 경유 주간 소매가격은 2026년 8월 17일로 끝난 주에 갤런당 5.454달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-08-17\",\"passages\":[\"08/17 | 5.454\"]},{\"claim_text\":\"미국 No 2 경유 주간 소매가격은 2026년 8월 31일로 끝난 주에 갤런당 5.599달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-08-31\",\"passages\":[\"08/31 | 5.599\"]},{\"claim_text\":\"미국 No 2 경유 주간 소매가격은 2026년 9월 7일로 끝난 주에 갤런당 5.967달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-07\",\"passages\":[\"2026-Sep | 09/07 | 5.967\"]},{\"claim_text\":\"미국 No 2 경유 주간 소매가격은 2026년 9월 14일로 끝난 주에 갤런당 6.285달러였다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-14\",\"passages\":[\"09/14 | 6.285\"]}]}",
+  "output_in": "here"
+}

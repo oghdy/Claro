@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "IMPL-09",
+  "source_id": "fb969b5c-3a94-472c-b154-4957e08fdbd0",
+  "text_sha256": "0757194169e21ea99f9136c0dc835ad28ab77a9c41ac8ff4aeb2dd8da22ef7f4",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "d0940861e277189cdcf32eeb1cba3eff1265b08cc95d359ba432a1ea4431e2ab",
+  "response_id": "msg_011CgtwRu4q3HDeubMov29F1",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4400,
+    "output_tokens": 1721,
+    "cache_creation_input_tokens": 3729,
+    "cache_read_input_tokens": 0
+  },
+  "duration_ms": 14500,
+  "cost_usd": 0.070665,
+  "called_at": "2026-11-10T08:34:11.468Z",
+  "output_sha256": "0b183ece312ab00d681fa3ffd10eb75d8d340ecfe09db10987ede09be6315568",
+  "output": "{\"facts\":[{\"claim_text\":\"연준 이사회는 만장일치로 지급준비금 이자율(IORB)을 3.90%로 인상하기로 표결했으며, 2026년 9월 17일부터 효력이 있다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"The Board of Governors of the Federal Reserve System voted unanimously to raise the interest rate paid on reserve balances to 3.90 percent, effective September 17, 2026.\"]},{\"claim_text\":\"FOMC 는 2026년 9월 17일부터 연방기금금리를 3-3/4~4% 목표 범위로 유지하도록 필요한 공개시장운영을 하라고 뉴욕 연은 공개시장 데스크에 지시하기로 표결했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Undertake open market operations as necessary to maintain the federal funds rate in a target range of 3-3/4 to 4 percent.\",\"\\\"Effective September 17, 2026, the Federal Open Market Committee directs the Desk to:\"]},{\"claim_text\":\"FOMC 는 데스크에 상설 익일물 레포(repo) 운영을 4.0% 금리로 하도록 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Conduct standing overnight repurchase agreement operations at a rate of 4.0 percent.\"]},{\"claim_text\":\"FOMC 는 데스크에 상설 익일물 역레포 운영을 3.75% 제시금리, 거래상대방당 하루 1,600억 달러 한도로 하도록 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Conduct standing overnight reverse repurchase agreement operations at an offering rate of 3.75 percent and with a per-counterparty limit of $160 billion per day.\"]},{\"claim_text\":\"FOMC 는 데스크에 적절할 때 충분한 지준 수준을 유지하기 위해 단기 국채(T-bill) 및 필요시 잔존만기 3년 이하 국채 매입으로 SOMA 보유 증권을 늘리도록 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"When appropriate, increase the System Open Market Account holdings of securities through purchases of Treasury bills and, if needed, other Treasury securities with remaining maturities of 3 years or less to maintain an ample level of reserves.\"]},{\"claim_text\":\"FOMC 는 데스크에 보유 국채의 원금 상환분을 모두 입찰에서 재투자(roll over)하고, 보유 기관채의 원금 상환분은 모두 단기 국채(T-bill)에 재투자하도록 지시했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Roll over at auction all principal payments from the Federal Reserve's holdings of Treasury securities.\",\"Reinvest all principal payments from the Federal Reserve's holdings of agency securities into Treasury bills.\\\"\"]},{\"claim_text\":\"연준 이사회는 만장일치로 재할인율(primary credit rate)을 1/4%p 인상해 4.0%로 하는 것을 승인했으며, 2026년 9월 17일부터 효력이 있다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"In a related action, the Board of Governors of the Federal Reserve System voted unanimously to approve a 1/4 percentage point increase in the primary credit rate to 4.0 percent, effective September 17, 2026.\"]},{\"claim_text\":\"연준 이사회는 이 재할인율 결정에서 Cleveland, Richmond, Atlanta, Chicago, Minneapolis, Kansas City, Dallas 연방준비은행 이사회가 제출한 해당 금리 설정 요청을 승인했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"In taking this action, the Board approved requests to establish that rate submitted by the Board of Directors of the Federal Reserve Banks of Cleveland, Richmond, Atlanta, Chicago, Minneapolis, Kansas City, and Dallas.\"]}]}",
+  "output_in": "here"
+}

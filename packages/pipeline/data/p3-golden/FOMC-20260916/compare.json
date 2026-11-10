@@ -1,0 +1,832 @@
+{
+  "_what": "P-3 9월 비교 — 골든 사실 60 과 모델이 뽑은 사실을 사람(이 세션)이 하나씩 대 본 판정. 이 파일은 판정이다 — 기계가 만든 것이 아니다. scripts/compare-p3-golden.py 가 이 판정의 모양 · 근거(원문 저장 여부 · 가리킨 사실이 그래프에 있는가 · 구절 겹침)를 검사하고 표를 센다",
+  "status_meaning": {
+    "FOUND": "골든 사실의 내용이 뽑은 사실 하나 이상에 있다 (원 수치로 있어도)",
+    "PARTIAL": "일부만 있다 — 나머지는 계산이거나 다른 문장",
+    "MISSED_STORED": "원문이 저장돼 있는데 놓쳤다",
+    "MISSED_UNSTORED": "골든의 출처가 저장되지 않았다 (P-1 못 가져옴) — 모델이 볼 수 없었다"
+  },
+  "keys_meaning": "\"<문서 label>#<모델 출력 안 순서>\" — 그래프 사실의 _from",
+  "models": {
+    "claude-sonnet-5-5": {
+      "graph": "packages/pipeline/data/p3-golden/FOMC-20260916/graph.json",
+      "judgements": {
+        "F01": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#1"
+          ],
+          "note": ""
+        },
+        "F02": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#0"
+          ],
+          "note": ""
+        },
+        "F03": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "\"2023년 7월 이후 첫 인상\"은 표의 줄을 견준 계산이다 — 프롬프트가 계산을 금한다. 2023-07-27 줄도 뽑지 않았다"
+        },
+        "F04": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#8"
+          ],
+          "note": ""
+        },
+        "F05": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#2"
+          ],
+          "note": ""
+        },
+        "F06": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#3"
+          ],
+          "note": ""
+        },
+        "F07": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#4"
+          ],
+          "note": ""
+        },
+        "F08": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#5"
+          ],
+          "note": ""
+        },
+        "F09": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#6"
+          ],
+          "note": ""
+        },
+        "F10": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#7"
+          ],
+          "note": ""
+        },
+        "F11": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#4"
+          ],
+          "note": ""
+        },
+        "F12": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#5"
+          ],
+          "note": "원 수치(점도표 2026 열 분포 4·12·2)로 — \"16명이 추가 인상 예상\"은 골든이 분포에서 읽은 것"
+        },
+        "F13": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "2027 열 분포를 뽑지 않았다 (구절에는 그 줄이 있다)"
+        },
+        "F14": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#4"
+          ],
+          "note": "중앙값 원 수치(2028 3.9 · 2029 3.6)로 — \"인하 1회\"는 읽은 것"
+        },
+        "F15": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#2",
+            "SEP-03#3"
+          ],
+          "note": "9월 3.7 과 3월 2.7 이 두 사실에"
+        },
+        "F16": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#3"
+          ],
+          "note": ""
+        },
+        "F17": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#1",
+            "SEP-03#2"
+          ],
+          "note": ""
+        },
+        "F18": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#0"
+          ],
+          "note": ""
+        },
+        "F19": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#2"
+          ],
+          "note": ""
+        },
+        "F20": {
+          "status": "FOUND",
+          "keys": [
+            "PC-09#12"
+          ],
+          "note": ""
+        },
+        "F21": {
+          "status": "FOUND",
+          "keys": [
+            "PC-09#1"
+          ],
+          "note": ""
+        },
+        "F22": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": ""
+        },
+        "F23": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": ""
+        },
+        "F24": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "잭슨홀의 같은 말(F32a)은 찾았다. 기자회견의 것은 놓침"
+        },
+        "F25": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "PC-09#4 는 실업률 · 구인 · 근로시간 — 실업수당 청구 문장은 뽑지 않았다"
+        },
+        "F26": {
+          "status": "PARTIAL",
+          "keys": [
+            "PC-09#8"
+          ],
+          "note": "모두발언의 \"await new information\" 으로 — \"seven weeks is a good investment … buy time\" 문장은 아니다. PC-09#8 의 글 뒷부분은 그 구절 밖에 있다 (구절 부족)"
+        },
+        "F27": {
+          "status": "FOUND",
+          "keys": [
+            "PC-09#18"
+          ],
+          "note": "세 이유는 구절 밖 (구절 부족 — 원문에는 있다)"
+        },
+        "F28": {
+          "status": "FOUND",
+          "keys": [
+            "ST-07#0",
+            "ST-07#1",
+            "ST-07#7"
+          ],
+          "note": "세 사실로 나뉨"
+        },
+        "F29a": {
+          "status": "FOUND",
+          "keys": [
+            "ST-06#0",
+            "ST-06#1"
+          ],
+          "note": ""
+        },
+        "F31": {
+          "status": "FOUND",
+          "keys": [
+            "BEA-07#6"
+          ],
+          "note": ""
+        },
+        "F32a": {
+          "status": "FOUND",
+          "keys": [
+            "JH#15"
+          ],
+          "note": ""
+        },
+        "F33": {
+          "status": "FOUND",
+          "keys": [
+            "JH#18"
+          ],
+          "note": "\"그렇지 않으면 할 일이 있다\"는 구절 밖 (구절 부족)"
+        },
+        "F34": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "8/27 · 8/28 줄을 뽑지 않았다"
+        },
+        "F35": {
+          "status": "PARTIAL",
+          "keys": [
+            "TSY#1",
+            "TSY#2"
+          ],
+          "note": "9/15 10년 5.00 · 7/29 4.67 은 있다. 1/2 4.19 와 차이(33bp · 81bp — 계산)는 없다"
+        },
+        "F37b": {
+          "status": "PARTIAL",
+          "keys": [
+            "EIA-D#3"
+          ],
+          "note": "9/14 $6.285 만. \"시리즈 최고치\" · \"종전 기록 2022-06-20\"은 표를 훑어 견준 계산"
+        },
+        "F38": {
+          "status": "FOUND",
+          "keys": [
+            "CAL#5"
+          ],
+          "note": ""
+        },
+        "F44": {
+          "status": "FOUND",
+          "keys": [
+            "CAL#3"
+          ],
+          "note": "사건(9/16) 뒤의 일(10/7) — 프롬프트의 \"사건 날짜 뒤는 뽑지 않는다\"를 어기고 뽑았다. 골든도 이 사실을 갖고 있다"
+        },
+        "F45": {
+          "status": "FOUND",
+          "keys": [
+            "MIN-07#11"
+          ],
+          "note": ""
+        },
+        "F50": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "1월 회의록의 위원 선출 문단을 뽑지 않았다"
+        },
+        "F51": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#4"
+          ],
+          "note": "6월 중앙값이 괄호 안에"
+        },
+        "F52": {
+          "status": "FOUND",
+          "keys": [
+            "JH#19"
+          ],
+          "note": ""
+        },
+        "F53": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": ""
+        },
+        "F54": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#2",
+            "SEP-09#3"
+          ],
+          "note": ""
+        },
+        "F55": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "MIN-07#13 은 참가자의 말 — 직원(staff)의 귀속 문장은 뽑지 않았다"
+        },
+        "IR01": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "WH-0408 에서 사실 0 — 2월 · 4월 일이라 \"직전 회의 이후\" 범위 밖으로 본 듯 (스토리라인 사실)"
+        },
+        "IR02": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "같음"
+        },
+        "IR06": {
+          "status": "PARTIAL",
+          "keys": [
+            "EIA-B#1"
+          ],
+          "note": "9/15 130.80 만. 2/27 · 4/6 주 · 7/2 · 7/23 · 8/26 없음"
+        },
+        "F30": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F39": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F40": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F41": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F42": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F43": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F46": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F47": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F48": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F49": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "IR03": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "IR04": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "IR05": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        }
+      }
+    },
+    "claude-opus-5-5": {
+      "graph": "packages/pipeline/data/p3-golden/FOMC-20260916/graph.claude-opus-5-5.json",
+      "judgements": {
+        "F01": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#1"
+          ],
+          "note": ""
+        },
+        "F02": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#0"
+          ],
+          "note": ""
+        },
+        "F03": {
+          "status": "PARTIAL",
+          "keys": [
+            "OMO#5",
+            "OMO#0"
+          ],
+          "note": "2023-07-27 인상 줄과 2026-09-17 인상 줄을 뽑았다 — \"그 뒤 첫 인상\"은 계산이라 없다"
+        },
+        "F04": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#9"
+          ],
+          "note": ""
+        },
+        "F05": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#3"
+          ],
+          "note": ""
+        },
+        "F06": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#4"
+          ],
+          "note": ""
+        },
+        "F07": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#5"
+          ],
+          "note": ""
+        },
+        "F08": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#6"
+          ],
+          "note": ""
+        },
+        "F09": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#7"
+          ],
+          "note": ""
+        },
+        "F10": {
+          "status": "FOUND",
+          "keys": [
+            "ST-09#8"
+          ],
+          "note": ""
+        },
+        "F11": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#10"
+          ],
+          "note": ""
+        },
+        "F12": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#12"
+          ],
+          "note": "원 수치(분포)로"
+        },
+        "F13": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "2027 열 분포를 뽑지 않았다"
+        },
+        "F14": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#10"
+          ],
+          "note": "중앙값 원 수치로"
+        },
+        "F15": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#6",
+            "SEP-03#4"
+          ],
+          "note": ""
+        },
+        "F16": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#8",
+            "SEP-09#9"
+          ],
+          "note": ""
+        },
+        "F17": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#4",
+            "SEP-03#3"
+          ],
+          "note": ""
+        },
+        "F18": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#2"
+          ],
+          "note": ""
+        },
+        "F19": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#6"
+          ],
+          "note": ""
+        },
+        "F20": {
+          "status": "FOUND",
+          "keys": [
+            "PC-09#13"
+          ],
+          "note": ""
+        },
+        "F21": {
+          "status": "PARTIAL",
+          "keys": [
+            "PC-09#1"
+          ],
+          "note": "\"만장일치 표결이었다\"(조치)로만 — \"결의를 보여준다\"는 의장의 말은 옮기지 않았다"
+        },
+        "F22": {
+          "status": "PARTIAL",
+          "keys": [
+            "PC-09#7"
+          ],
+          "note": "다른 문장 \"for more than five years\" — 5년 반이 아니라 5년"
+        },
+        "F23": {
+          "status": "PARTIAL",
+          "keys": [
+            "PC-09#20"
+          ],
+          "note": "앞 절 \"개별 가격은 못 움직인다\"만. \"번지는 것은 막겠다\"는 없다"
+        },
+        "F24": {
+          "status": "PARTIAL",
+          "keys": [
+            "PC-09#23"
+          ],
+          "note": "다른 문장 \"the inflation summer trends weren't passing the test\""
+        },
+        "F25": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "기자회견의 실업수당 청구 문장은 없다 (JH#14 는 잭슨홀의 다른 문장)"
+        },
+        "F26": {
+          "status": "PARTIAL",
+          "keys": [
+            "PC-09#11"
+          ],
+          "note": "모두발언의 \"await new information\" 으로"
+        },
+        "F27": {
+          "status": "FOUND",
+          "keys": [
+            "PC-09#27"
+          ],
+          "note": ""
+        },
+        "F28": {
+          "status": "FOUND",
+          "keys": [
+            "ST-07#0",
+            "ST-07#1",
+            "ST-07#9"
+          ],
+          "note": ""
+        },
+        "F29a": {
+          "status": "FOUND",
+          "keys": [
+            "ST-06#0",
+            "ST-06#1"
+          ],
+          "note": ""
+        },
+        "F31": {
+          "status": "FOUND",
+          "keys": [
+            "BEA-07#9"
+          ],
+          "note": ""
+        },
+        "F32a": {
+          "status": "FOUND",
+          "keys": [
+            "JH#18"
+          ],
+          "note": ""
+        },
+        "F33": {
+          "status": "FOUND",
+          "keys": [
+            "JH#24"
+          ],
+          "note": ""
+        },
+        "F34": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "8/31 줄만 — 8/27 · 8/28 없음"
+        },
+        "F35": {
+          "status": "PARTIAL",
+          "keys": [
+            "TSY#2",
+            "TSY#0"
+          ],
+          "note": "9/15 5.00 · 7/29 4.67. 1/2 와 차이 없음"
+        },
+        "F37b": {
+          "status": "PARTIAL",
+          "keys": [
+            "EIA-D#5"
+          ],
+          "note": "9/14 $6.285 만"
+        },
+        "F38": {
+          "status": "FOUND",
+          "keys": [
+            "CAL#2"
+          ],
+          "note": ""
+        },
+        "F44": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": "사건 뒤의 일 — 프롬프트 규칙대로 뽑지 않았다"
+        },
+        "F45": {
+          "status": "FOUND",
+          "keys": [
+            "MIN-07#18"
+          ],
+          "note": ""
+        },
+        "F50": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": ""
+        },
+        "F51": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#11"
+          ],
+          "note": ""
+        },
+        "F52": {
+          "status": "FOUND",
+          "keys": [
+            "JH#25"
+          ],
+          "note": ""
+        },
+        "F53": {
+          "status": "MISSED_STORED",
+          "keys": [],
+          "note": ""
+        },
+        "F54": {
+          "status": "FOUND",
+          "keys": [
+            "SEP-09#6",
+            "SEP-09#8"
+          ],
+          "note": ""
+        },
+        "F55": {
+          "status": "FOUND",
+          "keys": [
+            "MIN-07#31"
+          ],
+          "note": ""
+        },
+        "IR01": {
+          "status": "FOUND",
+          "keys": [
+            "WH-0408#1"
+          ],
+          "note": ""
+        },
+        "IR02": {
+          "status": "FOUND",
+          "keys": [
+            "WH-0408#0"
+          ],
+          "note": ""
+        },
+        "IR06": {
+          "status": "PARTIAL",
+          "keys": [
+            "EIA-B#0",
+            "EIA-B#1",
+            "EIA-B#4"
+          ],
+          "note": "7/29 91.95 · 8/24 주(8/26 87.77) · 9/15 130.80. 2/27 · 4/6 주 · 7/2 · 7/23 없음"
+        },
+        "F30": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F39": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F40": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F41": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F42": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F43": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F46": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F47": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F48": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "F49": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "IR03": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "IR04": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        },
+        "IR05": {
+          "status": "MISSED_UNSTORED",
+          "keys": [],
+          "note": ""
+        }
+      }
+    }
+  },
+  "text_errors": {
+    "_what": "글이 틀린 것 — 원문(구절 · 그 둘레)과 다른 사실 글. 짝지은 사실은 전부, 더 뽑은 것은 표본 22 + 표 줄 기계 대조(국채 표)로 봤다",
+    "claude-sonnet-5-5": [
+      {
+        "key": "TSY#0",
+        "kind": "표 칸 밀림",
+        "what": "2026-09-16 \"10년 4.94\" — 표의 10 Yr 칸은 5.01. 4.94 는 7 Yr 칸 (구절은 맞다 · 숫자도 구절에 있다 · 칸이 틀렸다)"
+      },
+      {
+        "key": "MIN-01#10",
+        "kind": "수량어",
+        "what": "\"Several participants\" → \"일부 참가자\". 회의록의 수량어 순서(a few < some < several < many < most)에서 한 칸 낮췄다"
+      },
+      {
+        "key": "MIN-07#7",
+        "kind": "수량어",
+        "what": "\"Several participants favored an increase\" → \"일부 참가자\""
+      }
+    ],
+    "claude-opus-5-5": []
+  },
+  "passage_short": {
+    "_what": "구절 부족 — 글은 원문과 맞지만 단 구절이 글의 일부만 받친다 (구절 검사는 \"구절이 원문에 있다\"만 본다 · 구절이 글을 받치는지는 못 본다). 짝지은 사실 + 표본에서 본 것",
+    "claude-sonnet-5-5": [
+      "PC-09#8",
+      "PC-09#13",
+      "PC-09#15",
+      "PC-09#18",
+      "PC-09#19",
+      "JH#3",
+      "JH#11",
+      "JH#18",
+      "MIN-07#14",
+      "MIN-07#18"
+    ],
+    "claude-opus-5-5": [
+      "JH#5",
+      "JH#12"
+    ]
+  }
+}

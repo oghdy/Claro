@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "PCP-10",
+  "source_id": "1f146449-0f0f-4314-bd1a-637afe5cd9b1",
+  "text_sha256": "edd8454fab2231300fae653d86a354b47502acbec10ab8c6234784cf19a4b99c",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "41e4b778f1ed3e05be7fec9a21fd991e6e2ec738285c6702fb8a105aad1c094a",
+  "response_id": "msg_011Cgtw3boPtKYnyV1YvizK5",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 3893,
+    "output_tokens": 163,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 2535,
+  "cost_usd": 0.009789,
+  "called_at": "2026-11-10T08:28:57.107Z",
+  "output_sha256": "f5c6971b1e90d8f6835c81ba4942a0f623f0e61e3fe91f08118e427a318371a1",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 성명문과 Implementation Note 가 2026년 10월 28일 오후 2:00 에 공개됨\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"FOMC Meeting Statement:\",\"Implementation Note (Released October 28, 2026 at 2:00 p.m.)\"]}]}",
+  "output_in": "here"
+}

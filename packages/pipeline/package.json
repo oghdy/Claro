@@ -6,10 +6,13 @@
   "scripts": {
     "p1": "node src/p1.ts",
     "p2": "node src/pack.ts",
+    "bls": "node src/bls.ts",
+    "p3": "node src/p3.ts",
     "test": "vitest run",
     "typecheck": "tsc -p ."
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "1.3.0",
     "htmlparser2": "12.0.0",
     "pdfjs-dist": "6.4.299"
   }

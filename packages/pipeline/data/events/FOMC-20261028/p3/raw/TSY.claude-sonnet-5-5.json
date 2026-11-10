@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "TSY",
+  "source_id": "637a6e29-5b4e-4fdb-8f5a-919087e44acf",
+  "text_sha256": "64b31f8d45ab55df18cade9579aa730453e9d14f4731781b1e06f69a3d43dd49",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "170f0100a7f82075f0d973f6dfd491897fdb61409a3bf4650758894aa9c92a68",
+  "response_id": "msg_011CgtwAViioNy8L7URqCbPW",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 36630,
+    "output_tokens": 1402,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 8559,
+  "cost_usd": 0.087653,
+  "called_at": "2026-11-10T08:30:36.695Z",
+  "output_sha256": "96c6d45e898870fa75d25889478db2159d263a759d8ae6aa750b7afae77d4173",
+  "output": "{\"facts\":[{\"claim_text\":\"2026-10-28 기준 미 재무부 일별 국채 par yield 곡선 금리는 1개월 4.07, 3개월 4.18, 6개월 4.32, 1년 4.47, 2년 4.67, 10년 4.95, 30년 5.37(%)이다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"10/28/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 4.07 | 4.10 | 4.16 | 4.18 | 4.22 | 4.32 | 4.47 | 4.67 | 4.80 | 4.85 | 4.95 | 5.05 | 5.41 | 5.37\"]},{\"claim_text\":\"2026-10-27 기준 미 재무부 일별 국채 par yield 곡선 금리는 1개월 4.10, 3개월 4.22, 6개월 4.34, 1년 4.50, 2년 4.70, 10년 4.91, 30년 5.30(%)이다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-27\",\"passages\":[\"10/27/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 4.10 | 4.11 | 4.18 | 4.22 | 4.31 | 4.34 | 4.50 | 4.70 | 4.80 | 4.82 | 4.91 | 4.99 | 5.34 | 5.30\"]},{\"claim_text\":\"2026-09-16 기준 미 재무부 일별 국채 par yield 곡선 금리는 1개월 3.96, 3개월 4.14, 6개월 4.22, 1년 4.45, 2년 4.74, 10년 4.94, 30년 5.35(%)이다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"09/16/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 3.96 | 4.00 | 4.07 | 4.14 | 4.24 | 4.22 | 4.45 | 4.74 | 4.82 | 4.86 | 4.94 | 5.01 | 5.39 | 5.35\"]},{\"claim_text\":\"2026-10-22 기준 미 재무부 일별 국채 par yield 곡선 금리는 2년 4.65, 10년 4.86, 30년 5.29(%)이다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-22\",\"passages\":[\"10/22/2026 | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | N/A | 4.11 | 4.10 | 4.16 | 4.22 | 4.29 | 4.29 | 4.41 | 4.65 | 4.72 | 4.78 | 4.86 | 4.96 | 5.32 | 5.29\"]},{\"claim_text\":\"미 재무부는 par yield 곡선 금리가 뉴욕 연방준비은행이 매 거래일 오후 3시 30분경 얻은 지표성 매수호가(실거래 아님)에서 도출된다고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"미 재무부 (Daily Treasury Par Yield Curve Rates 안내문)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"These par yields are derived from indicative, bid-side market price quotations (not actual transactions) obtained by the Federal Reserve Bank of New York at or near 3:30 PM each trading day.\"]}]}",
+  "output_in": "here"
+}

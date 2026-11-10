@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "SEP-09",
+  "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
+  "text_sha256": "e94f79a7133348cdd4a64b69b79351da115be820ccb4e48be4045aa9e83e72c3",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "1f4252771ce4a96d9efd06f56a9ab57c95d14c92f8b31d0a86f95f91caf076cb",
+  "response_id": "msg_011CgtwE5AinZ3M6KvYDK1SR",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 20856,
+    "output_tokens": 2995,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 15308,
+  "cost_usd": 0.072035,
+  "called_at": "2026-11-10T08:31:31.923Z",
+  "output_sha256": "853c3a66dd5abfe96d48ac54bf9001d92620196b33697935902b5371d0d9316a",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 참가자들은 2026-09-15~16 회의에 맞춰 제출한 경제 전망(SEP)에서 실질 GDP 성장률 중앙값을 2026년 2.3%, 2027년 2.4%, 2028년 2.2%, 2029년 2.1%, 장기 2.0%로 전망함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 참가자 (경제 전망)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Change in real GDP | 2.3 | 2.4 | 2.2 | 2.1 | 2.0 | 2.2–2.4 | 2.2–2.6 | 2.1–2.3 | 2.0–2.2 | 2.0–2.2 | 2.1–2.6 | 2.0–2.9 | 1.8–2.6 | 1.8–2.4 | 1.7–2.5\"]},{\"claim_text\":\"FOMC 참가자들은 9월 경제 전망에서 실업률 중앙값을 2026년 4.1%, 2027년 4.1%, 2028년 4.1%, 2029년 4.1%, 장기 4.2%로 전망함 (6월 전망 중앙값은 2026년 4.3%, 2027년 4.3%, 2028년 4.2%, 장기 4.2%)\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 참가자 (경제 전망)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Unemployment rate | 4.1 | 4.1 | 4.1 | 4.1 | 4.2 | 4.1–4.2 | 4.0–4.2 | 4.0–4.2 | 4.0–4.3 | 4.0–4.3 | 4.0–4.3 | 4.0–4.5 | 3.9–4.4 | 3.8–4.4 | 3.8–4.4\",\"June projection | 4.3 | 4.3 | 4.2 | | 4.2 | 4.3–4.4 | 4.2–4.5 | 4.1–4.3 | | 4.0–4.3 | 4.3–4.6 | 4.0–4.6 | 4.0–4.4 | | 3.8–4.5\"]},{\"claim_text\":\"FOMC 참가자들은 9월 경제 전망에서 PCE 물가상승률 중앙값을 2026년 3.7%, 2027년 2.3%, 2028년 2.1%, 2029년 2.0%, 장기 2.0%로 전망함 (6월 전망 중앙값은 2026년 3.6%)\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 참가자 (경제 전망)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"PCE inflation | 3.7 | 2.3 | 2.1 | 2.0 | 2.0 | 3.5–3.7 | 2.2–2.5 | 2.0–2.2 | 2.0 | 2.0 | 2.9–3.8 | 2.0–2.6 | 2.0–2.2 | 2.0 | 2.0\",\"June projection | 3.6 | 2.3 | 2.0 | | 2.0 | 3.5–3.7 | 2.2–2.5 | 2.0–2.1 | | 2.0 | 2.7–4.1 | 1.9–2.8 | 2.0–2.3 | | 2.0\"]},{\"claim_text\":\"FOMC 참가자들은 9월 경제 전망에서 근원 PCE 물가상승률 중앙값을 2026년 3.4%, 2027년 2.5%, 2028년 2.2%, 2029년 2.0%로 전망함 (6월 전망 중앙값은 2026년 3.3%)\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 참가자 (경제 전망)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Core PCE inflation4 | 3.4 | 2.5 | 2.2 | 2.0 | | 3.3–3.4 | 2.3–2.6 | 2.0–2.2 | 2.0 | | 2.8–3.5 | 2.1–2.7 | 2.0–2.3 | 2.0–2.1 |\",\"June projection | 3.3 | 2.5 | 2.1 | | | 3.2–3.5 | 2.3–2.6 | 2.0–2.2 | | | 2.6–3.5 | 2.0–3.0 | 2.0–2.4 | |\"]},{\"claim_text\":\"FOMC 참가자들은 9월 경제 전망에서 연방기금금리 중앙값을 2026년 말 4.1%, 2027년 4.1%, 2028년 3.9%, 2029년 3.6%, 장기 3.2%로 전망함 (6월 전망 중앙값은 2026년 3.8%, 2027년 3.6%, 2028년 3.4%, 장기 3.1%)\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 참가자 (경제 전망)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Federal funds rate | 4.1 | 4.1 | 3.9 | 3.6 | 3.2 | 4.1–4.4 | 3.6–4.4 | 3.1–4.1 | 3.1–3.6 | 3.0–3.6 | 3.9–4.4 | 3.1–4.4 | 3.1–4.1 | 2.9–3.9 | 2.9–3.9\",\"June projection | 3.8 | 3.6 | 3.4 | | 3.1 | 3.6–4.1 | 3.1–3.9 | 3.1–3.6 | | 3.0–3.5 | 3.4–4.4 | 2.9–4.4 | 2.9–3.9 | | 2.9–3.9\"]},{\"claim_text\":\"FOMC 참가자 중 2026년 말 연방기금금리 적정 수준(목표 범위 중간값)을 4.375%로 본 참가자는 4명, 4.125%로 본 참가자는 12명, 3.875%로 본 참가자는 2명임\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 참가자 (경제 전망)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"4.375 | 4 | 8 | | |\",\"4.125 | 12 | 6 | 4 | |\",\"3.875 | 2 | | 5 | 3 | 2\"]},{\"claim_text\":\"FOMC 참가자 중 GDP 성장률 전망의 위험이 균형적이라고 본 참가자는 13명, 상방으로 기울었다고 본 참가자는 5명, 하방으로 기울었다고 본 참가자는 0명임 (6월에는 하방 5명, 균형 10명, 상방 3명)\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 참가자 (경제 전망)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"September projections | 0 | 13 | 5\",\"June projections | 5 | 10 | 3\"]},{\"claim_text\":\"FOMC 참가자 중 PCE 물가상승률 전망의 위험이 상방으로 기울었다고 본 참가자는 17명, 균형적이라고 본 참가자는 1명임\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 참가자 (경제 전망)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"Risks to PCE inflation\\nNumber of participants\\n| Weighted to Downside | Broadly Balanced | Weighted to Upside\\nSeptember projections | 0 | 1 | 17\"]},{\"claim_text\":\"FOMC 회의 문서는 참가자들 전망의 분산이 지난 20년간의 평균 예측 오차보다 훨씬 작다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 경제 전망 문서 (Forecast Uncertainty)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"A comparison of figure 1 with figures 4.A through 4.C shows that the dispersion of the projections across participants is much smaller than the average forecast errors over the past 20 years.\"]}]}",
+  "output_in": "here"
+}

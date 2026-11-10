@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "TSY-IR-1021",
+  "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+  "text_sha256": "00b8b1af8f4d688854e17662aeeb8ae97ab107143b3016d8798e3942b5fdb366",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-sonnet-5-5",
+  "model": "claude-sonnet-5-5",
+  "effort": "medium",
+  "request_sha256": "7e281b093b0fe2748bc9c3e801f61bd8ad62672fb6123bf85493b64f6d539b1f",
+  "response_id": "msg_011CgtwBWTtzU7btqhz5omnH",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 8609,
+    "output_tokens": 2007,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 12209,
+  "cost_usd": 0.037661,
+  "called_at": "2026-11-10T08:30:54.107Z",
+  "output_sha256": "cb512143d51c09f357e681275beae7cd7be924622d75924d4b1af4411122ab45",
+  "output": "{\"facts\":[{\"claim_text\":\"미 재무부는 Operation Economic Outcast 의 일환으로 2026-10-21 파나마·그리스 기반 로펌 Karnakis and Karnakis 를 제재함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"Today, as part of Operation Economic Outcast, the U.S. Department of the Treasury sanctioned Panama- and Greece-based law firm Karnakis and Karnakis\"]},{\"claim_text\":\"미 재무부는 2026-10-21 싱가포르·UAE 기반 선박 대리업체들도 제재함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"Treasury today also sanctioned Singapore- and UAE-based shipping agents that directly aid Iranian shadow fleet operations.\"]},{\"claim_text\":\"이번 지정은 이란의 석유·석유화학 부문 등을 겨냥한 행정명령 13902호에 따라 이뤄졌다\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"The designations imposed today are being taken pursuant to Executive Order (E.O.) 13902, which targets the Iranian petroleum and petrochemical sectors, among other key sectors of the Iranian economy.\"]},{\"claim_text\":\"Bessent 재무장관은 이란 정권을 지원하는 자는 찾아내 제재할 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Bessent 재무장관 (재무부 보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"if you are supporting the Iranian regime, we will find you and sanction you,” said Secretary of the Treasury Scott Bessent.\"]},{\"claim_text\":\"FinCEN 은 그리스 은행의 이란 및 대리세력 연계 가능성 조사를 위해 은행비밀법 31 U.S.C. § 5318(k) 에 따른 행정 소환장을 처음 발부했다\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"its first issuance of an administrative subpoena pursuant to 31 U.S.C. § 5318(k) of the Bank Secrecy Act, to advance its investigation into a Greek bank’s potential ties to Iran and its proxies\"]},{\"claim_text\":\"Bessent 장관은 2026-08-24 Operation Economic Outcast 를 발표함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-08-24\",\"passages\":[\"Announced by Secretary Bessent on August 24, 2026 and dubbed Economic D-Day\"]},{\"claim_text\":\"재무부는 Karnakis and Karnakis 가 수년간 이란산 철강·석유·석유화학제품 운송 선박을 보유한 해운사들을 등록해 왔다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"미 재무부 (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"has for years leveraged its legal practice to register shipping companies that own shadow fleet vessels responsible for shipping hundreds of millions of dollars’ worth of Iranian steel, petroleum, and petrochemicals\"]},{\"claim_text\":\"재무부는 Roxette Maritime Shipping and Trading S.A. 를 지정하고 선박 ANEMOS, GLORIS, PRIDE, DESTINY, FLAMINGO 1, HARMONY, PRINCE 를 차단 재산으로 식별함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"ANEMOS, GLORIS, PRIDE, DESTINY, FLAMINGO 1, HARMONY, and PRINCE are being identified pursuant to E.O. 13902 as blocked property in which Roxette Maritime Shipping and Trading S.A. has an interest.\"]},{\"claim_text\":\"재무부는 Amigoz Singapore PTE. Ltd. 와 Whales Shipping Line LLC 를 지정하고 WHALES DIAMOND 와 WHALES PEARL 을 차단 재산으로 식별함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"Amigoz Singapore PTE. Ltd. is being designated pursuant to E.O. 13902 for operating in the petroleum sector of the Iranian economy.\",\"WHALES DIAMOND and WHALES PEARL are being identified as blocked property in which Whales Shipping Line LLC has an interest.\"]},{\"claim_text\":\"이번 조치로 지정·차단된 자의 미국 내 또는 미국인 관리 하의 모든 재산이 차단되며 OFAC 에 보고해야 한다\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-21\",\"passages\":[\"all property and interests in property of the designated or blocked persons described above that are in the United States or in the possession or control of U.S. persons are blocked and must be reported to OFAC\"]}]}",
+  "output_in": "here"
+}

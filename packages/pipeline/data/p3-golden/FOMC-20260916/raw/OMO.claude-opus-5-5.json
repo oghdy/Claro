@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "OMO",
+  "source_id": "e8d68151-fdec-45c8-ad26-f14cb5ad88c6",
+  "text_sha256": "193a6121a4e628787d9827ba34dab4afce9b2b4e37620dd8f89aea516aeb1a4d",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "bd3d2af0346289087446e664c730092f6a372cb1eb2141884f44d4d1f4d99392",
+  "response_id": "msg_011CgtwYZSaFDnHkmntug8Uk",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 6347,
+    "output_tokens": 1608,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 13884,
+  "cost_usd": 0.058294,
+  "called_at": "2026-11-10T08:35:41.370Z",
+  "output_sha256": "777eb9e46f9dfc5196f6bc37f74d71d8e2613907f9f1bfccc54bddd74c5a6247",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 는 연방기금금리 목표범위를 25bp 인상해 3.75-4.00% 로 정했다고 목표금리 변경 이력 표에 기재됨 (표의 날짜 2026년 9월 17일).\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-17\",\"passages\":[\"September 17 | 25 | 0 | 3.75-4.00\",\"FOMC's target federal funds rate or range, change (basis points) and level\"]},{\"claim_text\":\"FOMC 는 2025년 12월 11일 연방기금금리 목표범위를 25bp 인하해 3.50-3.75% 로 정함.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2025-12-11\",\"passages\":[\"December 11 | 0 | 25 | 3.50-3.75\"]},{\"claim_text\":\"FOMC 는 2025년 10월 30일 연방기금금리 목표범위를 25bp 인하해 3.75-4.00% 로 정함.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2025-10-30\",\"passages\":[\"October 30 | 0 | 25 | 3.75-4.00\"]},{\"claim_text\":\"FOMC 는 2025년 9월 18일 연방기금금리 목표범위를 25bp 인하해 4.00-4.25% 로 정함.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2025-09-18\",\"passages\":[\"September 18 | 0 | 25 | 4.00-4.25\"]},{\"claim_text\":\"FOMC 는 2024년 9월 19일 연방기금금리 목표범위를 50bp 인하해 4.75-5.00% 로 정함.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2024-09-19\",\"passages\":[\"September 19 | 0 | 50 | 4.75-5.00\"]},{\"claim_text\":\"FOMC 는 2023년 7월 27일 연방기금금리 목표범위를 25bp 인상해 5.25-5.50% 로 정함.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2023-07-27\",\"passages\":[\"July 27 | 25 | 0 | 5.25-5.50\"]}]}",
+  "output_in": "here"
+}

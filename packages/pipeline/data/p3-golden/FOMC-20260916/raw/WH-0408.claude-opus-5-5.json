@@ -1,0 +1,26 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/1 · 원문은 text_sha256",
+  "event": "FOMC-20260916",
+  "source_label": "WH-0408",
+  "source_id": "a75e9af7-9e33-4d8e-a90d-b506afc30c60",
+  "text_sha256": "049cc4d3e846b111ac0863f159e2e3e68819a9307c45de7a4856fdf80a12d849",
+  "prompt_version": "p3-extract/1",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "b58ef1b11f0de15d3e5ff37688be2f8fb7f3234d96b8099a02fb84cd94330f95",
+  "response_id": "msg_011Cgtwc64econdjDfgDE31c",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 3456,
+    "output_tokens": 1126,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 3729
+  },
+  "duration_ms": 10628,
+  "cost_usd": 0.03709,
+  "called_at": "2026-11-10T08:36:25.893Z",
+  "output_sha256": "8c17b3cc7364bfd4b9af555c5ff490750cc7ac1157018ab7fbfc4abc78b69278",
+  "output": "{\"facts\":[{\"claim_text\":\"백악관은 이란이 휴전과 호르무즈 해협 재개방에 동의했으며 Trump 행정부가 더 넓은 평화 협정을 협상 중이라고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"백악관 (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-08\",\"passages\":[\"Iran has now agreed to a ceasefire and reopening the Strait of Hormuz as the Trump Administration negotiates a broader peace agreement — once more proving Peace Through Strength victorious.\"]},{\"claim_text\":\"Dan Caine 합참의장은 2월 28일 대통령이 합동군에 Operation Epic Fury 수행을 명령했고, 38일간의 주요 전투 작전 동안 합동군이 대통령이 정한 군사 목표를 달성했다고 말함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Dan Caine 합참의장 (보도자료 인용)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-08\",\"passages\":[\"On February 28, the President of the United States ordered the Joint Force to execute Operation Epic Fury with the direction to accomplish three distinct military objectives\",\"Over the course of 38 days of major combat operation, the joint force achieved the military objectives as defined by the President.\"]},{\"claim_text\":\"백악관은 Trump 행정부가 협상의 다음 단계에 들어간다고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"백악관 (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-08\",\"passages\":[\"As the Trump Administration enters this next phase of negotiations, it is clear that America stands stronger, our enemies weaker, and the world safer.\"]}]}",
+  "output_in": "here"
+}
