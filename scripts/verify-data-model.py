@@ -17,7 +17,10 @@
   E. 원문 (P-1)  저장한 원문(SourceDocument)이 가져온 기록(packages/pipeline/data/*.sources.json)의 해시와 같다 ·
                  원문은 권리가 can_store 인 발행처 것만 저장소에 있다 · span 이 있는 FactSource 는 있는 Source 를 가리키고
                  그 글의 span 이 1차 구절(`_passage`)과 맞으며(packages/pipeline/match-rules.json 규칙) 그 구절이 글에 한 번만 있다.
-                 권리 미확인 원문은 git 밖 캐시에만 — 이 기계에 없으면 WARN(SOURCE_TEXT_NOT_HERE), 해시가 다르면 FAIL
+                 권리 미확인 원문은 git 밖 캐시에만 — 이 기계에 없으면 WARN(SOURCE_TEXT_NOT_HERE), 해시가 다르면 FAIL.
+                 W-4 — SourceDocument 의 가져온 기록 칸 (sha256 = 글의 해시 · fetched_at 시각 · extractor) 이 글 · 가져온 기록과 같다 (불변식 29 · SOURCE_DOC_HASH ·
+                 SOURCE_DOC_RECORD) · 권리 칸에 값이 있으면 basis 가 있다 (불변식 30 · REGISTRY_BASIS) ·
+                 StorylineVersion.event_facts 가 있는 사건 소유 사실이고 판들 사이에서 겹치지 않는다 (불변식 34 · SL_EVENT_FACTS)
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
 """
@@ -62,9 +65,9 @@ REQUIRED_FIELDS = {
              'storyline_id', 'storyline_version', 'extraction_model', 'extraction_version'),
     'FactSource': ('fact_id', 'source_id', 'section', 'span_start', 'span_end'),            # §5.5 · §5.3 N:M
     'Source': ('source_id', 'label', 'title', 'publisher', 'url', 'kind', 'language', 'published_at', 'ingested_at'),
-    'SourceDocument': ('source_id', 'text'),                                                   # §5.5 원문 보관
+    'SourceDocument': ('source_id', 'sha256', 'fetched_url', 'fetched_at', 'extractor', 'text'),   # §5.5 원문 보관 · 가져온 기록 (W-4 P1-a)
     'SourceRegistry': ('source', 'access_method', 'can_ingest', 'can_store', 'can_quote', 'can_transform',
-                       'commercial_use', 'attribution_required', 'terms_url', 'last_reviewed_at'),   # §5.1
+                       'commercial_use', 'attribution_required', 'terms_url', 'last_reviewed_at', 'basis'),   # §5.1 · basis (W-4 J5)
     'DerivedClaim': ('claim_id', 'label', 'event_id', 'statement', 'kind', 'basis', 'checks'),
     'CounterCheck': ('question', 'slot', 'recollected', 'answer', 'facts', 'outcome'),           # §7.2
     'Goal': ('goal_id', 'label', 'event_id', 'kind', 'statement', 'claims'),                    # 확정 §7.3 · D33
@@ -72,7 +75,9 @@ REQUIRED_FIELDS = {
                'from_event', 'facts'),
     'Event': ('event_id', 'code', 'title', 'occurred_at', 'storyline_id'),                     # code — D27
     'Storyline': ('storyline_id', 'code', 'title', 'version', 'ongoing'),                      # §9.2 · code — D27                              # §9.2
-    'StorylineVersion': ('storyline_id', 'version', 'created_at', 'change'),
+    'StorylineVersion': ('storyline_id', 'version', 'created_at', 'change', 'event_facts'),   # event_facts — W-4 P5-b
+    'ComputedNumber': ('computed_id', 'label', 'event_id', 'op', 'inputs', 'places', 'value', 'unit', 'volatility', 'as_of'),   # §6.5 — W-4 · D48 W3-a
+    'ComputedInput': ('role', 'fact', 'value'),
     'ArticleRecord': ('article_id', 'article_version', 'package', 'authoring'),     # D30
     'ArticleAuthoring': ('time_expressions', 'storylines', 'notes'),
     'StorylinePin': ('storyline_id', 'version'),
@@ -90,7 +95,9 @@ REQUIRED_ENUMS = {
     ('Goal', 'kind'): {'COMMON', 'DEEP'},                                                      # 확정 §7.3
     ('DerivedClaim', 'kind'): {'ASSERTED', 'DEFENSIVE'},                                       # 실물 DC-B
     ('CounterCheck', 'outcome'): {'NOT_REFUTED', 'SCOPED', 'UNRESOLVED'},                      # 실물 DC-A · C · B
+    ('ComputedNumber', 'volatility'): {'STABLE', 'VOLATILE'},                                  # §6.5 — 입력이 VOLATILE 이면 VOLATILE
 }
+COMPUTED_OPS = {'pct_change_12m', 'pct_change_1m', 'level_change_1m'}                          # §6.5 실물 셋 (W-3 rates.json)
 OPS = {'days_inclusive', 'weeks', 'months', 'months_round', 'years', 'years_floor', 'year_of'}   # 실물 7
 # 다른 계약 · 0.2c 의 타입 — 이 계약의 타입 블록에 정의되면 안 된다
 FOREIGN_TYPES = ('Concept', 'ConceptVersion', 'ConceptRef', 'ConceptAlias', 'ConflictingAlias', 'ConceptRelation',
@@ -232,6 +239,9 @@ def check_contract(text, btypes):
             errs.append(('CONTRACT_OPEN_LEFT', f'L{n}: 판정 안 된 _open 이 남았다 — {line.strip()[:50]}'))
     if h16 is None or 'D27' not in h16:
         errs.append(('CONTRACT_OPEN_LEFT', '§16 제목이 "판정됨 → D27" 이 아니다'))
+    cops = set(re.findall(r'"([a-z0-9_]+)"', types.get('ComputedNumber', {}).get('op', '')))
+    if cops != COMPUTED_OPS:
+        errs.append(('CONTRACT_OP', f'ComputedNumber.op {sorted(cops)} ≠ 실물 {sorted(COMPUTED_OPS)} (§6.5)'))
     ops = op_table(text)
     if ops != OPS:
         errs.append(('CONTRACT_OP', f'§6.4 op {sorted(ops)} ≠ 실물 {sorted(OPS)}'))
@@ -447,6 +457,39 @@ def sha256_text(t):
     return hashlib.sha256(t.encode('utf-8')).hexdigest()
 
 
+SHA_RE = re.compile(r'^[0-9a-f]{64}$')
+TIME_RE = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}')
+
+
+def source_document_problems(d, rec=None):
+    """불변식 29 — SourceDocument 의 가져온 기록 칸. rec = 파이프라인의 가져온 기록 한 줄 ({text_sha256, extractor, fetch:{final_url, fetched_at}}) 이 있으면 그것과도 댄다.
+    -> [(code, 글)]. verify-source-pack · verify-bls-rates 도 쓴다"""
+    out = []
+    t = d.get('text')
+    if not isinstance(t, str) or not SHA_RE.match(str(d.get('sha256'))) or sha256_text(t) != d.get('sha256'):
+        out.append(('SOURCE_DOC_HASH', 'sha256 이 글의 sha256(UTF-8) 과 다르다 — 한 번 보관한 원문은 바뀌지 않는다 (불변식 29 · §4.1)'))
+    if not isinstance(d.get('fetched_at'), str) or not TIME_RE.match(d['fetched_at']):
+        out.append(('SOURCE_DOC_RECORD', f'fetched_at {d.get("fetched_at")!r} 이 시각까지 적힌 TimePoint 가 아니다 (불변식 29)'))
+    if not isinstance(d.get('extractor'), str) or not d['extractor'].strip():
+        out.append(('SOURCE_DOC_RECORD', '뽑은 방법(extractor)이 없다 (불변식 29)'))
+    if d.get('fetched_url') is not None and not (isinstance(d['fetched_url'], str) and re.match(r'^https?://', d['fetched_url'])):
+        out.append(('SOURCE_DOC_RECORD', f'fetched_url {d.get("fetched_url")!r} 이 주소가 아니다'))
+    if rec is not None:
+        f = rec.get('fetch') or {}
+        if (d.get('sha256'), d.get('fetched_at'), d.get('extractor')) != (rec.get('text_sha256'), f.get('fetched_at'), rec.get('extractor')) \
+                or d.get('fetched_url') != f.get('final_url'):
+            out.append(('SOURCE_DOC_RECORD', '가져온 기록 칸(sha256 · fetched_url · fetched_at · extractor)이 파이프라인의 기록과 다르다 — 손으로 고쳤나 (불변식 29)'))
+    return out
+
+
+def registry_problems(r):
+    """불변식 30 — 권리 칸에 값이 있으면 근거(basis)가 있다"""
+    vals = [r.get(k) for k in ('can_ingest', 'can_store', 'can_quote', 'can_transform', 'commercial_use', 'attribution_required')]
+    if any(v is not None for v in vals) and not (isinstance(r.get('basis'), str) and r['basis'].strip()):
+        return [('REGISTRY_BASIS', f'{r.get("source")}: 권리 칸에 값이 있는데 근거(basis)가 없다 (불변식 30 · §4.4)')]
+    return []
+
+
 def load_fetch():
     return json.load(open(FETCH, encoding='utf-8')) if os.path.exists(FETCH) else None
 
@@ -468,6 +511,9 @@ def check_documents(store, fetch, cache_dir=TEXT_CACHE):
         if d['source_id'] not in S:
             E('SOURCE_UNKNOWN', f'가져온 기록의 {d.get("label")}: 없는 Source {d["source_id"]}')
         recs[d['source_id']] = d
+    for r_ in store['source_registry']:
+        for c_, m_ in registry_problems(r_):
+            E(c_, m_)
     for sid, n in Counter(d['source_id'] for d in store['source_documents']).items():
         if n > 1:
             E('SOURCE_DOC_DUP', f'SourceDocument {lab(sid)} 가 {n}번 — Source 하나에 원문 하나 (store.json · store.documents.json 을 합친 것)')
@@ -477,6 +523,10 @@ def check_documents(store, fetch, cache_dir=TEXT_CACHE):
             E('SOURCE_UNKNOWN', f'SourceDocument {sid}: 없는 Source 의 원문이다')
             continue
         w = f'SourceDocument {lab(sid)}'
+        r0 = recs.get(sid)
+        stored = r0 if r0 and r0.get('status') == 'STORED' and r0.get('text_in') == 'store.documents.json' else None   # 기록이 저장을 말할 때만 칸을 댄다 (아니면 아래 UNRECORDED)
+        for c_, m_ in source_document_problems(d, stored):
+            E(c_, f'{w}: {m_}')
         if reg.get(S[sid]['publisher'], {}).get('can_store') is not True:
             E('SOURCE_DOC_NOT_STORABLE', f'{w}: 발행처 {S[sid]["publisher"]} 가 can_store 가 아니다 — 권리 미확인 전문을 공개 저장소에 두지 않는다 (P-1 · §4.4)')
         r = recs.get(sid)
@@ -591,7 +641,8 @@ def verdict(c):
     outs = [k['outcome'] for k in c['checks']]
     if not outs:
         return None
-    if c['kind'] == 'DEFENSIVE' and set(outs) == {'UNRESOLVED'}:
+    # 방어용 — DEFENSIVE 이고 UNRESOLVED 가 있고 나머지는 NOT_REFUTED · SCOPED 뿐 (§7.3 두 줄 · W-4 D50 P5-c)
+    if c['kind'] == 'DEFENSIVE' and 'UNRESOLVED' in outs and set(outs) <= {'UNRESOLVED', 'NOT_REFUTED', 'SCOPED'}:
         return 'DEFENSIVE'
     if 'UNRESOLVED' in outs:
         return None
@@ -634,6 +685,21 @@ def check_model(m, lib, publish=False):
         vs = sorted(v['version'] for v in m['storyline_versions'] if v['storyline_id'] == sid)
         if vs != list(range(1, sl['version'] + 1)):
             E('STORYLINE_VERSION', f'{sl["code"]}: 버전 {vs} — 1부터 {sl["version"]} 까지 빠짐없이 (불변식 14)')
+    # 34 — 스토리라인 판이 가리키는 사건 사실 (W-4 · §9.2)
+    for sid, sl in m['storylines'].items():
+        seen_ef = Counter()
+        for v in m['storyline_versions']:
+            if v['storyline_id'] != sid:
+                continue
+            for x in v.get('event_facts', []):
+                seen_ef[x] += 1
+                if x not in F:
+                    E('SL_EVENT_FACTS', f'{sl["code"]} v{v["version"]}: event_facts 의 {x} 가 없는 사실이다 (불변식 34)')
+                elif not F[x]['event_id'] or F[x]['storyline_id']:
+                    E('SL_EVENT_FACTS', f'{sl["code"]} v{v["version"]}: event_facts 의 {F[x]["label"]} 는 사건 소유가 아니다 — 스토리라인 소유 사실은 storyline_version 이 판을 말한다 (불변식 34)')
+        for x, n in seen_ef.items():
+            if n > 1:
+                E('SL_EVENT_FACTS', f'{sl["code"]}: event_facts 의 {F.get(x, {}).get("label", x)} 가 판 {n} 곳에 — 한 사실은 한 번만 붙는다 (불변식 34)')
     codes = Counter(x['code'] for kind in ('events', 'storylines') for x in m[kind].values())
     for c, n in codes.items():
         if n > 1:

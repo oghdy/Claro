@@ -38,9 +38,27 @@ def m_hash(b):            # 원문 한 글자 바꾸기
     d['text'] = d['text'].replace('10 – 2', '11 – 1', 1)
 
 
-def m_unstorable(b):      # 권리 미확인(클리블랜드 연은) 전문을 공개 저장소 파일에
+def m_unstorable(b):      # 권리 미확인(클리블랜드 연은) 전문을 공개 저장소 파일에 (칸은 다 갖춘 채로)
     x = rec(b, 'SP-HAM-1012')
-    b['docs']['source_documents'].append({'source_id': x['source_id'], 'text': 'x'})
+    b['docs']['source_documents'].append({'source_id': x['source_id'], 'sha256': V.VD.sha256_text('x'), 'fetched_url': x['url'],
+                                          'fetched_at': '2026-11-10T00:00:00.000Z', 'extractor': 'p1-extract/1', 'text': 'x'})
+
+
+def m_doc_sha(b):          # W-4 불변식 29 — SourceDocument.sha256 한 자리
+    d = doc(b, 'ST-10')
+    d['sha256'] = ('1' if d['sha256'][0] != '1' else '2') + d['sha256'][1:]
+
+
+def m_doc_url(b):          # W-4 불변식 29 — 받은 주소를 기록과 다르게
+    doc(b, 'ST-10')['fetched_url'] = 'https://www.federalreserve.gov/other.htm'
+
+
+def m_doc_field(b):        # W-4 — SourceDocument 에서 extractor 칸을 뺌
+    doc(b, 'ST-10').pop('extractor')
+
+
+def m_reg_basis(b):        # W-4 불변식 30 — 연방 정부 행의 근거를 지움
+    next(r for r in b['store']['source_registry'] if r['can_store'] is True)['basis'] = None
 
 
 def m_cache_into_repo(b):  # 기록이 권리 미확인 문서를 저장소에 둔다고 적는다
@@ -126,6 +144,10 @@ CASES = [
     ('까닭 없음', m_no_why, 'PACK_NO_WHY'),
     ('캐시 해시 다름', m_cache_hash, 'PACK_DOC'),
     ('2차 Source', m_secondary, 'PACK_KIND'),
+    ('W-4 SourceDocument sha256 한 자리', m_doc_sha, 'PACK_DOC_HASH'),
+    ('W-4 SourceDocument 받은 주소 ≠ 기록', m_doc_url, 'PACK_DOC_RECORD'),
+    ('W-4 SourceDocument 칸 빠짐', m_doc_field, 'PACK_SHAPE'),
+    ('W-4 권리 행 근거 없음', m_reg_basis, 'PACK_REGISTRY'),
 ]
 
 

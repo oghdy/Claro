@@ -3,15 +3,15 @@
   "event": "FOMC-20261028",
   "schema": "fomc-hold/2",
   "graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
-  "graph_sha256": "967739018c52369ef98a80199b99894b7c6a800e5fa3031888171fb798a7af34",
+  "graph_sha256": "a666b8ac3c57790da5875e55bd1998c86b6317a5d0ee91e26136e161b5682548",
   "assign_version": "p4-assign/1",
   "unslotted_version": "p4-unslotted/1",
   "model": "claude-opus-5-5",
   "counts": {
-    "facts": 805,
-    "facts_table": 250,
+    "facts": 814,
+    "facts_table": 259,
     "facts_model": 555,
-    "facts_with_element": 577,
+    "facts_with_element": 586,
     "facts_without_element": 228,
     "slots": 15,
     "slots_full": 12,
@@ -808,13 +808,13 @@
       "from_09": "실제 물가 수치",
       "renamed": null,
       "state": "채움",
-      "n_facts": 36,
+      "n_facts": 43,
       "elements": [
         {
           "id": "S07.a",
           "what": "9월 소비자물가 CPI (전체 · 근원) — 회의 전 마지막 발표",
           "status": "FOUND",
-          "n": 12,
+          "n": 16,
           "rep": {
             "label": "BLS-CUSR0000SA0-2026M09",
             "docs": [
@@ -831,10 +831,14 @@
             "BLS-CUSR0000SA0L1E-2026M08",
             "BLS-CUUR0000SA0-2026M08",
             "BLS-CUUR0000SA0L1E-2026M08",
+            "BLS-CUSR0000SA0-2026M07",
+            "BLS-CUSR0000SA0L1E-2026M07",
             "BLS-CUSR0000SA0-2025M09",
             "BLS-CUSR0000SA0L1E-2025M09",
             "BLS-CUUR0000SA0-2025M09",
-            "BLS-CUUR0000SA0L1E-2025M09"
+            "BLS-CUUR0000SA0L1E-2025M09",
+            "BLS-CUUR0000SA0-2025M08",
+            "BLS-CUUR0000SA0L1E-2025M08"
           ],
           "facts": [
             "73a4100f-abf5-48a7-a522-830354f28750",
@@ -845,10 +849,14 @@
             "bd2dd34b-0e6d-4efb-b1cc-67fb4789aa58",
             "44ac2f8c-f7d0-46ed-960c-c0bcfb3548db",
             "15ad4caa-e2b7-4199-afb3-9bb0ef76c077",
+            "70538587-1ec9-4e29-b2e5-d824ac6e9038",
+            "f1773c86-6b32-4561-a764-c7845dc9d1be",
             "7a87254c-f9e3-4d22-9bcf-382f5c580f48",
             "8b3cc3ff-606c-427d-be0b-aef5b1c49626",
             "f2447a01-1c32-4cc5-8844-35ca595355a4",
-            "7395bcd4-1fab-48a1-bde0-ac98c3e81e20"
+            "7395bcd4-1fab-48a1-bde0-ac98c3e81e20",
+            "b01b2bdb-4786-4b2a-bb16-b5336eb553a0",
+            "595b43a1-1f77-4b12-aa5e-79d38e457b66"
           ]
         },
         {
@@ -902,7 +910,7 @@
           "id": "S07.c",
           "what": "9월 생산자물가 PPI",
           "status": "FOUND",
-          "n": 6,
+          "n": 8,
           "rep": {
             "label": "BLS-WPSFD4-2026M09",
             "docs": [
@@ -915,23 +923,27 @@
             "BLS-WPUFD4-2026M09",
             "BLS-WPSFD4-2026M08",
             "BLS-WPUFD4-2026M08",
+            "BLS-WPSFD4-2026M07",
             "BLS-WPSFD4-2025M09",
-            "BLS-WPUFD4-2025M09"
+            "BLS-WPUFD4-2025M09",
+            "BLS-WPUFD4-2025M08"
           ],
           "facts": [
             "b1a51626-9707-481a-83a2-99a2bcde912d",
             "e9166b4c-abe9-4d3d-83f2-966bd5920404",
             "46b40822-ea67-4d50-81c5-9ee451d96aed",
             "f0bfc757-9d0d-4bcb-a103-f5fae9a0d276",
+            "313cee05-73a7-452a-a67e-8bc01c8c3162",
             "ccc235da-95a6-4bb9-abfe-dcb44d28e596",
-            "c5efafe5-6bb0-480e-be06-7c9d9aebed1d"
+            "c5efafe5-6bb0-480e-be06-7c9d9aebed1d",
+            "52366c21-5374-4139-acf3-5a6d63519b24"
           ]
         },
         {
           "id": "S07.d",
           "what": "에너지 물가 (CPI 에너지 등)",
           "status": "FOUND",
-          "n": 3,
+          "n": 4,
           "rep": {
             "label": "BLS-CUSR0000SA0E-2026M09",
             "docs": [
@@ -942,11 +954,13 @@
           "labels": [
             "BLS-CUSR0000SA0E-2026M09",
             "BLS-CUSR0000SA0E-2026M08",
+            "BLS-CUSR0000SA0E-2026M07",
             "BLS-CUSR0000SA0E-2025M09"
           ],
           "facts": [
             "0c565d69-4415-41db-a7a3-703a6cc58d0e",
             "11d5bc92-f3bc-4e51-ad09-8481b46022e9",
+            "0944c70b-cc7e-498d-b3a5-0ec9a87e929d",
             "0cc8a9e1-9468-45a9-94ac-d28bba0c9e8c"
           ]
         }
@@ -958,13 +972,13 @@
       "from_09": "고용·성장",
       "renamed": null,
       "state": "채움",
-      "n_facts": 70,
+      "n_facts": 72,
       "elements": [
         {
           "id": "S08.a",
           "what": "9월 고용 지표 (비농업 취업자 · 실업률 · 경제활동참가율)",
           "status": "FOUND",
-          "n": 13,
+          "n": 15,
           "rep": {
             "label": "BLS-CES0000000001-2026M09",
             "docs": [
@@ -981,6 +995,8 @@
             "BLS-LNS11300000-2026M08",
             "BLS-LNS13023653-2026M08",
             "BLS-LNS14000000-2026M08",
+            "BLS-CES0000000001-2026M07",
+            "BLS-LNS13023653-2026M07",
             "BLS-CES0000000001-2025M09",
             "BLS-LNS11300000-2025M09",
             "BLS-LNS13023653-2025M09",
@@ -996,6 +1012,8 @@
             "ca500075-df6d-478f-9018-2fb501115759",
             "ea195d06-19b1-42fe-9fce-e8ccf1f479d7",
             "f7e69791-d385-4baa-9b9f-1932a2578afc",
+            "1d23502a-26e2-4268-b703-51b7e1e05c0b",
+            "1401f965-cc98-4628-ba2a-819b0df4ff70",
             "4e12aad2-6d91-4534-aa67-19e6904fd96d",
             "8df3eb1a-24cf-4416-93dc-87973349d194",
             "4d1977b6-15bc-4af4-a755-5fedaf3c95f3",
@@ -2561,10 +2579,14 @@
         "bd2dd34b-0e6d-4efb-b1cc-67fb4789aa58",
         "44ac2f8c-f7d0-46ed-960c-c0bcfb3548db",
         "15ad4caa-e2b7-4199-afb3-9bb0ef76c077",
+        "70538587-1ec9-4e29-b2e5-d824ac6e9038",
+        "f1773c86-6b32-4561-a764-c7845dc9d1be",
         "7a87254c-f9e3-4d22-9bcf-382f5c580f48",
         "8b3cc3ff-606c-427d-be0b-aef5b1c49626",
         "f2447a01-1c32-4cc5-8844-35ca595355a4",
-        "7395bcd4-1fab-48a1-bde0-ac98c3e81e20"
+        "7395bcd4-1fab-48a1-bde0-ac98c3e81e20",
+        "b01b2bdb-4786-4b2a-bb16-b5336eb553a0",
+        "595b43a1-1f77-4b12-aa5e-79d38e457b66"
       ],
       "sources": [],
       "storyline": null
@@ -2600,8 +2622,10 @@
         "e9166b4c-abe9-4d3d-83f2-966bd5920404",
         "46b40822-ea67-4d50-81c5-9ee451d96aed",
         "f0bfc757-9d0d-4bcb-a103-f5fae9a0d276",
+        "313cee05-73a7-452a-a67e-8bc01c8c3162",
         "ccc235da-95a6-4bb9-abfe-dcb44d28e596",
-        "c5efafe5-6bb0-480e-be06-7c9d9aebed1d"
+        "c5efafe5-6bb0-480e-be06-7c9d9aebed1d",
+        "52366c21-5374-4139-acf3-5a6d63519b24"
       ],
       "sources": [],
       "storyline": null
@@ -2612,6 +2636,7 @@
       "facts": [
         "0c565d69-4415-41db-a7a3-703a6cc58d0e",
         "11d5bc92-f3bc-4e51-ad09-8481b46022e9",
+        "0944c70b-cc7e-498d-b3a5-0ec9a87e929d",
         "0cc8a9e1-9468-45a9-94ac-d28bba0c9e8c"
       ],
       "sources": [],
@@ -2629,6 +2654,8 @@
         "ca500075-df6d-478f-9018-2fb501115759",
         "ea195d06-19b1-42fe-9fce-e8ccf1f479d7",
         "f7e69791-d385-4baa-9b9f-1932a2578afc",
+        "1d23502a-26e2-4268-b703-51b7e1e05c0b",
+        "1401f965-cc98-4628-ba2a-819b0df4ff70",
         "4e12aad2-6d91-4534-aa67-19e6904fd96d",
         "8df3eb1a-24cf-4416-93dc-87973349d194",
         "4d1977b6-15bc-4af4-a755-5fedaf3c95f3",
@@ -11532,6 +11559,17 @@
       "why": "표 규칙 BLS-API-1110 /CES0000000001|LNS/ → S08.a",
       "by": "table_rules (코드)"
     },
+    "1d23502a-26e2-4268-b703-51b7e1e05c0b": {
+      "label": "BLS-CES0000000001-2026M07",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S08.a"
+      ],
+      "why": "표 규칙 BLS-API-1110 /CES0000000001|LNS/ → S08.a",
+      "by": "table_rules (코드)"
+    },
     "6cb7c220-3795-4319-932d-11a09d5e602b": {
       "label": "BLS-LNS14000000-2026M09",
       "docs": [
@@ -11631,6 +11669,17 @@
       "why": "표 규칙 BLS-API-1110 /CES0000000001|LNS/ → S08.a",
       "by": "table_rules (코드)"
     },
+    "1401f965-cc98-4628-ba2a-819b0df4ff70": {
+      "label": "BLS-LNS13023653-2026M07",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S08.a"
+      ],
+      "why": "표 규칙 BLS-API-1110 /CES0000000001|LNS/ → S08.a",
+      "by": "table_rules (코드)"
+    },
     "73a4100f-abf5-48a7-a522-830354f28750": {
       "label": "BLS-CUSR0000SA0-2026M09",
       "docs": [
@@ -11655,6 +11704,17 @@
     },
     "7a87254c-f9e3-4d22-9bcf-382f5c580f48": {
       "label": "BLS-CUSR0000SA0-2025M09",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S07.a"
+      ],
+      "why": "표 규칙 BLS-API-1110 /CUSR0000SA0 |CUUR0000SA0 |SA0L1E/ → S07.a",
+      "by": "table_rules (코드)"
+    },
+    "70538587-1ec9-4e29-b2e5-d824ac6e9038": {
+      "label": "BLS-CUSR0000SA0-2026M07",
       "docs": [
         "BLS-API-1110"
       ],
@@ -11697,6 +11757,17 @@
       "why": "표 규칙 BLS-API-1110 /CUSR0000SA0 |CUUR0000SA0 |SA0L1E/ → S07.a",
       "by": "table_rules (코드)"
     },
+    "b01b2bdb-4786-4b2a-bb16-b5336eb553a0": {
+      "label": "BLS-CUUR0000SA0-2025M08",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S07.a"
+      ],
+      "why": "표 규칙 BLS-API-1110 /CUSR0000SA0 |CUUR0000SA0 |SA0L1E/ → S07.a",
+      "by": "table_rules (코드)"
+    },
     "872b5ffa-e14d-4492-8295-bfd1c124f2b8": {
       "label": "BLS-CUSR0000SA0L1E-2026M09",
       "docs": [
@@ -11721,6 +11792,17 @@
     },
     "8b3cc3ff-606c-427d-be0b-aef5b1c49626": {
       "label": "BLS-CUSR0000SA0L1E-2025M09",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S07.a"
+      ],
+      "why": "표 규칙 BLS-API-1110 /CUSR0000SA0 |CUUR0000SA0 |SA0L1E/ → S07.a",
+      "by": "table_rules (코드)"
+    },
+    "f1773c86-6b32-4561-a764-c7845dc9d1be": {
+      "label": "BLS-CUSR0000SA0L1E-2026M07",
       "docs": [
         "BLS-API-1110"
       ],
@@ -11763,6 +11845,17 @@
       "why": "표 규칙 BLS-API-1110 /CUSR0000SA0 |CUUR0000SA0 |SA0L1E/ → S07.a",
       "by": "table_rules (코드)"
     },
+    "595b43a1-1f77-4b12-aa5e-79d38e457b66": {
+      "label": "BLS-CUUR0000SA0L1E-2025M08",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S07.a"
+      ],
+      "why": "표 규칙 BLS-API-1110 /CUSR0000SA0 |CUUR0000SA0 |SA0L1E/ → S07.a",
+      "by": "table_rules (코드)"
+    },
     "0c565d69-4415-41db-a7a3-703a6cc58d0e": {
       "label": "BLS-CUSR0000SA0E-2026M09",
       "docs": [
@@ -11787,6 +11880,17 @@
     },
     "0cc8a9e1-9468-45a9-94ac-d28bba0c9e8c": {
       "label": "BLS-CUSR0000SA0E-2025M09",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S07.d"
+      ],
+      "why": "표 규칙 BLS-API-1110 /CUSR0000SA0E/ → S07.d",
+      "by": "table_rules (코드)"
+    },
+    "0944c70b-cc7e-498d-b3a5-0ec9a87e929d": {
+      "label": "BLS-CUSR0000SA0E-2026M07",
       "docs": [
         "BLS-API-1110"
       ],
@@ -11829,6 +11933,17 @@
       "why": "표 규칙 BLS-API-1110 /WPSFD4|WPUFD4/ → S07.c",
       "by": "table_rules (코드)"
     },
+    "313cee05-73a7-452a-a67e-8bc01c8c3162": {
+      "label": "BLS-WPSFD4-2026M07",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S07.c"
+      ],
+      "why": "표 규칙 BLS-API-1110 /WPSFD4|WPUFD4/ → S07.c",
+      "by": "table_rules (코드)"
+    },
     "e9166b4c-abe9-4d3d-83f2-966bd5920404": {
       "label": "BLS-WPUFD4-2026M09",
       "docs": [
@@ -11853,6 +11968,17 @@
     },
     "c5efafe5-6bb0-480e-be06-7c9d9aebed1d": {
       "label": "BLS-WPUFD4-2025M09",
+      "docs": [
+        "BLS-API-1110"
+      ],
+      "elements": [
+        "S07.c"
+      ],
+      "why": "표 규칙 BLS-API-1110 /WPSFD4|WPUFD4/ → S07.c",
+      "by": "table_rules (코드)"
+    },
+    "52366c21-5374-4139-acf3-5a6d63519b24": {
+      "label": "BLS-WPUFD4-2025M08",
       "docs": [
         "BLS-API-1110"
       ],

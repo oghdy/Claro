@@ -3,7 +3,7 @@
   "event": "FOMC-20261028",
   "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
   "graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
-  "graph_sha256": "967739018c52369ef98a80199b99894b7c6a800e5fa3031888171fb798a7af34",
+  "graph_sha256": "a666b8ac3c57790da5875e55bd1998c86b6317a5d0ee91e26136e161b5682548",
   "derive_version": "p5-derive/1",
   "counter_version": "p5-counter/1",
   "model": "claude-opus-5-5",
@@ -26,7 +26,7 @@
       "VALID": 1,
       "VALID WITH SCOPE": 4,
       "검사 안 됨": 5,
-      "계약 표 밖 (DEFENSIVE + UNRESOLVED 와 다른 outcome — _open P5-c)": 4
+      "방어용": 4
     },
     "empty_counter_slots": 10,
     "problems": 0

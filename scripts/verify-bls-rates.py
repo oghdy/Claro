@@ -15,11 +15,18 @@
   E. 대조   골든 조각이 fixtures 의 그 사실 글에 있다 (없으면 ERROR) · 연준 조각이 그래프에 없으면 WARN · 정답 수가 조각 안에 있다 (천 명은 ",000") ·
             computed · match 를 다시 계산해 같다 ·
             tally = 줄에서 센 것 (BR_COMPARE)
-  F. 자리   계산값이 사실 그래프에 들어가지 않았다 — 계약에 자리가 없다 (W-3 _open W3-a). RATE- label 이 그래프에 없다 (BR_PLACE)
+  F. 자리   계산값은 사실이 아니다 — RATE- label 이 사실 그래프에 없다 (BR_PLACE). 계약의 자리는 ComputedNumber (DATA_MODEL §6.5 — W-4)
+  G. 계산된 수 (W-4 · DATA_MODEL §6.5 · 불변식 31 ~ 33) — 10월 rates.json 의 computed:
+            모양이 계약 ComputedNumber · ComputedInput 그대로 · computed_id UUID · 겹치지 않음 · label = 계산 기록의 줄 하나씩 · event_id = 그래프의 사건 (BR_COMPUTED)
+            입력 둘 (to · from) 이 그래프의 사실 · value 가 그 사실의 원문 위치 글에 글자로 · 두 입력이 같은 Source · 같은 section · from 의 event_at = to 의 op 달 수 앞 (BR_COMPUTED_INPUT)
+            다시 계산 == value (Decimal · 0 에서 먼 쪽 반올림) · places · unit 이 op 와 맞다 · 계산 기록의 값과 같다 (BR_COMPUTED_VALUE)
+            입력에 VOLATILE 이 있으면 VOLATILE · as_of = 입력의 as_of (BR_COMPUTED_VOLATILE)
+            9월 bls-rates.json 에는 computed 가 없다 (측정 — W3-e)
+  H. 원문   bls.json 의 SourceDocument 가 계약 모양이고 가져온 기록 칸(sha256 · fetched_at · extractor)이 글 · 기록과 같다 (불변식 29 · BR_SOURCE_DOC)
 
 exit 0 OK · 1 FAIL
 """
-import copy, hashlib, json, os, re, sys
+import copy, hashlib, importlib.util, json, os, re, sys, uuid
 from decimal import Decimal, ROUND_HALF_UP
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +48,12 @@ NSA = ('CUUR', 'WPU')  # 계절조정 안 함 — 1년 전 대비에만
 RATE_FIELDS = ['label', 'measure', 'ko', 'month', 'op', 'lag', 'value', 'unit', 'unrounded', 'inputs', 'vintage']
 INPUT_FIELDS = ['role', 'series', 'month', 'value', 'footnotes', 'fact_id', 'fact_label', 'source_id', 'section', 'span_start', 'span_end', 'passage']
 sha = lambda s: hashlib.sha256(s.encode('utf-8')).hexdigest()
+COMPUTED_LAG = {'pct_change_12m': 12, 'pct_change_1m': 1, 'level_change_1m': 1}   # DATA_MODEL §6.5 op 표 — 따로 적는다
+
+_spec = importlib.util.spec_from_file_location('vd', R('scripts/verify-data-model.py'))
+VD = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(VD)
+TYPES = VD.VC.ts_types(open(R('docs/contract/DATA_MODEL.md'), encoding='utf-8').read())
 
 
 def rj(p):
@@ -107,12 +120,110 @@ def avg(data, series, a, b):
     return f'{v:.1f}'
 
 
+def recompute(op, to, frm, places):
+    """DATA_MODEL §6.5 — 정확한 십진 계산 · 0 에서 먼 쪽 반올림 (Decimal ROUND_HALF_UP) · 0 은 부호 없이"""
+    if op.startswith('pct_change'):
+        return pct(to, frm, places)
+    return diff(to, frm)
+
+
+def check_computed(b, code, r, E):
+    graph = b['graph']
+    gf = {f.get('fact_id'): f for f in graph['facts']}
+    fs = {}
+    for x in graph['fact_sources']:
+        fs.setdefault(x['fact_id'], []).append(x)
+    docs = {d['source_id']: d['text'] for d in b['bls']['source_documents']}
+    want_c, want_i = list(TYPES.get('ComputedNumber', {})), list(TYPES.get('ComputedInput', {}))
+    comp = r.get('computed')
+    if not isinstance(comp, list):
+        E('BR_COMPUTED', f'{code}: computed 가 없다 — 계산된 수 (DATA_MODEL §6.5)')
+        return
+    by_rate = {x['label']: x for x in r.get('rates', [])}
+    if sorted(c.get('label', '') for c in comp) != sorted(by_rate):
+        E('BR_COMPUTED', f'{code}: computed 의 label 이 계산 기록의 줄과 하나씩 맞지 않다')
+    ids = set()
+    for c in comp:
+        w = f'{code} computed {c.get("label")}'
+        if [k for k in c if not k.startswith('_')] != want_c:
+            E('BR_COMPUTED', f'{w}: ComputedNumber 필드 {[k for k in c if not k.startswith("_")]} ≠ 계약 {want_c}')
+            continue
+        try:
+            ok = str(uuid.UUID(str(c['computed_id']))) == c['computed_id']
+        except ValueError:
+            ok = False
+        if not ok or c['computed_id'] in ids:
+            E('BR_COMPUTED', f'{w}: computed_id 가 UUID 가 아니거나 겹친다')
+        ids.add(c['computed_id'])
+        if c['event_id'] != graph['event_id']:
+            E('BR_COMPUTED', f'{w}: event_id 가 그래프의 사건이 아니다')
+        op = c['op']
+        if op not in COMPUTED_LAG:
+            E('BR_COMPUTED', f'{w}: op {op!r} — 실물 셋 {sorted(COMPUTED_LAG)}')
+            continue
+        ins = c['inputs']
+        if len(ins) != 2 or any([k for k in i if not k.startswith('_')] != want_i for i in ins) or [i['role'] for i in ins] != ['to', 'from']:
+            E('BR_COMPUTED_INPUT', f'{w}: 입력은 ComputedInput 둘 — to · from 순서 (불변식 31)')
+            continue
+        # 31 — 입력은 그래프의 사실 · 값은 원문 위치 글에 · 같은 계열 · 달
+        locs = []
+        for i in ins:
+            f = gf.get(i['fact'])
+            if not f:
+                E('BR_COMPUTED_INPUT', f'{w}: 입력 {i["role"]} 이 그래프의 사실이 아니다 (불변식 31)')
+                locs.append(None)
+                continue
+            spans = [x for x in fs.get(f['fact_id'], []) if isinstance(x.get('span_start'), int) and x['source_id'] in docs]
+            hit = [x for x in spans if re.search(r'"value"\s*:\s*"' + re.escape(i['value']) + '"', docs[x['source_id']][x['span_start']:x['span_end']])]
+            if not hit:
+                E('BR_COMPUTED_INPUT', f'{w}: 입력 {f["label"]} 의 값 {i["value"]} 이 그 사실의 원문 위치 글에 없다 (불변식 31)')
+            locs.append({(x['source_id'], x.get('section')) for x in spans})
+        if None not in locs and not (locs[0] & locs[1]):
+            E('BR_COMPUTED_INPUT', f'{w}: 두 입력이 같은 Source · 같은 section 에 원문 위치가 없다 — 같은 계열이 아니다 (불변식 31)')
+        ft = [gf.get(i['fact']) for i in ins]
+        if all(ft):
+            a, z = str(ft[0].get('event_at') or ''), str(ft[1].get('event_at') or '')
+            if not (re.match(r'^\d{4}-\d{2}', a) and re.match(r'^\d{4}-\d{2}', z)) or months_between(z[:7], a[:7]) != COMPUTED_LAG[op]:
+                E('BR_COMPUTED_INPUT', f'{w}: 입력 달 {a} · {z} — from 이 to 의 {COMPUTED_LAG[op]} 달 전이어야 (불변식 31)')
+        # 32 — 다시 계산
+        pct_op = op.startswith('pct_change')
+        if pct_op != isinstance(c['places'], int) or (pct_op and c['unit'] != '%') or (not pct_op and c['places'] is not None):
+            E('BR_COMPUTED_VALUE', f'{w}: places {c["places"]!r} · unit {c["unit"]!r} 이 op {op} 와 맞지 않다 (불변식 32)')
+        else:
+            try:
+                again = recompute(op, ins[0]['value'], ins[1]['value'], c['places'])
+            except Exception as ex:  # noqa: BLE001 — 수가 아닌 입력
+                again = f'계산 안 됨 ({ex})'
+            if again != c['value']:
+                E('BR_COMPUTED_VALUE', f'{w}: 값 {c["value"]} — 다시 계산 {again} (불변식 32)')
+        rr = by_rate.get(c['label'])
+        if rr and (rr['value'] != c['value'] or [i['fact_id'] for i in rr['inputs']] != [i['fact'] for i in ins] or [i['value'] for i in rr['inputs']] != [i['value'] for i in ins]):
+            E('BR_COMPUTED_VALUE', f'{w}: 계산 기록(rates)과 값 · 입력이 다르다')
+        # 33 — VOLATILE
+        if all(ft):
+            vol = [f for f in ft if f.get('volatility') == 'VOLATILE']
+            want_vol = 'VOLATILE' if vol else 'STABLE'
+            as_ofs = {f.get('as_of') for f in vol}
+            want_as = (as_ofs.pop() if len(as_ofs) == 1 else '여럿') if vol else None
+            if c['volatility'] != want_vol or c['as_of'] != want_as:
+                E('BR_COMPUTED_VOLATILE', f'{w}: volatility {c["volatility"]} · as_of {c["as_of"]} — 입력에서 {want_vol} · {want_as} (불변식 33)')
+    if len({c.get('label') for c in comp}) != len(comp):
+        E('BR_COMPUTED', f'{code}: computed label 이 겹친다')
+
+
 def check(b):
     errs, warns = [], []
     E = lambda c, m: errs.append((c, m))
     bls = b['bls']
     src, doc = bls['sources'][0], bls['source_documents'][0]
     text = doc['text']
+    # H. 원문 — SourceDocument 의 칸 (불변식 29)
+    if [k for k in doc if not k.startswith('_')] != list(TYPES.get('SourceDocument', {})):
+        E('BR_SOURCE_DOC', f'bls.json SourceDocument 필드 {[k for k in doc if not k.startswith("_")]} ≠ 계약')
+    rec = {'text_sha256': bls['fetch'].get('text_sha256'), 'extractor': doc.get('extractor'),
+           'fetch': {'fetched_at': bls['fetch'].get('fetched_at'), 'final_url': bls['fetch'].get('final_url')}}
+    for _, m_ in VD.source_document_problems(doc, rec):
+        E('BR_SOURCE_DOC', f'bls.json: {m_}')
     cps = list(text)
     data = series_data(text)
     blk = blocks(text)
@@ -195,7 +306,13 @@ def check(b):
                 E('BR_VALUE', f'{code} {lab}: "-0.0"')
             # F. 자리
             if x['label'] in graph_labels:
-                E('BR_PLACE', f'{code} {lab}: 계산값이 사실 그래프에 있다 — 계약에 자리가 없다 (W3-a)')
+                E('BR_PLACE', f'{code} {lab}: 계산값이 사실 그래프에 있다 — 계산된 수는 사실이 아니다 (DATA_MODEL §6.5)')
+
+        # G. 계산된 수
+        if against == 'graph':
+            check_computed(b, code, r, E)
+        elif 'computed' in r:
+            E('BR_COMPUTED', f'{code}: 계산된 수가 있다 — 9월 계산은 측정이고 입력이 이 사건의 사실이 아니다 (W3-e)')
 
         # E. 대조
         rows = r.get('compare', {}).get('rows', [])
@@ -244,6 +361,12 @@ def main():
         t = r['compare']['tally']
         print(f'  {code} {os.path.basename(rel)}: 계산 {len(r["rates"])} (달 {months[0]} ~ {months[-1]} · 측정 {len(RULES)}) · 판 {r["source"]["label"]} {r["source"]["fetched_at"][:10]} · '
               f'대조({"9월 골든" if against == "golden" else "연준 인용"}) {t["rows"]} 줄 — 견줌 {t["compared"]} · 같음 {t["match"]} · 다름 {t["differ"]} · 대조 안 함 {t["not_compared"]}')
+        if 'computed' in r:
+            ops = {}
+            for c in r['computed']:
+                ops[c['op']] = ops.get(c['op'], 0) + 1
+            print(f'    계산된 수 (ComputedNumber · DATA_MODEL §6.5) {len(r["computed"])} — ' + ' · '.join(f'{k} {v}' for k, v in sorted(ops.items())) +
+                  f' · VOLATILE {sum(c["volatility"] == "VOLATILE" for c in r["computed"])} (as_of {sorted({c["as_of"] for c in r["computed"]})})')
         if '--report' in sys.argv:
             for x in r['rates']:
                 print(f'    {x["label"]} {x["value"]} {x["unit"]} ({x["inputs"][0]["value"]} ÷ {x["inputs"][1]["value"]})')

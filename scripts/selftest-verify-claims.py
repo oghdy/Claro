@@ -63,6 +63,20 @@ def m_scoped_unnarrowed(b):  # SCOPED 가 있는데 원래 문장 그대로
     c['statement'] = c.pop('_statement_before', c['statement'])
 
 
+def m_defensive_unnarrowed(b):  # W-4 §7.3 새 줄 — 방어용(DEFENSIVE + U + N · S) 도 SCOPED 가 있으면 좁힌 문장이어야 (실물 DC-08)
+    c = next(c for c in b['claims']['claims'] if c['label'] == 'DC-08')
+    c['statement'] = c.pop('_statement_before')
+
+
+def m_verdict_count(b):     # W-4 — 판정 수를 옛 표로 (방어용 4 를 표 밖으로)
+    v = b['claims']['counts']['verdicts']
+    v['계약 표 밖'] = v.pop('방어용')
+
+
+def m_defensive_to_asserted(b):  # W-4 — 방어용 해석을 ASSERTED 로 바꾸고 판정 수는 그대로 → 다시 계산과 다르다
+    next(c for c in b['claims']['claims'] if c['label'] == 'DC-11')['kind'] = 'ASSERTED'
+
+
 def m_missing(b):           # UNRESOLVED 인데 무엇이 답할지 없음
     for grp in ('claims', 'claims_d5'):
         for c in b['claims'][grp]:
@@ -200,6 +214,9 @@ CASES = [
     ('/2 반증인데 체크포인트 답 없음 (W3-c)', m_checkpoint_missing, 'CL_CHECKPOINT'),
     ('체크포인트 답을 손으로', m_checkpoint_hand, 'CL_CHECKPOINT'),
     ('모르는 체크포인트', m_checkpoint_unknown, 'CL_CHECKPOINT'),
+    ('W-4 방어용(섞인 outcome)인데 좁힌 문장이 아님', m_defensive_unnarrowed, 'CL_CHECK'),
+    ('W-4 판정 수를 옛 표로', m_verdict_count, 'CL_VERDICT'),
+    ('W-4 방어용을 ASSERTED 로 (판정 수 그대로)', m_defensive_to_asserted, 'CL_VERDICT'),
 ]
 
 

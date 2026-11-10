@@ -15,18 +15,21 @@
 //
 // 사실 만들기: 모델을 부르지 않는다. 응답이 이미 구조화된 수치라 코드가 뽑는다 (결정적). 시리즈마다 정해진 달의 값 하나 = 사실 하나.
 // 구절 = 그 값의 JSON 조각 글자 그대로 · section = seriesID (같은 조각이 다른 시리즈에도 있을 수 있어 시리즈 블록 안에서 찾는다).
-// 변화율 · 증감은 만들지 않는다 — 원문에 없는 계산이다 (P-3 _open).
+// 변화율 · 증감은 사실로 만들지 않는다 — 원문에 없는 계산이다. 계산은 bls-rates.ts 가 하고 결과는 계약의 "계산된 수"(ComputedNumber — W-4 · D48 W3-a)다.
+// 계산된 수의 입력은 그래프의 사실이어야 하므로, 변화율의 기준 달(전월 · 1년 전) 값도 사실로 만든다 (factMonths — MEASURES · RATE_MONTHS 에서 정해진다).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-import { sha256 } from "./extract.ts";
+import { sha256, sourceDocument } from "./extract.ts";
 import { cpLength } from "./match.ts";
 import { registryRow } from "./rights.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 export const BLS_UA = "ClaroPipeline/0.1 (Claro pipeline)";
 export const BLS_API = "https://api.bls.gov/publicAPI/v1/timeseries/data/";
+// SourceDocument.extractor — 응답 본문을 글자 그대로 둔다 (JSON 을 고쳐 쓰지 않는다). 뽑는 일이 없다
+export const BLS_EXTRACTOR = "bls-raw/1 (API 응답 본문 글자 그대로 — 뽑지 않음)";
 const DAILY_LIMIT = 25;
 
 // 시리즈 — 9월 브리프의 슬롯(고용·성장 · 실제 물가 수치 · 외부 충격)과 9월 골든이 쓴 수치(F30 F39 F40 F41 F48)를 보고 골랐다
@@ -52,6 +55,55 @@ export const EVENT_MONTHS: Record<string, { year: string; period: string }[]> = 
     { year: "2025", period: "M09" },
   ],
 };
+
+// ── 변화율 측정 (W-3 · bls-rates.ts 가 계산한다) — 기준 달의 사실을 여기서 만들어야 해서 이 파일에 둔다 ─────────────
+export type Op = "pct_change" | "level_change";
+export type Measure = { key: string; ko: string; series: string; op: Op; lag: 1 | 12; unit: "%" | "천 명"; basis: string };
+
+// BLS 보도자료의 방식 — 시리즈 ID 의 뜻은 SERIES (응답 안에서 대조되지 않음 — P3-g (1))
+export const MEASURES: Measure[] = [
+  { key: "CPI_ALL_1M", ko: "CPI-U 전체 · 전월 대비", series: "CUSR0000SA0", op: "pct_change", lag: 1, unit: "%", basis: "계절조정 지수" },
+  { key: "CPI_ALL_12M", ko: "CPI-U 전체 · 1년 전 대비", series: "CUUR0000SA0", op: "pct_change", lag: 12, unit: "%", basis: "계절조정 안 한 지수" },
+  { key: "CPI_CORE_1M", ko: "CPI-U 식품·에너지 제외 · 전월 대비", series: "CUSR0000SA0L1E", op: "pct_change", lag: 1, unit: "%", basis: "계절조정 지수" },
+  { key: "CPI_CORE_12M", ko: "CPI-U 식품·에너지 제외 · 1년 전 대비", series: "CUUR0000SA0L1E", op: "pct_change", lag: 12, unit: "%", basis: "계절조정 안 한 지수" },
+  { key: "CPI_ENERGY_1M", ko: "CPI-U 에너지 · 전월 대비", series: "CUSR0000SA0E", op: "pct_change", lag: 1, unit: "%", basis: "계절조정 지수" },
+  { key: "PPI_FD_1M", ko: "PPI 최종수요 · 전월 대비", series: "WPSFD4", op: "pct_change", lag: 1, unit: "%", basis: "계절조정 지수" },
+  { key: "PPI_FD_12M", ko: "PPI 최종수요 · 1년 전 대비", series: "WPUFD4", op: "pct_change", lag: 12, unit: "%", basis: "계절조정 안 한 지수" },
+  { key: "PAYROLL_1M", ko: "비농업 취업자 수 · 전월 대비 증감", series: "CES0000000001", op: "level_change", lag: 1, unit: "천 명", basis: "계절조정 수준" },
+  { key: "TEMP_LAYOFF_1M", ko: "일시해고 실업자 수 · 전월 대비 증감", series: "LNS13023653", op: "level_change", lag: 1, unit: "천 명", basis: "계절조정 수준" },
+];
+// 계산하지 않는 것 — 에너지 1년 전 대비 (계절조정 안 한 에너지 지수 CUUR0000SA0E 를 받지 않았다) · 실업률 · 경제활동참가율 (이미 율)
+
+export type Month = { year: string; period: string }; // period = "M01" … "M12"
+export const monthOf = (ym: string): Month => ({ year: ym.slice(0, 4), period: `M${ym.slice(5, 7)}` });
+export const ymOf = (m: Month) => `${m.year}-${m.period.slice(1)}`;
+export function back(m: Month, k: number): Month {
+  let y = Number(m.year);
+  let mo = Number(m.period.slice(1)) - k;
+  while (mo <= 0) {
+    mo += 12;
+    y -= 1;
+  }
+  while (mo > 12) {
+    mo -= 12;
+    y += 1;
+  }
+  return { year: String(y), period: `M${String(mo).padStart(2, "0")}` };
+}
+
+// 계산된 수(ComputedNumber)를 만드는 사건의 달 — bls-rates.ts RATE_EVENTS 가 이것을 쓴다 (한 곳)
+export const RATE_MONTHS: Record<string, string[]> = { "FOMC-20261028": ["2026-08", "2026-09"] };
+
+/** 시리즈 하나의 사실 달 — EVENT_MONTHS (사람이 볼 달) 다음에, 그 사건의 계산된 수가 입력으로 쓰는 기준 달 (전월 · 1년 전) 가운데 아직 없는 것 (새 것부터).
+ *  기준 달 사실이 없으면 계산된 수의 입력이 그래프 사실이 아니게 된다 (DATA_MODEL ComputedNumber — W-4) */
+export function factMonths(code: string, series: string): { m: Month; base: boolean }[] {
+  const out: { m: Month; base: boolean }[] = (EVENT_MONTHS[code] ?? []).map((m) => ({ m, base: false }));
+  const have = new Set(out.map((x) => ymOf(x.m)));
+  const extra = new Set<string>();
+  for (const ym of RATE_MONTHS[code] ?? []) for (const ms of MEASURES) if (ms.series === series) for (const m of [monthOf(ym), back(monthOf(ym), ms.lag)]) if (!have.has(ymOf(m))) extra.add(ymOf(m));
+  for (const ym of [...extra].sort().reverse()) out.push({ m: monthOf(ym), base: true });
+  return out;
+}
 
 const MONTH_KO: Record<string, string> = Object.fromEntries(Array.from({ length: 12 }, (_, i) => [`M${String(i + 1).padStart(2, "0")}`, `${i + 1}월`]));
 
@@ -101,7 +153,8 @@ async function main() {
   const cCalls = join(cacheDir(), "calls.json");
   const body = { seriesid: SERIES.map((s) => s.id), startyear: "2025", endyear: "2026" };
 
-  let text: string, meta: { requested_url: string; method: string; request_body: unknown; user_agent: string; fetched_at: string; http_status: number; content_type: string | null };
+  // final_url — 리다이렉트 뒤 받은 주소 (W-4 에서 더함). 그 전에 받은 캐시의 meta 에는 없다 → SourceDocument.fetched_url null (기록하지 않았다)
+  let text: string, meta: { requested_url: string; final_url?: string; method: string; request_body: unknown; user_agent: string; fetched_at: string; http_status: number; content_type: string | null };
   if (existsSync(cRaw) && existsSync(cMeta) && !REFETCH) {
     text = readFileSync(cRaw, "utf8");
     meta = JSON.parse(readFileSync(cMeta, "utf8"));
@@ -118,7 +171,7 @@ async function main() {
       signal: AbortSignal.timeout(60_000),
     });
     text = await res.text();
-    meta = { requested_url: BLS_API, method: "POST", request_body: body, user_agent: BLS_UA, fetched_at: new Date().toISOString(), http_status: res.status, content_type: res.headers.get("content-type") };
+    meta = { requested_url: BLS_API, final_url: res.url, method: "POST", request_body: body, user_agent: BLS_UA, fetched_at: new Date().toISOString(), http_status: res.status, content_type: res.headers.get("content-type") };
     if (res.status !== 200) throw new Error(`BLS API HTTP ${res.status} — 응답 앞부분: ${text.slice(0, 300)}`);
     writeFileSync(cRaw, text);
     writeFileSync(cMeta, JSON.stringify(meta, null, 2) + "\n");
@@ -153,7 +206,7 @@ async function main() {
       missing.push(`${s.id}: 응답에 시리즈가 없다`);
       continue;
     }
-    for (const m of EVENT_MONTHS[code]!) {
+    for (const { m, base } of factMonths(code, s.id)) {
       const p = findPoint(text, b, m.year, m.period);
       if (!p) {
         missing.push(`${s.id} ${m.year}-${m.period}: 값이 정확히 한 곳에 있지 않다`);
@@ -166,6 +219,7 @@ async function main() {
         fact_type: "MEASUREMENT", actor: null, volatility: "VOLATILE", as_of: fetchedDay, event_at: `${m.year}-${m.period.slice(1)}`,
         event_id: null, storyline_id: null, storyline_version: null, extraction_model: null, extraction_version: "p3-bls/1 (code)",
         _key: `${s.id}|${m.year}|${m.period}`, _slot: s.slot, _series_meaning_basis: "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+        ...(base ? { _rate_base: "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)" } : {}),
       });
       fact_sources.push({ fact_id, source_id, section: s.id, span_start: p.start, span_end: p.end, _passage: p.passage });
       if (p.latest) notes.push(`${s.id} ${m.year}-${m.period} 은 이 응답의 최신 값 (latest)`);
@@ -179,8 +233,9 @@ async function main() {
     fetch: { ...meta, text_sha256: h, text_length: cpLength(text), position_unit: "코드 포인트 (Unicode scalar)", hash: "sha256(UTF-8(SourceDocument.text))" },
     series: SERIES,
     months: EVENT_MONTHS[code],
+    rate_months: RATE_MONTHS[code] ?? [],   // 이 달들의 계산된 수가 쓰는 기준 달도 사실이다 (factMonths · `_rate_base`)
     sources: [source],
-    source_documents: [{ source_id, text }],
+    source_documents: [sourceDocument(source_id, text, { text_sha256: h, extractor: BLS_EXTRACTOR, fetch: { fetched_at: meta.fetched_at, final_url: meta.final_url ?? null } })],
     source_registry: [registryRow("bls.gov", fetchedDay, "BLS Public Data API v1 — 등록 · 키 없이 POST (D41 도윤 선택). 정직한 User-Agent · 하루 25회 안")],
     facts: facts.map((f) => ({ ...f, event_id: "__EVENT__" })),
     fact_sources,

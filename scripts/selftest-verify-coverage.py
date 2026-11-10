@@ -117,6 +117,18 @@ def m_sl_graph(b):          # 그래프가 바뀌었는데 v2 를 다시 짓지 
     b['v2']['_graph_sha256'] = '0' * 64
 
 
+def m_ef_drift(b):          # W-4 — v2 줄의 event_facts 가 _fact_refs 와 다르다 (하나 뺌)
+    b['v2']['storyline_versions'][1]['event_facts'].pop()
+
+
+def m_ef_v1(b):             # W-4 불변식 34 — 같은 사실을 v1 에도 (판들 사이 겹침 · v1 은 골든과도 달라진다)
+    b['v2']['storyline_versions'][0]['event_facts'] = [b['v2']['storyline_versions'][1]['event_facts'][0]]
+
+
+def m_ef_field(b):          # W-4 — v2 줄에 event_facts 칸이 없다 (P-5 의 모양)
+    b['v2']['storyline_versions'][1].pop('event_facts')
+
+
 def m_rights(b):            # 구절 글이 v2 에
     b['v2']['_fact_refs'][0]['_passage'] = 'some passage'
 
@@ -143,6 +155,9 @@ CASES = [
     ('v2 label ≠ 그래프', m_sl_label, 'CV_STORYLINE'),
     ('v2 가 옛 그래프', m_sl_graph, 'CV_STORYLINE'),
     ('권리 미확인 구절 글', m_rights, 'CV_RIGHTS'),
+    ('W-4 event_facts ≠ _fact_refs', m_ef_drift, 'CV_STORYLINE'),
+    ('W-4 event_facts 가 판 둘에', m_ef_v1, 'CV_STORYLINE'),
+    ('W-4 event_facts 칸 없음', m_ef_field, 'CV_STORYLINE'),
 ]
 
 

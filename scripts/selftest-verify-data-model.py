@@ -186,7 +186,7 @@ def second_bridge(m):
 
 def bump_storyline(m):
     m['storylines'][IRAN_ID]['version'] = 2
-    m['storyline_versions'].append({'storyline_id': IRAN_ID, 'version': 2, 'created_at': '2026-09-16', 'change': '시험'})
+    m['storyline_versions'].append({'storyline_id': IRAN_ID, 'version': 2, 'created_at': '2026-09-16', 'change': '시험', 'event_facts': []})
 
 
 # ── E. 원문 (P-1) — 저장소 · 가져온 기록의 사본을 망가뜨린다 ──────────────────
@@ -228,6 +228,7 @@ def shift(o, k):
 def rehash(st, fe, label):
     t = doc(st, label)['text']
     drec(fe, label).update(text_sha256=V.sha256_text(t), text_length=len(t))
+    doc(st, label)['sha256'] = V.sha256_text(t)          # W-4 — SourceDocument 도 해시 칸을 갖는다
 
 
 def as_cache(st, fe, label, text):
@@ -251,7 +252,7 @@ DOC_CASES = [
     ('P-1 — span 을 한 글자 밀기 (저장소만 — 기록과도 어긋난다)', None,
      d_(lambda st, fe: shift(fsrow(st, 'F33', 'JH'), -1)), {'SPAN_TEXT_MISMATCH', 'FETCH_RECORD_STALE'}),
     ('P-1 — 기록의 해시를 바꿈 (ST-09)', None,
-     d_(lambda st, fe: drec(fe, 'ST-09').__setitem__('text_sha256', '0' * 64)), {'SOURCE_DOC_HASH'}),
+     d_(lambda st, fe: drec(fe, 'ST-09').__setitem__('text_sha256', '0' * 64)), {'SOURCE_DOC_HASH', 'SOURCE_DOC_RECORD'}),
     ('P-1 — 저장한 원문의 한 글자를 바꿈 (span 밖 — 해시가 잡는다)', None,
      d_(lambda st, fe: doc(st, 'ST-09').__setitem__('text', '#' + doc(st, 'ST-09')['text'][1:])), {'SOURCE_DOC_HASH'}),
     ('P-1 — FactSource 가 없는 Source 를 가리킴', None,
@@ -259,7 +260,8 @@ DOC_CASES = [
     ('P-1 — 없는 Source 의 원문', None,
      d_(lambda st, fe: st['source_documents'].append({'source_id': UID('source', 'gone'), 'text': 'x'})), {'SOURCE_UNKNOWN'}),
     ('P-1 — 권리 미확인(CME) 전문을 저장소에 넣음', None,
-     d_(lambda st, fe: st['source_documents'].append({'source_id': SRC['CME-2'], 'text': CACHE_TEXT})),
+     d_(lambda st, fe: st['source_documents'].append({'source_id': SRC['CME-2'], 'sha256': V.sha256_text(CACHE_TEXT), 'fetched_url': 'https://www.cmegroup.com/x',
+                                                     'fetched_at': '2026-10-30T05:00:00.000Z', 'extractor': 'p1-extract/1', 'text': CACHE_TEXT})),
      {'SOURCE_DOC_NOT_STORABLE', 'SOURCE_DOC_UNRECORDED'}),
     ('P-1 — 연방 정부 원문인데 권리 행이 can_store 가 아님', None,
      d_(lambda st, fe: next(r for r in st['source_registry'] if r['source'] == 'bea.gov').__setitem__('can_store', None)),
@@ -277,6 +279,25 @@ DOC_CASES = [
     ('P-1 — 권리 미확인 원문이 캐시에만 있는데 이 기계에 없다 (WARN)', 'empty', d_(cme_span), {'SOURCE_TEXT_NOT_HERE'}),
     ('P-1 — 캐시의 원문이 기록의 해시와 다르다', 'wrong', d_(cme_span), {'SOURCE_DOC_HASH'}),
     ('통과해야 한다 — 캐시의 원문이 맞고 span 도 맞다', 'right', d_(cme_span), set()),
+    # W-4 — SourceDocument 의 가져온 기록 칸 (불변식 29) · 권리 근거 (불변식 30)
+    ('W-4 불변식 29 — SourceDocument.sha256 한 자리 바꿈 (ST-09)', None,
+     d_(lambda st, fe: doc(st, 'ST-09').__setitem__('sha256', ('1' if doc(st, 'ST-09')['sha256'][0] != '1' else '2') + doc(st, 'ST-09')['sha256'][1:])),
+     {'SOURCE_DOC_HASH', 'SOURCE_DOC_RECORD'}),
+    ('W-4 불변식 29 — 글 한 글자와 sha256 을 같이 바꿈 (기록은 그대로)', None,
+     d_(lambda st, fe: (doc(st, 'ST-09').__setitem__('text', '#' + doc(st, 'ST-09')['text'][1:]), doc(st, 'ST-09').__setitem__('sha256', V.sha256_text(doc(st, 'ST-09')['text'])))),
+     {'SOURCE_DOC_HASH', 'SOURCE_DOC_RECORD'}),
+    ('W-4 불변식 29 — fetched_at 을 날짜만으로', None,
+     d_(lambda st, fe: doc(st, 'ST-09').__setitem__('fetched_at', '2026-10-30')), {'SOURCE_DOC_RECORD'}),
+    ('W-4 불변식 29 — fetched_url 을 리다이렉트 앞 주소로 (EIA-B)', None,
+     d_(lambda st, fe: doc(st, 'EIA-B').__setitem__('fetched_url', drec(fe, 'EIA-B')['fetch']['requested_url'])), {'SOURCE_DOC_RECORD'}),
+    ('W-4 불변식 29 — extractor 를 비움', None,
+     d_(lambda st, fe: doc(st, 'ST-09').__setitem__('extractor', '')), {'SOURCE_DOC_RECORD'}),
+    ('W-4 불변식 29 — extractor 판을 바꿈 (기록과 다르다)', None,
+     d_(lambda st, fe: doc(st, 'ST-09').__setitem__('extractor', 'p1-extract/2')), {'SOURCE_DOC_RECORD'}),
+    ('W-4 불변식 30 — 연방 정부 권리 행의 basis 지움 (can_store · can_quote 는 참)', None,
+     d_(lambda st, fe: next(r for r in st['source_registry'] if r['source'] == 'bea.gov').__setitem__('basis', None)), {'REGISTRY_BASIS'}),
+    ('통과해야 한다 — W-4 불변식 30: 권리 칸이 전부 null 이면 basis 가 없어도 된다', None,
+     d_(lambda st, fe: next(r for r in st['source_registry'] if r['source'] == 'cmegroup.com').__setitem__('basis', None)), set()),
 ]
 
 
@@ -559,6 +580,33 @@ CASES = [
      m_(lambda m: all_registry(m, can_quote=False)), {'QUOTE_NOT_ALLOWED'}),
     ('불변식 20 — 권리 검토 안 된 발행처 (null)', 'publish',
      m_(lambda m: all_registry(m, can_quote=None)), {'QUOTE_NOT_ALLOWED'}),
+    # W-4 — §7.3 방어용 둘째 줄 (D50 P5-c) · 스토리라인 판의 사건 사실 (불변식 34) · 계약 칸
+    ('통과해야 한다 — W-4 §7.3 새 줄: DEFENSIVE DC-B 에 NOT_REFUTED · SCOPED 물음을 더해도 방어용 (실물 DC-08 꼴)', 'publish',
+     m_(lambda m: m['claims'][CID['DC-B']]['checks'].extend([
+         {'question': '시험 N', 'slot': None, 'recollected': False, 'answer': '시험', 'facts': [m['claims'][CID['DC-B']]['basis'][0]], 'outcome': 'NOT_REFUTED'},
+         {'question': '시험 S', 'slot': None, 'recollected': False, 'answer': '시험', 'facts': [m['claims'][CID['DC-B']]['basis'][0]], 'outcome': 'SCOPED'}])), set()),
+    ('W-4 §7.3 새 줄 — 같은 물음인데 ASSERTED 면 검사 안 됨 (DC-B 를 ASSERTED 로)', 'publish',
+     m_(lambda m: (m['claims'][CID['DC-B']].__setitem__('kind', 'ASSERTED'), m['claims'][CID['DC-B']]['checks'].append(
+         {'question': '시험 S', 'slot': None, 'recollected': False, 'answer': '시험', 'facts': [m['claims'][CID['DC-B']]['basis'][0]], 'outcome': 'SCOPED'}))),
+     {'CLAIM_UNCHECKED', 'GOAL_UNCHECKED'}),
+    ('W-4 §7.3 — DEFENSIVE 인데 UNRESOLVED 가 없다 → 보통 줄 (VALID WITH SCOPE · 통과)', 'publish',
+     m_(lambda m: m['claims'][CID['DC-B']].__setitem__('checks', [
+         {'question': '시험 S', 'slot': None, 'recollected': False, 'answer': '시험', 'facts': [m['claims'][CID['DC-B']]['basis'][0]], 'outcome': 'SCOPED'}])), set()),
+    ('W-4 불변식 34 — v1 event_facts 에 스토리라인 소유 사실 (F37b)', 'model',
+     m_(lambda m: m['storyline_versions'][0]['event_facts'].append(FID['F37b'])), {'SL_EVENT_FACTS'}),
+    ('W-4 불변식 34 — event_facts 에 없는 사실', 'model',
+     m_(lambda m: m['storyline_versions'][0]['event_facts'].append(UID('fact', 'gone'))), {'SL_EVENT_FACTS'}),
+    ('통과해야 한다 — W-4 불변식 34: event_facts 에 사건 소유 사실 (F01)', 'model',
+     m_(lambda m: m['storyline_versions'][0]['event_facts'].append(FID['F01'])), set()),
+    ('W-4 불변식 34 — 같은 사건 사실을 두 판에 (v2 를 더해 F01 을 두 번)', 'model',
+     m_(lambda m: (m['storyline_versions'][0]['event_facts'].append(FID['F01']), bump_storyline(m),
+                   m['storyline_versions'][-1]['event_facts'].append(FID['F01']))), {'SL_EVENT_FACTS'}),
+    ('W-4 — SourceDocument.sha256 칸을 계약에서 뺌', 'contract',
+     lambda c: sub(c, '  sha256:      string               // sha256(UTF-8(text))', '  digest:      string               // sha256(UTF-8(text))'), {'CONTRACT_FIELD', 'STORE_SHAPE'}),
+    ('W-4 — ComputedNumber.op 에 실물 없는 op', 'contract',
+     lambda c: sub(c, '"pct_change_12m" | "pct_change_1m" | "level_change_1m"', '"pct_change_12m" | "pct_change_1m" | "level_change_1m" | "ratio"'), {'CONTRACT_OP'}),
+    ('W-4 — StorylineVersion.event_facts 를 계약에서 뺌', 'contract',
+     lambda c: sub(c, '  event_facts:  FactRef[]           // 이 판에 붙은', '  // 이 판에 붙은'), {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     ('ARTICLE_PACKAGE §6.2 — 대기 span 이 발행에 남음', 'publish',
      m_(lambda m: (span_at(m, 'basic', 'slides/7/blocks/0/paragraphs/0/body/0').__setitem__('refs', []),
                    m['pending'].append(('basic', 'slides/7/blocks/0/paragraphs/0/body/0', 'fact', 'Fact 출처')))),

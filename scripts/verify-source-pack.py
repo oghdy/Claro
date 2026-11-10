@@ -11,7 +11,9 @@
               요청 기록이 없다 (D40 — 막힌 곳을 다시 두드리지 않는다) · 막힌 것은 까닭이 있다
   C. 원문     저장한 글의 sha256 · 길이 = 기록 · 권리가 can_store 가 아닌 발행처의 전문은 저장소에 없다 (공개 저장소) ·
               P-1 과 같은 글이면 fixtures/store.documents.json 의 그 글이고 Source 행이 P-1 행과 칸마다 같다 ·
-              권리 미확인 원문은 git 밖 캐시 — 이 기계에 없으면 WARN, 해시가 다르면 FAIL
+              권리 미확인 원문은 git 밖 캐시 — 이 기계에 없으면 WARN, 해시가 다르면 FAIL ·
+              W-4 — SourceDocument 가 계약 칸 그대로 (PACK_SHAPE) · 가져온 기록 칸(sha256 · fetched_url · fetched_at · extractor)이 글 · fetch.json 과 같다 (불변식 29 · PACK_DOC_HASH · PACK_DOC_RECORD) ·
+              권리 칸에 값이 있으면 basis (불변식 30 · PACK_REGISTRY)
   D. 공개 시각 Source.published_at 은 TimePoint 이고, P-1 과 같은 문서가 아니면 pack.json 의 증거 글이 저장한 글에 그대로 있다 (지어내지 않는다)
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
@@ -127,6 +129,9 @@ def check(b, contract_text, p1_store, p1_docs):
     if len(sid) != len(st.get('sources', [])):
         E('PACK_SOURCE_DUP', f'{code}: source_id 가 겹친다')
     reg = {r['source']: r for r in st.get('source_registry', [])}
+    for r_ in st.get('source_registry', []):
+        for c_, m_ in VD.registry_problems(r_):
+            E('PACK_REGISTRY', f'{code} {m_}')
     p1src = {s['label']: s for s in p1_store.get('sources', [])}
     for lab, x in recs.items():
         it = items.get(lab, {})
@@ -175,6 +180,12 @@ def check(b, contract_text, p1_store, p1_docs):
             E('PACK_DOC_UNRECORDED', f'{w}: 기록은 원문이 {x.get("text_in")} 에 있다고 한다')
         if VD.sha256_text(d['text']) != x.get('text_sha256') or len(d['text']) != x.get('text_length'):
             E('PACK_DOC_HASH', f'{w}: 글의 sha256 · 길이가 기록과 다르다 — 한 번 보관한 원문은 바뀌지 않는다 (§4.1)')
+        # W-4 — SourceDocument 의 칸 (계약 모양) · 가져온 기록 칸이 글 · 기록과 같다 (불변식 29)
+        want_f = set(types.get('SourceDocument', {}))
+        if {k for k in d if not k.startswith('_')} != want_f:
+            E('PACK_SHAPE', f'{w}: SourceDocument 필드가 계약과 다르다 — {sorted(k for k in d if not k.startswith("_"))} (DATA_MODEL §1)')
+        for c_, m_ in VD.source_document_problems(d, x):
+            E('PACK_DOC_HASH' if c_ == 'SOURCE_DOC_HASH' else 'PACK_DOC_RECORD', f'{w}: {m_}')
         texts[x['label']] = d['text']
     p1text = {d['source_id']: d['text'] for d in p1_docs.get('source_documents', [])}
     for lab, x in recs.items():

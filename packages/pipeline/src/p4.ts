@@ -177,20 +177,22 @@ function storylineV2(code: string, graph: Graph) {
     if (ds.some((d) => slDocs.has(d))) return true; // 스토리라인 문서의 사실 — 전부 (v1 에 없던 것이다. WH-0619 는 9/16 앞의 일이지만 v1 이 몰랐던 1차)
     return ds.length === 1 && series.has(ds[0]!) && !!f.event_at && f.event_at > since && f.event_at <= conf.date; // 유가 · 경유 — v1 뒤 ~ 사건 날
   });
-  // P-5 (D44 P4-b) — 사실을 옮겨 적지 않는다. 그래프의 사실을 가리킨다 (한 사실은 한 곳에). 계약에는 "스토리라인 판이 사건 그래프의 사실을 가리키는" 모양이 없다 — _fact_refs 는 계약 밖 (_open P5-b)
+  // P-5 (D44 P4-b) — 사실을 옮겨 적지 않는다. 그래프의 사실을 가리킨다 (한 사실은 한 곳에). 계약: StorylineVersion.event_facts (DATA_MODEL §9.2 — W-4 P5-b).
+  // _fact_refs 는 그 목록의 사람이 읽는 주석 (label · 문서) — event_facts 와 같은 사실 · 같은 순서
   const fact_refs = pick.map((f) => ({ fact_id: f.fact_id, label: f.label, docs: factDocs(f) }));
   const byDoc: Record<string, number> = {};
   for (const f of pick) for (const d of factDocs(f)) byDoc[d] = (byDoc[d] ?? 0) + 1;
   return {
     _what: `${sl.code} 의 새 판 (v2) — Storyline · StorylineVersion 은 계약 모양 (DATA_MODEL §1). p4.ts 가 ${code} 의 사실 그래프에서 짓는다 — 손으로 고치지 않는다. ` +
       `v1 은 골든(fixtures/store.json)에 있고 고치지 않는다 — 아래 storyline_versions 의 v1 줄은 골든에서 옮긴 것. ` +
-      `v2 가 아는 사실은 옮겨 적지 않고 그래프의 사실을 가리킨다 (_fact_refs — fact_id 는 그래프의 것 · D44 P4-b "한 사실은 한 곳에"). 계약의 소유 규칙(Fact 는 event_id · storyline_id 중 하나)으로는 이 모양을 적을 수 없다 — _open P5-b`,
+      `v2 가 아는 사실은 옮겨 적지 않고 그래프의 사실을 가리킨다 — v2 줄의 event_facts (계약 StorylineVersion.event_facts · DATA_MODEL §9.2 — W-4 P5-b). 사실의 소유는 그대로 사건이다 (한 사실은 한 곳에 · D44 P4-b). _fact_refs 는 event_facts 의 label · 문서 주석`,
     storylines: [{ storyline_id: row.storyline_id, code: row.code, title: row.title, version: 2, ongoing: row.ongoing, _ongoing_note: "v1 의 값을 그대로 옮겼다 — 판정하지 않았다 (_open P4-c)" }],
     storyline_versions: [
       ...v1.map((v) => ({ ...v, _copied_from: "fixtures/store.json (골든 — 고치지 않는다)" })),
       {
         storyline_id: row.storyline_id, version: 2, created_at: V2_DATE,
         change: `P-4 — v1(${since}) 뒤 ~ ${conf.date} 의 1차 사실 + v1 이 몰랐던 6/19 백악관 MOU 발표. 문서별 ${Object.entries(byDoc).map(([d, n]) => `${d} ${n}`).join(" · ")}`,
+        event_facts: pick.map((f) => f.fact_id),
         _rule: `사실 = (1) 스토리라인 문서(${[...slDocs].join(" · ")} — 저장된 것만)의 그래프 사실 전부 (2) EIA-B · EIA-D 표 사실 가운데 event_at 이 ${since} 뒤 ~ ${conf.date}. 둘 다 코드 규칙 (p4.ts storylineV2)`,
       },
     ],

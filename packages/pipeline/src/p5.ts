@@ -169,8 +169,9 @@ export function verdict(kind: string, outcomes: string[]): string {
   if (!outcomes.length) return "검사 안 됨";
   if (outcomes.includes("REFUTED")) return "반증됨 (계약 밖)";
   const u = outcomes.includes("UNRESOLVED");
-  if (kind === "DEFENSIVE" && outcomes.every((o) => o === "UNRESOLVED")) return "방어용";
-  if (u) return kind === "DEFENSIVE" ? "계약 표 밖 (DEFENSIVE + UNRESOLVED 와 다른 outcome — _open P5-c)" : "검사 안 됨";
+  // DEFENSIVE 이고 UNRESOLVED 가 있으면 — 나머지가 NOT_REFUTED · SCOPED 뿐이면 방어용 (DATA_MODEL §7.3 · D50 P5-c). SCOPED 가 있으면 statement 는 좁힌 문장 (짓기가 반증 출력의 좁힌 문장으로 바꾼다)
+  if (kind === "DEFENSIVE" && u && outcomes.every((o) => o === "UNRESOLVED" || o === "NOT_REFUTED" || o === "SCOPED")) return "방어용";
+  if (u) return "검사 안 됨";
   if (outcomes.every((o) => o === "NOT_REFUTED")) return "VALID";
   return "VALID WITH SCOPE";
 }

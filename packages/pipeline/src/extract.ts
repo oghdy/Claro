@@ -132,3 +132,17 @@ export async function extract(bytes: Uint8Array, contentType: string | null): Pr
 }
 
 export const sha256 = (b: Uint8Array | string): string => createHash("sha256").update(b).digest("hex");
+
+/** SourceDocument (DATA_MODEL §1 · §4.1 — W-4 P1-a) — 원문 전문과 가져온 기록. 칸 순서는 계약 그대로.
+ *  sha256 은 글에서 다시 계산해 기록(rec.text_sha256)과 대 본다 — 다르면 멈춘다 (한 번 보관한 원문은 바뀌지 않는다) */
+export type SourceDocument = { source_id: string; sha256: string; fetched_url: string | null; fetched_at: string; extractor: string; text: string };
+export function sourceDocument(
+  source_id: string,
+  text: string,
+  rec: { text_sha256: string | null; extractor: string | null; fetch: { fetched_at: string; final_url?: string | null } | null },
+): SourceDocument {
+  const h = sha256(text);
+  if (h !== rec.text_sha256) throw new Error(`SourceDocument ${source_id}: 글의 sha256 이 가져온 기록과 다르다`);
+  if (!rec.fetch?.fetched_at || !rec.extractor) throw new Error(`SourceDocument ${source_id}: 가져온 때 · 뽑은 방법이 기록에 없다`);
+  return { source_id, sha256: h, fetched_url: rec.fetch.final_url ?? null, fetched_at: rec.fetch.fetched_at, extractor: rec.extractor, text };
+}

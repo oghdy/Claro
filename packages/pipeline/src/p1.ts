@@ -18,7 +18,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { EXTRACTOR, extract, sha256 } from "./extract.ts";
+import { EXTRACTOR, extract, sha256, sourceDocument, type SourceDocument } from "./extract.ts";
 import { fetchOnce, readCached, readCachedText, writeCached, writeCachedText, USER_AGENT, type Fetched } from "./fetch.ts";
 import { RULES, cpLength, locate } from "./match.ts";
 import { registryRow, rightsOf, type Rights } from "./rights.ts";
@@ -26,13 +26,13 @@ import { robotsAllows } from "./robots.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const STORE = join(ROOT, "fixtures/store.json");
-// SourceDocument(원문 전문) — store.json 옆 파일. 계약 타입 그대로 { source_id, text } 의 줄이다. 검사는 둘을 합쳐 읽는다 (verify-article.load_bundle)
+// SourceDocument(원문 전문 + 가져온 기록) — store.json 옆 파일. 계약 타입 그대로 { source_id, sha256, fetched_url, fetched_at, extractor, text } 의 줄이다 (W-4 P1-a). 검사는 둘을 합쳐 읽는다 (verify-article.load_bundle)
 const STORE_DOCS = join(ROOT, "fixtures/store.documents.json");
 export const RECORD = join(ROOT, "packages/pipeline/data/fomc-2026-09.sources.json");
 
 type Source = { source_id: string; label: string; title: string; publisher: string; url: string | null; published_at: string; ingested_at: string; _note?: string };
 type FactSource = { fact_id: string; source_id: string; section: string | null; span_start: number | null; span_end: number | null; _passage?: string; _note?: string };
-type Store = { sources: Source[]; source_documents: { source_id: string; text: string }[]; source_registry: unknown[]; facts: { fact_id: string; label: string }[]; fact_sources: FactSource[] } & Record<string, unknown>;
+type Store = { sources: Source[]; source_documents: SourceDocument[]; source_registry: unknown[]; facts: { fact_id: string; label: string }[]; fact_sources: FactSource[] } & Record<string, unknown>;
 
 type DocRecord = {
   label: string;
@@ -275,7 +275,7 @@ async function main() {
   }
 
   // store.json 에 쓴다 — 원문 · 권리 · span. 다른 칸은 손대지 않는다
-  const documents = store.sources.filter((s) => docBy.get(s.source_id)?.text_in === "store.documents.json").map((s) => ({ source_id: s.source_id, text: texts.get(s.source_id)! }));
+  const documents = store.sources.filter((s) => docBy.get(s.source_id)?.text_in === "store.documents.json").map((s) => sourceDocument(s.source_id, texts.get(s.source_id)!, docBy.get(s.source_id)!));
   const pubs = [...new Set(store.sources.map((s) => s.publisher))];
   const prevReg = new Map((store.source_registry as { source: string; last_reviewed_at: string | null }[]).map((r) => [r.source, r]));
   store.source_registry = pubs.map((p) => registryRow(p, prevReg.get(p)?.last_reviewed_at ?? today, "공개 웹 페이지 — HTTP GET (P-1 파이프라인)"));
@@ -310,13 +310,15 @@ async function main() {
     JSON.stringify({
       _what: "fixtures/store.json 의 SourceDocument (DATA_MODEL §1) — 원문 전문. store.json 을 사람이 읽을 크기로 두려고 옆 파일에 둔다. " +
         "미국 연방 정부 저작물만 (17 U.S.C. §105 · store.json source_registry). 권리 미확인 원문은 git 밖 캐시에만. " +
-        "packages/pipeline (P-1) 이 쓴다 — 손으로 고치지 않는다. 해시 · 가져온 때 · 주소는 packages/pipeline/data/fomc-2026-09.sources.json",
+        "packages/pipeline (P-1) 이 쓴다 — 손으로 고치지 않는다. 해시 · 가져온 주소 · 가져온 때 · 뽑은 방법은 SourceDocument 의 칸 (W-4 P1-a) — " +
+        "HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭은 가져온 기록 packages/pipeline/data/fomc-2026-09.sources.json",
       source_documents: documents,
     }, null, 2) + "\n",
   );
 
   const record = {
-    _what: "P-1 이 원문을 가져온 기록 (packages/pipeline/src/p1.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — SourceDocument 에 해시 · 가져온 주소 · 때의 칸이 없어 여기에 둔다 (logs/pipeline/P-1.md _open)",
+    _what: "P-1 이 원문을 가져온 기록 (packages/pipeline/src/p1.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. " +
+      "해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭 · 구절마다 결과",
     store: "fixtures/store.json",
     user_agent: USER_AGENT,
     extractor: EXTRACTOR,

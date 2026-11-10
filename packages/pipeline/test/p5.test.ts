@@ -10,8 +10,14 @@ describe("P-5 — 판정은 checks 에서 계산한다 (DATA_MODEL §7.3)", () =
     expect(verdict("ASSERTED", ["NOT_REFUTED", "UNRESOLVED"])).toBe("검사 안 됨");
     expect(verdict("DEFENSIVE", ["UNRESOLVED"])).toBe("방어용");
   });
-  it("계약 표에 없는 경우는 그렇다고 말한다 (DEFENSIVE + UNRESOLVED 섞임 · REFUTED)", () => {
-    expect(verdict("DEFENSIVE", ["UNRESOLVED", "NOT_REFUTED"])).toContain("계약 표 밖");
+  it("DEFENSIVE 이고 UNRESOLVED 가 있고 나머지가 NOT_REFUTED · SCOPED 뿐 → 방어용 (§7.3 의 새 줄 · D50 P5-c)", () => {
+    expect(verdict("DEFENSIVE", ["UNRESOLVED", "NOT_REFUTED"])).toBe("방어용");
+    expect(verdict("DEFENSIVE", ["UNRESOLVED", "SCOPED", "NOT_REFUTED", "NOT_REFUTED", "NOT_REFUTED"])).toBe("방어용"); // 실물 DC-08
+    expect(verdict("DEFENSIVE", ["SCOPED", "SCOPED", "NOT_REFUTED", "UNRESOLVED", "NOT_REFUTED", "SCOPED"])).toBe("방어용"); // 실물 DC-14
+    expect(verdict("ASSERTED", ["UNRESOLVED", "SCOPED"])).toBe("검사 안 됨"); // ASSERTED 는 그대로
+    expect(verdict("DEFENSIVE", ["NOT_REFUTED", "SCOPED"])).toBe("VALID WITH SCOPE"); // UNRESOLVED 가 없으면 보통 줄
+  });
+  it("계약 표에 없는 경우는 그렇다고 말한다 (REFUTED)", () => {
     expect(verdict("ASSERTED", ["REFUTED"])).toContain("계약 밖");
   });
 });

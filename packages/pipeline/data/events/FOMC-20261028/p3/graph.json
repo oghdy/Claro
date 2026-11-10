@@ -434,7 +434,7 @@
     "merge_proposals_rejected": 0,
     "merge_proposals_partial": 0,
     "merge_candidates": 19,
-    "bls_facts": 33
+    "bls_facts": 42
   },
   "per_source": {
     "ST-10": {
@@ -23099,6 +23099,22 @@
       "_slot": "고용·성장"
     },
     {
+      "fact_id": "1d23502a-26e2-4268-b703-51b7e1e05c0b",
+      "label": "BLS-CES0000000001-2026M07",
+      "claim_text": "BLS 시리즈 CES0000000001 (비농업 취업자 수 (CES · 계절조정)) — 2026년 7월 값 158882 (천 명). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "고용·성장"
+    },
+    {
       "fact_id": "6cb7c220-3795-4319-932d-11a09d5e602b",
       "label": "BLS-LNS14000000-2026M09",
       "claim_text": "BLS 시리즈 LNS14000000 (실업률 (CPS · 계절조정)) — 2026년 9월 값 4.2 (%). 2026-11-10 에 받은 판",
@@ -23243,6 +23259,22 @@
       "_slot": "고용·성장"
     },
     {
+      "fact_id": "1401f965-cc98-4628-ba2a-819b0df4ff70",
+      "label": "BLS-LNS13023653-2026M07",
+      "claim_text": "BLS 시리즈 LNS13023653 (일시해고 실업자 수 (CPS · 계절조정)) — 2026년 7월 값 921 (천 명). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "고용·성장"
+    },
+    {
       "fact_id": "73a4100f-abf5-48a7-a522-830354f28750",
       "label": "BLS-CUSR0000SA0-2026M09",
       "claim_text": "BLS 시리즈 CUSR0000SA0 (CPI-U 전체 지수 (계절조정)) — 2026년 9월 값 336.298 (지수 1982-84=100). 2026-11-10 에 받은 판",
@@ -23283,6 +23315,22 @@
       "volatility": "VOLATILE",
       "as_of": "2026-11-10",
       "event_at": "2025-09",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "실제 물가 수치"
+    },
+    {
+      "fact_id": "70538587-1ec9-4e29-b2e5-d824ac6e9038",
+      "label": "BLS-CUSR0000SA0-2026M07",
+      "claim_text": "BLS 시리즈 CUSR0000SA0 (CPI-U 전체 지수 (계절조정)) — 2026년 7월 값 332.813 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
       "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
       "storyline_id": null,
       "storyline_version": null,
@@ -23339,6 +23387,22 @@
       "_slot": "실제 물가 수치"
     },
     {
+      "fact_id": "b01b2bdb-4786-4b2a-bb16-b5336eb553a0",
+      "label": "BLS-CUUR0000SA0-2025M08",
+      "claim_text": "BLS 시리즈 CUUR0000SA0 (CPI-U 전체 지수 (계절조정 안 함)) — 2025년 8월 값 323.976 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2025-08",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "실제 물가 수치"
+    },
+    {
       "fact_id": "872b5ffa-e14d-4492-8295-bfd1c124f2b8",
       "label": "BLS-CUSR0000SA0L1E-2026M09",
       "claim_text": "BLS 시리즈 CUSR0000SA0L1E (CPI-U 식품·에너지 제외 지수 (계절조정)) — 2026년 9월 값 338.896 (지수 1982-84=100). 2026-11-10 에 받은 판",
@@ -23379,6 +23443,22 @@
       "volatility": "VOLATILE",
       "as_of": "2026-11-10",
       "event_at": "2025-09",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "실제 물가 수치"
+    },
+    {
+      "fact_id": "f1773c86-6b32-4561-a764-c7845dc9d1be",
+      "label": "BLS-CUSR0000SA0L1E-2026M07",
+      "claim_text": "BLS 시리즈 CUSR0000SA0L1E (CPI-U 식품·에너지 제외 지수 (계절조정)) — 2026년 7월 값 336.789 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
       "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
       "storyline_id": null,
       "storyline_version": null,
@@ -23435,6 +23515,22 @@
       "_slot": "실제 물가 수치"
     },
     {
+      "fact_id": "595b43a1-1f77-4b12-aa5e-79d38e457b66",
+      "label": "BLS-CUUR0000SA0L1E-2025M08",
+      "claim_text": "BLS 시리즈 CUUR0000SA0L1E (CPI-U 식품·에너지 제외 지수 (계절조정 안 함)) — 2025년 8월 값 329.970 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2025-08",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "실제 물가 수치"
+    },
+    {
       "fact_id": "0c565d69-4415-41db-a7a3-703a6cc58d0e",
       "label": "BLS-CUSR0000SA0E-2026M09",
       "claim_text": "BLS 시리즈 CUSR0000SA0E (CPI-U 에너지 지수 (계절조정)) — 2026년 9월 값 337.834 (지수 1982-84=100). 2026-11-10 에 받은 판",
@@ -23475,6 +23571,22 @@
       "volatility": "VOLATILE",
       "as_of": "2026-11-10",
       "event_at": "2025-09",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "실제 물가 수치"
+    },
+    {
+      "fact_id": "0944c70b-cc7e-498d-b3a5-0ec9a87e929d",
+      "label": "BLS-CUSR0000SA0E-2026M07",
+      "claim_text": "BLS 시리즈 CUSR0000SA0E (CPI-U 에너지 지수 (계절조정)) — 2026년 7월 값 314.553 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
       "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
       "storyline_id": null,
       "storyline_version": null,
@@ -23531,6 +23643,22 @@
       "_slot": "실제 물가 수치"
     },
     {
+      "fact_id": "313cee05-73a7-452a-a67e-8bc01c8c3162",
+      "label": "BLS-WPSFD4-2026M07",
+      "claim_text": "BLS 시리즈 WPSFD4 (PPI 최종수요 지수 (계절조정)) — 2026년 7월 값 156.924 (지수 2009-11=100) · 각주 \"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\". 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "실제 물가 수치"
+    },
+    {
       "fact_id": "e9166b4c-abe9-4d3d-83f2-966bd5920404",
       "label": "BLS-WPUFD4-2026M09",
       "claim_text": "BLS 시리즈 WPUFD4 (PPI 최종수요 지수 (계절조정 안 함)) — 2026년 9월 값 159.613 (지수 2009-11=100) · 각주 \"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\". 2026-11-10 에 받은 판",
@@ -23571,6 +23699,22 @@
       "volatility": "VOLATILE",
       "as_of": "2026-11-10",
       "event_at": "2025-09",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_slot": "실제 물가 수치"
+    },
+    {
+      "fact_id": "52366c21-5374-4139-acf3-5a6d63519b24",
+      "label": "BLS-WPUFD4-2025M08",
+      "claim_text": "BLS 시리즈 WPUFD4 (PPI 최종수요 지수 (계절조정 안 함)) — 2025년 8월 값 149.466 (지수 2009-11=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2025-08",
       "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
       "storyline_id": null,
       "storyline_version": null,
@@ -33226,6 +33370,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"158548\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "1d23502a-26e2-4268-b703-51b7e1e05c0b",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CES0000000001",
+      "span_start": 464,
+      "span_end": 546,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"158882\",\"footnotes\":[{}]"
+    },
+    {
       "fact_id": "6cb7c220-3795-4319-932d-11a09d5e602b",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "LNS14000000",
@@ -33298,6 +33450,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"844\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "1401f965-cc98-4628-ba2a-819b0df4ff70",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "LNS13023653",
+      "span_start": 6725,
+      "span_end": 6804,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"921\",\"footnotes\":[{}]"
+    },
+    {
       "fact_id": "73a4100f-abf5-48a7-a522-830354f28750",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "CUSR0000SA0",
@@ -33320,6 +33480,14 @@
       "span_start": 9739,
       "span_end": 9827,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"324.245\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "70538587-1ec9-4e29-b2e5-d824ac6e9038",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUSR0000SA0",
+      "span_start": 8790,
+      "span_end": 8873,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"332.813\",\"footnotes\":[{}]"
     },
     {
       "fact_id": "08603599-f6de-4407-a626-37dba11afb95",
@@ -33346,6 +33514,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"324.800\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "b01b2bdb-4786-4b2a-bb16-b5336eb553a0",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUUR0000SA0",
+      "span_start": 11800,
+      "span_end": 11885,
+      "_passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"323.976\",\"footnotes\":[{}]"
+    },
+    {
       "fact_id": "872b5ffa-e14d-4492-8295-bfd1c124f2b8",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "CUSR0000SA0L1E",
@@ -33368,6 +33544,14 @@
       "span_start": 13682,
       "span_end": 13770,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"330.418\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "f1773c86-6b32-4561-a764-c7845dc9d1be",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUSR0000SA0L1E",
+      "span_start": 12733,
+      "span_end": 12816,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"336.789\",\"footnotes\":[{}]"
     },
     {
       "fact_id": "65793986-e24c-4510-a412-8350d912103f",
@@ -33394,6 +33578,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"330.804\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "595b43a1-1f77-4b12-aa5e-79d38e457b66",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUUR0000SA0L1E",
+      "span_start": 15746,
+      "span_end": 15831,
+      "_passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"329.970\",\"footnotes\":[{}]"
+    },
+    {
       "fact_id": "0c565d69-4415-41db-a7a3-703a6cc58d0e",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "CUSR0000SA0E",
@@ -33416,6 +33608,14 @@
       "span_start": 17626,
       "span_end": 17714,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"280.700\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "0944c70b-cc7e-498d-b3a5-0ec9a87e929d",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUSR0000SA0E",
+      "span_start": 16677,
+      "span_end": 16760,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"314.553\",\"footnotes\":[{}]"
     },
     {
       "fact_id": "b1a51626-9707-481a-83a2-99a2bcde912d",
@@ -33442,6 +33642,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"150.245\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "313cee05-73a7-452a-a67e-8bc01c8c3162",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "WPSFD4",
+      "span_start": 18888,
+      "span_end": 19094,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"156.924\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]"
+    },
+    {
       "fact_id": "e9166b4c-abe9-4d3d-83f2-966bd5920404",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "WPUFD4",
@@ -33464,6 +33672,14 @@
       "span_start": 22400,
       "span_end": 22488,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"150.100\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "52366c21-5374-4139-acf3-5a6d63519b24",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "WPUFD4",
+      "span_start": 22491,
+      "span_end": 22576,
+      "_passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"149.466\",\"footnotes\":[{}]"
     }
   ],
   "merges": [

@@ -38,6 +38,7 @@
       "version": 1,
       "created_at": "2026-09-16",
       "change": "생성 — 골든 FOMC 기사(2026-09-16)가 닿는 이란 전쟁 사실 7개 (IR01~IR06 · F37b)",
+      "event_facts": [],
       "_note": "사실은 2026-10-09 에 C-3 이 1차 대조했다 (storyline-iran-war.md). 발행 때 고정한 판이라 created_at 을 발행일로 적었다. 발행 뒤의 전개(Brent 10/2 · 경유 9/21)는 붙이지 않았다 — 그것은 다음 버전의 일이다"
     }
   ],
@@ -421,7 +422,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-10-30",
-      "_basis": "17 U.S.C. §105 — Board of Governors of the Federal Reserve System 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+      "basis": "17 U.S.C. §105 — Board of Governors of the Federal Reserve System 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     },
     {
       "source": "bls.gov",
@@ -434,7 +435,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-10-30",
-      "_basis": "17 U.S.C. §105 — U.S. Bureau of Labor Statistics (Department of Labor) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+      "basis": "17 U.S.C. §105 — U.S. Bureau of Labor Statistics (Department of Labor) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     },
     {
       "source": "bea.gov",
@@ -447,7 +448,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-10-30",
-      "_basis": "17 U.S.C. §105 — U.S. Bureau of Economic Analysis (Department of Commerce) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+      "basis": "17 U.S.C. §105 — U.S. Bureau of Economic Analysis (Department of Commerce) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     },
     {
       "source": "home.treasury.gov",
@@ -460,7 +461,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-10-30",
-      "_basis": "17 U.S.C. §105 — U.S. Department of the Treasury 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+      "basis": "17 U.S.C. §105 — U.S. Department of the Treasury 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     },
     {
       "source": "cmegroup.com",
@@ -473,7 +474,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": null,
-      "_basis": "권리 미확인 — 미국 연방 정부가 아니다. 전문은 git 밖 캐시(packages/pipeline/.cache/text)에만 둔다. git 에는 서지 · 해시 · span 만 (P-1)"
+      "basis": "권리 미확인 — 미국 연방 정부가 아니다. 전문은 git 밖 캐시(packages/pipeline/.cache/text)에만 둔다. git 에는 서지 · 해시 · span 만 (P-1)"
     },
     {
       "source": "whitehouse.gov",
@@ -486,7 +487,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-10-30",
-      "_basis": "17 U.S.C. §105 — The White House (Executive Office of the President) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+      "basis": "17 U.S.C. §105 — The White House (Executive Office of the President) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     },
     {
       "source": "centcom.mil",
@@ -499,7 +500,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-10-30",
-      "_basis": "17 U.S.C. §105 — U.S. Central Command (Department of Defense) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+      "basis": "17 U.S.C. §105 — U.S. Central Command (Department of Defense) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     },
     {
       "source": "eia.gov",
@@ -512,7 +513,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-10-30",
-      "_basis": "17 U.S.C. §105 — U.S. Energy Information Administration (Department of Energy) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+      "basis": "17 U.S.C. §105 — U.S. Energy Information Administration (Department of Energy) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     }
   ],
   "facts": [

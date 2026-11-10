@@ -111,6 +111,10 @@
       "period": "M09"
     }
   ],
+  "rate_months": [
+    "2026-08",
+    "2026-09"
+  ],
   "sources": [
     {
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
@@ -128,6 +132,10 @@
   "source_documents": [
     {
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "sha256": "7907a08413d3b42c28e8fbe3a660400bc10dc3393e878690ed50f20c656c9360",
+      "fetched_url": null,
+      "fetched_at": "2026-11-10T08:24:04.458Z",
+      "extractor": "bls-raw/1 (API 응답 본문 글자 그대로 — 뽑지 않음)",
       "text": "{\"status\":\"REQUEST_SUCCEEDED\",\"responseTime\":62,\"message\":[],\"Results\":{\n\"series\":\n[{\"seriesID\":\"CES0000000001\",\"data\":[{\"year\":\"2026\",\"period\":\"M10\",\"periodName\":\"October\",\"latest\":\"true\",\"value\":\"159293\",\"footnotes\":[{\"code\":\"P\",\"text\":\"preliminary\"}]},{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"159128\",\"footnotes\":[{\"code\":\"P\",\"text\":\"preliminary\"}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"159068\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"158882\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"158892\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"158861\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"158798\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"158650\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"158436\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"158592\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"158432\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"158449\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"158408\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"158548\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"158472\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"158542\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"158478\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"158498\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"158485\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"158377\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"158310\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"158268\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"LNS14000000\",\"data\":[{\"year\":\"2026\",\"period\":\"M10\",\"periodName\":\"October\",\"latest\":\"true\",\"value\":\"4.1\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"4.2\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"4.1\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"4.1\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"4.2\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"4.3\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"4.3\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"4.3\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"4.4\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"4.3\",\"footnotes\":[{\"code\":\"12\",\"text\":\"January 2026 estimates were revised to incorporate updated population controls. For more information, see www.bls.gov/cps/documentation.htm#pop.\"}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"4.4\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"4.5\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"-\",\"footnotes\":[{\"code\":\"9\",\"text\":\"Data unavailable due to the 2025 lapse in appropriations.\"}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"4.4\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"4.3\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"4.3\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"4.1\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"4.3\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"4.2\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"4.2\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"4.2\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"4.0\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"LNS11300000\",\"data\":[{\"year\":\"2026\",\"period\":\"M10\",\"periodName\":\"October\",\"latest\":\"true\",\"value\":\"61.9\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"61.8\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"61.6\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"61.4\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"61.5\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"61.8\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"61.8\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"61.9\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"62.0\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"62.1\",\"footnotes\":[{\"code\":\"12\",\"text\":\"January 2026 estimates were revised to incorporate updated population controls. For more information, see www.bls.gov/cps/documentation.htm#pop.\"}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"62.4\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"62.5\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"-\",\"footnotes\":[{\"code\":\"9\",\"text\":\"Data unavailable due to the 2025 lapse in appropriations.\"}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"62.5\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"62.3\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"62.2\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"62.3\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"62.4\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"62.6\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"62.5\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"62.5\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"62.6\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"LNS13023653\",\"data\":[{\"year\":\"2026\",\"period\":\"M10\",\"periodName\":\"October\",\"latest\":\"true\",\"value\":\"766\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"845\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"839\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"921\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"768\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"778\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"917\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"877\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"925\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"839\",\"footnotes\":[{\"code\":\"12\",\"text\":\"January 2026 estimates were revised to incorporate updated population controls. For more information, see www.bls.gov/cps/documentation.htm#pop.\"}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"929\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"1002\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"-\",\"footnotes\":[{\"code\":\"9\",\"text\":\"Data unavailable due to the 2025 lapse in appropriations.\"}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"844\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"890\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"940\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"867\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"879\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"873\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"818\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"819\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"837\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"CUSR0000SA0\",\"data\":[{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"336.298\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"334.131\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"332.813\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"332.568\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"333.979\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"332.407\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"330.293\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"327.460\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"326.588\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"326.031\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"325.063\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"-\",\"footnotes\":[{\"code\":\"X\",\"text\":\"Data unavailable due to the 2025 lapse in appropriations\"}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"324.245\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"323.291\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"322.169\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"321.435\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"320.620\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"320.302\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"319.785\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"319.679\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"318.961\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"CUUR0000SA0\",\"data\":[{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"336.940\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"334.980\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"333.918\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"333.952\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"335.123\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"333.020\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"330.213\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"326.785\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"325.252\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"324.054\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"324.122\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"-\",\"footnotes\":[{\"code\":\"X\",\"text\":\"Data unavailable due to the 2025 lapse in appropriations\"}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"324.800\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"323.976\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"323.048\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"322.561\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"321.465\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"320.795\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"319.799\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"319.082\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"317.671\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"CUSR0000SA0L1E\",\"data\":[{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"338.896\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"337.765\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"336.789\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"336.065\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"336.121\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"335.423\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"334.165\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"333.512\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"332.793\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"331.814\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"331.043\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"-\",\"footnotes\":[{\"code\":\"X\",\"text\":\"Data unavailable due to the 2025 lapse in appropriations\"}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"330.418\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"329.700\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"328.682\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"327.658\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"326.893\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"326.467\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"325.690\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"325.465\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"324.638\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"CUUR0000SA0L1E\",\"data\":[{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"339.287\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"338.041\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"337.133\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"336.882\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"336.846\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"335.803\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"334.391\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"333.242\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"331.950\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"330.506\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"330.425\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"-\",\"footnotes\":[{\"code\":\"X\",\"text\":\"Data unavailable due to the 2025 lapse in appropriations\"}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"330.804\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"329.970\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"328.980\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"328.364\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"327.509\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"326.815\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"325.933\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"325.252\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"323.842\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"CUSR0000SA0E\",\"data\":[{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"337.834\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"321.148\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"314.553\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"319.290\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"338.639\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"325.978\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"314.019\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"283.223\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"281.436\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"285.624\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"284.648\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"-\",\"footnotes\":[{\"code\":\"X\",\"text\":\"Data unavailable due to the 2025 lapse in appropriations\"}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"280.700\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"276.734\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"274.850\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"276.558\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"275.377\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"277.343\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"278.906\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"282.096\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"282.272\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"WPSFD4\",\"data\":[{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"159.780\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"157.662\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"156.924\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"156.683\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"156.874\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"156.061\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"154.393\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"153.204\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"152.468\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"151.592\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"151.054\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"150.439\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"150.245\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"149.327\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"149.597\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"148.393\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"148.153\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"147.655\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"148.055\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"148.233\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"147.975\",\"footnotes\":[{}]}]},\n{\"seriesID\":\"WPUFD4\",\"data\":[{\"year\":\"2026\",\"period\":\"M09\",\"periodName\":\"September\",\"latest\":\"true\",\"value\":\"159.613\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]},{\"year\":\"2026\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"157.855\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]},{\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"157.297\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]},{\"year\":\"2026\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"157.158\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]},{\"year\":\"2026\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"157.219\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"156.443\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"154.675\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"153.156\",\"footnotes\":[{}]},{\"year\":\"2026\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"152.145\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M12\",\"periodName\":\"December\",\"value\":\"150.773\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M11\",\"periodName\":\"November\",\"value\":\"150.580\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M10\",\"periodName\":\"October\",\"value\":\"150.439\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"150.100\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"149.466\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"149.898\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M06\",\"periodName\":\"June\",\"value\":\"148.838\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M05\",\"periodName\":\"May\",\"value\":\"148.427\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M04\",\"periodName\":\"April\",\"value\":\"148.009\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M03\",\"periodName\":\"March\",\"value\":\"148.319\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M02\",\"periodName\":\"February\",\"value\":\"148.169\",\"footnotes\":[{}]},{\"year\":\"2025\",\"period\":\"M01\",\"periodName\":\"January\",\"value\":\"147.604\",\"footnotes\":[{}]}]}]\n}}"
     }
   ],
@@ -143,7 +151,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-11-10",
-      "_basis": "17 U.S.C. §105 — U.S. Bureau of Labor Statistics (Department of Labor) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+      "basis": "17 U.S.C. §105 — U.S. Bureau of Labor Statistics (Department of Labor) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     }
   ],
   "facts": [
@@ -200,6 +208,25 @@
       "_key": "CES0000000001|2025|M09",
       "_slot": "고용·성장",
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
+    },
+    {
+      "fact_id": "1d23502a-26e2-4268-b703-51b7e1e05c0b",
+      "label": "BLS-CES0000000001-2026M07",
+      "claim_text": "BLS 시리즈 CES0000000001 (비농업 취업자 수 (CES · 계절조정)) — 2026년 7월 값 158882 (천 명). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "CES0000000001|2026|M07",
+      "_slot": "고용·성장",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
     },
     {
       "fact_id": "6cb7c220-3795-4319-932d-11a09d5e602b",
@@ -364,6 +391,25 @@
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
     },
     {
+      "fact_id": "1401f965-cc98-4628-ba2a-819b0df4ff70",
+      "label": "BLS-LNS13023653-2026M07",
+      "claim_text": "BLS 시리즈 LNS13023653 (일시해고 실업자 수 (CPS · 계절조정)) — 2026년 7월 값 921 (천 명). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "LNS13023653|2026|M07",
+      "_slot": "고용·성장",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
+    },
+    {
       "fact_id": "73a4100f-abf5-48a7-a522-830354f28750",
       "label": "BLS-CUSR0000SA0-2026M09",
       "claim_text": "BLS 시리즈 CUSR0000SA0 (CPI-U 전체 지수 (계절조정)) — 2026년 9월 값 336.298 (지수 1982-84=100). 2026-11-10 에 받은 판",
@@ -416,6 +462,25 @@
       "_key": "CUSR0000SA0|2025|M09",
       "_slot": "실제 물가 수치",
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
+    },
+    {
+      "fact_id": "70538587-1ec9-4e29-b2e5-d824ac6e9038",
+      "label": "BLS-CUSR0000SA0-2026M07",
+      "claim_text": "BLS 시리즈 CUSR0000SA0 (CPI-U 전체 지수 (계절조정)) — 2026년 7월 값 332.813 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "CUSR0000SA0|2026|M07",
+      "_slot": "실제 물가 수치",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
     },
     {
       "fact_id": "08603599-f6de-4407-a626-37dba11afb95",
@@ -472,6 +537,25 @@
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
     },
     {
+      "fact_id": "b01b2bdb-4786-4b2a-bb16-b5336eb553a0",
+      "label": "BLS-CUUR0000SA0-2025M08",
+      "claim_text": "BLS 시리즈 CUUR0000SA0 (CPI-U 전체 지수 (계절조정 안 함)) — 2025년 8월 값 323.976 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2025-08",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "CUUR0000SA0|2025|M08",
+      "_slot": "실제 물가 수치",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
+    },
+    {
       "fact_id": "872b5ffa-e14d-4492-8295-bfd1c124f2b8",
       "label": "BLS-CUSR0000SA0L1E-2026M09",
       "claim_text": "BLS 시리즈 CUSR0000SA0L1E (CPI-U 식품·에너지 제외 지수 (계절조정)) — 2026년 9월 값 338.896 (지수 1982-84=100). 2026-11-10 에 받은 판",
@@ -524,6 +608,25 @@
       "_key": "CUSR0000SA0L1E|2025|M09",
       "_slot": "실제 물가 수치",
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
+    },
+    {
+      "fact_id": "f1773c86-6b32-4561-a764-c7845dc9d1be",
+      "label": "BLS-CUSR0000SA0L1E-2026M07",
+      "claim_text": "BLS 시리즈 CUSR0000SA0L1E (CPI-U 식품·에너지 제외 지수 (계절조정)) — 2026년 7월 값 336.789 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "CUSR0000SA0L1E|2026|M07",
+      "_slot": "실제 물가 수치",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
     },
     {
       "fact_id": "65793986-e24c-4510-a412-8350d912103f",
@@ -580,6 +683,25 @@
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
     },
     {
+      "fact_id": "595b43a1-1f77-4b12-aa5e-79d38e457b66",
+      "label": "BLS-CUUR0000SA0L1E-2025M08",
+      "claim_text": "BLS 시리즈 CUUR0000SA0L1E (CPI-U 식품·에너지 제외 지수 (계절조정 안 함)) — 2025년 8월 값 329.970 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2025-08",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "CUUR0000SA0L1E|2025|M08",
+      "_slot": "실제 물가 수치",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
+    },
+    {
       "fact_id": "0c565d69-4415-41db-a7a3-703a6cc58d0e",
       "label": "BLS-CUSR0000SA0E-2026M09",
       "claim_text": "BLS 시리즈 CUSR0000SA0E (CPI-U 에너지 지수 (계절조정)) — 2026년 9월 값 337.834 (지수 1982-84=100). 2026-11-10 에 받은 판",
@@ -632,6 +754,25 @@
       "_key": "CUSR0000SA0E|2025|M09",
       "_slot": "실제 물가 수치",
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
+    },
+    {
+      "fact_id": "0944c70b-cc7e-498d-b3a5-0ec9a87e929d",
+      "label": "BLS-CUSR0000SA0E-2026M07",
+      "claim_text": "BLS 시리즈 CUSR0000SA0E (CPI-U 에너지 지수 (계절조정)) — 2026년 7월 값 314.553 (지수 1982-84=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "CUSR0000SA0E|2026|M07",
+      "_slot": "실제 물가 수치",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
     },
     {
       "fact_id": "b1a51626-9707-481a-83a2-99a2bcde912d",
@@ -688,6 +829,25 @@
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
     },
     {
+      "fact_id": "313cee05-73a7-452a-a67e-8bc01c8c3162",
+      "label": "BLS-WPSFD4-2026M07",
+      "claim_text": "BLS 시리즈 WPSFD4 (PPI 최종수요 지수 (계절조정)) — 2026년 7월 값 156.924 (지수 2009-11=100) · 각주 \"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\". 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2026-07",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "WPSFD4|2026|M07",
+      "_slot": "실제 물가 수치",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
+    },
+    {
       "fact_id": "e9166b4c-abe9-4d3d-83f2-966bd5920404",
       "label": "BLS-WPUFD4-2026M09",
       "claim_text": "BLS 시리즈 WPUFD4 (PPI 최종수요 지수 (계절조정 안 함)) — 2026년 9월 값 159.613 (지수 2009-11=100) · 각주 \"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\". 2026-11-10 에 받은 판",
@@ -740,6 +900,25 @@
       "_key": "WPUFD4|2025|M09",
       "_slot": "실제 물가 수치",
       "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)"
+    },
+    {
+      "fact_id": "52366c21-5374-4139-acf3-5a6d63519b24",
+      "label": "BLS-WPUFD4-2025M08",
+      "claim_text": "BLS 시리즈 WPUFD4 (PPI 최종수요 지수 (계절조정 안 함)) — 2025년 8월 값 149.466 (지수 2009-11=100). 2026-11-10 에 받은 판",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-11-10",
+      "event_at": "2025-08",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-bls/1 (code)",
+      "_key": "WPUFD4|2025|M08",
+      "_slot": "실제 물가 수치",
+      "_series_meaning_basis": "시리즈 ID 형식 — 이 응답 안에서 대조되지 않음 (P-3 _open)",
+      "_rate_base": "변화율의 기준 달 — 계산된 수(bls-rates · ComputedNumber)의 입력이라 사실로 만든다 (W-4)"
     }
   ],
   "fact_sources": [
@@ -766,6 +945,14 @@
       "span_start": 1333,
       "span_end": 1420,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"158548\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "1d23502a-26e2-4268-b703-51b7e1e05c0b",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CES0000000001",
+      "span_start": 464,
+      "span_end": 546,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"158882\",\"footnotes\":[{}]"
     },
     {
       "fact_id": "6cb7c220-3795-4319-932d-11a09d5e602b",
@@ -840,6 +1027,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"844\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "1401f965-cc98-4628-ba2a-819b0df4ff70",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "LNS13023653",
+      "span_start": 6725,
+      "span_end": 6804,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"921\",\"footnotes\":[{}]"
+    },
+    {
       "fact_id": "73a4100f-abf5-48a7-a522-830354f28750",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "CUSR0000SA0",
@@ -862,6 +1057,14 @@
       "span_start": 9739,
       "span_end": 9827,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"324.245\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "70538587-1ec9-4e29-b2e5-d824ac6e9038",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUSR0000SA0",
+      "span_start": 8790,
+      "span_end": 8873,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"332.813\",\"footnotes\":[{}]"
     },
     {
       "fact_id": "08603599-f6de-4407-a626-37dba11afb95",
@@ -888,6 +1091,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"324.800\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "b01b2bdb-4786-4b2a-bb16-b5336eb553a0",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUUR0000SA0",
+      "span_start": 11800,
+      "span_end": 11885,
+      "_passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"323.976\",\"footnotes\":[{}]"
+    },
+    {
       "fact_id": "872b5ffa-e14d-4492-8295-bfd1c124f2b8",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "CUSR0000SA0L1E",
@@ -910,6 +1121,14 @@
       "span_start": 13682,
       "span_end": 13770,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"330.418\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "f1773c86-6b32-4561-a764-c7845dc9d1be",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUSR0000SA0L1E",
+      "span_start": 12733,
+      "span_end": 12816,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"336.789\",\"footnotes\":[{}]"
     },
     {
       "fact_id": "65793986-e24c-4510-a412-8350d912103f",
@@ -936,6 +1155,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"330.804\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "595b43a1-1f77-4b12-aa5e-79d38e457b66",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUUR0000SA0L1E",
+      "span_start": 15746,
+      "span_end": 15831,
+      "_passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"329.970\",\"footnotes\":[{}]"
+    },
+    {
       "fact_id": "0c565d69-4415-41db-a7a3-703a6cc58d0e",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "CUSR0000SA0E",
@@ -958,6 +1185,14 @@
       "span_start": 17626,
       "span_end": 17714,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"280.700\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "0944c70b-cc7e-498d-b3a5-0ec9a87e929d",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "CUSR0000SA0E",
+      "span_start": 16677,
+      "span_end": 16760,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"314.553\",\"footnotes\":[{}]"
     },
     {
       "fact_id": "b1a51626-9707-481a-83a2-99a2bcde912d",
@@ -984,6 +1219,14 @@
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"150.245\",\"footnotes\":[{}]"
     },
     {
+      "fact_id": "313cee05-73a7-452a-a67e-8bc01c8c3162",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "WPSFD4",
+      "span_start": 18888,
+      "span_end": 19094,
+      "_passage": "\"year\":\"2026\",\"period\":\"M07\",\"periodName\":\"July\",\"value\":\"156.924\",\"footnotes\":[{\"code\":\"P\",\"text\":\"Preliminary. All indexes are subject to monthly revisions up to four months after original publication.\"}]"
+    },
+    {
       "fact_id": "e9166b4c-abe9-4d3d-83f2-966bd5920404",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "WPUFD4",
@@ -1006,6 +1249,14 @@
       "span_start": 22400,
       "span_end": 22488,
       "_passage": "\"year\":\"2025\",\"period\":\"M09\",\"periodName\":\"September\",\"value\":\"150.100\",\"footnotes\":[{}]"
+    },
+    {
+      "fact_id": "52366c21-5374-4139-acf3-5a6d63519b24",
+      "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
+      "section": "WPUFD4",
+      "span_start": 22491,
+      "span_end": 22576,
+      "_passage": "\"year\":\"2025\",\"period\":\"M08\",\"periodName\":\"August\",\"value\":\"149.466\",\"footnotes\":[{}]"
     }
   ],
   "missing": [],

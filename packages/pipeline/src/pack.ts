@@ -7,7 +7,7 @@
 // 사건마다 폴더 하나: packages/pipeline/data/events/<code>/
 //   pack.json              사람이 쓴 목록 (입력) — 무엇 · 누가 · 주소 · 왜(슬롯) · 주소를 어떻게 확인했나 · 공개 시각과 그 증거 글
 //   store.json             계약 모양 (DATA_MODEL §1) — events · sources · source_registry · source_documents(비움) · 나머지 칸은 빈 배열
-//   store.documents.json   SourceDocument — 원문 전문 (can_store 인 발행처만 = 미국 연방 정부). P-1 과 같은 모양
+//   store.documents.json   SourceDocument — 원문 전문 + 가져온 기록의 칸 (can_store 인 발행처만 = 미국 연방 정부). P-1 과 같은 모양
 //   fetch.json             가져온 기록 — 문서마다 요청 · 받은 때 · 리다이렉트 뒤 주소 · 해시 · robots · 못 가져온 까닭 (계약 밖 — P-1 _open P1-a)
 //   .cache (git 밖)        받은 바이트 · 권리 미확인 문서의 글 — packages/pipeline/.cache/events/<code>/
 //
@@ -18,7 +18,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-import { EXTRACTOR, extract, sha256 } from "./extract.ts";
+import { EXTRACTOR, extract, sha256, sourceDocument } from "./extract.ts";
 import { USER_AGENT, fetchOnce, type Fetched } from "./fetch.ts";
 import { cpLength } from "./match.ts";
 import { registryRow, rightsOf, type Rights } from "./rights.ts";
@@ -245,7 +245,7 @@ async function main() {
   // 가져온 기록을 먼저 쓴다 — 뒤에서 멈춰도 무엇을 요청했고 무엇이 왔는지는 남는다
   const robots = [...new Map([...(prevRec.robots ?? []).map((r) => [r.host, r] as const), ...[...robotsSeen.values()].map((r) => [r.host, r] as const)]).values()];
   writeFileSync(RECORD, JSON.stringify({
-    _what: `${code} 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — SourceDocument 에 해시 · 가져온 주소 · 때의 칸이 없다 (P-1 _open P1-a · D40)`,
+    _what: `${code} 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭`,
     event: code, user_agent: USER_AGENT, extractor: EXTRACTOR, robots_rules: ROBOTS_VERSION,
     position_unit: "코드 포인트 (Unicode scalar)", hash: "sha256(UTF-8(SourceDocument.text))",
     robots, documents: docs, spans: [],
@@ -296,10 +296,10 @@ async function main() {
     source_registry: pubs.map((p) => registryRow(p, prevReg.get(p)?.last_reviewed_at ?? today, "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)")),
     facts: [], fact_sources: [], claims: [], goals: [], bridges: [], slot_checks: [],
   };
-  const documents = sources.filter((s) => docs.find((d) => d.label === s.label)!.text_in === "store.documents.json").map((s) => ({ source_id: s.source_id as string, text: texts.get(s.label as string)! }));
+  const documents = sources.filter((s) => docs.find((d) => d.label === s.label)!.text_in === "store.documents.json").map((s) => sourceDocument(s.source_id as string, texts.get(s.label as string)!, docs.find((d) => d.label === s.label)!));
   writeFileSync(STORE, JSON.stringify(store, null, 2) + "\n");
   writeFileSync(DOCS, JSON.stringify({
-    _what: `${code} 의 SourceDocument (DATA_MODEL §1) — 원문 전문. 미국 연방 정부 저작물만 (17 U.S.C. §105 · store.json source_registry). 권리 미확인 원문은 git 밖 캐시에만. pack.ts 가 쓴다 — 손으로 고치지 않는다`,
+    _what: `${code} 의 SourceDocument (DATA_MODEL §1) — 원문 전문 + 가져온 기록의 칸 (sha256 · 가져온 주소 · 때 · 뽑은 방법 — W-4 P1-a). 미국 연방 정부 저작물만 (17 U.S.C. §105 · store.json source_registry). 권리 미확인 원문은 git 밖 캐시에만. pack.ts 가 쓴다 — 손으로 고치지 않는다`,
     source_documents: documents,
   }, null, 2) + "\n");
   const n = (f: (d: PackDoc) => boolean) => docs.filter(f).length;

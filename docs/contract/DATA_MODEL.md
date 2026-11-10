@@ -11,6 +11,7 @@
 | 2026-10-12 | 잔일 (D33 C-6 검수) — §7.4 표를 실물에 맞춤: Deep A 가 DC-G 도 가리킨다 · Deep C 는 좁혀졌다 (요점 문장 넷은 C-6 이 고쳤다). 표는 `e6ff2ca` 의 저장소에 대한 날짜 붙은 기록이다. 타입 · 불변식 불변 | B-0.4a |
 | 2026-10-09 | 골든 · 브리프를 이 모양으로 옮겼다 (§18) — `fixtures/store.json` · `fomc-2026-09.record.json` · 패키지의 참조를 층별 Ref 로. 계약에 더한 것: "닿는 Fact"의 뜻과 불변식 11 이 반증 답의 사실에도 걸린다는 것(§7.3 · §14) · `_source_note` 의 행선지(§11) · §15 대체 관계 줄(자리 없음) · §17 대기 21 이 풀린 기록 · §19 _open-m6 ~ m8. 타입은 안 바뀜 | B-0.2m-a |
 | 2026-10-09 | 계약이 살아 있는 실물의 글자 · 수를 적지 않게 — §17 대기 표는 날짜 붙은 기록으로, 불변식 25 는 어휘 · 층만 (목록 · 수는 검사가 실물에서 센다). 잠정 적용 → §19 _open-m1 | B-0.2m-a |
+| 2026-11-11 | 파이프라인 실물을 계약에 — SourceDocument 에 가져온 기록 (`sha256` · `fetched_url` · `fetched_at` · `extractor` — P1-a) · SourceRegistry `basis` (J5) · **ComputedNumber** 타입 (계산된 수 · §6.5 — D48 W3-a) · §7.3 표에 방어용 줄 (DEFENSIVE + UNRESOLVED + NOT_REFUTED · SCOPED — D50 P5-c) · StorylineVersion `event_facts` (스토리라인 판이 사건 사실을 가리킨다 — P5-b) · 불변식 23 · 29 ~ 34 · §20 _open W4 | W-4 |
 
 > **상태: 게이트 통과 (D27 · 2026-10-03). _open 3개 모두 판정됨 (§16).**
 > ARTICLE_PACKAGE 는 사실 · 해석 · 브리지 · 사건을 참조로만 가리켰다. 이 계약이 그 참조가 가리키는 것의 주인이다.
@@ -37,8 +38,8 @@
 ## 0. 범위
 
 **이 계약이 주인인 것** — Fact · FactSource · Source · SourceDocument · SourceRegistry · DerivedClaim · CounterCheck · Goal · Bridge ·
-Event · Storyline · StorylineVersion · TimeExpression · ArticleRecord · ArticleAuthoring · SlotCheck,
-그리고 참조 모양 FactRef · ClaimRef · BridgeRef · SourceRef · EventRef · StorylineRef · GoalRef.
+Event · Storyline · StorylineVersion · TimeExpression · ComputedNumber · ArticleRecord · ArticleAuthoring · SlotCheck,
+그리고 참조 모양 FactRef · ClaimRef · BridgeRef · SourceRef · EventRef · StorylineRef · GoalRef · ComputedRef.
 
 **안 넣는 것**
 - Concept 과 그 참조(ConceptRef) · 브리지 자리(BridgeSlot) → CONCEPT_IDENTITY. 여기서는 가리키기만 한다
@@ -65,6 +66,7 @@ BridgeRef    = UUID                // Bridge.bridge_id
 SourceRef    = UUID                // Source.source_id — 패키지에는 나오지 않는다
 EventRef     = EventId
 GoalRef      = UUID                // Goal.goal_id — 패키지에는 나오지 않는다. 물음(OBSERVATION Probe)이 이것으로 가리킨다 (D33)
+ComputedRef  = UUID                // ComputedNumber.computed_id (W-4). 패키지 span 이 이것을 가리키는 모양은 미확인 — §6.5 · §20 _open W4-a
 StorylineRef = StorylineId
 
 FactType = "OFFICIAL_ACTION" | "OFFICIAL_CLAIM" | "OFFICIAL_LIMIT" | "MEASUREMENT"
@@ -106,9 +108,13 @@ Source {                            // 문서 하나 (§4)
   ingested_at:  TimePoint           // 확정 §5.3. Claro 가 수집한 때
 }
 
-SourceDocument {                    // 원문 보관 (확정 §5.5). 한 번 보관하면 바뀌지 않는다
-  source_id: UUID
-  text:      string                 // span_start · span_end 가 가리키는 글
+SourceDocument {                    // 원문 보관 (확정 §5.5). 한 번 보관하면 바뀌지 않는다 — 글과 "그때 무엇을 읽었나"의 증명 (§4.1 · D40 P1-a)
+  source_id:   UUID
+  sha256:      string               // sha256(UTF-8(text)), 소문자 16진 64자. 글에서 다시 계산한 값과 같다 (불변식 29)
+  fetched_url: string | null        // 실제로 받은 주소 — 리다이렉트 뒤 (실물 EIA-B: Source.url 과 다르다). null = 기록하지 않았다 (실물 BLS API 응답 1)
+  fetched_at:  TimePoint            // 받은 때 — 시각까지 (실물 "2026-10-30T05:33:10.407Z")
+  extractor:   string               // 글을 뽑은 방법과 그 판 — "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)". 판이 다르면 같은 바이트에서 다른 글이 나올 수 있다
+  text:        string               // span_start · span_end 가 가리키는 글
 }
 
 SourceRegistry {                    // 확정 §5.1 필드 그대로. 발행처 하나에 한 행. 실물 없음
@@ -122,6 +128,7 @@ SourceRegistry {                    // 확정 §5.1 필드 그대로. 발행처 
   attribution_required: boolean | null
   terms_url:            string | null
   last_reviewed_at:     TimePoint | null
+  basis:                string | null    // 위 칸들의 근거 — 법 · 약관 · 그 밖. null = 근거 없음 (그러면 can_* 은 전부 null). 실물: "17 U.S.C. §105 — … 연방 정부" · "권리 미확인 — …" (P-1 J5)
 }
 
 DerivedClaim {                      // 사실에서 끌어낸 해석. Fact 가 아니다 (확정 §4.1). 발행물이 가리키면 고치지 않는다
@@ -180,11 +187,12 @@ Storyline {                         // 버전이 오르는 독립 객체. 자체
   ongoing:      boolean             // "아직 진행 중인가" — 여기가 답한다 (D8 규칙 5). 실물 없음
 }
 
-StorylineVersion {                  // 한 번 만들면 고치지 않는다. 실물 없음
+StorylineVersion {                  // 한 번 만들면 고치지 않는다. 실물: SL-iran-war v1 (골든) · v2 (P-4)
   storyline_id: StorylineId
   version:      integer             // 1부터 1씩
   created_at:   TimePoint
   change:       string              // 한 줄. 무엇이 붙었나
+  event_facts:  FactRef[]           // 이 판에 붙은 사건 소유 사실 — 가리키기만 한다. 소유는 사건 그대로 (§9.2 · W-4 P5-b). 실물 v2 94 · v1 []
 }
 
 ArticleRecord {                     // 발행 한 번 = 하나. 통째로 불변 (§11)
@@ -216,6 +224,21 @@ TextLocator  { level: string, path: string, fragment: string }   // level = Leve
 DerivedInput { key: string, what: string, value: TimePoint, fact: FactRef | null }
 Formula      { op: string, from: string | null, to: string | null, of: string | null, offset: integer | null }
 
+ComputedNumber {                    // 사실(수) 둘에서 정해진 방법으로 계산한 수 (§6.5 · D48 W3-a). Fact 가 아니다 — 원문에 그 수가 글자로 없다
+  computed_id: UUID
+  label:       string               // "RATE-CPI_ALL_12M-2026M09" (실물). 사건 안에서 유일
+  event_id:    EventId              // 소유 — 사건 하나 (실물 10월 사건 18)
+  op:          "pct_change_12m" | "pct_change_1m" | "level_change_1m"   // 실물 셋 (§6.5 표). 새 op 는 계약 개정으로만
+  inputs:      ComputedInput[]      // 정확히 둘 — to · from 순서. 둘 다 Fact (불변식 31)
+  places:      integer | null       // pct_change_*: 반올림할 소수 자리 (실물 1). level_change_1m: null — 입력 자리 그대로, 반올림 없음
+  value:       string               // 십진 글 "3.7" · "-82" · "0.0". 수(number)가 아니다 — "0.0" 과 "0" 이 다르고, 다시 계산과 글자로 댄다 (불변식 32)
+  unit:        string               // "%" (pct_change_*) · 입력의 단위 (level_change_1m — 실물 "천 명")
+  volatility:  "STABLE" | "VOLATILE"   // 입력 중 하나라도 VOLATILE 이면 VOLATILE (불변식 33)
+  as_of:       TimePoint | null     // VOLATILE 이면 입력의 as_of (입력끼리 같아야 한다). STABLE 이면 null
+}
+
+ComputedInput { role: "to" | "from", fact: FactRef, value: string }   // value = 그 사실의 원문 위치(FactSource span) 글에 글자로 있는 수
+
 SlotCheck {                         // Coverage 슬롯 하나의 점검 결과 — Fact 에 닿는 부분만 (§12)
   slot:      string                 // 슬롯 이름. 슬롯 정의 · 모양은 미확인
   status:    "FOUND" | "NOT_EXTRACTED" | "SOURCE_UNAVAILABLE" | "NOT_APPLICABLE" | "STORYLINE_STALE"
@@ -234,6 +257,7 @@ SlotCheck {                         // Coverage 슬롯 하나의 점검 결과 �
 | 무엇 | 키 | 사람이 부르는 이름 | 근거 |
 |---|---|---|---|
 | Fact · DerivedClaim · Bridge · Source | UUID | `label` — "F31" · "DC-C" · "S1". 소유자 안에서만 유일 | 아래 · D27 |
+| ComputedNumber (W-4) | UUID (`computed_id`) | `label` — "RATE-CPI_ALL_12M-2026M09". 사건 안에서 유일 | Fact 와 같은 방식 (§6.5) |
 | Event | UUID (`event_id`) | `code` — "FOMC-20260916". 전체에서 유일 · 불변 | D27. code 값은 실물 — 골든 `event_ref` |
 | Storyline | UUID (`storyline_id`) | `code` — "SL-iran-war". 전체에서 유일 · 불변 | D27. code 값은 실물 — 도윤 관찰 · development-content C-3 |
 | Concept | CONCEPT_IDENTITY §2 (UUID + `code`) | "C-0002" | D25 |
@@ -372,6 +396,15 @@ ARTICLE_PACKAGE 의 span 은 층 하나에 refs 를 싣는다. refs 가 무엇�
 - **한 번 보관한 원문은 바뀌지 않는다.** span 위치가 그 글을 가리키기 때문이다. 같은 주소의 문서가 바뀌면 새 Source 다.
   **실물**: FOMC S3 "기자회견 전문 (**preliminary**)" — 확정본이 나오면 다른 글이다. 이미 뽑은 사실은 preliminary 를 계속 가리킨다
 - 원문 언어는 `Source.language` 에 (§10 인용)
+- **원문과 함께 "그때 무엇을 읽었나"의 증명을 둔다 (W-4 · D40 P1-a).** 원문 보관(확정 §5.5)의 뜻이 그 증명이고, 증명은 해시 · 받은 주소 · 받은 때 · 뽑은 방법이다 —
+  `SourceDocument.sha256` · `fetched_url` · `fetched_at` · `extractor`. **실물** — P-1 · P-2 의 가져온 기록(`packages/pipeline/data/fomc-2026-09.sources.json` ·
+  `data/events/FOMC-20261028/fetch.json` · `bls/bls.json`)의 `text_sha256` · `fetch.final_url` · `fetch.fetched_at` · `extractor` 칸 (공개 저장소의 원문 41 = P-1 17 · P-2 23 · BLS 1. 권리 미확인 5 는 git 밖 캐시 — 기록에는 같은 칸이 있다).
+  파이프라인이 원문을 쓸 때 이 칸을 같이 쓴다 (손으로 적지 않는다)
+  - `sha256` 은 **글**의 해시다 — 받은 바이트의 해시가 아니다. 같은 바이트도 뽑는 판이 다르면 다른 글이 되고, 다른 바이트도 같은 글이 될 수 있다 (실물: P-1 `--check` — 다시 받은 바이트 12 개가 달랐고 글은 17/17 같았다). span 이 가리키는 것은 글이다.
+    받은 바이트의 해시 · HTTP 상태 · robots 판단 · 못 가져온 까닭은 파이프라인의 기록에만 둔다 — 계약 타입이 아니다
+  - `fetched_url` — 실물 EIA-B 는 `Source.url` 과 다른 주소에서 받았다 (리다이렉트). `null` 은 "기록하지 않았다"이지 "리다이렉트가 없었다"가 아니다 (실물: BLS API 응답 — 요청 주소만 적었다)
+  - `fetched_at` 은 `Source.ingested_at`(날) 과 다른 칸이다. 실물: 골든 Source 의 `ingested_at` 은 C-3 이 읽은 날이고 원문은 그 뒤(10/30)에 받았다 (P-1 P1-c) — 받은 판이 읽은 판과 같다는 증명은 없다
+  - **Source 하나에 SourceDocument 하나.** D40 P1-c 는 "Source 는 문서(주소) 하나, 받은 판은 그 아래 여럿일 수 있다"를 받았지만, 한 Source 에 판 둘을 저장한 실물이 없다 (살아 있는 페이지 6 도 판 하나씩) → 둘째 판의 자리는 **미확인** (§20 _open W4-c)
 
 ### 4.2 원문 위치와 N:M (확정 §5.3 · §5.5)
 
@@ -391,7 +424,10 @@ ARTICLE_PACKAGE 의 span 은 층 하나에 refs 를 싣는다. refs 가 무엇�
 
 - `SourceRegistry` — 확정 §5.1 필드 그대로, 발행처마다 한 행. **실물 없음** — 채운 행이 하나도 없다. 브리프의 "성격" 열("미국 정부 저작물" · "주정부 자료" · "2차")이 가장 가까운 실물이다
 - "1차 자료를 쓰면 저작권 문제가 사라진다"는 사실이 아니다 (확정 §5.1) — 지역 연은 · 국제기구는 자체 저작권을 주장한다
-- 이 계약이 권리를 쓰는 곳: **인용 블록은 `can_quote` 가 참인 출처에서만** (§10 · 불변식 20)
+- 이 계약이 권리를 쓰는 곳: **인용 블록은 `can_quote` 가 참인 출처에서만** (§10 · 불변식 20) · **원문은 `can_store` 가 참인 발행처 것만 공개 저장소에** (P-1)
+- **`basis` — 권리 칸의 근거 (W-4 · P-1 J5).** 실물: 연방 정부 7 발행처 "17 U.S.C. §105 — … 는 미국 연방 정부다 … → can_store · can_quote. 나머지 칸은 이 근거가 직접 말하지 않아 null" · 그 밖 "권리 미확인 — …".
+  근거가 직접 말하는 칸만 채우고 나머지는 null 로 둔다 — 그래서 **can_* 에 값(참 · 거짓)이 하나라도 있으면 `basis` 가 있다** (불변식 30). 근거 없는 "가능"은 적지 않는다
+- SourceDocument 는 권리를 따로 적지 않는다 — 그 Source 의 발행처 행(`basis`)이 근거다 (한 곳). 행을 다시 검토해 값이 바뀌면 이미 보관한 원문이 어느 근거로 보관됐는지가 흐려진다 — 다시 검토한 실물이 없다 → **미확인** (§15)
 - `can_store` 가 거짓인 발행처는 원문 보관(§5.5)과 부딪힌다 — 그 출처로 Fact 를 지을 수 있는지 **미확인** (실물 없음)
 
 ---
@@ -494,6 +530,48 @@ D8 은 이것을 사실의 속성으로 두었는데, DERIVED 는 사실의 속�
 - **발행하려면 모든 입력에 `fact` 가 있어야 한다.** 실물: `war_start`(이란 개전) · `minutes`(9월 회의록 공개)가 비어 있었다 — 0.2m-a 에서 둘 다 사실을 가리킨다.
   단 회의록 공개일을 말하는 문서는 발행 뒤의 것이라 그 사실은 불변식 11 에 걸린다 (C-3 M-4)
 
+### 6.5 계산된 수 — ComputedNumber (W-4 · D48 W3-a)
+
+**원천** — 실물 `packages/pipeline/data/events/FOMC-20261028/bls/rates.json` (W-3 — 계산 18: CPI 전체 · 근원 · 에너지 · PPI 최종수요의 변화율, 비농업 취업자 · 일시해고의 증감 · 2026-08 · 2026-09) ·
+같은 계산의 정답 대조 (9월 골든 CPI 23/23 같음 — D48 검수) · D48 W3-a 판정 (a) · D8 규칙 3 · 4.
+
+**왜 Fact 가 아닌가** — Fact 는 원문 위치(FactSource span)가 그 글을 말해야 한다 (확정 §5.5). BLS 응답에는 지수 수준만 있고 "3.7%" 를 말하는 곳이 없다.
+그 수를 Fact 로 두면 "구절이 원문에 있다 ≠ 그 구절이 이 글을 말한다" (D42) 를 정면으로 어긴다. 계산된 수는 사실 둘을 가리키고, 사실이 원문을 가리킨다.
+
+**왜 TimeExpression(DERIVED) 과 합치지 않나 — 실물로 갈린다**
+
+| | TimeExpression (DERIVED · §6.3) | ComputedNumber |
+|---|---|---|
+| 붙는 곳 | 기사 글 조각 — `at: TextLocator` 필수. ArticleRecord 의 저작 데이터 | 사건 — 기사보다 먼저 있다 (실물: 기사가 없는 10월 사건 18) |
+| 기준 | 패키지 `published_at` 에 기댄다 ("올해" · "201일째") | 발행일과 무관 — 입력 두 사실만 |
+| 입력 | 날짜 (`DerivedInput.value: TimePoint`) · 입력 사실은 전부 STABLE (D8 규칙 4) | 수 · 입력 사실이 VOLATILE 일 수 있다 (실물 18 전부 — 받은 날의 판) → 결과도 VOLATILE |
+| 수명 | 기사 판 하나와 함께 불변 | 사건 그래프 곁 — 기사 여럿이 나눠 쓸 수 있다 (Fact 처럼) |
+| op | 날짜 7 (§6.4) | 수 3 (아래) |
+
+같은 것은 "다시 계산 == 기록값" 불변식 하나다 (D8 규칙 3). 한 타입으로 합치면 `at` · `published_at` 기준 · 규칙 4 가 한쪽에만 맞는 칸이 되어 칸마다 "이 종류일 때만"이 붙는다 — 그래서 따로 둔다.
+기사 글이 계산된 수를 말하는 조각은 TimeExpression 이 아니다 — 그 조각에는 발행일에 기대는 것이 없다.
+
+| `op` | 계산 | 실물 (10월 사건 · 두 달) |
+|---|---|---|
+| `pct_change_12m` | (to ÷ from − 1) × 100 을 `places` 자리로 반올림 · from = to 의 12 달 전 | CPI 전체 · 근원 · PPI 최종수요의 1년 전 대비 (6) |
+| `pct_change_1m` | 같은 식 · from = 1 달 전 | CPI 전체 · 근원 · 에너지 · PPI 최종수요의 전월 대비 (8) |
+| `level_change_1m` | to − from (입력의 소수 자리 그대로 · 반올림 없음) · from = 1 달 전 | 비농업 취업자 · 일시해고 실업자의 증감 (4) |
+
+- **실물 셋.** 새 op 는 계약 개정으로만 는다 (§6.4 와 같다). 대조에만 쓴 "월평균 증감"(W-3 `avg`) 은 계산된 수가 아니다 — 기사 쪽 실물이 없다
+- **반올림** — 정확한 십진 계산(부동소수 아님) · 남는 자리가 정확히 절반이면 0 에서 먼 쪽 (음수도 같은 크기로) · 0 은 부호 없이 "0.0". BLS 문서로 이 규칙을 확인하지는 못했다 (W3-f) — 정확히 절반인 실물이 아직 없다
+- **입력은 사실이다 (불변식 31).** 둘 다 Fact (FactRef). `ComputedInput.value` 는 그 사실의 원문 위치 글에 글자로 있다 — 원문에서 다시 읽힌다.
+  두 입력은 같은 Source 의 같은 `section` 에 원문 위치가 있다 — 같은 계열이다 (실물: section = BLS 시리즈 ID). from 의 `event_at` 은 to 의 것보다 op 의 달 수만큼 앞이다.
+  실물에서 기준 달(2026-07 · 2025-08)은 사실이 없었다 — W-4 에서 파이프라인(`bls.ts`)이 그 달 값도 사실로 만든다 (9 개 · 사람이 아니라 코드)
+- **어느 시리즈(계절조정 · 안 함)를 쓰나는 계약이 아니다** — BLS 의 발표 방식이고 검사(`verify-bls-rates`)가 본다. 계약은 같은 계열인지만 본다
+- **VOLATILE (불변식 33)** — 입력 중 하나라도 VOLATILE 이면 결과도 VOLATILE 이고 `as_of` = 입력의 `as_of`. 입력끼리 `as_of` 가 다르면 계산하지 않는다 (판이 다른 두 값을 섞지 않는다 — 실물 없음).
+  D8 규칙 4 의 짝이다 — 계산된 수는 발행일로 계산하지 않으니 DERIVED 가 아니고, 바뀌는 값에서 나왔으니 바뀌는 값이다
+- **다시 계산 == 기록값 (불변식 32)** — 입력 값 · op · `places` 로 다시 계산한 글이 `value` 와 글자로 같다. D8 규칙 3 과 같은 종류이고, 발행 때만이 아니라 지을 때부터 기계가 본다
+- **판** — 실물 18 의 입력은 전부 BLS API 를 받은 날(2026-11-10)의 판이다. 첫 발표(회의 때 위원들이 본 값)와 다를 수 있다 (D48 W3-b) — 기사에 쓰면 "11/10 기준"을 붙이거나 첫 발표를 1차로 얻는다 (P-7). `as_of` 가 그 날이다
+- **자리 — 그래프 곁** (`data/events/<code>/bls/rates.json` 의 `computed`). 그래프 파일(`p3/graph.json`)은 사실 추출이 짓는다 — 한 파일에 쓰는 이를 둘 두지 않는다.
+  계산 기록(입력의 원문 위치 · 구절 · 각주 · 반올림 전 값)은 같은 파일의 `rates` 에 둔다 — 계약 타입이 아니고, 값은 `computed` 와 같다.
+  9월 사건의 계산 기록(`p3-golden/FOMC-20260916/bls-rates.json`)은 정답과 견주는 측정이라 계산된 수를 짓지 않는다 — 입력이 9월 사건의 사실이 아니다 (W3-e)
+- **독자에게 어떻게 보이나 — 미확인** (§20 _open W4-a). ARTICLE_PACKAGE §6 의 span 은 층 하나에 refs 를 싣는데 층 다섯(fact · claim · bridge · concept · writing)에 계산된 수의 자리가 없다. 안만 적었다 — 패키지 · 화면은 바꾸지 않았다
+
 ---
 
 ## 7. DerivedClaim (질문 5)
@@ -529,7 +607,11 @@ FTC 는 A~E 중 방어용 1(D), 스크루웜은 A~D 중 방어용 2(C · D). 모
 | 없다 | **검사 안 됨** — 발행 불가 |
 | ASSERTED 인데 `UNRESOLVED` 가 있다 | **검사 안 됨** — 발행 불가 |
 | DEFENSIVE 이고 `UNRESOLVED` 만 있다 | 방어용 — 발행 가능. "어느 쪽도 단정할 수 없다"가 그 해석 자체다(DC-B) |
+| DEFENSIVE 이고 `UNRESOLVED` 가 있고, 나머지는 `NOT_REFUTED` · `SCOPED` 뿐이다 | 방어용 — 발행 가능. `SCOPED` 가 있으면 `statement` 는 좁힌 문장이어야 한다 (VALID WITH SCOPE 와 같은 규칙) — W-4 · D50 P5-c |
 
+- **방어용의 둘째 줄 (W-4 · D50 P5-c)** — 실물 10월 사건 4 건 (DC-08 · 11 · 13 · 14 — 반증 물음이 U 하나에 N · S 가 섞였다). 이 줄이 생기기 전에는 표 밖이었다.
+  까닭 (D50): 방어용 해석은 "어느 쪽도 단정할 수 없다"가 그 자체이고 UNRESOLVED 가 그 말을 받친다. 다른 물음이 반박되지 않았다는 것은 더 약하게 볼 까닭이 아니다. 좁힌 것은 VALID WITH SCOPE 와 같은 규칙이다.
+  ASSERTED 는 그대로다 — UNRESOLVED 가 하나라도 있으면 검사 안 됨. 우리 주장은 답이 비면 서지 않고, 방어는 답이 빈 것이 곧 내용이다
 - **왜 저장하지 않나** — 브리프에는 VALID 가 적혔는데 반증 기록이 없는 해석이 둘 있다(DC-D · DC-E). 판정을 따로 적을 수 있으면 검사 없는 VALID 가 생긴다.
   D23 이 드러낸 구멍("반증 검사를 거치지 않은 해석이 5개")과 같은 모양이다. 판정을 기록에서 계산하면 그 구멍이 구조로 막힌다
 - `NOT_REFUTED` · `SCOPED` 는 답이 된 사실(`facts`)이 1개 이상이어야 발행한다. 실물: DC-A 둘째 답 "셋 다 2026년 투표권자"는 F-ID 가 없다 — 배경 지식에서 온 답이다(FINDINGS 오류 #4 와 같은 경로)
@@ -613,7 +695,13 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 
 - **자체 사실을 갖는다** — "참조 배열이 아니라 first-class object" (확정 §9.2). 늦게 도착한 사실은 원 기사를 고치지 않고 스토리라인에 붙인다
 - 버전 = 사실이 붙는 단위. 사실이 붙을 때마다 버전이 오르고 StorylineVersion 한 행(날짜 · 한 줄)이 생긴다. 한 번 만든 버전은 고치지 않는다
-- 버전 v 에서 아는 사실 = `storyline_id` 가 이 스토리라인이고 `storyline_version ≤ v` 인 Fact 전부. 목록을 버전에 따로 적지 않는다 — 사실 쪽 한 곳에만
+- 버전 v 에서 아는 사실 = `storyline_id` 가 이 스토리라인이고 `storyline_version ≤ v` 인 Fact 전부 **+ 버전 1 ~ v 의 `event_facts`** (W-4 · P5-b). 스토리라인이 소유한 사실의 목록은 버전에 따로 적지 않는다 — 사실 쪽 한 곳에만
+- **스토리라인 판이 사건의 사실을 가리킨다 (`StorylineVersion.event_facts` — W-4 · P5-b (a)).** 실물: SL-iran-war v2 (P-4 · `packages/pipeline/data/storylines/SL-iran-war/v2.json`) —
+  10월 사건 그래프의 사실 94 (EIA 유가 · 경유 · 재무부 · 백악관 문서) 를 가리킨다. 그 사실들은 10월 사건 그래프가 뽑았고 소유도 사건이다 — 스토리라인으로 옮겨 적으면 같은 사실이 두 곳에 생긴다 (D44 P4-b "한 사실은 한 곳에")
+  - **소유는 그대로다.** Fact 는 `event_id` · `storyline_id` 중 정확히 하나 (§9.3 · 불변식 7). `event_facts` 는 가리키기만 한다 — 그래서 원소는 사건 소유 사실이다 (스토리라인 소유 사실은 `storyline_version` 이 이미 판을 말한다) (불변식 34)
+  - 한 사실은 한 스토리라인의 판들 가운데 한 번만 붙는다 — 판은 쌓인다 (v 가 아는 것 ⊆ v+1 이 아는 것)
+  - 판처럼 한 번 만들면 고치지 않는다. v1 (골든) 은 `[]` — v1 의 사실 7 은 전부 스토리라인 소유다
+  - 사건 사실을 가리키는 판을 기사가 쓸 때 핀(§9.4 · 불변식 13)이 필요한지 — **미확인** (§20 _open W4-b). 지금 불변식 13 은 스토리라인 **소유** 사실에만 건다
 - `ongoing` — "아직 진행 중인가"는 사실이 아니라 스토리라인이 답한다 (D8 규칙 5). **실물 없음**
 - 갱신 주기가 다른 스토리라인이 한 기사에서 만난다 (확정 §9.2) — FOMC 는 7주, 이란 전쟁은 며칠. 기사 하나가 스토리라인 여럿을 고정할 수 있어야 한다(§9.4)
 - 버전 이력의 실물은 없다 — 확정 §9.2 의 `S_v5 → S_v6` 예뿐. **실물 없음**
@@ -788,7 +876,8 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 
 **DerivedClaim**
 22. `basis` 1개 이상 (기계). 골든 이전 전: DC 가 있는 claim span 의 `_fact_refs_dropped` ⊆ 브리프 그 DC 의 근거 (기계)
-23. (발행) 판정(§7.3)이 VALID 또는 VALID WITH SCOPE, 또는 DEFENSIVE 이고 UNRESOLVED 만 · NOT_REFUTED · SCOPED 인 check 는 `facts` 1개 이상 (기계: 시험 사본은 WARN)
+23. (발행) 판정(§7.3)이 VALID 또는 VALID WITH SCOPE, 또는 방어용 (DEFENSIVE 이고 UNRESOLVED 가 있고 나머지는 NOT_REFUTED · SCOPED 뿐 — W-4) · NOT_REFUTED · SCOPED 인 check 는 `facts` 1개 이상 ·
+    SCOPED 가 있으면 `statement` 가 좁힌 문장 (기계: 시험 사본은 WARN. 좁힌 문장인지는 파이프라인 출력에서 `verify-claims` 가 — 반증 전 문장 `_statement_before` 와 다르다)
 
 **Coverage**
 24. FOUND 면 `facts` 1개 이상, 나머지 상태는 `facts` 없음. STORYLINE_STALE 이면 `storyline` (기계: 시험 사본에 슬롯이 들어오면. 지금은 0.4)
@@ -804,6 +893,19 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 **ArticleRecord**
 26. `article_id` 는 UUID, `article_version` 은 양의 정수 (기계: 시험 사본). 둘 다 발행 뒤 바뀌지 않고 둘의 짝은 전체에서 유일하다 (0.4).
     골든에 두 칸이 없는 동안은 WARN — 0.2m 대기 (D30)
+
+**원문 · 권리 (W-4)**
+29. SourceDocument `sha256` = sha256(UTF-8(`text`)) — 소문자 16진 64자 · `fetched_at` 은 시각까지 적힌 TimePoint · `extractor` 는 비어 있지 않다 (기계 — `verify-data-model` 골든 · `verify-source-pack` 사건 · `verify-bls-rates` BLS 응답). 파이프라인의 가져온 기록과도 같다 (기계)
+30. SourceRegistry — `can_*` 중 하나라도 값(참 · 거짓)이 있으면 `basis` 가 있다 (기계)
+
+**계산된 수 (W-4 · §6.5)**
+31. `inputs` 는 정확히 둘 (to · from 순서) · 둘 다 있는 Fact · `value` 가 그 사실의 원문 위치(FactSource span) 글에 글자로 있다 · 두 사실이 같은 Source 의 같은 `section` 에 원문 위치가 있다 ·
+    from 의 `event_at` = to 의 `event_at` 에서 op 의 달 수 (12 · 1) 앞 · `label` 은 사건 안에서 유일 · `event_id` = 입력 사실의 사건 (기계 — `verify-bls-rates`)
+32. 다시 계산 == `value` — 입력 값 · op · `places` 로 정확한 십진 계산을 다시 해 글자로 같다. pct_change_* 는 `places` 가 있고 `unit` 이 "%" · level_change_1m 은 `places` 가 null (기계)
+33. 입력 중 VOLATILE 이 있으면 `volatility` VOLATILE · `as_of` = 입력의 `as_of` (입력끼리 같다). 전부 STABLE 이면 STABLE · `as_of` null (기계)
+
+**스토리라인 판 (W-4 · §9.2)**
+34. `event_facts` 의 원소는 있는 Fact 이고 사건 소유다 (`event_id` 가 있다) · 한 스토리라인의 판들 사이에서 겹치지 않는다 (기계 — 골든 `verify-data-model` · v2 `verify-coverage`)
 
 ---
 
@@ -831,6 +933,10 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 | 살아 있는 페이지(달력 · 금리 표 · 가격 시리즈)의 `published_at` | 읽은 판이 언제 공개됐는지 기록이 없다. 저장소는 아는 만큼만 적었다(해 · 달) — 그런 출처에 선 사실은 공개 시점이 증명되지 않는다 (불변식 11). 파이프라인이 문서를 저장하면 그때의 판이 Source 가 된다 (§4.1) |
 | 무엇이 기사의 새 판(`article_version`)을 만드나 | 판이 둘인 실물이 없다 (§11 · D30) |
 | ArticleRecord 의 저장 키 | D1 백엔드 OPEN |
+| 한 Source 에 받은 판이 둘일 때 SourceDocument 의 자리 (W-4) | D40 P1-c 는 "판은 그 아래 여럿일 수 있다"를 받았지만 둘을 저장한 실물이 없다 (§4.1 · §20 _open W4-c) |
+| 권리 행을 다시 검토해 값이 바뀌면 이미 보관한 원문의 근거 (W-4) | SourceDocument 는 권리를 따로 적지 않는다 — 행이 바뀐 실물이 없다 (§4.4) |
+| 계산된 수가 기사 글에 어떻게 보이나 · 어느 층의 refs 가 가리키나 (W-4) | 기사가 없다 (P-7 전) — §6.5 · §20 _open W4-a |
+| 사건 사실을 가리키는 스토리라인 판의 핀 (W-4) | 그런 판을 쓴 기사가 없다 — §9.2 · §20 _open W4-b |
 
 ---
 
@@ -997,3 +1103,16 @@ FTC 2차 경유 출처 S4~S6 → 1차를 읽어야 한다 (D27) · 세 브리프
 | _open-m6 | FactSource 에 1차 구절(원문 그대로의 글)을 둘 칸 | **미룸 (D33).** 칸을 만들지 않았다. 그때까지 픽스처 주석 `_passage` — 원문을 저장하면 구절은 위치에서 나온다. 중간 상태를 타입에 넣지 않는다 | **다시 보는 때** — 파이프라인 스테이지 1 (수집 · 원문 저장)을 설계할 때 |
 | _open-m7 | 값이 바뀐 VOLATILE 사실의 앞뒤를 잇는 기록의 자리 | **미룸 (D33).** 자리를 만들지 않았다. 실물 1 — 7월 취업자 수의 세 번의 발표 (F30 8/7 -23,000 → F39 9/4 +21,000 → 10/2 -10,000). 무엇이 그 기록을 쓰는지 모르는 채로 모양을 정하지 않는다 | **다시 보는 때** — 스토리라인 stale 검사를 설계할 때 |
 | _open-m8 | 요점(Comprehension Goal)의 타입 | **판정됨 → D33: 만든다.** Goal (§1 · §7.4 · 불변식 27 · 28). 키는 `goal_id` | 확정 §7.3 · 브리프 §5 |
+
+---
+
+## 20. _open — W-4 (2026-11-11)
+
+W-4 (계약 잔일 · 계산된 수)에서 나온 것. 판정 전이다 — 그 부분만 멈췄고, 지금 계약은 되돌리기 쉬운 쪽(자리를 만들지 않음)으로 두었다.
+
+| # | 무엇 | 지금 | 안 |
+|---|---|---|---|
+| _open W4-a | 계산된 수(§6.5)를 기사 글이 말할 때 그 span 의 층과 refs | 자리 없음 — 패키지 · 화면 그대로. 기사가 없다 (P-7 전) | (1) `fact` 층 그대로 + refs 에 ComputedRef 도 허용 — 층 다섯 그대로지만 "층이 원소 모양을 정한다"(§2.2)가 깨지고, 독자는 `fact` 표시를 "원문 확인"으로 읽는데(§8.4) 3.7% 는 원문에 글자로 없다 (2) 새 층 `computed` — 표시 "BLS 지수에서 BLS 방식으로 계산 · 11/10 기준", 누르면 입력 사실 둘(지수 · 달)과 식. ARTICLE_PACKAGE 층 어휘 5 → 6 · 프론트가 새 표시를 그린다 (3) `fact` 층 · refs = 입력 FactRef 둘 + 저작 데이터에 "이 조각은 계산된 수"를 적는다 — 패키지는 그대로지만 독자는 지수 둘만 보고 3.7 이 어디서 왔는지 모른다. **추천 (2)** — 독자가 "BLS 가 3.7% 라고 했다"가 아니라 "BLS 지수로 계산하면 3.7%"를 알아야 한다 (§8.4 의 약속) |
+| _open W4-b | 사건 사실을 가리키는 스토리라인 판(`event_facts`)을 기사가 쓸 때 핀(§9.4 · 불변식 13)이 필요한가 | 불변식 13 은 스토리라인 **소유** 사실에만 | (a) 필요 — 기사가 닿는 사실이 어느 판의 `event_facts` 에 있으면 그 스토리라인의 핀 (b) 아니다 — 사건 사실은 사건이 안다. **추천 (a)** — 10월 기사가 v2 의 유가 사실을 쓰면 "이후 새로 확인된 내용"의 기준이 v2 다 (§9.4 의 까닭 1 그대로). P-7 의 첫 기사로 정한다 |
+| _open W4-c | 한 Source 에 받은 판이 둘일 때 (살아 있는 페이지 — D40 P1-c) | Source 하나에 SourceDocument 하나 (검사 SOURCE_DOC_DUP) | 판이 둘이 되는 첫 실물(같은 주소를 다른 날 다시 저장)이 나오면 — 키를 (source_id, fetched_at) 로 · FactSource 가 판을 가리킬 칸. 그 전에는 정하지 않는다 |
+| _open W4-d | _open-m6 (FactSource 의 1차 구절 칸) — D40 은 "P1-a 와 같이"라 했다 | W-4 지시 범위 밖이라 안 했다 — `_passage` 주석 그대로 | PM 이 정한다 — 지금 구절이 위치 없이 유일한 근거인 FactSource 가 있다 (P-1 못 찾은 17 · 원문 없는 31) |

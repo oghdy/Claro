@@ -14,6 +14,8 @@
   D. 최신     coverage.json 의 graph_sha256 = 지금 그래프 (CV_STALE)
   E. 스토리라인 v2 — Storyline 한 줄 (골든과 같은 id · code) · StorylineVersion 1 부터 빠짐없이 · v1 줄 = 골든 · Storyline.version = 최대 ·
               **사실을 옮겨 적지 않는다 (P-5 · D44 P4-b — 한 사실은 한 곳에)**: v2 에 Fact · FactSource 가 없다 · _fact_refs 가 지금 그래프의 사실을 가리킨다 (fact_id 가 있고 label 이 같다 · 겹치지 않는다) ·
+              W-4 — v2 줄의 event_facts (계약 StorylineVersion.event_facts) = _fact_refs 의 fact_id 와 같은 사실 · 같은 순서 · 원소는 사건 소유 사실 (event_id 가 있다) ·
+              판들 사이에서 겹치지 않는다 (불변식 34) ·
               _graph_sha256 = 지금 그래프 (CV_STORYLINE)
   F. 권리     권리 미확인 문서(전문이 캐시에만)의 구절 글이 v2 · coverage 에 없다 (CV_RIGHTS)
 
@@ -27,7 +29,7 @@ CODE = 'FOMC-20261028'
 STATUSES = ('FOUND', 'NOT_EXTRACTED', 'SOURCE_UNAVAILABLE', 'NOT_APPLICABLE', 'STORYLINE_STALE')
 SLOTCHECK_FIELDS = ['slot', 'status', 'facts', 'sources', 'storyline']
 STORYLINE_FIELDS = ['storyline_id', 'code', 'title', 'version', 'ongoing']
-VERSION_FIELDS = ['storyline_id', 'version', 'created_at', 'change']
+VERSION_FIELDS = ['storyline_id', 'version', 'created_at', 'change', 'event_facts']   # event_facts — W-4 P5-b (DATA_MODEL §9.2)
 FACT_FIELDS = ['fact_id', 'label', 'claim_text', 'fact_type', 'actor', 'volatility', 'as_of', 'event_at', 'event_id', 'storyline_id', 'storyline_version', 'extraction_model', 'extraction_version']
 FS_FIELDS = ['fact_id', 'source_id', 'section', 'span_start', 'span_end']
 ASSIGN_VERSION = 'p4-assign/1'
@@ -211,6 +213,16 @@ def check(b):
         refs = v2.get('_fact_refs', [])
         if not refs:
             E('CV_STORYLINE', 'v2 가 가리키는 사실이 없다')
+        v2row = next((v for v in vers if v.get('version') == 2), {})
+        if v2row.get('event_facts') != [r.get('fact_id') for r in refs]:
+            E('CV_STORYLINE', 'v2 줄의 event_facts 가 _fact_refs 의 사실과 다르다 — 계약 칸이 원본이고 _fact_refs 는 그 주석 (W-4 P5-b)')
+        all_ef = [x for v in vers for x in v.get('event_facts', [])]
+        if len(set(all_ef)) != len(all_ef):
+            E('CV_STORYLINE', 'event_facts 가 판들 사이에서 겹친다 (불변식 34)')
+        for x in all_ef:
+            o = facts.get(x)
+            if o and (not o.get('event_id') or o.get('storyline_id')):
+                E('CV_STORYLINE', f'event_facts 의 {o["label"]} 는 사건 소유 사실이 아니다 (불변식 34)')
         seen = set()
         for r in refs:
             o = facts.get(r.get('fact_id'))

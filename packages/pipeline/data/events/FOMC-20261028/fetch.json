@@ -1,5 +1,5 @@
 {
-  "_what": "FOMC-20261028 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — SourceDocument 에 해시 · 가져온 주소 · 때의 칸이 없다 (P-1 _open P1-a · D40)",
+  "_what": "FOMC-20261028 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
   "event": "FOMC-20261028",
   "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
   "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",

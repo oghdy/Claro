@@ -21,6 +21,7 @@
               문장 수 규칙은 p5.ts sentenceCount 와 같은 뜻을 여기서 따로 짠다: 마침표 · 물음표 · 느낌표 (뒤 따옴표 · 괄호) 다음 공백이나 끝 · 머리글자("D. Cook" · "U.S.")와
               인용 뒤 조사("'…다.' 고 했다")는 끝이 아니다
   J. 체크포인트 events/<code>/checkpoints.json 의 OPEN 물음 — /2 반증 출력을 썼으면 claims.json checkpoints 에 답이 있고 반증 출력과 같다 · ANSWERED 는 사실 1개 이상 · UNRESOLVED 는 _missing (CL_CHECKPOINT)
+  K. 판정 수   claims.json counts.verdicts (p5.ts verdict 가 센 것) = 여기서 따로 계산한 판정 (§7.3 표 — 방어용 둘째 줄 W-4 · D50 P5-c 포함) (CL_VERDICT)
 
 exit 0 OK · 1 FAIL
 """
@@ -82,10 +83,11 @@ def verdict(kind, outs):
         return '검사 안 됨'
     if 'REFUTED' in outs:
         return '반증됨 (계약 밖)'
-    if kind == 'DEFENSIVE' and all(o == 'UNRESOLVED' for o in outs):
+    # 방어용 — DEFENSIVE 이고 UNRESOLVED 가 있고 나머지는 NOT_REFUTED · SCOPED 뿐 (§7.3 두 줄 · W-4 D50 P5-c). SCOPED 가 있으면 좁힌 문장 — C 가 본다
+    if kind == 'DEFENSIVE' and 'UNRESOLVED' in outs and set(outs) <= {'UNRESOLVED', 'NOT_REFUTED', 'SCOPED'}:
         return '방어용'
     if 'UNRESOLVED' in outs:
-        return '계약 표 밖 (DEFENSIVE + UNRESOLVED 와 다른 outcome — _open P5-c)' if kind == 'DEFENSIVE' else '검사 안 됨'
+        return '검사 안 됨'
     return 'VALID' if all(o == 'NOT_REFUTED' for o in outs) else 'VALID WITH SCOPE'
 
 
@@ -261,6 +263,14 @@ def check(b):
             if (k['question'], k['answer'], k['outcome'], k.get('_labels')) != (o['question'], o['answer'], o['outcome'], [l for l in o['facts'] if l in by_label]):
                 E('CL_RAW', f'{w} 물음 {i + 1}: 반증 출력과 다르다 (손으로 고쳤나)')
             refs_ok(r, o['facts'], f'{w} 물음 {i + 1}')
+
+    # K — 판정 수 (p5.ts 가 센 것 = 여기서 따로 계산한 것)
+    want_v = {}
+    for _, c in rows:
+        v = verdict(c['kind'], [k['outcome'] for k in c['checks']])
+        want_v[v] = want_v.get(v, 0) + 1
+    if cj.get('counts', {}).get('verdicts') != dict(sorted(want_v.items())):
+        E('CL_VERDICT', f'counts.verdicts {cj.get("counts", {}).get("verdicts")} ≠ 다시 계산 {dict(sorted(want_v.items()))} (§7.3)')
 
     # J — 체크포인트 (사람이 둔 확인할 물음 · W3-c)
     cps = {k['id']: k for k in b['checkpoints']}

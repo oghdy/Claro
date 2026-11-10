@@ -11,35 +11,23 @@
 //   - 실업률 · 경제활동참가율: 계산하지 않는다 (이미 사실 — bls.ts). 대조에만 그 값을 그대로 쓴다
 // 모델을 부르지 않는다 · API 를 부르지 않는다 — bls.ts 가 저장한 응답(SourceDocument.text) 하나에서만 계산한다. 같은 입력이면 같은 출력.
 //
-// **계산값의 자리 — 계약에 없다 (W-3 _open W3-a).** Fact 에는 DERIVED 가 없고 (DATA_MODEL §1 · §6), DERIVED 는 기사 글 조각(TimeExpression)의
-// 날짜 계산뿐이다 (op 7 개 · 입력 = TimePoint · 입력 사실이 VOLATILE 이면 쓸 수 없다 — D8 규칙 4). 그래서 이 파일은 **계산 기록**이다:
-// 사실 그래프 · coverage · claims 는 이것을 읽지 않는다. 자리가 정해지면 그 모양으로 옮긴다.
+// **계산값의 자리 — 계약의 "계산된 수" (ComputedNumber · DATA_MODEL §6.5 — W-4 · D48 W3-a).** 10월 사건의 rates.json 은 두 부분이다:
+//   computed  계약 모양 (ComputedNumber) — 입력은 그래프의 사실 (FactRef) · op · 소수 자리 · 값 · 단위 · volatility · as_of. 그래프 곁에 둔다 (그래프 안이 아니다 — p3 가 짓는 파일에 두 쓰는 이를 두지 않는다)
+//   rates     계산 기록 (W-3) — 입력의 원문 위치 · 구절 · 각주 · 반올림 전 값. 계약 타입이 아니다. computed 의 값과 같아야 한다 (verify-bls-rates)
+// 9월 사건의 bls-rates.json 은 계산 기록만이다 — 9월 골든과 견주는 측정이고 입력이 9월 사건의 사실이 아니다 (W3-e).
 //
 // **판** — API 값은 받은 날(bls.json 의 fetched_at)의 판이다. 첫 발표(회의 때 위원들이 본 값)와 다를 수 있다. 계산값마다 쓴 지수 · 그 지수의 각주를 적는다. 고치지 않는다.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { blsDir, findPoint, seriesBlocks } from "./bls.ts";
+import { MEASURES, RATE_MONTHS, back, blsDir, findPoint, monthOf, seriesBlocks, ymOf, type Measure, type Month, type Op } from "./bls.ts";
+import { uuidFrom } from "./p3.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 export const RATES_VERSION = "bls-rates/1";
 
-export type Op = "pct_change" | "level_change";
-export type Measure = { key: string; ko: string; series: string; op: Op; lag: 1 | 12; unit: "%" | "천 명"; basis: string };
-
-// BLS 보도자료의 방식 — 시리즈 ID 의 뜻은 bls.ts SERIES (응답 안에서 대조되지 않음 — P3-g (1))
-export const MEASURES: Measure[] = [
-  { key: "CPI_ALL_1M", ko: "CPI-U 전체 · 전월 대비", series: "CUSR0000SA0", op: "pct_change", lag: 1, unit: "%", basis: "계절조정 지수" },
-  { key: "CPI_ALL_12M", ko: "CPI-U 전체 · 1년 전 대비", series: "CUUR0000SA0", op: "pct_change", lag: 12, unit: "%", basis: "계절조정 안 한 지수" },
-  { key: "CPI_CORE_1M", ko: "CPI-U 식품·에너지 제외 · 전월 대비", series: "CUSR0000SA0L1E", op: "pct_change", lag: 1, unit: "%", basis: "계절조정 지수" },
-  { key: "CPI_CORE_12M", ko: "CPI-U 식품·에너지 제외 · 1년 전 대비", series: "CUUR0000SA0L1E", op: "pct_change", lag: 12, unit: "%", basis: "계절조정 안 한 지수" },
-  { key: "CPI_ENERGY_1M", ko: "CPI-U 에너지 · 전월 대비", series: "CUSR0000SA0E", op: "pct_change", lag: 1, unit: "%", basis: "계절조정 지수" },
-  { key: "PPI_FD_1M", ko: "PPI 최종수요 · 전월 대비", series: "WPSFD4", op: "pct_change", lag: 1, unit: "%", basis: "계절조정 지수" },
-  { key: "PPI_FD_12M", ko: "PPI 최종수요 · 1년 전 대비", series: "WPUFD4", op: "pct_change", lag: 12, unit: "%", basis: "계절조정 안 한 지수" },
-  { key: "PAYROLL_1M", ko: "비농업 취업자 수 · 전월 대비 증감", series: "CES0000000001", op: "level_change", lag: 1, unit: "천 명", basis: "계절조정 수준" },
-  { key: "TEMP_LAYOFF_1M", ko: "일시해고 실업자 수 · 전월 대비 증감", series: "LNS13023653", op: "level_change", lag: 1, unit: "천 명", basis: "계절조정 수준" },
-];
-// 계산하지 않는 것 — 에너지 1년 전 대비 (계절조정 안 한 에너지 지수 CUUR0000SA0E 를 받지 않았다) · 실업률 · 경제활동참가율 (이미 율)
+// 측정 표 · 달 계산은 bls.ts 에 있다 (기준 달의 사실을 bls.ts 가 만들어야 해서 — W-4). 여기서는 다시 내보내기만
+export { MEASURES, back, monthOf, ymOf, type Measure, type Month, type Op } from "./bls.ts";
 
 // ── 정확한 십진 계산 ──────────────────────────────────────────────
 /** "336.940" → 336940n (소수 자리 d 로 맞춘다) */
@@ -79,24 +67,6 @@ export function pctChange(to: string, from: string, places = 1): string {
 export function levelChange(to: string, from: string): string {
   const d = Math.max(decimals(to), decimals(from));
   return fmt(scaled(to, d) - scaled(from, d), d);
-}
-
-// ── 달 ──────────────────────────────────────────────────────────
-export type Month = { year: string; period: string }; // period = "M01" … "M12"
-export const monthOf = (ym: string): Month => ({ year: ym.slice(0, 4), period: `M${ym.slice(5, 7)}` });
-export const ymOf = (m: Month) => `${m.year}-${m.period.slice(1)}`;
-export function back(m: Month, k: number): Month {
-  let y = Number(m.year);
-  let mo = Number(m.period.slice(1)) - k;
-  while (mo <= 0) {
-    mo += 12;
-    y -= 1;
-  }
-  while (mo > 12) {
-    mo -= 12;
-    y += 1;
-  }
-  return { year: String(y), period: `M${String(mo).padStart(2, "0")}` };
 }
 
 // ── 계산 ────────────────────────────────────────────────────────
@@ -259,18 +229,45 @@ const months = (from: string, to: string): string[] => {
   for (let m = monthOf(from); ymOf(m) <= to; m = back(m, -1)) out.push(ymOf(m));
   return out;
 };
-export const RATE_EVENTS: Record<string, { months: string[]; out: string; blsFrom: string; key: Cmp[]; keyFrom: "golden" | "graph"; note: string }> = {
+export const RATE_EVENTS: Record<string, { months: string[]; out: string; blsFrom: string; key: Cmp[]; keyFrom: "golden" | "graph"; computed: boolean; note: string }> = {
   // 회의(10/28) 전에 나온 마지막 달 9월 · 그 앞 달 8월 (bls.ts EVENT_MONTHS 와 같은 달). 10월 값은 회의 뒤 발표라 계산하지 않는다
   "FOMC-20261028": {
-    months: ["2026-08", "2026-09"], out: "packages/pipeline/data/events/FOMC-20261028/bls/rates.json", blsFrom: "FOMC-20261028", key: FED_KEY, keyFrom: "graph",
+    months: RATE_MONTHS["FOMC-20261028"]!, out: "packages/pipeline/data/events/FOMC-20261028/bls/rates.json", blsFrom: "FOMC-20261028", key: FED_KEY, keyFrom: "graph", computed: true,
     note: "회의 직전 지표 — 9월 (그 앞 달 8월). 9월 값이 회의(10/28) 전에 공개됐는지는 이 응답이 증명하지 못한다 (P4-k). 9월 고용 보고서는 Waller 10/8 (F231) · Hammack 10/12 (F265 실업률 4.2%) 연설이 말한다. 9월 CPI · PPI 는 회의 전 공개를 말하는 1차가 그래프에 없다 — Waller 10/8 은 10/1 에 시작된 정부 셧다운으로 공식 통계가 끊겼다고 말했다 (F217)",
   },
   // 9월 사건에는 BLS 원문이 없다 (P-1: 보도자료 못 가져옴). 같은 11/10 응답(2025 ~ 2026)으로 계산한다 — 9월 골든의 3 ~ 8월 값과 견주는 정답 대조
   "FOMC-20260916": {
-    months: months("2026-03", "2026-08"), out: "packages/pipeline/data/p3-golden/FOMC-20260916/bls-rates.json", blsFrom: "FOMC-20261028", key: GOLDEN_KEY, keyFrom: "golden",
+    months: months("2026-03", "2026-08"), out: "packages/pipeline/data/p3-golden/FOMC-20260916/bls-rates.json", blsFrom: "FOMC-20261028", key: GOLDEN_KEY, keyFrom: "golden", computed: false,
     note: "9월 골든 대조 — 골든은 첫 발표 보도자료에서 사람이 옮긴 값 · 이 계산은 2026-11-10 판. 다르면 그 사이 고쳐진 것이다 (계산이 틀린 것인지는 같은 판의 다른 값으로 가른다)",
   },
 };
+
+// ── 계산된 수 (ComputedNumber — DATA_MODEL §6.5) ─────────────────────────────────────
+export type ComputedOp = "pct_change_12m" | "pct_change_1m" | "level_change_1m";
+export type ComputedNumber = {
+  computed_id: string; label: string; event_id: string; op: ComputedOp;
+  inputs: { role: "to" | "from"; fact: string; value: string }[];
+  places: number | null; value: string; unit: string; volatility: "STABLE" | "VOLATILE"; as_of: string | null;
+};
+type GFact = { fact_id: string; label: string; volatility: string; as_of: string | null };
+
+/** 계산 기록 한 줄 → 계약의 계산된 수. 입력이 그래프의 사실이 아니면 멈춘다 (기준 달 사실은 bls.ts 가 만든다 — bls 를 다시 · p3 를 다시) */
+export function computedOf(code: string, eventId: string, r: Rate, facts: Map<string, GFact>): ComputedNumber {
+  const ins = r.inputs.map((i) => {
+    const f = i.fact_id ? facts.get(i.fact_id) : undefined;
+    if (!f) throw new Error(`${r.label}: 입력 ${i.series} ${i.month} 이 그래프의 사실이 아니다 — bls 를 다시 돌려 기준 달 사실을 만들고 p3 를 다시`);
+    return f;
+  });
+  const vol = ins.some((f) => f.volatility === "VOLATILE") ? "VOLATILE" : "STABLE";
+  const asOfs = [...new Set(ins.filter((f) => f.volatility === "VOLATILE").map((f) => f.as_of))];
+  if (vol === "VOLATILE" && (asOfs.length !== 1 || !asOfs[0])) throw new Error(`${r.label}: VOLATILE 입력의 as_of 가 하나가 아니다 (${asOfs.join(" · ")}) — 판이 다른 값을 섞어 계산하지 않는다`);
+  return {
+    computed_id: uuidFrom(`${code}|computed|${r.label}`), label: r.label, event_id: eventId,
+    op: `${r.op}_${r.lag === 12 ? "12m" : "1m"}` as ComputedOp,
+    inputs: r.inputs.map((i) => ({ role: i.role, fact: i.fact_id!, value: i.value })),
+    places: r.op === "pct_change" ? 1 : null, value: r.value, unit: r.unit, volatility: vol, as_of: vol === "VOLATILE" ? asOfs[0]! : null,
+  };
+}
 
 export function build(code: string) {
   const ev = RATE_EVENTS[code];
@@ -293,9 +290,18 @@ export function build(code: string) {
       : JSON.parse(readFileSync(join(ROOT, "packages/pipeline/data/events", code, "p3/graph.json"), "utf8")).facts;
   for (const f of facts) texts.set(f.label, f.claim_text);
   const cmp = compare(bls, rates, ev.key, texts);
+  // 계산된 수 — 입력은 이 사건 그래프의 사실 (읽기만)
+  let computed: ComputedNumber[] | null = null;
+  if (ev.computed) {
+    const g = JSON.parse(readFileSync(join(ROOT, "packages/pipeline/data/events", code, "p3/graph.json"), "utf8")) as { event_id: string; facts: GFact[] };
+    const gf = new Map(g.facts.map((f) => [f.fact_id, f]));
+    computed = rates.map((r) => computedOf(code, g.event_id, r, gf));
+  }
   const tally = { rows: cmp.length, compared: cmp.filter((c) => c.match !== null).length, match: cmp.filter((c) => c.match === true).length, differ: cmp.filter((c) => c.match === false).length, not_compared: cmp.filter((c) => c.kind === "none").length, anchor_lost: cmp.filter((c) => !c.anchored).length };
   return {
-    _what: `${code} 의 BLS 변화율 · 증감 — bls-rates.ts 가 쓴다 (손으로 고치지 않는다). 계산 기록이다: 계약에 자리가 없어 (W-3 _open W3-a) 사실 그래프 · coverage · claims 는 이 파일을 읽지 않는다`,
+    _what: ev.computed
+      ? `${code} 의 BLS 변화율 · 증감 — bls-rates.ts 가 쓴다 (손으로 고치지 않는다). computed = 계약의 계산된 수 (ComputedNumber · DATA_MODEL §6.5 — 입력은 그래프의 사실) · rates = 계산 기록 (원문 위치 · 구절 · 각주 · 반올림 전 값 — 계약 타입이 아니다). 두 값은 같다`
+      : `${code} 의 BLS 변화율 · 증감 — bls-rates.ts 가 쓴다 (손으로 고치지 않는다). 계산 기록이다 (9월 골든과 견주는 측정 — W3-e). 입력이 이 사건의 사실이 아니라 계산된 수(ComputedNumber)를 짓지 않는다`,
     version: RATES_VERSION,
     event: code,
     note: ev.note,
@@ -304,6 +310,7 @@ export function build(code: string) {
     rule: "전월 대비 = 계절조정 · 1년 전 대비 = 계절조정 안 함 · (지금/전 − 1) × 100 · 발표된 지수 그대로 정확한 십진 계산 · 소수 한 자리 반올림 (0.05 → 0.1) · 증감 = 수준의 차 (천 명)",
     measures: MEASURES,
     months: ev.months,
+    ...(computed ? { computed } : {}),
     rates,
     missing,
     compare: { against: ev.keyFrom === "golden" ? "fixtures/store.json (9월 골든 — 읽기만)" : `packages/pipeline/data/events/${code}/p3/graph.json (연준 문서 사실 — 읽기만)`, tally, rows: cmp },
