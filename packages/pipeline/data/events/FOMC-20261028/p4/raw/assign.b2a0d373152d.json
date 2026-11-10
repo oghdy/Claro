@@ -1,0 +1,726 @@
+{
+  "_what": "P-4 사실 → Coverage 요소 (모델 출력 — p4.ts 가 쓴다 · 손으로 고치지 않는다). items = 보낸 사실 (key = 그때의 label · fact_id · 글의 sha256). 프롬프트 src/p4-prompt.ts p4-assign/1 · 스키마 coverage-schema.json fomc-hold/1",
+  "event": "FOMC-20261028",
+  "prompt_version": "p4-assign/1",
+  "model": "claude-opus-5-5",
+  "model_requested": "claude-opus-5-5",
+  "effort": "medium",
+  "schema_version": "fomc-hold/1",
+  "items": [
+    {
+      "key": "F141",
+      "fact_id": "5e77baca-9b29-5cae-8d16-a05bb7b15273",
+      "claim_sha256": "2a6020db723a54ecfab40c77d16d04d1f781936b4dd0ef446188d98cba1a9360"
+    },
+    {
+      "key": "F142",
+      "fact_id": "0b178897-eb31-5b0c-8b70-5bf9e36f1810",
+      "claim_sha256": "2eae87df3e47a359be5aaba98b68a0f655d319220d9304eea40ada1f518d1da2"
+    },
+    {
+      "key": "F143",
+      "fact_id": "7185cdc2-5d1e-57db-b53d-7ffceb430550",
+      "claim_sha256": "73a7e31f5685cf86a4ea265e3f417de123bb66113d94ab97a69f6c175eee9777"
+    },
+    {
+      "key": "F144",
+      "fact_id": "ac5f78f6-e285-5988-a290-acfac59e28df",
+      "claim_sha256": "8caad7bc67fe0551eb9a3f3a4b9ee8c4af4bdbab971df0ddf7daa7a901eef3a6"
+    },
+    {
+      "key": "F145",
+      "fact_id": "e45d14a5-d864-5bde-94dd-94c6dd26ca31",
+      "claim_sha256": "ad6d99a3bfeb7de2ff85f934096a3cff268b14b53812e740e4de2bcf9908510f"
+    },
+    {
+      "key": "F146",
+      "fact_id": "0ccfb086-6619-5180-a6ed-68d8b855edf9",
+      "claim_sha256": "4fe99a1ad1ab3dec5d69f3cc95651ea2bfc62e6f7228878d84ef032e55c77e69"
+    },
+    {
+      "key": "F147",
+      "fact_id": "67525ff6-94c6-54ab-b979-e6f59435aa25",
+      "claim_sha256": "3b259935242b53bfa4e629035d9e9ac1c976824f570d46e336a38811367af2b7"
+    },
+    {
+      "key": "F148",
+      "fact_id": "9df1fb8e-9404-5ccf-a9d9-e9b29690bac7",
+      "claim_sha256": "3d99741e99e4ef9bddc526c9cbc72906a95e50c53454f93a46418463c9586322"
+    },
+    {
+      "key": "F149",
+      "fact_id": "09e0dbf7-99c9-598c-ad7d-055a269af5ca",
+      "claim_sha256": "e42650103e7632bdd286abab21b402d49a20a5b7bcd5ec1bf65e01ba694b2b8a"
+    },
+    {
+      "key": "F150",
+      "fact_id": "72caa1b4-ad33-5155-ac52-278fd62cf06b",
+      "claim_sha256": "ff011caec2020789c28245adec8f46d928b0d76dae7d05ee69b4a5e57458dc11"
+    },
+    {
+      "key": "F151",
+      "fact_id": "f8525d29-ba48-5b4c-8244-1c9138312510",
+      "claim_sha256": "3c18faeb556bf623f673d2b8cf1e1d78c8e72cf31679465a7353dafc7bd877f5"
+    },
+    {
+      "key": "F152",
+      "fact_id": "0a919a0b-c694-5f89-8aa9-584bd250fba0",
+      "claim_sha256": "b2ab2b625da1f145b527b8fc83dd78f6514632cac24ab6682376468c527d68b7"
+    },
+    {
+      "key": "F153",
+      "fact_id": "fba854ee-580e-5d7f-8b08-d501b91e36dc",
+      "claim_sha256": "d14d630c9acbd5402741d27b4bf8934e95d9da18fe80eb2e70cd48b6868695e2"
+    },
+    {
+      "key": "F154",
+      "fact_id": "11fa86e1-96a9-5c28-8d12-98d05eba0c2d",
+      "claim_sha256": "3f1f2569b8b0ddb6635d603562e80061c6a4cb593631422bceb52c1b12648da7"
+    },
+    {
+      "key": "F155",
+      "fact_id": "9a8a73bd-7c07-524e-b322-a697324b4639",
+      "claim_sha256": "58fce9c995ecd33a42398f594c2a4c97c922601a78594950f8d4cc9e01cc13a5"
+    },
+    {
+      "key": "F156",
+      "fact_id": "2075ee89-3077-5d96-9c7d-08f5ea931a92",
+      "claim_sha256": "c7777a467b3070997b66e1908211891f394b37e33c96d2af622787d4bd4a284f"
+    },
+    {
+      "key": "F157",
+      "fact_id": "6c849fbe-98a0-55d0-85d2-b2e48db4d287",
+      "claim_sha256": "a1a386161977da9d361d9845aab9222d703733cc772a905c128bde8c0406b683"
+    },
+    {
+      "key": "F158",
+      "fact_id": "d20d912e-de0d-5d28-966c-38e429102fc0",
+      "claim_sha256": "2fcdf5a50ee439b881ea4b4e2246efbdc7c0c085137c8cb94b1409ac94a392f7"
+    },
+    {
+      "key": "F159",
+      "fact_id": "7ae64fa4-b0e8-5268-af45-30e5bc6945f7",
+      "claim_sha256": "73d405244dd7ea3c6088949ce32618279c8a78b94d3a03121d5ff1a5c66eded9"
+    },
+    {
+      "key": "F160",
+      "fact_id": "b98618e3-7b8e-524b-a373-f0b421b2d032",
+      "claim_sha256": "f16a399db43d32cab54ff5eb9803807737a7d6001c99f1bea535d9486495564c"
+    },
+    {
+      "key": "F161",
+      "fact_id": "80724ee0-f1dc-53fe-bf3d-7586d3dba138",
+      "claim_sha256": "9b91a6440b09a1ff485bfc9387536894fef3242ac256587b28e38fd8741f160d"
+    },
+    {
+      "key": "F162",
+      "fact_id": "f78d4ab3-b890-53f5-80c4-99d18ece140c",
+      "claim_sha256": "787890b3087f159901d99aa2145882401ba4d1711508bba6439b71178ce77275"
+    },
+    {
+      "key": "F163",
+      "fact_id": "0d3317b1-8bca-5311-ab78-e1efa25bcef0",
+      "claim_sha256": "9dc41202d06edbcb45bf09da0d5819b8a8255a4050a51fb64008f98fe9adb6fc"
+    },
+    {
+      "key": "F164",
+      "fact_id": "86379156-ddef-5922-894f-c52d6ebe9b07",
+      "claim_sha256": "14ba56fd9bd505556a8fa6f172e5e8f0e395deac94fe2caf3f16d72ec0278863"
+    },
+    {
+      "key": "F165",
+      "fact_id": "e3d8b845-6363-5fe9-9948-0e067b98fbef",
+      "claim_sha256": "899156513b50fa5e54cc6cfcdb95ddd45e2755df5ed4d8970d64db89bfc8b3b3"
+    },
+    {
+      "key": "F166",
+      "fact_id": "2abf332a-c03f-52ce-831c-111742be9933",
+      "claim_sha256": "f68e5dac9726bbd81b8ba3ee5af3f62b50e5f8b351321e6a0b07a5ca3778d2a4"
+    },
+    {
+      "key": "F167",
+      "fact_id": "497ba4b1-f68f-5084-9752-1bbf17311aed",
+      "claim_sha256": "164b913ed8711cf8da2eee82b5409ff038a7355628b69a2f7ed8e701947bf20b"
+    },
+    {
+      "key": "F168",
+      "fact_id": "53f30b99-bac5-53e7-bbeb-9a6f7dc7f8b4",
+      "claim_sha256": "67078e62af731301086e56d28a71866b04ac07fb62ffd32a1526bb90648d3c25"
+    },
+    {
+      "key": "F169",
+      "fact_id": "19b67723-2051-50d1-8592-bbfc4f9e2d2c",
+      "claim_sha256": "9bb1de6666d3e2cc1b1cda5cbd78a243e003b24de9a1ffda7f4fce31fb2eb1ab"
+    },
+    {
+      "key": "F170",
+      "fact_id": "f3d59b5e-c92d-5b37-b6cb-f136201ae15a",
+      "claim_sha256": "c563476b76ef5dd1db90f88362e332e163e37f1c7f6656a08a95af6b1ca9751a"
+    },
+    {
+      "key": "F171",
+      "fact_id": "d7c93b30-e468-5e52-bb95-8e9ba50f57d5",
+      "claim_sha256": "72c7d53fe5f3ddba40e2d3865664bbfe24d9fde3f5f6c5aa307468cf65b161b1"
+    },
+    {
+      "key": "F172",
+      "fact_id": "6fe74c12-354e-5a00-8fb0-4e14415bc588",
+      "claim_sha256": "2614df8b75d0f69cb645b6310d596e18d6bb8ae28bbefebad75988e660be972b"
+    },
+    {
+      "key": "F173",
+      "fact_id": "49745004-9555-57cb-af45-36ba5dd28440",
+      "claim_sha256": "771a50e405590e1b1cd15db54fab72758c459eca79ea1b9f3870e1375381da74"
+    },
+    {
+      "key": "F174",
+      "fact_id": "fa4c91e7-a00a-569d-88d0-a9f1db301691",
+      "claim_sha256": "219bae2d79ce17cf99c5c4156f1215dfa8c403eb7f8f7fb1a0b6125a22c26577"
+    },
+    {
+      "key": "F175",
+      "fact_id": "484cf78d-4aa0-5f6c-8081-e12312e64f29",
+      "claim_sha256": "61e63389bdd8a854673266ec0163ef4d92b230746511c2d569c1906b80544b7c"
+    },
+    {
+      "key": "F176",
+      "fact_id": "d5478f1c-adcc-5abc-84ac-9c91a4f094e5",
+      "claim_sha256": "2e27a273a6105f00b65f5b6982b2cbedc11ca224923661704222fb15ea9d5008"
+    },
+    {
+      "key": "F177",
+      "fact_id": "729f52db-2bf3-5616-ac83-8de8f6716531",
+      "claim_sha256": "a71302e861fb49a1a42a0a22921da015d73e7145e3fa99e3a759eae7a1a40a59"
+    },
+    {
+      "key": "F178",
+      "fact_id": "bbbd0204-c860-55a8-8813-3c2f11a94f49",
+      "claim_sha256": "383a72a68fcbf5b567a2110c96aea85b2316a30bc219aab0361ac37967708896"
+    },
+    {
+      "key": "F179",
+      "fact_id": "5b8a3fcd-88d6-552a-ba7b-87710135ffb3",
+      "claim_sha256": "928edbeb94951ecbd8a776f6a5f2b46dff9cdbc78ce58797dcb600cc0cc91dad"
+    },
+    {
+      "key": "F180",
+      "fact_id": "1812c9b7-3bb5-5148-af23-da8115ed3896",
+      "claim_sha256": "aeeaf32e1c9115afb24e910f9dca589edb4dea7d69b3941ccb8d55910e401cac"
+    },
+    {
+      "key": "F181",
+      "fact_id": "9222bf27-f42d-5c1e-9e6f-0e760f394139",
+      "claim_sha256": "a3ecc01230637b511e18c7af848919dcb4a6b945b99a05d6f802c9bb16afdb7c"
+    },
+    {
+      "key": "F182",
+      "fact_id": "a16b68b1-87c4-5c66-b5bf-e29e51d59221",
+      "claim_sha256": "3a1d698560e79701df625a0b5d6eedc7fdf274ba85523ca3e844c3b67ecb2a77"
+    },
+    {
+      "key": "F183",
+      "fact_id": "e5fca032-f70c-5fb4-9541-4e68d235884d",
+      "claim_sha256": "e84149746e9909007e1d075d6a495a729665f15410ff4617646e4f507e66b6aa"
+    },
+    {
+      "key": "F184",
+      "fact_id": "edfbbe3c-aeb5-52b1-b5e0-5d6066af28e0",
+      "claim_sha256": "932de4f62a58bbccbb84a9f83ccc2e82a19871d01899177d9ebace7fbac31fdc"
+    },
+    {
+      "key": "F185",
+      "fact_id": "613f66bb-730a-5dc0-aa47-adf41c81857d",
+      "claim_sha256": "492ca7fc088ff0184b767254f890d1d5f2de6e457fadec9ede8f829ee8ae03b0"
+    },
+    {
+      "key": "F186",
+      "fact_id": "5e36a9bf-b10e-5045-ac5a-e359ea54ea7e",
+      "claim_sha256": "68a39de43528e35e21f5bf806fda280ef1b9e3a69cafbb30188fda5eb77ba419"
+    },
+    {
+      "key": "F187",
+      "fact_id": "8ccdccfb-30b0-54bb-a3fe-bf11f6fd97d1",
+      "claim_sha256": "421f903ee9a837f8c3ae510c77f4cc8b50c4ce76fb6f2ced71fac581c4133743"
+    },
+    {
+      "key": "F188",
+      "fact_id": "ca9f299f-d4d3-521c-a3f4-e5c8f20a71ce",
+      "claim_sha256": "c64da6afe7decb9aa693bb60ee40a5e84701bf0bc48d2af5af42018285960b0a"
+    },
+    {
+      "key": "F189",
+      "fact_id": "a725aa47-c846-51cd-8fe3-c50b3d2eeff5",
+      "claim_sha256": "48bba186f37f877e321546faa34cbaf2e0855c19d537f9f972007c63261c23d3"
+    },
+    {
+      "key": "F190",
+      "fact_id": "3ada1406-0ed7-57ab-848c-e2a9778448a2",
+      "claim_sha256": "8e05cfdf6d1017d468f970030c8139af6e746381b207c8dcd2e35411de953702"
+    },
+    {
+      "key": "F191",
+      "fact_id": "55a77570-37f1-50d9-9a9a-1b1026efbf8c",
+      "claim_sha256": "f394c15cc098b6138c0d1f11758a7b5b28b4967850ab592927eae2fa5199362c"
+    },
+    {
+      "key": "F192",
+      "fact_id": "19677ac7-6503-56c6-819a-310ebafbb5c4",
+      "claim_sha256": "c7d6bcb8de648ad4dc4d286aabd8979f7a8b9ce973541ba7a265643646820968"
+    },
+    {
+      "key": "F193",
+      "fact_id": "64644a48-0ca8-5a84-9d2f-977e4538eebe",
+      "claim_sha256": "c3819a9033515bd674f2ad046aa942c8b77c89eee98636918b1c6581db932270"
+    },
+    {
+      "key": "F194",
+      "fact_id": "b41108cf-d45b-50b1-a5aa-dc0a5a1ee9f9",
+      "claim_sha256": "5de6cba326b432ebd1dde41a955365435605f393eb5f7f7c3376399288483ee3"
+    },
+    {
+      "key": "F195",
+      "fact_id": "74626b90-06ae-509b-bd2c-6eafeb05a1db",
+      "claim_sha256": "437b49b5b86c539b9ee8e8d9088fbff95f57de72fba3790021c72376f2b82526"
+    },
+    {
+      "key": "F196",
+      "fact_id": "7b0efd3e-dff9-5272-94f8-185f56da7579",
+      "claim_sha256": "e41107676799e390804c1be6ebe08b57f1f22c9105610812c9e77384295ea284"
+    },
+    {
+      "key": "F197",
+      "fact_id": "d8ba2575-52a5-5afa-b51c-e3e08966b4c0",
+      "claim_sha256": "0f55afa6c89e9c11eada1e687398ac8fb3b0989aa1437a7b6e4871fa97e32848"
+    },
+    {
+      "key": "F198",
+      "fact_id": "8a339928-690d-53c6-a763-e4744bcc59d6",
+      "claim_sha256": "e56f0c6343d9c9756fffc5b984b21f8ef088e23094451bd6cddf5a64cb699a5d"
+    },
+    {
+      "key": "F199",
+      "fact_id": "fcf96d18-89b3-533b-90df-d48a43090944",
+      "claim_sha256": "23d80cea3ce90b6fe9016c8772d2b2a21340a6f830124349961c47868859f164"
+    },
+    {
+      "key": "F200",
+      "fact_id": "bab19ee7-0536-5932-b5a6-228488c04741",
+      "claim_sha256": "5388ecd085e9acbd4b288d7e7a37f4b57d43fd6841021be5d0f371eae037a2ad"
+    },
+    {
+      "key": "F201",
+      "fact_id": "10b6ae64-8bee-5189-a750-fb49bf55ee45",
+      "claim_sha256": "806004b52f6d4b2d34fd002186194ca2570a84c2b4db115028ee5b26bf006d36"
+    },
+    {
+      "key": "F202",
+      "fact_id": "2d64287e-ac76-5460-bb48-aab0d247aca1",
+      "claim_sha256": "38a6d360cc9c426f46baafa1ccd5252da3d08a106ad6a76b52349a7a3b6fdbf1"
+    },
+    {
+      "key": "F203",
+      "fact_id": "5e8bb8b2-46b3-590e-a294-f425523b82b6",
+      "claim_sha256": "90eaf9b431e61777fde8f082ba4961c5706bc7d4643b809c8136038eef3dcc2f"
+    },
+    {
+      "key": "F204",
+      "fact_id": "018139b1-5bb1-54ac-a9f3-6ebd04920fdb",
+      "claim_sha256": "0014224fe55e6ef0663224a79b93c689fe09b7402a4fb654883df13875119daf"
+    },
+    {
+      "key": "F205",
+      "fact_id": "51af1210-5099-5e46-a791-90070db0df17",
+      "claim_sha256": "3d54bbd622e76eb0655efb642d1c7b3ec10c58bed82230e2653d83d8d661ad32"
+    },
+    {
+      "key": "F206",
+      "fact_id": "e0d642f9-d5d1-550e-bc5f-97cd8c78aa20",
+      "claim_sha256": "e9866935d63cc55602e4f2ffa6d6cc5783011cc9b0e0c8d8be60a87b9ae61cdc"
+    },
+    {
+      "key": "F207",
+      "fact_id": "cf5e6360-670c-5925-860d-025cfc51c02a",
+      "claim_sha256": "b8c8ef797342cb1732570ea70a5ca5c8ac159323f799b1a65432afe9557c3f8b"
+    },
+    {
+      "key": "F208",
+      "fact_id": "ba829052-5373-5b3c-8dce-278ff2a815bf",
+      "claim_sha256": "9e9f1ba9888f4718a77b9f6c694dac5c0d5a5b4baa3ec42a1e5388b0e21c3ade"
+    },
+    {
+      "key": "F209",
+      "fact_id": "ae07f933-a559-5a10-8167-2b13b880645a",
+      "claim_sha256": "a922787bb35035abbcba6f52ed7fd9233722df258d366853f73938fd3794d3d1"
+    },
+    {
+      "key": "F210",
+      "fact_id": "a7f3a545-4cf8-5b49-b0d2-d98000cdd715",
+      "claim_sha256": "746f24e72e748c7f73e8aa7e53ecb7c31fb2b3f96eb347f5466c1f05fc5905c3"
+    },
+    {
+      "key": "F211",
+      "fact_id": "dcd98cd2-9ef2-58f9-b38a-4f489c5cae8f",
+      "claim_sha256": "cf45c7519d5a1a80407568588c67ca5470141eb1578d03d0588bcc78610a88dd"
+    },
+    {
+      "key": "F212",
+      "fact_id": "01cdf21a-d2cd-5738-b224-35e51591e368",
+      "claim_sha256": "4918850cfa3ba6e66068f5ee9a1b39444b6eb30691d61f5d2c2fd6ae5f83b5f9"
+    },
+    {
+      "key": "F213",
+      "fact_id": "f137dcf2-a210-5627-9dc3-e0300f1cc12c",
+      "claim_sha256": "9b651193e3bcf54508d5b25b8393b211274b705f8c0e11c5744077cf56a4da66"
+    },
+    {
+      "key": "F214",
+      "fact_id": "5890633c-aefd-515e-886a-e7cbe8dd7dc7",
+      "claim_sha256": "61e44fea97bb03aea68ff8282b2c2e69c023ff740772fe99a8bf6ec0163c9aab"
+    },
+    {
+      "key": "F215",
+      "fact_id": "d20baa93-cd5a-5255-b9c4-1bd9d1cffb04",
+      "claim_sha256": "f45f1c4975e3e72fb799651e49b6e12efbda5438c690b910c0ffbc28348d7b0c"
+    },
+    {
+      "key": "F216",
+      "fact_id": "de82f3d9-fd3a-5a52-b901-aa64a3888139",
+      "claim_sha256": "d54e1aae310c5f00d944b5a7bc559c8a71bd1137d313f5bd1c09b0dc3cd2efad"
+    },
+    {
+      "key": "F217",
+      "fact_id": "94a965cf-0fcf-59f5-bc35-5f93744bb92d",
+      "claim_sha256": "ffd65ce43c931f9d3f6504c8c3f8933f3bc1573f0aa1fba617cf8e7cc2b407c7"
+    },
+    {
+      "key": "F218",
+      "fact_id": "3ea73b45-e339-5242-8e6f-f84394a475e7",
+      "claim_sha256": "1e6c3e09a7aa787602f2d83199e9478bdb2e4d7dd755ba4a8bd2ca6100c07d7e"
+    },
+    {
+      "key": "F219",
+      "fact_id": "66a13e3d-7616-596f-bbab-4628de39a979",
+      "claim_sha256": "ffefff578e2a514afac99d8df01ddfb6fc59b3978b4d1c8165deb5f99312538e"
+    },
+    {
+      "key": "F220",
+      "fact_id": "1340e588-49ad-576b-aeac-a11dee4efff4",
+      "claim_sha256": "6f3f3acd34c45224c33138b497df88f519c682d518e1d839704d788a30affc25"
+    },
+    {
+      "key": "F221",
+      "fact_id": "ed54aec5-bf40-502d-ae40-19c4c0ea3ff0",
+      "claim_sha256": "f9c7feb7d8460d6676565f6c20863d236b00957b9a42e6c7e81fdb63efddfaa1"
+    },
+    {
+      "key": "F222",
+      "fact_id": "c2089dae-51ba-5357-86b4-75833ec1e4f0",
+      "claim_sha256": "65de4e1a152d5241338c6e785777953f5f9017faa2d6792b3ef8864668acb4a4"
+    },
+    {
+      "key": "F223",
+      "fact_id": "92203912-f558-5401-bdcb-8ff44ef0e73a",
+      "claim_sha256": "5750a6e4ef2345b56c5403781ebd998251882aa1e7b4f59c55366d7f1ccfcd80"
+    },
+    {
+      "key": "F224",
+      "fact_id": "fddd3893-54c8-5d0a-815a-17b3cc78f2ef",
+      "claim_sha256": "e670f84b5536ef9832330f7150b46300452699eacfaaa65e7ad410f3718b9744"
+    },
+    {
+      "key": "F225",
+      "fact_id": "14ce1eab-db7b-53ca-900f-e9d80f3eb7b3",
+      "claim_sha256": "94f20a80d277b69f846a4868b3184816ab1c6357cb8ec90ce165a0ef286c446f"
+    },
+    {
+      "key": "F226",
+      "fact_id": "b6b5908c-eff6-50ea-a9e4-37399d10aac6",
+      "claim_sha256": "0cbb452c1284aa3ad02137f7cc9f9ceae765b397390b8632b396b3dc0ef0c9c8"
+    },
+    {
+      "key": "F227",
+      "fact_id": "612d9063-deea-51b6-94f5-aedd2bd59d9a",
+      "claim_sha256": "d1b8ed73d5344be0b9379cdd74f899c7f2ece143f839d73cfdc32fc4fa6eb62f"
+    },
+    {
+      "key": "F228",
+      "fact_id": "9c4cf286-a329-547c-90b1-a948f1f6cb01",
+      "claim_sha256": "0ff3509d6404a940bf0d326ae2f7a65bda071caa2e1071f9f73c5f1a8ec69085"
+    },
+    {
+      "key": "F229",
+      "fact_id": "ee1d3186-a898-5a40-9837-5ecb8c1fb6a1",
+      "claim_sha256": "302c7d8eef256e0fbae7a93d97ebfae522bb0e7cf4bdbee1186a7f4b36456182"
+    },
+    {
+      "key": "F230",
+      "fact_id": "2b8988f6-7d86-56be-822f-cd595313775e",
+      "claim_sha256": "dd0d1f21a6a66dfc97c2f3c76e1d11df2acb1776cfbf163471a60cd6c9369654"
+    },
+    {
+      "key": "F231",
+      "fact_id": "bcb5b1e3-b534-5397-b03d-2992bcd2c3c1",
+      "claim_sha256": "70e61aaa8f8e405222d4dc8f8af609946ddf7562e1d317cff0a724c39fa13c66"
+    },
+    {
+      "key": "F232",
+      "fact_id": "65cfaf1c-92f5-5103-ad2e-a03c17f9645c",
+      "claim_sha256": "99062277d88827c0a620767b985e5820bff97397998d95ccf654da64883d2aa2"
+    },
+    {
+      "key": "F233",
+      "fact_id": "f44e28f3-0c67-5cc5-adff-5e53edcfac17",
+      "claim_sha256": "fbd4e3d332e376058958adb1e6a854b537f5671952521d4a6191b16c819c3db3"
+    },
+    {
+      "key": "F234",
+      "fact_id": "805a499b-c7fa-5a46-b3fb-9aa07a1b3345",
+      "claim_sha256": "766cb372c6565939103e716c8b7c0c785cac056726062c79a628f931d351cdfe"
+    },
+    {
+      "key": "F235",
+      "fact_id": "3cf0be63-84a2-5fae-94a8-880fce662505",
+      "claim_sha256": "e4a0e467c4d9bddff6c11b1eadd95bbcb6eaba541ec9b612f2523eb2a0980448"
+    },
+    {
+      "key": "F236",
+      "fact_id": "cadd9767-1739-5ccb-ada9-20c2f638740e",
+      "claim_sha256": "bc3dcd34e713c7ede1369d19a43b30291d33de09a1600bb8a17eb774f6f13d25"
+    },
+    {
+      "key": "F237",
+      "fact_id": "0b3cc479-1194-53ae-b41f-4dce0d9542e0",
+      "claim_sha256": "03845eb8545bd8e47fb666dbce3dea9a62db3b7a0a912381e29e0a6efd4f0e48"
+    },
+    {
+      "key": "F238",
+      "fact_id": "cb498961-db98-55f4-809a-ab47131839da",
+      "claim_sha256": "4002dfa135d3eb22156330183acc33895ea02632fe511197d5bf420f79360570"
+    },
+    {
+      "key": "F239",
+      "fact_id": "960bec86-8e85-550e-8608-59264b663e29",
+      "claim_sha256": "bf7f79121c941ad4a0d53d20ce6a206c191749edc5d1bc6a125cfc9c185a6b22"
+    },
+    {
+      "key": "F240",
+      "fact_id": "555fffe4-39ca-54cc-a3eb-b9148514ec65",
+      "claim_sha256": "8723b3cd0089b0e0c121ae52596adec06b290e9af9ee55412db2024076dc6a5c"
+    },
+    {
+      "key": "F241",
+      "fact_id": "7d6cd4e1-d67b-59d4-b7c6-3b798bfce278",
+      "claim_sha256": "85a5682af737914e06b11d60071eb87d60074e0d1199a75332eecac9669a5c3b"
+    },
+    {
+      "key": "F242",
+      "fact_id": "aa180abf-c29a-5227-8302-a5c6061bdd61",
+      "claim_sha256": "e9cfc54ae239e1125e11f41013e902aeaf40b7633a33b5ed28485b30f3096640"
+    },
+    {
+      "key": "F243",
+      "fact_id": "8e9c806f-7598-5ff6-b3ee-1b061aa15b90",
+      "claim_sha256": "5713d147e5e52b858c4f6d936b67430b791dba321f77bcca49316a5973b49781"
+    },
+    {
+      "key": "F244",
+      "fact_id": "e13587d1-71a9-5d48-96a8-982a1bed9552",
+      "claim_sha256": "c0c1032547a0fb21742994e072ddab03870f901ca6ba0edc7806a1b279d16d56"
+    },
+    {
+      "key": "F245",
+      "fact_id": "13c1c0c6-66d6-54e4-9068-eeb97abd00f8",
+      "claim_sha256": "bd7ffb3547aaa693885e50029274e14a2ae372af7637970cf696f5e254e9a06d"
+    },
+    {
+      "key": "F246",
+      "fact_id": "e4a485a6-619d-5bc2-9e91-2f40f6e05919",
+      "claim_sha256": "5b6817714c125eb40f18e2320ff316e303ec0dc4982c6053834fc08ce736bfb6"
+    },
+    {
+      "key": "F247",
+      "fact_id": "aa6c27f6-365b-5038-9b3e-4627c31a47fa",
+      "claim_sha256": "c40a4d53b9220d070d6e89a96d95f3f1ca08c3bd27c9484de8f2b37d0e5417ce"
+    },
+    {
+      "key": "F248",
+      "fact_id": "a1f378df-625b-50d7-af43-44d5547cea2f",
+      "claim_sha256": "9397731b07ed490e9269a4a0f717a018fc35bf9b5ef4993fd320602f860af60e"
+    },
+    {
+      "key": "F249",
+      "fact_id": "2d0ebf65-e52e-502f-9d6c-e56809ac1ab1",
+      "claim_sha256": "01c35a337ea3d6cf16b9fbfbc1871fe34b4cead55104e8a75d0ecabf30a36561"
+    },
+    {
+      "key": "F250",
+      "fact_id": "b248a0da-beb7-5555-8216-0d5fa478e35d",
+      "claim_sha256": "682d4c8daa4dcf956a676e93914b3bd69ff384b25e7399b0333c37df29e580c7"
+    },
+    {
+      "key": "F251",
+      "fact_id": "a3a8cd7a-03b5-5b71-bc3b-a0a76533a897",
+      "claim_sha256": "f043c3f5f6d0355fefb219b3a4ca62a3b9a4ca15ec59b48ef5e0a29d9f8ba7ba"
+    },
+    {
+      "key": "F252",
+      "fact_id": "c46f236d-da66-50a7-a7fc-5e374266c85f",
+      "claim_sha256": "4bd21fb002438dee0e829a58cc1f2e76d8c1e70842506135dbf8340edf6fbb3c"
+    },
+    {
+      "key": "F253",
+      "fact_id": "c73743e3-7e45-5b73-8b97-98a09f59cfbb",
+      "claim_sha256": "0fc95d328e0401ea94ec606f3bcb7ed1f1bd02b1abe7bb161d28ef0fffa883ef"
+    },
+    {
+      "key": "F254",
+      "fact_id": "39255650-eedb-5fff-b59d-6945ea035a03",
+      "claim_sha256": "444f87115b27b7d982bacdc56d65cf695d42c36d1c062660c5c787498c8ae910"
+    },
+    {
+      "key": "F255",
+      "fact_id": "2c710af8-2cff-5530-ac40-b58d3d67b001",
+      "claim_sha256": "5318f04cbba8c4eab55191dce11708ac767283cf10c857fc6731bae1d510b88c"
+    },
+    {
+      "key": "F256",
+      "fact_id": "49df193f-6454-59c2-b8e9-60654b0ec021",
+      "claim_sha256": "a5711ae044f384e79adbb61bfc3d2ed6e28132a846caf9d34a54ed07cd80853b"
+    },
+    {
+      "key": "F257",
+      "fact_id": "2f11d8c5-2dd9-56d7-8a24-7f54945b3966",
+      "claim_sha256": "d3ed0e200b57a1a8f36fbd5c3e692850c44d7c1a8dfc2fb71dd1fbd45f900246"
+    },
+    {
+      "key": "F258",
+      "fact_id": "0a84bf09-d32d-59be-b08b-66aa6a34e1bb",
+      "claim_sha256": "939b1b8277be897e691c5b76906b6699af1289afb279ec6580e3d1146c160d9e"
+    },
+    {
+      "key": "F259",
+      "fact_id": "9870d81e-99cc-5547-a77b-610c5fe9e46c",
+      "claim_sha256": "0aba573823931972ae2cd14afa3aff6c49f62dca71befb8b81bfb531d8e86878"
+    },
+    {
+      "key": "F260",
+      "fact_id": "086ae28a-c07b-544c-a8fa-967e5c38a2ee",
+      "claim_sha256": "12953cb1747878630e4654896e8283d52bd3f42b3b13e15f4e2483caaf737e13"
+    },
+    {
+      "key": "F261",
+      "fact_id": "6332a71d-cbb7-57c2-86f4-971459c40fb7",
+      "claim_sha256": "141310395e4dbcbeca7d56230c2900a8c25440c24953b5c721d473e8fb96abd2"
+    },
+    {
+      "key": "F262",
+      "fact_id": "0c8aa956-1b2a-5be9-8fa7-9b9fbbde7ad3",
+      "claim_sha256": "c2a3ed2b9b0776efc35bcc568c0da68da5a767332ea1aaaf9565c4e11932d754"
+    },
+    {
+      "key": "F263",
+      "fact_id": "c235cc96-4890-5bcf-84aa-5c9fa90991aa",
+      "claim_sha256": "be6523daf85c842554122a92a3feaa0fafd7755d37766e47aa7b3e0172b012c1"
+    },
+    {
+      "key": "F264",
+      "fact_id": "16031155-ffec-5b0a-9f86-a38a160e9b4d",
+      "claim_sha256": "736e3e764000d94c310c73f0af9058de1a77b563e436666d79935fa5b98adce6"
+    },
+    {
+      "key": "F265",
+      "fact_id": "c2f97e1f-65f9-5fdf-af42-3a5c1539ae36",
+      "claim_sha256": "54d637c6b6a55fc5f8d5e16df5c3bd4709c56bd96f5010699995704315fa4999"
+    },
+    {
+      "key": "F266",
+      "fact_id": "74ca9229-21c8-5b24-87a9-9e19317b58c6",
+      "claim_sha256": "77c3490796c1029b1898b0e2c46d77baf9344590f6d2f02275d19ef130b15811"
+    },
+    {
+      "key": "F267",
+      "fact_id": "aff3b622-c305-5805-bf9f-8783ae1803a2",
+      "claim_sha256": "0f639a0b887ff71f36ee0d3d1d09bffeadba6dc6c2cbf9e62d6bf4d7e69ae61d"
+    },
+    {
+      "key": "F268",
+      "fact_id": "02f43536-382c-5836-8c36-fa6f7e191909",
+      "claim_sha256": "ef4f56b752a600d6b79a85019c833db6ea701a3091328674aca57b575d02800b"
+    },
+    {
+      "key": "F269",
+      "fact_id": "5e9d618d-cf81-5c8b-89ea-d5bc26577456",
+      "claim_sha256": "204c34b6798f1843affded8314e3576948081012c70881b6e0985740301b6079"
+    },
+    {
+      "key": "F270",
+      "fact_id": "3502b9f5-6fce-532c-919a-c77804ddafa5",
+      "claim_sha256": "f5fc02417ddf89ec71ca84d4ce1013ff8189d226977b0b1dbe353ee357d11e04"
+    },
+    {
+      "key": "F271",
+      "fact_id": "d61c2da5-203b-504a-99a6-b1bb9f676294",
+      "claim_sha256": "fca953f0ec8f640c90d9acd27b7e88e0d3a24ed1b159c94b830029e650741798"
+    },
+    {
+      "key": "F272",
+      "fact_id": "6c07ab15-d460-5206-86db-d4dba6da3581",
+      "claim_sha256": "8e7c7b847807a7b0d5130e2fe2f7e41031386ad145f792408858db130e79dcc8"
+    },
+    {
+      "key": "F273",
+      "fact_id": "acdd96b7-341e-5e98-99e2-62bbc18d08f9",
+      "claim_sha256": "96d199c7dd13ba0d30cbbc13aa454e97d6771cd0a2e4e485a1ed0b1e2ce131ad"
+    },
+    {
+      "key": "F274",
+      "fact_id": "7a2aa1db-424e-51a4-8e46-b1de622c9bdc",
+      "claim_sha256": "863148063a94590ba0a11075e1162c8767ec34bcb5953c706c543b23fd4f7d5e"
+    },
+    {
+      "key": "F275",
+      "fact_id": "eb2f3a2f-3061-5492-ad12-289901fb47eb",
+      "claim_sha256": "e6669e665d7b53e7c5174508f29614416cb7c9d2fce90822d641ab9df1d9a100"
+    },
+    {
+      "key": "F276",
+      "fact_id": "b4d35314-4b4a-53cf-99ab-59d31aeab737",
+      "claim_sha256": "11041387d0a0b304f21ed29581b8be8231cda930086bb9ea63311fabee1e6690"
+    },
+    {
+      "key": "F277",
+      "fact_id": "6d003eb7-e9b8-5778-ab14-0c92b18c4502",
+      "claim_sha256": "8bc94cdf21f72b7ccb50f5818e70c72840f8eb7985b8e761b3c4c55fc52b764a"
+    },
+    {
+      "key": "F278",
+      "fact_id": "fc1d085f-531a-5e8e-a266-e14bb8614f1e",
+      "claim_sha256": "26641e84cfa54903aa950a2c27f88388cedad7495b8bba215ca12ca0605b6f66"
+    },
+    {
+      "key": "F279",
+      "fact_id": "195b2b42-1c7f-579d-b51c-a391b8861a38",
+      "claim_sha256": "3305c108deb4e9859525f563a022de9c4146f990157fc4113051584267f12a74"
+    },
+    {
+      "key": "F280",
+      "fact_id": "b382587d-8af5-5268-8824-b1fcbbc70776",
+      "claim_sha256": "e8486fe8d284aee461da64db170e59a13fee1bc4bc6bc537605aea555f4837dd"
+    }
+  ],
+  "input_sha256": "b2a0d373152d8ea140cec2b6a09ffeb8d8dae33d9652ce253dccd63cdec42a86",
+  "request_sha256": "b0f544a80478b9421c811c14cfead98cc682b295141bf73fdea686fcf6ac1ffe",
+  "response_id": "msg_011Cgu3NcJPGBpj4uSE1TY1s",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 20391,
+    "output_tokens": 14079,
+    "cache_creation_input_tokens": 1505,
+    "cache_read_input_tokens": 0
+  },
+  "duration_ms": 112579,
+  "cost_usd": 0.370669,
+  "called_at": "2026-11-10T09:53:43.831Z",
+  "output_sha256": "fabc33ab3f078785ed128eca812c3197637310a8886adf53817285883adaf2b4",
+  "output": "{\"assignments\":[{\"key\":\"F141\",\"elements\":[\"S12.b\"],\"why\":\"Barr 이사(반대자 밖)가 9/29 연설에서 'AI 구축'의 '기업 고정투자' 부양과 '칩 가격 급등' 전망을 밝힘\"},{\"key\":\"F142\",\"elements\":[\"S12.b\"],\"why\":\"Barr 이사가 회의 사이 연설에서 '칩 가격 상승'이 번지고 '공급 제약'이 있다는 물가 판단을 밝힘\"},{\"key\":\"F143\",\"elements\":[\"S12.b\"],\"why\":\"Barr 이사가 회의 사이 연설에서 '기술 기업 가치평가'가 지출을 뒷받침한다는 경제 판단을 밝힘\"},{\"key\":\"F144\",\"elements\":[\"S12.b\"],\"why\":\"Barr 이사가 회의 사이 연설에서 AI의 '일자리 대체' 증거가 거의 없다는 고용 판단을 밝힘\"},{\"key\":\"F145\",\"elements\":[\"S12.b\"],\"why\":\"Barr 이사가 회의 사이 연설에서 AI 투자 '재평가'가 '성장에 타격'을 줄 수 있다고 함\"},{\"key\":\"F146\",\"elements\":[\"S12.b\"],\"why\":\"Barr 이사가 회의 사이 연설에서 '통화정책이 구조적 변화'에 적합하지 않다는 정책 견해를 밝힘\"},{\"key\":\"F147\",\"elements\":[],\"why\":\"슬롯 밖 — AI 안전·국가안보는 중앙은행 범위 밖이라는 한계\"},{\"key\":\"F148\",\"elements\":[\"S12.b\"],\"why\":\"Barr 이사가 회의 사이 연설에서 'r*'와 '더 높은 정책금리 설정'에 대한 정책 견해를 밝힘\"},{\"key\":\"F149\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 9/30 연설(회의 전)에서 '노동시장이 대체로 안정적'이라고 평가함\"},{\"key\":\"F150\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '실업률이 역사적 기준으로 낮고' '실업수당 신규 청구'가 낮다고 함\"},{\"key\":\"F151\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '여름 동안 고용 증가가 상승 추세'라고 함\"},{\"key\":\"F152\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '인플레이션이 너무 오랫동안 너무 높았다'는 물가 판단을 밝힘\"},{\"key\":\"F153\",\"elements\":[\"S04.a\",\"S04.b\"],\"why\":\"'9월 회의'에서 '나머지 위원들과 함께' '25 basis points 인상'에 찬성 — 9월 결정과 표결\"},{\"key\":\"F154\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '인플레이션을 목표로 되돌리는 데 전념'하겠다는 정책 견해를 밝힘\"},{\"key\":\"F155\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '주거비가 여전히 전체 인플레이션의 중요한 동인'이라는 물가 판단을 밝힘\"},{\"key\":\"F156\",\"elements\":[],\"why\":\"슬롯 밖 — 농촌 지역 노동시장 흐름 비교\"},{\"key\":\"F157\",\"elements\":[],\"why\":\"슬롯 밖 — 농촌 노동자 수 통계\"},{\"key\":\"F158\",\"elements\":[],\"why\":\"슬롯 밖 — 일자리 창출의 도시 쏠림\"},{\"key\":\"F159\",\"elements\":[],\"why\":\"슬롯 밖 — 연설 견해 면책 문구\"},{\"key\":\"F160\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 9/28 연설에서 '금리 인상'이 '너무 높았던 인플레이션에 대응'하기 위한 것이라는 정책 견해를 밝힘\"},{\"key\":\"F161\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '전체 인플레이션 추정 3.8%' '근원 3.4%'로 물가 판단을 밝힘\"},{\"key\":\"F162\",\"elements\":[\"S03.d\",\"S10.c\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '중동 분쟁에 따른 유가 상승'으로 '인플레이션 압력이 계속'될 것이라 함 — 연설이 지정학·에너지를 말함\"},{\"key\":\"F163\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '노동시장이 금리 인상을 감당할 좋은 위치'라고 평가함\"},{\"key\":\"F164\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '실업률이 하락 추세' '8월 4.1%'라고 함\"},{\"key\":\"F165\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '노동시장이 대체로 균형 상태이며 점차 개선'된다고 함\"},{\"key\":\"F166\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '경제성장 지표가 놀라울 만큼 견조'했다고 함\"},{\"key\":\"F167\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '어떤 정책금리가 필요할지' '향후 조정의 횟수와 폭'을 데이터로 정하겠다는 정책 견해를 밝힘\"},{\"key\":\"F168\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 'AI 주도 투자'가 인플레이션 요인이라는 물가 판단을 밝힘\"},{\"key\":\"F169\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '특정 부문의 인플레이션을 통화정책으로 잡으려는 것은 실수'라는 정책 견해를 밝힘\"},{\"key\":\"F170\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '정책 수단이 너무 무디고' '상대가격 변화 대응은 연준 역할이 아니다'라는 정책 견해를 밝힘\"},{\"key\":\"F171\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 AI '2 trillion 달러 계획 중 작은 일부만 지출'이라는 경제 판단을 밝힘\"},{\"key\":\"F172\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 'AI 열광'의 부가 '가계 지출'로 이어진다는 경제 판단을 밝힘\"},{\"key\":\"F173\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '전기·수도 비용' '근원 상품 가격 연율 3%' 상승이라는 물가 판단을 밝힘\"},{\"key\":\"F174\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 생산성 디스인플레이션이 '확산되는 인플레이션 압력'을 상쇄하지 못한다는 물가 판단을 밝힘\"},{\"key\":\"F175\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 AI가 '2% 목표 복귀를 늦추는' 것으로 보인다고 함\"},{\"key\":\"F176\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '생산성 증가가 인플레이션 압력을 완만하게 줄일' 수 있다는 물가 판단을 밝힘\"},{\"key\":\"F177\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '실업률과 해고가 모두 낮은 수준'이라고 함\"},{\"key\":\"F178\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Cook이 회의 전 연설에서 '연방기금금리를 내릴 수는 있지만 인플레이션을 부추길 위험'이라는 정책 견해를 밝힘\"},{\"key\":\"F179\",\"elements\":[],\"why\":\"슬롯 밖 — 재정정책은 소관 밖이라는 한계\"},{\"key\":\"F180\",\"elements\":[],\"why\":\"슬롯 밖 — 연설 견해 면책 문구\"},{\"key\":\"F181\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장(반대자 밖)이 10/1 연설에서 '인플레이션이 너무 높으며' 목표를 웃돌았다고 함\"},{\"key\":\"F182\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '인플레이션에는 상방 위험'이라고 평가함\"},{\"key\":\"F183\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '에너지 충격' 등 연쇄 충격을 말함 — 연설이 에너지를 말함\"},{\"key\":\"F184\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 경제가 '회복력을 보일 가능성이 높다'고 전망함\"},{\"key\":\"F185\",\"elements\":[\"S12.b\",\"S08.c\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '상반기 GDP가 2.4% 속도로 성장'이라는 성장 측정값을 말함\"},{\"key\":\"F186\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '기업 투자가 AI 관련 지출에 힘입어 상당히 강했다'고 함\"},{\"key\":\"F187\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '높은 에너지 가격'에도 소비가 회복력을 유지했다고 함\"},{\"key\":\"F188\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '저소득 소비자' '소비 수요 약화'의 일화적 증거를 말함\"},{\"key\":\"F189\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '단기 실질 GDP 성장률'이 상반기 속도와 같을 것으로 전망함\"},{\"key\":\"F190\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '중동 긴장 고조'가 경제활동을 짓누를 수 있다고 함 — 지정학 언급\"},{\"key\":\"F191\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '노동시장 여건이 안정'되었다고 함\"},{\"key\":\"F192\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 실업률이 '8월에 4.1%'로 내려갔다고 함\"},{\"key\":\"F193\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 실업률 수준이 '최대 고용에 가깝다'고 평가함\"},{\"key\":\"F194\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '고용 증가가 많은 부문으로 넓어졌고' '해고는 낮게'라고 함\"},{\"key\":\"F195\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '실업자 대비 구인 비율'이 1 위로 올라왔다고 함\"},{\"key\":\"F196\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '실업률이 현재 수준 근처'에 머물 것으로 전망함\"},{\"key\":\"F197\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 AI가 '일자리 감소'로 이어질 수 있다고 함\"},{\"key\":\"F198\",\"elements\":[\"S12.b\",\"S07.b\"],\"why\":\"Jefferson 부의장이 '개인소비지출 물가지수의 12개월 변화율이 8월에 3.4%'라고 함 — 8월 PCE 수치\"},{\"key\":\"F199\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '휘발유와 디젤 비용을 포함한 에너지 가격'이 헤드라인 상승 요인이라고 함\"},{\"key\":\"F200\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '높은 에너지 가격'의 인플레이션 전이 위험을 우려함\"},{\"key\":\"F201\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '주거 제외 핵심 서비스 가격'이 올랐다고 함\"},{\"key\":\"F202\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 'AI 관련 수요 붐'이 '핵심 재화 가격 상승'에 기여한다고 함\"},{\"key\":\"F203\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '장기 기대인플레이션 지표'가 안정적이라고 함\"},{\"key\":\"F204\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '에너지 등 가격 충격' 소멸 뒤 하락 재개 전망과 '상방' 위험을 말함\"},{\"key\":\"F205\",\"elements\":[\"S04.a\",\"S14.a\"],\"why\":\"'지난달 연방기금금리 목표 범위를 1/4%p 올려 3-3/4~4%' — 9월 결정이자 금리 변경 이력\"},{\"key\":\"F206\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '지난달 인상 결정'을 '적절한 정책'으로 지지했다고 함\"},{\"key\":\"F207\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 '향후 정책 조정'은 데이터·전망·위험을 보고 결정해야 한다고 함\"},{\"key\":\"F208\",\"elements\":[\"S12.b\",\"S11.b\"],\"why\":\"Jefferson 부의장이 '9월 회의 이후 만기 전반의 금리가 더 올랐다'고 함 — 직전 회의 이후 금리 움직임\"},{\"key\":\"F209\",\"elements\":[\"S12.b\"],\"why\":\"Jefferson 부의장이 회의 사이 연설에서 인플레이션의 '목표 복귀'를 계속 평가하겠다는 정책 견해를 밝힘\"},{\"key\":\"F210\",\"elements\":[],\"why\":\"슬롯 밖 — 연설 견해 면책 문구\"},{\"key\":\"F211\",\"elements\":[\"S04.a\",\"S14.a\"],\"why\":\"'9월에 정책금리를 25 basis points 올려 3.75~4%' — 9월 결정이자 변경 이력\"},{\"key\":\"F212\",\"elements\":[],\"why\":\"슬롯 밖 — 7월 회의 금리 동결(변경 아님)\"},{\"key\":\"F213\",\"elements\":[\"S14.a\"],\"why\":\"'2025년 하반기에 세 차례' '75 basis points 내렸음' — 목표 금리 변경 이력\"},{\"key\":\"F214\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사(반대자 밖)가 10/8 연설에서 '지난달 자신의 결정'이 누적 요인의 결과라고 함\"},{\"key\":\"F215\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 2025년 인하 때 물가가 '2% 목표에 꽤 가까웠다'고 함\"},{\"key\":\"F216\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 당시 '노동시장 약화의 상당한 증거'가 있었다고 함\"},{\"key\":\"F217\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '위험의 균형이 고용 쪽으로 기울었다'는 당시 견해를 말함\"},{\"key\":\"F218\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '작년의 정책금리 인하를 경기 둔화에 대한 보험'으로 여겼다고 함\"},{\"key\":\"F219\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '에너지 가격을 크게 끌어올린 중동 분쟁' 탓에 물가 진전이 멈췄다고 함\"},{\"key\":\"F220\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '분쟁'과 '유가 급등'을 들어 '정책금리 동결을 지지'했다고 함\"},{\"key\":\"F221\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '근원 PCE 물가가 6월 0.1%, 7월' 완화됐다고 함\"},{\"key\":\"F222\",\"elements\":[\"S12.b\",\"S10.c\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '중동 분쟁의 빠른 종식' 기대가 사라지고 '유가가 2027년까지 높게' 유지될 수 있다고 함\"},{\"key\":\"F223\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '인공지능 구축이 첨단 소비재 가격'을 끌어올린다고 함\"},{\"key\":\"F224\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '새 관세'가 물가에 '상방 압력'을 줄 수 있다고 함\"},{\"key\":\"F225\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '물가가 여전히 너무 높고' 진전이 충분하지 않다고 함\"},{\"key\":\"F226\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '9월 정책 전환'이 '여러 달에 걸친 증거의 우세' 때문이라고 함\"},{\"key\":\"F227\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 유지한 '정책 설정으로는' 물가 복귀에 '충분하지 않다'고 판단했다고 함\"},{\"key\":\"F228\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '긴축 정책이 해로운 경기 둔화'를 부를까 크게 걱정하지 않는다고 함\"},{\"key\":\"F229\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 물가 가속이 '기대 인플레이션을 높일 것을 우려'한다고 함\"},{\"key\":\"F230\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 경제가 '9월 회의 때와 대체로 같은 위치'라고 평가함\"},{\"key\":\"F231\",\"elements\":[\"S12.b\",\"S08.a\"],\"why\":\"Waller 이사가 '고용 보고서상 9월 노동시장이 견조'하고 '창출된 일자리 수는 줄었다'고 함 — 9월 고용 지표\"},{\"key\":\"F232\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '실업률이 비교적 낮고' 고용 증가가 '손익분기 추정 범위 안'이라고 함\"},{\"key\":\"F233\",\"elements\":[\"S12.b\",\"S07.b\"],\"why\":\"Waller 이사가 '8월 물가 지표에서 근원 PCE 물가가 월간 0.25%, 12개월 3%'라고 함 — 8월 PCE 수치\"},{\"key\":\"F234\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '12개월 근원 물가'가 '충분한 진전을 보이지 않는다'고 함\"},{\"key\":\"F235\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '정책이 책무 중 물가 쪽에 집중'될 것이라고 함\"},{\"key\":\"F236\",\"elements\":[],\"why\":\"슬롯 밖 — 소통과 SEP의 신호 역할 일반론\"},{\"key\":\"F237\",\"elements\":[\"S05.b\"],\"why\":\"'9월 회의에 제출된 전망'에서 '대다수 참가자가 올해 적어도 한 번 더' 인상 — 9월 점도표 분포\"},{\"key\":\"F238\",\"elements\":[\"S05.b\"],\"why\":\"'점도표를 낸 18명 중 16명' 추가 인상, '4명은 두 번' — 9월 점도표 분포\"},{\"key\":\"F239\",\"elements\":[\"S05.b\"],\"why\":\"'eight 명의 참가자가 2027년 말 금리가' 50bp 높을 것으로 예상 — 9월 점도표 분포\"},{\"key\":\"F240\",\"elements\":[],\"why\":\"슬롯 밖 — 시장의 몇 달 간 50bp 인상 해석(이번 회의 확률 아님)\"},{\"key\":\"F241\",\"elements\":[],\"why\":\"슬롯 밖 — 12월 회의까지 누적 인상 확률(이번 회의 결정 확률 아님)\"},{\"key\":\"F242\",\"elements\":[],\"why\":\"슬롯 밖 — 2027년 3월까지 시장 인상 확률\"},{\"key\":\"F243\",\"elements\":[\"S12.b\"],\"why\":\"Waller 이사가 회의 사이 연설에서 '추가 인상을 예상'하며 '연속 회의에서 이뤄질 필요는 없다'고 함\"},{\"key\":\"F244\",\"elements\":[],\"why\":\"슬롯 밖 — 연설 견해 면책 문구\"},{\"key\":\"F245\",\"elements\":[],\"why\":\"슬롯 밖 — Hammack 연설 장소·행사 정보\"},{\"key\":\"F246\",\"elements\":[],\"why\":\"슬롯 밖 — 연설 견해 면책 문구\"},{\"key\":\"F247\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 10/12 연설(회의 전)에서 '반응함수'가 정책 예측이 아니며 '고정된 경로'가 없다고 함\"},{\"key\":\"F248\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '긴축적 정책 기조가 필요'하다고 함\"},{\"key\":\"F249\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '작은 조정을 비교적 빠르게' 하는 것이 낫다는 정책 견해를 밝힘\"},{\"key\":\"F250\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '인플레이션이 2% 목표에 비해 높다'고 평가함\"},{\"key\":\"F251\",\"elements\":[\"S03.d\",\"S07.b\"],\"why\":\"반대자 Hammack이 '8월 헤드라인 PCE 인플레이션이 3.4%, 근원 PCE가 3%'라고 함 — 8월 PCE 수치\"},{\"key\":\"F252\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 두 수치 모두 '1년 전 수준보다 높다'고 함\"},{\"key\":\"F253\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '인플레이션 압력이 비교적 광범위'하다고 함\"},{\"key\":\"F254\",\"elements\":[\"S03.d\",\"S10.c\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '원유·소매 휘발유·디젤 가격이 올랐지만' 에너지가 전부는 아니라고 함 — 에너지 언급\"},{\"key\":\"F255\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '관세율'이 '일련의 비용 충격'을 낳았다고 함\"},{\"key\":\"F256\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 'AI 구축'의 '수요 측 압력'이 부품 가격을 올린다고 함\"},{\"key\":\"F257\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 접촉처의 '추가 비용 압력'을 전함\"},{\"key\":\"F258\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '주거 제외 근원 서비스 인플레이션'에도 압력이 있다고 함\"},{\"key\":\"F259\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '추세 인플레이션을 2% 중후반'으로 추정한다고 함\"},{\"key\":\"F260\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 인플레이션이 '2%로 돌아가는 데 시간이 걸릴' 것이라는 기본 전망을 밝힘\"},{\"key\":\"F261\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 수요 측 압력에는 '더 긴축적인 정책이 필요'하다고 함\"},{\"key\":\"F262\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '위험이 여전히 그 방향(상방)으로 기운' 것으로 보인다고 함\"},{\"key\":\"F263\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '장기 기대인플레이션'을 '당연하게 여기지 않는다'고 함\"},{\"key\":\"F264\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 소매업체 가격 계획이 '인플레이션 심리가 자리잡는 신호'일 수 있다고 함\"},{\"key\":\"F265\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '4.2% 실업률'이 '최대고용 추정치에 가깝다'고 함\"},{\"key\":\"F266\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '고용 증가가 작년보다 빨라졌고' 청구·WARN 통지가 낮다고 함\"},{\"key\":\"F267\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 AI 구축이 '인력 부족과 빠른 임금 상승'에 기여한다는 보고를 전함\"},{\"key\":\"F268\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '최대고용 책무에 대한 위험'이 빡빡한 쪽으로 기운다고 함\"},{\"key\":\"F269\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 'GDP 성장이 상반기에 견조'하고 3분기도 견조하다고 함\"},{\"key\":\"F270\",\"elements\":[\"S03.d\",\"S10.c\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '높은 에너지 가격에도 소비 지출이 강했다'고 함 — 에너지 언급\"},{\"key\":\"F271\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '견조한 성장이 이어지는' 전망을 밝힘\"},{\"key\":\"F272\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '금융여건이 수요를 억제하기보다 중립적'이라고 봄\"},{\"key\":\"F273\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '높은 주식 밸류에이션' '회사채 스프레드가 낮다'고 함\"},{\"key\":\"F274\",\"elements\":[\"S03.d\",\"S11.b\",\"S10.c\"],\"why\":\"반대자 Hammack이 '채권 금리 상승'이 '높은 에너지 가격·지정학적 우려' 등을 반영한다고 전함 — 금리 움직임·지정학 언급\"},{\"key\":\"F275\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '중립 실질금리가 GFC 이전 수준'으로 돌아왔다는 인식을 말함\"},{\"key\":\"F276\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '긴축적 통화정책 기조가 적절'하다고 함\"},{\"key\":\"F277\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '잦은 작은 조정'이 위험을 줄인다는 정책 견해를 밝힘\"},{\"key\":\"F278\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '노동시장이 확실한 악화 신호'면 정책이 대응해야 한다고 함\"},{\"key\":\"F279\",\"elements\":[\"S03.d\"],\"why\":\"반대자 Hammack이 회의 전 연설에서 '정책금리를 더 높은 쪽으로' 향하게 해야 할 수 있다고 함\"},{\"key\":\"F280\",\"elements\":[],\"why\":\"슬롯 밖 — Logan 연설 견해 면책 문구\"}]}"
+}

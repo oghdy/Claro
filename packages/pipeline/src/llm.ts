@@ -16,10 +16,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const ENV = join(ROOT, "packages/pipeline/.env.pipeline");
 export const LEDGER = join(ROOT, "packages/pipeline/data/p3-calls.jsonl");
 export const DEFAULT_MODEL = "claude-opus-5-5"; // D42 — 사실 추출
-// 상한은 Step 마다 (장부의 step 칸으로 센다). P-3 은 $15 · P-3b 는 $12 (지시)
-export const STEP = "P-3b";
-export const BUDGET_USD = 12;
-export const STOP_AT_USD = 11.5;       // 이 Step 에서 쓴 돈 + 이번 부르기의 넉넉한 추정이 이 값을 넘으면 부르지 않는다 — 상한 아래 여유
+// 상한은 Step 마다 (장부의 step 칸으로 센다). P-3 은 $15 · P-3b 는 $12 · P-4 는 $8 (지시)
+export const STEP = "P-4";
+export const BUDGET_USD = 8;
+export const STOP_AT_USD = 7.5;        // 이 Step 에서 쓴 돈 + 이번 부르기의 넉넉한 추정이 이 값을 넘으면 부르지 않는다 — 상한 아래 여유
 
 // 가격 (US$ / 100만 토큰 · claude-api 스킬의 표 2026-11-03 판). 대략 비용이다 — 청구서가 아니다
 export const PRICE: Record<string, { in: number; out: number; cache_write: number; cache_read: number }> = {

@@ -1,0 +1,27 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/2 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "ST-01",
+  "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+  "text_sha256": "3dba8982ba274aea7e33aa1f794f88a17e3eb7ef578f6a0578d78f099fa3ec00",
+  "input_sha256": "3dba8982ba274aea7e33aa1f794f88a17e3eb7ef578f6a0578d78f099fa3ec00",
+  "prompt_version": "p3-extract/2",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "ac671390484febb568a09dfe067098796c5e2bb731ce2a7107581536a9d44606",
+  "response_id": "msg_011Cgu3erqCqENbgxeD3oMnj",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4365,
+    "output_tokens": 2629,
+    "cache_creation_input_tokens": 4999,
+    "cache_read_input_tokens": 0
+  },
+  "duration_ms": 20653,
+  "cost_usd": 0.095035,
+  "called_at": "2026-11-10T09:55:54.364Z",
+  "output_sha256": "06084bc5a02d2754d3d2e0633509b57d4a38b0f5b9a0c338fbe5ee246883ded9",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 는 연방기금금리 목표 범위를 3-1/2~3-3/4% 로 유지하기로 결정함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"In support of its goals, the Committee decided to maintain the target range for the federal funds rate at 3‑1/2 to 3‑3/4 percent.\"]},{\"claim_text\":\"이 통화정책 조치에 Jerome H. Powell 의장, John C. Williams 부의장, Michael S. Barr, Michelle W. Bowman, Lisa D. Cook, Beth M. Hammack, Philip N. Jefferson, Neel Kashkari, Lorie K. Logan, Anna Paulson 이 찬성표를 던짐\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"Voting for the monetary policy action were Jerome H. Powell, Chair; John C. Williams, Vice Chair; Michael S. Barr; Michelle W. Bowman; Lisa D. Cook; Beth M. Hammack; Philip N. Jefferson; Neel Kashkari; Lorie K. Logan; and Anna Paulson.\"]},{\"claim_text\":\"Stephen I. Miran 과 Christopher J. Waller 는 이 조치에 반대표를 던졌으며, 이번 회의에서 연방기금금리 목표 범위를 1/4%p 낮추기를 선호함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"Voting against this action were Stephen I. Miran and Christopher J. Waller, who preferred to lower the target range for the federal funds rate by 1/4 percentage point at this meeting.\"]},{\"claim_text\":\"FOMC 성명문은 이용 가능한 지표가 경제활동이 견조한 속도로 확장해 왔음을 시사한다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"Available indicators suggest that economic activity has been expanding at a solid pace.\"]},{\"claim_text\":\"FOMC 성명문은 일자리 증가가 낮은 수준에 머물렀고 실업률은 일부 안정의 징후를 보였다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"Job gains have remained low, and the unemployment rate has shown some signs of stabilization.\"]},{\"claim_text\":\"FOMC 성명문은 인플레이션이 다소 높은 수준에 머물러 있다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"Inflation remains somewhat elevated.\"]},{\"claim_text\":\"FOMC 성명문은 경제 전망에 대한 불확실성이 여전히 높으며, 위원회가 이중 책무 양쪽의 위험에 주의를 기울이고 있다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"Uncertainty about the economic outlook remains elevated.\",\"The Committee is attentive to the risks to both sides of its dual mandate.\"]},{\"claim_text\":\"FOMC 성명문은 연방기금금리 목표 범위의 추가 조정 규모와 시점을 고려할 때 위원회가 들어오는 데이터, 변화하는 전망, 위험의 균형을 신중히 평가할 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks.\"]},{\"claim_text\":\"FOMC 성명문은 위원회가 최대 고용을 지원하고 인플레이션을 2% 목표로 되돌리는 데 강하게 전념하고 있다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"The Committee is strongly committed to supporting maximum employment and returning inflation to its 2 percent objective.\"]},{\"claim_text\":\"FOMC 성명문은 위원회의 목표 달성을 저해할 수 있는 위험이 나타나면 위원회가 통화정책 기조를 적절히 조정할 준비가 되어 있을 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-01-28\",\"passages\":[\"The Committee would be prepared to adjust the stance of monetary policy as appropriate if risks emerge that could impede the attainment of the Committee's goals.\"]}]}",
+  "output_in": "here"
+}

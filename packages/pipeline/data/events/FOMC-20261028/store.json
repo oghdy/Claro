@@ -319,6 +319,105 @@
       "language": "en",
       "published_at": "2026-10-21",
       "ingested_at": "2026-10-30"
+    },
+    {
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "label": "BB-10S",
+      "title": "Beige Book — National Summary (October 2026)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/beigebook202610-summary.htm",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-10-14",
+      "ingested_at": "2026-11-10"
+    },
+    {
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "label": "SP-HAM-1105",
+      "title": "Hammack, Reserve Currencies and Stablecoins (2026-11-05)",
+      "publisher": "clevelandfed.org",
+      "url": "https://www.clevelandfed.org/collections/speeches/2026/sp-20261105-reserve-currencies-and-stablecoins",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-11-05",
+      "ingested_at": "2026-11-10"
+    },
+    {
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "label": "WH-0619",
+      "title": "President Trump's Iran Agreement Is America First in Action (The White House, 2026-06-19)",
+      "publisher": "whitehouse.gov",
+      "url": "https://www.whitehouse.gov/releases/2026/06/president-trumps-iran-agreement-is-america-first-in-action/",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-06-19",
+      "ingested_at": "2026-11-10"
+    },
+    {
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "label": "WH-1025",
+      "title": "President Trump Secures Major Deals to Unleash American Energy and Cut Gas Prices at the Pump (The White House, 2026-10-25)",
+      "publisher": "whitehouse.gov",
+      "url": "https://www.whitehouse.gov/releases/2026/10/president-trump-secures-major-deals-to-unleash-american-energy-and-cut-gas-prices-at-the-pump/",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-10-25",
+      "ingested_at": "2026-11-10"
+    },
+    {
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "label": "ST-01",
+      "title": "Federal Reserve issues FOMC statement (2026-01-28)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260128a.htm",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-01-28T14:00-05:00",
+      "ingested_at": "2026-11-10"
+    },
+    {
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "label": "ST-03",
+      "title": "Federal Reserve issues FOMC statement (2026-03-18)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-03-18T14:00-04:00",
+      "ingested_at": "2026-11-10"
+    },
+    {
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "label": "ST-04",
+      "title": "Federal Reserve issues FOMC statement (2026-04-29)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260429a.htm",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-04-29T14:00-04:00",
+      "ingested_at": "2026-11-10"
+    },
+    {
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "label": "ST-06",
+      "title": "Federal Reserve issues FOMC statement (2026-06-17)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-06-17T14:00-04:00",
+      "ingested_at": "2026-09-18"
+    },
+    {
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "label": "ST-07",
+      "title": "Federal Reserve issues FOMC statement (2026-07-29)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-07-29T14:00-04:00",
+      "ingested_at": "2026-09-18"
     }
   ],
   "source_documents": [],
@@ -439,6 +538,19 @@
       "terms_url": null,
       "last_reviewed_at": "2026-10-30",
       "_basis": "17 U.S.C. §105 — U.S. Central Command (Department of Defense) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    },
+    {
+      "source": "whitehouse.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-10",
+      "_basis": "17 U.S.C. §105 — The White House (Executive Office of the President) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
     }
   ],
   "facts": [],

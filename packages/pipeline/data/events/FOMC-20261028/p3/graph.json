@@ -15,9 +15,11 @@
       "TSY-IR-1008",
       "TSY-IR-1021",
       "CC-1005",
-      "CC-1010"
+      "CC-1010",
+      "WH-0619",
+      "WH-1025"
     ],
-    "basis": "P-2 소스 팩 pack.json 의 group \"스토리라인\" (why: SL-iran-war 9/16 뒤)"
+    "basis": "P-2 소스 팩 pack.json 의 group \"스토리라인\" (why: SL-iran-war 9/16 뒤) · P-4 가 더한 WH-0619 · WH-1025"
   },
   "built_from": [
     {
@@ -203,6 +205,78 @@
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
       "input_sha256": "00b8b1af8f4d688854e17662aeeb8ae97ab107143b3016d8798e3942b5fdb366"
+    },
+    {
+      "source_label": "BB-10S",
+      "raw": "BB-10S.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "a5ab7f80f3db5e6837bf842d58122532093474c38f0fe29c810ab60dadb26cc1",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "f9cfd197398ace753bfabfeb5aa162f5595a02338c9767cb28eaf8a33a6594ea"
+    },
+    {
+      "source_label": "SP-HAM-1105",
+      "raw": "SP-HAM-1105.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "929114bed036cae91bbc4faf3790e6f06cc023125ea3c93b17ac48fdcce82877",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "db147ab53cac350cd771b1af149e8cd21afc423328ffa70ea29aa1c1cb6e7c13"
+    },
+    {
+      "source_label": "WH-0619",
+      "raw": "WH-0619.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "b5bb2c2690ab3c66817e9c3cad1670fbfee9e2255d56c6caaae55519c6895421",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "3dcb2f7804432a1eba83f4c632e11f63453962bc56dadbbfb59b6024585137a9"
+    },
+    {
+      "source_label": "WH-1025",
+      "raw": "WH-1025.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "e0dc7747233b66135e54b5e9272914d42c54fb63f1396479bb3f1348b7e83ea9",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "67a2555426d55782b1af895210029ae0a40be946bff347d7761e32a1e57e83a3"
+    },
+    {
+      "source_label": "ST-01",
+      "raw": "ST-01.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "06084bc5a02d2754d3d2e0633509b57d4a38b0f5b9a0c338fbe5ee246883ded9",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "3dba8982ba274aea7e33aa1f794f88a17e3eb7ef578f6a0578d78f099fa3ec00"
+    },
+    {
+      "source_label": "ST-03",
+      "raw": "ST-03.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "a32422496f34f446f5ee2811d793e48a4d32eaa56163f70d488eb3cfffcc9a2a",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "61a41012c59cb6314139dee68c1db63dbee6bf38280cf4fea18a9abd0a8f57b4"
+    },
+    {
+      "source_label": "ST-04",
+      "raw": "ST-04.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "3778deaf16e62e97968a47654887cae878ddd5d57517eb4718687ed929e7650e",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "0f6ef119fee48b429258263c4a3761c7c434efaca57e8c4fd831c5827b6ae73e"
+    },
+    {
+      "source_label": "ST-06",
+      "raw": "ST-06.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "e0a887907ae0a817c0e271e49ea350edeac12d213a1cc7b3b3f7d8b39d9a155d",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "bf3e7cf3024d3bb0bf32a8b19d074296c2cf986d29c2f34ce22cc1b060d1b982"
+    },
+    {
+      "source_label": "ST-07",
+      "raw": "ST-07.claude-opus-5-5.p3-extract-2.json",
+      "output_sha256": "0732daba98b5d638e83ab4944dbedb85e6f3905ac6048403ec5259f969f49393",
+      "model": "claude-opus-5-5",
+      "prompt_version": "p3-extract/2",
+      "input_sha256": "e62f8176863b72bd6081fc1f4b7ac4b3db8e33b8d4f80afdef3b88b2dd5a7ec8"
     }
   ],
   "missing_output": [],
@@ -254,19 +328,19 @@
     "SEP-09: 읽지 않은 것 — Figure 1 (Table 1 과 같은 값 + 지난해 실제 값) · Figure 3 (분포 막대 — 머리의 해 칸 5 와 줄의 칸 9 가 짝이 맞지 않는다) · Figure 4.D · 4.E (확산 지수 이력) · Figure 5 · Table 2 · 글 (방법 설명 · 각주)"
   ],
   "counts": {
-    "documents": 28,
-    "documents_text": 23,
-    "documents_with_output": 23,
-    "candidates": 647,
-    "model_candidates": 438,
+    "documents": 37,
+    "documents_text": 32,
+    "documents_with_output": 32,
+    "candidates": 770,
+    "model_candidates": 561,
     "table_facts": 209,
-    "verified": 642,
+    "verified": 764,
     "no_passage": 0,
     "multiple": 0,
     "bad_shape": 0,
     "quantifier_mismatch": 0,
-    "number_mismatch": 5,
-    "facts_after_merge": 629,
+    "number_mismatch": 6,
+    "facts_after_merge": 751,
     "merges": 13,
     "merges_by_rule": {
       "R1": 2,
@@ -275,7 +349,7 @@
     },
     "merge_proposals": 9,
     "merge_proposals_rejected": 0,
-    "merge_proposals_partial": 1,
+    "merge_proposals_partial": 0,
     "merge_candidates": 19,
     "bls_facts": 33
   },
@@ -548,6 +622,96 @@
       "bad_shape": 0,
       "quantifier_mismatch": 0,
       "number_mismatch": 1,
+      "table": 0
+    },
+    "BB-10S": {
+      "candidates": 27,
+      "verified": 27,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 0,
+      "table": 0
+    },
+    "SP-HAM-1105": {
+      "candidates": 11,
+      "verified": 11,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 0,
+      "table": 0
+    },
+    "WH-0619": {
+      "candidates": 21,
+      "verified": 20,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 1,
+      "table": 0
+    },
+    "WH-1025": {
+      "candidates": 12,
+      "verified": 12,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 0,
+      "table": 0
+    },
+    "ST-01": {
+      "candidates": 10,
+      "verified": 10,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 0,
+      "table": 0
+    },
+    "ST-03": {
+      "candidates": 12,
+      "verified": 12,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 0,
+      "table": 0
+    },
+    "ST-04": {
+      "candidates": 12,
+      "verified": 12,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 0,
+      "table": 0
+    },
+    "ST-06": {
+      "candidates": 9,
+      "verified": 9,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 0,
+      "table": 0
+    },
+    "ST-07": {
+      "candidates": 9,
+      "verified": 9,
+      "no_passage": 0,
+      "multiple": 0,
+      "bad_shape": 0,
+      "quantifier_mismatch": 0,
+      "number_mismatch": 0,
       "table": 0
     }
   },
@@ -20048,6 +20212,2245 @@
       "_storyline_doc": "SL-iran-war"
     },
     {
+      "fact_id": "db3bc1b3-52f9-50b1-992f-6336281cc0b3",
+      "label": "F630",
+      "claim_text": "베이지북은 직전 베이지북 이후 12개 연준 지역 중 2개 지역이 경제활동의 moderate 성장을, 3개 지역이 modest 성장을, 4개 지역이 slight 성장을 보고했고 3개 지역은 큰 변화가 없다고 보고했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#0"
+      ]
+    },
+    {
+      "fact_id": "254ef48b-d1ca-5e93-b802-a50481706a2a",
+      "label": "F631",
+      "claim_text": "베이지북은 Dallas 지역의 moderate 성장을 제조업의 견조하고 폭넓은 성장이 이끌었고, 다른 6개 지역도 제조업체로부터 modest~moderate 성장을 보고했으며 나머지 5개 지역은 제조업 성장이 거의 없거나 없었다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#1"
+      ]
+    },
+    {
+      "fact_id": "cbb93f33-1e8a-527c-8628-07bdfe087b43",
+      "label": "F632",
+      "claim_text": "베이지북은 다른 부문에 대한 보고가 전반적으로 성장이 거의 없음을 나타낸다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#2"
+      ]
+    },
+    {
+      "fact_id": "d621809c-8289-5a5b-a13e-811e7236d246",
+      "label": "F633",
+      "claim_text": "베이지북은 대부분의 지역에서 전체 소비지출에 변화가 거의 없거나 없었다고 보고했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#3"
+      ]
+    },
+    {
+      "fact_id": "ae2674eb-aa2b-5190-822f-41e59ce26a04",
+      "label": "F634",
+      "claim_text": "베이지북은 보고한 6개 지역 중 5개 지역의 자동차 업계 응답자가 판매가 보합이거나 소폭 낮았다고 밝혔다고 전함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#4"
+      ]
+    },
+    {
+      "fact_id": "19a805e6-407a-5c5d-b9e4-c0187e5b0ac7",
+      "label": "F635",
+      "claim_text": "베이지북은 절반이 넘는 지역에서 소비지출이 고소득 가구에 의해 주도되었다고 밝혔다고 전함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#5"
+      ]
+    },
+    {
+      "fact_id": "8274c575-31f8-5e63-b2e3-247e63b6af1f",
+      "label": "F636",
+      "claim_text": "베이지북은 관광이 계속 성장했으나 Boston, Minneapolis, San Francisco 지역의 기업들이 캐나다 관광객 매출 감소를 언급했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#6"
+      ]
+    },
+    {
+      "fact_id": "702f2b99-5ae6-514d-88cb-097452b47c97",
+      "label": "F637",
+      "claim_text": "베이지북은 대부분의 지역에서 기업들이 향후 몇 달에 대해 긍정적 전망을 유지했다고 보고했으나, 기대는 제조업 중심의 slight 성장이며 지속적인 불확실성의 부담을 받는 경향이 있다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#7"
+      ]
+    },
+    {
+      "fact_id": "242cd55d-d8a6-51c6-94b7-ed389970e1ba",
+      "label": "F638",
+      "claim_text": "베이지북은 대부분의 지역에서 전체 고용 수준의 순변화가 거의 없거나 없었으며, 3개 지역은 modest 증가, 5개 지역은 slight 증가, 4개 지역은 큰 변화 없음을 보고했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#8"
+      ]
+    },
+    {
+      "fact_id": "45f4706f-4e5c-5e58-826b-7b8480f93932",
+      "label": "F639",
+      "claim_text": "베이지북은 노동공급이 대체로 수요를 충족했으나 전문 · 기술 · 숙련 기능 인력의 부족은 지속되었다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#9"
+      ]
+    },
+    {
+      "fact_id": "2a53cc41-0ddb-59fa-94a1-61a2e20ac4c8",
+      "label": "F640",
+      "claim_text": "베이지북은 5개 지역에서 일부 기업이 AI 투자로 생산성을 높인 뒤 인력을 줄이거나(자연감소를 통해) 채용을 미루거나 일자리 창출 축소를 예상했다고 보고했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#10"
+      ]
+    },
+    {
+      "fact_id": "43af7fc3-ab7e-5088-8f5a-c9b8d3a19d5a",
+      "label": "F641",
+      "claim_text": "베이지북은 5개 지역이 전체 임금의 moderate 성장을, 4개 지역이 modest 성장을, 2개 지역이 slight 성장을 보고했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#11"
+      ]
+    },
+    {
+      "fact_id": "53cdabe4-1b47-59dd-a03a-b396a828fcf7",
+      "label": "F642",
+      "claim_text": "베이지북은 여러 지역에서 인플레이션이 생계비 인상 요구와 복리후생 비용 상승이라는 형태로 추가적인 임금 압력을 낳았다고 언급했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#12"
+      ]
+    },
+    {
+      "fact_id": "45434fb8-1541-52a8-adb6-0d8e1aa77170",
+      "label": "F643",
+      "claim_text": "베이지북은 3개 지역이 전체 물가 상승을 robust 로, 8개 지역이 moderate 로 평가했고 (8개 중 3개는 투입가격 압력이 강해지고 있다고 언급), 1개 지역이 modest 물가 상승을 보고했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#13"
+      ]
+    },
+    {
+      "fact_id": "4f056c91-580a-5555-a4b3-f2ea21aca995",
+      "label": "F644",
+      "claim_text": "베이지북은 4개 지역에서 직전 기간 이후 물가 상승 속도가 빨라졌다고 보고했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#14"
+      ]
+    },
+    {
+      "fact_id": "f20b07ac-cc1d-5824-88ec-e5727139a6f8",
+      "label": "F645",
+      "claim_text": "베이지북은 유가 상승이 모든 지역 보고서에 나타났고, 기업들이 높은 디젤 가격과 유류할증료를 통한 공급망 전반의 비용 전가를 언급했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#15"
+      ]
+    },
+    {
+      "fact_id": "2b2a24cd-699e-5c00-8bb5-a337246dd032",
+      "label": "F646",
+      "claim_text": "베이지북은 복수의 지역 응답자가 다른 원자재, 관세, 보험으로부터의 지속적인 가격 압력도 언급했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#16"
+      ]
+    },
+    {
+      "fact_id": "25f284b6-5a9e-52d9-92c6-132fab68b980",
+      "label": "F647",
+      "claim_text": "베이지북은 소비자 대면 기업들이 가격에 민감한 고객의 가격 인상 저항으로 이윤 마진이 좁아졌다고 언급했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#17"
+      ]
+    },
+    {
+      "fact_id": "8737bdd4-91ac-5636-ae12-48e82430a63d",
+      "label": "F648",
+      "claim_text": "베이지북은 여러 지역의 기업들이 에너지와 관세를 둘러싼 지속적 불확실성을 들며 향후 몇 달간 가격이 더 오를 것으로 예상한다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (전국 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#18"
+      ]
+    },
+    {
+      "fact_id": "21a8ca10-9bd8-5fe1-9ffe-a175229a1350",
+      "label": "F649",
+      "claim_text": "베이지북은 Boston 지역에서 난방유 가격이 1년 전보다 급등해 겨울 난방비 우려를 키웠다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (Boston 지역 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#19"
+      ]
+    },
+    {
+      "fact_id": "5351ea9b-9e4d-521b-a8be-11fd94eb44b5",
+      "label": "F650",
+      "claim_text": "베이지북은 New York 지역에서 판매가격 상승이 moderate 범위의 상단으로 빨라졌고 투입가격은 계속 강하게 올랐다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (New York 지역 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#20"
+      ]
+    },
+    {
+      "fact_id": "52bf215f-97e1-57a0-8fe3-888c92ff26bc",
+      "label": "F651",
+      "claim_text": "베이지북은 Cleveland 지역에서 비노동 비용 압력이 강하게 유지되었고 판매가격이 robust 하게 올랐다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (Cleveland 지역 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#21"
+      ]
+    },
+    {
+      "fact_id": "4b0d4f3b-dbd1-567d-973f-20d2642061c4",
+      "label": "F652",
+      "claim_text": "베이지북은 St. Louis 지역에서 물가가 robust 한 속도로 올랐고 상승이 광범위했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (St. Louis 지역 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#22"
+      ]
+    },
+    {
+      "fact_id": "c6f38aba-c959-52a3-985c-2ed6b7f10297",
+      "label": "F653",
+      "claim_text": "베이지북은 Kansas City 지역에서 디젤 가격과 운송비 상승이 이윤 마진에 압력을 더해 가장 큰 우려였다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (Kansas City 지역 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#23"
+      ]
+    },
+    {
+      "fact_id": "d3529ac3-084a-542a-8cc8-fff9b43e1ad0",
+      "label": "F654",
+      "claim_text": "베이지북은 Dallas 지역의 전망이 대체로 긍정적이었으나 인플레이션과 지정학 · 무역정책 불확실성이 역풍으로 남았다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "베이지북 (Dallas 지역 요약)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#24"
+      ]
+    },
+    {
+      "fact_id": "506f6709-e3ba-5f09-bc37-8dfe986fc916",
+      "label": "F655",
+      "claim_text": "베이지북은 이 보고서가 October 5, 2026 이전에 수집된 정보에 기초해 Federal Reserve Bank of Philadelphia 에서 작성되었다고 밝힘.",
+      "fact_type": "OFFICIAL_LIMIT",
+      "actor": "베이지북 (주석)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#25"
+      ]
+    },
+    {
+      "fact_id": "9a7d388d-0ac6-527d-8831-a16d4d8e1384",
+      "label": "F656",
+      "claim_text": "베이지북은 이 문서가 연준 외부 응답자의 의견을 요약한 것이며 연준 관계자의 견해에 대한 논평이 아니라고 밝힘.",
+      "fact_type": "OFFICIAL_LIMIT",
+      "actor": "베이지북 (주석)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "BB-10S#26"
+      ]
+    },
+    {
+      "fact_id": "147e59a9-afa5-5b1c-b436-0e03e3dfdaf9",
+      "label": "F657",
+      "claim_text": "Hammack 클리블랜드 연은 총재는 이날 밝히는 견해가 자신의 것이며 Federal Reserve System 이나 FOMC 동료들의 견해가 아니라고 말함",
+      "fact_type": "OFFICIAL_LIMIT",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#0"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "36be003b-b608-5357-bf13-0100d7c9b033",
+      "label": "F658",
+      "claim_text": "Hammack 총재는 3월 초 이후 물가상승률이 잘못된 방향으로 움직였다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#1"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "e04b3d01-241c-5ae8-a980-575b7237662b",
+      "label": "F659",
+      "claim_text": "Hammack 총재는 9월 헤드라인 PCE 물가상승률이 3.6%, 근원 PCE 물가상승률이 3.1%였다고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#2"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "47c50f5c-8b0d-5d21-b10d-f732f90be9c7",
+      "label": "F660",
+      "claim_text": "Hammack 총재는 이 수치들이 2% 목표를 크게 웃돌고 올해 초보다 높다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#3"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "44435126-1b7e-5cd1-8e81-895fe414a9fd",
+      "label": "F661",
+      "claim_text": "Hammack 총재는 물가상승률이 거의 6년 동안 목표를 웃돌았다고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#4"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "b8c66d01-26ce-5981-a9bb-93d80f679827",
+      "label": "F662",
+      "claim_text": "Hammack 총재는 자신이 보는 물가 압력이 비교적 광범위한 것으로 보이며 공급과 수요 양쪽을 반영한다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#5"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "1c4ec025-48f9-51da-ba52-6ace68d16f92",
+      "label": "F663",
+      "claim_text": "Hammack 총재는 물가상승률을 적시에 2% 로 되돌리려면 통화정책이 긴축적 기조로 옮겨가야 할 것으로 예상한다고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#6"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "3431c59c-8a0f-5ac1-9e88-628e388e723a",
+      "label": "F664",
+      "claim_text": "Hammack 총재는 가능하면 더 잦고 더 작은 조정으로 그 기조에 도달하는 것을 선호하며, 이것이 가계 · 기업 · 금융시장에 덜 혼란을 줄 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#7"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "10c6de5c-4c2d-5ed4-8865-6b7d1a94b5f0",
+      "label": "F665",
+      "claim_text": "Hammack 총재는 이 전략이 정책이 필요한 수준에 뒤처지고 인플레이션 심리가 자리 잡을 위험도 줄일 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#8"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "14435c32-c264-5ab0-b780-0ad7b338ecc9",
+      "label": "F666",
+      "claim_text": "Hammack 총재는 의회에 대한 책임과 함께 연준의 독립성이 2% 물가 목표에 대한 세계의 신뢰를 유지하는 데 결정적이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#9"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "6dd276be-7047-5177-84eb-3186eb60bba1",
+      "label": "F667",
+      "claim_text": "Hammack 총재는 달러 가치가 물가와 경제 전반에 영향을 주는 많은 요인 중 하나여서 자신이 지켜보는 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Hammack 클리블랜드 연은 총재 (연설)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-11-05",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "SP-HAM-1105#10"
+      ],
+      "_after_event": true
+    },
+    {
+      "fact_id": "24d33f88-f3bd-5cfc-b9c9-35f22527512e",
+      "label": "F668",
+      "claim_text": "백악관은 Donald J. Trump 대통령과 JD Vance 부통령이 이란과 양해각서(Memorandum of Understanding)에 서명했다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#0"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "b1d56ae3-77ed-50c5-8e27-9a558d169d4f",
+      "label": "F669",
+      "claim_text": "백악관은 이 합의가 이란이 결코 핵무기를 갖지 못하도록 보장하고 호르무즈 해협을 자유 항행에 다시 연다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-19",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#1"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "cc4b502d-d032-5263-8705-6ba4e3648115",
+      "label": "F670",
+      "claim_text": "Macron 프랑스 대통령은 Trump 대통령이 Versailles 에서 이란과 미국 사이의 합의에 서명했으며, 이 합의가 호르무즈 해협 재개방을 가능하게 하고 곧 에너지 가격 하락을 가능하게 할 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Emmanuel Macron 프랑스 대통령",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#2"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "4cb7dbf3-8b7c-50e3-9181-66996c5198dc",
+      "label": "F671",
+      "claim_text": "Sharif 파키스탄 총리는 양해각서가 양국 대통령에 의해 서명되었고 중재자인 자신이 승인했다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Shehbaz Sharif 파키스탄 총리",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#3"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "28082195-bc8a-5660-9401-6b98cb59094d",
+      "label": "F672",
+      "claim_text": "카타르 외무부는 미국과 이란이 군사작전 중단과 호르무즈 해협 항행의 자유 보장을 포함하는 양해각서에 전자 서명한 것을 환영한다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "카타르 외무부",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#4"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "5f6b8cd6-7d3e-521e-93cb-d384c9ee5be6",
+      "label": "F673",
+      "claim_text": "Takaichi 일본 총리는 미국과 이란이 각서에 서명했고 적대행위 중단이 선언되었다고 말하며, 앞으로의 협상으로 이란 핵 문제 등에 대한 최종 합의가 가능한 한 빨리 이뤄지기를 바란다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Sanae Takaichi 일본 총리",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#5"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "481698d9-5568-5534-8a4c-70d7beba6174",
+      "label": "F674",
+      "claim_text": "유엔 사무총장 대변인은 미국과 이란이 즉각적이고 영구적인 휴전, 호르무즈 해협 재개방, 추가 협상의 틀을 담은 평화 합의에 동의했다는 발표를 사무총장이 환영한다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "유엔 사무총장 대변인",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#6"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "f56ae637-11e3-5756-b411-16ef98286b6b",
+      "label": "F675",
+      "claim_text": "Starmer 영국 총리는 미국과 이란의 합의가 전쟁 종식과 호르무즈 해협 재개방을 향한 매우 중요한 진전이라고 말하고 Pakistan · Qatar 등의 중재자를 언급함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Keir Starmer 영국 총리",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#8"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "6d217789-8936-51b2-a075-ba027e84f6d2",
+      "label": "F676",
+      "claim_text": "von der Leyen 유럽연합 집행위원장은 해협이 다시 열릴 것이며 유가가 떨어지고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Ursula von der Leyen 유럽연합 집행위원장",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#9"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "edab8277-e399-5484-9960-298f6f7d1f18",
+      "label": "F677",
+      "claim_text": "Merz 독일 총리는 이란과의 합의가 지역 안정과 세계 경제를 위한 기회이며 합의된 평화가 이제 유지되어야 한다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Friedrich Merz 독일 총리",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#10"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "42fa6232-29c8-5d63-8a8d-df5478880d7b",
+      "label": "F678",
+      "claim_text": "Atlantic Council 부회장은 이란의 호르무즈 해협 위협과 미국의 보복 봉쇄가 세계 에너지 흐름을 막아 에너지 가격 상승과 세계 경제 충격으로 이어졌다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Atlantic Council 지정학 담당 부회장 (백악관 보도자료 인용)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#11"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "801d2230-b93f-5b4c-a621-5c07b7b6ee1d",
+      "label": "F679",
+      "claim_text": "Atlantic Council 부회장은 이번 합의가 경제적 압력을 완화할 것으로 보이며, 양측 모두 에너지를 세계 시장으로 흐르게 할 강한 경제적 유인이 있어 합의가 유지될 것으로 짐작한다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Atlantic Council 지정학 담당 부회장 (백악관 보도자료 인용)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#12"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "c1978d92-f3d4-5476-be6f-7112686d3479",
+      "label": "F680",
+      "claim_text": "America First Policy Institute 는 Operation Epic Fury 개시 후 107일 만에 합의가 나왔다고 말하며 이란 정권과의 60일 양해각서 마무리 노력을 높이 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "America First Policy Institute",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#13"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "91b832e2-7d5c-5616-ba36-aa489668ab17",
+      "label": "F681",
+      "claim_text": "Graham 상원의원은 미국이 이란과 핵 프로그램 등에 대해 수용 가능하고 검증 가능한 합의에 이를 수 있을지는 아직 정해지지 않았다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Lindsey Graham 상원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#14"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "f1011019-b3b5-5617-a738-25c7401d2ba2",
+      "label": "F682",
+      "claim_text": "Kennedy 상원의원은 60일 안에 결과를 알게 될 것이라며 평화에 60일의 기회를 주자고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "John Kennedy 상원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#15"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "10ad9177-6eca-595e-be05-95115a6091b3",
+      "label": "F683",
+      "claim_text": "Marshall 상원의원은 해협이 다시 열렸고 휘발유 가격이 급락하고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Roger Marshall 상원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#16"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "f2a79ca9-1c9b-5449-9e45-c7abf8b6a002",
+      "label": "F684",
+      "claim_text": "Kustoff 하원의원은 협상이 아직 진행 중이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "David Kustoff 하원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#17"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "9bc55137-66ab-5251-801e-8e4cbe6e286f",
+      "label": "F685",
+      "claim_text": "Mast 하원의원은 Trump 대통령이 Operation Midnight Hammer 를 실행하고 Operation Epic Fury 를 60일 동안 수행하며 이란 해안 전체를 봉쇄했다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Brian Mast 하원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#18"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "01706f10-3552-5435-a03e-94aef4f9c236",
+      "label": "F686",
+      "claim_text": "Williams 하원의원은 호르무즈 해협 재개방이 세계 교역 회복을 돕고 협상이 계속되는 동안 에너지 시장에 더 큰 확실성을 가져올 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Roger Williams 하원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#19"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "44098f87-19d0-502f-b8a2-df8abe03131b",
+      "label": "F687",
+      "claim_text": "Miller-Meeks 하원의원은 미국 가정의 에너지 가격이 계속 떨어지기를 바란다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Mariannette Miller-Meeks 하원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-0619#20"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "85bd3940-6050-5665-b70b-58af3c063d4b",
+      "label": "F688",
+      "claim_text": "백악관은 Trump 대통령의 조치 덕분에 휘발유와 diesel 가격이 곧 빠르게 떨어질 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#0"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "106a6c81-1270-5074-82f4-38908eb46f96",
+      "label": "F689",
+      "claim_text": "백악관은 이달 초 Trump 대통령이 트럭 운전사와 농민의 diesel 비용을 즉시 낮추기 위한 행정명령에 서명했다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#1"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "f3089786-1cc5-5d44-a487-ec162e6361ff",
+      "label": "F690",
+      "claim_text": "백악관은 Trump 대통령이 여러 나라와 비축분에서 130 million 배럴이 넘는 diesel 을 방출하는 합의를 이뤘다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#2"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "cc7764fa-e8c6-557f-b4ad-e9ef9f005f8f",
+      "label": "F691",
+      "claim_text": "백악관은 이 diesel 방출 합의가 세계 공급을 늘리고 가격을 낮추기 위한 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#3"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "04cb3ff4-ed51-5355-9292-88436930d8d4",
+      "label": "F692",
+      "claim_text": "백악관은 미군의 힘과 Trump 대통령의 리더십 덕분에 분쟁 이전보다 더 많은 원유가 Hormuz 해협을 통해 나가고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#4"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "6db7e807-030e-54ea-9c72-931c562d4ed1",
+      "label": "F693",
+      "claim_text": "백악관은 지금까지 미국으로 들어오는 Venezuela 원유의 양이 400% 넘게 늘었고 거의 10년 만에 최고에 이르렀다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#5"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "73f3ccf5-f2ed-5106-a51d-a9cfa5799a5d",
+      "label": "F694",
+      "claim_text": "백악관은 Trump 대통령이 Venezuela 와 65 billion 배럴의 원유를 확보하는 원유 합의를 발표했다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#6"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "717241d6-8f20-5751-a378-871cd17b40b7",
+      "label": "F695",
+      "claim_text": "백악관은 Trump 대통령이 Defense Production Act 를 활용해 미국의 정제 능력을 늘리고 diesel 과 휘발유를 더 생산하는 데 투자하고 있다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#7"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "95207870-74d5-534a-8967-1268accca92d",
+      "label": "F696",
+      "claim_text": "백악관은 Trump 행정부의 EPA 가 연료 규제 면제(fuel waivers)를 발급했다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#8"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "8eefd768-fc3f-5838-8407-484e965424da",
+      "label": "F697",
+      "claim_text": "백악관은 EPA 의 연료 규제 면제가 국내 휘발유 공급을 하루 수천 배럴 늘렸다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#9"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "2fb3c166-cdb0-5fc4-b32c-0f2211f7c579",
+      "label": "F698",
+      "claim_text": "백악관은 Trump 대통령이 규제 면제를 발급해 휘발유 · diesel · 항공유의 국내 반입을 늘렸다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#10"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "081c0928-3a20-57c4-8ce6-213fa3465e61",
+      "label": "F699",
+      "claim_text": "백악관은 Trump 대통령이 Korea 및 Taiwan 과 Alaska 천연가스 파이프라인 건설을 위한 54 billion 달러 규모 합의를 이뤘으며 이것이 Alaska 주민의 에너지 비용을 10 billion 달러 줄일 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "WH-1025#11"
+      ],
+      "_storyline_doc": "SL-iran-war"
+    },
+    {
+      "fact_id": "cc743398-172e-5911-b134-ce14c776d15b",
+      "label": "F700",
+      "claim_text": "FOMC 는 연방기금금리 목표 범위를 3-1/2~3-3/4% 로 유지하기로 결정함",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#0"
+      ]
+    },
+    {
+      "fact_id": "a03adb46-bd3b-52ce-8d71-9ca22ab67a6b",
+      "label": "F701",
+      "claim_text": "이 통화정책 조치에 Jerome H. Powell 의장, John C. Williams 부의장, Michael S. Barr, Michelle W. Bowman, Lisa D. Cook, Beth M. Hammack, Philip N. Jefferson, Neel Kashkari, Lorie K. Logan, Anna Paulson 이 찬성표를 던짐",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#1"
+      ]
+    },
+    {
+      "fact_id": "71bd6308-c8db-5d99-ad7e-81258c04dd67",
+      "label": "F702",
+      "claim_text": "Stephen I. Miran 과 Christopher J. Waller 는 이 조치에 반대표를 던졌으며, 이번 회의에서 연방기금금리 목표 범위를 1/4%p 낮추기를 선호함",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#2"
+      ]
+    },
+    {
+      "fact_id": "265602ab-5229-51d6-9a65-259a6cf47bec",
+      "label": "F703",
+      "claim_text": "FOMC 성명문은 이용 가능한 지표가 경제활동이 견조한 속도로 확장해 왔음을 시사한다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#3"
+      ]
+    },
+    {
+      "fact_id": "742560d5-cee6-5f31-846a-bc15b37eb974",
+      "label": "F704",
+      "claim_text": "FOMC 성명문은 일자리 증가가 낮은 수준에 머물렀고 실업률은 일부 안정의 징후를 보였다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#4"
+      ]
+    },
+    {
+      "fact_id": "abe3ef8c-7f12-5024-89ba-9e0fda788995",
+      "label": "F705",
+      "claim_text": "FOMC 성명문은 인플레이션이 다소 높은 수준에 머물러 있다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#5"
+      ]
+    },
+    {
+      "fact_id": "1d48aaae-b483-5395-b142-99abeb34f6d9",
+      "label": "F706",
+      "claim_text": "FOMC 성명문은 경제 전망에 대한 불확실성이 여전히 높으며, 위원회가 이중 책무 양쪽의 위험에 주의를 기울이고 있다고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#6"
+      ]
+    },
+    {
+      "fact_id": "e908380d-f2a6-5cdc-804d-f01021e5cdac",
+      "label": "F707",
+      "claim_text": "FOMC 성명문은 연방기금금리 목표 범위의 추가 조정 규모와 시점을 고려할 때 위원회가 들어오는 데이터, 변화하는 전망, 위험의 균형을 신중히 평가할 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#7"
+      ]
+    },
+    {
+      "fact_id": "36ff7457-ade2-5d7e-a87b-beb3cb451560",
+      "label": "F708",
+      "claim_text": "FOMC 성명문은 위원회가 최대 고용을 지원하고 인플레이션을 2% 목표로 되돌리는 데 강하게 전념하고 있다고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#8"
+      ]
+    },
+    {
+      "fact_id": "e2cf507e-9701-5876-aa3d-474baeee48d9",
+      "label": "F709",
+      "claim_text": "FOMC 성명문은 위원회의 목표 달성을 저해할 수 있는 위험이 나타나면 위원회가 통화정책 기조를 적절히 조정할 준비가 되어 있을 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-01-28",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-01#9"
+      ]
+    },
+    {
+      "fact_id": "ef1fc575-01d3-5ddb-81f0-dddd2d030e3d",
+      "label": "F710",
+      "claim_text": "FOMC 는 연방기금금리 목표 범위를 3-1/2~3-3/4% 로 유지하기로 결정함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#0"
+      ]
+    },
+    {
+      "fact_id": "1dd9aecb-cd3c-5a8e-80d5-270b3bdfe4c4",
+      "label": "F711",
+      "claim_text": "이 통화정책 결정에 Jerome H. Powell 의장, John C. Williams 부의장, Michael S. Barr, Michelle W. Bowman, Lisa D. Cook, Beth M. Hammack, Philip N. Jefferson, Neel Kashkari, Lorie K. Logan, Anna Paulson, Christopher J. Waller 가 찬성함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#1"
+      ]
+    },
+    {
+      "fact_id": "18208090-2b6f-5a7a-b2d1-e6a992b0a100",
+      "label": "F712",
+      "claim_text": "Stephen I. Miran 은 이 결정에 반대표를 던졌으며, 이번 회의에서 연방기금금리 목표 범위를 1/4%p 낮추기를 선호함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#2"
+      ]
+    },
+    {
+      "fact_id": "eff48d80-f4f8-5bc0-8b85-13d965d8d27a",
+      "label": "F713",
+      "claim_text": "FOMC 성명문은 입수 가능한 지표들이 경제 활동이 견조한 속도로 확장해 왔음을 시사한다고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#3"
+      ]
+    },
+    {
+      "fact_id": "14b0b16c-fd06-5947-bf05-ef15b5f9eb14",
+      "label": "F714",
+      "claim_text": "FOMC 성명문은 일자리 증가가 낮은 수준에 머물렀고 실업률은 최근 몇 달간 거의 변하지 않았다고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#4"
+      ]
+    },
+    {
+      "fact_id": "370fcb99-9f21-5e90-abda-3f5ad1296598",
+      "label": "F715",
+      "claim_text": "FOMC 성명문은 인플레이션이 여전히 다소 높은 수준이라고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#5"
+      ]
+    },
+    {
+      "fact_id": "d01eb531-6047-55cf-82f4-416122cc976e",
+      "label": "F716",
+      "claim_text": "FOMC 성명문은 경제 전망에 대한 불확실성이 여전히 높다고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#6"
+      ]
+    },
+    {
+      "fact_id": "a1c73b50-8cc9-5d8a-ae84-e132e99850dc",
+      "label": "F717",
+      "claim_text": "FOMC 성명문은 중동 상황 전개가 미국 경제에 미칠 영향이 불확실하다고 말함.",
+      "fact_type": "OFFICIAL_LIMIT",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#7"
+      ]
+    },
+    {
+      "fact_id": "58786cef-55a8-528a-bc04-586f8de146ae",
+      "label": "F718",
+      "claim_text": "FOMC 성명문은 위원회가 이중 책무의 양쪽 위험 모두에 주의를 기울이고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#8"
+      ]
+    },
+    {
+      "fact_id": "026ea50a-be1d-5c50-ab85-40ccdfb9f6ca",
+      "label": "F719",
+      "claim_text": "FOMC 성명문은 연방기금금리 목표 범위의 추가 조정 정도와 시기를 고려할 때 위원회가 들어오는 데이터, 변화하는 전망, 위험의 균형을 신중히 평가할 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#9"
+      ]
+    },
+    {
+      "fact_id": "d936ac11-a5ef-5650-9a68-8acbc33c2dd4",
+      "label": "F720",
+      "claim_text": "FOMC 성명문은 위원회가 최대 고용을 지원하고 인플레이션을 2% 목표로 되돌리는 데 강하게 전념하고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#10"
+      ]
+    },
+    {
+      "fact_id": "25810207-6eb5-5d74-928a-65949236a12b",
+      "label": "F721",
+      "claim_text": "FOMC 성명문은 위원회 목표 달성을 저해할 수 있는 위험이 나타나면 위원회가 통화정책 기조를 적절히 조정할 준비가 되어 있을 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-03-18",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-03#11"
+      ]
+    },
+    {
+      "fact_id": "a802b220-9e2b-5153-bf3a-218916b4a9e1",
+      "label": "F722",
+      "claim_text": "FOMC 는 4월 회의에서 연방기금금리 목표 범위를 3‑1/2~3‑3/4% 로 유지하기로 결정함",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#0"
+      ]
+    },
+    {
+      "fact_id": "99940e60-b9c0-5a39-86eb-c0a4a5f66ec0",
+      "label": "F723",
+      "claim_text": "이 통화정책 결정에 Powell 의장 · Williams 부의장 · Barr · Bowman · Cook · Jefferson · Paulson · Waller 가 찬성 표를 던짐",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#1"
+      ]
+    },
+    {
+      "fact_id": "99a3d11c-2a2b-5a77-b628-ae74f3f0b682",
+      "label": "F724",
+      "claim_text": "Stephen I. Miran 은 이번 회의에서 연방기금금리 목표 범위를 1/4%p 내리기를 선호해 반대 표를 던짐",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#2"
+      ]
+    },
+    {
+      "fact_id": "b890f3bb-40f4-53e6-ac4d-9584ef4e879d",
+      "label": "F725",
+      "claim_text": "Beth M. Hammack · Neel Kashkari · Lorie K. Logan 은 목표 범위 유지는 지지했지만 이번에 성명문에 완화 편향을 넣는 것을 지지하지 않아 반대 표를 던짐",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#3"
+      ]
+    },
+    {
+      "fact_id": "a7092536-96d1-5f80-a70a-9481ee5e29b7",
+      "label": "F726",
+      "claim_text": "FOMC 성명문은 최근 지표가 경제활동이 견조한 속도로 확장해 왔음을 시사한다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#4"
+      ]
+    },
+    {
+      "fact_id": "c61093bc-ed50-5d7b-8dd0-cdc97088950d",
+      "label": "F727",
+      "claim_text": "FOMC 성명문은 일자리 증가가 평균적으로 낮은 수준에 머물렀고 실업률은 최근 몇 달간 거의 변하지 않았다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#5"
+      ]
+    },
+    {
+      "fact_id": "fd18afd5-efed-5119-8ff1-b56fca1f33ec",
+      "label": "F728",
+      "claim_text": "FOMC 성명문은 인플레이션이 높은 수준이며 이는 부분적으로 최근 세계 에너지 가격 상승을 반영한다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#6"
+      ]
+    },
+    {
+      "fact_id": "1e73b74f-1cb0-580d-8a08-d8042bd30173",
+      "label": "F729",
+      "claim_text": "FOMC 성명문은 중동 상황이 경제 전망에 대한 높은 불확실성에 기여하고 있다고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#7"
+      ]
+    },
+    {
+      "fact_id": "8d5d7e11-1d29-517f-941a-85c21df2eccf",
+      "label": "F730",
+      "claim_text": "FOMC 성명문은 위원회가 이중 책무의 양쪽 위험 모두에 주의를 기울이고 있다고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#8"
+      ]
+    },
+    {
+      "fact_id": "9810e31f-94f5-5cb6-a106-69841c54dca5",
+      "label": "F731",
+      "claim_text": "FOMC 성명문은 목표 범위의 추가 조정 정도와 시기를 고려할 때 위원회가 들어오는 데이터 · 전망 변화 · 위험의 균형을 신중히 평가할 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#9"
+      ]
+    },
+    {
+      "fact_id": "e194b716-2927-569b-9c1a-85776c18d311",
+      "label": "F732",
+      "claim_text": "FOMC 성명문은 위원회가 최대 고용을 뒷받침하고 인플레이션을 2% 목표로 되돌리는 데 강하게 전념한다고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#10"
+      ]
+    },
+    {
+      "fact_id": "bd75cda6-ae4b-5572-a049-e51eb9b94276",
+      "label": "F733",
+      "claim_text": "FOMC 성명문은 위원회의 목표 달성을 방해할 수 있는 위험이 나타나면 통화정책 기조를 적절히 조정할 준비가 되어 있을 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-04-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-04#11"
+      ]
+    },
+    {
+      "fact_id": "bb9420c2-b590-5506-ad9f-0261f967eb1b",
+      "label": "F734",
+      "claim_text": "FOMC 는 성명문을 12 – 0 표결로 승인함",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#0"
+      ]
+    },
+    {
+      "fact_id": "939fc63e-01d2-5023-902e-3b9282020356",
+      "label": "F735",
+      "claim_text": "FOMC 는 연방기금금리 목표 범위를 3-1/2~3-3/4% 로 유지하기로 결정함",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#1"
+      ]
+    },
+    {
+      "fact_id": "6089f5d3-a6df-553b-8b3a-a6b03559b9c1",
+      "label": "F736",
+      "claim_text": "FOMC 성명문은 금리 유지 결정이 연준의 이중 책무를 지지하기 위한 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#2"
+      ]
+    },
+    {
+      "fact_id": "fbe74e8f-97da-50fa-a3cb-a4127b8077bf",
+      "label": "F737",
+      "claim_text": "FOMC 는 은행 시스템에 충분한 지준을 유지하는 정책을 재확인함",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#3"
+      ]
+    },
+    {
+      "fact_id": "f630fe3c-69ec-5ceb-84cb-e5ed2662ff9b",
+      "label": "F738",
+      "claim_text": "FOMC 성명문은 부분적으로 중동 분쟁에서 비롯된 높은 불확실성에도 경제활동이 견조한 속도로 확장하고 있다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#4"
+      ]
+    },
+    {
+      "fact_id": "188803fe-1e6f-5c65-9ed0-e3574fec47b5",
+      "label": "F739",
+      "claim_text": "FOMC 성명문은 생산성 증가와 자본 투자가 강하다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#5"
+      ]
+    },
+    {
+      "fact_id": "b511355c-15e5-51a0-949f-e55bf2ec6494",
+      "label": "F740",
+      "claim_text": "FOMC 성명문은 일자리 증가가 노동력 증가와 보조를 맞춰 왔고 실업률은 거의 변하지 않았다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#6"
+      ]
+    },
+    {
+      "fact_id": "9ecad8e4-453f-55b2-be1f-99f767b12d63",
+      "label": "F741",
+      "claim_text": "FOMC 성명문은 인플레이션이 위원회의 2% 목표에 비해 여전히 높으며, 이는 부분적으로 에너지를 포함한 특정 부문의 가격 상승을 이끈 공급 충격을 반영한다고 평가함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#7"
+      ]
+    },
+    {
+      "fact_id": "b6c924e3-6d60-56be-936d-461a6dae3741",
+      "label": "F742",
+      "claim_text": "FOMC 성명문은 위원회가 물가 안정을 달성할 것이라고 말함",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-17",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-06#8"
+      ]
+    },
+    {
+      "fact_id": "e8e5ee47-3074-53a9-9940-1f52ed358832",
+      "label": "F743",
+      "claim_text": "FOMC 는 7월 회의에서 연방기금금리 목표 범위를 3-1/2~3-3/4% 로 유지하기로 결정함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#0"
+      ]
+    },
+    {
+      "fact_id": "4fd6bfd6-224e-5588-95ce-dde8df9bf4ba",
+      "label": "F744",
+      "claim_text": "FOMC 는 성명문을 9 대 3 표결로 승인함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#1"
+      ]
+    },
+    {
+      "fact_id": "0799946f-a35b-594c-9a57-7e269a84e611",
+      "label": "F745",
+      "claim_text": "Beth M. Hammack, Neel Kashkari, Lorie K. Logan 은 통화정책 조치에 반대표를 던졌고, 이번 회의에서 연방기금금리 목표 범위를 1/4%p 올리는 것을 선호함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#2"
+      ]
+    },
+    {
+      "fact_id": "b691f592-2bd3-5ed3-8c43-fee88b9b8e1d",
+      "label": "F746",
+      "claim_text": "FOMC 성명문은 위원회가 은행 시스템에 충분한 지준을 유지하는 정책을 계속하고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#3"
+      ]
+    },
+    {
+      "fact_id": "f377a9c0-642b-5656-a1e8-0fe1851d6568",
+      "label": "F747",
+      "claim_text": "FOMC 성명문은 부분적으로 중동 분쟁에서 비롯된 높은 불확실성에도 경제활동이 견조한 속도로 확장하고 있다고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#4"
+      ]
+    },
+    {
+      "fact_id": "0e0c5687-33de-50fa-8a65-e1e8d9747266",
+      "label": "F748",
+      "claim_text": "FOMC 성명문은 생산성 증가와 설비투자가 강하다고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#5"
+      ]
+    },
+    {
+      "fact_id": "7d1eaada-02f1-572d-a3e5-9407bd213c05",
+      "label": "F749",
+      "claim_text": "FOMC 성명문은 일자리 증가가 노동력 증가와 보조를 맞춰 왔고 실업률은 거의 변하지 않았다고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#6"
+      ]
+    },
+    {
+      "fact_id": "4acbf49f-44f1-59ac-a3d7-91335eeaed87",
+      "label": "F750",
+      "claim_text": "FOMC 성명문은 인플레이션이 위원회의 2% 목표에 비해 여전히 높으며, 이는 부분적으로 에너지를 포함한 일부 부문의 가격 상승을 이끈 공급 충격을 반영한다고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#7"
+      ]
+    },
+    {
+      "fact_id": "5a7396f7-78be-5dd8-be60-85a5cea87753",
+      "label": "F751",
+      "claim_text": "FOMC 성명문은 위원회가 물가 안정을 이뤄낼 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "FOMC 성명문",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-07-29",
+      "event_id": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_from": [
+        "ST-07#8"
+      ]
+    },
+    {
       "fact_id": "d2f0fb3b-6103-45a7-b7c3-4509c79a8219",
       "label": "BLS-CES0000000001-2026M09",
       "claim_text": "BLS 시리즈 CES0000000001 (비농업 취업자 수 (CES · 계절조정)) — 2026년 9월 값 159128 (천 명) · 각주 \"preliminary\". 2026-11-10 에 받은 판",
@@ -28561,6 +30964,1230 @@
       "_passage": "Furthermore, engaging in certain transactions involving the persons designated today may risk the imposition of secondary sanctions on participating foreign financial institutions."
     },
     {
+      "fact_id": "db3bc1b3-52f9-50b1-992f-6336281cc0b3",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 7947,
+      "span_end": 8065,
+      "_from": "BB-10S#0",
+      "_passage": "Since the prior Beige Book, two of the twelve Federal Reserve Districts reported moderate growth in economic activity."
+    },
+    {
+      "fact_id": "db3bc1b3-52f9-50b1-992f-6336281cc0b3",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8066,
+      "span_end": 8182,
+      "_from": "BB-10S#0",
+      "_passage": "Three Districts reported modest growth, while four reported slight growth, and three reported no significant change."
+    },
+    {
+      "fact_id": "254ef48b-d1ca-5e93-b802-a50481706a2a",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8183,
+      "span_end": 8283,
+      "_from": "BB-10S#1",
+      "_passage": "Robust, broad-based growth in manufacturing led the moderate growth reported in the Dallas District."
+    },
+    {
+      "fact_id": "254ef48b-d1ca-5e93-b802-a50481706a2a",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8284,
+      "span_end": 8393,
+      "_from": "BB-10S#1",
+      "_passage": "While not as robust, another six Districts reported modest to moderate growth from their manufacturing firms."
+    },
+    {
+      "fact_id": "254ef48b-d1ca-5e93-b802-a50481706a2a",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8394,
+      "span_end": 8463,
+      "_from": "BB-10S#1",
+      "_passage": "The remaining five Districts noted little or no manufacturing growth."
+    },
+    {
+      "fact_id": "cbb93f33-1e8a-527c-8628-07bdfe087b43",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8464,
+      "span_end": 8520,
+      "_from": "BB-10S#2",
+      "_passage": "Reports on other sectors indicate little growth overall."
+    },
+    {
+      "fact_id": "d621809c-8289-5a5b-a13e-811e7236d246",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8521,
+      "span_end": 8594,
+      "_from": "BB-10S#3",
+      "_passage": "Most Districts reported little or no change in overall consumer spending."
+    },
+    {
+      "fact_id": "ae2674eb-aa2b-5190-822f-41e59ce26a04",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8595,
+      "span_end": 8687,
+      "_from": "BB-10S#4",
+      "_passage": "Auto contacts noted flat to modestly lower sales in five of the six Districts that reported."
+    },
+    {
+      "fact_id": "19a805e6-407a-5c5d-b9e4-c0187e5b0ac7",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8688,
+      "span_end": 8781,
+      "_from": "BB-10S#5",
+      "_passage": "Over half of the Districts noted that consumer spending was driven by high-income households."
+    },
+    {
+      "fact_id": "8274c575-31f8-5e63-b2e3-247e63b6af1f",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 8935,
+      "span_end": 9076,
+      "_from": "BB-10S#6",
+      "_passage": "Tourism continued to grow, but firms in the Boston, Minneapolis, and San Francisco Districts noted a decline in sales from Canadian tourists."
+    },
+    {
+      "fact_id": "702f2b99-5ae6-514d-88cb-097452b47c97",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 9077,
+      "span_end": 9187,
+      "_from": "BB-10S#7",
+      "_passage": "Overall, most Districts reported that firms have maintained a positive economic outlook for the coming months."
+    },
+    {
+      "fact_id": "702f2b99-5ae6-514d-88cb-097452b47c97",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 9188,
+      "span_end": 9311,
+      "_from": "BB-10S#7",
+      "_passage": "However, expectations tend to be for slight growth, weighted toward manufacturing and burdened by persistent uncertainties."
+    },
+    {
+      "fact_id": "242cd55d-d8a6-51c6-94b7-ed389970e1ba",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 9326,
+      "span_end": 9404,
+      "_from": "BB-10S#8",
+      "_passage": "Most Districts described little or no net change in overall employment levels."
+    },
+    {
+      "fact_id": "242cd55d-d8a6-51c6-94b7-ed389970e1ba",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 9405,
+      "span_end": 9527,
+      "_from": "BB-10S#8",
+      "_passage": "While three Districts described modest increases, five reported slight increases, and four reported no significant change."
+    },
+    {
+      "fact_id": "45f4706f-4e5c-5e58-826b-7b8480f93932",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 9582,
+      "span_end": 9717,
+      "_from": "BB-10S#9",
+      "_passage": "Labor supply was generally adequate to meet demand; however, shortages persisted for specialized, technical, and skilled trade workers."
+    },
+    {
+      "fact_id": "2a53cc41-0ddb-59fa-94a1-61a2e20ac4c8",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 9718,
+      "span_end": 9912,
+      "_from": "BB-10S#10",
+      "_passage": "Five Districts reported that some firms had either reduced staffing levels (through attrition), delayed hiring, or anticipated less job creation after increasing productivity by investing in AI."
+    },
+    {
+      "fact_id": "43af7fc3-ab7e-5088-8f5a-c9b8d3a19d5a",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 9913,
+      "span_end": 10032,
+      "_from": "BB-10S#11",
+      "_passage": "Five Districts described moderate growth in overall wages, four reported modest growth, and two reported slight growth."
+    },
+    {
+      "fact_id": "53cdabe4-1b47-59dd-a03a-b396a828fcf7",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 10033,
+      "span_end": 10219,
+      "_from": "BB-10S#12",
+      "_passage": "Several Districts noted that inflation has spawned additional wage pressure in the form of higher cost-of-living demands from individuals as well as challenges from rising benefit costs."
+    },
+    {
+      "fact_id": "45434fb8-1541-52a8-adb6-0d8e1aa77170",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 10355,
+      "span_end": 10567,
+      "_from": "BB-10S#13",
+      "_passage": "Three Districts characterized overall price growth as robust, while eight noted that growth was moderate—and three of the eight noted that input price pressures were intensifying, if not already growing robustly."
+    },
+    {
+      "fact_id": "45434fb8-1541-52a8-adb6-0d8e1aa77170",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 10568,
+      "span_end": 10610,
+      "_from": "BB-10S#13",
+      "_passage": "One District reported modest price growth."
+    },
+    {
+      "fact_id": "4f056c91-580a-5555-a4b3-f2ea21aca995",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 10611,
+      "span_end": 10711,
+      "_from": "BB-10S#14",
+      "_passage": "Moreover, four Districts reported that the pace of price increases picked up since the prior period."
+    },
+    {
+      "fact_id": "f20b07ac-cc1d-5824-88ec-e5727139a6f8",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 10712,
+      "span_end": 10761,
+      "_from": "BB-10S#15",
+      "_passage": "Higher oil prices permeated all District reports."
+    },
+    {
+      "fact_id": "f20b07ac-cc1d-5824-88ec-e5727139a6f8",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 10762,
+      "span_end": 10891,
+      "_from": "BB-10S#15",
+      "_passage": "Firms reported elevated diesel prices and noted that fuel surcharges were passing on increased costs throughout the supply chain."
+    },
+    {
+      "fact_id": "2b2a24cd-699e-5c00-8bb5-a337246dd032",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 10892,
+      "span_end": 11006,
+      "_from": "BB-10S#16",
+      "_passage": "Contacts in multiple Districts also noted continued price pressure from other commodities, tariffs, and insurance."
+    },
+    {
+      "fact_id": "25f284b6-5a9e-52d9-92c6-132fab68b980",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 11007,
+      "span_end": 11118,
+      "_from": "BB-10S#17",
+      "_passage": "Consumer-facing firms noted tighter profit margins as price-sensitive customers continue to resist price hikes."
+    },
+    {
+      "fact_id": "8737bdd4-91ac-5636-ae12-48e82430a63d",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 11246,
+      "span_end": 11534,
+      "_from": "BB-10S#18",
+      "_passage": "Firms in several Districts cited persistent uncertainty around energy and tariffs and expect that prices will increase further in the coming months, as existing contracts expire, and firms must renegotiate hedge contracts for their own inputs and/or delivery contracts to their customers."
+    },
+    {
+      "fact_id": "21a8ca10-9bd8-5fe1-9ffe-a175229a1350",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 11817,
+      "span_end": 11961,
+      "_from": "BB-10S#19",
+      "_passage": "Inflation was modest overall, but home heating oil prices rose sharply from a year earlier, raising concerns about heating costs for the winter."
+    },
+    {
+      "fact_id": "5351ea9b-9e4d-521b-a8be-11fd94eb44b5",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 12190,
+      "span_end": 12309,
+      "_from": "BB-10S#20",
+      "_passage": "Selling price increases picked up to the high end of the moderate range, while input prices continued to rise strongly."
+    },
+    {
+      "fact_id": "52bf215f-97e1-57a0-8fe3-888c92ff26bc",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 13037,
+      "span_end": 13111,
+      "_from": "BB-10S#21",
+      "_passage": "Nonlabor cost pressures remained strong, and selling prices grew robustly."
+    },
+    {
+      "fact_id": "4b0d4f3b-dbd1-567d-973f-20d2642061c4",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 14495,
+      "span_end": 14560,
+      "_from": "BB-10S#22",
+      "_passage": "Prices have risen at a robust pace and increases were widespread."
+    },
+    {
+      "fact_id": "c6f38aba-c959-52a3-985c-2ed6b7f10297",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 15163,
+      "span_end": 15267,
+      "_from": "BB-10S#23",
+      "_passage": "Rising diesel prices and shipping costs were a top concern, as both put more pressure on profit margins."
+    },
+    {
+      "fact_id": "d3529ac3-084a-542a-8cc8-fff9b43e1ad0",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 15506,
+      "span_end": 15629,
+      "_from": "BB-10S#24",
+      "_passage": "Outlooks were mostly positive, though inflation and continued geopolitical and trade policy uncertainty remained headwinds."
+    },
+    {
+      "fact_id": "506f6709-e3ba-5f09-bc37-8dfe986fc916",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 16040,
+      "span_end": 16175,
+      "_from": "BB-10S#25",
+      "_passage": "Note: This report was prepared at the Federal Reserve Bank of Philadelphia based on information collected on or before October 5, 2026."
+    },
+    {
+      "fact_id": "9a7d388d-0ac6-527d-8831-a16d4d8e1384",
+      "source_id": "03608fb3-5420-464b-911c-802e4a1e4e86",
+      "section": null,
+      "span_start": 16176,
+      "span_end": 16334,
+      "_from": "BB-10S#26",
+      "_passage": "This document summarizes comments received from contacts outside the Federal Reserve System and is not a commentary on the views of Federal Reserve officials."
+    },
+    {
+      "fact_id": "147e59a9-afa5-5b1c-b436-0e03e3dfdaf9",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 13745,
+      "span_end": 13900,
+      "_from": "SP-HAM-1105#0",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "36be003b-b608-5357-bf13-0100d7c9b033",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 20451,
+      "span_end": 20541,
+      "_from": "SP-HAM-1105#1",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "e04b3d01-241c-5ae8-a980-575b7237662b",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 20542,
+      "span_end": 20634,
+      "_from": "SP-HAM-1105#2",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "47c50f5c-8b0d-5d21-b10d-f732f90be9c7",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 20635,
+      "span_end": 20726,
+      "_from": "SP-HAM-1105#3",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "44435126-1b7e-5cd1-8e81-895fe414a9fd",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 20727,
+      "span_end": 20887,
+      "_from": "SP-HAM-1105#4",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "b8c66d01-26ce-5981-a9bb-93d80f679827",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 20727,
+      "span_end": 20887,
+      "_from": "SP-HAM-1105#5",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "1c4ec025-48f9-51da-ba52-6ace68d16f92",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 20888,
+      "span_end": 21016,
+      "_from": "SP-HAM-1105#6",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "3431c59c-8a0f-5ac1-9e88-628e388e723a",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 21017,
+      "span_end": 21196,
+      "_from": "SP-HAM-1105#7",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "10c6de5c-4c2d-5ed4-8865-6b7d1a94b5f0",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 21197,
+      "span_end": 21326,
+      "_from": "SP-HAM-1105#8",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "14435c32-c264-5ab0-b780-0ad7b338ecc9",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 21327,
+      "span_end": 21485,
+      "_from": "SP-HAM-1105#9",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "6dd276be-7047-5177-84eb-3186eb60bba1",
+      "source_id": "e85b6af6-4563-487f-a193-469680d7530c",
+      "section": null,
+      "span_start": 19722,
+      "span_end": 19850,
+      "_from": "SP-HAM-1105#10",
+      "_passage_in": "cache"
+    },
+    {
+      "fact_id": "24d33f88-f3bd-5cfc-b9c9-35f22527512e",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 3092,
+      "span_end": 3234,
+      "_from": "WH-0619#0",
+      "_passage": "President Donald J. Trump and Vice President JD Vance have secured a historic breakthrough by signing a Memorandum of Understanding with Iran."
+    },
+    {
+      "fact_id": "b1d56ae3-77ed-50c5-8e27-9a558d169d4f",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 3235,
+      "span_end": 3413,
+      "_from": "WH-0619#1",
+      "_passage": "Forged through decisive American strength, this agreement ensures Iran will never obtain a nuclear weapon, reopens the Strait of Hormuz to free navigation, and puts America First"
+    },
+    {
+      "fact_id": "cc4b502d-d032-5263-8705-6ba4e3648115",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25864,
+      "span_end": 25958,
+      "_from": "WH-0619#2",
+      "_passage": "President Trump signed tonight at Versailles the agreement between Iran and the United States."
+    },
+    {
+      "fact_id": "cc4b502d-d032-5263-8705-6ba4e3648115",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25959,
+      "span_end": 26055,
+      "_from": "WH-0619#2",
+      "_passage": "This agreement paves the way for lasting peace and allows the reopening of the Strait of Hormuz."
+    },
+    {
+      "fact_id": "cc4b502d-d032-5263-8705-6ba4e3648115",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 26056,
+      "span_end": 26173,
+      "_from": "WH-0619#2",
+      "_passage": "It is an important step in the right direction for our compatriots that will soon enable a decrease in energy prices."
+    },
+    {
+      "fact_id": "4cb7dbf3-8b7c-50e3-9181-66996c5198dc",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 27518,
+      "span_end": 27636,
+      "_from": "WH-0619#3",
+      "_passage": "The Memorandum has been signed by honourable Presidents of both the countries and also endorsed by me as the mediator."
+    },
+    {
+      "fact_id": "28082195-bc8a-5660-9401-6b98cb59094d",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 28352,
+      "span_end": 28662,
+      "_from": "WH-0619#4",
+      "_passage": "The State of Qatar welcomes the electronic signing by the United States of America and the Islamic Republic of Iran of the Memorandum of Understanding (MoU) on addressing outstanding issues between them, including the cessation of military operations and ensuring freedom of navigation in the Strait of Hormuz."
+    },
+    {
+      "fact_id": "5f6b8cd6-7d3e-521e-93cb-d384c9ee5be6",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 26421,
+      "span_end": 26548,
+      "_from": "WH-0619#5",
+      "_passage": "On this occasion, both the United States and Iran have signed a memorandum, and the cessation of hostilities has been declared."
+    },
+    {
+      "fact_id": "5f6b8cd6-7d3e-521e-93cb-d384c9ee5be6",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 26897,
+      "span_end": 27121,
+      "_from": "WH-0619#5",
+      "_passage": "Furthermore, we continue to strongly hope that, through further negotiations between the United States and Iran in the future, a final agreement on Iran’s nuclear issue and other matters will be realized as soon as possible."
+    },
+    {
+      "fact_id": "481698d9-5568-5534-8a4c-70d7beba6174",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 29231,
+      "span_end": 29482,
+      "_from": "WH-0619#6",
+      "_passage": "The Secretary-General welcomes the announcement that the United States and Iran have agreed on a peace deal that provides for an immediate and permanent ceasefire, the reopening of the Strait of Hormuz, as well as a framework for further negotiations."
+    },
+    {
+      "fact_id": "f56ae637-11e3-5756-b411-16ef98286b6b",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25211,
+      "span_end": 25334,
+      "_from": "WH-0619#8",
+      "_passage": "This is a hugely important step forward in ending the war, ensuring regional stability and re-opening the Strait of Hormuz."
+    },
+    {
+      "fact_id": "f56ae637-11e3-5756-b411-16ef98286b6b",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25335,
+      "span_end": 25461,
+      "_from": "WH-0619#8",
+      "_passage": "I congratulate President Trump and the mediators from Pakistan, Qatar and elsewhere who have contributed to this breakthrough."
+    },
+    {
+      "fact_id": "6d217789-8936-51b2-a075-ba027e84f6d2",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25745,
+      "span_end": 25827,
+      "_from": "WH-0619#9",
+      "_passage": "The Strait will reopen. Oil prices are falling. And that’s how diplomacy delivers."
+    },
+    {
+      "fact_id": "edab8277-e399-5484-9960-298f6f7d1f18",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 26210,
+      "span_end": 26348,
+      "_from": "WH-0619#10",
+      "_passage": "The agreement with Iran is an opportunity—for the stability of the region and for the global economy. The agreed-upon peace must now hold."
+    },
+    {
+      "fact_id": "42fa6232-29c8-5d63-8a8d-df5478880d7b",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 18287,
+      "span_end": 18495,
+      "_from": "WH-0619#11",
+      "_passage": "The major downside cost has been Iran’s threats to the Strait of Hormuz and the US retaliatory blockade, which have choked off global energy flows, leading to higher energy prices and a global economic shock."
+    },
+    {
+      "fact_id": "801d2230-b93f-5b4c-a621-5c07b7b6ee1d",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 18496,
+      "span_end": 18573,
+      "_from": "WH-0619#12",
+      "_passage": "The deal announced this weekend promises to alleviate this economic pressure."
+    },
+    {
+      "fact_id": "801d2230-b93f-5b4c-a621-5c07b7b6ee1d",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 18574,
+      "span_end": 18689,
+      "_from": "WH-0619#12",
+      "_passage": "I suspect it will hold because both sides have a strong economic incentive to get energy flowing to global markets."
+    },
+    {
+      "fact_id": "c1978d92-f3d4-5476-be6f-7112686d3479",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 23054,
+      "span_end": 23275,
+      "_from": "WH-0619#13",
+      "_passage": "In just 107 days since the launch of Operation Epic Fury, American military forces have obliterated the Iranian navy, eliminated their air capabilities, and ensured that Iran can no longer arm their proxies’ capabilities."
+    },
+    {
+      "fact_id": "c1978d92-f3d4-5476-be6f-7112686d3479",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 23276,
+      "span_end": 23490,
+      "_from": "WH-0619#13",
+      "_passage": "We commend the effort to finalize a 60-day Memorandum of Understanding with the Iranian regime, an important step toward ensuring that Iran cannot obtain a nuclear weapon and no longer threaten the American people."
+    },
+    {
+      "fact_id": "91b832e2-7d5c-5616-ba36-aa489668ab17",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 4927,
+      "span_end": 5119,
+      "_from": "WH-0619#14",
+      "_passage": "Whether or not the United States can reach an acceptable, verifiable deal with Iran regarding its nuclear program and other issues is yet to be determined, but I see little downside to trying."
+    },
+    {
+      "fact_id": "f1011019-b3b5-5617-a738-25c7401d2ba2",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 6699,
+      "span_end": 6772,
+      "_from": "WH-0619#15",
+      "_passage": "Let’s give us 60 days to give peace a chance, and that’s all he’s saying."
+    },
+    {
+      "fact_id": "10ad9177-6eca-595e-be05-95115a6091b3",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 7903,
+      "span_end": 8007,
+      "_from": "WH-0619#16",
+      "_passage": "The Strait is open again, and gas prices are plummeting — so we think it is a great day here in America."
+    },
+    {
+      "fact_id": "f2a79ca9-1c9b-5449-9e45-c7abf8b6a002",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 13319,
+      "span_end": 13465,
+      "_from": "WH-0619#17",
+      "_passage": "While negotiations are still ongoing, I remain confident that @POTUS will fulfill his promise and ensure that Iran never obtains a nuclear weapon."
+    },
+    {
+      "fact_id": "9bc55137-66ab-5251-801e-8e4cbe6e286f",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 13837,
+      "span_end": 14007,
+      "_from": "WH-0619#18",
+      "_passage": "conducting Operation Midnight Hammer, leveling Fordow, Natanz, and Isfahan nuclear sites, conducting Operation Epic Fury for 60 days, closing the entire Iranian coastline"
+    },
+    {
+      "fact_id": "01706f10-3552-5435-a03e-94aef4f9c236",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 16736,
+      "span_end": 16872,
+      "_from": "WH-0619#19",
+      "_passage": "Reopening the Strait of Hormuz will help restore global commerce and bring greater certainty to energy markets as negotiations continue."
+    },
+    {
+      "fact_id": "44098f87-19d0-502f-b8a2-df8abe03131b",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 14972,
+      "span_end": 15169,
+      "_from": "WH-0619#20",
+      "_passage": "My hope is that lasting peace is restored in the region, that energy prices continue to fall for American families, and that Iran is never again a nuclear threat to the United States or our allies."
+    },
+    {
+      "fact_id": "85bd3940-6050-5665-b70b-58af3c063d4b",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 3129,
+      "span_end": 3252,
+      "_from": "WH-1025#0",
+      "_passage": "Gas and diesel prices will soon drop rapidly thanks to President Donald J. Trump’s bold actions to unleash American Energy."
+    },
+    {
+      "fact_id": "106a6c81-1270-5074-82f4-38908eb46f96",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4541,
+      "span_end": 4694,
+      "_from": "WH-1025#1",
+      "_passage": "Earlier this month, President Trump signed an Executive Order to immediately cut diesel costs for America’s truckers and farmers who keep America moving."
+    },
+    {
+      "fact_id": "f3089786-1cc5-5d44-a487-ec162e6361ff",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4695,
+      "span_end": 4857,
+      "_from": "WH-1025#2",
+      "_passage": "President Trump secured deals with numerous countries to release over 130 million barrels of diesel from their stockpiles to boost global supply and lower prices."
+    },
+    {
+      "fact_id": "cc7764fa-e8c6-557f-b4ad-e9ef9f005f8f",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4695,
+      "span_end": 4857,
+      "_from": "WH-1025#3",
+      "_passage": "President Trump secured deals with numerous countries to release over 130 million barrels of diesel from their stockpiles to boost global supply and lower prices."
+    },
+    {
+      "fact_id": "04cb3ff4-ed51-5355-9292-88436930d8d4",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4858,
+      "span_end": 5001,
+      "_from": "WH-1025#4",
+      "_passage": "Thanks to the strength of U.S. forces and President Trump’s leadership, more oil is leaving through the Hormuz Strait than before the conflict."
+    },
+    {
+      "fact_id": "6db7e807-030e-54ea-9c72-931c562d4ed1",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4412,
+      "span_end": 4540,
+      "_from": "WH-1025#5",
+      "_passage": "So far, the amount of Venezuelan oil coming into the U.S. has increased by over 400% and reached its highest in almost a decade."
+    },
+    {
+      "fact_id": "73f3ccf5-f2ed-5106-a51d-a9cfa5799a5d",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4116,
+      "span_end": 4411,
+      "_from": "WH-1025#6",
+      "_passage": "After President Trump’s capture of narcoterrorist dictator Nicolas Maduro, the President announced the largest oil deal in world history with Venezuela to and lower gas prices for all Americans by securing 65 billion barrels of oil to double America’s oil reserves and increasing our oil supply."
+    },
+    {
+      "fact_id": "717241d6-8f20-5751-a378-871cd17b40b7",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 3887,
+      "span_end": 4115,
+      "_from": "WH-1025#7",
+      "_passage": "President Trump is utilizing the Defense Production Act, investing millions of dollars to increase American refining capacity and produce more diesel and more gasoline after Radical Democrats drained America’s refining capacity."
+    },
+    {
+      "fact_id": "95207870-74d5-534a-8967-1268accca92d",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 5282,
+      "span_end": 5414,
+      "_from": "WH-1025#8",
+      "_passage": "The Trump EPA issued fuel waivers that increased domestic gasoline supply by thousands of barrels per day to lower Americans’ costs."
+    },
+    {
+      "fact_id": "8eefd768-fc3f-5838-8407-484e965424da",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 5282,
+      "span_end": 5414,
+      "_from": "WH-1025#9",
+      "_passage": "The Trump EPA issued fuel waivers that increased domestic gasoline supply by thousands of barrels per day to lower Americans’ costs."
+    },
+    {
+      "fact_id": "2fb3c166-cdb0-5fc4-b32c-0f2211f7c579",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 5415,
+      "span_end": 5524,
+      "_from": "WH-1025#10",
+      "_passage": "President Trump issued a waiver, increasing the shipments of gasoline, diesel, and jet fuel into the country."
+    },
+    {
+      "fact_id": "081c0928-3a20-57c4-8ce6-213fa3465e61",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 5002,
+      "span_end": 5176,
+      "_from": "WH-1025#11",
+      "_passage": "The President secured a $54 billion deal with Korea and Taiwan to build the long-stalled natural gas pipeline in Alaska, which will cut Alaskans’ energy costs by $10 billion."
+    },
+    {
+      "fact_id": "cc743398-172e-5911-b134-ce14c776d15b",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 7954,
+      "span_end": 8083,
+      "_from": "ST-01#0",
+      "_passage": "In support of its goals, the Committee decided to maintain the target range for the federal funds rate at 3‑1/2 to 3‑3/4 percent."
+    },
+    {
+      "fact_id": "a03adb46-bd3b-52ce-8d71-9ca22ab67a6b",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 8960,
+      "span_end": 9195,
+      "_from": "ST-01#1",
+      "_passage": "Voting for the monetary policy action were Jerome H. Powell, Chair; John C. Williams, Vice Chair; Michael S. Barr; Michelle W. Bowman; Lisa D. Cook; Beth M. Hammack; Philip N. Jefferson; Neel Kashkari; Lorie K. Logan; and Anna Paulson."
+    },
+    {
+      "fact_id": "71bd6308-c8db-5d99-ad7e-81258c04dd67",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 9196,
+      "span_end": 9379,
+      "_from": "ST-01#2",
+      "_passage": "Voting against this action were Stephen I. Miran and Christopher J. Waller, who preferred to lower the target range for the federal funds rate by 1/4 percentage point at this meeting."
+    },
+    {
+      "fact_id": "265602ab-5229-51d6-9a65-259a6cf47bec",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 7493,
+      "span_end": 7580,
+      "_from": "ST-01#3",
+      "_passage": "Available indicators suggest that economic activity has been expanding at a solid pace."
+    },
+    {
+      "fact_id": "742560d5-cee6-5f31-846a-bc15b37eb974",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 7581,
+      "span_end": 7674,
+      "_from": "ST-01#4",
+      "_passage": "Job gains have remained low, and the unemployment rate has shown some signs of stabilization."
+    },
+    {
+      "fact_id": "abe3ef8c-7f12-5024-89ba-9e0fda788995",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 7675,
+      "span_end": 7711,
+      "_from": "ST-01#5",
+      "_passage": "Inflation remains somewhat elevated."
+    },
+    {
+      "fact_id": "1d48aaae-b483-5395-b142-99abeb34f6d9",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 7822,
+      "span_end": 7878,
+      "_from": "ST-01#6",
+      "_passage": "Uncertainty about the economic outlook remains elevated."
+    },
+    {
+      "fact_id": "1d48aaae-b483-5395-b142-99abeb34f6d9",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 7879,
+      "span_end": 7953,
+      "_from": "ST-01#6",
+      "_passage": "The Committee is attentive to the risks to both sides of its dual mandate."
+    },
+    {
+      "fact_id": "e908380d-f2a6-5cdc-804d-f01021e5cdac",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 8084,
+      "span_end": 8293,
+      "_from": "ST-01#7",
+      "_passage": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks."
+    },
+    {
+      "fact_id": "36ff7457-ade2-5d7e-a87b-beb3cb451560",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 8294,
+      "span_end": 8414,
+      "_from": "ST-01#8",
+      "_passage": "The Committee is strongly committed to supporting maximum employment and returning inflation to its 2 percent objective."
+    },
+    {
+      "fact_id": "e2cf507e-9701-5876-aa3d-474baeee48d9",
+      "source_id": "d77c03d8-9732-4002-9d4f-57d12d9b2171",
+      "section": null,
+      "span_start": 8577,
+      "span_end": 8738,
+      "_from": "ST-01#9",
+      "_passage": "The Committee would be prepared to adjust the stance of monetary policy as appropriate if risks emerge that could impede the attainment of the Committee's goals."
+    },
+    {
+      "fact_id": "ef1fc575-01d3-5ddb-81f0-dddd2d030e3d",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 8043,
+      "span_end": 8172,
+      "_from": "ST-03#0",
+      "_passage": "In support of its goals, the Committee decided to maintain the target range for the federal funds rate at 3‑1/2 to 3‑3/4 percent."
+    },
+    {
+      "fact_id": "1dd9aecb-cd3c-5a8e-80d5-270b3bdfe4c4",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 9049,
+      "span_end": 9307,
+      "_from": "ST-03#1",
+      "_passage": "Voting for the monetary policy action were Jerome H. Powell, Chair; John C. Williams, Vice Chair; Michael S. Barr; Michelle W. Bowman; Lisa D. Cook; Beth M. Hammack; Philip N. Jefferson; Neel Kashkari; Lorie K. Logan; Anna Paulson; and Christopher J. Waller."
+    },
+    {
+      "fact_id": "18208090-2b6f-5a7a-b2d1-e6a992b0a100",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 9308,
+      "span_end": 9464,
+      "_from": "ST-03#2",
+      "_passage": "Voting against this action was Stephen I. Miran, who preferred to lower the target range for the federal funds rate by 1/4 percentage point at this meeting."
+    },
+    {
+      "fact_id": "eff48d80-f4f8-5bc0-8b85-13d965d8d27a",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 7491,
+      "span_end": 7578,
+      "_from": "ST-03#3",
+      "_passage": "Available indicators suggest that economic activity has been expanding at a solid pace."
+    },
+    {
+      "fact_id": "14b0b16c-fd06-5947-bf05-ef15b5f9eb14",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 7579,
+      "span_end": 7675,
+      "_from": "ST-03#4",
+      "_passage": "Job gains have remained low, and the unemployment rate has been little changed in recent months."
+    },
+    {
+      "fact_id": "370fcb99-9f21-5e90-abda-3f5ad1296598",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 7676,
+      "span_end": 7712,
+      "_from": "ST-03#5",
+      "_passage": "Inflation remains somewhat elevated."
+    },
+    {
+      "fact_id": "d01eb531-6047-55cf-82f4-416122cc976e",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 7823,
+      "span_end": 7879,
+      "_from": "ST-03#6",
+      "_passage": "Uncertainty about the economic outlook remains elevated."
+    },
+    {
+      "fact_id": "a1c73b50-8cc9-5d8a-ae84-e132e99850dc",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 7880,
+      "span_end": 7967,
+      "_from": "ST-03#7",
+      "_passage": "The implications of developments in the Middle East for the U.S. economy are uncertain."
+    },
+    {
+      "fact_id": "58786cef-55a8-528a-bc04-586f8de146ae",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 7968,
+      "span_end": 8042,
+      "_from": "ST-03#8",
+      "_passage": "The Committee is attentive to the risks to both sides of its dual mandate."
+    },
+    {
+      "fact_id": "026ea50a-be1d-5c50-ab85-40ccdfb9f6ca",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 8173,
+      "span_end": 8382,
+      "_from": "ST-03#9",
+      "_passage": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks."
+    },
+    {
+      "fact_id": "d936ac11-a5ef-5650-9a68-8acbc33c2dd4",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 8383,
+      "span_end": 8503,
+      "_from": "ST-03#10",
+      "_passage": "The Committee is strongly committed to supporting maximum employment and returning inflation to its 2 percent objective."
+    },
+    {
+      "fact_id": "25810207-6eb5-5d74-928a-65949236a12b",
+      "source_id": "74eb5d24-4b96-4997-b24a-6454fc0e52d8",
+      "section": null,
+      "span_start": 8666,
+      "span_end": 8827,
+      "_from": "ST-03#11",
+      "_passage": "The Committee would be prepared to adjust the stance of monetary policy as appropriate if risks emerge that could impede the attainment of the Committee's goals."
+    },
+    {
+      "fact_id": "a802b220-9e2b-5153-bf3a-218916b4a9e1",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 8109,
+      "span_end": 8238,
+      "_from": "ST-04#0",
+      "_passage": "In support of its goals, the Committee decided to maintain the target range for the federal funds rate at 3‑1/2 to 3‑3/4 percent."
+    },
+    {
+      "fact_id": "99940e60-b9c0-5a39-86eb-c0a4a5f66ec0",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 9115,
+      "span_end": 9325,
+      "_from": "ST-04#1",
+      "_passage": "Voting for the monetary policy action were Jerome H. Powell, Chair; John C. Williams, Vice Chair; Michael S. Barr; Michelle W. Bowman; Lisa D. Cook; Philip N. Jefferson; Anna Paulson; and Christopher J. Waller."
+    },
+    {
+      "fact_id": "99a3d11c-2a2b-5a77-b628-ae74f3f0b682",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 9326,
+      "span_end": 9482,
+      "_from": "ST-04#2",
+      "_passage": "Voting against this action were Stephen I. Miran, who preferred to lower the target range for the federal funds rate by 1/4 percentage point at this meeting"
+    },
+    {
+      "fact_id": "b890f3bb-40f4-53e6-ac4d-9584ef4e879d",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 9488,
+      "span_end": 9688,
+      "_from": "ST-04#3",
+      "_passage": "Beth M. Hammack, Neel Kashkari, and Lorie K. Logan, who supported maintaining the target range for the federal funds rate but did not support inclusion of an easing bias in the statement at this time."
+    },
+    {
+      "fact_id": "a7092536-96d1-5f80-a70a-9481ee5e29b7",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 7535,
+      "span_end": 7619,
+      "_from": "ST-04#4",
+      "_passage": "Recent indicators suggest that economic activity has been expanding at a solid pace."
+    },
+    {
+      "fact_id": "c61093bc-ed50-5d7b-8dd0-cdc97088950d",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 7620,
+      "span_end": 7728,
+      "_from": "ST-04#5",
+      "_passage": "Job gains have remained low, on average, and the unemployment rate has been little changed in recent months."
+    },
+    {
+      "fact_id": "fd18afd5-efed-5119-8ff1-b56fca1f33ec",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 7729,
+      "span_end": 7815,
+      "_from": "ST-04#6",
+      "_passage": "Inflation is elevated, in part reflecting the recent increase in global energy prices."
+    },
+    {
+      "fact_id": "1e73b74f-1cb0-580d-8a08-d8042bd30173",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 7926,
+      "span_end": 8033,
+      "_from": "ST-04#7",
+      "_passage": "Developments in the Middle East are contributing to a high level of uncertainty about the economic outlook."
+    },
+    {
+      "fact_id": "8d5d7e11-1d29-517f-941a-85c21df2eccf",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 8034,
+      "span_end": 8108,
+      "_from": "ST-04#8",
+      "_passage": "The Committee is attentive to the risks to both sides of its dual mandate."
+    },
+    {
+      "fact_id": "9810e31f-94f5-5cb6-a106-69841c54dca5",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 8239,
+      "span_end": 8448,
+      "_from": "ST-04#9",
+      "_passage": "In considering the extent and timing of additional adjustments to the target range for the federal funds rate, the Committee will carefully assess incoming data, the evolving outlook, and the balance of risks."
+    },
+    {
+      "fact_id": "e194b716-2927-569b-9c1a-85776c18d311",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 8449,
+      "span_end": 8569,
+      "_from": "ST-04#10",
+      "_passage": "The Committee is strongly committed to supporting maximum employment and returning inflation to its 2 percent objective."
+    },
+    {
+      "fact_id": "bd75cda6-ae4b-5572-a049-e51eb9b94276",
+      "source_id": "56671afd-0872-4ca5-92f4-4fb965ac1df5",
+      "section": null,
+      "span_start": 8732,
+      "span_end": 8893,
+      "_from": "ST-04#11",
+      "_passage": "The Committee would be prepared to adjust the stance of monetary policy as appropriate if risks emerge that could impede the attainment of the Committee's goals."
+    },
+    {
+      "fact_id": "bb9420c2-b590-5506-ad9f-0261f967eb1b",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 7534,
+      "span_end": 7630,
+      "_from": "ST-06#0",
+      "_passage": "The Federal Open Market Committee approved the following statement for release by a 12 – 0 vote:"
+    },
+    {
+      "fact_id": "939fc63e-01d2-5023-902e-3b9282020356",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 7631,
+      "span_end": 7785,
+      "_from": "ST-06#1",
+      "_passage": "The Committee decided to maintain the target range for the federal funds rate at 3-1/2 to 3-3/4 percent, in support of the Federal Reserve's dual mandate."
+    },
+    {
+      "fact_id": "6089f5d3-a6df-553b-8b3a-a6b03559b9c1",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 7631,
+      "span_end": 7785,
+      "_from": "ST-06#2",
+      "_passage": "The Committee decided to maintain the target range for the federal funds rate at 3-1/2 to 3-3/4 percent, in support of the Federal Reserve's dual mandate."
+    },
+    {
+      "fact_id": "fbe74e8f-97da-50fa-a3cb-a4127b8077bf",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 7786,
+      "span_end": 7874,
+      "_from": "ST-06#3",
+      "_passage": "The Committee reaffirmed its policy of maintaining ample reserves in the banking system."
+    },
+    {
+      "fact_id": "f630fe3c-69ec-5ceb-84cb-e5ed2662ff9b",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 7875,
+      "span_end": 8006,
+      "_from": "ST-06#4",
+      "_passage": "Economic activity is expanding at a solid pace despite elevated uncertainty that owes, in part, to the conflict in the Middle East."
+    },
+    {
+      "fact_id": "188803fe-1e6f-5c65-9ed0-e3574fec47b5",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 8007,
+      "span_end": 8061,
+      "_from": "ST-06#5",
+      "_passage": "Productivity growth and capital investment are strong."
+    },
+    {
+      "fact_id": "b511355c-15e5-51a0-949f-e55bf2ec6494",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 8062,
+      "span_end": 8152,
+      "_from": "ST-06#6",
+      "_passage": "Job gains have kept pace with the workforce, and the unemployment rate has changed little."
+    },
+    {
+      "fact_id": "9ecad8e4-453f-55b2-be1f-99f767b12d63",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 8153,
+      "span_end": 8327,
+      "_from": "ST-06#7",
+      "_passage": "Inflation remains elevated relative to the Committee's 2 percent goal, in part reflecting supply shocks that have driven price increases in certain sectors, including energy."
+    },
+    {
+      "fact_id": "b6c924e3-6d60-56be-936d-461a6dae3741",
+      "source_id": "2d92fde9-76af-4c51-aac3-5e9c8bec0d4c",
+      "section": null,
+      "span_start": 8328,
+      "span_end": 8371,
+      "_from": "ST-06#8",
+      "_passage": "The Committee will deliver price stability."
+    },
+    {
+      "fact_id": "e8e5ee47-3074-53a9-9940-1f52ed358832",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 7630,
+      "span_end": 7784,
+      "_from": "ST-07#0",
+      "_passage": "The Committee decided to maintain the target range for the federal funds rate at 3-1/2 to 3-3/4 percent, in support of the Federal Reserve's dual mandate."
+    },
+    {
+      "fact_id": "4fd6bfd6-224e-5588-95ce-dde8df9bf4ba",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 7534,
+      "span_end": 7629,
+      "_from": "ST-07#1",
+      "_passage": "The Federal Open Market Committee approved the following statement for release by a 9 – 3 vote:"
+    },
+    {
+      "fact_id": "0799946f-a35b-594c-9a57-7e269a84e611",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 8374,
+      "span_end": 8580,
+      "_from": "ST-07#2",
+      "_passage": "Voting against the monetary policy action were Beth M. Hammack, Neel Kashkari, and Lorie K. Logan, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting."
+    },
+    {
+      "fact_id": "b691f592-2bd3-5ed3-8c43-fee88b9b8e1d",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 7785,
+      "span_end": 7876,
+      "_from": "ST-07#3",
+      "_passage": "The Committee is continuing its policy of maintaining ample reserves in the banking system."
+    },
+    {
+      "fact_id": "f377a9c0-642b-5656-a1e8-0fe1851d6568",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 7877,
+      "span_end": 8008,
+      "_from": "ST-07#4",
+      "_passage": "Economic activity is expanding at a solid pace despite elevated uncertainty that owes, in part, to the conflict in the Middle East."
+    },
+    {
+      "fact_id": "0e0c5687-33de-50fa-8a65-e1e8d9747266",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 8009,
+      "span_end": 8063,
+      "_from": "ST-07#5",
+      "_passage": "Productivity growth and capital investment are strong."
+    },
+    {
+      "fact_id": "7d1eaada-02f1-572d-a3e5-9407bd213c05",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 8064,
+      "span_end": 8154,
+      "_from": "ST-07#6",
+      "_passage": "Job gains have kept pace with the workforce, and the unemployment rate has changed little."
+    },
+    {
+      "fact_id": "4acbf49f-44f1-59ac-a3d7-91335eeaed87",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 8155,
+      "span_end": 8329,
+      "_from": "ST-07#7",
+      "_passage": "Inflation remains elevated relative to the Committee's 2 percent goal, in part reflecting supply shocks that have driven price increases in certain sectors, including energy."
+    },
+    {
+      "fact_id": "5a7396f7-78be-5dd8-be60-85a5cea87753",
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "section": null,
+      "span_start": 8330,
+      "span_end": 8373,
+      "_from": "ST-07#8",
+      "_passage": "The Committee will deliver price stability."
+    },
+    {
       "fact_id": "d2f0fb3b-6103-45a7-b7c3-4509c79a8219",
       "source_id": "5a14e86b-9161-49fb-8e18-912c0f9ea714",
       "section": "CES0000000001",
@@ -28847,7 +32474,7 @@
         "ST-10#1",
         "PC-10#0"
       ],
-      "why": "10월 28일 FOMC 가 연방기금금리 목표 범위를 3-3/4~4% 로 유지한 같은 결정을 성명문과 기자회견 기록이 각각 적었다.",
+      "why": "두 문서 모두 FOMC 가 2026-10-28 에 연방기금금리 목표 범위를 3-3/4~4% 로 유지하기로 한 같은 결정을 적었다.",
       "result": "묶음 ST-10#1 + PC-10#0"
     },
     {
@@ -28855,18 +32482,17 @@
         "ST-09#1",
         "PC-09#0",
         "SP-JEF-1001#24",
-        "SP-WIL-0929#20",
-        "SP-LOG-1001#6"
+        "SP-WIL-0929#20"
       ],
-      "why": "9월 16일 FOMC 가 목표 범위를 1/4%p(25bp) 올려 3-3/4~4% 로 정한 같은 결정을 여러 문서가 적었다.",
-      "result": "묶음 SP-JEF-1001#24 + SP-WIL-0929#20 + ST-09#1 + PC-09#0 — 뺀 것: SP-LOG-1001#6 (글의 수가 다르다 (1 3 4 · 25 9))"
+      "why": "네 문서 모두 FOMC 가 2026-09-16 에 목표 범위를 1/4%p 올려 3-3/4~4% 로 한 같은 결정을 적었다.",
+      "result": "묶음 SP-JEF-1001#24 + SP-WIL-0929#20 + ST-09#1 + PC-09#0"
     },
     {
       "keys": [
         "ST-09#3",
         "PC-09#1"
       ],
-      "why": "9월 16일 FOMC 가 은행 시스템에 충분한 지준을 유지하는 정책을 계속한 같은 조치이다.",
+      "why": "두 문서 모두 FOMC 가 9월 회의에서 충분한 지준 유지 정책을 계속하기로 한 같은 조치를 적었다.",
       "result": "이미 묶여 있음 (R1 · R2) ST-09#3 + PC-09#1"
     },
     {
@@ -28874,7 +32500,7 @@
         "ST-09#0",
         "MIN-09#1"
       ],
-      "why": "9월 16일 FOMC 가 성명문을 12–0 으로 승인한 같은 표결이다.",
+      "why": "두 문서 모두 FOMC 가 9월 성명문을 12–0 으로 승인한 같은 표결을 적었다.",
       "result": "묶음 MIN-09#1 + ST-09#0"
     },
     {
@@ -28882,7 +32508,7 @@
         "ST-09#9",
         "MIN-09#6"
       ],
-      "why": "9월 성명문이 이번 조치가 2% 목표로의 더 시의적절한 복귀를 뒷받침한다고 한 같은 문장이다.",
+      "why": "두 문서 모두 9월 성명문에 담긴, 정책 조치가 2% 목표로의 더 시의적절한 복귀를 뒷받침한다는 같은 문구를 옮겼다.",
       "result": "이미 묶여 있음 (R1 · R2) MIN-09#6 + ST-09#9"
     },
     {
@@ -28890,7 +32516,7 @@
         "ST-09#10",
         "MIN-09#7"
       ],
-      "why": "9월 성명문이 위원회가 물가 안정을 이뤄낼 것이라고 한 같은 문장이다.",
+      "why": "두 문서 모두 9월 성명문에 담긴, 위원회가 물가 안정을 이룰 것이라는 같은 문구를 옮겼다.",
       "result": "이미 묶여 있음 (R1 · R2) MIN-09#7 + ST-09#10"
     },
     {
@@ -28898,7 +32524,7 @@
         "ST-09#6",
         "MIN-09#9"
       ],
-      "why": "9월 성명문이 생산성 증가가 강하고 자본 투자가 견조하다고 평가한 같은 문장이다.",
+      "why": "두 문서 모두 9월 성명문에 담긴, 생산성 증가가 강하고 자본 투자가 견고하다는 같은 평가를 옮겼다.",
       "result": "이미 묶여 있음 (R1 · R2) MIN-09#9 + ST-09#6"
     },
     {
@@ -28906,7 +32532,7 @@
         "SP-COOK-0930#4",
         "SP-COOK-0928#0"
       ],
-      "why": "Cook 이사가 9월 회의에서 25bp 인상에 찬성 표결한 같은 행동이다.",
+      "why": "두 연설 모두 Cook 이사가 9월 회의에서 25bp 인상에 찬성 투표한 같은 행동을 적었다.",
       "result": "이미 묶여 있음 (R1 · R2) SP-COOK-0930#4 + SP-COOK-0928#0"
     },
     {
@@ -28914,7 +32540,7 @@
         "TSY-IR-1008#6",
         "TSY-IR-1021#8"
       ],
-      "why": "Bessent 재무장관이 2026년 8월 24일 Operation Economic Outcast 를 발표한 같은 사실이다.",
+      "why": "두 보도자료 모두 Bessent 장관이 2026-08-24 에 Operation Economic Outcast(Economic D-Day)를 발표한 같은 일을 적었다.",
       "result": "이미 묶여 있음 (R1 · R2) TSY-IR-1008#6 + TSY-IR-1021#8"
     }
   ],
@@ -29062,6 +32688,31 @@
         }
       ],
       "problem": "글의 수 5 가 구절 · 문서 공개일 · 제목에 없다"
+    },
+    {
+      "key": "WH-0619#7",
+      "source_label": "WH-0619",
+      "claim_text": "G7 정상들은 미국과 이란 사이의 합의 발표를 환영하며 그 이행을 지지하고 기여할 준비가 되어 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "G7 정상",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "passages": [
+        {
+          "result": "FOUND",
+          "text": "We welcome the announcement of a deal between the United States and Iran, secured under the strong leadership of President Trump, with the support of mediating countries",
+          "span_start": 24126,
+          "span_end": 24295
+        },
+        {
+          "result": "FOUND",
+          "text": "We support and are ready to contribute to its implementation.",
+          "span_start": 24461,
+          "span_end": 24522
+        }
+      ],
+      "problem": "글의 수 7 가 구절 · 문서 공개일 · 제목에 없다"
     }
   ]
 }

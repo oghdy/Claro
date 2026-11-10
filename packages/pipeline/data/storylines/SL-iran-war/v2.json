@@ -1,0 +1,3818 @@
+{
+  "_what": "SL-iran-war 의 새 판 (v2) — 계약 모양 (DATA_MODEL §1 Storyline · StorylineVersion · Fact · FactSource + _ 주석). p4.ts 가 FOMC-20261028 의 사실 그래프에서 짓는다 — 손으로 고치지 않는다. v1 은 골든(fixtures/store.json)에 있고 고치지 않는다 — 아래 storyline_versions 의 v1 줄은 골든에서 옮긴 것. v2 의 사실은 그래프 사실을 스토리라인 소유로 옮겨 적은 것이다 (fact_id 는 새로 · _graph_fact_id 가 원래 사실) — 소유를 어디에 둘지는 _open P4-b",
+  "storylines": [
+    {
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "code": "SL-iran-war",
+      "title": "이란 전쟁",
+      "version": 2,
+      "ongoing": true,
+      "_ongoing_note": "v1 의 값을 그대로 옮겼다 — 판정하지 않았다 (_open P4-c)"
+    }
+  ],
+  "storyline_versions": [
+    {
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "version": 1,
+      "created_at": "2026-09-16",
+      "change": "생성 — 골든 FOMC 기사(2026-09-16)가 닿는 이란 전쟁 사실 7개 (IR01~IR06 · F37b)",
+      "_note": "사실은 2026-10-09 에 C-3 이 1차 대조했다 (storyline-iran-war.md). 발행 때 고정한 판이라 created_at 을 발행일로 적었다. 발행 뒤의 전개(Brent 10/2 · 경유 9/21)는 붙이지 않았다 — 그것은 다음 버전의 일이다",
+      "_copied_from": "fixtures/store.json (골든 — 고치지 않는다)"
+    },
+    {
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "version": 2,
+      "created_at": "2026-11-10",
+      "change": "P-4 — v1(2026-09-16) 뒤 ~ 2026-10-28 의 1차 사실 + v1 이 몰랐던 6/19 백악관 MOU 발표. 문서별 EIA-B 29 · EIA-D 6 · TSY-IR-1008 12 · TSY-IR-1021 16 · WH-0619 20 · WH-1025 12",
+      "_rule": "사실 = (1) 스토리라인 문서(TSY-IR-1008 · TSY-IR-1021 · CC-1005 · CC-1010 · WH-0619 · WH-1025 — 저장된 것만)의 그래프 사실 전부 (2) EIA-B · EIA-D 표 사실 가운데 event_at 이 2026-09-16 뒤 ~ 2026-10-28. 둘 다 코드 규칙 (p4.ts storylineV2)"
+    }
+  ],
+  "facts": [
+    {
+      "fact_id": "01d94766-2a07-5c04-a5da-b43f77bfdc64",
+      "label": "v2-F567",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-17 · Thu 121.18",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-17",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-14 to Sep-18 | 121.25 | 130.80 | 127.84 | 121.18 | 119.66",
+        "cells": [
+          {
+            "h": 4,
+            "r": 4,
+            "col": "Thu",
+            "shown": "Thu",
+            "value": "121.18"
+          }
+        ],
+        "row_label": "2026 Sep-14 to Sep-18"
+      },
+      "_graph_fact_id": "70555c41-97eb-5611-97f4-da8ebc6f7fa8",
+      "_graph_label": "F567",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T3"
+      ]
+    },
+    {
+      "fact_id": "bc9489ec-eca1-5e5c-9e93-f5fe7e131f03",
+      "label": "v2-F568",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-18 · Fri 119.66",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-18",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-14 to Sep-18 | 121.25 | 130.80 | 127.84 | 121.18 | 119.66",
+        "cells": [
+          {
+            "h": 5,
+            "r": 5,
+            "col": "Fri",
+            "shown": "Fri",
+            "value": "119.66"
+          }
+        ],
+        "row_label": "2026 Sep-14 to Sep-18"
+      },
+      "_graph_fact_id": "98589bb7-ca03-5169-9906-d33c5e9cd284",
+      "_graph_label": "F568",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T4"
+      ]
+    },
+    {
+      "fact_id": "339c173c-9785-5b0a-acf5-81477a3a508d",
+      "label": "v2-F569",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-21 · Mon 116.15",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01",
+        "cells": [
+          {
+            "h": 1,
+            "r": 1,
+            "col": "Mon",
+            "shown": "Mon",
+            "value": "116.15"
+          }
+        ],
+        "row_label": "2026 Sep-21 to Sep-25"
+      },
+      "_graph_fact_id": "2e930971-b5f8-57f7-8028-cefc8885114c",
+      "_graph_label": "F569",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T5"
+      ]
+    },
+    {
+      "fact_id": "eefd6fe6-9a26-5994-a1e0-8327a98c05d2",
+      "label": "v2-F570",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-22 · Tue 114.89",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-22",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01",
+        "cells": [
+          {
+            "h": 2,
+            "r": 2,
+            "col": "Tue",
+            "shown": "Tue",
+            "value": "114.89"
+          }
+        ],
+        "row_label": "2026 Sep-21 to Sep-25"
+      },
+      "_graph_fact_id": "01059143-d192-5509-8c20-c35a10914974",
+      "_graph_label": "F570",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T6"
+      ]
+    },
+    {
+      "fact_id": "d384c2d1-0eed-56ff-97a1-96db0ef2d12c",
+      "label": "v2-F571",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-23 · Wed 117.45",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-23",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01",
+        "cells": [
+          {
+            "h": 3,
+            "r": 3,
+            "col": "Wed",
+            "shown": "Wed",
+            "value": "117.45"
+          }
+        ],
+        "row_label": "2026 Sep-21 to Sep-25"
+      },
+      "_graph_fact_id": "2acfd304-29a4-5ab9-8e18-14959236d517",
+      "_graph_label": "F571",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T7"
+      ]
+    },
+    {
+      "fact_id": "6c892167-f888-5eea-9392-8b8c2c850f52",
+      "label": "v2-F572",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-24 · Thu 120.92",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-24",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01",
+        "cells": [
+          {
+            "h": 4,
+            "r": 4,
+            "col": "Thu",
+            "shown": "Thu",
+            "value": "120.92"
+          }
+        ],
+        "row_label": "2026 Sep-21 to Sep-25"
+      },
+      "_graph_fact_id": "6d6a7d53-c46a-5cb9-8fa1-a5cc0a710c6c",
+      "_graph_label": "F572",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T8"
+      ]
+    },
+    {
+      "fact_id": "ed56e555-f022-5fdf-b51e-456ac4f8d7b5",
+      "label": "v2-F573",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-25 · Fri 116.01",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-25",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01",
+        "cells": [
+          {
+            "h": 5,
+            "r": 5,
+            "col": "Fri",
+            "shown": "Fri",
+            "value": "116.01"
+          }
+        ],
+        "row_label": "2026 Sep-21 to Sep-25"
+      },
+      "_graph_fact_id": "4dbac298-5e99-5a42-a65e-28f43d8dca60",
+      "_graph_label": "F573",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T9"
+      ]
+    },
+    {
+      "fact_id": "af5b33fe-5c62-5179-aa71-7bda2d052db0",
+      "label": "v2-F574",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-28 · Mon 119.97",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-28",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51",
+        "cells": [
+          {
+            "h": 1,
+            "r": 1,
+            "col": "Mon",
+            "shown": "Mon",
+            "value": "119.97"
+          }
+        ],
+        "row_label": "2026 Sep-28 to Oct- 2"
+      },
+      "_graph_fact_id": "097083f4-c5ed-5313-b221-79c08ef60f36",
+      "_graph_label": "F574",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T10"
+      ]
+    },
+    {
+      "fact_id": "30184cad-407b-56ac-af47-ae63c251c7e8",
+      "label": "v2-F575",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-29 · Tue 113.96",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-29",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51",
+        "cells": [
+          {
+            "h": 2,
+            "r": 2,
+            "col": "Tue",
+            "shown": "Tue",
+            "value": "113.96"
+          }
+        ],
+        "row_label": "2026 Sep-28 to Oct- 2"
+      },
+      "_graph_fact_id": "443ab78c-9e58-5c6a-9bfb-0cb890ba2b69",
+      "_graph_label": "F575",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T11"
+      ]
+    },
+    {
+      "fact_id": "58fec8df-3037-594b-880b-b8e96d2ed8fc",
+      "label": "v2-F576",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-09-30 · Wed 115.91",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-30",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51",
+        "cells": [
+          {
+            "h": 3,
+            "r": 3,
+            "col": "Wed",
+            "shown": "Wed",
+            "value": "115.91"
+          }
+        ],
+        "row_label": "2026 Sep-28 to Oct- 2"
+      },
+      "_graph_fact_id": "29e6c75e-e9f1-5237-8fb6-26c8449f2ccf",
+      "_graph_label": "F576",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T12"
+      ]
+    },
+    {
+      "fact_id": "631edac1-5939-5bda-8f96-34cd24b1dc20",
+      "label": "v2-F577",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-01 · Thu 114.82",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-01",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51",
+        "cells": [
+          {
+            "h": 4,
+            "r": 4,
+            "col": "Thu",
+            "shown": "Thu",
+            "value": "114.82"
+          }
+        ],
+        "row_label": "2026 Sep-28 to Oct- 2"
+      },
+      "_graph_fact_id": "385e75d5-f877-5182-bc10-659a210a9e5a",
+      "_graph_label": "F577",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T13"
+      ]
+    },
+    {
+      "fact_id": "be173212-db56-5c14-b87c-7aa5c5721f27",
+      "label": "v2-F578",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-02 · Fri 135.51",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-02",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51",
+        "cells": [
+          {
+            "h": 5,
+            "r": 5,
+            "col": "Fri",
+            "shown": "Fri",
+            "value": "135.51"
+          }
+        ],
+        "row_label": "2026 Sep-28 to Oct- 2"
+      },
+      "_graph_fact_id": "a8f05285-25cb-52ca-974a-95408f6a4072",
+      "_graph_label": "F578",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T14"
+      ]
+    },
+    {
+      "fact_id": "b0d33f53-ba0e-50b2-864d-30d71d66af30",
+      "label": "v2-F579",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-05 · Mon 125.51",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-05",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03",
+        "cells": [
+          {
+            "h": 1,
+            "r": 1,
+            "col": "Mon",
+            "shown": "Mon",
+            "value": "125.51"
+          }
+        ],
+        "row_label": "2026 Oct- 5 to Oct- 9"
+      },
+      "_graph_fact_id": "303f7f5d-7381-5bb7-abd2-db334cd8718b",
+      "_graph_label": "F579",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T15"
+      ]
+    },
+    {
+      "fact_id": "0212eabd-a4aa-5088-9ad0-2a42b21a1e62",
+      "label": "v2-F580",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-06 · Tue 125.44",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-06",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03",
+        "cells": [
+          {
+            "h": 2,
+            "r": 2,
+            "col": "Tue",
+            "shown": "Tue",
+            "value": "125.44"
+          }
+        ],
+        "row_label": "2026 Oct- 5 to Oct- 9"
+      },
+      "_graph_fact_id": "b26623da-4d71-53bb-b451-deddd3525c06",
+      "_graph_label": "F580",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T16"
+      ]
+    },
+    {
+      "fact_id": "5af2d877-69bc-57c0-add4-0b5b599f9464",
+      "label": "v2-F581",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-07 · Wed 126.00",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-07",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03",
+        "cells": [
+          {
+            "h": 3,
+            "r": 3,
+            "col": "Wed",
+            "shown": "Wed",
+            "value": "126.00"
+          }
+        ],
+        "row_label": "2026 Oct- 5 to Oct- 9"
+      },
+      "_graph_fact_id": "604e3c27-1cba-5f4d-9cf9-2b515197b2ce",
+      "_graph_label": "F581",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T17"
+      ]
+    },
+    {
+      "fact_id": "885f0c19-6843-5831-bfd3-96a4aaedac01",
+      "label": "v2-F582",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-08 · Thu 130.18",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03",
+        "cells": [
+          {
+            "h": 4,
+            "r": 4,
+            "col": "Thu",
+            "shown": "Thu",
+            "value": "130.18"
+          }
+        ],
+        "row_label": "2026 Oct- 5 to Oct- 9"
+      },
+      "_graph_fact_id": "ce253f3c-62c6-56c5-b502-9dbbf2524e0d",
+      "_graph_label": "F582",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T18"
+      ]
+    },
+    {
+      "fact_id": "0d5f6514-3488-5ee4-aaeb-3f52b6115044",
+      "label": "v2-F583",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-09 · Fri 130.03",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-09",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03",
+        "cells": [
+          {
+            "h": 5,
+            "r": 5,
+            "col": "Fri",
+            "shown": "Fri",
+            "value": "130.03"
+          }
+        ],
+        "row_label": "2026 Oct- 5 to Oct- 9"
+      },
+      "_graph_fact_id": "57c4eab8-b5b3-55c2-82ff-ef5ebd5fde1b",
+      "_graph_label": "F583",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T19"
+      ]
+    },
+    {
+      "fact_id": "7f9e0b55-5810-5004-8930-d2958957121e",
+      "label": "v2-F584",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-12 · Mon 129.95",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-12",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33",
+        "cells": [
+          {
+            "h": 1,
+            "r": 1,
+            "col": "Mon",
+            "shown": "Mon",
+            "value": "129.95"
+          }
+        ],
+        "row_label": "2026 Oct-12 to Oct-16"
+      },
+      "_graph_fact_id": "ba5668d1-48e4-5867-b111-745b76457b5c",
+      "_graph_label": "F584",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T20"
+      ]
+    },
+    {
+      "fact_id": "e57bc08c-09e1-5e69-8262-41f3be970600",
+      "label": "v2-F585",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-13 · Tue 125.78",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-13",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33",
+        "cells": [
+          {
+            "h": 2,
+            "r": 2,
+            "col": "Tue",
+            "shown": "Tue",
+            "value": "125.78"
+          }
+        ],
+        "row_label": "2026 Oct-12 to Oct-16"
+      },
+      "_graph_fact_id": "eeccdf01-56b6-5938-9bac-d226e6e675fe",
+      "_graph_label": "F585",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T21"
+      ]
+    },
+    {
+      "fact_id": "5d6b9613-8497-5f97-8c1b-41880c55837b",
+      "label": "v2-F586",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-14 · Wed 126.55",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-14",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33",
+        "cells": [
+          {
+            "h": 3,
+            "r": 3,
+            "col": "Wed",
+            "shown": "Wed",
+            "value": "126.55"
+          }
+        ],
+        "row_label": "2026 Oct-12 to Oct-16"
+      },
+      "_graph_fact_id": "3a07667f-3ce1-5ffc-b9fb-e663fee62bac",
+      "_graph_label": "F586",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T22"
+      ]
+    },
+    {
+      "fact_id": "76ffee01-ceca-522a-b735-02cd01d0aaf5",
+      "label": "v2-F587",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-15 · Thu 126.35",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-15",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33",
+        "cells": [
+          {
+            "h": 4,
+            "r": 4,
+            "col": "Thu",
+            "shown": "Thu",
+            "value": "126.35"
+          }
+        ],
+        "row_label": "2026 Oct-12 to Oct-16"
+      },
+      "_graph_fact_id": "ad65bbfe-0cc5-5a51-bd1b-71163e6f1d53",
+      "_graph_label": "F587",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T23"
+      ]
+    },
+    {
+      "fact_id": "0dddc5a8-430a-50d2-8390-6ca9b78b9bd0",
+      "label": "v2-F588",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-16 · Fri 119.33",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-16",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33",
+        "cells": [
+          {
+            "h": 5,
+            "r": 5,
+            "col": "Fri",
+            "shown": "Fri",
+            "value": "119.33"
+          }
+        ],
+        "row_label": "2026 Oct-12 to Oct-16"
+      },
+      "_graph_fact_id": "9b0f7286-d31d-53be-bdce-c7900b07e251",
+      "_graph_label": "F588",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T24"
+      ]
+    },
+    {
+      "fact_id": "c8fb3193-5fbf-51b7-b9b4-017f50526def",
+      "label": "v2-F589",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-19 · Mon 118.82",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-19",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30",
+        "cells": [
+          {
+            "h": 1,
+            "r": 1,
+            "col": "Mon",
+            "shown": "Mon",
+            "value": "118.82"
+          }
+        ],
+        "row_label": "2026 Oct-19 to Oct-23"
+      },
+      "_graph_fact_id": "ec2905b6-4ec6-5fae-b07f-90465976015f",
+      "_graph_label": "F589",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T25"
+      ]
+    },
+    {
+      "fact_id": "9ccdd9ac-f3ec-5b1e-9498-a307cfe1ce9e",
+      "label": "v2-F590",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-20 · Tue 115.22",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-20",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30",
+        "cells": [
+          {
+            "h": 2,
+            "r": 2,
+            "col": "Tue",
+            "shown": "Tue",
+            "value": "115.22"
+          }
+        ],
+        "row_label": "2026 Oct-19 to Oct-23"
+      },
+      "_graph_fact_id": "9045aeb7-d73c-5754-86f7-6f664188ad08",
+      "_graph_label": "F590",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T26"
+      ]
+    },
+    {
+      "fact_id": "81fc5396-50a4-5716-af10-7ef34cb1e06b",
+      "label": "v2-F591",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-21 · Wed 117.37",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30",
+        "cells": [
+          {
+            "h": 3,
+            "r": 3,
+            "col": "Wed",
+            "shown": "Wed",
+            "value": "117.37"
+          }
+        ],
+        "row_label": "2026 Oct-19 to Oct-23"
+      },
+      "_graph_fact_id": "52b0fc83-3a4a-512b-a75c-c741fff67ea1",
+      "_graph_label": "F591",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T27"
+      ]
+    },
+    {
+      "fact_id": "29dc450a-6f3a-5155-9f26-7878758faa35",
+      "label": "v2-F592",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-22 · Thu 125.39",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-22",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30",
+        "cells": [
+          {
+            "h": 4,
+            "r": 4,
+            "col": "Thu",
+            "shown": "Thu",
+            "value": "125.39"
+          }
+        ],
+        "row_label": "2026 Oct-19 to Oct-23"
+      },
+      "_graph_fact_id": "4d2cabef-de2c-5ae0-9a4a-37a88ec90398",
+      "_graph_label": "F592",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T28"
+      ]
+    },
+    {
+      "fact_id": "edd4779b-0acc-5a0a-bd43-ac0155239ebc",
+      "label": "v2-F593",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-23 · Fri 128.30",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-23",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30",
+        "cells": [
+          {
+            "h": 5,
+            "r": 5,
+            "col": "Fri",
+            "shown": "Fri",
+            "value": "128.30"
+          }
+        ],
+        "row_label": "2026 Oct-19 to Oct-23"
+      },
+      "_graph_fact_id": "e618ac4a-2ce4-5198-bd39-caf888b9992e",
+      "_graph_label": "F593",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T29"
+      ]
+    },
+    {
+      "fact_id": "e951a486-2779-521c-8f17-14aa5268022b",
+      "label": "v2-F594",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-26 · Mon 128.12",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-26",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-26 to Oct-30 | 128.12 | 123.10 | | |",
+        "cells": [
+          {
+            "h": 1,
+            "r": 1,
+            "col": "Mon",
+            "shown": "Mon",
+            "value": "128.12"
+          }
+        ],
+        "row_label": "2026 Oct-26 to Oct-30"
+      },
+      "_graph_fact_id": "9c318ac9-16a6-5add-bff7-531a4ee59232",
+      "_graph_label": "F594",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T30"
+      ]
+    },
+    {
+      "fact_id": "fd643070-9ad0-5510-9197-7d6f6652bc0e",
+      "label": "v2-F595",
+      "claim_text": "EIA Europe Brent Spot Price FOB (Dollars per Barrel) — 2026-10-27 · Tue 123.10",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-27",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_daily",
+        "header_line": "Week Of | Mon | Tue | Wed | Thu | Fri",
+        "row_line": "2026 Oct-26 to Oct-30 | 128.12 | 123.10 | | |",
+        "cells": [
+          {
+            "h": 2,
+            "r": 2,
+            "col": "Tue",
+            "shown": "Tue",
+            "value": "123.10"
+          }
+        ],
+        "row_label": "2026 Oct-26 to Oct-30"
+      },
+      "_graph_fact_id": "b39c9d98-d514-5b54-9e9d-abbb288fd441",
+      "_graph_label": "F595",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-B#T31"
+      ]
+    },
+    {
+      "fact_id": "00d1a6c4-9ee2-57ac-a2d6-522be4876abd",
+      "label": "v2-F597",
+      "claim_text": "EIA Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon) — End Date 09/21 (2026-09-21) · Value 6.529",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_weekly",
+        "header_line": "End Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value",
+        "row_line": "2026-Sep | 09/07 | 5.967 | 09/14 | 6.285 | 09/21 | 6.529 | 09/28 | 6.382 | |",
+        "cells": [
+          {
+            "h": 5,
+            "r": 6,
+            "col": "Value",
+            "shown": "Value",
+            "value": "6.529"
+          }
+        ],
+        "row_label": "2026-Sep",
+        "date_cell": "09/21"
+      },
+      "_graph_fact_id": "1f234982-11e3-50ea-af8a-1097c28f16ee",
+      "_graph_label": "F597",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-D#T2"
+      ]
+    },
+    {
+      "fact_id": "76fd7bda-c7ce-5389-adb2-64408d87fad5",
+      "label": "v2-F598",
+      "claim_text": "EIA Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon) — End Date 09/28 (2026-09-28) · Value 6.382",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-09-28",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_weekly",
+        "header_line": "End Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value",
+        "row_line": "2026-Sep | 09/07 | 5.967 | 09/14 | 6.285 | 09/21 | 6.529 | 09/28 | 6.382 | |",
+        "cells": [
+          {
+            "h": 7,
+            "r": 8,
+            "col": "Value",
+            "shown": "Value",
+            "value": "6.382"
+          }
+        ],
+        "row_label": "2026-Sep",
+        "date_cell": "09/28"
+      },
+      "_graph_fact_id": "7e075f21-5007-53af-8bf1-b108794bf914",
+      "_graph_label": "F598",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-D#T3"
+      ]
+    },
+    {
+      "fact_id": "4efa4ff9-c0d4-5e74-92a6-6d9614801e97",
+      "label": "v2-F599",
+      "claim_text": "EIA Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon) — End Date 10/05 (2026-10-05) · Value 6.199",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-05",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_weekly",
+        "header_line": "End Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value",
+        "row_line": "2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |",
+        "cells": [
+          {
+            "h": 1,
+            "r": 2,
+            "col": "Value",
+            "shown": "Value",
+            "value": "6.199"
+          }
+        ],
+        "row_label": "2026-Oct",
+        "date_cell": "10/05"
+      },
+      "_graph_fact_id": "6abc21e3-2b44-5100-9b2f-7a04d9481b7a",
+      "_graph_label": "F599",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-D#T4"
+      ]
+    },
+    {
+      "fact_id": "d22a70b2-3bd1-591a-9748-9d41d061870f",
+      "label": "v2-F600",
+      "claim_text": "EIA Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon) — End Date 10/12 (2026-10-12) · Value 6.179",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-12",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_weekly",
+        "header_line": "End Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value",
+        "row_line": "2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |",
+        "cells": [
+          {
+            "h": 3,
+            "r": 4,
+            "col": "Value",
+            "shown": "Value",
+            "value": "6.179"
+          }
+        ],
+        "row_label": "2026-Oct",
+        "date_cell": "10/12"
+      },
+      "_graph_fact_id": "34595932-b856-5fb5-9770-f9452a22a9ee",
+      "_graph_label": "F600",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-D#T5"
+      ]
+    },
+    {
+      "fact_id": "08dedae7-436e-5f10-aaf4-4c75d29bdeb0",
+      "label": "v2-F601",
+      "claim_text": "EIA Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon) — End Date 10/19 (2026-10-19) · Value 6.276",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-19",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_weekly",
+        "header_line": "End Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value",
+        "row_line": "2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |",
+        "cells": [
+          {
+            "h": 5,
+            "r": 6,
+            "col": "Value",
+            "shown": "Value",
+            "value": "6.276"
+          }
+        ],
+        "row_label": "2026-Oct",
+        "date_cell": "10/19"
+      },
+      "_graph_fact_id": "1041785d-6148-5d5c-b159-8d5311121680",
+      "_graph_label": "F601",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-D#T6"
+      ]
+    },
+    {
+      "fact_id": "1911004a-38bf-5baf-965d-a0394f16b9c5",
+      "label": "v2-F602",
+      "claim_text": "EIA Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon) — End Date 10/26 (2026-10-26) · Value 6.352",
+      "fact_type": "MEASUREMENT",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-26",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/1 (code)",
+      "_table": {
+        "handler": "eia_weekly",
+        "header_line": "End Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value",
+        "row_line": "2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |",
+        "cells": [
+          {
+            "h": 7,
+            "r": 8,
+            "col": "Value",
+            "shown": "Value",
+            "value": "6.352"
+          }
+        ],
+        "row_label": "2026-Oct",
+        "date_cell": "10/26"
+      },
+      "_graph_fact_id": "9a95ccf2-91ae-5055-806a-bf1111124583",
+      "_graph_label": "F602",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "EIA-D#T7"
+      ]
+    },
+    {
+      "fact_id": "2b59c4a1-9a0c-5a75-b0c5-dcf5ed74702b",
+      "label": "v2-F603",
+      "claim_text": "미 재무부는 Operation Economic Outcast 의 일환으로 이란 그림자 선단(shadow fleet)의 잔존 세력을 겨냥한 조치를 취함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "964652de-5352-5ded-b33a-4b73dc31ccbf",
+      "_graph_label": "F603",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#0"
+      ]
+    },
+    {
+      "fact_id": "f6b85f7b-c665-58c7-89f4-15a6af367ba2",
+      "label": "v2-F604",
+      "claim_text": "미 재무부는 이번 조치가 이란에 남은 그림자 선단 네트워크의 대다수를 사실상 무력화한다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "44494306-18c7-519c-a1af-034713337c5d",
+      "_graph_label": "F604",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#1"
+      ]
+    },
+    {
+      "fact_id": "ab5242ce-b051-584d-a442-e967b2fe04ae",
+      "label": "v2-F605",
+      "claim_text": "Scott Bessent 재무장관은 재무부가 테헤란 정권이 역내 전쟁을 벌이는 데 쓰는 자금을 고갈시키고 있으며, 정권의 원유 판매를 돕는 자들을 계속 드러내겠다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Scott Bessent 재무장관",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "65254551-3bf1-5b9f-94da-4cd081973239",
+      "_graph_label": "F605",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#2"
+      ]
+    },
+    {
+      "fact_id": "109f3e86-4934-5fb7-b6a9-5620c1edb7f2",
+      "label": "v2-F606",
+      "claim_text": "미 재무부는 미군 봉쇄의 성공, 봉쇄선 밖 이란 원유 선적의 감소, Operation Economic Outcast 의 경제 압박 강화로 이란 정권이 경제를 안정시킬 선택지를 잃어가고 있다고 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "81826ba3-6143-5b48-9898-df4532ea4475",
+      "_graph_label": "F606",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#3"
+      ]
+    },
+    {
+      "fact_id": "b7475603-8776-50d1-acee-f70900b2cf55",
+      "label": "v2-F607",
+      "claim_text": "미 재무부는 남아시아·동아시아 시장으로 이란산 원유와 석유·석유화학 제품 수백만 배럴을 운송한 그림자 선단 선박 17척에 대해 조치를 취함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "47e8e6e7-f56f-5079-824a-9a8eba9caa88",
+      "_graph_label": "F607",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#4"
+      ]
+    },
+    {
+      "fact_id": "4f464af8-80bf-5907-9eb5-8eb9a5277479",
+      "label": "v2-F608",
+      "claim_text": "이번 제재 지정은 이란 석유 부문 등을 겨냥하는 행정명령(E.O.) 13902 에 따라 이루어짐.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "238ce77c-252c-5fe9-9880-0b2ed126aab2",
+      "_graph_label": "F608",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#5"
+      ]
+    },
+    {
+      "fact_id": "6fd9efc7-e073-57ee-b499-4e480edba43a",
+      "label": "v2-F609",
+      "claim_text": "Operation Economic Outcast 는 Bessent 재무장관이 August 24, 2026 에 발표했으며 Economic D-Day 로 불림.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-08-24",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "e0130095-e912-5cd0-8153-796ebf4385e4",
+      "_graph_label": "F609",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#6",
+        "TSY-IR-1021#8"
+      ]
+    },
+    {
+      "fact_id": "4e2b7397-f544-56a9-9755-e78ffdf172b5",
+      "label": "v2-F610",
+      "claim_text": "미 재무부는 미국 정부 내 협력 기관, 유럽연합, 영국, 걸프 협력국 등과 함께 이란 정권의 불법 수입원과 제재 회피 수단을 겨냥하고 있다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "1e0b7983-a7e0-56ae-9604-2fdd2d652923",
+      "_graph_label": "F610",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#7"
+      ]
+    },
+    {
+      "fact_id": "006e3f51-5481-5f5d-bc99-e75252628c8a",
+      "label": "v2-F611",
+      "claim_text": "미 재무부는 이란을 위해 자금세탁이나 제재 회피를 돕는 모든 주체가 미국 금융 시스템에서 차단될 위험이 있다고 경고함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미 재무부",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "45dfb7b6-fead-5c6f-862d-4b3a4a726160",
+      "_graph_label": "F611",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#8"
+      ]
+    },
+    {
+      "fact_id": "4d8d12af-38ba-5d15-94d4-94a7ffe192ff",
+      "label": "v2-F612",
+      "claim_text": "미 재무부는 그림자 선단 생태계가 유동적이어서 앞으로도 제재 회피 시도를 계속 감시·식별·차단하겠다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "47abdc75-e0d4-5c74-88af-ef3bc2bfb73a",
+      "_graph_label": "F612",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#9"
+      ]
+    },
+    {
+      "fact_id": "9a9fc2fe-d357-5478-beb6-3e4ce3cc0514",
+      "label": "v2-F613",
+      "claim_text": "미 재무부는 원유 운반선 TINA 5 가 August 2026 에 이란산 원유 1.5 million 배럴 이상을 운송했다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "6b57bc9b-e196-57fb-b3f0-579a665ae07d",
+      "_graph_label": "F613",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#10"
+      ]
+    },
+    {
+      "fact_id": "c1c19d1b-49cc-50a7-bfa1-b1d378622315",
+      "label": "v2-F614",
+      "claim_text": "OFAC 는 이번 조치의 일환으로 그림자 선단에서 빠져 비제재·미국 우호 운영사에 매각된 선박 HAKUNA MATATA 와 PINOCCHIO 두 척을 SDN 목록에서 삭제함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-08",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "bb316b29-cf7c-5b62-8d2a-c914faa27920",
+      "_graph_label": "F614",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1008#11"
+      ]
+    },
+    {
+      "fact_id": "5c9ca9e4-1736-5b55-98af-c9c48730bada",
+      "label": "v2-F615",
+      "claim_text": "미국 재무부는 Operation Economic Outcast 의 하나로 Panama · Greece 에 기반을 둔 로펌 Karnakis and Karnakis 를 제재함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "4d8c1e9e-7b82-54cc-9318-5b36d4c91e9f",
+      "_graph_label": "F615",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#0"
+      ]
+    },
+    {
+      "fact_id": "71ea848e-87d8-5eb6-bcba-6babb4f9994e",
+      "label": "v2-F616",
+      "claim_text": "재무부는 Karnakis and Karnakis 가 수년간 불법 이란 해운 활동을 지원해 Tehran 이 군사 · 무기 · 핵 프로그램 자금을 마련하는 능력을 간접적으로 도왔다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미국 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "f2a320b6-c1fb-512a-821b-40e97e42429c",
+      "_graph_label": "F616",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#1"
+      ]
+    },
+    {
+      "fact_id": "3589aeee-1f30-56ce-aa63-4ab69fb8e09f",
+      "label": "v2-F617",
+      "claim_text": "재무부는 Operation Economic Outcast 기간 내내 유럽과 세계의 상대 기관들과 계속 협력해 이란 정권의 남은 경제 생명줄을 끊고 있다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미국 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "cf3f31c3-d1c2-5d2e-825b-dfe93b9ed8ae",
+      "_graph_label": "F617",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#2"
+      ]
+    },
+    {
+      "fact_id": "57b840b6-4810-50a5-94e1-19eef29288c3",
+      "label": "v2-F618",
+      "claim_text": "Scott Bessent 재무장관은 이란 정권을 지원하면 찾아내 제재하겠다고 말하고, 이란의 조력자들은 미국 편인지 반대편인지 선택해야 하며 재무부는 계속 조치를 취하겠다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Scott Bessent 재무장관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "072d6969-f513-5d64-b49c-743d34d1ffb7",
+      "_graph_label": "F618",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#3"
+      ]
+    },
+    {
+      "fact_id": "e13043da-b691-530d-b569-70a49dc2ceb1",
+      "label": "v2-F619",
+      "claim_text": "재무부는 이란 shadow fleet 운영을 직접 돕는 Singapore · UAE 기반 shipping agent 들도 제재함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "b5ebbe46-4624-5987-a226-957783ea9602",
+      "_graph_label": "F619",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#4"
+      ]
+    },
+    {
+      "fact_id": "9346bc8a-6419-5f01-9857-4a625967a27f",
+      "label": "v2-F620",
+      "claim_text": "이번 지정은 이란의 석유 · 석유화학 부문 등을 겨냥하는 Executive Order 13902 에 따라 이뤄짐.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "3a8b9d25-fc58-5a9f-9c6d-1f734e7acd5e",
+      "_graph_label": "F620",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#5"
+      ]
+    },
+    {
+      "fact_id": "7caa5354-fd00-5464-8436-33a10ba9bdec",
+      "label": "v2-F621",
+      "claim_text": "FinCEN 은 그리스 은행의 이란 및 그 대리 세력과의 잠재적 연관성 조사를 위해 Bank Secrecy Act 31 U.S.C. § 5318(k) 에 따른 행정 소환장을 처음으로 발부함.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "d8157f74-7eef-5175-b936-0a4937a1db88",
+      "_graph_label": "F621",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#6"
+      ]
+    },
+    {
+      "fact_id": "920e9d15-cd4d-5216-9d1c-100644843b86",
+      "label": "v2-F622",
+      "claim_text": "FinCEN 은 은행들과 OFAC 이 지정한 이란 금융기관의 관계에 관해 여러 건의 정보 요청을 냄.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "0e3c9976-1a6f-5e54-bbb8-d28d67ab695c",
+      "_graph_label": "F622",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#7"
+      ]
+    },
+    {
+      "fact_id": "ebd37a8d-a112-535f-a0e9-f9ee0da31a87",
+      "label": "v2-F623",
+      "claim_text": "재무부는 미국 정부 내 협력 기관 · EU · 영국 · 걸프 협력국 등과 함께 이란 정권의 불법 수입원과 자금 이동을 위한 제재 회피 수법을 겨냥하고 있다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미국 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "9eb20568-63bc-5aff-b2e1-ea7b5b124f43",
+      "_graph_label": "F623",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#9"
+      ]
+    },
+    {
+      "fact_id": "885fedcb-0b03-5c98-9552-8da8863734b2",
+      "label": "v2-F624",
+      "claim_text": "재무부는 이란을 대신해 자금 세탁이나 제재 회피를 돕는 어떤 기관도 미국 금융 시스템에서 차단될 위험이 있다고 경고함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미국 재무부",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "429430ec-9923-5a87-b57f-71327519787e",
+      "_graph_label": "F624",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#10"
+      ]
+    },
+    {
+      "fact_id": "828c3ff7-ab53-5372-9806-36b461f5472e",
+      "label": "v2-F625",
+      "claim_text": "재무부는 Operation Economic Outcast 가 이란 정권과 계속 거래하는 비미국인의 제재 노출을 넓혔고 미국의 집행 속도를 높일 것이라고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미국 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "a2ed5fad-0cf5-59a6-85ac-28bcf5c3519c",
+      "_graph_label": "F625",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#11"
+      ]
+    },
+    {
+      "fact_id": "08308702-c683-5332-b3ff-a93e6a6e1a78",
+      "label": "v2-F626",
+      "claim_text": "재무부는 Karnakis and Karnakis 가 수억 달러어치의 이란산 철강 · 석유 · 석유화학 제품을 운송한 shadow fleet 선박 소유 해운사들을 등록해 왔다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미국 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "759af5a1-4049-5b89-aafe-6f4317ad57c0",
+      "_graph_label": "F626",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#12"
+      ]
+    },
+    {
+      "fact_id": "459cfe24-1439-58af-8ddc-788ec008d52f",
+      "label": "v2-F627",
+      "claim_text": "Roxette Maritime Shipping and Trading S.A. 는 E.O. 13902 에 따라 지정되고, ANEMOS · GLORIS · PRIDE · DESTINY · FLAMINGO 1 · HARMONY · PRINCE 선박은 차단 재산으로 식별됨.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "8e1c240c-876b-5aa7-967d-55ac5ac93b00",
+      "_graph_label": "F627",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#14"
+      ]
+    },
+    {
+      "fact_id": "33ed69b6-c3ad-50c7-85f9-7cfc661c3946",
+      "label": "v2-F628",
+      "claim_text": "Amigoz Singapore PTE. Ltd. 는 이란 석유 부문 활동으로, Whales Shipping Line LLC 는 Amigoz 를 지원한 혐의로 각각 E.O. 13902 에 따라 지정되고, WHALES DIAMOND · WHALES PEARL 은 차단 재산으로 식별됨.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "8493a07b-93aa-53b4-b24c-effa4ee8076b",
+      "_graph_label": "F628",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#15"
+      ]
+    },
+    {
+      "fact_id": "92000236-9784-5bb9-829b-9636d5ae4c27",
+      "label": "v2-F629",
+      "claim_text": "재무부는 오늘 지정된 자들이 관련된 특정 거래에 참여하는 외국 금융기관이 secondary sanctions 를 받을 위험이 있다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "미국 재무부 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-21",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "e1638d0e-f2f8-5efa-8d1c-d3841b219bd7",
+      "_graph_label": "F629",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "TSY-IR-1021#16"
+      ]
+    },
+    {
+      "fact_id": "6e41d27e-9b34-523c-b86d-7620426cd3f1",
+      "label": "v2-F668",
+      "claim_text": "백악관은 Donald J. Trump 대통령과 JD Vance 부통령이 이란과 양해각서(Memorandum of Understanding)에 서명했다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "24d33f88-f3bd-5cfc-b9c9-35f22527512e",
+      "_graph_label": "F668",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#0"
+      ]
+    },
+    {
+      "fact_id": "b9ef12f4-6af6-54c3-b198-3cca421baba7",
+      "label": "v2-F669",
+      "claim_text": "백악관은 이 합의가 이란이 결코 핵무기를 갖지 못하도록 보장하고 호르무즈 해협을 자유 항행에 다시 연다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-06-19",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "b1d56ae3-77ed-50c5-8e27-9a558d169d4f",
+      "_graph_label": "F669",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#1"
+      ]
+    },
+    {
+      "fact_id": "c2fe4171-520c-5a79-86cf-172b1b1a4a3b",
+      "label": "v2-F670",
+      "claim_text": "Macron 프랑스 대통령은 Trump 대통령이 Versailles 에서 이란과 미국 사이의 합의에 서명했으며, 이 합의가 호르무즈 해협 재개방을 가능하게 하고 곧 에너지 가격 하락을 가능하게 할 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Emmanuel Macron 프랑스 대통령",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "cc4b502d-d032-5263-8705-6ba4e3648115",
+      "_graph_label": "F670",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#2"
+      ]
+    },
+    {
+      "fact_id": "acf455b5-bf58-586a-bb46-9f8bf6ecef8e",
+      "label": "v2-F671",
+      "claim_text": "Sharif 파키스탄 총리는 양해각서가 양국 대통령에 의해 서명되었고 중재자인 자신이 승인했다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Shehbaz Sharif 파키스탄 총리",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "4cb7dbf3-8b7c-50e3-9181-66996c5198dc",
+      "_graph_label": "F671",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#3"
+      ]
+    },
+    {
+      "fact_id": "8255a4c3-e567-50af-bf2b-6916e4f737d2",
+      "label": "v2-F672",
+      "claim_text": "카타르 외무부는 미국과 이란이 군사작전 중단과 호르무즈 해협 항행의 자유 보장을 포함하는 양해각서에 전자 서명한 것을 환영한다고 밝힘.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "카타르 외무부",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "28082195-bc8a-5660-9401-6b98cb59094d",
+      "_graph_label": "F672",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#4"
+      ]
+    },
+    {
+      "fact_id": "da5fa7a0-2136-5b02-8bc8-8d2e12d62d7f",
+      "label": "v2-F673",
+      "claim_text": "Takaichi 일본 총리는 미국과 이란이 각서에 서명했고 적대행위 중단이 선언되었다고 말하며, 앞으로의 협상으로 이란 핵 문제 등에 대한 최종 합의가 가능한 한 빨리 이뤄지기를 바란다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Sanae Takaichi 일본 총리",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "5f6b8cd6-7d3e-521e-93cb-d384c9ee5be6",
+      "_graph_label": "F673",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#5"
+      ]
+    },
+    {
+      "fact_id": "70960d7a-d4ab-5610-972c-97aa7428ef79",
+      "label": "v2-F674",
+      "claim_text": "유엔 사무총장 대변인은 미국과 이란이 즉각적이고 영구적인 휴전, 호르무즈 해협 재개방, 추가 협상의 틀을 담은 평화 합의에 동의했다는 발표를 사무총장이 환영한다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "유엔 사무총장 대변인",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "481698d9-5568-5534-8a4c-70d7beba6174",
+      "_graph_label": "F674",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#6"
+      ]
+    },
+    {
+      "fact_id": "aad04f07-16c9-5177-b4a5-4bddb27668ad",
+      "label": "v2-F675",
+      "claim_text": "Starmer 영국 총리는 미국과 이란의 합의가 전쟁 종식과 호르무즈 해협 재개방을 향한 매우 중요한 진전이라고 말하고 Pakistan · Qatar 등의 중재자를 언급함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Keir Starmer 영국 총리",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "f56ae637-11e3-5756-b411-16ef98286b6b",
+      "_graph_label": "F675",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#8"
+      ]
+    },
+    {
+      "fact_id": "f4dc0e1d-b54a-59c0-83a1-d81355718c4e",
+      "label": "v2-F676",
+      "claim_text": "von der Leyen 유럽연합 집행위원장은 해협이 다시 열릴 것이며 유가가 떨어지고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Ursula von der Leyen 유럽연합 집행위원장",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "6d217789-8936-51b2-a075-ba027e84f6d2",
+      "_graph_label": "F676",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#9"
+      ]
+    },
+    {
+      "fact_id": "bd28f238-7f23-5a3c-9c82-9fac71bc622c",
+      "label": "v2-F677",
+      "claim_text": "Merz 독일 총리는 이란과의 합의가 지역 안정과 세계 경제를 위한 기회이며 합의된 평화가 이제 유지되어야 한다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Friedrich Merz 독일 총리",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "edab8277-e399-5484-9960-298f6f7d1f18",
+      "_graph_label": "F677",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#10"
+      ]
+    },
+    {
+      "fact_id": "ddb7a253-efc9-5b26-bd79-a23122b14a8e",
+      "label": "v2-F678",
+      "claim_text": "Atlantic Council 부회장은 이란의 호르무즈 해협 위협과 미국의 보복 봉쇄가 세계 에너지 흐름을 막아 에너지 가격 상승과 세계 경제 충격으로 이어졌다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Atlantic Council 지정학 담당 부회장 (백악관 보도자료 인용)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "42fa6232-29c8-5d63-8a8d-df5478880d7b",
+      "_graph_label": "F678",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#11"
+      ]
+    },
+    {
+      "fact_id": "b7a8d106-4fa0-5d85-a02e-8b62a1c0a2a3",
+      "label": "v2-F679",
+      "claim_text": "Atlantic Council 부회장은 이번 합의가 경제적 압력을 완화할 것으로 보이며, 양측 모두 에너지를 세계 시장으로 흐르게 할 강한 경제적 유인이 있어 합의가 유지될 것으로 짐작한다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Atlantic Council 지정학 담당 부회장 (백악관 보도자료 인용)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "801d2230-b93f-5b4c-a621-5c07b7b6ee1d",
+      "_graph_label": "F679",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#12"
+      ]
+    },
+    {
+      "fact_id": "5326352a-9afb-5df7-a1c6-5cff3bb42fa5",
+      "label": "v2-F680",
+      "claim_text": "America First Policy Institute 는 Operation Epic Fury 개시 후 107일 만에 합의가 나왔다고 말하며 이란 정권과의 60일 양해각서 마무리 노력을 높이 평가함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "America First Policy Institute",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "c1978d92-f3d4-5476-be6f-7112686d3479",
+      "_graph_label": "F680",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#13"
+      ]
+    },
+    {
+      "fact_id": "d4d5efdf-dfce-55b7-9c77-a0b18a5c3cf6",
+      "label": "v2-F681",
+      "claim_text": "Graham 상원의원은 미국이 이란과 핵 프로그램 등에 대해 수용 가능하고 검증 가능한 합의에 이를 수 있을지는 아직 정해지지 않았다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Lindsey Graham 상원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "91b832e2-7d5c-5616-ba36-aa489668ab17",
+      "_graph_label": "F681",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#14"
+      ]
+    },
+    {
+      "fact_id": "fe90cb0f-eb16-5602-bdff-3a47240fb54e",
+      "label": "v2-F682",
+      "claim_text": "Kennedy 상원의원은 60일 안에 결과를 알게 될 것이라며 평화에 60일의 기회를 주자고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "John Kennedy 상원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "f1011019-b3b5-5617-a738-25c7401d2ba2",
+      "_graph_label": "F682",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#15"
+      ]
+    },
+    {
+      "fact_id": "89d41adc-5660-5d44-87a0-3a7859177e06",
+      "label": "v2-F683",
+      "claim_text": "Marshall 상원의원은 해협이 다시 열렸고 휘발유 가격이 급락하고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Roger Marshall 상원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "10ad9177-6eca-595e-be05-95115a6091b3",
+      "_graph_label": "F683",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#16"
+      ]
+    },
+    {
+      "fact_id": "30e2e8a3-be31-5787-bbbe-3136fb478fac",
+      "label": "v2-F684",
+      "claim_text": "Kustoff 하원의원은 협상이 아직 진행 중이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "David Kustoff 하원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "f2a79ca9-1c9b-5449-9e45-c7abf8b6a002",
+      "_graph_label": "F684",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#17"
+      ]
+    },
+    {
+      "fact_id": "48158f17-e8b2-5a9b-bb7b-4dc07aa1585a",
+      "label": "v2-F685",
+      "claim_text": "Mast 하원의원은 Trump 대통령이 Operation Midnight Hammer 를 실행하고 Operation Epic Fury 를 60일 동안 수행하며 이란 해안 전체를 봉쇄했다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Brian Mast 하원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "9bc55137-66ab-5251-801e-8e4cbe6e286f",
+      "_graph_label": "F685",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#18"
+      ]
+    },
+    {
+      "fact_id": "f6997933-4898-50cb-b4b3-7176955d40f5",
+      "label": "v2-F686",
+      "claim_text": "Williams 하원의원은 호르무즈 해협 재개방이 세계 교역 회복을 돕고 협상이 계속되는 동안 에너지 시장에 더 큰 확실성을 가져올 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Roger Williams 하원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "01706f10-3552-5435-a03e-94aef4f9c236",
+      "_graph_label": "F686",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#19"
+      ]
+    },
+    {
+      "fact_id": "5475b09d-1d12-51f5-b7fc-8f5d315d2254",
+      "label": "v2-F687",
+      "claim_text": "Miller-Meeks 하원의원은 미국 가정의 에너지 가격이 계속 떨어지기를 바란다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "Mariannette Miller-Meeks 하원의원",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "44098f87-19d0-502f-b8a2-df8abe03131b",
+      "_graph_label": "F687",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-0619#20"
+      ]
+    },
+    {
+      "fact_id": "41664ea1-8141-51e1-a7bf-3ce970dd8bdf",
+      "label": "v2-F688",
+      "claim_text": "백악관은 Trump 대통령의 조치 덕분에 휘발유와 diesel 가격이 곧 빠르게 떨어질 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "85bd3940-6050-5665-b70b-58af3c063d4b",
+      "_graph_label": "F688",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#0"
+      ]
+    },
+    {
+      "fact_id": "6fe7f819-cb0f-5e12-a318-7e599b02d2ed",
+      "label": "v2-F689",
+      "claim_text": "백악관은 이달 초 Trump 대통령이 트럭 운전사와 농민의 diesel 비용을 즉시 낮추기 위한 행정명령에 서명했다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "106a6c81-1270-5074-82f4-38908eb46f96",
+      "_graph_label": "F689",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#1"
+      ]
+    },
+    {
+      "fact_id": "52f2e19c-6dd1-5ee4-b625-c0b1fa0e8fd2",
+      "label": "v2-F690",
+      "claim_text": "백악관은 Trump 대통령이 여러 나라와 비축분에서 130 million 배럴이 넘는 diesel 을 방출하는 합의를 이뤘다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "f3089786-1cc5-5d44-a487-ec162e6361ff",
+      "_graph_label": "F690",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#2"
+      ]
+    },
+    {
+      "fact_id": "9fe582ae-9162-5600-b1fc-c0b756d13bd5",
+      "label": "v2-F691",
+      "claim_text": "백악관은 이 diesel 방출 합의가 세계 공급을 늘리고 가격을 낮추기 위한 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "cc7764fa-e8c6-557f-b4ad-e9ef9f005f8f",
+      "_graph_label": "F691",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#3"
+      ]
+    },
+    {
+      "fact_id": "3fc828a1-249e-596d-93c0-766885d2ae31",
+      "label": "v2-F692",
+      "claim_text": "백악관은 미군의 힘과 Trump 대통령의 리더십 덕분에 분쟁 이전보다 더 많은 원유가 Hormuz 해협을 통해 나가고 있다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "04cb3ff4-ed51-5355-9292-88436930d8d4",
+      "_graph_label": "F692",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#4"
+      ]
+    },
+    {
+      "fact_id": "a69916af-bf3d-5ece-89af-f615d7cabedd",
+      "label": "v2-F693",
+      "claim_text": "백악관은 지금까지 미국으로 들어오는 Venezuela 원유의 양이 400% 넘게 늘었고 거의 10년 만에 최고에 이르렀다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "6db7e807-030e-54ea-9c72-931c562d4ed1",
+      "_graph_label": "F693",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#5"
+      ]
+    },
+    {
+      "fact_id": "d1362e7e-a946-52a1-9eb5-bc67826e8ae4",
+      "label": "v2-F694",
+      "claim_text": "백악관은 Trump 대통령이 Venezuela 와 65 billion 배럴의 원유를 확보하는 원유 합의를 발표했다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "73f3ccf5-f2ed-5106-a51d-a9cfa5799a5d",
+      "_graph_label": "F694",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#6"
+      ]
+    },
+    {
+      "fact_id": "81f8647e-9637-5898-bf3f-cbaae601e34b",
+      "label": "v2-F695",
+      "claim_text": "백악관은 Trump 대통령이 Defense Production Act 를 활용해 미국의 정제 능력을 늘리고 diesel 과 휘발유를 더 생산하는 데 투자하고 있다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "717241d6-8f20-5751-a378-871cd17b40b7",
+      "_graph_label": "F695",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#7"
+      ]
+    },
+    {
+      "fact_id": "a6af1abf-eaa0-573d-b815-016741f038fc",
+      "label": "v2-F696",
+      "claim_text": "백악관은 Trump 행정부의 EPA 가 연료 규제 면제(fuel waivers)를 발급했다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "95207870-74d5-534a-8967-1268accca92d",
+      "_graph_label": "F696",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#8"
+      ]
+    },
+    {
+      "fact_id": "6189aef6-3642-5a0b-acc9-aa4823cd8473",
+      "label": "v2-F697",
+      "claim_text": "백악관은 EPA 의 연료 규제 면제가 국내 휘발유 공급을 하루 수천 배럴 늘렸다고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "8eefd768-fc3f-5838-8407-484e965424da",
+      "_graph_label": "F697",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#9"
+      ]
+    },
+    {
+      "fact_id": "9791085a-6379-5dc5-a252-699afec8e598",
+      "label": "v2-F698",
+      "claim_text": "백악관은 Trump 대통령이 규제 면제를 발급해 휘발유 · diesel · 항공유의 국내 반입을 늘렸다고 밝힘.",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "2fb3c166-cdb0-5fc4-b32c-0f2211f7c579",
+      "_graph_label": "F698",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#10"
+      ]
+    },
+    {
+      "fact_id": "6dac3732-ff97-5e35-b2e2-600131271beb",
+      "label": "v2-F699",
+      "claim_text": "백악관은 Trump 대통령이 Korea 및 Taiwan 과 Alaska 천연가스 파이프라인 건설을 위한 54 billion 달러 규모 합의를 이뤘으며 이것이 Alaska 주민의 에너지 비용을 10 billion 달러 줄일 것이라고 말함.",
+      "fact_type": "OFFICIAL_CLAIM",
+      "actor": "백악관 (보도자료)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": "2026-10-25",
+      "event_id": null,
+      "storyline_id": "5890d4ff-878a-482e-8e4a-dcaf7b44ff39",
+      "storyline_version": 2,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/2",
+      "_graph_fact_id": "081c0928-3a20-57c4-8ce6-213fa3465e61",
+      "_graph_label": "F699",
+      "_graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
+      "_from": [
+        "WH-1025#11"
+      ]
+    }
+  ],
+  "fact_sources": [
+    {
+      "fact_id": "01d94766-2a07-5c04-a5da-b43f77bfdc64",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T3",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "01d94766-2a07-5c04-a5da-b43f77bfdc64",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125284,
+      "span_end": 125350,
+      "_from": "EIA-B#T3",
+      "_passage": "2026 Sep-14 to Sep-18 | 121.25 | 130.80 | 127.84 | 121.18 | 119.66"
+    },
+    {
+      "fact_id": "bc9489ec-eca1-5e5c-9e93-f5fe7e131f03",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T4",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "bc9489ec-eca1-5e5c-9e93-f5fe7e131f03",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125284,
+      "span_end": 125350,
+      "_from": "EIA-B#T4",
+      "_passage": "2026 Sep-14 to Sep-18 | 121.25 | 130.80 | 127.84 | 121.18 | 119.66"
+    },
+    {
+      "fact_id": "339c173c-9785-5b0a-acf5-81477a3a508d",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T5",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "339c173c-9785-5b0a-acf5-81477a3a508d",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125351,
+      "span_end": 125417,
+      "_from": "EIA-B#T5",
+      "_passage": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01"
+    },
+    {
+      "fact_id": "eefd6fe6-9a26-5994-a1e0-8327a98c05d2",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T6",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "eefd6fe6-9a26-5994-a1e0-8327a98c05d2",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125351,
+      "span_end": 125417,
+      "_from": "EIA-B#T6",
+      "_passage": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01"
+    },
+    {
+      "fact_id": "d384c2d1-0eed-56ff-97a1-96db0ef2d12c",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T7",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "d384c2d1-0eed-56ff-97a1-96db0ef2d12c",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125351,
+      "span_end": 125417,
+      "_from": "EIA-B#T7",
+      "_passage": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01"
+    },
+    {
+      "fact_id": "6c892167-f888-5eea-9392-8b8c2c850f52",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T8",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "6c892167-f888-5eea-9392-8b8c2c850f52",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125351,
+      "span_end": 125417,
+      "_from": "EIA-B#T8",
+      "_passage": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01"
+    },
+    {
+      "fact_id": "ed56e555-f022-5fdf-b51e-456ac4f8d7b5",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T9",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "ed56e555-f022-5fdf-b51e-456ac4f8d7b5",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125351,
+      "span_end": 125417,
+      "_from": "EIA-B#T9",
+      "_passage": "2026 Sep-21 to Sep-25 | 116.15 | 114.89 | 117.45 | 120.92 | 116.01"
+    },
+    {
+      "fact_id": "af5b33fe-5c62-5179-aa71-7bda2d052db0",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T10",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "af5b33fe-5c62-5179-aa71-7bda2d052db0",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125428,
+      "span_end": 125494,
+      "_from": "EIA-B#T10",
+      "_passage": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51"
+    },
+    {
+      "fact_id": "30184cad-407b-56ac-af47-ae63c251c7e8",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T11",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "30184cad-407b-56ac-af47-ae63c251c7e8",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125428,
+      "span_end": 125494,
+      "_from": "EIA-B#T11",
+      "_passage": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51"
+    },
+    {
+      "fact_id": "58fec8df-3037-594b-880b-b8e96d2ed8fc",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T12",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "58fec8df-3037-594b-880b-b8e96d2ed8fc",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125428,
+      "span_end": 125494,
+      "_from": "EIA-B#T12",
+      "_passage": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51"
+    },
+    {
+      "fact_id": "631edac1-5939-5bda-8f96-34cd24b1dc20",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T13",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "631edac1-5939-5bda-8f96-34cd24b1dc20",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125428,
+      "span_end": 125494,
+      "_from": "EIA-B#T13",
+      "_passage": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51"
+    },
+    {
+      "fact_id": "be173212-db56-5c14-b87c-7aa5c5721f27",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T14",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "be173212-db56-5c14-b87c-7aa5c5721f27",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125428,
+      "span_end": 125494,
+      "_from": "EIA-B#T14",
+      "_passage": "2026 Sep-28 to Oct- 2 | 119.97 | 113.96 | 115.91 | 114.82 | 135.51"
+    },
+    {
+      "fact_id": "b0d33f53-ba0e-50b2-864d-30d71d66af30",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T15",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "b0d33f53-ba0e-50b2-864d-30d71d66af30",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125495,
+      "span_end": 125561,
+      "_from": "EIA-B#T15",
+      "_passage": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03"
+    },
+    {
+      "fact_id": "0212eabd-a4aa-5088-9ad0-2a42b21a1e62",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T16",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "0212eabd-a4aa-5088-9ad0-2a42b21a1e62",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125495,
+      "span_end": 125561,
+      "_from": "EIA-B#T16",
+      "_passage": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03"
+    },
+    {
+      "fact_id": "5af2d877-69bc-57c0-add4-0b5b599f9464",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T17",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "5af2d877-69bc-57c0-add4-0b5b599f9464",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125495,
+      "span_end": 125561,
+      "_from": "EIA-B#T17",
+      "_passage": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03"
+    },
+    {
+      "fact_id": "885f0c19-6843-5831-bfd3-96a4aaedac01",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T18",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "885f0c19-6843-5831-bfd3-96a4aaedac01",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125495,
+      "span_end": 125561,
+      "_from": "EIA-B#T18",
+      "_passage": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03"
+    },
+    {
+      "fact_id": "0d5f6514-3488-5ee4-aaeb-3f52b6115044",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T19",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "0d5f6514-3488-5ee4-aaeb-3f52b6115044",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125495,
+      "span_end": 125561,
+      "_from": "EIA-B#T19",
+      "_passage": "2026 Oct- 5 to Oct- 9 | 125.51 | 125.44 | 126.00 | 130.18 | 130.03"
+    },
+    {
+      "fact_id": "7f9e0b55-5810-5004-8930-d2958957121e",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T20",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "7f9e0b55-5810-5004-8930-d2958957121e",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125562,
+      "span_end": 125628,
+      "_from": "EIA-B#T20",
+      "_passage": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33"
+    },
+    {
+      "fact_id": "e57bc08c-09e1-5e69-8262-41f3be970600",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T21",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "e57bc08c-09e1-5e69-8262-41f3be970600",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125562,
+      "span_end": 125628,
+      "_from": "EIA-B#T21",
+      "_passage": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33"
+    },
+    {
+      "fact_id": "5d6b9613-8497-5f97-8c1b-41880c55837b",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T22",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "5d6b9613-8497-5f97-8c1b-41880c55837b",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125562,
+      "span_end": 125628,
+      "_from": "EIA-B#T22",
+      "_passage": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33"
+    },
+    {
+      "fact_id": "76ffee01-ceca-522a-b735-02cd01d0aaf5",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T23",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "76ffee01-ceca-522a-b735-02cd01d0aaf5",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125562,
+      "span_end": 125628,
+      "_from": "EIA-B#T23",
+      "_passage": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33"
+    },
+    {
+      "fact_id": "0dddc5a8-430a-50d2-8390-6ca9b78b9bd0",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T24",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "0dddc5a8-430a-50d2-8390-6ca9b78b9bd0",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125562,
+      "span_end": 125628,
+      "_from": "EIA-B#T24",
+      "_passage": "2026 Oct-12 to Oct-16 | 129.95 | 125.78 | 126.55 | 126.35 | 119.33"
+    },
+    {
+      "fact_id": "c8fb3193-5fbf-51b7-b9b4-017f50526def",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T25",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "c8fb3193-5fbf-51b7-b9b4-017f50526def",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125629,
+      "span_end": 125695,
+      "_from": "EIA-B#T25",
+      "_passage": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30"
+    },
+    {
+      "fact_id": "9ccdd9ac-f3ec-5b1e-9498-a307cfe1ce9e",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T26",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "9ccdd9ac-f3ec-5b1e-9498-a307cfe1ce9e",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125629,
+      "span_end": 125695,
+      "_from": "EIA-B#T26",
+      "_passage": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30"
+    },
+    {
+      "fact_id": "81fc5396-50a4-5716-af10-7ef34cb1e06b",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T27",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "81fc5396-50a4-5716-af10-7ef34cb1e06b",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125629,
+      "span_end": 125695,
+      "_from": "EIA-B#T27",
+      "_passage": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30"
+    },
+    {
+      "fact_id": "29dc450a-6f3a-5155-9f26-7878758faa35",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T28",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "29dc450a-6f3a-5155-9f26-7878758faa35",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125629,
+      "span_end": 125695,
+      "_from": "EIA-B#T28",
+      "_passage": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30"
+    },
+    {
+      "fact_id": "edd4779b-0acc-5a0a-bd43-ac0155239ebc",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T29",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "edd4779b-0acc-5a0a-bd43-ac0155239ebc",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125629,
+      "span_end": 125695,
+      "_from": "EIA-B#T29",
+      "_passage": "2026 Oct-19 to Oct-23 | 118.82 | 115.22 | 117.37 | 125.39 | 128.30"
+    },
+    {
+      "fact_id": "e951a486-2779-521c-8f17-14aa5268022b",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T30",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "e951a486-2779-521c-8f17-14aa5268022b",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125696,
+      "span_end": 125741,
+      "_from": "EIA-B#T30",
+      "_passage": "2026 Oct-26 to Oct-30 | 128.12 | 123.10 | | |"
+    },
+    {
+      "fact_id": "fd643070-9ad0-5510-9197-7d6f6652bc0e",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 85,
+      "span_end": 171,
+      "_from": "EIA-B#T31",
+      "_passage": "Europe Brent Spot Price FOB (Dollars per Barrel)\nWeek Of | Mon | Tue | Wed | Thu | Fri"
+    },
+    {
+      "fact_id": "fd643070-9ad0-5510-9197-7d6f6652bc0e",
+      "source_id": "59623e90-92df-43a0-8c4b-1222c11eb283",
+      "section": null,
+      "span_start": 125696,
+      "span_end": 125741,
+      "_from": "EIA-B#T31",
+      "_passage": "2026 Oct-26 to Oct-30 | 128.12 | 123.10 | | |"
+    },
+    {
+      "fact_id": "00d1a6c4-9ee2-57ac-a2d6-522be4876abd",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 75,
+      "span_end": 282,
+      "_from": "EIA-D#T2",
+      "_passage": "Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon)\nYear-Month | Week 1 | Week 2 | Week 3 | Week 4 | Week 5\nEnd Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value"
+    },
+    {
+      "fact_id": "00d1a6c4-9ee2-57ac-a2d6-522be4876abd",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 31921,
+      "span_end": 31997,
+      "_from": "EIA-D#T2",
+      "_passage": "2026-Sep | 09/07 | 5.967 | 09/14 | 6.285 | 09/21 | 6.529 | 09/28 | 6.382 | |"
+    },
+    {
+      "fact_id": "76fd7bda-c7ce-5389-adb2-64408d87fad5",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 75,
+      "span_end": 282,
+      "_from": "EIA-D#T3",
+      "_passage": "Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon)\nYear-Month | Week 1 | Week 2 | Week 3 | Week 4 | Week 5\nEnd Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value"
+    },
+    {
+      "fact_id": "76fd7bda-c7ce-5389-adb2-64408d87fad5",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 31921,
+      "span_end": 31997,
+      "_from": "EIA-D#T3",
+      "_passage": "2026-Sep | 09/07 | 5.967 | 09/14 | 6.285 | 09/21 | 6.529 | 09/28 | 6.382 | |"
+    },
+    {
+      "fact_id": "4efa4ff9-c0d4-5e74-92a6-6d9614801e97",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 75,
+      "span_end": 282,
+      "_from": "EIA-D#T4",
+      "_passage": "Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon)\nYear-Month | Week 1 | Week 2 | Week 3 | Week 4 | Week 5\nEnd Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value"
+    },
+    {
+      "fact_id": "4efa4ff9-c0d4-5e74-92a6-6d9614801e97",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 31998,
+      "span_end": 32074,
+      "_from": "EIA-D#T4",
+      "_passage": "2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |"
+    },
+    {
+      "fact_id": "d22a70b2-3bd1-591a-9748-9d41d061870f",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 75,
+      "span_end": 282,
+      "_from": "EIA-D#T5",
+      "_passage": "Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon)\nYear-Month | Week 1 | Week 2 | Week 3 | Week 4 | Week 5\nEnd Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value"
+    },
+    {
+      "fact_id": "d22a70b2-3bd1-591a-9748-9d41d061870f",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 31998,
+      "span_end": 32074,
+      "_from": "EIA-D#T5",
+      "_passage": "2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |"
+    },
+    {
+      "fact_id": "08dedae7-436e-5f10-aaf4-4c75d29bdeb0",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 75,
+      "span_end": 282,
+      "_from": "EIA-D#T6",
+      "_passage": "Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon)\nYear-Month | Week 1 | Week 2 | Week 3 | Week 4 | Week 5\nEnd Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value"
+    },
+    {
+      "fact_id": "08dedae7-436e-5f10-aaf4-4c75d29bdeb0",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 31998,
+      "span_end": 32074,
+      "_from": "EIA-D#T6",
+      "_passage": "2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |"
+    },
+    {
+      "fact_id": "1911004a-38bf-5baf-965d-a0394f16b9c5",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 75,
+      "span_end": 282,
+      "_from": "EIA-D#T7",
+      "_passage": "Weekly U.S. No 2 Diesel Retail Prices (Dollars per Gallon)\nYear-Month | Week 1 | Week 2 | Week 3 | Week 4 | Week 5\nEnd Date | Value | End Date | Value | End Date | Value | End Date | Value | End Date | Value"
+    },
+    {
+      "fact_id": "1911004a-38bf-5baf-965d-a0394f16b9c5",
+      "source_id": "632f8a2b-c885-4a89-8ddc-e607e9435ee4",
+      "section": null,
+      "span_start": 31998,
+      "span_end": 32074,
+      "_from": "EIA-D#T7",
+      "_passage": "2026-Oct | 10/05 | 6.199 | 10/12 | 6.179 | 10/19 | 6.276 | 10/26 | 6.352 | |"
+    },
+    {
+      "fact_id": "2b59c4a1-9a0c-5a75-b0c5-dcf5ed74702b",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 7424,
+      "span_end": 7554,
+      "_from": "TSY-IR-1008#0",
+      "_passage": "Today, as part of Operation Economic Outcast, the U.S. Department of the Treasury is targeting the remnants of Iran’s shadow fleet"
+    },
+    {
+      "fact_id": "f6b85f7b-c665-58c7-89f4-15a6af367ba2",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 7697,
+      "span_end": 7795,
+      "_from": "TSY-IR-1008#1",
+      "_passage": "Today’s action effectively neutralizes the vast majority of Iran’s remaining shadow fleet network."
+    },
+    {
+      "fact_id": "ab5242ce-b051-584d-a442-e967b2fe04ae",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 7796,
+      "span_end": 8015,
+      "_from": "TSY-IR-1008#2",
+      "_passage": "“Treasury is starving the tyrannical regime in Tehran of the money it uses to wage war in the region, and we will continue exposing those who enable the regime’s oil sales,” said Secretary of the Treasury Scott Bessent."
+    },
+    {
+      "fact_id": "109f3e86-4934-5fb7-b6a9-5620c1edb7f2",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 8113,
+      "span_end": 8378,
+      "_from": "TSY-IR-1008#3",
+      "_passage": "With the success of the U.S. military’s blockade, dwindling Iranian oil shipments outside the blockade line, and intensifying economic pressure across sectors from Operation Economic Outcast, the regime is running out of options to stabilize Iran’s failing economy."
+    },
+    {
+      "fact_id": "b7475603-8776-50d1-acee-f70900b2cf55",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 10619,
+      "span_end": 10836,
+      "_from": "TSY-IR-1008#4",
+      "_passage": "Treasury today took action against 17 shadow fleet vessels responsible for transporting millions of barrels of Iranian crude oil and petroleum and petrochemical products to a variety of markets in South and East Asia."
+    },
+    {
+      "fact_id": "4f464af8-80bf-5907-9eb5-8eb9a5277479",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 9279,
+      "span_end": 9459,
+      "_from": "TSY-IR-1008#5",
+      "_passage": "The designations imposed today are being taken pursuant to Executive Order (E.O.) 13902, which targets the Iranian petroleum sector, among other key sectors of the Iranian economy."
+    },
+    {
+      "fact_id": "6fd9efc7-e073-57ee-b499-4e480edba43a",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 9519,
+      "span_end": 9700,
+      "_from": "TSY-IR-1008#6",
+      "_passage": "Announced by Secretary Bessent on August 24, 2026 and dubbed Economic D-Day, Operation Economic Outcast is severing the remaining economic lifelines that sustain the Iranian regime."
+    },
+    {
+      "fact_id": "6fd9efc7-e073-57ee-b499-4e480edba43a",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 9395,
+      "span_end": 9576,
+      "_from": "TSY-IR-1021#8",
+      "_passage": "Announced by Secretary Bessent on August 24, 2026 and dubbed Economic D-Day, Operation Economic Outcast is severing the remaining economic lifelines that sustain the Iranian regime."
+    },
+    {
+      "fact_id": "4e2b7397-f544-56a9-9755-e78ffdf172b5",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 9837,
+      "span_end": 10071,
+      "_from": "TSY-IR-1008#7",
+      "_passage": "Working with partners across the U.S. government, the European Union, United Kingdom, Gulf partners, and others, Treasury is targeting any source of the regime’s illicit revenue, as well as its sanctions evasion schemes to move funds."
+    },
+    {
+      "fact_id": "006e3f51-5481-5f5d-bc99-e75252628c8a",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 10196,
+      "span_end": 10348,
+      "_from": "TSY-IR-1008#8",
+      "_passage": "Treasury warned that any entity facilitating money laundering or sanctions evasion on behalf of Iran risks being cut off from the U.S. financial system."
+    },
+    {
+      "fact_id": "4d8d12af-38ba-5d15-94d4-94a7ffe192ff",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 9080,
+      "span_end": 9278,
+      "_from": "TSY-IR-1008#9",
+      "_passage": "Because this illicit maritime ecosystem is fluid, with vessels routinely entering and exiting the network, Treasury will continue to monitor, identify, and disrupt any attempts at sanctions evasion."
+    },
+    {
+      "fact_id": "9a9fc2fe-d357-5478-beb6-3e4ce3cc0514",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 13318,
+      "span_end": 13509,
+      "_from": "TSY-IR-1008#10",
+      "_passage": "The Vanuatu-flagged crude oil tanker TINA 5 (IMO 9237761), owned by Marshall Islands-based Nostalgia Company Limited, transported over 1.5 million barrels of Iranian crude oil in August 2026."
+    },
+    {
+      "fact_id": "c1c19d1b-49cc-50a7-bfa1-b1d378622315",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 15209,
+      "span_end": 15296,
+      "_from": "TSY-IR-1008#11",
+      "_passage": "As a part of today’s action, OFAC is also removing two vessels from the sanctions list."
+    },
+    {
+      "fact_id": "c1c19d1b-49cc-50a7-bfa1-b1d378622315",
+      "source_id": "02ce914a-9aea-4bf6-b58b-4956a1997cd8",
+      "section": null,
+      "span_start": 15429,
+      "span_end": 15646,
+      "_from": "TSY-IR-1008#11",
+      "_passage": "Following a demonstrated change in circumstances, namely the removal of these vessels from the shadow fleet and their sale to non-sanctioned/U.S.-aligned operators, OFAC has effectuated their removal from the SDN List"
+    },
+    {
+      "fact_id": "5c9ca9e4-1736-5b55-98af-c9c48730bada",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 7412,
+      "span_end": 7560,
+      "_from": "TSY-IR-1021#0",
+      "_passage": "Today, as part of Operation Economic Outcast, the U.S. Department of the Treasury sanctioned Panama- and Greece-based law firm Karnakis and Karnakis"
+    },
+    {
+      "fact_id": "71ea848e-87d8-5eb6-bcba-6babb4f9994e",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 7562,
+      "span_end": 7733,
+      "_from": "TSY-IR-1021#1",
+      "_passage": "which has supported illicit Iranian shipping activity for years, indirectly aiding Tehran’s ability to generate revenue to fund its military, weapons, and nuclear programs"
+    },
+    {
+      "fact_id": "3589aeee-1f30-56ce-aa63-4ab69fb8e09f",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 7735,
+      "span_end": 7919,
+      "_from": "TSY-IR-1021#2",
+      "_passage": "Throughout Operation Economic Outcast, Treasury has continued to coordinate with counterparts in Europe and around the world to sever the Iranian regime’s remaining economic lifelines."
+    },
+    {
+      "fact_id": "57b840b6-4810-50a5-94e1-19eef29288c3",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 8024,
+      "span_end": 8099,
+      "_from": "TSY-IR-1021#3",
+      "_passage": "if you are supporting the Iranian regime, we will find you and sanction you"
+    },
+    {
+      "fact_id": "57b840b6-4810-50a5-94e1-19eef29288c3",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 8149,
+      "span_end": 8226,
+      "_from": "TSY-IR-1021#3",
+      "_passage": "Iran’s facilitators must make a choice: Either you are with us or against us."
+    },
+    {
+      "fact_id": "57b840b6-4810-50a5-94e1-19eef29288c3",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 8227,
+      "span_end": 8311,
+      "_from": "TSY-IR-1021#3",
+      "_passage": "We know who you are, we know what you’re doing, and we will continue to take action."
+    },
+    {
+      "fact_id": "e13043da-b691-530d-b569-70a49dc2ceb1",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 8313,
+      "span_end": 8435,
+      "_from": "TSY-IR-1021#4",
+      "_passage": "Treasury today also sanctioned Singapore- and UAE-based shipping agents that directly aid Iranian shadow fleet operations."
+    },
+    {
+      "fact_id": "9346bc8a-6419-5f01-9857-4a625967a27f",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 8655,
+      "span_end": 8854,
+      "_from": "TSY-IR-1021#5",
+      "_passage": "The designations imposed today are being taken pursuant to Executive Order (E.O.) 13902, which targets the Iranian petroleum and petrochemical sectors, among other key sectors of the Iranian economy."
+    },
+    {
+      "fact_id": "7caa5354-fd00-5464-8436-33a10ba9bdec",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 8982,
+      "span_end": 9183,
+      "_from": "TSY-IR-1021#6",
+      "_passage": "such as its first issuance of an administrative subpoena pursuant to 31 U.S.C. § 5318(k) of the Bank Secrecy Act, to advance its investigation into a Greek bank’s potential ties to Iran and its proxies"
+    },
+    {
+      "fact_id": "920e9d15-cd4d-5216-9d1c-100644843b86",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 9185,
+      "span_end": 9335,
+      "_from": "TSY-IR-1021#7",
+      "_passage": "Additionally, FinCEN has issued multiple requests for information concerning banks’ relationships with OFAC-designated Iranian financial institutions."
+    },
+    {
+      "fact_id": "ebd37a8d-a112-535f-a0e9-f9ee0da31a87",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 9713,
+      "span_end": 9947,
+      "_from": "TSY-IR-1021#9",
+      "_passage": "Working with partners across the U.S. government, the European Union, United Kingdom, Gulf partners, and others, Treasury is targeting any source of the regime’s illicit revenue, as well as its sanctions evasion schemes to move funds."
+    },
+    {
+      "fact_id": "885fedcb-0b03-5c98-9552-8da8863734b2",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 10072,
+      "span_end": 10224,
+      "_from": "TSY-IR-1021#10",
+      "_passage": "Treasury warned that any entity facilitating money laundering or sanctions evasion on behalf of Iran risks being cut off from the U.S. financial system."
+    },
+    {
+      "fact_id": "828c3ff7-ab53-5372-9806-36b461f5472e",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 10225,
+      "span_end": 10407,
+      "_from": "TSY-IR-1021#11",
+      "_passage": "Operation Economic Outcast also expanded sanctions exposure for non-U.S. persons who continue doing business with the Iranian regime and will accelerate the pace of U.S. enforcement."
+    },
+    {
+      "fact_id": "08308702-c683-5332-b3ff-a93e6a6e1a78",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 10814,
+      "span_end": 11105,
+      "_from": "TSY-IR-1021#12",
+      "_passage": "Panama- and Greece-based law firm Karnakis and Karnakis has for years leveraged its legal practice to register shipping companies that own shadow fleet vessels responsible for shipping hundreds of millions of dollars’ worth of Iranian steel, petroleum, and petrochemicals, among other goods."
+    },
+    {
+      "fact_id": "459cfe24-1439-58af-8ddc-788ec008d52f",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 14132,
+      "span_end": 14283,
+      "_from": "TSY-IR-1021#14",
+      "_passage": "Roxette Maritime Shipping and Trading S.A. is being designated pursuant to E.O. 13902 for operating in the petrochemical sector of the Iranian economy."
+    },
+    {
+      "fact_id": "459cfe24-1439-58af-8ddc-788ec008d52f",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 14284,
+      "span_end": 14411,
+      "_from": "TSY-IR-1021#14",
+      "_passage": "ANEMOS, GLORIS, PRIDE, DESTINY, FLAMINGO 1, HARMONY, and PRINCE are being identified pursuant to E.O. 13902 as blocked property"
+    },
+    {
+      "fact_id": "33ed69b6-c3ad-50c7-85f9-7cfc661c3946",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 16001,
+      "span_end": 16132,
+      "_from": "TSY-IR-1021#15",
+      "_passage": "Amigoz Singapore PTE. Ltd. is being designated pursuant to E.O. 13902 for operating in the petroleum sector of the Iranian economy."
+    },
+    {
+      "fact_id": "33ed69b6-c3ad-50c7-85f9-7cfc661c3946",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 16133,
+      "span_end": 16231,
+      "_from": "TSY-IR-1021#15",
+      "_passage": "Whales Shipping Line LLC is being designated pursuant to E.O. 13902 for having materially assisted"
+    },
+    {
+      "fact_id": "33ed69b6-c3ad-50c7-85f9-7cfc661c3946",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 16376,
+      "span_end": 16499,
+      "_from": "TSY-IR-1021#15",
+      "_passage": "WHALES DIAMOND and WHALES PEARL are being identified as blocked property in which Whales Shipping Line LLC has an interest."
+    },
+    {
+      "fact_id": "92000236-9784-5bb9-829b-9636d5ae4c27",
+      "source_id": "6d48ad42-78ef-40e6-aa4b-ff0fb4563c58",
+      "section": null,
+      "span_start": 18467,
+      "span_end": 18647,
+      "_from": "TSY-IR-1021#16",
+      "_passage": "Furthermore, engaging in certain transactions involving the persons designated today may risk the imposition of secondary sanctions on participating foreign financial institutions."
+    },
+    {
+      "fact_id": "6e41d27e-9b34-523c-b86d-7620426cd3f1",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 3092,
+      "span_end": 3234,
+      "_from": "WH-0619#0",
+      "_passage": "President Donald J. Trump and Vice President JD Vance have secured a historic breakthrough by signing a Memorandum of Understanding with Iran."
+    },
+    {
+      "fact_id": "b9ef12f4-6af6-54c3-b198-3cca421baba7",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 3235,
+      "span_end": 3413,
+      "_from": "WH-0619#1",
+      "_passage": "Forged through decisive American strength, this agreement ensures Iran will never obtain a nuclear weapon, reopens the Strait of Hormuz to free navigation, and puts America First"
+    },
+    {
+      "fact_id": "c2fe4171-520c-5a79-86cf-172b1b1a4a3b",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25864,
+      "span_end": 25958,
+      "_from": "WH-0619#2",
+      "_passage": "President Trump signed tonight at Versailles the agreement between Iran and the United States."
+    },
+    {
+      "fact_id": "c2fe4171-520c-5a79-86cf-172b1b1a4a3b",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25959,
+      "span_end": 26055,
+      "_from": "WH-0619#2",
+      "_passage": "This agreement paves the way for lasting peace and allows the reopening of the Strait of Hormuz."
+    },
+    {
+      "fact_id": "c2fe4171-520c-5a79-86cf-172b1b1a4a3b",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 26056,
+      "span_end": 26173,
+      "_from": "WH-0619#2",
+      "_passage": "It is an important step in the right direction for our compatriots that will soon enable a decrease in energy prices."
+    },
+    {
+      "fact_id": "acf455b5-bf58-586a-bb46-9f8bf6ecef8e",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 27518,
+      "span_end": 27636,
+      "_from": "WH-0619#3",
+      "_passage": "The Memorandum has been signed by honourable Presidents of both the countries and also endorsed by me as the mediator."
+    },
+    {
+      "fact_id": "8255a4c3-e567-50af-bf2b-6916e4f737d2",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 28352,
+      "span_end": 28662,
+      "_from": "WH-0619#4",
+      "_passage": "The State of Qatar welcomes the electronic signing by the United States of America and the Islamic Republic of Iran of the Memorandum of Understanding (MoU) on addressing outstanding issues between them, including the cessation of military operations and ensuring freedom of navigation in the Strait of Hormuz."
+    },
+    {
+      "fact_id": "da5fa7a0-2136-5b02-8bc8-8d2e12d62d7f",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 26421,
+      "span_end": 26548,
+      "_from": "WH-0619#5",
+      "_passage": "On this occasion, both the United States and Iran have signed a memorandum, and the cessation of hostilities has been declared."
+    },
+    {
+      "fact_id": "da5fa7a0-2136-5b02-8bc8-8d2e12d62d7f",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 26897,
+      "span_end": 27121,
+      "_from": "WH-0619#5",
+      "_passage": "Furthermore, we continue to strongly hope that, through further negotiations between the United States and Iran in the future, a final agreement on Iran’s nuclear issue and other matters will be realized as soon as possible."
+    },
+    {
+      "fact_id": "70960d7a-d4ab-5610-972c-97aa7428ef79",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 29231,
+      "span_end": 29482,
+      "_from": "WH-0619#6",
+      "_passage": "The Secretary-General welcomes the announcement that the United States and Iran have agreed on a peace deal that provides for an immediate and permanent ceasefire, the reopening of the Strait of Hormuz, as well as a framework for further negotiations."
+    },
+    {
+      "fact_id": "aad04f07-16c9-5177-b4a5-4bddb27668ad",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25211,
+      "span_end": 25334,
+      "_from": "WH-0619#8",
+      "_passage": "This is a hugely important step forward in ending the war, ensuring regional stability and re-opening the Strait of Hormuz."
+    },
+    {
+      "fact_id": "aad04f07-16c9-5177-b4a5-4bddb27668ad",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25335,
+      "span_end": 25461,
+      "_from": "WH-0619#8",
+      "_passage": "I congratulate President Trump and the mediators from Pakistan, Qatar and elsewhere who have contributed to this breakthrough."
+    },
+    {
+      "fact_id": "f4dc0e1d-b54a-59c0-83a1-d81355718c4e",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 25745,
+      "span_end": 25827,
+      "_from": "WH-0619#9",
+      "_passage": "The Strait will reopen. Oil prices are falling. And that’s how diplomacy delivers."
+    },
+    {
+      "fact_id": "bd28f238-7f23-5a3c-9c82-9fac71bc622c",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 26210,
+      "span_end": 26348,
+      "_from": "WH-0619#10",
+      "_passage": "The agreement with Iran is an opportunity—for the stability of the region and for the global economy. The agreed-upon peace must now hold."
+    },
+    {
+      "fact_id": "ddb7a253-efc9-5b26-bd79-a23122b14a8e",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 18287,
+      "span_end": 18495,
+      "_from": "WH-0619#11",
+      "_passage": "The major downside cost has been Iran’s threats to the Strait of Hormuz and the US retaliatory blockade, which have choked off global energy flows, leading to higher energy prices and a global economic shock."
+    },
+    {
+      "fact_id": "b7a8d106-4fa0-5d85-a02e-8b62a1c0a2a3",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 18496,
+      "span_end": 18573,
+      "_from": "WH-0619#12",
+      "_passage": "The deal announced this weekend promises to alleviate this economic pressure."
+    },
+    {
+      "fact_id": "b7a8d106-4fa0-5d85-a02e-8b62a1c0a2a3",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 18574,
+      "span_end": 18689,
+      "_from": "WH-0619#12",
+      "_passage": "I suspect it will hold because both sides have a strong economic incentive to get energy flowing to global markets."
+    },
+    {
+      "fact_id": "5326352a-9afb-5df7-a1c6-5cff3bb42fa5",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 23054,
+      "span_end": 23275,
+      "_from": "WH-0619#13",
+      "_passage": "In just 107 days since the launch of Operation Epic Fury, American military forces have obliterated the Iranian navy, eliminated their air capabilities, and ensured that Iran can no longer arm their proxies’ capabilities."
+    },
+    {
+      "fact_id": "5326352a-9afb-5df7-a1c6-5cff3bb42fa5",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 23276,
+      "span_end": 23490,
+      "_from": "WH-0619#13",
+      "_passage": "We commend the effort to finalize a 60-day Memorandum of Understanding with the Iranian regime, an important step toward ensuring that Iran cannot obtain a nuclear weapon and no longer threaten the American people."
+    },
+    {
+      "fact_id": "d4d5efdf-dfce-55b7-9c77-a0b18a5c3cf6",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 4927,
+      "span_end": 5119,
+      "_from": "WH-0619#14",
+      "_passage": "Whether or not the United States can reach an acceptable, verifiable deal with Iran regarding its nuclear program and other issues is yet to be determined, but I see little downside to trying."
+    },
+    {
+      "fact_id": "fe90cb0f-eb16-5602-bdff-3a47240fb54e",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 6699,
+      "span_end": 6772,
+      "_from": "WH-0619#15",
+      "_passage": "Let’s give us 60 days to give peace a chance, and that’s all he’s saying."
+    },
+    {
+      "fact_id": "89d41adc-5660-5d44-87a0-3a7859177e06",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 7903,
+      "span_end": 8007,
+      "_from": "WH-0619#16",
+      "_passage": "The Strait is open again, and gas prices are plummeting — so we think it is a great day here in America."
+    },
+    {
+      "fact_id": "30e2e8a3-be31-5787-bbbe-3136fb478fac",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 13319,
+      "span_end": 13465,
+      "_from": "WH-0619#17",
+      "_passage": "While negotiations are still ongoing, I remain confident that @POTUS will fulfill his promise and ensure that Iran never obtains a nuclear weapon."
+    },
+    {
+      "fact_id": "48158f17-e8b2-5a9b-bb7b-4dc07aa1585a",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 13837,
+      "span_end": 14007,
+      "_from": "WH-0619#18",
+      "_passage": "conducting Operation Midnight Hammer, leveling Fordow, Natanz, and Isfahan nuclear sites, conducting Operation Epic Fury for 60 days, closing the entire Iranian coastline"
+    },
+    {
+      "fact_id": "f6997933-4898-50cb-b4b3-7176955d40f5",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 16736,
+      "span_end": 16872,
+      "_from": "WH-0619#19",
+      "_passage": "Reopening the Strait of Hormuz will help restore global commerce and bring greater certainty to energy markets as negotiations continue."
+    },
+    {
+      "fact_id": "5475b09d-1d12-51f5-b7fc-8f5d315d2254",
+      "source_id": "23a9a5e7-5fe7-4402-acef-ee696dbfeffd",
+      "section": null,
+      "span_start": 14972,
+      "span_end": 15169,
+      "_from": "WH-0619#20",
+      "_passage": "My hope is that lasting peace is restored in the region, that energy prices continue to fall for American families, and that Iran is never again a nuclear threat to the United States or our allies."
+    },
+    {
+      "fact_id": "41664ea1-8141-51e1-a7bf-3ce970dd8bdf",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 3129,
+      "span_end": 3252,
+      "_from": "WH-1025#0",
+      "_passage": "Gas and diesel prices will soon drop rapidly thanks to President Donald J. Trump’s bold actions to unleash American Energy."
+    },
+    {
+      "fact_id": "6fe7f819-cb0f-5e12-a318-7e599b02d2ed",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4541,
+      "span_end": 4694,
+      "_from": "WH-1025#1",
+      "_passage": "Earlier this month, President Trump signed an Executive Order to immediately cut diesel costs for America’s truckers and farmers who keep America moving."
+    },
+    {
+      "fact_id": "52f2e19c-6dd1-5ee4-b625-c0b1fa0e8fd2",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4695,
+      "span_end": 4857,
+      "_from": "WH-1025#2",
+      "_passage": "President Trump secured deals with numerous countries to release over 130 million barrels of diesel from their stockpiles to boost global supply and lower prices."
+    },
+    {
+      "fact_id": "9fe582ae-9162-5600-b1fc-c0b756d13bd5",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4695,
+      "span_end": 4857,
+      "_from": "WH-1025#3",
+      "_passage": "President Trump secured deals with numerous countries to release over 130 million barrels of diesel from their stockpiles to boost global supply and lower prices."
+    },
+    {
+      "fact_id": "3fc828a1-249e-596d-93c0-766885d2ae31",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4858,
+      "span_end": 5001,
+      "_from": "WH-1025#4",
+      "_passage": "Thanks to the strength of U.S. forces and President Trump’s leadership, more oil is leaving through the Hormuz Strait than before the conflict."
+    },
+    {
+      "fact_id": "a69916af-bf3d-5ece-89af-f615d7cabedd",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4412,
+      "span_end": 4540,
+      "_from": "WH-1025#5",
+      "_passage": "So far, the amount of Venezuelan oil coming into the U.S. has increased by over 400% and reached its highest in almost a decade."
+    },
+    {
+      "fact_id": "d1362e7e-a946-52a1-9eb5-bc67826e8ae4",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 4116,
+      "span_end": 4411,
+      "_from": "WH-1025#6",
+      "_passage": "After President Trump’s capture of narcoterrorist dictator Nicolas Maduro, the President announced the largest oil deal in world history with Venezuela to and lower gas prices for all Americans by securing 65 billion barrels of oil to double America’s oil reserves and increasing our oil supply."
+    },
+    {
+      "fact_id": "81f8647e-9637-5898-bf3f-cbaae601e34b",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 3887,
+      "span_end": 4115,
+      "_from": "WH-1025#7",
+      "_passage": "President Trump is utilizing the Defense Production Act, investing millions of dollars to increase American refining capacity and produce more diesel and more gasoline after Radical Democrats drained America’s refining capacity."
+    },
+    {
+      "fact_id": "a6af1abf-eaa0-573d-b815-016741f038fc",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 5282,
+      "span_end": 5414,
+      "_from": "WH-1025#8",
+      "_passage": "The Trump EPA issued fuel waivers that increased domestic gasoline supply by thousands of barrels per day to lower Americans’ costs."
+    },
+    {
+      "fact_id": "6189aef6-3642-5a0b-acc9-aa4823cd8473",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 5282,
+      "span_end": 5414,
+      "_from": "WH-1025#9",
+      "_passage": "The Trump EPA issued fuel waivers that increased domestic gasoline supply by thousands of barrels per day to lower Americans’ costs."
+    },
+    {
+      "fact_id": "9791085a-6379-5dc5-a252-699afec8e598",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 5415,
+      "span_end": 5524,
+      "_from": "WH-1025#10",
+      "_passage": "President Trump issued a waiver, increasing the shipments of gasoline, diesel, and jet fuel into the country."
+    },
+    {
+      "fact_id": "6dac3732-ff97-5e35-b2e2-600131271beb",
+      "source_id": "facda0f9-efe5-4bc3-a648-3c2ceaef75df",
+      "section": null,
+      "span_start": 5002,
+      "span_end": 5176,
+      "_from": "WH-1025#11",
+      "_passage": "The President secured a $54 billion deal with Korea and Taiwan to build the long-stalled natural gas pipeline in Alaska, which will cut Alaskans’ energy costs by $10 billion."
+    }
+  ]
+}

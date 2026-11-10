@@ -44,12 +44,14 @@ const readJson = <T,>(p: string): T => JSON.parse(readFileSync(p, "utf8"));
 
 // 사건 — 무엇을 읽고 어디에 쓰나. storyline = 스토리라인 문서 (P3-h — 범위가 스토리라인 전체)
 type Storyline = { code: string; title: string; docs: string[]; basis: string };
-type EventConf = EventContext & { out: string; cacheOut: string; kind: "pack" | "golden"; storyline: Storyline | null };
+// after_docs = 사건 뒤에 나온 문서 (P-4 다시 모으기 — 반대자의 회의 뒤 발언). 범위가 "그 사람의 정책 견해" (p3-prompt.ts scopeLine)
+type EventConf = EventContext & { out: string; cacheOut: string; kind: "pack" | "golden"; storyline: Storyline | null; after_docs?: string[] };
 export const EVENTS: Record<string, EventConf> = {
   "FOMC-20261028": {
     code: "FOMC-20261028", what: "미국 연준 FOMC 의 10월 통화정책 회의 (2026-10-27 ~ 28)", date: "2026-10-28", prev_meeting: "2026-09-16",
     out: R("packages/pipeline/data/events/FOMC-20261028/p3"), cacheOut: R("packages/pipeline/.cache/p3/FOMC-20261028"), kind: "pack",
-    storyline: { code: "SL-iran-war", title: "이란 전쟁", docs: ["TSY-IR-1008", "TSY-IR-1021", "CC-1005", "CC-1010"], basis: "P-2 소스 팩 pack.json 의 group \"스토리라인\" (why: SL-iran-war 9/16 뒤)" },
+    storyline: { code: "SL-iran-war", title: "이란 전쟁", docs: ["TSY-IR-1008", "TSY-IR-1021", "CC-1005", "CC-1010", "WH-0619", "WH-1025"], basis: "P-2 소스 팩 pack.json 의 group \"스토리라인\" (why: SL-iran-war 9/16 뒤) · P-4 가 더한 WH-0619 · WH-1025" },
+    after_docs: ["SP-HAM-1105"],
   },
   // 9월 — 정답(골든 사실 60)이 있는 데서 추출 품질을 잰다. 골든(fixtures/)에는 쓰지 않는다
   "FOMC-20260916": {
@@ -62,7 +64,7 @@ export const EVENTS: Record<string, EventConf> = {
 export type Doc = {
   label: string; source_id: string; title: string; publisher: string; published_at: string; url: string | null;
   text: string; text_sha256: string; in_git: boolean;   // in_git = 전문이 저장소에 있다 (연방 정부). 아니면 캐시에만 — 모델 출력 · 구절도 캐시에만
-  kind: "TABLE" | "MIXED" | "TEXT"; storyline: { code: string; title: string } | null;
+  kind: "TABLE" | "MIXED" | "TEXT"; storyline: { code: string; title: string } | null; after?: boolean;
 };
 
 const safe = (label: string) => label.replace(/[^\w.-]/g, "_");
@@ -90,7 +92,7 @@ export function loadDocs(code: string): { event_id: string; docs: Doc[] } {
         : existsSync(R("packages/pipeline/.cache/events", code, "text", `${safe(x.label)}.txt`)) ? readFileSync(R("packages/pipeline/.cache/events", code, "text", `${safe(x.label)}.txt`), "utf8") : undefined;
       if (text == null) throw new Error(`${x.label}: 원문이 이 기계에 없다 (${x.text_in}) — p2 를 먼저 돌린다`);
       if (sha256(text) !== x.text_sha256) throw new Error(`${x.label}: 원문의 해시가 기록과 다르다`);
-      docs.push({ label: x.label, source_id: s.source_id, title: s.title, publisher: s.publisher, published_at: s.published_at, url: s.url, text, text_sha256: x.text_sha256!, in_git: x.text_in !== "cache", kind: docKind(s.url), storyline: sl(x.label) });
+      docs.push({ label: x.label, source_id: s.source_id, title: s.title, publisher: s.publisher, published_at: s.published_at, url: s.url, text, text_sha256: x.text_sha256!, in_git: x.text_in !== "cache", kind: docKind(s.url), storyline: sl(x.label), ...(conf.after_docs?.includes(x.label) ? { after: true } : {}) });
     }
     return { event_id: st.events[0]!.event_id, docs };
   }
@@ -164,7 +166,7 @@ async function callAll(code: string, docs: Doc[], model: string, effort: "low" |
         stop = true;
         return;
       }
-      const user = userMessage(conf, { label: d.label, title: d.title, publisher: d.publisher, published_at: d.published_at, url: d.url, storyline: d.storyline }, input);
+      const user = userMessage(conf, { label: d.label, title: d.title, publisher: d.publisher, published_at: d.published_at, url: d.url, storyline: d.storyline, after: d.after }, input);
       const r = await callJson({ event: code, source_label: d.label, model, effort, system: SYSTEM_PROMPT, user, schema: OUTPUT_SCHEMA, prompt_version: PROMPT_VERSION, text_sha256: d.text_sha256, max_tokens: 64000 });
       if (!r.ok || r.text == null) {
         console.log(`  ${d.label.padEnd(13)} 실패 — ${r.error}`);

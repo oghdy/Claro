@@ -85,10 +85,12 @@ ${quantTable}
   구절은 기계가 원문에서 글자 단위로 찾는다. 못 찾으면 그 사실은 쓸 수 없다.`;
 
 export type EventContext = { code: string; what: string; date: string; prev_meeting: string };
-export type DocContext = { label: string; title: string; publisher: string; published_at: string; url: string | null; storyline?: { code: string; title: string } | null };
+export type DocContext = { label: string; title: string; publisher: string; published_at: string; url: string | null; storyline?: { code: string; title: string } | null; after?: boolean };
 
 /** 이 문서의 범위 — 스토리라인 문서는 스토리라인 전체 (P3-h) */
 export function scopeLine(ev: EventContext, doc: DocContext): string {
+  // P-4 — 회의 뒤 문서 (반대자의 회의 뒤 발언 등). 이 갈래가 없는 문서의 사용자 메시지는 글자 하나 바뀌지 않는다 (PROMPT_VERSION 그대로)
+  if (doc.after) return `이 문서는 사건 날짜(${ev.date}) 뒤에 나온 문서다 — 이 사건에 참여한 사람이 회의 뒤에 한 말. 범위: 이 사람의 경제 판단 · 통화정책 견해 · 이번 결정에 대한 설명. 사건 날짜 뒤에 말한 것이지만 뽑는다 (event_at 은 말한 날). 그 밖의 주제(이 사건과 무관한 것)는 뽑지 않는다`;
   if (doc.storyline) return `이 문서는 스토리라인 ${doc.storyline.code} (${doc.storyline.title}) 의 문서다. 범위: 이 스토리라인의 처음부터 사건 날짜(${ev.date})까지의 전개 전체 — 시작 · 주요 조치 · 전환점 · 지금 상태. 직전 회의 이후로 좁히지 않는다`;
   return `직전 회의(${ev.prev_meeting}) 이후 사건 날짜(${ev.date})까지가 중심 — 과거의 비슷한 결정 · 이 사건을 이해하는 데 필요한 앞선 일은 넣는다`;
 }

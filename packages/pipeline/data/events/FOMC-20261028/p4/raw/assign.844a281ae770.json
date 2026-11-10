@@ -1,0 +1,376 @@
+{
+  "_what": "P-4 사실 → Coverage 요소 (모델 출력 — p4.ts 가 쓴다 · 손으로 고치지 않는다). items = 보낸 사실 (key = 그때의 label · fact_id · 글의 sha256). 프롬프트 src/p4-prompt.ts p4-assign/1 · 스키마 coverage-schema.json fomc-hold/1",
+  "event": "FOMC-20261028",
+  "prompt_version": "p4-assign/1",
+  "model": "claude-opus-5-5",
+  "model_requested": "claude-opus-5-5",
+  "effort": "medium",
+  "schema_version": "fomc-hold/1",
+  "items": [
+    {
+      "key": "F630",
+      "fact_id": "db3bc1b3-52f9-50b1-992f-6336281cc0b3",
+      "claim_sha256": "68e95112004924f51d87caf6bb1363a7adefa35c274b1e37de5d31e8ceeecae1"
+    },
+    {
+      "key": "F631",
+      "fact_id": "254ef48b-d1ca-5e93-b802-a50481706a2a",
+      "claim_sha256": "5f107846dcc78b3114b68c424d1ba8ea77fa8dd92e62d3429b57a53b0bfaabac"
+    },
+    {
+      "key": "F632",
+      "fact_id": "cbb93f33-1e8a-527c-8628-07bdfe087b43",
+      "claim_sha256": "6df23335a9408aef4657b1e16e0c19869009fe03b3d2d24f0e96d2072e11c09e"
+    },
+    {
+      "key": "F633",
+      "fact_id": "d621809c-8289-5a5b-a13e-811e7236d246",
+      "claim_sha256": "d013209d574bf63f06ba3f40860043327d44fdec91eef575bca172b1066aee26"
+    },
+    {
+      "key": "F634",
+      "fact_id": "ae2674eb-aa2b-5190-822f-41e59ce26a04",
+      "claim_sha256": "c7e741563daf49f257e8c0bfef074631727407881cc977e2399d2e152fb6debf"
+    },
+    {
+      "key": "F635",
+      "fact_id": "19a805e6-407a-5c5d-b9e4-c0187e5b0ac7",
+      "claim_sha256": "87b2942481b2fe9f22df10dc1000a06e3a6fc7e37952b81773653fe43babcaa0"
+    },
+    {
+      "key": "F636",
+      "fact_id": "8274c575-31f8-5e63-b2e3-247e63b6af1f",
+      "claim_sha256": "ab8bb1e60c169343148f01430be7ffc014850aef720bb3bd9e9e38f5aa2536d6"
+    },
+    {
+      "key": "F637",
+      "fact_id": "702f2b99-5ae6-514d-88cb-097452b47c97",
+      "claim_sha256": "db4a57d8f37365bb4c455d6fc2d55de862f15a788a1eb96acd7eecfe7972a57a"
+    },
+    {
+      "key": "F638",
+      "fact_id": "242cd55d-d8a6-51c6-94b7-ed389970e1ba",
+      "claim_sha256": "1f0eeebb1975e48175d68c61fa491aff5b085f48ccc7bd50956c18d471ebe7f7"
+    },
+    {
+      "key": "F639",
+      "fact_id": "45f4706f-4e5c-5e58-826b-7b8480f93932",
+      "claim_sha256": "7a4f0f6a61dca250d92cf6984b31128beeedeac6b991321948f6d7f95349c4c1"
+    },
+    {
+      "key": "F640",
+      "fact_id": "2a53cc41-0ddb-59fa-94a1-61a2e20ac4c8",
+      "claim_sha256": "eecfdc9a4d0785220cda6c3f791782c6f6df5aefc820ae6640bb3896d3103109"
+    },
+    {
+      "key": "F641",
+      "fact_id": "43af7fc3-ab7e-5088-8f5a-c9b8d3a19d5a",
+      "claim_sha256": "ec506a23b71a48448788f3b6972d401c3a0eb5d89a11b2a1a009cc6f42c191ca"
+    },
+    {
+      "key": "F642",
+      "fact_id": "53cdabe4-1b47-59dd-a03a-b396a828fcf7",
+      "claim_sha256": "65818cc996b49ee8b7882dfc92d66a46fa4cbf5a1da93f28c6f8e968feee1aae"
+    },
+    {
+      "key": "F643",
+      "fact_id": "45434fb8-1541-52a8-adb6-0d8e1aa77170",
+      "claim_sha256": "09fa89e8a5e6a91d3be153933221fa206375bf085ba9f636acfc10a54e23b597"
+    },
+    {
+      "key": "F644",
+      "fact_id": "4f056c91-580a-5555-a4b3-f2ea21aca995",
+      "claim_sha256": "cc809dbb8b8dc36cb9161da9c6393b22823960e6449a97b87f56c5d6879a26ff"
+    },
+    {
+      "key": "F645",
+      "fact_id": "f20b07ac-cc1d-5824-88ec-e5727139a6f8",
+      "claim_sha256": "4e7ecd6468aae2d16758e4f7e098a9efa60976b8244c4855931f4295f80ee599"
+    },
+    {
+      "key": "F646",
+      "fact_id": "2b2a24cd-699e-5c00-8bb5-a337246dd032",
+      "claim_sha256": "e6438cbe5aaf510e9d595ec835e017834557ba5f70297d514255b97660a2049c"
+    },
+    {
+      "key": "F647",
+      "fact_id": "25f284b6-5a9e-52d9-92c6-132fab68b980",
+      "claim_sha256": "fdc474f708e0112d99543fb3afed75c2f7cd4fcff1325f25bd3dca5dd3f7a99e"
+    },
+    {
+      "key": "F648",
+      "fact_id": "8737bdd4-91ac-5636-ae12-48e82430a63d",
+      "claim_sha256": "0d803cb230c696f00f4656f978425ed79ef3eb8c814ad59b675a7d9a82c958ae"
+    },
+    {
+      "key": "F649",
+      "fact_id": "21a8ca10-9bd8-5fe1-9ffe-a175229a1350",
+      "claim_sha256": "54b3d3092bccde68ad42864ff716f5a8a16b1f389cade64060e46b9cd72550ef"
+    },
+    {
+      "key": "F650",
+      "fact_id": "5351ea9b-9e4d-521b-a8be-11fd94eb44b5",
+      "claim_sha256": "ee207e84b97cefe2a92dc1a91cb0845ec31ee77b2347819edcb396f1ffed7e3a"
+    },
+    {
+      "key": "F651",
+      "fact_id": "52bf215f-97e1-57a0-8fe3-888c92ff26bc",
+      "claim_sha256": "b59abeb0aacb07e2f7138d02d3e80ffffb599242e9b230fd274b1d619ceabcba"
+    },
+    {
+      "key": "F652",
+      "fact_id": "4b0d4f3b-dbd1-567d-973f-20d2642061c4",
+      "claim_sha256": "4a77199b86515b58e98e084fc7b72b39af18d87f04ffe2d2df4ffe2d688f98b3"
+    },
+    {
+      "key": "F653",
+      "fact_id": "c6f38aba-c959-52a3-985c-2ed6b7f10297",
+      "claim_sha256": "db68be4c78bf4ef999e32976964c78bdb2ab87d1d82129b0d0df83b5150e443f"
+    },
+    {
+      "key": "F654",
+      "fact_id": "d3529ac3-084a-542a-8cc8-fff9b43e1ad0",
+      "claim_sha256": "e82e8fe178605ab4976bd5a540667502942414e56c722998156ee01c9df07dac"
+    },
+    {
+      "key": "F655",
+      "fact_id": "506f6709-e3ba-5f09-bc37-8dfe986fc916",
+      "claim_sha256": "4af6f063a5e15cfe36887bc84c20fb2cc592c48547d5be0c916f484f1f74a202"
+    },
+    {
+      "key": "F656",
+      "fact_id": "9a7d388d-0ac6-527d-8831-a16d4d8e1384",
+      "claim_sha256": "833312426eee35c641c8927a4073b49835580561f4fefba6e46d48abc26e6c90"
+    },
+    {
+      "key": "F657",
+      "fact_id": "147e59a9-afa5-5b1c-b436-0e03e3dfdaf9",
+      "claim_sha256": "8d1fad3088517e5bbc5204c4e04016ce50c89adcca62803341894c80c46d43c7"
+    },
+    {
+      "key": "F658",
+      "fact_id": "36be003b-b608-5357-bf13-0100d7c9b033",
+      "claim_sha256": "9262cb2a6702ef603872ae22cda4b249c0f7e3960e87f5f48644e667386f17d8"
+    },
+    {
+      "key": "F659",
+      "fact_id": "e04b3d01-241c-5ae8-a980-575b7237662b",
+      "claim_sha256": "f1cc2604f61072471ef9c220d2d09ef8335d034c5c505421174ca295359645e6"
+    },
+    {
+      "key": "F660",
+      "fact_id": "47c50f5c-8b0d-5d21-b10d-f732f90be9c7",
+      "claim_sha256": "5e095966183ca22338ed35ad6ff9b725deab2f855f637d5c1c42375a6e9e0fd5"
+    },
+    {
+      "key": "F661",
+      "fact_id": "44435126-1b7e-5cd1-8e81-895fe414a9fd",
+      "claim_sha256": "67c382240883ae57c0a7fae80da02524ebc817a923c977698a16857a06eb4cc4"
+    },
+    {
+      "key": "F662",
+      "fact_id": "b8c66d01-26ce-5981-a9bb-93d80f679827",
+      "claim_sha256": "8592910ee826d457c7589edfadaddb1c045b5b25525102514044ca3bbb156d13"
+    },
+    {
+      "key": "F663",
+      "fact_id": "1c4ec025-48f9-51da-ba52-6ace68d16f92",
+      "claim_sha256": "b3ed8c27795b94d4eaa745278294a4f449e9e1dfdd8e7856958c45f092ed558e"
+    },
+    {
+      "key": "F664",
+      "fact_id": "3431c59c-8a0f-5ac1-9e88-628e388e723a",
+      "claim_sha256": "6fce58970a3d96c4ebad7699931eff534537816f490da16233f507de01e891d1"
+    },
+    {
+      "key": "F665",
+      "fact_id": "10c6de5c-4c2d-5ed4-8865-6b7d1a94b5f0",
+      "claim_sha256": "193dca36de1576cc941b81e1286714a11725cd54ab67987e7b7012a1c5598872"
+    },
+    {
+      "key": "F666",
+      "fact_id": "14435c32-c264-5ab0-b780-0ad7b338ecc9",
+      "claim_sha256": "eb5c99540769cdc430952b069abd9c2addc8643f098fe222c8829356e3b7fe24"
+    },
+    {
+      "key": "F667",
+      "fact_id": "6dd276be-7047-5177-84eb-3186eb60bba1",
+      "claim_sha256": "2e9a975032b7f977f62f2fe6b8aa1deffe69e4be6b71371092156d3700d76b87"
+    },
+    {
+      "key": "F668",
+      "fact_id": "24d33f88-f3bd-5cfc-b9c9-35f22527512e",
+      "claim_sha256": "bdab6a10dd3a79595f267cec570dd85432ee8aa927daea98061ba8ddb8812d44"
+    },
+    {
+      "key": "F669",
+      "fact_id": "b1d56ae3-77ed-50c5-8e27-9a558d169d4f",
+      "claim_sha256": "3fe0ea05f7196c1de4b66caa4b2ce784ec21d1eb185701cc50cfb26accb8c775"
+    },
+    {
+      "key": "F670",
+      "fact_id": "cc4b502d-d032-5263-8705-6ba4e3648115",
+      "claim_sha256": "38170e9303a89749d3f1fd6a0f47d6ff0e5b4eed36e1bc1ecabfbe2d30d15ade"
+    },
+    {
+      "key": "F671",
+      "fact_id": "4cb7dbf3-8b7c-50e3-9181-66996c5198dc",
+      "claim_sha256": "3e4720fecac212bbc4a0be8204178e1e61e645e6df4b03a9bbaa223b8af74392"
+    },
+    {
+      "key": "F672",
+      "fact_id": "28082195-bc8a-5660-9401-6b98cb59094d",
+      "claim_sha256": "979538c19424c095e90943195fdc697c0cff1aa76ae6085f42a560c14073108b"
+    },
+    {
+      "key": "F673",
+      "fact_id": "5f6b8cd6-7d3e-521e-93cb-d384c9ee5be6",
+      "claim_sha256": "79d08528d1fc19ac6ceafc6c59edff785edeefabd36805a2e966f0b7807c0bb6"
+    },
+    {
+      "key": "F674",
+      "fact_id": "481698d9-5568-5534-8a4c-70d7beba6174",
+      "claim_sha256": "ce0ed6af0b5a10ed31e88075f963fcffc76ecccd5b23284424d0afea045eade1"
+    },
+    {
+      "key": "F675",
+      "fact_id": "f56ae637-11e3-5756-b411-16ef98286b6b",
+      "claim_sha256": "c95f63df446b43c38e47e16103471c4a3f9a85c98d1537ccb46688e8e2449c44"
+    },
+    {
+      "key": "F676",
+      "fact_id": "6d217789-8936-51b2-a075-ba027e84f6d2",
+      "claim_sha256": "14bb0ec44c3c9807c97a96184cd946354bac39ac1292098cf7d31ea003313202"
+    },
+    {
+      "key": "F677",
+      "fact_id": "edab8277-e399-5484-9960-298f6f7d1f18",
+      "claim_sha256": "318a8e2b2dfdbea3b7fbf2923c726dfe2ea5a124c539e0d152992bbc058a6317"
+    },
+    {
+      "key": "F678",
+      "fact_id": "42fa6232-29c8-5d63-8a8d-df5478880d7b",
+      "claim_sha256": "32b9013438b985b5120ebf54b9a718c5d3e3396126ea914efea7c14367c0ca4f"
+    },
+    {
+      "key": "F679",
+      "fact_id": "801d2230-b93f-5b4c-a621-5c07b7b6ee1d",
+      "claim_sha256": "c0f74ae4afa5828c6865a4edd91ddc63cb9a433cebc9b3dd0c51963284133856"
+    },
+    {
+      "key": "F680",
+      "fact_id": "c1978d92-f3d4-5476-be6f-7112686d3479",
+      "claim_sha256": "c9d029d3a2abdfa75cc5850677002909b00e64ceeec6a723769664aa86be5bb5"
+    },
+    {
+      "key": "F681",
+      "fact_id": "91b832e2-7d5c-5616-ba36-aa489668ab17",
+      "claim_sha256": "c4f44fd1c425eaf69d6aaa81e1e5efa9bf130960e881e18417c9ca8f51c1f5c3"
+    },
+    {
+      "key": "F682",
+      "fact_id": "f1011019-b3b5-5617-a738-25c7401d2ba2",
+      "claim_sha256": "10e1a1454f42df79243750ccd2765929be42c3d49fef4e082626c84a6cad09a0"
+    },
+    {
+      "key": "F683",
+      "fact_id": "10ad9177-6eca-595e-be05-95115a6091b3",
+      "claim_sha256": "b9a3850a35cac34eac0d79037b6630e99fc7a67b3aa0dd0428e574040df52932"
+    },
+    {
+      "key": "F684",
+      "fact_id": "f2a79ca9-1c9b-5449-9e45-c7abf8b6a002",
+      "claim_sha256": "0eae4ca59a4258ff0dcd7383c7f07b2216047e58c4ea960c0e685d7eddce6370"
+    },
+    {
+      "key": "F685",
+      "fact_id": "9bc55137-66ab-5251-801e-8e4cbe6e286f",
+      "claim_sha256": "9ca87c9a75c5024d2d94ac7df494e6cc30a237f0196735cacd2bdfff1f4bc21c"
+    },
+    {
+      "key": "F686",
+      "fact_id": "01706f10-3552-5435-a03e-94aef4f9c236",
+      "claim_sha256": "3ad7093046548f75d0d3a0a3497834036f552e47f2f7564bbfe93368edd0e90a"
+    },
+    {
+      "key": "F687",
+      "fact_id": "44098f87-19d0-502f-b8a2-df8abe03131b",
+      "claim_sha256": "5bb083bc949b5d1ed88a26137640abcc03ad076333a15c5720f5ad517acdafeb"
+    },
+    {
+      "key": "F688",
+      "fact_id": "85bd3940-6050-5665-b70b-58af3c063d4b",
+      "claim_sha256": "4df157864d444a6579372818908cf81e20c6b18fe42f7ffd8db9fce26ca129e3"
+    },
+    {
+      "key": "F689",
+      "fact_id": "106a6c81-1270-5074-82f4-38908eb46f96",
+      "claim_sha256": "920f83bc8aa59907d6deb12f4b0f37410edf92ae6db62540081c5bd0563cdfdc"
+    },
+    {
+      "key": "F690",
+      "fact_id": "f3089786-1cc5-5d44-a487-ec162e6361ff",
+      "claim_sha256": "6f2e95c7c291d22157a98a029d68a197af8cb8f39ceab896c39df88733801893"
+    },
+    {
+      "key": "F691",
+      "fact_id": "cc7764fa-e8c6-557f-b4ad-e9ef9f005f8f",
+      "claim_sha256": "fe400836d696493361bfabcd4d1a38b7176f95a110f63c46ff352cbed8f257e8"
+    },
+    {
+      "key": "F692",
+      "fact_id": "04cb3ff4-ed51-5355-9292-88436930d8d4",
+      "claim_sha256": "647621bdbfdcdf8208b4b0826d53855e1e9f2cb145224f92f1914df98b11e485"
+    },
+    {
+      "key": "F693",
+      "fact_id": "6db7e807-030e-54ea-9c72-931c562d4ed1",
+      "claim_sha256": "1fccb3255b9b1fa3ab1f600bb16b0f4a363797de85e128759aa043ef3ff2c51b"
+    },
+    {
+      "key": "F694",
+      "fact_id": "73f3ccf5-f2ed-5106-a51d-a9cfa5799a5d",
+      "claim_sha256": "89060530306286b28aa56890a37874364687ba11433506505cd29207b103dbf1"
+    },
+    {
+      "key": "F695",
+      "fact_id": "717241d6-8f20-5751-a378-871cd17b40b7",
+      "claim_sha256": "c797d6e78fe406b23dcaf643de8e823c2fa03d48ff948f906cdb6454da17e23f"
+    },
+    {
+      "key": "F696",
+      "fact_id": "95207870-74d5-534a-8967-1268accca92d",
+      "claim_sha256": "5972ccf9503a3a78671fc0de39de5f414442cb5f91b6459b88131ba968d4c91c"
+    },
+    {
+      "key": "F697",
+      "fact_id": "8eefd768-fc3f-5838-8407-484e965424da",
+      "claim_sha256": "33916ccc5d4bd2d0005048c7d2d07f39bd96d44bfa11d81351b9c7348443a6d9"
+    },
+    {
+      "key": "F698",
+      "fact_id": "2fb3c166-cdb0-5fc4-b32c-0f2211f7c579",
+      "claim_sha256": "e8ad440cf4a7495474369be567819150dba28319960d3cc9004bf1ece647bd10"
+    },
+    {
+      "key": "F699",
+      "fact_id": "081c0928-3a20-57c4-8ce6-213fa3465e61",
+      "claim_sha256": "11e468d9a2fe010ad473ad02b02a5d607502bc3bf497c59b65e229b9fb10f95d"
+    }
+  ],
+  "input_sha256": "844a281ae770956aa1d6c234e82ed41dc42500d03ba55d17819f0231f9a4534b",
+  "request_sha256": "ad53e1ce433ee52a6f30dc75d42f481efaa22dcafbde87e54a1275da0c3da5ab",
+  "response_id": "msg_011Cgu3NcHu9vMiz2bdQTJk5",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 11134,
+    "output_tokens": 6252,
+    "cache_creation_input_tokens": 1505,
+    "cache_read_input_tokens": 0
+  },
+  "duration_ms": 52197,
+  "cost_usd": 0.177101,
+  "called_at": "2026-11-10T09:52:43.452Z",
+  "output_sha256": "ade63bb1a6bfc34cba472b76bd7d19b358d1d0280f14f5e5337c1aa02cb57834",
+  "output": "{\"assignments\":[{\"key\":\"F630\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '경제활동의 moderate·modest·slight 성장' 지역 수가 지역 경기 보고에 닿음\"},{\"key\":\"F631\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '제조업' 성장 보고가 지역 경기 보고에 닿음\"},{\"key\":\"F632\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '다른 부문… 성장이 거의 없음'이 지역 경기 보고에 닿음\"},{\"key\":\"F633\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '소비지출에 변화가 거의 없거나 없었다'가 지역 경기 보고에 닿음\"},{\"key\":\"F634\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '자동차… 판매가 보합이거나 소폭 낮았다'가 지역 경기 보고에 닿음\"},{\"key\":\"F635\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '소비지출이 고소득 가구에 의해 주도'가 지역 경기 보고에 닿음\"},{\"key\":\"F636\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '관광이 계속 성장'·'캐나다 관광객 매출 감소'가 지역 경기 보고에 닿음\"},{\"key\":\"F637\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '향후 몇 달에 대해 긍정적 전망'·'slight 성장' 기대가 지역 경기 보고에 닿음\"},{\"key\":\"F638\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '전체 고용 수준의 순변화' 지역별 보고가 지역 고용 보고에 닿음\"},{\"key\":\"F639\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '노동공급'·'숙련 기능 인력의 부족'이 지역 고용 보고에 닿음\"},{\"key\":\"F640\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 'AI 투자'로 '인력을 줄이거나 채용을 미루'는 보고가 지역 고용 보고에 닿음\"},{\"key\":\"F641\",\"elements\":[\"S08.d\"],\"why\":\"베이지북의 '전체 임금의 moderate·modest·slight 성장'이 지역 고용 보고에 닿음\"},{\"key\":\"F642\",\"elements\":[\"S08.d\",\"S06.c\"],\"why\":\"베이지북의 '인플레이션이… 추가적인 임금 압력'·'복리후생 비용 상승'이 지역 고용과 투입 비용 보고에 닿음\"},{\"key\":\"F643\",\"elements\":[\"S06.c\"],\"why\":\"베이지북의 '전체 물가 상승을 robust·moderate·modest'·'투입가격 압력'이 지역 물가 보고에 닿음\"},{\"key\":\"F644\",\"elements\":[\"S06.c\"],\"why\":\"베이지북의 '물가 상승 속도가 빨라졌다'가 지역 물가 보고에 닿음\"},{\"key\":\"F645\",\"elements\":[\"S06.c\",\"S10.c\"],\"why\":\"베이지북의 '유가 상승'·'디젤 가격과 유류할증료' 비용 전가가 지역 물가·투입 비용과 연준 문서의 에너지 언급에 닿음\"},{\"key\":\"F646\",\"elements\":[\"S06.c\"],\"why\":\"베이지북의 '원자재, 관세, 보험으로부터의 지속적인 가격 압력'이 지역 물가 보고에 닿음\"},{\"key\":\"F647\",\"elements\":[\"S06.c\"],\"why\":\"베이지북의 '가격 인상 저항으로 이윤 마진이 좁아졌다'가 지역 물가 보고에 닿음\"},{\"key\":\"F648\",\"elements\":[\"S06.c\",\"S10.c\"],\"why\":\"베이지북의 '에너지와 관세를 둘러싼 지속적 불확실성'·'가격이 더 오를 것'이 지역 물가와 연준 문서의 에너지 언급에 닿음\"},{\"key\":\"F649\",\"elements\":[\"S06.c\",\"S10.c\"],\"why\":\"베이지북 Boston 의 '난방유 가격이… 급등'이 지역 물가와 연준 문서의 에너지 언급에 닿음\"},{\"key\":\"F650\",\"elements\":[\"S06.c\"],\"why\":\"베이지북 New York 의 '판매가격 상승'·'투입가격은 계속 강하게'가 지역 물가 보고에 닿음\"},{\"key\":\"F651\",\"elements\":[\"S06.c\"],\"why\":\"베이지북 Cleveland 의 '비노동 비용 압력'·'판매가격이 robust'가 지역 물가 보고에 닿음\"},{\"key\":\"F652\",\"elements\":[\"S06.c\"],\"why\":\"베이지북 St. Louis 의 '물가가 robust 한 속도로 올랐고'가 지역 물가 보고에 닿음\"},{\"key\":\"F653\",\"elements\":[\"S06.c\",\"S10.c\"],\"why\":\"베이지북 Kansas City 의 '디젤 가격과 운송비 상승'이 지역 투입 비용과 연준 문서의 에너지 언급에 닿음\"},{\"key\":\"F654\",\"elements\":[\"S08.d\",\"S10.c\"],\"why\":\"베이지북 Dallas 의 '전망이 대체로 긍정적'·'지정학… 불확실성이 역풍'이 지역 경기와 연준 문서의 지정학 언급에 닿음\"},{\"key\":\"F655\",\"elements\":[],\"why\":\"슬롯 밖 — 베이지북 작성 기준일·작성 은행\"},{\"key\":\"F656\",\"elements\":[],\"why\":\"슬롯 밖 — 베이지북 성격에 대한 주석\"},{\"key\":\"F657\",\"elements\":[],\"why\":\"슬롯 밖 — 연설 견해의 개인성 면책 문구\"},{\"key\":\"F658\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 회의 뒤 연설 '물가상승률이 잘못된 방향으로 움직였다'가 회의 뒤 물가 판단에 닿음\"},{\"key\":\"F659\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 회의 뒤 연설 '9월 헤드라인 PCE 3.6%, 근원 3.1%' 언급이 회의 뒤 물가 판단에 닿음\"},{\"key\":\"F660\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 '2% 목표를 크게 웃돌고' 평가가 회의 뒤 물가 판단에 닿음\"},{\"key\":\"F661\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 '거의 6년 동안 목표를 웃돌았다'가 회의 뒤 물가 판단에 닿음\"},{\"key\":\"F662\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 '물가 압력이 비교적 광범위'·'공급과 수요 양쪽' 평가가 회의 뒤 물가 판단에 닿음\"},{\"key\":\"F663\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 '통화정책이 긴축적 기조로 옮겨가야' 가 회의 뒤 정책 판단에 닿음\"},{\"key\":\"F664\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 '더 잦고 더 작은 조정' 선호가 회의 뒤 정책 판단에 닿음\"},{\"key\":\"F665\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 '정책이… 뒤처지고 인플레이션 심리가 자리 잡을 위험' 감소 언급이 회의 뒤 정책 판단에 닿음\"},{\"key\":\"F666\",\"elements\":[],\"why\":\"슬롯 밖 — 연준 독립성과 의회 책임\"},{\"key\":\"F667\",\"elements\":[\"S03.c\"],\"why\":\"반대자 Hammack 의 '달러 가치가 물가와 경제 전반에 영향'·'지켜보는 것'이 회의 뒤 물가 판단에 닿음\"},{\"key\":\"F668\",\"elements\":[],\"why\":\"슬롯 밖 — 6월 미국·이란 양해각서 서명(9/16 이전)\"},{\"key\":\"F669\",\"elements\":[],\"why\":\"슬롯 밖 — 6월 합의 내용(9/16 이전)\"},{\"key\":\"F670\",\"elements\":[],\"why\":\"슬롯 밖 — 마크롱의 6월 합의 논평\"},{\"key\":\"F671\",\"elements\":[],\"why\":\"슬롯 밖 — 파키스탄 총리의 중재 언급\"},{\"key\":\"F672\",\"elements\":[],\"why\":\"슬롯 밖 — 카타르 외무부 환영 성명\"},{\"key\":\"F673\",\"elements\":[],\"why\":\"슬롯 밖 — 일본 총리 논평\"},{\"key\":\"F674\",\"elements\":[],\"why\":\"슬롯 밖 — 유엔 사무총장 환영\"},{\"key\":\"F675\",\"elements\":[],\"why\":\"슬롯 밖 — 영국 총리 논평\"},{\"key\":\"F676\",\"elements\":[],\"why\":\"슬롯 밖 — EU 집행위원장 논평\"},{\"key\":\"F677\",\"elements\":[],\"why\":\"슬롯 밖 — 독일 총리 논평\"},{\"key\":\"F678\",\"elements\":[],\"why\":\"슬롯 밖 — 싱크탱크의 해협 봉쇄 영향 논평\"},{\"key\":\"F679\",\"elements\":[],\"why\":\"슬롯 밖 — 싱크탱크의 합의 지속 전망\"},{\"key\":\"F680\",\"elements\":[],\"why\":\"슬롯 밖 — 정책연구소의 합의 평가\"},{\"key\":\"F681\",\"elements\":[],\"why\":\"슬롯 밖 — 상원의원 논평\"},{\"key\":\"F682\",\"elements\":[],\"why\":\"슬롯 밖 — 상원의원 논평\"},{\"key\":\"F683\",\"elements\":[],\"why\":\"슬롯 밖 — 상원의원의 6월 휘발유 가격 논평\"},{\"key\":\"F684\",\"elements\":[],\"why\":\"슬롯 밖 — 하원의원 논평\"},{\"key\":\"F685\",\"elements\":[],\"why\":\"슬롯 밖 — 하원의원의 군사작전 언급(9/16 이전)\"},{\"key\":\"F686\",\"elements\":[],\"why\":\"슬롯 밖 — 하원의원 논평\"},{\"key\":\"F687\",\"elements\":[],\"why\":\"슬롯 밖 — 하원의원 논평\"},{\"key\":\"F688\",\"elements\":[\"S10.a\"],\"why\":\"백악관 10/25 보도자료의 '휘발유와 diesel 가격이 곧 빠르게 떨어질 것'이 9/16~10/28 미국 정부 발표에 닿음\"},{\"key\":\"F689\",\"elements\":[\"S10.a\"],\"why\":\"백악관이 밝힌 10월 '행정명령에 서명'(diesel 비용)이 9/16~10/28 미국 정부 조치에 닿음\"},{\"key\":\"F690\",\"elements\":[\"S10.a\"],\"why\":\"백악관 10/25 보도자료의 '130 million 배럴이 넘는 diesel 을 방출하는 합의'가 미국 정부 조치에 닿음\"},{\"key\":\"F691\",\"elements\":[\"S10.a\"],\"why\":\"백악관 10/25 의 'diesel 방출 합의가 세계 공급을 늘리고 가격을 낮추기 위한 것'이 미국 정부 발표에 닿음\"},{\"key\":\"F692\",\"elements\":[\"S10.a\"],\"why\":\"백악관 10/25 의 '분쟁 이전보다 더 많은 원유가 Hormuz 해협을 통해' 가 이란 전쟁 스토리라인의 미국 정부 발표에 닿음\"},{\"key\":\"F693\",\"elements\":[],\"why\":\"슬롯 밖 — 베네수엘라 원유 수입 증가\"},{\"key\":\"F694\",\"elements\":[],\"why\":\"슬롯 밖 — 베네수엘라 원유 합의\"},{\"key\":\"F695\",\"elements\":[\"S10.a\"],\"why\":\"백악관 10/25 보도자료의 'Defense Production Act 를 활용해… diesel 과 휘발유를 더 생산'이 미국 정부 조치에 닿음\"},{\"key\":\"F696\",\"elements\":[\"S10.a\"],\"why\":\"백악관 10/25 보도자료의 'EPA 가 연료 규제 면제(fuel waivers)를 발급'이 미국 정부 조치에 닿음\"},{\"key\":\"F697\",\"elements\":[\"S10.a\"],\"why\":\"백악관 10/25 의 '연료 규제 면제가 국내 휘발유 공급을 하루 수천 배럴 늘렸다'가 미국 정부 발표에 닿음\"},{\"key\":\"F698\",\"elements\":[\"S10.a\"],\"why\":\"백악관 10/25 보도자료의 '규제 면제를 발급해 휘발유·diesel·항공유의 국내 반입을 늘렸다'가 미국 정부 조치에 닿음\"},{\"key\":\"F699\",\"elements\":[],\"why\":\"슬롯 밖 — 알래스카 천연가스 파이프라인 합의\"}]}"
+}

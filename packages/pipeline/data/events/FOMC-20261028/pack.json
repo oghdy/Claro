@@ -502,6 +502,133 @@
       ],
       "why": "같음",
       "url_basis": "웹 검색 결과의 centcom.mil 주소"
+    },
+    {
+      "label": "BB-10S",
+      "group": "사이",
+      "title": "Beige Book — National Summary (October 2026)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/beigebook202610-summary.htm",
+      "slots": [
+        "현재 물가 평가",
+        "고용·성장",
+        "외부 충격"
+      ],
+      "why": "P-4 다시 모으기 — BB-10 은 베이지북의 표지 페이지(메뉴 · '이 간행물에 대하여')뿐이라 경기 · 물가 · 고용 서술이 없었다 (그래프의 BB-10 사실 6 은 전부 간행물 설명). 본문은 'National Summary' 페이지",
+      "url_basis": "BB-10 (beigebook202610.htm) 본문의 링크 'National Summary' — 2026-11-10 정직한 UA 로 표지 페이지를 다시 읽어 확인",
+      "published_at": "2026-10-14",
+      "published_evidence": "Last Update: October 14, 2026",
+      "published_note": "BB-10 과 같은 증거 (페이지의 Last Update)"
+    },
+    {
+      "label": "SP-HAM-1105",
+      "group": "회의 뒤",
+      "title": "Hammack, Reserve Currencies and Stablecoins (2026-11-05)",
+      "publisher": "clevelandfed.org",
+      "url": "https://www.clevelandfed.org/collections/speeches/2026/sp-20261105-reserve-currencies-and-stablecoins",
+      "slots": [
+        "반대표 방향",
+        "위원회 향후 전망"
+      ],
+      "why": "P-4 다시 모으기 — 10월 반대자 Hammack 의 회의 뒤 첫 공개 발언 (통화정책 견해 단락이 있다). 표결 설명 성명(4월 · 7월 같은 것)은 2026-11-10 현재 찾지 못했다. 회의 뒤 문서 — 범위는 그 사람의 정책 견해 (p3.ts EVENTS after_docs). 지역 연은 — 권리 미확인",
+      "url_basis": "클리블랜드 연은 연설 목록(clevelandfed.org/collections/speeches) 첫 항목 · 같은 날 보도자료 pr-20261105-cleveland-fed-president-hammack-speech 의 'Read her full remarks' 링크 (보도자료는 이 연설의 발췌라 넣지 않았다)",
+      "published_at": "2026-11-05",
+      "published_evidence": "11.05.2026 8:50 AM EST In Person The SNB and Its Watchers Conference 2026",
+      "published_note": "글이 적은 것은 연설한 날 · 시각. 회의(10/28) 뒤다"
+    },
+    {
+      "label": "WH-0619",
+      "group": "스토리라인",
+      "title": "President Trump's Iran Agreement Is America First in Action (The White House, 2026-06-19)",
+      "publisher": "whitehouse.gov",
+      "url": "https://www.whitehouse.gov/releases/2026/06/president-trumps-iran-agreement-is-america-first-in-action/",
+      "slots": [
+        "외부 충격"
+      ],
+      "why": "P-4 스토리라인 상태 — P-2 가 주소만 찾은 6월 백악관 발표 (D41 남은 것). 9월 스토리라인 I-1 ('4월 휴전이 한 번')의 1차. 전쟁 당사자의 문서 (FINDINGS §5.2). 글의 대부분이 상원의원 발언 인용이다 (D40 — 제3자 글)",
+      "url_basis": "P-2 pack.json seen_not_included 의 주소 · 2026-11-10 GET 200 — 본문 'June 19, 2026'",
+      "published_at": "2026-06-19",
+      "published_evidence": "The White House\nJune 19, 2026"
+    },
+    {
+      "label": "WH-1025",
+      "group": "스토리라인",
+      "title": "President Trump Secures Major Deals to Unleash American Energy and Cut Gas Prices at the Pump (The White House, 2026-10-25)",
+      "publisher": "whitehouse.gov",
+      "url": "https://www.whitehouse.gov/releases/2026/10/president-trump-secures-major-deals-to-unleash-american-energy-and-cut-gas-prices-at-the-pump/",
+      "slots": [
+        "외부 충격"
+      ],
+      "why": "P-4 스토리라인 상태 — 9/16 뒤 · 회의 전 백악관의 호르무즈 · 경유 관련 발표 (전쟁 당사자의 주장 — §5.2)",
+      "url_basis": "웹 검색 (whitehouse.gov 한정) 으로 찾고 2026-11-10 GET 200 — 본문 'October 25, 2026'",
+      "published_at": "2026-10-25",
+      "published_evidence": "The White House\nOctober 25, 2026"
+    },
+    {
+      "label": "ST-01",
+      "group": "직전",
+      "title": "Federal Reserve issues FOMC statement (2026-01-28)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260128a.htm",
+      "slots": [
+        "역사적 희소성"
+      ],
+      "why": "P-4 다시 모으기 — 슬롯 S14 '이력 (금리 · 반대)' 의 요소 S14.b (올해 앞선 회의들의 반대 표 이력) 가 9월 12–0 하나뿐이었다. 올해 회의마다 성명문의 표결 · 반대 줄",
+      "url_basis": "CAL (연준 회의 일정 페이지) 의 2026 회의 날짜 · 9월 성명문과 같은 주소 꼴 (monetaryYYYYMMDDa.htm)",
+      "published_at": "2026-01-28T14:00-05:00",
+      "published_evidence": "January 28, 2026\nFederal Reserve issues FOMC statement\nFor release at 2:00 p.m. EST"
+    },
+    {
+      "label": "ST-03",
+      "group": "직전",
+      "title": "Federal Reserve issues FOMC statement (2026-03-18)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm",
+      "slots": [
+        "역사적 희소성"
+      ],
+      "why": "P-4 다시 모으기 — 슬롯 S14 '이력 (금리 · 반대)' 의 요소 S14.b (올해 앞선 회의들의 반대 표 이력) 가 9월 12–0 하나뿐이었다. 올해 회의마다 성명문의 표결 · 반대 줄",
+      "url_basis": "CAL (연준 회의 일정 페이지) 의 2026 회의 날짜 · 9월 성명문과 같은 주소 꼴 (monetaryYYYYMMDDa.htm)",
+      "published_at": "2026-03-18T14:00-04:00",
+      "published_evidence": "March 18, 2026\nFederal Reserve issues FOMC statement\nFor release at 2:00 p.m. EDT"
+    },
+    {
+      "label": "ST-04",
+      "group": "직전",
+      "title": "Federal Reserve issues FOMC statement (2026-04-29)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260429a.htm",
+      "slots": [
+        "역사적 희소성"
+      ],
+      "why": "P-4 다시 모으기 — 슬롯 S14 '이력 (금리 · 반대)' 의 요소 S14.b (올해 앞선 회의들의 반대 표 이력) 가 9월 12–0 하나뿐이었다. 올해 회의마다 성명문의 표결 · 반대 줄",
+      "url_basis": "CAL (연준 회의 일정 페이지) 의 2026 회의 날짜 · 9월 성명문과 같은 주소 꼴 (monetaryYYYYMMDDa.htm)",
+      "published_at": "2026-04-29T14:00-04:00",
+      "published_evidence": "April 29, 2026\nFederal Reserve issues FOMC statement\nFor release at 2:00 p.m. EDT"
+    },
+    {
+      "label": "ST-06",
+      "group": "직전",
+      "title": "Federal Reserve issues FOMC statement (2026-06-17)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm",
+      "slots": [
+        "역사적 희소성"
+      ],
+      "why": "P-4 다시 모으기 — 슬롯 S14 '이력 (금리 · 반대)' 의 요소 S14.b (올해 앞선 회의들의 반대 표 이력) 가 9월 12–0 하나뿐이었다. 올해 회의마다 성명문의 표결 · 반대 줄",
+      "url_basis": "CAL (연준 회의 일정 페이지) 의 2026 회의 날짜 · 9월 성명문과 같은 주소 꼴 (monetaryYYYYMMDDa.htm)"
+    },
+    {
+      "label": "ST-07",
+      "group": "직전",
+      "title": "Federal Reserve issues FOMC statement (2026-07-29)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+      "slots": [
+        "역사적 희소성"
+      ],
+      "why": "P-4 다시 모으기 — 슬롯 S14 '이력 (금리 · 반대)' 의 요소 S14.b (올해 앞선 회의들의 반대 표 이력) 가 9월 12–0 하나뿐이었다. 올해 회의마다 성명문의 표결 · 반대 줄",
+      "url_basis": "CAL (연준 회의 일정 페이지) 의 2026 회의 날짜 · 9월 성명문과 같은 주소 꼴 (monetaryYYYYMMDDa.htm)"
     }
   ],
   "empty": [
@@ -552,5 +679,44 @@
       "what": "Kashkari 10/1 · Logan 10/1 · Kashkari 의 금리 확률 언급 보도 (Reuters · FXStreet · Kitco 등)",
       "why": "보도는 길잡이일 뿐 출처가 아니다 (D27)"
     }
-  ]
+  ],
+  "p4_recollect": {
+    "_what": "P-4 (2026-11-10) 다시 모으기의 기록 — 찾았으나 넣지 않은 것 · 못 가져온 것. 문서 목록은 위 items 끝의 넷 (BB-10S · SP-HAM-1105 · WH-0619 · WH-1025)",
+    "not_found": [
+      {
+        "what": "Hammack 의 10월 표결 설명 성명",
+        "why": "2026-11-10 현재 클리블랜드 연은 연설 목록 · 보도자료에 없다 (4월 sp-20260501 · 7월 sp-20260731 같은 'statement regarding … vote' 가 10월분은 없다). 회의 뒤 발언은 11/5 연설 하나 (SP-HAM-1105)"
+      },
+      {
+        "what": "Cook 의 10월 표결 설명",
+        "why": "2026-11-10 연준 연설 RSS(feeds/speeches.xml) · 보도자료 RSS(feeds/press_all.xml) 에 Cook 의 10/28 뒤 글이 없다. 10월 회의록(11/18 예정)에 반대 이유가 실릴 수 있다"
+      },
+      {
+        "what": "기자회견 녹취 FINAL (PC-10)",
+        "why": "2026-11-10 같은 주소가 아직 'PRELIMINARY' 를 준다 (첫 줄 'October 28, 2026 Chairman Warsh’s Press Conference PRELIMINARY'). 기자회견 페이지(PCP-10)에도 다른 녹취 링크가 없다"
+      },
+      {
+        "what": "BLS 보도자료 (고용 9월 10/2 · CPI 9월 10/14 · PPI 9월 10/15 · JOLTS · 수입물가)",
+        "why": "요청하지 않았다 — 2026-11-10 bls.gov 의 robots.txt 조차 정직한 UA 에 403 'Access Denied' (bot 활동 금지 문구). D41: 웹 페이지는 막히면 못 가져옴. 수치는 BLS API v1 (BLS-API-1110) 에 받은 날의 판으로 있다"
+      },
+      {
+        "what": "CENTCOM 9/16 뒤 발표 (CC-1005 · CC-1010 · 10/25 호르무즈 방문)",
+        "why": "P-2 와 같다 — centcom.mil 은 정직한 UA 에 403. 다시 두드리지 않았다"
+      }
+    ],
+    "seen_not_included": [
+      {
+        "what": "Hammack 11/5 보도자료 (pr-20261105-cleveland-fed-president-hammack-speech)",
+        "why": "SP-HAM-1105 연설의 발췌 · 같은 말이다"
+      },
+      {
+        "what": "Waller 'The Economic Outlook and Some Thoughts on Labor Market Dynamism' (2026-11-10)",
+        "why": "회의 뒤 · 반대자가 아니다. 오늘 나왔다 — 기사가 쓸지는 게이트 2"
+      },
+      {
+        "what": "백악관 행정명령 — 경유 값 (10월 '이달 초')",
+        "why": "WH-1025 가 적은 것. 주소를 찾지 않았다 — 이란 스토리라인보다 국내 에너지 정책이다"
+      }
+    ]
+  }
 }
