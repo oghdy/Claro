@@ -5,7 +5,7 @@
 
 ## 현재 위치
 **2026-11-11 · P-5 까지 끝. 10월 회의록(11/18 무렵)을 기다린다 (D45 · 도윤).** 회의록이 나오면 수집 → P-3b → P-4 → P-5 를 다시 돌리고 P-6 (요점 · 게이트 2 — 도윤).
-정치는 D46 (공식 발언만 · 동기 해석 안 함 · 필요할 때만 · 양쪽). **그동안 잔일 W-1 ~ W-5 (D47)** — 아래 "잔일 Step". **도는 중: W-1 (Opus)** · W-3 닫힘 (D48) · W-2 닫힘 (D49).
+정치는 D46 (공식 발언만 · 동기 해석 안 함 · 필요할 때만 · 양쪽). **그동안 잔일 W-1 ~ W-5 (D47)** — 아래 "잔일 Step". **도는 중: W-4 (Opus)** · W-3 · W-2 · W-1 닫힘 (D48 · D49 · D50). 회의록 날 명령: `pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10` (마른 실행) → `--go` (logs/pipeline/W-1.md ①).
 사건 폴더: `packages/pipeline/data/events/FOMC-20261028/` (p3 · p4 · p5 · bls) · 스토리라인 `packages/pipeline/data/storylines/SL-iran-war/v2.json`
 명령: `pnpm --filter @claro/pipeline p1 | p2 <code> | p3 | p4 | p5` (각각 `--check` 로 다시 돌려 같은지). 검사: `scripts/verify-source-pack · verify-fact-graph · verify-coverage · verify-claims .py`
 비용 장부 23.43 달러 (P-1 ~ P-5 16.70 + W-2 6.73 · W-3 0 · 크레딧 약 103 달러에서 · 콘솔 월 한도 권장 30 달러). 키: `packages/pipeline/.env.pipeline` (git 무시)
@@ -46,9 +46,9 @@
 |---|---|---|---|
 | W-2 | 의미 대조 (D43) — 판정 단계 + 시험 묶음 · Opus ↔ Fable 견줌 · 상한 8 달러 | Fable | ☑ 2026-11-11 — **닫힘 (D49 — 이 단계 모델 Opus medium)** (`logs/pipeline/W-2.md` · `w2` 명령 · 프롬프트 `w2-entail/1` · 판정 ENTAILED / NEEDS_CONTEXT / EXCEEDS / CONTRADICTS / CANNOT_JUDGE + 가리킨 부분(글자 그대로 · 코드가 확인) · 글을 고쳐 쓰지 않음. 시험 묶음 107: 맞는 예 56 · 구절 부족 16 · 넘침 · 어긋남 31 (교정 전 골든 4 · Sonnet 수량어 2 · 10월 F449 · 일부러 24). **medium — Opus: 잘못 막음 2 · 구절 부족 16/16 · 넘침 28/31 · $1.05 / Fable: 1 · 15/16 · 27/31 · $1.50** (high: Opus 3 · 16 · 28 · $1.13 / Fable 1 · 15 · 28 · $2.72). 둘 다 놓침: 연준 수량어 Several → 일부 2 (코드 검사가 막는다) · F449. 원문이 저장된 맞는 예 49 에서 잘못 막음 0. 비용 $6.73 · 새 검사 verify-entailment (사본 18) · _open W2-a ~ k — 모델은 고르지 않았다) |
 | W-3 | BLS 지수 → 변화율 (BLS 방식 그대로 · 9월 골든 대조) · API 비용 0 | Opus | ☑ 2026-11-11 — **닫힘 (D48)** (`logs/pipeline/W-3.md` · `bls-rates` 명령 · 10월 계산 18 (9월 · 8월 × 측정 9 — 9월 CPI 1년 전 3.7% · 근원 2.6% · 취업자 +60천) + 9월 54 · **9월 골든 대조 34: CPI 23/23 같음 · PPI 3 · 취업자 3 다름 (받은 날 판 — 고쳐진 시리즈)** · 연준 인용 9/9 같음 · **계약 자리 없음 → 그래프 0 · 계산 기록 `bls/rates.json` · _open W3-a (추천: 계산된 수 타입 — W-4)** · 9월 CPI 회의 전 공개 미확인 (W3-c · 10/1 셧다운 F217) · 검사 verify-bls-rates · 사본 18) |
-| W-1 | 회의록 다시 돌리기 한 번에 (+ `bls-rates` · W3-c 체크포인트) · 해석 한 문장 검사 (P5-e) · `p1 --check` · 상한 2 달러 | Opus | ☑ 2026-11-11 — PM 검수 대기 (`logs/pipeline/W-1.md` · **`rerun <code> --doc <LABEL>` (기본 마른 실행 · `--go` 로 돈다)** — 수집 → 추출 · 묶음 → bls-rates → 붙이기 · Unslotted → 해석 · 반증, 단계마다 verify-* · 실패하면 멈춤 · 바뀐 것만 부름. **마른 시험 (WH-COOK-1007 을 새 문서인 척): 다섯 단계 끝까지 · 모델 0 · 전부 `--check` 같다** · 회의록 날 예상 부르기 6 · 대략 $2.9 · P-5 판 `p5-derive/2` · `p5-counter/2` (부르지 않음 — 한 문장 · "주장은 남기고 범위를 단다" · 회의록 = `[뒤 · 회의 기록]` (after 갈래 아님 · p3 판 그대로) · 체크포인트) · 한 문장 검사 CL_SENTENCE (/1 은 WARN 13 — 해석 원래 문장도 11/14 가 두 문장 이상) · W3-c = `checkpoints.json` (반증 부르기에 같이) · `p1 --check` 못 가져옴 13 요청 0 · 비용 $0 · _open W1-a (llm.ts STEP 을 그날 바꾼다) ~ j) |
-| W-4 | 계약 잔일 (P1-a · P5-c · P5-b) + **계산된 수 타입 (W3-a · D48)** | Opus | ☐ W-1 뒤 |
-| W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + 의미 대조 프롬프트 actor 줄 (W2-b → `w2-entail/2` · Opus medium 다시 잼) + F046 · F449 다시 뽑기 확인 | Opus | ☐ W-1 뒤 |
+| W-1 | 회의록 다시 돌리기 한 번에 (+ `bls-rates` · W3-c 체크포인트) · 해석 한 문장 검사 (P5-e) · `p1 --check` · 상한 2 달러 | Opus | ☑ 2026-11-11 — **닫힘 (D50)** (`logs/pipeline/W-1.md` · **`rerun <code> --doc <LABEL>` (기본 마른 실행 · `--go` 로 돈다)** — 수집 → 추출 · 묶음 → bls-rates → 붙이기 · Unslotted → 해석 · 반증, 단계마다 verify-* · 실패하면 멈춤 · 바뀐 것만 부름. **마른 시험 (WH-COOK-1007 을 새 문서인 척): 다섯 단계 끝까지 · 모델 0 · 전부 `--check` 같다** · 회의록 날 예상 부르기 6 · 대략 $2.9 · P-5 판 `p5-derive/2` · `p5-counter/2` (부르지 않음 — 한 문장 · "주장은 남기고 범위를 단다" · 회의록 = `[뒤 · 회의 기록]` (after 갈래 아님 · p3 판 그대로) · 체크포인트) · 한 문장 검사 CL_SENTENCE (/1 은 WARN 13 — 해석 원래 문장도 11/14 가 두 문장 이상) · W3-c = `checkpoints.json` (반증 부르기에 같이) · `p1 --check` 못 가져옴 13 요청 0 · 비용 $0 · _open W1-a (llm.ts STEP 을 그날 바꾼다) ~ j) |
+| W-4 | 계약 잔일 — 가져온 기록 (P1-a · J5) · **계산된 수 타입 (W3-a · D48)** · §7.3 줄 (P5-c · D50 규칙) · 스토리라인 판 → 사건 사실 (P5-b) · API 0 | Opus | ⏳ 도는 중 (2026-11-11) |
+| W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + **판 올려 10월 사실 다시 뽑기 (≈ 3.5 달러 · D50)** + W1-a (rerun 이 단계 · 상한을 받게) + W2-b (`w2-entail/2` · Opus medium 다시 잼) + F046 · F449 확인 + 끝에 `rerun --pretend-new` | Opus | ☐ W-4 뒤 |
 
 **도윤이 준비할 것 (P-3 전)**: Claude API 키 — 비밀 값이다. 채팅에 붙이지 않고 `apps/web/.env.deploy` 처럼 git 밖 파일에. 사용 한도를 걸어 둔다.
 
@@ -61,6 +61,48 @@
 - P-3b 잔일: 영어 수 낱말이 글에 남음 (P3b-c) · 표의 창에 스토리라인 시작일 (P3b-d) · CAL 일정 줄 (P3b-e — P-4 에서 S05.d · S15.a 가 이것 때문에 NOT_EXTRACTED · P4-f) · bp · %p 표기 차이로 안 묶임 (P3b-f) · P3-e · f · g
 - `p1 --check` 가 못 가져온 문서를 다시 요청한다 — P-2 방식으로 맞춘다 (D41)
 - 남은 기계 검증용 26: 못 가져온 문서(BLS 7 · CENTCOM 3 · CME 2 …)에만 기댄 사실 13 + 표기 때문에 못 찾은 10
+
+## W-4 · 계약 잔일
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 백엔드 레인 (계약을 쓰는 레인). Step W-4 (계약 잔일)를 맡는다. PM(나)이 검수하고 도윤에게 보고한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 지금 다른 서브에이전트는 돌지 않는다 (도윤이 따로 세션을 열 수는 있다 — 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라).
+
+## 왜
+파이프라인(P-1 ~ P-5 · W-1 ~ W-3)이 만든 실물이 계약 밖에 기록을 두고 있다. P-7 에서 **계약 패키지**를 만들기 전에 계약이 실물을 담아야 한다. 계약은 실물에서 도출한다 (D24) — 지금 그 실물이 있다.
+독자 글은 바뀌지 않는다.
+
+## 먼저 읽을 것
+- CLAUDE.md — 특히 "계약 규칙" (백엔드만 쓴다 · 한 타입은 한 파일 · CHANGELOG 한 줄) · "계약은 실물에서 도출한다"
+- docs/contract/DATA_MODEL.md 전부 · ARTICLE_PACKAGE.md 의 VolatileRef · DERIVED 부분 · CONCEPT_IDENTITY · OBSERVATION 은 목차만
+- docs/DECISIONS.md D8 · D24 · D27 · D33 · D40 · D44 · D45 · **D48 (W3-a)** · **D50 (P5-c 판정 규칙)**
+- logs/pipeline/P-1.md (P1-a · J5) · P-5.md (P5-b · P5-c) · W-3.md (③ · W3-a) · W-1.md 맨 앞
+- packages/contract (types · data-model · validate) · scripts/verify-data-model.py · selftest · fixtures/store.json
+- packages/pipeline/data/ — 실물: `fomc-2026-09.sources.json` · `events/FOMC-20261028/` (store.documents.json · bls/rates.json) · `p3-golden/FOMC-20260916/bls-rates.json` · `storylines/SL-iran-war/v2.json`
+
+## 할 일 (넷)
+1. **P1-a · J5 — SourceDocument 의 가져온 기록**: 해시(sha256) · 가져온 주소(리다이렉트 뒤) · 가져온 때 · 뽑은 방법(판) · 권리 근거. 지금 파이프라인 기록 파일에 있는 칸에서 도출. 파이프라인 출력이 새 칸을 채우게 (손으로가 아니라 코드로)
+2. **W3-a — "계산된 수" 타입** (D48 의 안 (a)): 입력은 그래프 사실 (FactRef — 지수의 두 달) · op (실물: 1년 전 대비 변화율 · 전월 대비 변화율 · 수준의 차) · 반올림 · 값 · 단위 · 입력이 VOLATILE 이면 결과도 VOLATILE (as_of = 입력의 as_of) · **불변식: 다시 계산 == 기록값**. 입력 사실이 그래프에 있어야 하니 bls.ts 가 기준 달(1년 전 · 전월)의 지수도 사실로 만들게 한다. `bls/rates.json` 을 이 모양으로 그래프 곁(또는 안)에 — 자리는 네가 안을 낸다. 기사의 사실 표시에 어떻게 보일지(“BLS 지수에서 BLS 방식으로 계산”)는 ARTICLE_PACKAGE 를 읽고 안만 — 화면은 고치지 마라
+   - 기존 DERIVED (TimeExpression · 날짜 계산 op 7) 와 한 타입으로 합칠지 따로 둘지는 실물로 판단하고 까닭을 적어라 (한 타입은 한 파일)
+3. **P5-c — §7.3 판정 표에 줄을 더한다 (D50 의 규칙)**: "DEFENSIVE 이고 UNRESOLVED 가 있고, 나머지가 NOT_REFUTED · SCOPED 뿐 → 방어용 (발행 가능). SCOPED 가 있으면 statement 는 좁힌 문장이어야 한다". 실물 4 건 (DC-08 · 11 · 13 · 14) 에 대 보고 그 판정이 독자에게 이상해 보이는 것이 있으면 그 건만 _open. 계약 문서 · TS 판정 함수 · verify-claims 의 계산을 같이
+4. **P5-b — 스토리라인 판이 사건 그래프의 사실을 가리키는 모양** (v2 `_fact_refs`): 계약에 "StorylineVersion 이 사건 사실을 가리킨다"를 넣는다 (P5-b (a)). 사실 소유는 그대로 (한 사실은 한 곳에)
+
+## 하지 말 것
+- 독자 글 · 골든 패키지의 독자 글 · 개념 라이브러리 · apps/web 화면 · packages/db 스키마 (계약이 바뀌어 db 타입 검사가 깨지면 그 사실만 적고 _open)
+- 사실 그래프를 손으로 고치기 · 모델 호출 (이 Step 은 API 비용 0)
+- CLAUDE.md 금지 항목 · docs/PM.md 읽기 (PM 전용)
+- fixtures 의 골든을 새 칸 때문에 바꿔야 하면: 새 칸은 선택(optional)으로 두거나, 골든에 채울 수 있는 값이 실물로 있으면 채운다 (지어내지 마라). 판단이 필요하면 _open
+판단이 필요하면 _open 으로 적고 그 부분만 멈춘다.
+
+## 끝낼 때
+- 로그 `logs/backend/W-4.md` — 맨 앞에 ① 계약에 더한 것 (타입 · 불변식 · 표의 줄 — 각각 어느 실물에서 도출했나) ② 파이프라인 출력이 바뀐 것 ③ P5-c 실물 4 건의 판정 ④ _open. "작업 세션 모델: Opus 5.5" 를 적어라
+- 계약 파일마다 CHANGELOG 한 줄 (날짜 · 세션 W-4)
+- 검사: 파이썬 검사 전부 (verify-data-model · selftest · verify-claims · verify-bls-rates · verify-fact-graph · verify-entailment …) · `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · 새 불변식마다 망가뜨린 사본 (계산값 한 자리 바꾸면 실패 · 해시 바꾸면 실패 · 판정 표의 새 줄)
+- `pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc WH-COOK-1007 --pretend-new --go` 가 끝까지 도는지 (W-1 의 마른 시험 — 모델 0)
+- docs/development-pipeline.md 의 "잔일 Step" 표 W-4 줄 · 커밋 접두사 `W-4` · **파일 지정 (`git commit -m … -- <파일들>`)** · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard 금지
+- **나(PM)에게**: 25줄 안쪽 한국어 요약 — 커밋 · 계약에 더한 것 · P5-c 4 건 · 검사 · _open · 꼭 볼 것
+```
 
 ## W-1 · 회의록 다시 돌리기 준비
 
