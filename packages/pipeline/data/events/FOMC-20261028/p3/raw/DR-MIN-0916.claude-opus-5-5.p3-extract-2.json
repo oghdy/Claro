@@ -1,0 +1,27 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/2 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "DR-MIN-0916",
+  "source_id": "daca5b06-6484-40f0-8ddc-b75bfb5eef75",
+  "text_sha256": "34d34ca6577f212d8d155ddfed451386c39c6ad2cfdf2b96515c2dea43cdb5af",
+  "input_sha256": "34d34ca6577f212d8d155ddfed451386c39c6ad2cfdf2b96515c2dea43cdb5af",
+  "prompt_version": "p3-extract/2",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "9489a291a66ac5c45c390c4956a491c4a8537679b5a2f55258a50fc5d8df3284",
+  "response_id": "msg_011CgtzeBXUHTdMxQiWSbiXq",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 3924,
+    "output_tokens": 781,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 7394,
+  "cost_usd": 0.032316,
+  "called_at": "2026-11-10T09:16:07.573Z",
+  "output_sha256": "1668ba785f52c7a758427e1aad86ca1338554e8724c856740fa2334d017aafc4",
+  "output": "{\"facts\":[{\"claim_text\":\"연준 이사회는 화요일, 할인창구를 통해 예금취급기관에 제공되는 할인율을 검토하고 결정한 최근 회의들의 의사록을 공개했으며, 이 의사록은 2026년 August 17, September 9, September 16 에 열린 이사회 회의를 다룸.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-13\",\"passages\":[\"The Federal Reserve Board on Tuesday released the minutes from its recent meetings to review and determine the discount rates provided to depository institutions through the discount window.\",\"Today's minutes cover the Board meetings that occurred on August 17, September 9, and September 16, 2026.\"]},{\"claim_text\":\"연준 이사회는 할인율을 정하는 이사회의 절차가 FOMC 가 연방기금금리 목표 범위를 정할 때 따르는 절차와 별개라고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"연준 이사회 (보도자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-13\",\"passages\":[\"The Board's process for setting the discount rate is distinct from the process the Federal Open Market Committee follows in setting the target range for the federal funds rate.\"]}]}",
+  "output_in": "here"
+}

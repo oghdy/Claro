@@ -1,0 +1,27 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/2 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "CAL",
+  "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+  "text_sha256": "de37cd898fb22ee5ea755373bd0eccfee988c7c4774588ca2b4a5eb8cf398535",
+  "input_sha256": "de37cd898fb22ee5ea755373bd0eccfee988c7c4774588ca2b4a5eb8cf398535",
+  "prompt_version": "p3-extract/2",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "4d3d137998aa0de09d1a930cddb5de9c83fa0b656519cbef08bb1a4124f6127c",
+  "response_id": "msg_011CgtzsiK18mgAWXx42yweQ",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 7622,
+    "output_tokens": 1649,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 15310,
+  "cost_usd": 0.064468,
+  "called_at": "2026-11-10T09:19:19.044Z",
+  "output_sha256": "2d8a5fd455bc53a84508295f4e9b79ac581abae00276211726300eaf72b5f263",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 회의 일정 페이지는 FOMC 가 한 해에 eight 번의 정례 회의와 필요에 따라 그 밖의 회의를 연다고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC (회의 일정 페이지)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"The FOMC holds eight regularly scheduled meetings during the year and other meetings as needed.\"]},{\"claim_text\":\"FOMC 회의 일정 페이지는 정례 회의의 회의록이 정책 결정일로부터 three 주 뒤에 공개된다고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC (회의 일정 페이지)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"The minutes of regularly scheduled meetings are released three weeks after the date of the policy decision.\"]},{\"claim_text\":\"FOMC 회의 일정 페이지는 위원회 구성원이 매년 첫 정례 회의에서 바뀐다고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC (회의 일정 페이지)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"Committee membership changes at the first regularly scheduled meeting of the year.\"]},{\"claim_text\":\"FOMC 회의 일정 페이지는 각 회의 날짜가 바로 앞 회의에서 확정되기 전까지는 잠정적이라고 밝힘.\",\"fact_type\":\"OFFICIAL_LIMIT\",\"actor\":\"FOMC (회의 일정 페이지)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"Each meeting date is tentative until confirmed at the meeting immediately preceding it.\"]},{\"claim_text\":\"FOMC 는 January 25-26, 2028 에 이틀간의 회의를 예정해 두었음.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2028-01-25\",\"passages\":[\"Note: A two-day meeting is scheduled for January 25-26, 2028.\"]}]}",
+  "output_in": "here"
+}

@@ -1,0 +1,27 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/2 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "ST-10",
+  "source_id": "cf24cb79-2817-4ced-ad23-5d85ebc2972f",
+  "text_sha256": "c3ddf80840c7b841016f1f9d7537f2501ede5cbc1f4c4c461e7d7e1595638edf",
+  "input_sha256": "c3ddf80840c7b841016f1f9d7537f2501ede5cbc1f4c4c461e7d7e1595638edf",
+  "prompt_version": "p3-extract/2",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "a6e0581e36e87eea040100dd86f22a1b86bade0eec5c6b1decdddb9c1b1944d5",
+  "response_id": "msg_011CgtzduKtjYgQB6zR4Nad8",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4119,
+    "output_tokens": 2062,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 15653,
+  "cost_usd": 0.058716,
+  "called_at": "2026-11-10T09:16:11.892Z",
+  "output_sha256": "0bb83a96fe649573feacca7e49fdb4e717058c75ca11d727592361451932a68b",
+  "output": "{\"facts\":[{\"claim_text\":\"FOMC 는 성명문을 10 – 2 표결로 승인함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"The Federal Open Market Committee approved the following statement for release by a 10 – 2 vote:\"]},{\"claim_text\":\"FOMC 는 연방기금금리 목표 범위를 3-3/4~4% 로 유지하기로 결정함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"The Committee decided to maintain the target range for the federal funds rate at 3-3/4 to 4 percent, in support of the Federal Reserve's dual mandate.\"]},{\"claim_text\":\"FOMC 성명문은 금리 유지 결정이 연준의 이중 책무를 지원하기 위한 것이라고 설명함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"The Committee decided to maintain the target range for the federal funds rate at 3-3/4 to 4 percent, in support of the Federal Reserve's dual mandate.\"]},{\"claim_text\":\"FOMC 는 은행 시스템에 충분한 지준을 유지하는 정책을 계속함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"The Committee is continuing its policy of maintaining ample reserves in the banking system.\"]},{\"claim_text\":\"FOMC 성명문은 경제 활동이 강한 속도로 확장하고 있다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Economic activity is expanding at a strong pace.\"]},{\"claim_text\":\"FOMC 성명문은 부분적으로 지정학적 전개 때문에 불확실성이 여전히 높지만 국내 지출은 탄탄했다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"While uncertainty remains elevated owing, in part, to geopolitical developments, domestic spending has been resilient.\"]},{\"claim_text\":\"FOMC 성명문은 생산성 증가가 강하고 설비 투자가 견조하다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Productivity growth is strong, and capital investment is robust.\"]},{\"claim_text\":\"FOMC 성명문은 일자리 증가가 노동력 증가와 보조를 맞췄고 실업률은 거의 변하지 않았다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Job gains have kept pace with the workforce, and the unemployment rate has changed little.\"]},{\"claim_text\":\"FOMC 성명문은 인플레이션이 여전히 높다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Inflation remains elevated.\"]},{\"claim_text\":\"FOMC 성명문은 더 많은 정보가 쌓이면 인플레이션을 2% 목표로 적시에 되돌리는 데 적절한 정책 기조를 정하는 데 도움이 될 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"The accumulation of more information will help the Committee determine the policy stance appropriate to ensure a timely return of inflation to the Committee's 2 percent goal.\"]},{\"claim_text\":\"FOMC 성명문은 위원회가 물가 안정을 이룰 것이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"FOMC 성명문\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"The Committee will deliver price stability.\"]},{\"claim_text\":\"Lisa D. Cook 과 Beth M. Hammack 은 이번 통화정책 조치에 반대표를 던짐\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Voting against the monetary policy action were Lisa D. Cook and Beth M. Hammack, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting.\"]},{\"claim_text\":\"Lisa D. Cook 과 Beth M. Hammack 은 이번 회의에서 연방기금금리 목표 범위를 1/4%p 올리는 것을 선호함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Lisa D. Cook · Beth M. Hammack (FOMC 위원, 반대표)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Voting against the monetary policy action were Lisa D. Cook and Beth M. Hammack, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting.\"]}]}",
+  "output_in": "here"
+}

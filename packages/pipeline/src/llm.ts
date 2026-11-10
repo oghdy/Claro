@@ -3,7 +3,7 @@
 //   - 키는 packages/pipeline/.env.pipeline 의 ANTHROPIC_API_KEY (git 밖). **값을 출력 · 기록 · 오류 메시지에 남기지 않는다**
 //     — 기록에는 요청 머리(header)를 넣지 않고, 오류는 상태 코드와 오류 종류만 적는다
 //   - 호출마다 모델 · 입력 · 출력 토큰 · 걸린 시간 · 대략 비용을 장부(data/p3-calls.jsonl)에 한 줄. 장부의 합이 상한을 넘을 것 같으면 부르지 않는다
-//   - 모델 배치(D2)는 OPEN 이다 — 여기서 정하지 않는다. 부르는 쪽이 모델을 넘긴다. 기본값은 지시대로 claude-sonnet-5-5
+//   - 모델 배치(D2)는 단계마다 정한다. **사실 추출은 claude-opus-5-5 (D42)** — 기본값. 다른 단계는 그 단계에서 잰다
 //   - 출력은 structured outputs (output_config.format · json_schema) — 모양이 틀린 JSON 이 오지 않게. 스트리밍 + finalMessage (긴 출력)
 //   - 거절(refusal) 때 다른 모델로 넘기는 fallbacks 는 켜지 않았다: 어느 모델이 낸 출력인지가 이 Step 에서 재는 것이다. 거절은 기록하고 그 문서만 멈춘다
 import Anthropic from "@anthropic-ai/sdk";
@@ -15,9 +15,11 @@ import { sha256 } from "./extract.ts";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const ENV = join(ROOT, "packages/pipeline/.env.pipeline");
 export const LEDGER = join(ROOT, "packages/pipeline/data/p3-calls.jsonl");
-export const DEFAULT_MODEL = "claude-sonnet-5-5";
-export const BUDGET_USD = 15;          // 이 Step 전체 상한 (지시)
-export const STOP_AT_USD = 14;         // 이 값을 넘을 것 같으면 부르지 않는다 — 상한 아래 여유
+export const DEFAULT_MODEL = "claude-opus-5-5"; // D42 — 사실 추출
+// 상한은 Step 마다 (장부의 step 칸으로 센다). P-3 은 $15 · P-3b 는 $12 (지시)
+export const STEP = "P-3b";
+export const BUDGET_USD = 12;
+export const STOP_AT_USD = 11.5;       // 이 Step 에서 쓴 돈 + 이번 부르기의 넉넉한 추정이 이 값을 넘으면 부르지 않는다 — 상한 아래 여유
 
 // 가격 (US$ / 100만 토큰 · claude-api 스킬의 표 2026-11-03 판). 대략 비용이다 — 청구서가 아니다
 export const PRICE: Record<string, { in: number; out: number; cache_write: number; cache_read: number }> = {
@@ -34,7 +36,7 @@ export function costOf(model: string, u: Usage): number {
 }
 
 export type LedgerLine = {
-  at: string; step: "P-3"; event: string; source_label: string; model_requested: string; model: string | null; effort: string;
+  at: string; step: string; event: string; source_label: string; model_requested: string; model: string | null; effort: string;
   prompt_version: string; request_sha256: string; text_sha256: string; stop_reason: string | null; usage: Usage | null;
   duration_ms: number; cost_usd: number; ok: boolean; error: string | null; request_id: string | null;
 };
@@ -44,6 +46,8 @@ export function ledger(): LedgerLine[] {
   return readFileSync(LEDGER, "utf8").split("\n").filter(Boolean).map((l) => JSON.parse(l));
 }
 export const spent = () => ledger().reduce((a, l) => a + l.cost_usd, 0);
+/** 이 Step(STEP)에서 쓴 돈 */
+export const spentStep = () => ledger().filter((l) => l.step === STEP).reduce((a, l) => a + l.cost_usd, 0);
 
 function loadKey(): string {
   if (!existsSync(ENV)) throw new Error("packages/pipeline/.env.pipeline 이 없다 — 키가 없다. 멈춘다");
@@ -111,7 +115,7 @@ export async function callJson(a: {
     r = { ok: false, fatal: s.fatal, error: s.msg, model: null, stop_reason: null, usage: null, text: null, response_id: null, duration_ms: Date.now() - t0, cost_usd: 0, request_sha256 };
   }
   const line: LedgerLine = {
-    at: new Date().toISOString(), step: "P-3", event: a.event, source_label: a.source_label, model_requested: a.model, model: r.model, effort: a.effort,
+    at: new Date().toISOString(), step: STEP, event: a.event, source_label: a.source_label, model_requested: a.model, model: r.model, effort: a.effort,
     prompt_version: a.prompt_version, request_sha256, text_sha256: a.text_sha256, stop_reason: r.stop_reason, usage: r.usage,
     duration_ms: r.duration_ms, cost_usd: Number(r.cost_usd.toFixed(6)), ok: r.ok, error: r.error, request_id: r.response_id,
   };

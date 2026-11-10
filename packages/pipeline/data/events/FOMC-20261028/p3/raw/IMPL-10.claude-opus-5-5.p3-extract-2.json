@@ -1,0 +1,27 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/2 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "IMPL-10",
+  "source_id": "97163744-dc67-48de-b273-74e13fa056a9",
+  "text_sha256": "64f2ffebbbbedddfe62cebe874ca0282dabc530a2b6c6dd2dcad6780164e7c0b",
+  "input_sha256": "64f2ffebbbbedddfe62cebe874ca0282dabc530a2b6c6dd2dcad6780164e7c0b",
+  "prompt_version": "p3-extract/2",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "f515c34ddab7338b0540875298dd8b66959a429bab82a3b4110e0bf356835d26",
+  "response_id": "msg_011CgtzduKQEQiTCBXSGPsvS",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4397,
+    "output_tokens": 1533,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 12519,
+  "cost_usd": 0.049248,
+  "called_at": "2026-11-10T09:16:08.794Z",
+  "output_sha256": "771f359098b523544f34e534125b5cb9eea4cfe817cc0cc5ea88865463f24974",
+  "output": "{\"facts\":[{\"claim_text\":\"연준 이사회는 지급준비금 이자율(IORB)을 3.90%로 유지하기로 만장일치로 표결했으며, 2026년 10월 29일부터 적용된다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"The Board of Governors of the Federal Reserve System voted unanimously to maintain the interest rate paid on reserve balances at 3.90 percent, effective October 29, 2026.\"]},{\"claim_text\":\"FOMC 는 뉴욕 연은 공개시장 데스크에 연방기금금리를 3-3/4~4% 목표 범위로 유지하도록 필요한 공개시장 운영을 하라고 지시하는 정책 지시문을 표결했으며, 2026년 10월 29일부터 적용된다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"As part of its policy decision, the Federal Open Market Committee voted to direct the Open Market Desk at the Federal Reserve Bank of New York, until instructed otherwise, to execute transactions in the System Open Market Account in accordance with the following domestic policy directive:\",\"\\\"Effective October 29, 2026, the Federal Open Market Committee directs the Desk to:\",\"Undertake open market operations as necessary to maintain the federal funds rate in a target range of 3-3/4 to 4 percent.\"]},{\"claim_text\":\"FOMC 지시문은 상설 익일물 레포 운영을 4.0% 금리로 실시하도록 했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Conduct standing overnight repurchase agreement operations at a rate of 4.0 percent.\"]},{\"claim_text\":\"FOMC 지시문은 상설 익일물 역레포 운영을 3.75% 제시 금리와 거래상대방당 하루 $160 billion 한도로 실시하도록 했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Conduct standing overnight reverse repurchase agreement operations at an offering rate of 3.75 percent and with a per-counterparty limit of $160 billion per day.\"]},{\"claim_text\":\"FOMC 지시문은 충분한 지급준비금 수준을 유지하기 위해 적절할 때 단기국채(Treasury bills) 매입과, 필요하면 잔존만기 3년 이하의 다른 국채 매입을 통해 SOMA 보유 증권을 늘리도록 했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"When appropriate, increase the System Open Market Account holdings of securities through purchases of Treasury bills and, if needed, other Treasury securities with remaining maturities of 3 years or less to maintain an ample level of reserves.\"]},{\"claim_text\":\"FOMC 지시문은 연준 보유 국채의 모든 원금 상환분을 입찰에서 차환하고, 보유 기관채(agency securities)의 모든 원금 상환분을 단기국채에 재투자하도록 했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"Roll over at auction all principal payments from the Federal Reserve's holdings of Treasury securities.\",\"Reinvest all principal payments from the Federal Reserve's holdings of agency securities into Treasury bills.\\\"\"]},{\"claim_text\":\"연준 이사회는 재할인율(primary credit rate)을 기존 수준인 4.0%로 정하는 것을 만장일치로 승인했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-28\",\"passages\":[\"In a related action, the Board of Governors of the Federal Reserve System voted unanimously to approve the establishment of the primary credit rate at the existing level of 4.0 percent.\"]}]}",
+  "output_in": "here"
+}

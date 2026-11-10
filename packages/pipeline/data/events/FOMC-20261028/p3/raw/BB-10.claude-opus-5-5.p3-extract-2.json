@@ -1,0 +1,27 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/2 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "BB-10",
+  "source_id": "905b8bf0-7cd2-4015-a3b7-d6e1c916a77d",
+  "text_sha256": "67b80429ffd4c38b5954139cbc676277e7f74070c7801e462f8d010dd1b5eeb6",
+  "input_sha256": "67b80429ffd4c38b5954139cbc676277e7f74070c7801e462f8d010dd1b5eeb6",
+  "prompt_version": "p3-extract/2",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "4683bdad0a821ba274562ea10df5fc51c10d6c7f66b332a99e207b5678e39ff2",
+  "response_id": "msg_011CgtzejBijYAEgoECRYAL6",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4897,
+    "output_tokens": 1611,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 14116,
+  "cost_usd": 0.052808,
+  "called_at": "2026-11-10T09:16:21.690Z",
+  "output_sha256": "e1b97446cd6b3676ea78c39841665c4239912a79754cb45ba915a573e5fe6322",
+  "output": "{\"facts\":[{\"claim_text\":\"Federal Reserve 는 Beige Book 이 12개 Federal Reserve District 전반의 현재 경제 상황에 관한 Federal Reserve System 간행물이며, 각 District 의 출처에서 직접 모은 주로 정성적인 정보에 바탕을 둔다고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Federal Reserve (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"The Beige Book is a Federal Reserve System publication about current economic conditions across the 12 Federal Reserve Districts.\",\"It characterizes regional economic conditions and prospects based on a variety of mostly qualitative information, gathered directly from each District's sources.\"]},{\"claim_text\":\"Federal Reserve 는 Beige Book 보고서가 한 해에 eight 번 발간된다고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Federal Reserve (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"Reports are published eight times per year.\"]},{\"claim_text\":\"Federal Reserve 는 Beige Book 이 지난 보고서 이후 경제 상황의 변화를 서술하려는 것이라고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Federal Reserve (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"The Beige Book is intended to characterize the change in economic conditions since the last report.\"]},{\"claim_text\":\"Federal Reserve 는 Beige Book 이 Federal Reserve 관계자들의 견해에 대한 논평이 아니라고 밝힘.\",\"fact_type\":\"OFFICIAL_LIMIT\",\"actor\":\"Federal Reserve (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"The Beige Book is not a commentary on the views of Federal Reserve officials.\"]},{\"claim_text\":\"Federal Reserve 는 Beige Book 의 정보원(contacts)이 무작위로 선정되지 않으며, 각 Bank 가 다양한 출처를 꾸리려 한다고 밝힘.\",\"fact_type\":\"OFFICIAL_LIMIT\",\"actor\":\"Federal Reserve (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"Contacts are not selected at random; rather, Banks strive to curate a diverse set of sources that can provide accurate and objective information about a broad range of economic activities.\"]},{\"claim_text\":\"Federal Reserve 는 contacts 에서 얻은 정보가 Federal Reserve 이코노미스트와 직원이 경제 상황을 평가하는 데 쓰는 데이터와 분석을 보완한다고 설명함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Federal Reserve (Beige Book 소개)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-14\",\"passages\":[\"The information from contacts supplements the data and analysis used by Federal Reserve economists and staff to assess economic conditions in the Federal Reserve Districts.\"]}]}",
+  "output_in": "here"
+}

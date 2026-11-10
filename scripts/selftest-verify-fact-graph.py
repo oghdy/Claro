@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""verify-fact-graph 자체 시험 — 실물 그래프(10월 · 9월 둘)는 통과하고, 망가뜨린 사본은 그 code 로 실패해야 한다.
+"""verify-fact-graph 자체 시험 — 실물 그래프(10월 · 9월)는 통과하고, 망가뜨린 사본은 그 code 로 실패해야 한다.
+P-3b: 칸 (FG_CELL · FG_AFTER) · 표와 모델 (FG_TABLE_MODEL) · 수량어 (FG_QUANTIFIER) · 수 (FG_NUMBER) · 묶기 (FG_MERGE) 사본을 더했다.
 
     python3 scripts/selftest-verify-fact-graph.py
 """
@@ -124,6 +125,108 @@ def m_counts(b):            # 수가 맞지 않는다
     b['graph']['counts']['verified'] += 1
 
 
+# ── P-3b ────────────────────────────────────────────────────────────────────────────────────────────
+def tsy(b, day='2026-10-28'):
+    return fact(b, lambda f: f.get('_table', {}).get('handler') == 'treasury_par_yield' and f['event_at'] == day)
+
+
+def m_cell_7yr(b):          # P-3 의 오류 그대로 — "10 Yr" 칸에 7 Yr 값 (글 · 주석 모두 4.95)
+    f = tsy(b)
+    c10 = next(c for c in f['_table']['cells'] if c['col'] == '10 Yr')
+    c7 = next(c for c in f['_table']['cells'] if c['col'] == '7 Yr')
+    f['claim_text'] = f['claim_text'].replace(f'10 Yr {c10["value"]}', f'10 Yr {c7["value"]}')
+    c10['value'] = c7['value']
+
+
+def m_cell_shift(b):        # 머리 칸 번호를 하나 밀기 (값 · 글은 그대로)
+    c = next(c for c in tsy(b)['_table']['cells'] if c['col'] == '10 Yr')
+    c['h'] -= 1
+
+
+def m_cell_claim(b):        # 주석은 맞고 글만 틀림
+    f = tsy(b)
+    f['claim_text'] = f['claim_text'].replace('10 Yr 5.05', '10 Yr 4.95')
+
+
+def m_cell_group(b):        # SEP 묶음 머리를 바꿈 (Median → Range)
+    f = fact(b, lambda f: f.get('_table', {}).get('handler') == 'sep_table1' and f['_table']['group']['shown'] == 'Median')
+    f['_table']['group'].update(index=3, col='Range3', shown='Range')
+    f['claim_text'] = f['claim_text'].replace('· Median:', '· Range:')
+
+
+def m_cell_date(b):         # 표 사실의 날짜가 줄과 다름
+    tsy(b, '2026-10-27')['event_at'] = '2026-10-26'
+
+
+def m_after(b):             # 사건 날 뒤의 줄 (10/29 — 국채 표에 있다)
+    f = tsy(b)
+    t = lab(b, 'TSY')['text']
+    row = next(l for l in t.split('\n') if l.startswith('10/29/2026 |'))
+    old = f['_table']['row_line']
+    f['_table']['row_line'] = row
+    for r in b['graph']['fact_sources']:
+        if r['fact_id'] == f['fact_id'] and r.get('_passage') == old:
+            i = t.index(row)
+            r.update(_passage=row, span_start=i, span_end=i + len(row))
+    vals = V.cells(row)
+    for c in f['_table']['cells']:
+        f['claim_text'] = f['claim_text'].replace(f'{c["shown"]} {c["value"]}', f'{c["shown"]} {vals[c["r"]]}')
+        c['value'] = vals[c['r']]
+    f['event_at'] = '2026-10-29'
+
+
+def m_table_model(b):       # 표 문서에 모델 사실 (표 주석을 떼고 모델이 뽑은 것처럼)
+    f = tsy(b)
+    del f['_table']
+    f.update(extraction_model='claude-opus-5-5', extraction_version='p3-extract/2')
+
+
+def m_input_unmasked(b):    # BEA 를 표를 가리지 않고 모델에 보냈다 (모델이 받은 글의 sha256 = 원문)
+    bf = next(x for x in b['graph']['built_from'] if x['source_label'] == 'BEA-08')
+    bf['input_sha256'] = lab(b, 'BEA-08')['sha']
+    b['raw'][bf['raw']]['input_sha256'] = lab(b, 'BEA-08')['sha']
+
+
+def q_fact(b):
+    return fact(b, lambda f: f['claim_text'].startswith('여러 참가자') and '_table' not in f)
+
+
+def m_quant_some(b):        # P-3 의 오류 그대로 — several → 일부
+    f = q_fact(b)
+    f['claim_text'] = f['claim_text'].replace('여러 참가자', '일부 참가자', 1)
+
+
+def m_quant_drop(b):        # 수량어를 뺐다 — 모두로 읽힌다
+    f = q_fact(b)
+    f['claim_text'] = f['claim_text'].replace('여러 참가자는', '참가자들은', 1)
+
+
+def m_quant_banned(b):      # 대응표에 없는 말
+    f = q_fact(b)
+    f['claim_text'] = f['claim_text'].replace('여러 참가자', '다수의 참가자', 1)
+
+
+def m_number(b):            # 구절에 없는 수
+    f = fact(b, lambda f: f['_from'][0].startswith('ST-10#') and '_table' not in f)
+    f['claim_text'] += ' (7.77%)'
+
+
+def m_year(b):              # 구절에 없는 해를 붙였다
+    f = fact(b, lambda f: f['_from'][0].startswith('MIN-09#') and '2019' not in f['claim_text'] and '_table' not in f)
+    f['claim_text'] = '2019년 ' + f['claim_text']
+
+
+def m_merge(b):             # 묶인 사실의 글의 수가 다르다
+    f = fact(b, lambda f: f['_from'][0].startswith('ST-10#') and '_table' not in f)
+    f['_from'].append('PC-10#0')
+    f['_other_texts'] = ['PC-10#0: 위원회는 목표 범위를 3-1/2~3-3/4%로 유지함']
+
+
+def m_bucket_q(b):          # 수량어 어긋남으로 갈린 것이 그래프에
+    f = q_fact(b)
+    b['graph']['quantifier_mismatch'].append({'key': f['_from'][0], 'source_label': f['_from'][0].split('#')[0], 'passages': []})
+
+
 CASES = [
     ('span 한 글자 밀기', m_shift, 'FG_PASSAGE'),
     ('지어낸 구절', m_invented, 'FG_PASSAGE'),
@@ -145,6 +248,21 @@ CASES = [
     ('BLS 다른 시리즈 블록', m_bls_section, 'FG_SPAN'),
     ('구절이 여러 번', m_not_unique, 'FG_PASSAGE_NOT_UNIQUE'),
     ('수 안 맞음', m_counts, 'FG_COUNTS'),
+    ('국채 10 Yr 칸에 7 Yr 값 (P-3 오류)', m_cell_7yr, 'FG_CELL'),
+    ('머리 칸 번호 밀기', m_cell_shift, 'FG_CELL'),
+    ('주석은 맞고 글만 다른 칸', m_cell_claim, 'FG_CELL'),
+    ('SEP 묶음 머리 바꿈', m_cell_group, 'FG_CELL'),
+    ('표 사실 날짜가 줄과 다름', m_cell_date, 'FG_CELL'),
+    ('사건 날 뒤의 표 줄', m_after, 'FG_AFTER'),
+    ('표 문서에 모델 사실', m_table_model, 'FG_TABLE_MODEL'),
+    ('BEA 표를 가리지 않고 모델에', m_input_unmasked, 'FG_TABLE_MODEL'),
+    ('several → 일부 (P-3 오류)', m_quant_some, 'FG_QUANTIFIER'),
+    ('수량어 빼기', m_quant_drop, 'FG_QUANTIFIER'),
+    ('대응표에 없는 수량어', m_quant_banned, 'FG_QUANTIFIER'),
+    ('구절에 없는 수', m_number, 'FG_NUMBER'),
+    ('구절에 없는 해', m_year, 'FG_NUMBER'),
+    ('묶인 사실의 수가 다름', m_merge, 'FG_MERGE'),
+    ('수량어 어긋남이 그래프에', m_bucket_q, 'FG_BUCKET'),
 ]
 
 

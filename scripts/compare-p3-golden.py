@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""P-3 9월 비교 — 골든 사실 60 (fixtures/store.json) 과 파이프라인이 뽑은 사실을 견준 판정을 검사하고 센다.
+"""P-3 · P-3b 9월 비교 — 골든 사실 60 (fixtures/store.json) 과 파이프라인이 뽑은 사실을 견준 판정을 검사하고 센다.
+P-3b: 판정의 models = 지금 그래프와 대 본다 · p3 = P-3 (2014a27) 의 얼린 판정 — 그래프가 다시 지어져 수만 센다. 표에 나란히
 
     python3 scripts/compare-p3-golden.py            # 표
     python3 scripts/compare-p3-golden.py --detail   # + 골든 사실마다 판정
 
-판정은 사람(P-3 세션)이 했다 — packages/pipeline/data/p3-golden/FOMC-20260916/compare.json. 이 스크립트는 판정을 만들지 않는다.
+판정은 사람(P-3 · P-3b 세션)이 했다 — packages/pipeline/data/p3-golden/FOMC-20260916/compare.json. 이 스크립트는 판정을 만들지 않는다.
 검사하는 것:
   - 골든 사실 60 이 모델마다 하나씩 판정돼 있다 · status 는 네 값
   - MISSED_UNSTORED ⇔ 그 골든 사실의 출처가 하나도 저장되지 않았다 (P-1 기록). 저장된 출처가 있으면 "놓침"은 MISSED_STORED 다
@@ -37,6 +38,8 @@ def main():
     rows = []
     for model, m in cmp_['models'].items():
         g = J(m['graph'])
+        if g.get('prompt_version') != m['prompt_version'] or g.get('model') != m['model']:
+            errs.append(f'{model}: 그래프의 모델 · 프롬프트 판 ({g.get("model")} · {g.get("prompt_version")}) 이 판정과 다르다')
         by_key = {}
         for f in g['facts']:
             for k in f.get('_from', []):
@@ -78,7 +81,7 @@ def main():
             if st in ('FOUND', 'PARTIAL') and over and not set(over) & set(keys):
                 warns.append(f'{model} {label}: 구절이 겹치는 {over} 를 가리키지 않았다 (가리킨 것 {keys})')
         for kind in ('text_errors', 'passage_short'):
-            for e in cmp_.get(kind, {}).get(model, []):
+            for e in cmp_.get(kind, {}).get(model, []) if not model.startswith('_') else []:
                 k = e['key'] if isinstance(e, dict) else e
                 if k not in by_key:
                     errs.append(f'{model} {kind}: {k} 가 그래프에 없다')
@@ -88,36 +91,62 @@ def main():
         after = sum(1 for f in g['facts'] if f.get('_after_event'))
         te = cmp_.get('text_errors', {}).get(model, [])
         te_matched = [e for e in te if e['key'] in {k for j in jd.values() for k in j.get('keys', [])}]
-        calls = [l for l in ledger if l['event'] == 'FOMC-20260916' and l['model_requested'] == model and l['ok']]
-        rows.append((model, c, len(g['facts']), len(extra), extra_src, after, te, te_matched, len(cmp_.get('passage_short', {}).get(model, [])), calls, g['counts']))
+        calls = [l for l in ledger if l['event'] == 'FOMC-20260916' and l['model_requested'] == m['model'] and l['ok'] and l['prompt_version'] in (m['prompt_version'], g.get('merge_version'))]
+        tab = sum(1 for f in g['facts'] if '_table' in f)
+        rows.append({'name': model, 'c': c, 'facts': len(g['facts']), 'extra': len(extra), 'extra_src': extra_src, 'after': after, 'te_extra': len(te) - len(te_matched), 'te_paired': len(te_matched), 'te': te,
+                     'ps': len(cmp_.get('passage_short', {}).get(model, [])), 'calls': calls, 'cnt': g['counts'], 'tab': tab, 'live': True,
+                     'cell': sum(1 for e in te if e['kind'] == '표 칸 밀림'), 'quant': sum(1 for e in te if e['kind'] == '수량어'),
+                     'qb': g['counts'].get('quantifier_mismatch', 0), 'nb': g['counts'].get('number_mismatch', 0), 'merges': g['counts'].get('merges', 0)})
         if '--detail' in sys.argv:
             print(f'\n{model}')
             for label in golden:
                 j = jd.get(label, {})
                 print(f'  {label:<5} {j.get("status", "?"):<16} {", ".join(j.get("keys", [])):<32} {j.get("note", "")[:90]}')
-    print('\n| | ' + ' | '.join(r[0] for r in rows) + ' |')
-    print('|---|' + '---|' * len(rows))
-    line = lambda name, f: print(f'| {name} | ' + ' | '.join(f(r) for r in rows) + ' |')
+    # P-3 (얼린 판정) — 수만 센다
+    frozen = []
+    for name, m in cmp_.get('p3', {}).get('models', {}).items():
+        jd = m['judgements']
+        if set(jd) != set(golden):
+            errs.append(f'P-3 {name}: 판정한 골든 사실이 60 과 다르다')
+        sm = m['summary']
+        frozen.append({'name': f'P-3 {name}', 'c': Counter(j['status'] for j in jd.values()), 'facts': sm['facts'], 'extra': sm['extra'], 'te_paired': sm['text_errors_paired'], 'te_extra': sm['text_errors_extra'],
+                       'cell': sm['cell_errors'], 'quant': sm['quantifier_errors'], 'ps': sm['passage_short'], 'tab': 0, 'qb': '—', 'nb': '—', 'merges': '—', 'live': False,
+                       'cost': sm['cost_usd'], 'sec': sm['seconds'], 'ncalls': sm['calls'], 'buckets': sm['no_passage_multiple_badshape']})
+    allr = frozen + [dict(r, name=f'P-3b {r["name"]}') for r in rows]
+    print('\n| | ' + ' | '.join(r['name'] for r in allr) + ' |')
+    print('|---|' + '---|' * len(allr))
+    line = lambda name, f: print(f'| {name} | ' + ' | '.join(str(f(r)) for r in allr) + ' |')
     stored_n = sum(1 for lb, f in golden.items() if any(r['source_id'] in stored for r in gfs.get(f['fact_id'], [])))
-    line('찾음 (FOUND)', lambda r: str(r[1]['FOUND']))
-    line('일부 (PARTIAL)', lambda r: str(r[1]['PARTIAL']))
-    line('놓침 — 원문 저장됨', lambda r: str(r[1]['MISSED_STORED']))
-    line('놓침 — 원문 저장 안 됨', lambda r: str(r[1]['MISSED_UNSTORED']))
-    line(f'저장된 원문이 있는 골든 {stored_n} 중 찾음 + 일부', lambda r: f'{r[1]["FOUND"] + r[1]["PARTIAL"]} ({(r[1]["FOUND"] + r[1]["PARTIAL"]) / stored_n:.0%})')
-    line('뽑은 사실 (묶은 뒤)', lambda r: str(r[2]))
-    line('더 뽑음 (골든에 없는 것)', lambda r: str(r[3]))
-    line('  그중 사건 뒤 표시 (_after_event)', lambda r: str(r[5]))
-    line('글이 틀린 것 (짝지은 것 중)', lambda r: str(len(r[7])))
-    line('글이 틀린 것 (더 뽑은 것 · 표본 22 + 국채 표 대조)', lambda r: str(len(r[6]) - len(r[7])))
-    line('구절 부족 (본 것 중)', lambda r: str(r[8]))
-    line('구절 없음 · 여럿 · 모양 틀림', lambda r: f'{r[10]["no_passage"]} · {r[10]["multiple"]} · {r[10]["bad_shape"]}')
-    line('호출 · 입력 / 출력 토큰', lambda r: f'{len(r[9])} · {sum(l["usage"]["input_tokens"] + l["usage"]["cache_read_input_tokens"] + l["usage"]["cache_creation_input_tokens"] for l in r[9]):,} / {sum(l["usage"]["output_tokens"] for l in r[9]):,}')
-    line('대략 비용', lambda r: f'${sum(l["cost_usd"] for l in r[9]):.2f}')
-    line('걸린 시간 (호출 합)', lambda r: f'{sum(l["duration_ms"] for l in r[9]) / 1000:.0f}초')
+    line('찾음 (FOUND)', lambda r: r['c']['FOUND'])
+    line('일부 (PARTIAL)', lambda r: r['c']['PARTIAL'])
+    line('놓침 — 원문 저장됨', lambda r: r['c']['MISSED_STORED'])
+    line('놓침 — 원문 저장 안 됨', lambda r: r['c']['MISSED_UNSTORED'])
+    line(f'**저장된 원문이 있는 골든 {stored_n} 중 찾음 + 일부**', lambda r: f'**{r["c"]["FOUND"] + r["c"]["PARTIAL"]} ({(r["c"]["FOUND"] + r["c"]["PARTIAL"]) / stored_n:.0%})**')
+    line('뽑은 사실 (묶은 뒤)', lambda r: r['facts'])
+    line('  그중 표 사실 (코드)', lambda r: r['tab'])
+    line('더 뽑음 (골든에 없는 것)', lambda r: r['extra'])
+    line('글이 틀린 것 — 짝지은 것', lambda r: r['te_paired'])
+    line('글이 틀린 것 — 더 뽑은 것 (표본)', lambda r: r['te_extra'])
+    line('  칸 틀림', lambda r: r['cell'])
+    line('  수량어 틀림', lambda r: r['quant'])
+    line('구절 부족 (본 것 중)', lambda r: r['ps'])
+    line('수량어 · 수 어긋남 — 코드가 그래프 밖으로', lambda r: f'{r["qb"]} · {r["nb"]}')
+    line('구절 없음 · 여럿 · 모양 틀림', lambda r: r.get('buckets') or f'{r["cnt"]["no_passage"]} · {r["cnt"]["multiple"]} · {r["cnt"]["bad_shape"]}')
+    line('묶기', lambda r: r['merges'])
+    line('호출 (모델)', lambda r: r.get('ncalls') or len(r['calls']))
+    line('대략 비용', lambda r: f'${r["cost"]:.2f}' if not r['live'] else f'${sum(l["cost_usd"] for l in r["calls"]):.2f}')
+    line('걸린 시간 (호출 합)', lambda r: f'{r["sec"]}초' if not r['live'] else f'{sum(l["duration_ms"] for l in r["calls"]) / 1000:.0f}초')
     for r in rows:
-        print(f'\n{r[0]} — 더 뽑은 것의 문서별: ' + ' · '.join(f'{k} {v}' for k, v in sorted(r[4].items(), key=lambda x: -x[1])))
-        for e in r[6]:
+        print(f'\n{r["name"]} — 더 뽑은 것의 문서별: ' + ' · '.join(f'{k} {v}' for k, v in sorted(r['extra_src'].items(), key=lambda x: -x[1])))
+        for e in r['te']:
             print(f'  글이 틀림 {e["key"]} [{e["kind"]}] {e["what"]}')
+    # 표본의 key 가 그래프에 있다
+    for model, keys in ((k, v) for k, v in cmp_.get('sample', {}).items() if not k.startswith('_')):
+        g = J(cmp_['models'][model]['graph'])
+        have = {k for f in g['facts'] for k in f.get('_from', [])}
+        for k in keys:
+            if k not in have:
+                errs.append(f'{model} 표본 {k} 가 그래프에 없다')
     for w in warns:
         print('  WARN  ' + w)
     for e in errs:

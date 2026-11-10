@@ -1,0 +1,27 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/2 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "SP-LOG-1001",
+  "source_id": "5bc771dd-60a2-4224-9b67-e3d2d3197258",
+  "text_sha256": "58aef8eeb173afff2c5392852f8f2b4281f282a75e21bf79a300588c274e4c0f",
+  "input_sha256": "58aef8eeb173afff2c5392852f8f2b4281f282a75e21bf79a300588c274e4c0f",
+  "prompt_version": "p3-extract/2",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "b0701e08bdaea4965c1e2aed57b6c61c153da986ac1caaad6759824154d7e395",
+  "response_id": "msg_011Cgtzm7S7MdBu18uMRsxH5",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 2984,
+    "output_tokens": 4287,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 32131,
+  "cost_usd": 0.098676,
+  "called_at": "2026-11-10T09:18:06.313Z",
+  "output_sha256": "ba6982f6526ad26edda3bd5a5c600543a1032458cde1a59f8bbde23fa28bdbc2",
+  "output": null,
+  "output_in": "cache"
+}

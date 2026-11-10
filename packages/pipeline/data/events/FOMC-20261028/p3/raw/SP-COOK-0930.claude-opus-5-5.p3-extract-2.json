@@ -1,0 +1,27 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/2 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "FOMC-20261028",
+  "source_label": "SP-COOK-0930",
+  "source_id": "27a2b964-9027-4e75-94d6-27f4472af596",
+  "text_sha256": "4fc6640c6f336440200733d1a879848487908376616bb06001bfed845b88d997",
+  "input_sha256": "4fc6640c6f336440200733d1a879848487908376616bb06001bfed845b88d997",
+  "prompt_version": "p3-extract/2",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "1cd40766738702e33d84ba7c26cf8fea6563f30334a6503147ee58e2bdcc47dd",
+  "response_id": "msg_011Cgtzf3hhRiB1P1VCo4gAM",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 9151,
+    "output_tokens": 2795,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 22950,
+  "cost_usd": 0.093504,
+  "called_at": "2026-11-10T09:16:34.845Z",
+  "output_sha256": "fd73c4608c008f27bc70e204d0d6dd6540a24d03f35cfd1d845f98cd9cda9e95",
+  "output": "{\"facts\":[{\"claim_text\":\"Cook 이사는 전국적으로 노동시장이 대체로 안정적이라고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Nationwide, the labor market is largely stable.\"]},{\"claim_text\":\"Cook 이사는 실업률이 역사적 기준으로 낮고, 해고의 대리지표인 실업수당 신규 청구가 계속 낮은 수준에서 움직이고 있다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Unemployment is low by historical standards, and new claims for unemployment benefits—a proxy for layoffs—continue to trend at low levels.\"]},{\"claim_text\":\"Cook 이사는 최근 몇 년간 채용이 확장 초기보다 완만했지만, 여름 동안 고용 증가가 상승 추세를 보였다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Hiring has been more modest in recent years than earlier in the expansion, though employment gains trended up over the summer months.\"]},{\"claim_text\":\"Cook 이사는 인플레이션이 너무 오랫동안 너무 높았으며, 전국적으로 연준의 2% 목표를 five years 넘게 웃돌았다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Regardless of whether you are in a rural or urban area, the fact remains that inflation has been too high for too long.\",\"On a national level, it has exceeded the Fed's 2 percent target for more than five years.\"]},{\"claim_text\":\"Cook 이사는 최근 9월 회의에서 FOMC 의 나머지 위원들과 함께 금리를 25 basis points 인상하는 데 찬성 투표함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-16\",\"passages\":[\"As you know, I voted along with the rest of the FOMC to raise rates 25 basis points at the recent September meeting.\"]},{\"claim_text\":\"Cook 이사는 노동시장의 강세를 유지하면서 인플레이션을 목표로 되돌리는 데 전념하겠다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"I am committed to returning inflation to our objective while preserving the strength in the labor market.\"]},{\"claim_text\":\"Cook 이사는 2023년 이후 농촌 지역의 주거비 인플레이션이 팬데믹 이전 패턴 쪽으로 되돌아갔지만, 주거비가 여전히 전체 인플레이션의 중요한 동인이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"Since 2023, housing inflation in rural areas has reverted toward pre-pandemic patterns; however, housing costs remain a significant driver of overall inflation.\"]},{\"claim_text\":\"Cook 이사는 농촌 지역의 노동시장 흐름이 몇 가지 중요한 단서를 제외하면 나라의 나머지 지역과 대체로 비슷하다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"In my assessment, rural communities experience labor-market dynamics broadly similar to those in much of the rest of the country, with some important caveats.\"]},{\"claim_text\":\"Cook 이사는 농촌 지역 노동자가 약 20 million 명으로 미국 노동자 약 8명 중 1명이라고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"The roughly 20 million workers in rural communities are an important part of that overall picture.\",\"They represent about 1 in 8 American workers.\"]},{\"claim_text\":\"Cook 이사는 지난 4년 남짓 동안 일자리 창출이 도시 지역 쪽으로 기울었다고 말함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"However, over the past four or so years, job creation has tilted toward urban areas.\"]},{\"claim_text\":\"Cook 이사는 연설의 견해가 자신의 것이며 연준 이사회나 FOMC 동료들의 견해와 반드시 같지는 않다고 밝힘\",\"fact_type\":\"OFFICIAL_LIMIT\",\"actor\":\"Cook 이사 (연설)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-09-30\",\"passages\":[\"The views expressed here are my own and are not necessarily those of my colleagues on the Federal Reserve Board or the Federal Open Market Committee.\"]}]}",
+  "output_in": "here"
+}

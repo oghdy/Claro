@@ -1,0 +1,360 @@
+{
+  "_what": "P-3b 사실 글 검사 규칙 — 수량어 대응표 · 수(數) 대조. **이 파일 한 곳에만 있다.** 프롬프트(src/p3-prompt.ts 가 이 표를 그대로 옮긴다) · 짓기(src/checks.ts) · 검사(scripts/verify-fact-graph.py) 가 같은 파일을 읽는다. 바꾸면 version 을 올린다",
+  "version": "p3-checks/1",
+  "quantifiers": {
+    "_what": "연준 회의록 · 베이지북 · 연설의 수량어 (몇 명 · 몇 곳이 그렇게 봤나). 한 원문 말 = 한 한국어 말. 서로 섞이지 않는다 — 한국어 말 하나는 한 줄에만 있다. 표에 없는 한국어(다수 · 상당한 · 적지 않은 …)로 사람 수를 옮기면 실패",
+    "classes": [
+      {
+        "id": "all",
+        "en": [
+          "all"
+        ],
+        "ko": [
+          "모든",
+          "전원",
+          "모두"
+        ]
+      },
+      {
+        "id": "almost_all",
+        "en": [
+          "almost all",
+          "nearly all",
+          "virtually all"
+        ],
+        "ko": [
+          "거의 모든",
+          "거의 전원",
+          "거의 모두"
+        ]
+      },
+      {
+        "id": "large_majority",
+        "en": [
+          "a large majority of",
+          "a large majority",
+          "the vast majority of",
+          "the vast majority",
+          "a vast majority of",
+          "a vast majority",
+          "a substantial majority of",
+          "a substantial majority",
+          "the large majority of",
+          "the large majority",
+          "a strong majority of"
+        ],
+        "ko": [
+          "대다수"
+        ]
+      },
+      {
+        "id": "most",
+        "en": [
+          "most"
+        ],
+        "ko": [
+          "대부분"
+        ]
+      },
+      {
+        "id": "majority",
+        "en": [
+          "a majority of",
+          "a majority",
+          "the majority of",
+          "the majority"
+        ],
+        "ko": [
+          "과반"
+        ]
+      },
+      {
+        "id": "many",
+        "en": [
+          "many"
+        ],
+        "ko": [
+          "많은"
+        ]
+      },
+      {
+        "id": "a_number",
+        "en": [
+          "a number of"
+        ],
+        "ko": [
+          "상당수"
+        ]
+      },
+      {
+        "id": "several",
+        "en": [
+          "several"
+        ],
+        "ko": [
+          "여러"
+        ]
+      },
+      {
+        "id": "some",
+        "en": [
+          "some"
+        ],
+        "ko": [
+          "일부"
+        ]
+      },
+      {
+        "id": "a_few",
+        "en": [
+          "a few"
+        ],
+        "ko": [
+          "몇몇"
+        ]
+      },
+      {
+        "id": "a_couple",
+        "en": [
+          "a couple of",
+          "a couple"
+        ],
+        "ko": [
+          "두어"
+        ]
+      },
+      {
+        "id": "minority",
+        "en": [
+          "a minority of",
+          "a minority"
+        ],
+        "ko": [
+          "소수"
+        ]
+      }
+    ],
+    "nouns": [
+      {
+        "en": [
+          "participants",
+          "participant"
+        ],
+        "ko": [
+          "참가자"
+        ]
+      },
+      {
+        "en": [
+          "members",
+          "member",
+          "voters",
+          "policymakers"
+        ],
+        "ko": [
+          "위원",
+          "구성원",
+          "투표권자",
+          "정책결정자"
+        ]
+      },
+      {
+        "en": [
+          "officials"
+        ],
+        "ko": [
+          "관계자",
+          "당국자"
+        ]
+      },
+      {
+        "en": [
+          "governors"
+        ],
+        "ko": [
+          "이사"
+        ]
+      },
+      {
+        "en": [
+          "presidents"
+        ],
+        "ko": [
+          "총재"
+        ]
+      },
+      {
+        "en": [
+          "districts",
+          "district"
+        ],
+        "ko": [
+          "지역",
+          "연은",
+          "지구"
+        ]
+      },
+      {
+        "en": [
+          "contacts",
+          "respondents"
+        ],
+        "ko": [
+          "응답자",
+          "접촉처"
+        ]
+      },
+      {
+        "en": [
+          "firms",
+          "businesses",
+          "companies"
+        ],
+        "ko": [
+          "기업",
+          "업체",
+          "사업체",
+          "회사"
+        ]
+      },
+      {
+        "en": [
+          "banks",
+          "lenders"
+        ],
+        "ko": [
+          "은행",
+          "대출기관"
+        ]
+      },
+      {
+        "en": [
+          "economists",
+          "forecasters",
+          "analysts"
+        ],
+        "ko": [
+          "경제학자",
+          "예측기관",
+          "분석가",
+          "전문가"
+        ]
+      }
+    ],
+    "_nouns": "사람 · 곳 낱말의 짝 (원문 ↔ 한국어). 한국어 낱말은 낱말의 처음에서만 찾는다 ('중앙은행' 의 '은행' 은 아니다). 수량어를 뺐는지는 구절의 (수량어 + 낱말) 의 짝 한국어 낱말이 글에 있는데 글에 수량어가 없을 때",
+    "ko_banned": [
+      "다수",
+      "상당한",
+      "적지 않은"
+    ],
+    "_rule": "구절의 (수량어 + 사람 낱말) → 원문 쪽 갈래 E. 글의 (수량어 + 사람 낱말 · 또는 사람 낱말 + (들)(중) + 수량어) → 글 쪽 갈래 K. 실패: K 에 E 에 없는 갈래가 있다 · 또는 구절의 (수량어 + 낱말) 의 짝 한국어 낱말이 글에 있는데 글에 수량어가 없다 (수량어를 뺐다 — '참가자들은' 은 모두로 읽힌다) · 또는 글에 금지 말이 사람 낱말 곁에 있다 (표의 한국어 말을 지운 뒤에 찾는다 — '대다수' 의 '다수' 는 금지 말이 아니다)"
+  },
+  "numbers": {
+    "_what": "글의 수 · 날짜가 구절에 있나. 글의 아라비아 숫자 하나하나가 구절의 수 · 수 낱말 · 달 이름 · 서수 · 문서 공개일 · 문서 제목의 수 가운데 있어야 한다. 표(코드가 만든 사실)는 이 검사가 아니라 칸 검사를 받는다",
+    "month_names": {
+      "january": 1,
+      "jan": 1,
+      "february": 2,
+      "feb": 2,
+      "march": 3,
+      "mar": 3,
+      "april": 4,
+      "apr": 4,
+      "may": 5,
+      "june": 6,
+      "jun": 6,
+      "july": 7,
+      "jul": 7,
+      "august": 8,
+      "aug": 8,
+      "september": 9,
+      "sept": 9,
+      "sep": 9,
+      "october": 10,
+      "oct": 10,
+      "november": 11,
+      "nov": 11,
+      "december": 12,
+      "dec": 12
+    },
+    "number_words": {
+      "zero": 0,
+      "one": 1,
+      "two": 2,
+      "three": 3,
+      "four": 4,
+      "five": 5,
+      "six": 6,
+      "seven": 7,
+      "eight": 8,
+      "nine": 9,
+      "ten": 10,
+      "eleven": 11,
+      "twelve": 12,
+      "thirteen": 13,
+      "fourteen": 14,
+      "fifteen": 15,
+      "sixteen": 16,
+      "seventeen": 17,
+      "eighteen": 18,
+      "nineteen": 19,
+      "twenty": 20,
+      "thirty": 30,
+      "forty": 40,
+      "fifty": 50,
+      "sixty": 60,
+      "seventy": 70,
+      "eighty": 80,
+      "ninety": 90,
+      "hundred": 100,
+      "half": 2,
+      "halves": 2,
+      "third": 3,
+      "thirds": 3,
+      "quarter": 4,
+      "quarters": 4,
+      "single": 1,
+      "once": 1,
+      "twice": 2,
+      "both": 2,
+      "dozen": 12,
+      "a year": 1,
+      "past year": 1,
+      "a month": 1,
+      "a week": 1,
+      "a day": 1,
+      "a decade": 10
+    },
+    "ordinals": {
+      "first": 1,
+      "second": 2,
+      "third": 3,
+      "fourth": 4,
+      "fifth": 5,
+      "sixth": 6,
+      "seventh": 7,
+      "eighth": 8,
+      "ninth": 9,
+      "tenth": 10,
+      "eleventh": 11,
+      "twelfth": 12
+    },
+    "fractions": {
+      "¼": "1/4",
+      "½": "1/2",
+      "¾": "3/4",
+      "⅛": "1/8",
+      "⅜": "3/8",
+      "⅝": "5/8",
+      "⅞": "7/8"
+    },
+    "_tokens": "수 = 아라비아 숫자 묶음 (소수점 포함 · 천 단위 쉼표는 지운다 · 정수의 앞 0 은 지운다 — '09' = '9'). 구절 쪽: 숫자 묶음 + 위 낱말들 (대소문자 무시 · 낱말 경계) + 'mid-2026' 의 2026 같은 붙은 숫자. 허용: 문서의 공개일 (년 · 월 · 일) 과 문서 제목의 수",
+    "one_units": {
+      "년": "year",
+      "개월": "month",
+      "달": "month",
+      "주": "week"
+    },
+    "_one_units": "글의 '1년' · '1개월' · '1주' 의 1 은 구절에 그 영어 낱말(year · years · year-earlier · year-ago …)이 있으면 된다 — 'a year earlier' · 'year-ago levels' 를 '1년 전' 으로 옮긴 것"
+  }
+}
