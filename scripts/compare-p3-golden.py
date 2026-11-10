@@ -38,8 +38,15 @@ def main():
     rows = []
     for model, m in cmp_['models'].items():
         g = J(m['graph'])
-        if g.get('prompt_version') != m['prompt_version'] or g.get('model') != m['model']:
+        # P-5 (P4-j): 그래프 판이 올랐어도, 판정이 가리킨 문서의 출력이 판정 때의 판 그대로(앞 판 출력을 같은 요청으로 쓴 것 — prompt_compat)면 판정은 그 출력에 대해 유효하다
+        bf_ver = {x['source_label']: x.get('prompt_version') for x in g.get('built_from', [])}
+        judged_docs = {k.split('#')[0] for j in m['judgements'].values() for k in j.get('keys', [])}
+        compat_ok = m['prompt_version'] in (g.get('prompt_compat') or {}) and all(bf_ver.get(d) == m['prompt_version'] for d in judged_docs if d in bf_ver)
+        if g.get('model') != m['model'] or (g.get('prompt_version') != m['prompt_version'] and not compat_ok):
             errs.append(f'{model}: 그래프의 모델 · 프롬프트 판 ({g.get("model")} · {g.get("prompt_version")}) 이 판정과 다르다')
+        elif g.get('prompt_version') != m['prompt_version']:
+            redone = sorted(d for d, v in bf_ver.items() if v != m['prompt_version'])
+            warns.append(f'{model}: 그래프는 {g.get("prompt_version")} — 판정이 가리킨 문서의 출력은 {m["prompt_version"]} 그대로 (같은 요청). 다시 뽑은 문서 {redone} 는 판정 밖 (P-5 — CAL 일정은 이제 코드가 읽는다 · F38 판정은 모델 출력에 대한 것)')
         by_key = {}
         for f in g['facts']:
             for k in f.get('_from', []):

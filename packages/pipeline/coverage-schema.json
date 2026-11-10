@@ -1,6 +1,6 @@
 {
   "_what": "Coverage Schema — 통화정책형 · 동결 회의 (P-4 · 2026-11-10). 9월 브리프 §3 의 15 슬롯(인상 회의)에서 출발해 10월 동결 회의에 맞게 고친 안이다 (FINDINGS §6.2 '유형마다 새로 만든다'). 사람(작업 세션)이 쓴다 — PM 게이트 전의 안. 슬롯은 '놓치지 않기 위한 체크리스트'라 슬롯마다 요소(element)를 두고, 요소 하나하나가 계약 SlotCheck 한 줄이 된다 (DATA_MODEL §12 — PARTIAL 은 확정 다섯 밖이라 상태를 늘리지 않고 슬롯을 요소로 나눴다. 슬롯의 채움 / 일부 / 빔 은 요소에서 계산한다). 사실을 요소에 붙이는 일은 모델(p4-assign) · 표 사실은 아래 table_rules (코드). 요소가 비면 if_empty 의 상태 · 근거 — 없으면 짓기가 멈춘다 (빈 것을 사람이 보지 않고 넘기지 않게)",
-  "version": "fomc-hold/1",
+  "version": "fomc-hold/2",
   "applies_to": [
     "FOMC-20261028"
   ],
@@ -441,6 +441,21 @@
         "elements": [
           "S07.c"
         ]
+      },
+      {
+        "doc": "CAL",
+        "match": "— December 8-9\\* 회의",
+        "elements": [
+          "S05.d",
+          "S15.a"
+        ]
+      },
+      {
+        "doc": "CAL",
+        "match": "— October 27-28 회의",
+        "elements": [
+          "S05.d"
+        ]
       }
     ]
   },
@@ -449,27 +464,14 @@
       "status": "SOURCE_UNAVAILABLE",
       "basis": "P-4 다시 모으기 (2026-11-10): Hammack 의 10월 표결 설명 성명이 클리블랜드 연은 연설 · 보도자료 목록에 없다 (4월 sp-20260501 · 7월 sp-20260731 은 있었다). Cook 의 회의 뒤 글이 연준 연설 · 보도자료 RSS 에 없다. 회의 뒤 Hammack 의 공개 발언은 11/5 연설(SP-HAM-1105)뿐이고 표결을 말하지 않는다 → S03.c. 10월 회의록(11/18 예정)이 반대 이유를 적을 수 있다"
     },
-    "S05.d": {
-      "status": "NOT_EXTRACTED",
-      "sources": [
-        "CAL"
-      ],
-      "basis": "CAL(연준 회의 일정 페이지)에 'December | 8-9*' · '* Meeting associated with a Summary of Economic Projections.' 가 있고 'October | 27-28' 에는 * 가 없다 — 자료는 있는데 P-3b 가 일정 줄을 뽑지 않았다 (P3b-e). 그래프를 손으로 고치지 않는다"
-    },
     "S09.c": {
       "status": "SOURCE_UNAVAILABLE",
-      "basis": "10월 회의록은 아직 나오지 않았다 (2026-11-10 기준). CAL 사실 F530: 회의록은 결정일로부터 three 주 뒤 — 11/18 무렵. 나오면 다시 모은다"
+      "basis": "10월 회의록은 아직 나오지 않았다 (2026-11-10 기준). CAL 사실 F761 (P-5 에서 CAL 을 다시 뽑아 F530 → F761): 회의록은 결정일로부터 three weeks 뒤 — 11/18 무렵. 나오면 다시 모은다"
     },
     "S11.a": {
       "status": "SOURCE_UNAVAILABLE",
       "basis": "회의 직전 금리 확률(CME FedWatch)은 약관상 자동 수집 금지 (D40 P1-e). 다른 1차 확률 측정을 P-2 · P-4 모두 못 찾았다. 사람이 브라우저로 보면 채울 수 있다"
-    },
-    "S15.a": {
-      "status": "NOT_EXTRACTED",
-      "sources": [
-        "CAL"
-      ],
-      "basis": "CAL 에 'December | 8-9*' 가 있다 — P-3b 가 CAL 의 일정 줄을 놓쳤다 (P3b-e · 9월에도 F38 을 놓침). 의장의 '6주 뒤 회의'(F060)는 날짜가 아니어서 모델이 붙이지 않았다"
     }
-  }
+  },
+  "_changes": "fomc-hold/2 (P-5 · D44 P4-f) — 슬롯 · 요소는 그대로. CAL 일정 사실(fomc_calendar 표 읽기)을 붙이는 표 규칙 둘을 더하고, 그 때문에 빈 요소가 아니게 된 S05.d · S15.a 의 if_empty 를 뺐다 (CAL 이 다시 비면 짓기가 멈춰 사람이 본다)"
 }

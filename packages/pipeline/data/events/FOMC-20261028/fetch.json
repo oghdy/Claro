@@ -82,7 +82,7 @@
     {
       "host": "www.whitehouse.gov",
       "url": "https://www.whitehouse.gov/robots.txt",
-      "fetched_at": "2026-11-10T09:45:00.352Z",
+      "fetched_at": "2026-11-10T10:43:10.226Z",
       "http_status": 200,
       "sha256": "44c691a48cb56ed97912daf32352c7de679f4fb2ade725a5cdc91efb7b43e496",
       "error": null,
@@ -1772,6 +1772,47 @@
         "policy rate": 0,
         "inflation": 1,
         "FOMC": 2
+      }
+    },
+    {
+      "label": "WH-COOK-1007",
+      "source_id": "15137bd5-ec01-41ac-a42c-d39934abac82",
+      "publisher": "whitehouse.gov",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/establishment-of-a-committee-of-inquiry-to-investigate-allegations-of-false-statements-by-lisa-denell-cook/",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 에 맞는 규칙 없음 — 된다"
+      },
+      "fetch": {
+        "requested_url": "https://www.whitehouse.gov/presidential-actions/2026/10/establishment-of-a-committee-of-inquiry-to-investigate-allegations-of-false-statements-by-lisa-denell-cook/",
+        "fetched_at": "2026-11-10T10:43:10.497Z",
+        "final_url": "https://www.whitehouse.gov/presidential-actions/2026/10/establishment-of-a-committee-of-inquiry-to-investigate-allegations-of-false-statements-by-lisa-denell-cook/",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "c4a081dab38eba1f179172d35b0b780caf48e189c53dbc094d6dde14358c6008",
+        "raw_bytes": 295649,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "3aecef9141c988203058209cb96c7ad987562ada8e4f651a551e1d9fbfb0bfdc",
+      "text_length": 8054,
+      "pdf_page_starts": null,
+      "first_line": "Skip to content",
+      "rights": "US_FEDERAL_17USC105",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "monetary policy": 0,
+        "federal funds rate": 0,
+        "policy rate": 0,
+        "inflation": 0,
+        "FOMC": 0
       }
     }
   ],

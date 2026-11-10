@@ -629,6 +629,21 @@
       ],
       "why": "P-4 다시 모으기 — 슬롯 S14 '이력 (금리 · 반대)' 의 요소 S14.b (올해 앞선 회의들의 반대 표 이력) 가 9월 12–0 하나뿐이었다. 올해 회의마다 성명문의 표결 · 반대 줄",
       "url_basis": "CAL (연준 회의 일정 페이지) 의 2026 회의 날짜 · 9월 성명문과 같은 주소 꼴 (monetaryYYYYMMDDa.htm)"
+    },
+    {
+      "label": "WH-COOK-1007",
+      "group": "사이",
+      "title": "Establishment of a Committee of Inquiry to Investigate Allegations of False Statements by Lisa DeNell Cook (The White House, Presidential Actions, 2026-10-07)",
+      "publisher": "whitehouse.gov",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/establishment-of-a-committee-of-inquiry-to-investigate-allegations-of-false-statements-by-lisa-denell-cook/",
+      "slots": [
+        "반대표 방향"
+      ],
+      "why": "P-5 반증 — DC-14(_d5) 물음 'Cook 관련 백악관 청문 절차 자체의 1차가 그래프에 있나?' 가 비었다 (기자회견의 기자 질문 속 말 F066 뿐). 그 절차를 정한 백악관 문서 (대통령 각서 — 당사자의 공식 문서 · §5.2). 정치 층 — D44: 누가 무엇을 공식적으로 했다 · 말했다 까지만",
+      "url_basis": "웹 검색 (whitehouse.gov 한정) 으로 찾고 2026-11-10 GET 200 — 본문 <time datetime=\"2026-10-07T21:00:00-04:00\">October 7, 2026</time>",
+      "published_at": "2026-10-07",
+      "published_evidence": "October 7, 2026",
+      "published_note": "페이지에 적힌 날 (각서 날짜). 회의(10/28) 전"
     }
   ],
   "empty": [
@@ -716,6 +731,34 @@
       {
         "what": "백악관 행정명령 — 경유 값 (10월 '이달 초')",
         "why": "WH-1025 가 적은 것. 주소를 찾지 않았다 — 이란 스토리라인보다 국내 에너지 정책이다"
+      }
+    ]
+  },
+  "p5_recollect": {
+    "_what": "P-5 (2026-11-10) 반증 물음이 비어 다시 모은 기록 (FINDINGS §7.2). added = 이번에 팩에 더한 문서 (p5.ts 가 이 문서의 사실로 답한 반증 물음을 recollected 로 적는다)",
+    "added": [
+      "WH-COOK-1007"
+    ],
+    "not_found": [
+      {
+        "what": "10월 FOMC 회의록 (DC-01 · DC-05 · DC-08 · DC-11 · DC-12 · DC-13 · DC-14 의 물음)",
+        "why": "2026-11-10 https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm → 404. CAL 사실 F761: 결정일 3주 뒤 — 11/18 무렵"
+      },
+      {
+        "what": "Cook 의 회의 뒤 발언 · 표결 설명",
+        "why": "2026-11-10 연준 연설 RSS(feeds/speeches.xml) 의 Cook 글은 9/28 · 9/30 뿐 (둘 다 그래프에 있다)"
+      },
+      {
+        "what": "Hammack 의 표결 설명 성명",
+        "why": "P-4 (같은 날) 와 같다 — 클리블랜드 연은 목록에 없다. 다시 두드리지 않았다"
+      },
+      {
+        "what": "Kashkari 의 회의 사이 견해 (DC-07 물음)",
+        "why": "미니애폴리스 연은 연설 목록(publications-archive/all-speeches) 의 9/16 ~ 10/28 항목은 9/30 'Neel Kashkari Q&A at the Council on Foreign Relations' 하나 — 페이지에 글이 없고 영상 설명 한 줄 ('moderated conversation … with Steve Liesman of CNBC'). 녹취가 없어 사실을 뽑을 수 없다 · 보도로 대신하지 않는다"
+      },
+      {
+        "what": "10월 성명문의 찬성 위원 명단 (DC-07 물음)",
+        "why": "없다 — 6월부터 성명문에 찬성자 줄이 없다 (P4-h · 기계 확인). 9월 C-3b 방식(1월 위원 명단 F701 + 반대자 명단)으로 이끌어낼 수는 있다 — 답이 아니라 추론이라 UNRESOLVED 그대로 둔다"
       }
     ]
   }

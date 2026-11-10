@@ -1,0 +1,91 @@
+{
+  "_what": "P-4 사실 → Coverage 요소 (모델 출력 — p4.ts 가 쓴다 · 손으로 고치지 않는다). items = 보낸 사실 (key = 그때의 label · fact_id · 글의 sha256). 프롬프트 src/p4-prompt.ts p4-assign/1 · 스키마 coverage-schema.json fomc-hold/2",
+  "event": "FOMC-20261028",
+  "prompt_version": "p4-assign/1",
+  "model": "claude-opus-5-5",
+  "model_requested": "claude-opus-5-5",
+  "effort": "medium",
+  "schema_version": "fomc-hold/2",
+  "items": [
+    {
+      "key": "F776",
+      "fact_id": "8df4c3c6-1586-5549-b8bb-5a58966fdce3",
+      "claim_sha256": "4ff28e53802ddfeafd2cd70e8a5420db1601f591b097123cf8c37cd9554ed4a8"
+    },
+    {
+      "key": "F777",
+      "fact_id": "3e78adcb-27be-568d-aeda-ff2803b49cbf",
+      "claim_sha256": "13d2615ea07197b96fd72959bdf8f89e4858adc7dcae071599b889c15c584e8f"
+    },
+    {
+      "key": "F778",
+      "fact_id": "7a0e1285-faeb-5326-aaf1-01b28767d0c4",
+      "claim_sha256": "0e55e4803de1937975c29d10414a6eaf6731259d4efe28129784c32794e2fff7"
+    },
+    {
+      "key": "F779",
+      "fact_id": "b635d4ab-93fb-5603-a45f-89f069534539",
+      "claim_sha256": "fce21c357f4a2b1cb1664ff31c90945dbc0338d3bd6002d751ae5084d06a4615"
+    },
+    {
+      "key": "F780",
+      "fact_id": "894839f7-b574-51b1-aa9a-5970b2914d38",
+      "claim_sha256": "341a7d4d331e9ce574d163a7678eaa9b5da80ed48da5b61b922cfcc7bb31ae92"
+    },
+    {
+      "key": "F781",
+      "fact_id": "03797f58-466b-506d-a8c3-900379bad43d",
+      "claim_sha256": "5a91cd5dea6f095733c1e301f1886dec59bc12abdffb1f542d0dda7696633308"
+    },
+    {
+      "key": "F782",
+      "fact_id": "12572f29-d86a-55e4-b6e2-7f017ee3aaee",
+      "claim_sha256": "f98b6322436f77044b66ef62f5cb3731dd6578ba9a78aefa93b7b66105fd8051"
+    },
+    {
+      "key": "F783",
+      "fact_id": "a56b2c22-fa0c-5583-861c-965d65d3d16b",
+      "claim_sha256": "2090927ed0e5fb6bbfbde45341443cb6758275b72619b89e9877cc12b69ae350"
+    },
+    {
+      "key": "F784",
+      "fact_id": "857029ff-bcd0-5387-8155-9ca96bb6bded",
+      "claim_sha256": "8cfe148542b0bd204ec2a84d3eb076e1c1529ddea9ce1083cd361cde041c0c1b"
+    },
+    {
+      "key": "F785",
+      "fact_id": "27533676-14dc-5a98-869e-9d0acdb1c871",
+      "claim_sha256": "abe7b13d0b43b69d82adfd71fff123b539b1a70160861645790e5c1afc3ec873"
+    },
+    {
+      "key": "F786",
+      "fact_id": "59ea67b1-7578-5e48-b17a-942faef94c32",
+      "claim_sha256": "07780e6d329c3a944e09d613fbc5e70ee153d6370a19c9e0352264d862cd0056"
+    },
+    {
+      "key": "F787",
+      "fact_id": "62ee442b-f161-5473-ba1f-db2f7bb53d27",
+      "claim_sha256": "153558e4f2552087d07ffc0ba19cb2ce97703129a7de6c2fba7f895a342a8b60"
+    },
+    {
+      "key": "F788",
+      "fact_id": "1790ded6-aa7c-5a34-a11a-410f1a01c96f",
+      "claim_sha256": "f04f2391bd614ce27e38a76320758a10659c4e700e01c7f661a1fe75482eacdb"
+    }
+  ],
+  "input_sha256": "5d52a5acc04a9f81c1a89c6653b91152aced0909c13bb73e18a931c7bf362c96",
+  "request_sha256": "d92f08de3dd95b94ce199620023e09830a703277ebadc871e1ea7d490fbfad38",
+  "response_id": "msg_011Cgu7N8q868wUunRqyKGiQ",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 4366,
+    "output_tokens": 695,
+    "cache_creation_input_tokens": 1505,
+    "cache_read_input_tokens": 0
+  },
+  "duration_ms": 7034,
+  "cost_usd": 0.038889,
+  "called_at": "2026-11-10T10:44:21.210Z",
+  "output_sha256": "f21ce2e27048e4737ebb7231ffdab5b8ec585e6b02718ca3c3dfb5addb37b841",
+  "output": "{\"assignments\":[{\"key\":\"F776\",\"elements\":[],\"why\":\"슬롯 밖 — 대통령의 Cook 이사 모기지 의혹 조사위원회 설치\"},{\"key\":\"F777\",\"elements\":[],\"why\":\"슬롯 밖 — Cook 조사위원회 위원 구성\"},{\"key\":\"F778\",\"elements\":[],\"why\":\"슬롯 밖 — Cook 해임 사유 조사·보고 지시\"},{\"key\":\"F779\",\"elements\":[],\"why\":\"슬롯 밖 — 부하 해임 권한에 대한 대통령의 주장\"},{\"key\":\"F780\",\"elements\":[],\"why\":\"슬롯 밖 — 조사위원회의 법무부 등 협의 권한\"},{\"key\":\"F781\",\"elements\":[],\"why\":\"슬롯 밖 — Cook 청문회 일정(11월 5일) 지정\"},{\"key\":\"F782\",\"elements\":[],\"why\":\"슬롯 밖 — Cook 서면 입장문 제출 조건\"},{\"key\":\"F783\",\"elements\":[],\"why\":\"슬롯 밖 — Cook 청문회 출석·신문 절차\"},{\"key\":\"F784\",\"elements\":[],\"why\":\"슬롯 밖 — 조사 증거의 Cook 제공\"},{\"key\":\"F785\",\"elements\":[],\"why\":\"슬롯 밖 — 청문회 비공개·속기 방침\"},{\"key\":\"F786\",\"elements\":[],\"why\":\"슬롯 밖 — 청문회 후 서면 진술 기한\"},{\"key\":\"F787\",\"elements\":[],\"why\":\"슬롯 밖 — 조사위원회의 해임 사유 권고 제출\"},{\"key\":\"F788\",\"elements\":[],\"why\":\"슬롯 밖 — 각서의 Federal Register 게재 지시\"}]}"
+}

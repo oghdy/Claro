@@ -300,6 +300,37 @@ export function readTables(doc: TableDoc, ev: TableEvent): ReadResult {
     return out;
   }
 
+  if (rule.handler === "fomc_calendar") {
+    // 연준 회의 일정 페이지 — 사건 해의 덩어리 ("YYYY FOMC Meetings" ~ 그 해의 각주 줄). 회의 = 달 줄 + 바로 다음 날 줄 ("27-28" · "8-9*")
+    const y0 = ev.date.slice(0, 4);
+    const hi = L.findIndex((l) => l.text === `${y0} FOMC Meetings`);
+    if (hi < 0) throw new Error(`${doc.label}: ${y0} FOMC Meetings 줄이 없다`);
+    const fi = L.findIndex((l, i) => i > hi && l.text === CAL_FOOT);
+    if (fi < 0) throw new Error(`${doc.label}: ${y0} 의 SEP 각주 줄이 없다`);
+    const lu = L.findIndex((l) => /^Last Update: [A-Z][a-z]+ \d{1,2}, \d{4}$/.test(l.text));
+    const lm = lu >= 0 ? /^Last Update: ([A-Z][a-z]+) (\d{1,2}), (\d{4})$/.exec(L[lu]!.text)! : null;
+    const asOf = lm ? iso(+lm[3]!, MONTHS.indexOf(lm[1]!.toLowerCase()) + 1, +lm[2]!) : doc.published_at.slice(0, 10);
+    const meets: { mi: number; month: string; days: string }[] = [];
+    for (let i = hi + 1; i < fi; i++) {
+      const m = L[i]!.text, d = L[i + 1]?.text ?? "";
+      if (/^[A-Z][a-z]+(\/[A-Z][a-z]+)?$/.test(m) && /^\d{1,2}-\d{1,2}\*?$/.test(d)) meets.push({ mi: i, month: m, days: d });
+    }
+    if (!meets.length) throw new Error(`${doc.label}: ${y0} 회의 줄을 못 찾았다`);
+    const last = meets.at(-1)!;
+    const foot = slice(last.mi, fi); // 마지막 회의 ~ 각주 (각주 줄만으로는 해마다 같아 한 곳이 아니다)
+    for (const x of meets) {
+      const sep = x.days.endsWith("*");
+      const pair = slice(x.mi, x.mi + 1) ?? slice(hi, x.mi + 1); // 달 · 날 두 줄이 다른 해에도 있으면 해 머리부터
+      const off = TABLE_RULES.offsets.fomc_calendar!;
+      push({
+        claim_text: `연준 FOMC 회의 일정 페이지 (${y0} FOMC Meetings) — ${x.month} ${x.days} 회의: ${sep ? `* 표시 있음 (각주 "${CAL_FOOT}")` : "* 표시 없음 (경제 전망 SEP 각주가 붙지 않은 회의)"}`,
+        fact_type: "OFFICIAL_ACTION", actor: null, volatility: "VOLATILE", as_of: asOf, event_at: null,
+        table: { handler: "fomc_calendar", header_line: L[hi]!.text, row_line: x.month, cells: [{ h: 0, r: off, col: x.month, shown: x.month, value: x.days }], row_label: x.month, date_cell: lu >= 0 ? L[lu]!.text : null },
+      }, [slice(hi, hi), pair, foot, ...(lu >= 0 ? [slice(lu, lu)] : [])], `${y0} ${x.month} ${x.days}`);
+    }
+    return out;
+  }
+
   if (rule.handler === "pipe_blocks") {
     for (const b of pipeBlocks(doc.text)) {
       out.regions.push([L[b.header]!.start, L[b.last]!.end]);
@@ -355,6 +386,25 @@ export function pipeBlocks(text: string): { caption: number[]; header: number; n
 }
 
 export const MASK = TABLE_RULES.mask_line;
+export const CAL_FOOT = "* Meeting associated with a Summary of Economic Projections.";
+
+/** 연준 회의 일정 페이지의 일정 덩어리 — 첫 "YYYY FOMC Meetings" 줄 ~ 마지막 SEP 각주 줄 (줄 번호 · 0 부터). 없으면 null */
+export function calendarBlock(text: string): { first: number; last: number } | null {
+  const ls = text.split("\n");
+  const first = ls.findIndex((l) => /^\d{4} FOMC Meetings$/.test(l));
+  const last = ls.lastIndexOf(CAL_FOOT);
+  return first >= 0 && last > first ? { first, last } : null;
+}
+
+/** MIXED 문서에서 코드가 읽고 모델에게는 가리는 줄 덩어리 [첫 줄, 마지막 줄] */
+export function maskBlocks(url: string | null, text: string): [number, number][] {
+  const r = docRule(url);
+  if (r?.handler === "fomc_calendar") {
+    const b = calendarBlock(text);
+    return b ? [[b.first, b.last]] : [];
+  }
+  return pipeBlocks(text).map((b) => [b.header, b.last]);
+}
 
 /** 모델에 보낼 글. TABLE 은 보내지 않는다 (부르면 오류). MIXED 는 표 덩어리(머리 ~ 마지막 줄)를 한 줄 표시로 바꾼다. TEXT 는 그대로 */
 export function modelInput(doc: { label: string; url: string | null; text: string }): string {
@@ -362,6 +412,6 @@ export function modelInput(doc: { label: string; url: string | null; text: strin
   if (k === "TABLE") throw new Error(`${doc.label}: 표 문서는 모델에 보내지 않는다 (D42)`);
   if (k === "TEXT") return doc.text;
   const ls = doc.text.split("\n");
-  for (const b of pipeBlocks(doc.text).reverse()) ls.splice(b.header, b.last - b.header + 1, MASK);
+  for (const [a, z] of maskBlocks(doc.url, doc.text).reverse()) ls.splice(a, z - a + 1, MASK);
   return ls.join("\n");
 }

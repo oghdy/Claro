@@ -20,6 +20,10 @@
   G. 수량어   모델 사실의 글 수량어가 구절의 수량어와 대응표대로 (packages/pipeline/fact-check-rules.json) (FG_QUANTIFIER)
   H. 수       모델 사실의 글 숫자가 구절 · 문서 공개일 · 제목에 있다 (FG_NUMBER)
   I. 묶기     묶인 사실들의 fact_type · event_at 이 같고 글의 수 · 수량어가 같다 (FG_MERGE)
+  --- P-5 (D44 P4-f · P4-j) ---
+  E'. 일정    연준 회의 일정 페이지(fomc_calendar) 사실: 해 머리 줄 = 사건 해 · 달 줄 · 날 줄이 원문에서 이어진 두 줄이고 그 해 덩어리 안 · * 표시 ↔ 글 · 각주 구절 · as_of = Last Update (FG_CELL)
+  J. 판       앞 판(prompt_compat) 출력은 회의 뒤 문서가 아니고, 파이프라인이 지금 판으로 다시 낸 요청 지문이 출력 기록과 같다고 적혀 있다 · 모델 사실의 extraction_version = 그 출력의 판 (FG_RAW)
+  K. 장부     label 장부(labels.json)가 있으면 그래프의 F 사실 label = 장부 · 장부의 label 이 겹치지 않는다 (FG_LABEL)
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
 """
@@ -48,7 +52,9 @@ GRAPHS = [
 EVENT_DATES = {'FOMC-20261028': '2026-10-28', 'FOMC-20260916': '2026-09-16'}
 TABLE_RULES = json.load(open(os.path.join(ROOT, 'packages/pipeline/table-rules.json'), encoding='utf-8'))
 CHECK_RULES = json.load(open(os.path.join(ROOT, 'packages/pipeline/fact-check-rules.json'), encoding='utf-8'))
-SUB = {'treasury_par_yield': 'treasury_par_yield', 'eia_daily': 'eia_history', 'eia_weekly': 'eia_history', 'sep_table1': 'sep', 'sep_dots': 'sep', 'sep_risk': 'sep', 'omo_rates': 'omo_rates', 'pipe_blocks': 'pipe_blocks'}
+SUB = {'treasury_par_yield': 'treasury_par_yield', 'eia_daily': 'eia_history', 'eia_weekly': 'eia_history', 'sep_table1': 'sep', 'sep_dots': 'sep', 'sep_risk': 'sep', 'omo_rates': 'omo_rates', 'pipe_blocks': 'pipe_blocks', 'fomc_calendar': 'fomc_calendar'}
+CAL_FOOT = '* Meeting associated with a Summary of Economic Projections.'
+AFTER_DOCS = {'FOMC-20261028': {'SP-HAM-1105'}, 'FOMC-20260916': set()}   # 회의 뒤 문서 — packages/pipeline/src/p3.ts EVENTS after_docs 와 같아야 한다
 safe = lambda label: re.sub(r'[^\w.-]', '_', label)
 
 
@@ -92,6 +98,7 @@ def load(code, rel):
         b['cache_raw'][os.path.basename(p)] = open(p, encoding='utf-8').read()
     model = (b['graph'] or {}).get('model')
     b['cache_passages'] = rj(os.path.join(cdir, f'graph-passages.{model}.json'))
+    b['ledger'] = rj(os.path.join(os.path.dirname(gpath), 'labels.json'))
     return b
 
 
@@ -142,9 +149,24 @@ def pipe_blocks(text):
     return out
 
 
-def masked(text):
+def calendar_block(text):
     ls = text.split('\n')
-    for a, z in reversed(pipe_blocks(text)):
+    first = next((i for i, l in enumerate(ls) if re.match(r'^\d{4} FOMC Meetings$', l)), -1)
+    last = len(ls) - 1 - ls[::-1].index(CAL_FOOT) if CAL_FOOT in ls else -1
+    return (first, last) if first >= 0 and last > first else None
+
+
+def mask_blocks(rule, text):
+    """MIXED 문서에서 코드가 읽고 모델에게는 가리는 줄 덩어리 — 파이프라인 tables.ts maskBlocks 와 따로 다시 짠 것"""
+    if rule and rule['handler'] == 'fomc_calendar':
+        b = calendar_block(text)
+        return [b] if b else []
+    return pipe_blocks(text)
+
+
+def masked(text, rule=None):
+    ls = text.split('\n')
+    for a, z in reversed(mask_blocks(rule, text)):
         ls[a:z + 1] = [TABLE_RULES['mask_line']]
     return '\n'.join(ls)
 
@@ -311,6 +333,9 @@ def check_p3b(b, g, w0, E, W):
             if rule is None or SUB.get(t['handler']) != rule['handler']:
                 E('FG_CELL', f'{w}: 읽는 방법 {t["handler"]} 가 문서 {doc["label"]} 의 규칙 ({rule and rule["handler"]}) 과 다르다')
                 continue
+            if t['handler'] == 'fomc_calendar':
+                check_calendar(f, t, rows, doc, ev_date, w, E)
+                continue
             lines = set(doc['text'].split('\n'))
             if t['header_line'] not in lines or t['row_line'] not in lines:
                 E('FG_CELL', f'{w}: 머리 줄 · 줄이 원문의 한 줄이 아니다')
@@ -350,7 +375,7 @@ def check_p3b(b, g, w0, E, W):
             continue
         if rule and rule['kind'] == 'MIXED' and doc['text'] is not None:
             lr = line_ranges(doc['text'])
-            regions = [(lr[a][0], lr[z][1]) for a, z in pipe_blocks(doc['text'])]
+            regions = [(lr[a][0], lr[z][1]) for a, z in mask_blocks(rule, doc['text'])]
             for r, _ in rows:
                 if r['source_id'] == doc_id(b, doc) and any(r['span_start'] < e and s < r['span_end'] for s, e in regions):
                     E('FG_TABLE_MODEL', f'{w}: 모델 사실의 구절이 글 안의 표 줄에 있다 ({doc["label"]})')
@@ -386,7 +411,7 @@ def check_p3b(b, g, w0, E, W):
         if rule and rule['kind'] == 'TABLE':
             E('FG_TABLE_MODEL', f'{w0} {bf["source_label"]}: 표 문서를 모델에 보냈다 (D42)')
             continue
-        want = VD.sha256_text(masked(d['text']) if rule and rule['kind'] == 'MIXED' else d['text'])
+        want = VD.sha256_text(masked(d['text'], rule) if rule and rule['kind'] == 'MIXED' else d['text'])
         if bf.get('input_sha256') != want:
             E('FG_TABLE_MODEL', f'{w0} {bf["source_label"]}: 모델이 받은 글의 sha256 이 검사가 다시 낸 글과 다르다 (표를 가리지 않았나)')
     raw_by = {bf['source_label']: b['raw'].get(bf['raw']) for bf in g.get('built_from', [])}
@@ -394,6 +419,43 @@ def check_p3b(b, g, w0, E, W):
         bf = next(x for x in g['built_from'] if x['source_label'] == lab)
         if raw is not None and raw.get('input_sha256') != bf.get('input_sha256'):
             E('FG_TABLE_MODEL', f'{w0} {lab}: 모델 출력 기록의 input_sha256 이 그래프와 다르다')
+
+
+def check_calendar(f, t, rows, doc, ev_date, w, E):
+    """E' — 연준 회의 일정 페이지 사실. 원문에서 해 덩어리 · 달 줄 · 날 줄을 다시 찾아 댄다"""
+    text = doc['text']
+    if text is None:
+        return
+    ls = text.split('\n')
+    lr = line_ranges(text)
+    year = ev_date[:4]
+    if t['header_line'] != f'{year} FOMC Meetings' or t['header_line'] not in ls:
+        E('FG_CELL', f'{w}: 일정 해 머리 줄 {t["header_line"]!r} 가 사건 해({year})의 머리 줄이 아니다')
+        return
+    hi = ls.index(t['header_line'])
+    fi = next((i for i in range(hi + 1, len(ls)) if ls[i] == CAL_FOOT), None)
+    c = (t.get('cells') or [{}])[0]
+    month, days = t['row_line'], c.get('value', '')
+    pairs = [i for i in range(hi + 1, fi or hi) if ls[i] == month and ls[i + 1] == days]
+    if fi is None or len(pairs) != 1:
+        E('FG_CELL', f'{w}: {month} / {days} 가 {year} 덩어리 안의 이어진 두 줄로 한 번 있지 않다')
+        return
+    mi = pairs[0]
+    if c.get('r', 0) - c.get('h', 0) != TABLE_RULES['offsets']['fomc_calendar'] or c.get('col') != month or c.get('shown') != month:
+        E('FG_CELL', f'{w}: 일정 칸 짝 (달 줄 → 날 줄) 이 규칙과 다르다')
+    if f'{month} {days} 회의' not in f['claim_text']:
+        E('FG_CELL', f'{w}: 글에 "{month} {days} 회의" 가 없다')
+    if days.endswith('*') != ('* 표시 있음' in f['claim_text']) or ('* 표시 없음' in f['claim_text']) == days.endswith('*'):
+        E('FG_CELL', f'{w}: * 표시와 글이 맞지 않는다 ({days})')
+    spans = [(r['span_start'], r['span_end']) for r, _ in rows]
+    if (lr[mi][0], lr[mi + 1][1]) not in spans and (lr[hi][0], lr[mi + 1][1]) not in spans:
+        E('FG_CELL', f'{w}: 달 · 날 두 줄의 구절이 없다')
+    if (lr[hi][0], lr[hi][1]) not in spans or not any(s <= lr[fi][0] and e == lr[fi][1] for s, e in spans):
+        E('FG_CELL', f'{w}: 해 머리 · 각주 구절이 없다')
+    m = re.search(r'^Last Update: ([A-Z][a-z]+) (\d{1,2}), (\d{4})$', text, re.M)
+    want = f'{m.group(3)}-{_MONTHS.index(m.group(1).lower()) + 1:02d}-{int(m.group(2)):02d}' if m else str(doc['meta'].get('published_at', ''))[:10]
+    if f.get('volatility') != 'VOLATILE' or f.get('as_of') != want or f.get('event_at') is not None or f.get('fact_type') != 'OFFICIAL_ACTION':
+        E('FG_CELL', f'{w}: 일정 사실의 칸 (VOLATILE · as_of {want} · event_at 없음 · OFFICIAL_ACTION) 이 아니다')
 
 
 def doc_id(b, doc):
@@ -515,8 +577,14 @@ def check(b, contract_text):
         if raw is None:
             E('FG_RAW', f'{w}: 모델 출력 파일 {bf["raw"]} 가 없다')
             continue
-        if raw.get('prompt_version') != g.get('prompt_version') or raw.get('output_sha256') != bf.get('output_sha256'):
+        if raw.get('prompt_version') != bf.get('prompt_version') or raw.get('output_sha256') != bf.get('output_sha256'):
             E('FG_RAW', f'{w}: 모델 출력 기록이 그래프와 다르다 (프롬프트 판 · 출력 sha256)')
+        # J. 판 — 지금 판이거나, 앞 판이면 회의 뒤 문서가 아니고 지금 판과 같은 요청이라고 파이프라인이 댔다
+        if bf.get('prompt_version') != g.get('prompt_version'):
+            if bf.get('prompt_version') not in (g.get('prompt_compat') or {}) or not bf.get('compat') or bf['source_label'] in AFTER_DOCS.get(code, set()) or raw.get('request_sha256') != bf.get('request_sha256'):
+                E('FG_RAW', f'{w}: 앞 판 {bf.get("prompt_version")} 출력을 지금 판 {g.get("prompt_version")} 그래프에 썼다 — 같은 요청이라는 기록이 없다 (PROMPT_COMPAT)')
+        elif bf.get('compat'):
+            E('FG_RAW', f'{w}: 지금 판의 출력인데 compat 표시')
         d = by_label.get(bf['source_label'])
         if d is None or raw.get('text_sha256') != d['sha']:
             E('FG_RAW', f'{w}: 모델이 읽은 원문의 sha256 이 지금 원문과 다르다')
@@ -541,6 +609,22 @@ def check(b, contract_text):
         for c in g.get(bucket, []):
             if c['key'] in in_graph:
                 E('FG_BUCKET', f'{w0}: {bucket} 의 {c["key"]} 가 그래프 사실에 들어 있다')
+    # J. 모델 사실의 extraction_version = 그 출력의 판
+    ver = {bf['source_label']: bf.get('prompt_version') for bf in g.get('built_from', [])}
+    for f in g['facts']:
+        if f.get('_table') or str(f.get('extraction_version', '')).startswith('p3-bls'):
+            continue
+        head = (f.get('_from') or [''])[0].split('#')[0]
+        if ver.get(head) and f.get('extraction_version') != ver[head]:
+            E('FG_RAW', f'{w0} {f["label"]}: extraction_version {f.get("extraction_version")} ≠ 그 출력의 판 {ver[head]}')
+    # K. label 장부
+    led = (b.get('ledger') or {}).get('labels')
+    if led is not None:
+        if len(set(led.values())) != len(led):
+            E('FG_LABEL', f'{w0}: 장부의 label 이 겹친다')
+        for f in g['facts']:
+            if re.match(r'^F\d+$', str(f.get('label'))) and led.get(f['fact_id']) != f['label']:
+                E('FG_LABEL', f'{w0} {f["label"]}: 장부의 label ({led.get(f["fact_id"])}) 과 다르다')
     check_p3b(b, g, w0, E, W)
     return errs, warns
 

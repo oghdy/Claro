@@ -54,8 +54,9 @@ def m_stale_no_ref(b):      # STORYLINE_STALE 인데 storyline 없음
     x['status'] = 'STORYLINE_STALE'
 
 
-def m_bad_source(b):        # NOT_EXTRACTED 의 sources 가 이 사건의 Source 가 아님
-    sc(b, 'NOT_EXTRACTED')['sources'] = ['00000000-0000-4000-8000-000000000000']
+def m_bad_source(b):        # NOT_EXTRACTED 의 sources 가 이 사건의 Source 가 아님 (P-5 뒤 실물에 NOT_EXTRACTED 가 없어 빈 요소 하나를 바꿔 만든다)
+    x = sc(b, 'SOURCE_UNAVAILABLE')
+    x['status'], x['sources'] = 'NOT_EXTRACTED', ['00000000-0000-4000-8000-000000000000']
 
 
 def m_missing_element(b):   # 스키마 요소 하나의 SlotCheck 가 없다
@@ -100,23 +101,24 @@ def m_sl_v1(b):             # 골든 v1 줄을 고침
     b['v2']['storyline_versions'][0]['change'] = '고친 줄'
 
 
-def m_sl_owner(b):          # v2 사실이 사건 소유도 가짐
-    b['v2']['facts'][0]['event_id'] = b['graph']['event_id']
+def m_sl_copy(b):           # v2 가 사실을 옮겨 적음 (P-4 의 모양 — 두 벌)
+    b['v2']['facts'] = [dict(b['graph']['facts'][0])]
 
 
-def m_sl_text(b):           # v2 사실의 글이 원래 그래프 사실과 다름
-    b['v2']['facts'][1]['claim_text'] += ' (고침)'
+def m_sl_unknown(b):        # 그래프에 없는 사실을 가리킴
+    b['v2']['_fact_refs'][0]['fact_id'] = '00000000-0000-4000-8000-000000000000'
 
 
-def m_sl_span(b):           # v2 FactSource span 한 글자 밀기
-    b['v2']['fact_sources'][0]['span_start'] += 1
+def m_sl_label(b):          # 가리키는 label 이 그래프와 다름
+    b['v2']['_fact_refs'][1]['label'] = 'F999'
 
 
-def m_rights(b):            # 권리 미확인 문서의 구절 글이 v2 에
-    r = copy.deepcopy(b['v2']['fact_sources'][0])
-    r['source_id'] = next(iter(b['cache_sources']))
-    r['_passage'] = 'some passage'
-    b['v2']['fact_sources'].append(r)
+def m_sl_graph(b):          # 그래프가 바뀌었는데 v2 를 다시 짓지 않음
+    b['v2']['_graph_sha256'] = '0' * 64
+
+
+def m_rights(b):            # 구절 글이 v2 에
+    b['v2']['_fact_refs'][0]['_passage'] = 'some passage'
 
 
 CASES = [
@@ -136,9 +138,10 @@ CASES = [
     ('그래프가 바뀜', m_graph_changed, 'CV_STALE'),
     ('스토리라인 판 구멍', m_sl_gap, 'CV_STORYLINE'),
     ('골든 v1 줄 고침', m_sl_v1, 'CV_STORYLINE'),
-    ('v2 사실 소유 둘', m_sl_owner, 'CV_STORYLINE'),
-    ('v2 사실 글 ≠ 그래프', m_sl_text, 'CV_STORYLINE'),
-    ('v2 span 밀기', m_sl_span, 'CV_STORYLINE'),
+    ('v2 가 사실을 옮겨 적음', m_sl_copy, 'CV_STORYLINE'),
+    ('v2 가 없는 사실을 가리킴', m_sl_unknown, 'CV_STORYLINE'),
+    ('v2 label ≠ 그래프', m_sl_label, 'CV_STORYLINE'),
+    ('v2 가 옛 그래프', m_sl_graph, 'CV_STORYLINE'),
     ('권리 미확인 구절 글', m_rights, 'CV_RIGHTS'),
 ]
 

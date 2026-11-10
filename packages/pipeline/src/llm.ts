@@ -16,10 +16,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const ENV = join(ROOT, "packages/pipeline/.env.pipeline");
 export const LEDGER = join(ROOT, "packages/pipeline/data/p3-calls.jsonl");
 export const DEFAULT_MODEL = "claude-opus-5-5"; // D42 — 사실 추출
-// 상한은 Step 마다 (장부의 step 칸으로 센다). P-3 은 $15 · P-3b 는 $12 · P-4 는 $8 (지시)
-export const STEP = "P-4";
-export const BUDGET_USD = 8;
-export const STOP_AT_USD = 7.5;        // 이 Step 에서 쓴 돈 + 이번 부르기의 넉넉한 추정이 이 값을 넘으면 부르지 않는다 — 상한 아래 여유
+// 상한은 Step 마다 (장부의 step 칸으로 센다). P-3 은 $15 · P-3b 는 $12 · P-4 는 $8 · P-5 는 $10 (지시)
+export const STEP = "P-5";
+export const BUDGET_USD = 10;
+export const STOP_AT_USD = 9.5;        // 이 Step 에서 쓴 돈 + 이번 부르기의 넉넉한 추정이 이 값을 넘으면 부르지 않는다 — 상한 아래 여유
 
 // 가격 (US$ / 100만 토큰 · claude-api 스킬의 표 2026-11-03 판). 대략 비용이다 — 청구서가 아니다
 export const PRICE: Record<string, { in: number; out: number; cache_write: number; cache_read: number }> = {
@@ -80,19 +80,25 @@ export type CallResult = {
   text: string | null; response_id: string | null; duration_ms: number; cost_usd: number; request_sha256: string;
 };
 
-/** 한 번 부른다. JSON 을 받고 JSON 을 낸다 — 출력 글(text)을 그대로 돌려준다. 장부에 한 줄 */
-export async function callJson(a: {
-  event: string; source_label: string; model: string; effort: "low" | "medium" | "high"; system: string; user: string; schema: object;
-  prompt_version: string; text_sha256: string; max_tokens: number;
-}): Promise<CallResult> {
-  const params = {
+/** 요청 본문 — 부르기와 지문(request_sha256) 다시 내기가 같은 것을 쓴다 (P-5 · P4-j: 저장한 출력이 지금 프롬프트와 같은 요청에서 나왔는지 코드가 대 본다) */
+export function requestParams(a: { model: string; effort: "low" | "medium" | "high"; system: string; user: string; schema: object; max_tokens: number }) {
+  return {
     model: a.model,
     max_tokens: a.max_tokens,
     system: [{ type: "text" as const, text: a.system, cache_control: { type: "ephemeral" as const } }],
     messages: [{ role: "user" as const, content: a.user }],
     output_config: { effort: a.effort, format: { type: "json_schema" as const, schema: a.schema as Record<string, unknown> } },
   };
-  // 요청의 지문 — 머리(키) 없이 본문만
+}
+/** 요청의 지문 — 머리(키) 없이 본문만 */
+export const requestSha = (a: Parameters<typeof requestParams>[0]) => sha256(JSON.stringify(requestParams(a)));
+
+/** 한 번 부른다. JSON 을 받고 JSON 을 낸다 — 출력 글(text)을 그대로 돌려준다. 장부에 한 줄 */
+export async function callJson(a: {
+  event: string; source_label: string; model: string; effort: "low" | "medium" | "high"; system: string; user: string; schema: object;
+  prompt_version: string; text_sha256: string; max_tokens: number;
+}): Promise<CallResult> {
+  const params = requestParams(a);
   const request_sha256 = sha256(JSON.stringify(params));
   const t0 = Date.now();
   let r: CallResult;

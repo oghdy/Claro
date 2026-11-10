@@ -683,24 +683,14 @@
       "claim_sha256": "ee87e4347f5c4530c0efb6014833032b238335f431bf7f41b11772d10faab6e5"
     },
     {
-      "key": "F529",
-      "fact_id": "15b9f49c-1e58-5177-8b9c-77e0f23070ca",
-      "claim_sha256": "c673c074c39503de8f4a2b5635b3918714f36e8d2beee8490f5f60ad9ed74632"
+      "key": "F760",
+      "fact_id": "203da650-72a8-5426-84c8-f577d843dee8",
+      "claim_sha256": "0ef3969dd70c8d6978fbe14d4ffd8c884a6b07923b34dd38f44509ec3b03675d"
     },
     {
-      "key": "F531",
-      "fact_id": "1e716017-6bdb-55ac-bd1f-700a0b3f6d0f",
-      "claim_sha256": "3ca551fd7b079249db3124b06bc21eefd8c83d6358e533045aaf249a3385ac72"
-    },
-    {
-      "key": "F532",
-      "fact_id": "b5669da9-6520-560c-a28e-9e8aa351ef3f",
-      "claim_sha256": "8ec055aec0cde7b6812015089935fcb0ddf703ba346ef4937cae0cc0d3a0d6a3"
-    },
-    {
-      "key": "F533",
-      "fact_id": "1e64e71a-22e3-5bcc-bf78-131120e98bd0",
-      "claim_sha256": "af7fb6ba660a5492f77b9ddc7fbfd7983c4f24e09a33fc5ec72c9e5316435914"
+      "key": "F762",
+      "fact_id": "81b35081-e625-5754-854f-39798d20bff4",
+      "claim_sha256": "881251e8ce65ae4c30db5e2b16ae28a9f4c3f25f1f9269b784d09ba0b8177188"
     },
     {
       "key": "F609",
@@ -723,14 +713,29 @@
       "claim_sha256": "833312426eee35c641c8927a4073b49835580561f4fefba6e46d48abc26e6c90"
     },
     {
-      "key": "F657",
-      "fact_id": "147e59a9-afa5-5b1c-b436-0e03e3dfdaf9",
-      "claim_sha256": "8d1fad3088517e5bbc5204c4e04016ce50c89adcca62803341894c80c46d43c7"
+      "key": "F763",
+      "fact_id": "773e6547-7661-5403-9a1f-108cdba30097",
+      "claim_sha256": "4a0c3408bd65bf26b1a690b7b9d4e6f185867a789b09b9ee95f0462603aae779"
     },
     {
-      "key": "F666",
-      "fact_id": "14435c32-c264-5ab0-b780-0ad7b338ecc9",
-      "claim_sha256": "eb5c99540769cdc430952b069abd9c2addc8643f098fe222c8829356e3b7fe24"
+      "key": "F772",
+      "fact_id": "8424f8cc-d946-5a55-8343-7cd8b68f78ed",
+      "claim_sha256": "e8b1b51b6aad2a5df8ec087e08f40b3e68fbabddee908b1ef08029257cf12233"
+    },
+    {
+      "key": "F773",
+      "fact_id": "bd866b81-5b2f-5cd1-ba92-ff549dad0a73",
+      "claim_sha256": "7c90406f4b83a5f92fe4f78061c7f6bfae3ae7150bb1df9bb7e357a00b76722b"
+    },
+    {
+      "key": "F774",
+      "fact_id": "13b5ff78-d92d-5350-a490-e92f8cebe642",
+      "claim_sha256": "72d9a48f95a1859da091ec752e0a8ea169d010c7b091a83e9aa28a2f4bc67724"
+    },
+    {
+      "key": "F775",
+      "fact_id": "46d74e4f-557b-5b9c-bcb7-57b2f928657e",
+      "claim_sha256": "8c05a6d387cd9efeb0468726279134c69b070f1d779ad4b07d9ec023f32db728"
     },
     {
       "key": "F668",
@@ -1046,21 +1051,86 @@
       "key": "F751",
       "fact_id": "5a7396f7-78be-5dd8-be60-85a5cea87753",
       "claim_sha256": "18caacd19420485b8374d2ebb70131b1cb97db36eb09b4ace5226135ae6200dd"
+    },
+    {
+      "key": "F776",
+      "fact_id": "8df4c3c6-1586-5549-b8bb-5a58966fdce3",
+      "claim_sha256": "4ff28e53802ddfeafd2cd70e8a5420db1601f591b097123cf8c37cd9554ed4a8"
+    },
+    {
+      "key": "F777",
+      "fact_id": "3e78adcb-27be-568d-aeda-ff2803b49cbf",
+      "claim_sha256": "13d2615ea07197b96fd72959bdf8f89e4858adc7dcae071599b889c15c584e8f"
+    },
+    {
+      "key": "F778",
+      "fact_id": "7a0e1285-faeb-5326-aaf1-01b28767d0c4",
+      "claim_sha256": "0e55e4803de1937975c29d10414a6eaf6731259d4efe28129784c32794e2fff7"
+    },
+    {
+      "key": "F779",
+      "fact_id": "b635d4ab-93fb-5603-a45f-89f069534539",
+      "claim_sha256": "fce21c357f4a2b1cb1664ff31c90945dbc0338d3bd6002d751ae5084d06a4615"
+    },
+    {
+      "key": "F780",
+      "fact_id": "894839f7-b574-51b1-aa9a-5970b2914d38",
+      "claim_sha256": "341a7d4d331e9ce574d163a7678eaa9b5da80ed48da5b61b922cfcc7bb31ae92"
+    },
+    {
+      "key": "F781",
+      "fact_id": "03797f58-466b-506d-a8c3-900379bad43d",
+      "claim_sha256": "5a91cd5dea6f095733c1e301f1886dec59bc12abdffb1f542d0dda7696633308"
+    },
+    {
+      "key": "F782",
+      "fact_id": "12572f29-d86a-55e4-b6e2-7f017ee3aaee",
+      "claim_sha256": "f98b6322436f77044b66ef62f5cb3731dd6578ba9a78aefa93b7b66105fd8051"
+    },
+    {
+      "key": "F783",
+      "fact_id": "a56b2c22-fa0c-5583-861c-965d65d3d16b",
+      "claim_sha256": "2090927ed0e5fb6bbfbde45341443cb6758275b72619b89e9877cc12b69ae350"
+    },
+    {
+      "key": "F784",
+      "fact_id": "857029ff-bcd0-5387-8155-9ca96bb6bded",
+      "claim_sha256": "8cfe148542b0bd204ec2a84d3eb076e1c1529ddea9ce1083cd361cde041c0c1b"
+    },
+    {
+      "key": "F785",
+      "fact_id": "27533676-14dc-5a98-869e-9d0acdb1c871",
+      "claim_sha256": "abe7b13d0b43b69d82adfd71fff123b539b1a70160861645790e5c1afc3ec873"
+    },
+    {
+      "key": "F786",
+      "fact_id": "59ea67b1-7578-5e48-b17a-942faef94c32",
+      "claim_sha256": "07780e6d329c3a944e09d613fbc5e70ee153d6370a19c9e0352264d862cd0056"
+    },
+    {
+      "key": "F787",
+      "fact_id": "62ee442b-f161-5473-ba1f-db2f7bb53d27",
+      "claim_sha256": "153558e4f2552087d07ffc0ba19cb2ce97703129a7de6c2fba7f895a342a8b60"
+    },
+    {
+      "key": "F788",
+      "fact_id": "1790ded6-aa7c-5a34-a11a-410f1a01c96f",
+      "claim_sha256": "f04f2391bd614ce27e38a76320758a10659c4e700e01c7f661a1fe75482eacdb"
     }
   ],
-  "input_sha256": "b315c34d024566ac21c524acc4d71910cf77a377da416886c13c075137e01df5",
-  "request_sha256": "8bd93084033931eab96cb716db239de0fbee85770d626b65a4a8a6e58d3830eb",
-  "response_id": "msg_011Cgu3oMDj4LgZEfYcCUbL7",
+  "input_sha256": "81bcba971327bde9b3c7b9fd46f6291c1d536bc950cd108c82ea93be17cd7ccf",
+  "request_sha256": "7140b9108174f94edd25ad983dee61d86b908f30aae446e25ab02dc94cb8a902",
+  "response_id": "msg_011Cgu7NfcXrWTwHRYfPKDNc",
   "stop_reason": "end_turn",
   "usage": {
-    "input_tokens": 20817,
-    "output_tokens": 2020,
+    "input_tokens": 22413,
+    "output_tokens": 1733,
     "cache_creation_input_tokens": 874,
     "cache_read_input_tokens": 0
   },
-  "duration_ms": 21435,
-  "cost_usd": 0.128038,
-  "called_at": "2026-11-10T09:57:49.996Z",
-  "output_sha256": "7c883c9e3c03806eb660fe26d2aa0349e78134d1805917b7126cbb82e7b47c68",
-  "output": "{\"groups\":[{\"title\":\"의장 교체와 Warsh 의 새 프레임워크\",\"keys\":[\"F040\",\"F043\",\"F042\",\"F050\",\"F701\",\"F711\",\"F723\"],\"why\":\"1·3·4월 표결 명단에는 Powell 의장이 있었으나, 이번 기자회견에서는 Warsh 가 다섯 달 전에 의장이 됐다고 말함. 새 의장은 Jackson Hole 에서 프레임워크를 제시하고, 느슨하거나 암묵적인 목표는 없으며 PCE 2% 라고 못박음.\"},{\"title\":\"태스크포스 신설과 일정\",\"keys\":[\"F467\",\"F052\",\"F053\",\"F061\",\"F054\"],\"why\":\"새 의장 아래 AI 관련 태스크포스를 포함한 다섯 개 태스크포스가 생겨 연말 기한을 받았음. Balance Sheet Task Force 권고는 내년 1분기 초에 나오고, Productivity and Jobs Task Force 는 11월 16일 현장 청문회를 여는 이례적 일정이 잡힘.\"},{\"title\":\"의장이 자기 전망을 내지 않음\",\"keys\":[\"F459\",\"F460\"],\"why\":\"Warsh 의장은 6월에 이어 9월에도 자신의 경제 전망을 제출하지 않았고, 경제 전망이 18명 동료의 것이라고 말함. 의장이 SEP 에 참여하지 않는 이례적 관행임.\"},{\"title\":\"반대자 Cook 관련 백악관 청문 절차\",\"keys\":[\"F066\"],\"why\":\"이번에 인상을 주장하며 반대한 Lisa Cook 이사를 두고 백악관 청문 절차가 진행 중임이 기자회견 질문으로 드러남. 현직 이사에 대한 행정부 절차라는 점이 이례적임.\"},{\"title\":\"정치 개입 부인 · 독립성 강조\",\"keys\":[\"F058\",\"F666\"],\"why\":\"의장이 정치가 이번 결정에 아무 역할도 하지 않았다고 따로 밝혔음. Hammack 총재도 회의 뒤 연설에서 연준 독립성이 2% 목표에 대한 신뢰에 결정적이라고 강조함.\"},{\"title\":\"재무부 외환 개입 · 미일 공동 엔화 지지\",\"keys\":[\"F080\",\"F081\"],\"why\":\"7월 말 엔화를 지지하려는 미일 공동 개입이 있었고, Desk 가 재무부 대리인으로 외환시장에 개입했음. 이 개입이 달러 약세에 직접 기여했다고 SOMA 매니저가 말함.\"},{\"title\":\"지준 관리 매입 중단\",\"keys\":[\"F077\",\"F089\"],\"why\":\"Desk 가 지준 관리 매입(RMPs)을 중단했고, EFFR 은 IORB 보다 2bp 낮았음. 대차대조표 운용에서 달라진 점임.\"},{\"title\":\"BEA 연례 개정으로 물가 하향 수정\",\"keys\":[\"F351\",\"F381\",\"F376\",\"F377\",\"F378\"],\"why\":\"연례 개정이 2021년부터 다시 계산됐음. 이로써 2분기 PCE 물가 상승률은 5.0%, 근원은 3.3% 로 각각 0.3%p 하향 수정됐고, 1분기 국내 총구매 물가도 0.4%p 낮아짐.\"}]}"
+  "duration_ms": 22271,
+  "cost_usd": 0.128682,
+  "called_at": "2026-11-10T10:44:43.670Z",
+  "output_sha256": "e77878b00f19cc696899b92eced4b586598b09b7029cf41a5246bceedf537603",
+  "output": "{\"groups\":[{\"title\":\"백악관의 Cook 이사 해임 사유 조사\",\"keys\":[\"F776\",\"F777\",\"F778\",\"F779\",\"F780\",\"F781\",\"F782\",\"F783\",\"F784\",\"F785\",\"F786\",\"F787\",\"F066\"],\"why\":\"이번 회의 반대자인 Cook 이사를 두고 대통령이 조사위원회를 만들었다. 위원회는 12 U.S.C. 242 상 해임 '사유'가 있는지 보고해야 하며, 회의 직후인 11월 5일 백악관 비공개 청문회가 잡혀 있다. 현직 연준 이사의 해임 절차가 진행 중이라는 점이 이례적이다.\"},{\"title\":\"의장 교체: Powell 에서 Warsh 로\",\"keys\":[\"F040\",\"F701\",\"F711\",\"F058\"],\"why\":\"1·3월 성명문의 찬성자 명단에는 Powell 이 의장으로 올라 있다. 지금 의장인 Warsh 는 다섯 달 전에 취임했다고 말해, 의장이 바뀐 뒤의 회의라는 점이 이전과 다르다. Warsh 는 정치가 이번 결정에 아무 역할도 하지 않았다고 따로 밝혔다.\"},{\"title\":\"의장 주도 태스크포스 신설과 일정\",\"keys\":[\"F467\",\"F052\",\"F053\",\"F054\",\"F061\"],\"why\":\"Warsh 의장은 AI 관련을 포함한 다섯 개 태스크포스를 만들고 연말 기한을 줬다. Balance Sheet Task Force 권고는 내년 1분기 초에 FOMC 로 가고, Productivity and Jobs Task Force 는 11월 16일 현장 청문회를 연다. 의장 취임 후 새로 생긴 기구들이다.\"},{\"title\":\"의장이 자기 경제전망을 내지 않음\",\"keys\":[\"F459\",\"F460\"],\"why\":\"Warsh 의장은 6월에 이어 9월에도 자신의 경제 전망을 내지 않았다. 그는 경제 전망이 자신의 것이 아니라 18명 동료의 전망이라고 말했는데, 의장이 전망을 제출하지 않는다는 점이 이례적이다.\"},{\"title\":\"인플레이션 목표·프레임워크 재천명\",\"keys\":[\"F042\",\"F043\",\"F050\"],\"why\":\"Warsh 의장은 취임 후 2% 목표를 재확인했고 Jackson Hole 에서 프레임워크를 제시했다고 말했다. 또 느슨하거나 암묵적인 목표는 없고 목표는 PCE 2% 라고 못박았다. 목표 해석을 굳이 공개적으로 분명히 한 점이 새롭다.\"},{\"title\":\"지준 관리 매입 중단\",\"keys\":[\"F077\"],\"why\":\"Desk 가 지준 관리 매입(RMPs)을 중단했다는 것은 대차대조표 운용 방식이 바뀐 것이다.\"},{\"title\":\"미일 공동 엔화 지지 외환 개입\",\"keys\":[\"F080\",\"F081\"],\"why\":\"7월 말 엔화를 지지하려는 미일 공동 외환시장 개입이 있었다. Desk 가 재무부 자금으로 집행했고 달러 약세에 직접 기여했다고 설명돼, 이례적인 시장 개입이다.\"}]}"
 }

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """verify-fact-graph 자체 시험 — 실물 그래프(10월 · 9월)는 통과하고, 망가뜨린 사본은 그 code 로 실패해야 한다.
 P-3b: 칸 (FG_CELL · FG_AFTER) · 표와 모델 (FG_TABLE_MODEL) · 수량어 (FG_QUANTIFIER) · 수 (FG_NUMBER) · 묶기 (FG_MERGE) 사본을 더했다.
+P-5: 일정 (FG_CELL — fomc_calendar) · 앞 판 출력 (FG_RAW) · label 장부 (FG_LABEL) 사본을 더했다.
 
     python3 scripts/selftest-verify-fact-graph.py
 """
@@ -227,7 +228,63 @@ def m_bucket_q(b):          # 수량어 어긋남으로 갈린 것이 그래프�
     b['graph']['quantifier_mismatch'].append({'key': f['_from'][0], 'source_label': f['_from'][0].split('#')[0], 'passages': []})
 
 
+def cal_fact(b, days):
+    return next(f for f in b['graph']['facts'] if (f.get('_table') or {}).get('handler') == 'fomc_calendar' and f['_table']['cells'][0]['value'] == days)
+
+
+def m_cal_star(b):          # 10월 회의에 * 를 붙임 (주석 · 글 모두 — "10월에도 SEP 가 있었다")
+    f = cal_fact(b, '27-28')
+    f['_table']['cells'][0]['value'] = '27-28*'
+    f['claim_text'] = f['claim_text'].replace('27-28 회의: * 표시 없음 (경제 전망 SEP 각주가 붙지 않은 회의)', '27-28* 회의: * 표시 있음')
+
+
+def m_cal_month(b):         # 12월 날을 다른 달로 (다음 회의를 잘못 적음)
+    f = cal_fact(b, '8-9*')
+    f['_table']['row_line'] = 'November'
+    f['_table']['cells'][0]['col'] = f['_table']['cells'][0]['shown'] = 'November'
+    f['claim_text'] = f['claim_text'].replace('December', 'November')
+
+
+def m_cal_year(b):          # 다른 해의 덩어리
+    cal_fact(b, '8-9*')['_table']['header_line'] = '2027 FOMC Meetings'
+
+
+def m_cal_stable(b):        # 잠정 날짜를 STABLE 로
+    f = cal_fact(b, '8-9*')
+    f['volatility'], f['as_of'] = 'STABLE', None
+
+
+def m_compat_after(b):      # 회의 뒤 문서를 앞 판(/2) 출력으로 — 그 갈래가 /2 에 없었다
+    bf = next(x for x in b['graph']['built_from'] if x['source_label'] == 'SP-HAM-1105')
+    bf['prompt_version'], bf['compat'] = 'p3-extract/2', True
+    b['raw'][bf['raw']] = dict(b['raw'][bf['raw']], prompt_version='p3-extract/2')
+
+
+def m_compat_req(b):        # 앞 판 출력인데 요청 지문이 출력 기록과 다르다
+    bf = next(x for x in b['graph']['built_from'] if x.get('compat'))
+    bf['request_sha256'] = '0' * 64
+
+
+def m_extraction_ver(b):    # 모델 사실의 extraction_version 이 그 출력의 판과 다르다
+    bf = next(x for x in b['graph']['built_from'] if x.get('compat'))
+    f = next(f for f in b['graph']['facts'] if not f.get('_table') and f.get('_from', [''])[0].split('#')[0] == bf['source_label'])
+    f['extraction_version'] = 'p3-extract/3'
+
+
+def m_ledger(b):            # 장부와 다른 label (문서를 더하고 순서대로 다시 붙인 것처럼)
+    f = next(f for f in b['graph']['facts'] if f['label'] == 'F564')
+    f['label'] = 'F999'
+
+
 CASES = [
+    ('10월 회의에 * (SEP 있음으로)', m_cal_star, 'FG_CELL'),
+    ('다음 회의 달을 바꿈', m_cal_month, 'FG_CELL'),
+    ('일정 다른 해 덩어리', m_cal_year, 'FG_CELL'),
+    ('잠정 일정을 STABLE 로', m_cal_stable, 'FG_CELL'),
+    ('회의 뒤 문서를 앞 판 출력으로', m_compat_after, 'FG_RAW'),
+    ('앞 판 출력 요청 지문 다름', m_compat_req, 'FG_RAW'),
+    ('모델 사실 extraction_version ≠ 출력 판', m_extraction_ver, 'FG_RAW'),
+    ('label 이 장부와 다름', m_ledger, 'FG_LABEL'),
     ('span 한 글자 밀기', m_shift, 'FG_PASSAGE'),
     ('지어낸 구절', m_invented, 'FG_PASSAGE'),
     ('없는 Source', m_unknown_source, 'FG_SOURCE_UNKNOWN'),

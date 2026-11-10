@@ -20,7 +20,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { sha256 } from "./extract.ts";
 import { DEFAULT_MODEL, STEP, STOP_AT_USD, PRICE, callJson, spent, spentStep } from "./llm.ts";
-import { EVENTS, loadDocs, uuidFrom } from "./p3.ts";
+import { EVENTS, loadDocs } from "./p3.ts";
 import {
   ASSIGN_SYSTEM, ASSIGN_VERSION, UNSLOTTED_SCHEMA, UNSLOTTED_SYSTEM, UNSLOTTED_VERSION, assignSchema, assignUser, unslottedUser,
   type SchemaSlot,
@@ -177,21 +177,14 @@ function storylineV2(code: string, graph: Graph) {
     if (ds.some((d) => slDocs.has(d))) return true; // 스토리라인 문서의 사실 — 전부 (v1 에 없던 것이다. WH-0619 는 9/16 앞의 일이지만 v1 이 몰랐던 1차)
     return ds.length === 1 && series.has(ds[0]!) && !!f.event_at && f.event_at > since && f.event_at <= conf.date; // 유가 · 경유 — v1 뒤 ~ 사건 날
   });
-  const facts = pick.map((f) => {
-    const { _from, _storyline_doc, _after_event, ...rest } = f as Fact & { _storyline_doc?: string; _after_event?: boolean };
-    return {
-      ...Object.fromEntries(Object.entries(rest).filter(([k]) => !k.startsWith("_") || k === "_table")),
-      fact_id: uuidFrom(`${sl.code}|v2|${f.fact_id}`), label: `v2-${f.label}`, event_id: null, storyline_id: row.storyline_id, storyline_version: 2,
-      _graph_fact_id: f.fact_id, _graph_label: f.label, _graph: `packages/pipeline/data/events/${code}/p3/graph.json`, _from,
-    };
-  });
-  const ids = new Map(pick.map((f) => [f.fact_id, uuidFrom(`${sl.code}|v2|${f.fact_id}`)]));
-  const fact_sources = graph.fact_sources.filter((fs) => ids.has(fs.fact_id)).map((fs) => ({ ...fs, fact_id: ids.get(fs.fact_id)! }));
+  // P-5 (D44 P4-b) — 사실을 옮겨 적지 않는다. 그래프의 사실을 가리킨다 (한 사실은 한 곳에). 계약에는 "스토리라인 판이 사건 그래프의 사실을 가리키는" 모양이 없다 — _fact_refs 는 계약 밖 (_open P5-b)
+  const fact_refs = pick.map((f) => ({ fact_id: f.fact_id, label: f.label, docs: factDocs(f) }));
   const byDoc: Record<string, number> = {};
   for (const f of pick) for (const d of factDocs(f)) byDoc[d] = (byDoc[d] ?? 0) + 1;
   return {
-    _what: `${sl.code} 의 새 판 (v2) — 계약 모양 (DATA_MODEL §1 Storyline · StorylineVersion · Fact · FactSource + _ 주석). p4.ts 가 ${code} 의 사실 그래프에서 짓는다 — 손으로 고치지 않는다. ` +
-      `v1 은 골든(fixtures/store.json)에 있고 고치지 않는다 — 아래 storyline_versions 의 v1 줄은 골든에서 옮긴 것. v2 의 사실은 그래프 사실을 스토리라인 소유로 옮겨 적은 것이다 (fact_id 는 새로 · _graph_fact_id 가 원래 사실) — 소유를 어디에 둘지는 _open P4-b`,
+    _what: `${sl.code} 의 새 판 (v2) — Storyline · StorylineVersion 은 계약 모양 (DATA_MODEL §1). p4.ts 가 ${code} 의 사실 그래프에서 짓는다 — 손으로 고치지 않는다. ` +
+      `v1 은 골든(fixtures/store.json)에 있고 고치지 않는다 — 아래 storyline_versions 의 v1 줄은 골든에서 옮긴 것. ` +
+      `v2 가 아는 사실은 옮겨 적지 않고 그래프의 사실을 가리킨다 (_fact_refs — fact_id 는 그래프의 것 · D44 P4-b "한 사실은 한 곳에"). 계약의 소유 규칙(Fact 는 event_id · storyline_id 중 하나)으로는 이 모양을 적을 수 없다 — _open P5-b`,
     storylines: [{ storyline_id: row.storyline_id, code: row.code, title: row.title, version: 2, ongoing: row.ongoing, _ongoing_note: "v1 의 값을 그대로 옮겼다 — 판정하지 않았다 (_open P4-c)" }],
     storyline_versions: [
       ...v1.map((v) => ({ ...v, _copied_from: "fixtures/store.json (골든 — 고치지 않는다)" })),
@@ -201,8 +194,9 @@ function storylineV2(code: string, graph: Graph) {
         _rule: `사실 = (1) 스토리라인 문서(${[...slDocs].join(" · ")} — 저장된 것만)의 그래프 사실 전부 (2) EIA-B · EIA-D 표 사실 가운데 event_at 이 ${since} 뒤 ~ ${conf.date}. 둘 다 코드 규칙 (p4.ts storylineV2)`,
       },
     ],
-    facts,
-    fact_sources,
+    _graph: `packages/pipeline/data/events/${code}/p3/graph.json`,
+    _graph_sha256: sha256(readFileSync(graphPath(code), "utf8")),
+    _fact_refs: fact_refs,
   };
 }
 
@@ -216,7 +210,7 @@ export function build(code: string) {
   const { got, problems } = modelAssignments(code, graph, elementIds);
   const diff = statementDiff(code, graph);
   const v2 = storylineV2(code, graph);
-  const v2Built = v2.facts.length > 0;
+  const v2Built = v2._fact_refs.length > 0;
 
   const perFact: Record<string, { label: string; docs: string[]; elements: string[]; why: string; by: string }> = {};
   const unassigned: string[] = [];
@@ -325,7 +319,7 @@ export function build(code: string) {
     slot_checks,
     statement_diff: { method: diff.method, only_09: diff.only_09, only_10: diff.only_10, same: diff.same },
     unslotted,
-    storyline: { code: "SL-iran-war", file: "packages/pipeline/data/storylines/SL-iran-war/v2.json", version: 2, facts: v2.facts.length },
+    storyline: { code: "SL-iran-war", file: "packages/pipeline/data/storylines/SL-iran-war/v2.json", version: 2, fact_refs: v2._fact_refs.length },
     assign_problems: problems,
     per_fact: perFact,
   };
@@ -421,7 +415,7 @@ async function main() {
     for (const e of s.elements) console.log(`     ${e.id} ${e.status.padEnd(18)} ${String(e.n).padStart(3)}  ${e.rep ? `${e.rep.label} (${e.rep.docs.join("+")}) ${e.rep.claim_text.slice(0, 70)}` : e.basis ?? ""}`);
   }
   console.log(`  성명문 차이: 9월에만 ${coverage.statement_diff.only_09.length} · 10월에만 ${coverage.statement_diff.only_10.length} · 같음 ${coverage.statement_diff.same.length}`);
-  console.log(`  SL-iran-war v2: 사실 ${v2.facts.length} → ${vPath.replace(ROOT + "/", "")}`);
+  console.log(`  SL-iran-war v2: 가리키는 그래프 사실 ${v2._fact_refs.length} → ${vPath.replace(ROOT + "/", "")}`);
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) await main();

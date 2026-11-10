@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { findPoint, seriesBlocks } from "../src/bls.ts";
 import { cpSlice, spanMatches } from "../src/match.ts";
 import { build, loadDocs, uuidFrom } from "../src/p3.ts";
-import { FACT_TYPES, OUTPUT_SCHEMA, PROMPT_VERSION, SYSTEM_PROMPT } from "../src/p3-prompt.ts";
+import { FACT_TYPES, OUTPUT_SCHEMA, PROMPT_COMPAT, PROMPT_VERSION, SYSTEM_PROMPT, scopeLine } from "../src/p3-prompt.ts";
 import { CHECK_RULES, enQuantifiers, koQuantifiers, numbersMissing, quantifierProblem } from "../src/checks.ts";
-import { MASK, cells, docKind, modelInput, pipeBlocks, readTables } from "../src/tables.ts";
+import { CAL_FOOT, MASK, calendarBlock, cells, docKind, modelInput, pipeBlocks, readTables } from "../src/tables.ts";
 import { DEFAULT_MODEL } from "../src/llm.ts";
 
 describe("P-3 짓기 — 저장한 모델 출력 · 원문에서 결정적으로", () => {
@@ -111,11 +111,38 @@ describe("P-3 프롬프트 · 스키마", () => {
     expect(OUTPUT_SCHEMA.properties.facts.items.properties.fact_type.enum).toEqual([...FACT_TYPES]);
   });
   it("프롬프트 판이 있고, 9월 골든의 사실 글을 본보기로 담지 않는다 · 수량어 대응표를 그대로 담는다", () => {
-    expect(PROMPT_VERSION).toBe("p3-extract/2");
+    expect(PROMPT_VERSION).toBe("p3-extract/3");
     const store = JSON.parse(readFileSync(new URL("../../../fixtures/store.json", import.meta.url), "utf8"));
     for (const f of store.facts as { claim_text: string }[]) expect(SYSTEM_PROMPT.includes(f.claim_text)).toBe(false);
     for (const c of CHECK_RULES.quantifiers.classes) for (const k of c.ko) expect(SYSTEM_PROMPT).toContain(k);
     expect(SYSTEM_PROMPT).not.toContain("some participants\" 는 \"일부 참가자\"");
+  });
+});
+
+describe("P-5 — 프롬프트 판 · 연준 회의 일정 (P4-j · P4-f)", () => {
+  const ev = { code: "X", what: "x", date: "2026-10-28", prev_meeting: "2026-09-16" };
+  const doc = { label: "D", title: "t", publisher: "p", published_at: "2026-10-01", url: null };
+  it("/2 출력을 쓰는 조건은 회의 뒤 문서가 아닐 때 — 회의 뒤 갈래만 /3 에서 생겼다", () => {
+    expect(Object.keys(PROMPT_COMPAT)).toEqual(["p3-extract/2"]);
+    expect(scopeLine(ev, { ...doc, after: true })).toContain("뒤에 나온 문서");
+    expect(scopeLine(ev, doc)).not.toContain("뒤에 나온 문서");
+  });
+  const cal = ["intro", "2026 FOMC Meetings", "October", "27-28", "Statement:", "December", "8-9*", CAL_FOOT, "2025 FOMC Meetings", "October", "28-29", "December", "9-10*", CAL_FOOT, "Note: tentative", "Last Update: October 28, 2026"].join("\n");
+  const calDoc = { label: "CAL", source_id: "s", title: "t", publisher: "federalreserve.gov", published_at: "2026-10-07", url: "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm", text: cal };
+  it("일정은 코드가 읽는다 — 사건 해의 회의 하나 = 사실 하나 · * 표시 · as_of = Last Update", () => {
+    expect(docKind(calDoc.url)).toBe("MIXED");
+    const r = readTables(calDoc, { date: "2026-10-28", prev_meeting: "2026-09-16" });
+    expect(r.facts.map((f) => f.table.cells[0]!.value)).toEqual(["27-28", "8-9*"]);
+    expect(r.facts[0]!.claim_text).toContain("October 27-28 회의: * 표시 없음");
+    expect(r.facts[1]!.claim_text).toContain("December 8-9* 회의: * 표시 있음");
+    expect(r.facts.every((f) => f.volatility === "VOLATILE" && f.as_of === "2026-10-28" && f.event_at === null)).toBe(true);
+  });
+  it("모델에게는 일정 덩어리를 가린다 (글은 보낸다)", () => {
+    expect(calendarBlock(cal)).toEqual({ first: 1, last: 13 });
+    const m = modelInput(calDoc);
+    expect(m).toContain(MASK);
+    expect(m).toContain("Note: tentative");
+    expect(m).not.toContain("27-28");
   });
 });
 

@@ -1,12 +1,43 @@
 {
   "_what": "P-3b 표 규칙 — **어느 문서가 표인지 · 표를 누가 읽는지는 이 파일 한 곳에만 있다** (D42). 파이프라인(src/tables.ts)과 검사(scripts/verify-fact-graph.py)가 같은 파일을 읽는다. 바꾸면 version 을 올린다",
-  "version": "p3-tables/1",
+  "version": "p3-tables/2",
   "documents": [
-    { "handler": "treasury_par_yield", "kind": "TABLE", "url": "^https://home\\.treasury\\.gov/resource-center/data-chart-center/interest-rates/TextView\\?type=daily_treasury_yield_curve", "_why": "재무부 일별 국채 par 수익률 표. P-3 Sonnet 이 10년 칸 값을 7년 칸에서 읽었다 (D42)" },
-    { "handler": "eia_history", "kind": "TABLE", "url": "^https://www\\.eia\\.gov/dnav/pet/hist/LeafHandler\\.ashx\\?", "_why": "EIA 가격 이력 표 (일별 Brent · 주별 경유). P-3 에서 가장 비싼 입력이었다" },
-    { "handler": "sep", "kind": "TABLE", "url": "^https://www\\.federalreserve\\.gov/monetarypolicy/fomcprojtabl\\d{8}\\.htm$", "_why": "경제 전망(SEP) — 표 · 그림 자료뿐이다. 글은 방법 설명 · 각주" },
-    { "handler": "omo_rates", "kind": "TABLE", "url": "^https://www\\.federalreserve\\.gov/monetarypolicy/openmarket\\.htm$", "_why": "목표 금리 변경 이력 표 (Increase · Decrease 칸을 섞으면 인상이 인하가 된다). 위의 글은 공개시장조작 일반 설명" },
-    { "handler": "pipe_blocks", "kind": "MIXED", "url": "^https://www\\.bea\\.gov/news/", "_why": "BEA 보도자료 — 글은 모델이, 글 안의 표(머리 줄이 '| ' 로 시작하는 덩어리)는 코드가. 모델에게는 표 줄을 가려서 보낸다" }
+    {
+      "handler": "treasury_par_yield",
+      "kind": "TABLE",
+      "url": "^https://home\\.treasury\\.gov/resource-center/data-chart-center/interest-rates/TextView\\?type=daily_treasury_yield_curve",
+      "_why": "재무부 일별 국채 par 수익률 표. P-3 Sonnet 이 10년 칸 값을 7년 칸에서 읽었다 (D42)"
+    },
+    {
+      "handler": "eia_history",
+      "kind": "TABLE",
+      "url": "^https://www\\.eia\\.gov/dnav/pet/hist/LeafHandler\\.ashx\\?",
+      "_why": "EIA 가격 이력 표 (일별 Brent · 주별 경유). P-3 에서 가장 비싼 입력이었다"
+    },
+    {
+      "handler": "sep",
+      "kind": "TABLE",
+      "url": "^https://www\\.federalreserve\\.gov/monetarypolicy/fomcprojtabl\\d{8}\\.htm$",
+      "_why": "경제 전망(SEP) — 표 · 그림 자료뿐이다. 글은 방법 설명 · 각주"
+    },
+    {
+      "handler": "omo_rates",
+      "kind": "TABLE",
+      "url": "^https://www\\.federalreserve\\.gov/monetarypolicy/openmarket\\.htm$",
+      "_why": "목표 금리 변경 이력 표 (Increase · Decrease 칸을 섞으면 인상이 인하가 된다). 위의 글은 공개시장조작 일반 설명"
+    },
+    {
+      "handler": "pipe_blocks",
+      "kind": "MIXED",
+      "url": "^https://www\\.bea\\.gov/news/",
+      "_why": "BEA 보도자료 — 글은 모델이, 글 안의 표(머리 줄이 '| ' 로 시작하는 덩어리)는 코드가. 모델에게는 표 줄을 가려서 보낸다"
+    },
+    {
+      "handler": "fomc_calendar",
+      "kind": "MIXED",
+      "url": "^https://www\\.federalreserve\\.gov/monetarypolicy/fomccalendars\\.htm$",
+      "_why": "연준 FOMC 회의 일정 페이지 — 해마다 달 줄 · 날 줄 (SEP 를 내는 회의는 날에 * · 해 끝에 각주). P-3b 모델이 일정 줄을 뽑지 못했다 (P3b-e · P4-f — '10월엔 새 SEP 없음' · '다음 회의 12/8-9'). 글(회의 수 · 회의록 공개 · 잠정 날짜 안내)은 모델이, 일정 덩어리(첫 'YYYY FOMC Meetings' 줄 ~ 마지막 각주 줄)는 코드가. 모델에게는 일정 덩어리를 가려서 보낸다"
+    }
   ],
   "_kind": "TABLE = 모델에 보내지 않는다 · 코드가 읽는다. MIXED = 표 덩어리만 코드가 읽고 모델 입력에서는 가린다. 목록에 없는 문서 = TEXT (모델이 읽는다 — 성명문 · 기자회견 · 회의록 · 연설 · 보도자료)",
   "mask_line": "[표 — 이 줄들은 코드가 읽는다. 여기서 사실을 뽑지 않는다]",
@@ -22,6 +53,10 @@
     "sep_dots": 0,
     "sep_risk": 0,
     "omo_rates": 0,
-    "pipe_blocks": 0
-  }
+    "pipe_blocks": 0,
+    "fomc_calendar": 1,
+    "_fomc_calendar": "달 줄 → 날 줄 (바로 다음 줄)"
+  },
+  "_changes": "p3-tables/2 (P-5 · D44 P4-f) — fomc_calendar 를 더했다 (연준 회의 일정 페이지 CAL — 사건 해의 회의 날짜 · SEP 표시(*)). 다른 표 읽기는 그대로",
+  "calendar_rule": "일정 표(fomc_calendar)의 줄: 사건 해(YYYY FOMC Meetings)의 회의 전부 — 회의 하나 = 사실 하나 (달 · 날 · * 표시). 계산하지 않는다 (\"다음 회의\" · \"새 SEP 없음\" 을 코드가 말하지 않는다 — 회의마다 표시를 옮길 뿐). 날짜가 잠정이라 VOLATILE · as_of = 페이지의 \"Last Update\" 날"
 }

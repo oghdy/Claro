@@ -2,10 +2,13 @@
   "_what": "FOMC-20260916 의 Deep Fact Graph 초안 (P-3b · p3.ts 가 저장한 모델 출력 · 원문의 표에서 짓는다 — 손으로 고치지 않는다). facts · fact_sources 는 계약 모양 (DATA_MODEL §1 Fact · FactSource) + _ 주석. 구절이 원문에서 글자 그대로 한 곳에 찾아지고 수량어 · 수 검사를 통과한 사실만 facts 에 있다. 표 사실(_table)은 코드가 칸을 짝지어 만들었다. 나머지는 아래에 따로 — 사람이 게이트에서 본다 (§10.1)",
   "event": "FOMC-20260916",
   "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
-  "prompt_version": "p3-extract/2",
+  "prompt_version": "p3-extract/3",
+  "prompt_compat": {
+    "p3-extract/2": "회의 뒤 문서(after)가 아니고, 지금 판으로 다시 낸 요청의 sha256 이 저장한 출력의 request_sha256 과 같을 때 — 그 출력은 지금 판의 요청과 글자 그대로 같은 요청에서 나왔다"
+  },
   "model": "claude-opus-5-5",
   "match_rules": "p1-match/1",
-  "table_rules": "p3-tables/1",
+  "table_rules": "p3-tables/2",
   "check_rules": "p3-checks/1",
   "merge_version": "p3-merge/1",
   "storyline": {
@@ -26,7 +29,9 @@
       "output_sha256": "ac8b2a3f259302a80f1fe382b044995d87604f028b967831043457d041b1c8dc",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "8d64e5a2e080e62cd18dfd140f4e4dd44ceb51b4e1a1fde093619ce59ace301f"
+      "input_sha256": "8d64e5a2e080e62cd18dfd140f4e4dd44ceb51b4e1a1fde093619ce59ace301f",
+      "request_sha256": "5a448464c06a92723d81e6b6ae013e5d15241522f6bbc91b35c3ebc69d8ccf79",
+      "compat": true
     },
     {
       "source_label": "IMPL-09",
@@ -34,7 +39,9 @@
       "output_sha256": "8d80e98251566bd5f6ea597a2ebd789dcb26ce1cb3be03bd10d9d7d4dd90446f",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "0757194169e21ea99f9136c0dc835ad28ab77a9c41ac8ff4aeb2dd8da22ef7f4"
+      "input_sha256": "0757194169e21ea99f9136c0dc835ad28ab77a9c41ac8ff4aeb2dd8da22ef7f4",
+      "request_sha256": "734dcd2d9aef738679289eef6ceccad3f193d298b9d753f500e22a68c99d9071",
+      "compat": true
     },
     {
       "source_label": "ST-07",
@@ -42,7 +49,9 @@
       "output_sha256": "175318331cf0864029dcad5e97b7f29df8aeaa77e28688ada3271a52a777d6eb",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "e62f8176863b72bd6081fc1f4b7ac4b3db8e33b8d4f80afdef3b88b2dd5a7ec8"
+      "input_sha256": "e62f8176863b72bd6081fc1f4b7ac4b3db8e33b8d4f80afdef3b88b2dd5a7ec8",
+      "request_sha256": "5fa5fc42c9b25401699ddacd5fab9c047ac16026c3dcfd4efb417c14b9180e70",
+      "compat": true
     },
     {
       "source_label": "MIN-07",
@@ -50,7 +59,9 @@
       "output_sha256": "ea5fd92da9e1c0095b9539203172fb43d3e45a8b99b132358ab30b2f64fa34c9",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "45eecc258cbaf2d4d7ada7637cf40b1ffc9dc3b8d13564a6731d76bfb8bf7ef3"
+      "input_sha256": "45eecc258cbaf2d4d7ada7637cf40b1ffc9dc3b8d13564a6731d76bfb8bf7ef3",
+      "request_sha256": "c887a481f1eb805971ae4baa4f9049bdf043201b59cf2f6b5987ee49f40afed1",
+      "compat": true
     },
     {
       "source_label": "JH",
@@ -58,7 +69,9 @@
       "output_sha256": "3a77649c7dcecd83a68eebb69022196dd1b79b8148d69a0e4898cb7bb325a4f6",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "fe40737c8e1602d8adc20ef95c094c5909b2680d977d4e1762530e0ccd39eb95"
+      "input_sha256": "fe40737c8e1602d8adc20ef95c094c5909b2680d977d4e1762530e0ccd39eb95",
+      "request_sha256": "a9d7e77d021f7aed4df8b766ca736614397958cb67ba779c16f2bf3765426f31",
+      "compat": true
     },
     {
       "source_label": "ST-06",
@@ -66,7 +79,9 @@
       "output_sha256": "bcafbb44da2bbc73405afb3dfca9eb70170a31c9ab6b3e74084ed226c5ad25fe",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "bf3e7cf3024d3bb0bf32a8b19d074296c2cf986d29c2f34ce22cc1b060d1b982"
+      "input_sha256": "bf3e7cf3024d3bb0bf32a8b19d074296c2cf986d29c2f34ce22cc1b060d1b982",
+      "request_sha256": "a42231c14d0fbebbed33c1f528eb4ff7780154e06e5957915417bbc795d7520a",
+      "compat": true
     },
     {
       "source_label": "PC-09",
@@ -74,15 +89,19 @@
       "output_sha256": "cf69f4c042a83111163f00e80c9df45fda831513bb67f3d0681759b4fcd7236e",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "19441aa06b031fda0b8f9de0d4e4b5aa76c7080ccc35221f603e75a8ecfe4f05"
+      "input_sha256": "19441aa06b031fda0b8f9de0d4e4b5aa76c7080ccc35221f603e75a8ecfe4f05",
+      "request_sha256": "38c6af9e9491355fed62d35e7d820a366e33886def898647be801cff3a832e75",
+      "compat": true
     },
     {
       "source_label": "CAL",
-      "raw": "CAL.claude-opus-5-5.p3-extract-2.json",
-      "output_sha256": "d11def6d1316fe85cb83efd18472b8f61db9d8ad3b132276913e4ade751565c3",
+      "raw": "CAL.claude-opus-5-5.p3-extract-3.json",
+      "output_sha256": "e3516ee75f7a256eb18c4d07c1958897308bb727f322d6e788be62dae8046353",
       "model": "claude-opus-5-5",
-      "prompt_version": "p3-extract/2",
-      "input_sha256": "de37cd898fb22ee5ea755373bd0eccfee988c7c4774588ca2b4a5eb8cf398535"
+      "prompt_version": "p3-extract/3",
+      "input_sha256": "b5fdab4cbf9ba9a6dd00eb69dc22f954189667934d7c7872f2e16cad2c555389",
+      "request_sha256": "4a087e26f0913891aefaf68c385e3b2310e8d75bef5456ffc005b3ae6c4c191d",
+      "compat": false
     },
     {
       "source_label": "MIN-01",
@@ -90,7 +109,9 @@
       "output_sha256": "c8cb6430fa747797b0f0e9e417fb81c7a32930ded7ba2611f7c605ec44315844",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "3cf93fe25bcfe5fbb6326b76c54b4726e05cd6826aaafb36986752fd5650a719"
+      "input_sha256": "3cf93fe25bcfe5fbb6326b76c54b4726e05cd6826aaafb36986752fd5650a719",
+      "request_sha256": "56ec63a97fd6d73b73e13de5f46c71150114e30b72fbff87774de324d379ac75",
+      "compat": true
     },
     {
       "source_label": "BEA-07",
@@ -98,7 +119,9 @@
       "output_sha256": "0cde01cba59e718c4c64211835acf716c0e1ada2cd9444de8b3be567a9190de7",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "b980de25089e437e9c4cc6158fa093d5e66a037b6d6444e229cd422caff0a9a7"
+      "input_sha256": "b980de25089e437e9c4cc6158fa093d5e66a037b6d6444e229cd422caff0a9a7",
+      "request_sha256": "5a0e04e866fa0cfe00fd6627b1d1fd6542da79b88f3d6b73263bf075a03e3d9a",
+      "compat": true
     },
     {
       "source_label": "WH-0408",
@@ -106,7 +129,9 @@
       "output_sha256": "e441eeeee8f750d2103f35fb45b886ae9e958bf284d5b1f10efdd7ff079319da",
       "model": "claude-opus-5-5",
       "prompt_version": "p3-extract/2",
-      "input_sha256": "049cc4d3e846b111ac0863f159e2e3e68819a9307c45de7a4856fdf80a12d849"
+      "input_sha256": "049cc4d3e846b111ac0863f159e2e3e68819a9307c45de7a4856fdf80a12d849",
+      "request_sha256": "4d098c15496add48b2ca3943a7afcb58f46aa9a2f811eb124c867cdef9d5d76f",
+      "compat": true
     }
   ],
   "missing_output": [],
@@ -128,6 +153,12 @@
       "handler": "omo_rates",
       "kind": "TABLE",
       "facts": 59
+    },
+    {
+      "source_label": "CAL",
+      "handler": "fomc_calendar",
+      "kind": "MIXED",
+      "facts": 8
     },
     {
       "source_label": "BEA-07",
@@ -162,16 +193,16 @@
     "documents": 17,
     "documents_text": 11,
     "documents_with_output": 11,
-    "candidates": 466,
-    "model_candidates": 206,
-    "table_facts": 260,
-    "verified": 462,
+    "candidates": 475,
+    "model_candidates": 207,
+    "table_facts": 268,
+    "verified": 471,
     "no_passage": 0,
     "multiple": 0,
     "bad_shape": 0,
     "quantifier_mismatch": 0,
     "number_mismatch": 4,
-    "facts_after_merge": 457,
+    "facts_after_merge": 466,
     "merges": 5,
     "merges_by_rule": {
       "R1": 0,
@@ -286,14 +317,14 @@
       "table": 59
     },
     "CAL": {
-      "candidates": 3,
-      "verified": 3,
+      "candidates": 12,
+      "verified": 12,
       "no_passage": 0,
       "multiple": 0,
       "bad_shape": 0,
       "quantifier_mismatch": 0,
       "number_mismatch": 0,
-      "table": 0
+      "table": 8
     },
     "MIN-01": {
       "candidates": 41,
@@ -576,7 +607,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T1"
       ],
@@ -643,7 +674,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T2"
       ],
@@ -710,7 +741,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T3"
       ],
@@ -777,7 +808,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T4"
       ],
@@ -837,7 +868,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T5"
       ],
@@ -897,7 +928,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T6"
       ],
@@ -957,7 +988,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T7"
       ],
@@ -1024,7 +1055,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T8"
       ],
@@ -1091,7 +1122,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T9"
       ],
@@ -1158,7 +1189,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T10"
       ],
@@ -1218,7 +1249,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T11"
       ],
@@ -1278,7 +1309,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T12"
       ],
@@ -1338,7 +1369,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T13"
       ],
@@ -1405,7 +1436,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T14"
       ],
@@ -1472,7 +1503,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T15"
       ],
@@ -1539,7 +1570,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T16"
       ],
@@ -1599,7 +1630,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T17"
       ],
@@ -1659,7 +1690,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T18"
       ],
@@ -1719,7 +1750,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T19"
       ],
@@ -1779,7 +1810,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T20"
       ],
@@ -1839,7 +1870,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T21"
       ],
@@ -1899,7 +1930,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T22"
       ],
@@ -1952,7 +1983,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T23"
       ],
@@ -2005,7 +2036,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T24"
       ],
@@ -2058,7 +2089,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T25"
       ],
@@ -2125,7 +2156,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T26"
       ],
@@ -2192,7 +2223,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T27"
       ],
@@ -2259,7 +2290,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T28"
       ],
@@ -2319,7 +2350,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T29"
       ],
@@ -2379,7 +2410,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T30"
       ],
@@ -2439,7 +2470,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T31"
       ],
@@ -2479,7 +2510,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T32"
       ],
@@ -2526,7 +2557,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T33"
       ],
@@ -2580,7 +2611,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T34"
       ],
@@ -2613,7 +2644,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T35"
       ],
@@ -2667,7 +2698,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T36"
       ],
@@ -2700,7 +2731,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T37"
       ],
@@ -2747,7 +2778,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T38"
       ],
@@ -2780,7 +2811,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T39"
       ],
@@ -2834,7 +2865,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T40"
       ],
@@ -2867,7 +2898,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T41"
       ],
@@ -2907,7 +2938,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T42"
       ],
@@ -2954,7 +2985,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T43"
       ],
@@ -3001,7 +3032,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T44"
       ],
@@ -3048,7 +3079,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T45"
       ],
@@ -3095,7 +3126,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T46"
       ],
@@ -3142,7 +3173,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T47"
       ],
@@ -3189,7 +3220,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T48"
       ],
@@ -3236,7 +3267,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T49"
       ],
@@ -3283,7 +3314,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T50"
       ],
@@ -3330,7 +3361,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T51"
       ],
@@ -3377,7 +3408,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T52"
       ],
@@ -3424,7 +3455,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T53"
       ],
@@ -3471,7 +3502,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T54"
       ],
@@ -3518,7 +3549,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T55"
       ],
@@ -3565,7 +3596,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T56"
       ],
@@ -3612,7 +3643,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-09#T57"
       ],
@@ -5777,7 +5808,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T1"
       ],
@@ -5837,7 +5868,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T2"
       ],
@@ -5897,7 +5928,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T3"
       ],
@@ -5957,7 +5988,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T4"
       ],
@@ -6017,7 +6048,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T5"
       ],
@@ -6077,7 +6108,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T6"
       ],
@@ -6137,7 +6168,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T7"
       ],
@@ -6197,7 +6228,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T8"
       ],
@@ -6257,7 +6288,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T9"
       ],
@@ -6317,7 +6348,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T10"
       ],
@@ -6377,7 +6408,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T11"
       ],
@@ -6437,7 +6468,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T12"
       ],
@@ -6497,7 +6528,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T13"
       ],
@@ -6557,7 +6588,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T14"
       ],
@@ -6617,7 +6648,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T15"
       ],
@@ -6677,7 +6708,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T16"
       ],
@@ -6737,7 +6768,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T17"
       ],
@@ -6797,7 +6828,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T18"
       ],
@@ -6857,7 +6888,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T19"
       ],
@@ -6910,7 +6941,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T20"
       ],
@@ -6963,7 +6994,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T21"
       ],
@@ -7016,7 +7047,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T22"
       ],
@@ -7069,7 +7100,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T23"
       ],
@@ -7122,7 +7153,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T24"
       ],
@@ -7175,7 +7206,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T25"
       ],
@@ -7235,7 +7266,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T26"
       ],
@@ -7295,7 +7326,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T27"
       ],
@@ -7355,7 +7386,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T28"
       ],
@@ -7415,7 +7446,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T29"
       ],
@@ -7475,7 +7506,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T30"
       ],
@@ -7535,7 +7566,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T31"
       ],
@@ -7582,7 +7613,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T32"
       ],
@@ -7615,7 +7646,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T33"
       ],
@@ -7669,7 +7700,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T34"
       ],
@@ -7702,7 +7733,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T35"
       ],
@@ -7756,7 +7787,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T36"
       ],
@@ -7789,7 +7820,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T37"
       ],
@@ -7843,7 +7874,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T38"
       ],
@@ -7876,7 +7907,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T39"
       ],
@@ -7930,7 +7961,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T40"
       ],
@@ -7984,7 +8015,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T41"
       ],
@@ -8017,7 +8048,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T42"
       ],
@@ -8064,7 +8095,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T43"
       ],
@@ -8111,7 +8142,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T44"
       ],
@@ -8158,7 +8189,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T45"
       ],
@@ -8205,7 +8236,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T46"
       ],
@@ -8252,7 +8283,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T47"
       ],
@@ -8299,7 +8330,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T48"
       ],
@@ -8346,7 +8377,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T49"
       ],
@@ -8393,7 +8424,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T50"
       ],
@@ -8440,7 +8471,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T51"
       ],
@@ -8487,7 +8518,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T52"
       ],
@@ -8534,7 +8565,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T53"
       ],
@@ -8581,7 +8612,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T54"
       ],
@@ -8628,7 +8659,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T55"
       ],
@@ -8675,7 +8706,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T56"
       ],
@@ -8722,7 +8753,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "SEP-03#T57"
       ],
@@ -8769,7 +8800,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T1"
       ],
@@ -8817,7 +8848,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T2"
       ],
@@ -8865,7 +8896,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T3"
       ],
@@ -8913,7 +8944,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T4"
       ],
@@ -8961,7 +8992,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T5"
       ],
@@ -9009,7 +9040,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T6"
       ],
@@ -9057,7 +9088,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T7"
       ],
@@ -9105,7 +9136,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T8"
       ],
@@ -9153,7 +9184,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T9"
       ],
@@ -9201,7 +9232,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T10"
       ],
@@ -9249,7 +9280,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T11"
       ],
@@ -9297,7 +9328,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T12"
       ],
@@ -9345,7 +9376,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T13"
       ],
@@ -9393,7 +9424,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T14"
       ],
@@ -9441,7 +9472,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T15"
       ],
@@ -9489,7 +9520,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T16"
       ],
@@ -9537,7 +9568,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T17"
       ],
@@ -9585,7 +9616,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T18"
       ],
@@ -9633,7 +9664,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T19"
       ],
@@ -9681,7 +9712,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T20"
       ],
@@ -9729,7 +9760,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T21"
       ],
@@ -9777,7 +9808,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T22"
       ],
@@ -9825,7 +9856,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T23"
       ],
@@ -9873,7 +9904,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T24"
       ],
@@ -9921,7 +9952,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T25"
       ],
@@ -9969,7 +10000,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T26"
       ],
@@ -10017,7 +10048,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T27"
       ],
@@ -10065,7 +10096,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T28"
       ],
@@ -10113,7 +10144,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T29"
       ],
@@ -10161,7 +10192,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T30"
       ],
@@ -10209,7 +10240,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T31"
       ],
@@ -10257,7 +10288,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T32"
       ],
@@ -10298,7 +10329,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T33"
       ],
@@ -10339,7 +10370,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T34"
       ],
@@ -10380,7 +10411,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T35"
       ],
@@ -10421,7 +10452,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T36"
       ],
@@ -10462,7 +10493,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T37"
       ],
@@ -10503,7 +10534,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T38"
       ],
@@ -10544,7 +10575,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T39"
       ],
@@ -10585,7 +10616,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T40"
       ],
@@ -10626,7 +10657,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T41"
       ],
@@ -10667,7 +10698,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T42"
       ],
@@ -10708,7 +10739,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T43"
       ],
@@ -10749,7 +10780,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T44"
       ],
@@ -10790,7 +10821,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T45"
       ],
@@ -10831,7 +10862,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T46"
       ],
@@ -10872,7 +10903,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T47"
       ],
@@ -10913,7 +10944,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T48"
       ],
@@ -10954,7 +10985,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T49"
       ],
@@ -10995,7 +11026,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T50"
       ],
@@ -11036,7 +11067,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T51"
       ],
@@ -11077,7 +11108,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T52"
       ],
@@ -11118,7 +11149,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T53"
       ],
@@ -11159,7 +11190,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T54"
       ],
@@ -11200,7 +11231,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T55"
       ],
@@ -11241,7 +11272,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T56"
       ],
@@ -11282,7 +11313,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T57"
       ],
@@ -11323,7 +11354,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T58"
       ],
@@ -11364,7 +11395,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "OMO#T59"
       ],
@@ -11393,11 +11424,283 @@
       }
     },
     {
-      "fact_id": "2b1c1f27-f635-5601-856e-9855c4809c08",
-      "label": "F302",
-      "claim_text": "federalreserve.gov 의 FOMC 일정 페이지는 FOMC 가 한 해에 정례 회의를 eight 번 열고, 필요하면 다른 회의도 연다고 설명함",
+      "fact_id": "f4630101-578c-56e1-9d4b-6aefd7a3d956",
+      "label": "F458",
+      "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — January 27-28 회의: * 표시 없음 (경제 전망 SEP 각주가 붙지 않은 회의)",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-10-28",
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/2 (code)",
+      "_from": [
+        "CAL#T1"
+      ],
+      "_table": {
+        "handler": "fomc_calendar",
+        "header_line": "2026 FOMC Meetings",
+        "row_line": "January",
+        "cells": [
+          {
+            "h": 0,
+            "r": 1,
+            "col": "January",
+            "shown": "January",
+            "value": "27-28"
+          }
+        ],
+        "row_label": "January",
+        "date_cell": "Last Update: October 28, 2026"
+      }
+    },
+    {
+      "fact_id": "3fa669bb-bd96-5c0d-8e1e-4dae3e4b1e8f",
+      "label": "F459",
+      "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — March 17-18* 회의: * 표시 있음 (각주 \"* Meeting associated with a Summary of Economic Projections.\")",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-10-28",
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/2 (code)",
+      "_from": [
+        "CAL#T2"
+      ],
+      "_table": {
+        "handler": "fomc_calendar",
+        "header_line": "2026 FOMC Meetings",
+        "row_line": "March",
+        "cells": [
+          {
+            "h": 0,
+            "r": 1,
+            "col": "March",
+            "shown": "March",
+            "value": "17-18*"
+          }
+        ],
+        "row_label": "March",
+        "date_cell": "Last Update: October 28, 2026"
+      }
+    },
+    {
+      "fact_id": "ededc4a4-8133-5dc6-abce-b3bfadb7345e",
+      "label": "F460",
+      "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — April 28-29 회의: * 표시 없음 (경제 전망 SEP 각주가 붙지 않은 회의)",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-10-28",
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/2 (code)",
+      "_from": [
+        "CAL#T3"
+      ],
+      "_table": {
+        "handler": "fomc_calendar",
+        "header_line": "2026 FOMC Meetings",
+        "row_line": "April",
+        "cells": [
+          {
+            "h": 0,
+            "r": 1,
+            "col": "April",
+            "shown": "April",
+            "value": "28-29"
+          }
+        ],
+        "row_label": "April",
+        "date_cell": "Last Update: October 28, 2026"
+      }
+    },
+    {
+      "fact_id": "8d7b2539-ef39-5bdc-997e-411d6d395def",
+      "label": "F461",
+      "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — June 16-17* 회의: * 표시 있음 (각주 \"* Meeting associated with a Summary of Economic Projections.\")",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-10-28",
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/2 (code)",
+      "_from": [
+        "CAL#T4"
+      ],
+      "_table": {
+        "handler": "fomc_calendar",
+        "header_line": "2026 FOMC Meetings",
+        "row_line": "June",
+        "cells": [
+          {
+            "h": 0,
+            "r": 1,
+            "col": "June",
+            "shown": "June",
+            "value": "16-17*"
+          }
+        ],
+        "row_label": "June",
+        "date_cell": "Last Update: October 28, 2026"
+      }
+    },
+    {
+      "fact_id": "2dc2bafe-d853-542c-b019-decbf5d40583",
+      "label": "F462",
+      "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — July 28-29 회의: * 표시 없음 (경제 전망 SEP 각주가 붙지 않은 회의)",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-10-28",
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/2 (code)",
+      "_from": [
+        "CAL#T5"
+      ],
+      "_table": {
+        "handler": "fomc_calendar",
+        "header_line": "2026 FOMC Meetings",
+        "row_line": "July",
+        "cells": [
+          {
+            "h": 0,
+            "r": 1,
+            "col": "July",
+            "shown": "July",
+            "value": "28-29"
+          }
+        ],
+        "row_label": "July",
+        "date_cell": "Last Update: October 28, 2026"
+      }
+    },
+    {
+      "fact_id": "995458a9-6aca-51bc-88c2-1a0107fe81b5",
+      "label": "F463",
+      "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — September 15-16* 회의: * 표시 있음 (각주 \"* Meeting associated with a Summary of Economic Projections.\")",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-10-28",
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/2 (code)",
+      "_from": [
+        "CAL#T6"
+      ],
+      "_table": {
+        "handler": "fomc_calendar",
+        "header_line": "2026 FOMC Meetings",
+        "row_line": "September",
+        "cells": [
+          {
+            "h": 0,
+            "r": 1,
+            "col": "September",
+            "shown": "September",
+            "value": "15-16*"
+          }
+        ],
+        "row_label": "September",
+        "date_cell": "Last Update: October 28, 2026"
+      }
+    },
+    {
+      "fact_id": "fb3d2b10-a72b-5613-8f2f-000839cf3e02",
+      "label": "F464",
+      "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — October 27-28 회의: * 표시 없음 (경제 전망 SEP 각주가 붙지 않은 회의)",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-10-28",
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/2 (code)",
+      "_from": [
+        "CAL#T7"
+      ],
+      "_table": {
+        "handler": "fomc_calendar",
+        "header_line": "2026 FOMC Meetings",
+        "row_line": "October",
+        "cells": [
+          {
+            "h": 0,
+            "r": 1,
+            "col": "October",
+            "shown": "October",
+            "value": "27-28"
+          }
+        ],
+        "row_label": "October",
+        "date_cell": "Last Update: October 28, 2026"
+      }
+    },
+    {
+      "fact_id": "0f5039cf-16c4-5d0f-bdbb-8d469102c3e6",
+      "label": "F465",
+      "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — December 8-9* 회의: * 표시 있음 (각주 \"* Meeting associated with a Summary of Economic Projections.\")",
+      "fact_type": "OFFICIAL_ACTION",
+      "actor": null,
+      "volatility": "VOLATILE",
+      "as_of": "2026-10-28",
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": null,
+      "extraction_version": "p3-tables/2 (code)",
+      "_from": [
+        "CAL#T8"
+      ],
+      "_table": {
+        "handler": "fomc_calendar",
+        "header_line": "2026 FOMC Meetings",
+        "row_line": "December",
+        "cells": [
+          {
+            "h": 0,
+            "r": 1,
+            "col": "December",
+            "shown": "December",
+            "value": "8-9*"
+          }
+        ],
+        "row_label": "December",
+        "date_cell": "Last Update: October 28, 2026"
+      }
+    },
+    {
+      "fact_id": "3c8964a5-bb3f-5c29-81ae-2d3135f0d224",
+      "label": "F466",
+      "claim_text": "연준 웹사이트는 FOMC 가 1년에 정례 회의를 8번 열고, 필요하면 다른 회의도 연다고 설명함",
       "fact_type": "OFFICIAL_CLAIM",
-      "actor": "연준 이사회 (FOMC 회의 일정 페이지)",
+      "actor": "연준 (FOMC 회의 일정 페이지)",
       "volatility": "STABLE",
       "as_of": null,
       "event_at": null,
@@ -11405,17 +11708,17 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": "claude-opus-5-5",
-      "extraction_version": "p3-extract/2",
+      "extraction_version": "p3-extract/3",
       "_from": [
         "CAL#0"
       ]
     },
     {
-      "fact_id": "d01f96c6-6b0d-552c-b623-b9b227242ee7",
-      "label": "F303",
-      "claim_text": "federalreserve.gov 의 FOMC 일정 페이지는 정례 회의의 의사록이 정책 결정일로부터 three 주 뒤에 공개된다고 설명함",
+      "fact_id": "0696a4d1-745d-5f02-a4e1-a9c86fd2b463",
+      "label": "F467",
+      "claim_text": "연준 웹사이트는 정례 회의의 회의록이 정책 결정일로부터 3주 뒤에 공개된다고 설명함",
       "fact_type": "OFFICIAL_CLAIM",
-      "actor": "연준 이사회 (FOMC 회의 일정 페이지)",
+      "actor": "연준 (FOMC 회의 일정 페이지)",
       "volatility": "STABLE",
       "as_of": null,
       "event_at": null,
@@ -11423,17 +11726,17 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": "claude-opus-5-5",
-      "extraction_version": "p3-extract/2",
+      "extraction_version": "p3-extract/3",
       "_from": [
         "CAL#1"
       ]
     },
     {
-      "fact_id": "aad3102a-b6ca-5376-adeb-10bdc9a49765",
-      "label": "F304",
-      "claim_text": "federalreserve.gov 의 FOMC 일정 페이지는 각 회의 날짜가 바로 앞 회의에서 확정되기 전까지는 잠정적이라고 밝힘",
+      "fact_id": "6a903e46-4484-5e42-9ca0-930aa411ffc8",
+      "label": "F468",
+      "claim_text": "연준 웹사이트는 위원회 구성원이 매년 첫 정례 회의에서 바뀐다고 설명함",
       "fact_type": "OFFICIAL_CLAIM",
-      "actor": "연준 이사회 (FOMC 회의 일정 페이지)",
+      "actor": "연준 (FOMC 회의 일정 페이지)",
       "volatility": "STABLE",
       "as_of": null,
       "event_at": null,
@@ -11441,9 +11744,27 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": "claude-opus-5-5",
-      "extraction_version": "p3-extract/2",
+      "extraction_version": "p3-extract/3",
       "_from": [
         "CAL#2"
+      ]
+    },
+    {
+      "fact_id": "7ff76ee8-dff2-593f-af05-865cab34155d",
+      "label": "F469",
+      "claim_text": "연준 웹사이트는 각 회의 날짜가 바로 앞 회의에서 확정되기 전까지는 잠정적이라고 밝힘",
+      "fact_type": "OFFICIAL_LIMIT",
+      "actor": "연준 (FOMC 회의 일정 페이지)",
+      "volatility": "STABLE",
+      "as_of": null,
+      "event_at": null,
+      "event_id": "15661514-6b4a-4da8-8879-47430c6be5a9",
+      "storyline_id": null,
+      "storyline_version": null,
+      "extraction_model": "claude-opus-5-5",
+      "extraction_version": "p3-extract/3",
+      "_from": [
+        "CAL#3"
       ]
     },
     {
@@ -12197,7 +12518,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "BEA-07#T1"
       ],
@@ -12237,7 +12558,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "BEA-07#T2"
       ],
@@ -12277,7 +12598,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "BEA-07#T3"
       ],
@@ -12317,7 +12638,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "BEA-07#T4"
       ],
@@ -12357,7 +12678,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "BEA-07#T5"
       ],
@@ -12397,7 +12718,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "BEA-07#T6"
       ],
@@ -12437,7 +12758,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "BEA-07#T7"
       ],
@@ -12693,7 +13014,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T1"
       ],
@@ -12818,7 +13139,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T2"
       ],
@@ -12943,7 +13264,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T3"
       ],
@@ -13068,7 +13389,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T4"
       ],
@@ -13193,7 +13514,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T5"
       ],
@@ -13318,7 +13639,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T6"
       ],
@@ -13443,7 +13764,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T7"
       ],
@@ -13568,7 +13889,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T8"
       ],
@@ -13693,7 +14014,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T9"
       ],
@@ -13818,7 +14139,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T10"
       ],
@@ -13943,7 +14264,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T11"
       ],
@@ -14068,7 +14389,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T12"
       ],
@@ -14193,7 +14514,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T13"
       ],
@@ -14318,7 +14639,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T14"
       ],
@@ -14443,7 +14764,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T15"
       ],
@@ -14568,7 +14889,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T16"
       ],
@@ -14693,7 +15014,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T17"
       ],
@@ -14818,7 +15139,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T18"
       ],
@@ -14943,7 +15264,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T19"
       ],
@@ -15068,7 +15389,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T20"
       ],
@@ -15193,7 +15514,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T21"
       ],
@@ -15318,7 +15639,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T22"
       ],
@@ -15443,7 +15764,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T23"
       ],
@@ -15568,7 +15889,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T24"
       ],
@@ -15693,7 +16014,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T25"
       ],
@@ -15818,7 +16139,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T26"
       ],
@@ -15943,7 +16264,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T27"
       ],
@@ -16068,7 +16389,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T28"
       ],
@@ -16193,7 +16514,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T29"
       ],
@@ -16318,7 +16639,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T30"
       ],
@@ -16443,7 +16764,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T31"
       ],
@@ -16568,7 +16889,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T32"
       ],
@@ -16693,7 +17014,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T33"
       ],
@@ -16818,7 +17139,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T34"
       ],
@@ -16943,7 +17264,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T35"
       ],
@@ -17068,7 +17389,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "TSY#T36"
       ],
@@ -17440,7 +17761,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T1"
       ],
@@ -17473,7 +17794,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T2"
       ],
@@ -17506,7 +17827,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T3"
       ],
@@ -17539,7 +17860,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T4"
       ],
@@ -17572,7 +17893,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T5"
       ],
@@ -17605,7 +17926,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T6"
       ],
@@ -17638,7 +17959,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T7"
       ],
@@ -17671,7 +17992,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T8"
       ],
@@ -17704,7 +18025,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T9"
       ],
@@ -17737,7 +18058,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T10"
       ],
@@ -17770,7 +18091,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T11"
       ],
@@ -17803,7 +18124,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T12"
       ],
@@ -17836,7 +18157,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T13"
       ],
@@ -17869,7 +18190,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T14"
       ],
@@ -17902,7 +18223,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T15"
       ],
@@ -17935,7 +18256,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T16"
       ],
@@ -17968,7 +18289,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T17"
       ],
@@ -18001,7 +18322,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T18"
       ],
@@ -18034,7 +18355,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T19"
       ],
@@ -18067,7 +18388,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T20"
       ],
@@ -18100,7 +18421,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T21"
       ],
@@ -18133,7 +18454,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T22"
       ],
@@ -18166,7 +18487,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T23"
       ],
@@ -18199,7 +18520,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T24"
       ],
@@ -18232,7 +18553,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T25"
       ],
@@ -18265,7 +18586,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T26"
       ],
@@ -18298,7 +18619,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T27"
       ],
@@ -18331,7 +18652,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T28"
       ],
@@ -18364,7 +18685,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T29"
       ],
@@ -18397,7 +18718,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T30"
       ],
@@ -18430,7 +18751,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T31"
       ],
@@ -18463,7 +18784,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T32"
       ],
@@ -18496,7 +18817,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T33"
       ],
@@ -18529,7 +18850,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T34"
       ],
@@ -18562,7 +18883,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T35"
       ],
@@ -18595,7 +18916,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-B#T36"
       ],
@@ -18628,7 +18949,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-D#T1"
       ],
@@ -18662,7 +18983,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-D#T2"
       ],
@@ -18696,7 +19017,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-D#T3"
       ],
@@ -18730,7 +19051,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-D#T4"
       ],
@@ -18764,7 +19085,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-D#T5"
       ],
@@ -18798,7 +19119,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-D#T6"
       ],
@@ -18832,7 +19153,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-D#T7"
       ],
@@ -18866,7 +19187,7 @@
       "storyline_id": null,
       "storyline_version": null,
       "extraction_model": null,
-      "extraction_version": "p3-tables/1 (code)",
+      "extraction_version": "p3-tables/2 (code)",
       "_from": [
         "EIA-D#T8"
       ],
@@ -22679,7 +23000,295 @@
       "_passage": "2003\nDate | Increase | Decrease | Level (%)\nJune 25 | ... | 25 | 1.00"
     },
     {
-      "fact_id": "2b1c1f27-f635-5601-856e-9855c4809c08",
+      "fact_id": "f4630101-578c-56e1-9d4b-6aefd7a3d956",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8300,
+      "span_end": 8318,
+      "_from": "CAL#T1",
+      "_passage": "2026 FOMC Meetings"
+    },
+    {
+      "fact_id": "f4630101-578c-56e1-9d4b-6aefd7a3d956",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8319,
+      "span_end": 8332,
+      "_from": "CAL#T1",
+      "_passage": "January\n27-28"
+    },
+    {
+      "fact_id": "f4630101-578c-56e1-9d4b-6aefd7a3d956",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9333,
+      "_from": "CAL#T1",
+      "_passage": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    },
+    {
+      "fact_id": "f4630101-578c-56e1-9d4b-6aefd7a3d956",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 15950,
+      "span_end": 15979,
+      "_from": "CAL#T1",
+      "_passage": "Last Update: October 28, 2026"
+    },
+    {
+      "fact_id": "3fa669bb-bd96-5c0d-8e1e-4dae3e4b1e8f",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8300,
+      "span_end": 8318,
+      "_from": "CAL#T2",
+      "_passage": "2026 FOMC Meetings"
+    },
+    {
+      "fact_id": "3fa669bb-bd96-5c0d-8e1e-4dae3e4b1e8f",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8500,
+      "span_end": 8512,
+      "_from": "CAL#T2",
+      "_passage": "March\n17-18*"
+    },
+    {
+      "fact_id": "3fa669bb-bd96-5c0d-8e1e-4dae3e4b1e8f",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9333,
+      "_from": "CAL#T2",
+      "_passage": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    },
+    {
+      "fact_id": "3fa669bb-bd96-5c0d-8e1e-4dae3e4b1e8f",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 15950,
+      "span_end": 15979,
+      "_from": "CAL#T2",
+      "_passage": "Last Update: October 28, 2026"
+    },
+    {
+      "fact_id": "ededc4a4-8133-5dc6-abce-b3bfadb7345e",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8300,
+      "span_end": 8318,
+      "_from": "CAL#T3",
+      "_passage": "2026 FOMC Meetings"
+    },
+    {
+      "fact_id": "ededc4a4-8133-5dc6-abce-b3bfadb7345e",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8650,
+      "span_end": 8661,
+      "_from": "CAL#T3",
+      "_passage": "April\n28-29"
+    },
+    {
+      "fact_id": "ededc4a4-8133-5dc6-abce-b3bfadb7345e",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9333,
+      "_from": "CAL#T3",
+      "_passage": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    },
+    {
+      "fact_id": "ededc4a4-8133-5dc6-abce-b3bfadb7345e",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 15950,
+      "span_end": 15979,
+      "_from": "CAL#T3",
+      "_passage": "Last Update: October 28, 2026"
+    },
+    {
+      "fact_id": "8d7b2539-ef39-5bdc-997e-411d6d395def",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8300,
+      "span_end": 8318,
+      "_from": "CAL#T4",
+      "_passage": "2026 FOMC Meetings"
+    },
+    {
+      "fact_id": "8d7b2539-ef39-5bdc-997e-411d6d395def",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8765,
+      "span_end": 8776,
+      "_from": "CAL#T4",
+      "_passage": "June\n16-17*"
+    },
+    {
+      "fact_id": "8d7b2539-ef39-5bdc-997e-411d6d395def",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9333,
+      "_from": "CAL#T4",
+      "_passage": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    },
+    {
+      "fact_id": "8d7b2539-ef39-5bdc-997e-411d6d395def",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 15950,
+      "span_end": 15979,
+      "_from": "CAL#T4",
+      "_passage": "Last Update: October 28, 2026"
+    },
+    {
+      "fact_id": "2dc2bafe-d853-542c-b019-decbf5d40583",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8300,
+      "span_end": 8318,
+      "_from": "CAL#T5",
+      "_passage": "2026 FOMC Meetings"
+    },
+    {
+      "fact_id": "2dc2bafe-d853-542c-b019-decbf5d40583",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8913,
+      "span_end": 8923,
+      "_from": "CAL#T5",
+      "_passage": "July\n28-29"
+    },
+    {
+      "fact_id": "2dc2bafe-d853-542c-b019-decbf5d40583",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9333,
+      "_from": "CAL#T5",
+      "_passage": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    },
+    {
+      "fact_id": "2dc2bafe-d853-542c-b019-decbf5d40583",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 15950,
+      "span_end": 15979,
+      "_from": "CAL#T5",
+      "_passage": "Last Update: October 28, 2026"
+    },
+    {
+      "fact_id": "995458a9-6aca-51bc-88c2-1a0107fe81b5",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8300,
+      "span_end": 8318,
+      "_from": "CAL#T6",
+      "_passage": "2026 FOMC Meetings"
+    },
+    {
+      "fact_id": "995458a9-6aca-51bc-88c2-1a0107fe81b5",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9030,
+      "span_end": 9046,
+      "_from": "CAL#T6",
+      "_passage": "September\n15-16*"
+    },
+    {
+      "fact_id": "995458a9-6aca-51bc-88c2-1a0107fe81b5",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9333,
+      "_from": "CAL#T6",
+      "_passage": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    },
+    {
+      "fact_id": "995458a9-6aca-51bc-88c2-1a0107fe81b5",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 15950,
+      "span_end": 15979,
+      "_from": "CAL#T6",
+      "_passage": "Last Update: October 28, 2026"
+    },
+    {
+      "fact_id": "fb3d2b10-a72b-5613-8f2f-000839cf3e02",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8300,
+      "span_end": 8318,
+      "_from": "CAL#T7",
+      "_passage": "2026 FOMC Meetings"
+    },
+    {
+      "fact_id": "fb3d2b10-a72b-5613-8f2f-000839cf3e02",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9186,
+      "span_end": 9199,
+      "_from": "CAL#T7",
+      "_passage": "October\n27-28"
+    },
+    {
+      "fact_id": "fb3d2b10-a72b-5613-8f2f-000839cf3e02",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9333,
+      "_from": "CAL#T7",
+      "_passage": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    },
+    {
+      "fact_id": "fb3d2b10-a72b-5613-8f2f-000839cf3e02",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 15950,
+      "span_end": 15979,
+      "_from": "CAL#T7",
+      "_passage": "Last Update: October 28, 2026"
+    },
+    {
+      "fact_id": "0f5039cf-16c4-5d0f-bdbb-8d469102c3e6",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 8300,
+      "span_end": 8318,
+      "_from": "CAL#T8",
+      "_passage": "2026 FOMC Meetings"
+    },
+    {
+      "fact_id": "0f5039cf-16c4-5d0f-bdbb-8d469102c3e6",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9272,
+      "_from": "CAL#T8",
+      "_passage": "December\n8-9*"
+    },
+    {
+      "fact_id": "0f5039cf-16c4-5d0f-bdbb-8d469102c3e6",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 9259,
+      "span_end": 9333,
+      "_from": "CAL#T8",
+      "_passage": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    },
+    {
+      "fact_id": "0f5039cf-16c4-5d0f-bdbb-8d469102c3e6",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 15950,
+      "span_end": 15979,
+      "_from": "CAL#T8",
+      "_passage": "Last Update: October 28, 2026"
+    },
+    {
+      "fact_id": "3c8964a5-bb3f-5c29-81ae-2d3135f0d224",
       "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
       "section": null,
       "span_start": 7701,
@@ -22688,7 +23297,7 @@
       "_passage": "The FOMC holds eight regularly scheduled meetings during the year and other meetings as needed."
     },
     {
-      "fact_id": "d01f96c6-6b0d-552c-b623-b9b227242ee7",
+      "fact_id": "0696a4d1-745d-5f02-a4e1-a9c86fd2b463",
       "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
       "section": null,
       "span_start": 7864,
@@ -22697,12 +23306,21 @@
       "_passage": "The minutes of regularly scheduled meetings are released three weeks after the date of the policy decision."
     },
     {
-      "fact_id": "aad3102a-b6ca-5376-adeb-10bdc9a49765",
+      "fact_id": "6a903e46-4484-5e42-9ca0-930aa411ffc8",
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "section": null,
+      "span_start": 7972,
+      "span_end": 8054,
+      "_from": "CAL#2",
+      "_passage": "Committee membership changes at the first regularly scheduled meeting of the year."
+    },
+    {
+      "fact_id": "7ff76ee8-dff2-593f-af05-865cab34155d",
       "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
       "section": null,
       "span_start": 15850,
       "span_end": 15937,
-      "_from": "CAL#2",
+      "_from": "CAL#3",
       "_passage": "Each meeting date is tentative until confirmed at the meeting immediately preceding it."
     },
     {
@@ -24898,7 +25516,7 @@
         "ST-09#1",
         "PC-09#0"
       ],
-      "why": "9월 16일 FOMC가 연방기금금리 목표 범위를 1/4%p 올려 3-3/4~4%로 정한 같은 결정을 성명문과 기자회견 기록이 각각 적은 것이다.",
+      "why": "2026-09-16에 FOMC가 연방기금금리 목표 범위를 1/4%p 올려 3-3/4~4%로 정한 같은 결정을 성명문과 기자회견 기록이 각각 적은 것이다.",
       "result": "묶음 ST-09#1 + PC-09#0"
     },
     {
@@ -24906,7 +25524,7 @@
         "ST-09#3",
         "PC-09#1"
       ],
-      "why": "9월 16일 FOMC가 충분한 지급준비금 유지 정책을 이어간 같은 조치를 두 문서가 각각 적은 것이다.",
+      "why": "2026-09-16에 FOMC가 은행 시스템에 충분한 지급준비금을 유지하는 정책을 이어간 같은 조치를 두 문서가 적은 것이다.",
       "result": "묶음 ST-09#3 + PC-09#1"
     },
     {
@@ -24914,7 +25532,7 @@
         "ST-07#0",
         "MIN-07#1"
       ],
-      "why": "7월 29일 FOMC가 성명문을 9 대 3 표결로 승인한 같은 표결을 성명문과 회의록이 각각 적은 것이다.",
+      "why": "2026-07-29에 FOMC가 성명문을 9대 3 표결로 승인한 같은 표결을 성명문과 회의록이 각각 적은 것이다.",
       "result": "이미 묶여 있음 (R1 · R2) ST-07#0 + MIN-07#1"
     },
     {
@@ -24922,7 +25540,7 @@
         "ST-07#3",
         "MIN-07#9"
       ],
-      "why": "7월 성명문이 중동 분쟁에 따른 높은 불확실성에도 경제활동이 견조하게 확장한다고 한 같은 평가를 두 문서가 실은 것이다.",
+      "why": "7월 성명문이 중동 분쟁에 따른 높은 불확실성에도 경제활동이 견조하게 확장하고 있다고 한 같은 평가를 성명문과 회의록이 각각 실은 것이다.",
       "result": "이미 묶여 있음 (R1 · R2) ST-07#3 + MIN-07#9"
     },
     {
@@ -24930,7 +25548,7 @@
         "ST-07#5",
         "MIN-07#10"
       ],
-      "why": "7월 성명문이 일자리 증가가 노동력 증가와 보조를 맞추고 실업률이 거의 변하지 않았다고 한 같은 평가를 두 문서가 실은 것이다.",
+      "why": "7월 성명문이 일자리 증가가 노동력 증가와 보조를 맞췄고 실업률이 거의 변하지 않았다고 한 같은 평가를 성명문과 회의록이 각각 실은 것이다.",
       "result": "이미 묶여 있음 (R1 · R2) ST-07#5 + MIN-07#10"
     }
   ],

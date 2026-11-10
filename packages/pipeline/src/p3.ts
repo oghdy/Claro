@@ -31,10 +31,10 @@ import { createHash } from "node:crypto";
 import { sha256 } from "./extract.ts";
 import { RULES, canon, cpLength, cpSlice, locate } from "./match.ts";
 import {
-  FACT_TYPES, MERGE_SCHEMA, MERGE_SYSTEM, MERGE_VERSION, OUTPUT_SCHEMA, PROMPT_VERSION, SYSTEM_PROMPT,
+  FACT_TYPES, MERGE_SCHEMA, MERGE_SYSTEM, MERGE_VERSION, OUTPUT_SCHEMA, PROMPT_COMPAT, PROMPT_VERSION, SYSTEM_PROMPT,
   mergeUserMessage, userMessage, type EventContext, type MergeItem,
 } from "./p3-prompt.ts";
-import { DEFAULT_MODEL, PRICE, STEP, STOP_AT_USD, callJson, spent, spentStep } from "./llm.ts";
+import { DEFAULT_MODEL, PRICE, STEP, STOP_AT_USD, callJson, requestSha, spent, spentStep } from "./llm.ts";
 import { TABLE_RULES, docKind, modelInput, readTables, type TableFact } from "./tables.ts";
 import { CHECK_RULES, koQuantifiers, numbersMissing, passageNumbers, quantifierProblem } from "./checks.ts";
 
@@ -118,23 +118,41 @@ export type RawOut = {
   output_sha256: string; output: string | null; output_in: "here" | "cache";
 };
 const vtag = (v: string) => v.replace(/\//g, "-");
-const rawName = (label: string, model: string) => `${safe(label)}.${model}.${vtag(PROMPT_VERSION)}.json`;
-export const rawPath = (code: string, label: string, model: string) => join(EVENTS[code]!.out, "raw", rawName(label, model));
-const rawCachePath = (code: string, label: string, model: string) => join(EVENTS[code]!.cacheOut, "raw", rawName(label, model));
+const rawName = (label: string, model: string, version = PROMPT_VERSION) => `${safe(label)}.${model}.${vtag(version)}.json`;
+export const rawPath = (code: string, label: string, model: string, version = PROMPT_VERSION) => join(EVENTS[code]!.out, "raw", rawName(label, model, version));
+const rawCachePath = (code: string, label: string, model: string, version = PROMPT_VERSION) => join(EVENTS[code]!.cacheOut, "raw", rawName(label, model, version));
 const mergeName = (model: string) => `merge.${model}.${vtag(MERGE_VERSION)}.json`;
 
-export function readRaw(code: string, doc: Doc, model: string): { raw: RawOut; output: string | null } | null {
-  const p = rawPath(code, doc.label, model);
+export function readRaw(code: string, doc: Doc, model: string, version = PROMPT_VERSION): { raw: RawOut; output: string | null } | null {
+  const p = rawPath(code, doc.label, model, version);
   if (!existsSync(p)) return null;
   const raw = readJson<RawOut>(p);
   let output = raw.output;
   if (raw.output_in === "cache") {
-    const c = rawCachePath(code, doc.label, model);
+    const c = rawCachePath(code, doc.label, model, version);
     output = existsSync(c) ? readFileSync(c, "utf8") : null;
     if (output != null && sha256(output) !== raw.output_sha256) throw new Error(`${doc.label}: 캐시의 모델 출력이 기록의 해시와 다르다`);
   }
   return { raw, output };
 }
+
+/** 이 문서에 지금 쓸 수 있는 모델 출력 — 지금 판의 출력, 아니면 앞 판의 출력 가운데 지금 판의 요청과 글자 그대로 같은 요청에서 나온 것 (PROMPT_COMPAT · P4-j).
+ *  앞 판을 쓸 때는 지금 판으로 요청을 다시 지어 request_sha256 을 댄다 — 같지 않으면 쓰지 않는다 (다시 불러야 한다) */
+export function usableRaw(code: string, doc: Doc, model: string): { raw: RawOut; output: string | null; compat: boolean } | null {
+  const cur = readRaw(code, doc, model);
+  if (cur && cur.raw.text_sha256 === doc.text_sha256 && cur.raw.prompt_version === PROMPT_VERSION) return { ...cur, compat: false };
+  for (const v of Object.keys(PROMPT_COMPAT)) {
+    const old = readRaw(code, doc, model, v);
+    if (!old || old.raw.text_sha256 !== doc.text_sha256 || old.raw.prompt_version !== v || old.raw.model_requested !== model || doc.after) continue;
+    const user = userMessage(EVENTS[code]!, { label: doc.label, title: doc.title, publisher: doc.publisher, published_at: doc.published_at, url: doc.url, storyline: doc.storyline, after: doc.after }, modelInput(doc));
+    const req = requestSha({ model, effort: old.raw.effort as "low" | "medium" | "high", system: SYSTEM_PROMPT, user, schema: OUTPUT_SCHEMA, max_tokens: MAX_TOKENS });
+    if (req === old.raw.request_sha256) return { ...old, compat: true };
+  }
+  return null;
+}
+const MAX_TOKENS = 64000;
+// fact_id 이름의 판 칸 — 모델 사실은 그 출력의 판 · 표 사실은 P-3b 에서 지은 그대로 (판이 올라도 표 사실의 id 가 바뀌지 않게 — id 는 이름일 뿐이다)
+const TABLE_ID_SALT = "p3-extract/2";
 
 // ── ① 모델 ─────────────────────────────────────────────────────────────────────────────────────────────
 const estimate = (model: string, inputChars: number) => ((inputChars / 3 + 5000) * PRICE[model]!.in + 32000 * PRICE[model]!.out) / 1e6;
@@ -148,9 +166,9 @@ async function callAll(code: string, docs: Doc[], model: string, effort: "low" |
       console.log(`  ${d.label.padEnd(13)} 표 문서 — 모델에 보내지 않는다 (코드가 읽는다 · ${TABLE_RULES.version})`);
       continue;
     }
-    const have = readRaw(code, d, model);
-    if (have && have.raw.text_sha256 === d.text_sha256 && have.raw.prompt_version === PROMPT_VERSION) {
-      console.log(`  ${d.label.padEnd(13)} 저장된 출력이 있다 — 부르지 않는다`);
+    const have = usableRaw(code, d, model);
+    if (have) {
+      console.log(`  ${d.label.padEnd(13)} 저장된 출력이 있다 (${have.raw.prompt_version}${have.compat ? " — 지금 판과 같은 요청" : ""}) — 부르지 않는다`);
       continue;
     }
     queue.push(d);
@@ -167,7 +185,7 @@ async function callAll(code: string, docs: Doc[], model: string, effort: "low" |
         return;
       }
       const user = userMessage(conf, { label: d.label, title: d.title, publisher: d.publisher, published_at: d.published_at, url: d.url, storyline: d.storyline, after: d.after }, input);
-      const r = await callJson({ event: code, source_label: d.label, model, effort, system: SYSTEM_PROMPT, user, schema: OUTPUT_SCHEMA, prompt_version: PROMPT_VERSION, text_sha256: d.text_sha256, max_tokens: 64000 });
+      const r = await callJson({ event: code, source_label: d.label, model, effort, system: SYSTEM_PROMPT, user, schema: OUTPUT_SCHEMA, prompt_version: PROMPT_VERSION, text_sha256: d.text_sha256, max_tokens: MAX_TOKENS });
       if (!r.ok || r.text == null) {
         console.log(`  ${d.label.padEnd(13)} 실패 — ${r.error}`);
         if (r.fatal) {
@@ -218,7 +236,7 @@ type Cand = {
   key: string; source_label: string; source_id: string; idx: number; in_git: boolean; model: string | null;
   claim_text: string; fact_type: string; actor: string | null; volatility: string; as_of: string | null; event_at: string | null;
   passages: { text: string; result: "FOUND" | "NOT_FOUND" | "MULTIPLE"; span_start?: number; span_end?: number; count?: number }[];
-  shape_errors: string[]; problem: string | null; bucket: Bucket; table: TableFact["table"] | null;
+  shape_errors: string[]; problem: string | null; bucket: Bucket; table: TableFact["table"] | null; version: string | null;
 };
 
 export type Graph = Record<string, unknown> & { facts: Record<string, unknown>[]; fact_sources: Record<string, unknown>[] };
@@ -243,7 +261,7 @@ function collect(code: string, model: string) {
   const conf = EVENTS[code]!;
   const { event_id, docs } = loadDocs(code);
   const cands: Cand[] = [];
-  const builtFrom: { source_label: string; raw: string; output_sha256: string; model: string; prompt_version: string; input_sha256: string | null }[] = [];
+  const builtFrom: { source_label: string; raw: string; output_sha256: string; model: string; prompt_version: string; input_sha256: string | null; request_sha256: string; compat: boolean }[] = [];
   const missingOutput: string[] = [];
   const tableNotes: string[] = [];
   const tableRead: { source_label: string; handler: string; kind: string; facts: number }[] = [];
@@ -256,14 +274,14 @@ function collect(code: string, model: string) {
       for (const f of t.facts) {
         cands.push({
           key: f.key, source_label: d.label, source_id: d.source_id, idx: -1, in_git: d.in_git, model: null, claim_text: f.claim_text, fact_type: f.fact_type, actor: f.actor,
-          volatility: f.volatility, as_of: f.as_of, event_at: f.event_at, passages: f.passages.map((p) => ({ ...p, result: "FOUND" as const })), shape_errors: [], problem: null, bucket: "verified", table: f.table,
+          volatility: f.volatility, as_of: f.as_of, event_at: f.event_at, passages: f.passages.map((p) => ({ ...p, result: "FOUND" as const })), shape_errors: [], problem: null, bucket: "verified", table: f.table, version: null,
         });
       }
     }
     if (d.kind === "TABLE") continue;
     // 글 (모델)
-    const got = readRaw(code, d, model);
-    if (!got || got.raw.text_sha256 !== d.text_sha256 || got.raw.prompt_version !== PROMPT_VERSION) {
+    const got = usableRaw(code, d, model);
+    if (!got) {
       missingOutput.push(d.label);
       continue;
     }
@@ -271,7 +289,7 @@ function collect(code: string, model: string) {
       missingOutput.push(`${d.label} (출력이 이 기계의 캐시에 없다)`);
       continue;
     }
-    builtFrom.push({ source_label: d.label, raw: rawName(d.label, model), output_sha256: got.raw.output_sha256, model: got.raw.model, prompt_version: got.raw.prompt_version, input_sha256: got.raw.input_sha256 ?? null });
+    builtFrom.push({ source_label: d.label, raw: rawName(d.label, model, got.raw.prompt_version), output_sha256: got.raw.output_sha256, model: got.raw.model, prompt_version: got.raw.prompt_version, input_sha256: got.raw.input_sha256 ?? null, request_sha256: got.raw.request_sha256, compat: got.compat });
     const out = JSON.parse(got.output) as { facts: Record<string, unknown>[] };
     const allowed = [d.published_at, d.title];
     out.facts.forEach((f, idx) => {
@@ -308,7 +326,7 @@ function collect(code: string, model: string) {
           problem = `글의 수 ${miss.join(" · ")} 가 구절 · 문서 공개일 · 제목에 없다`;
         }
       }
-      cands.push({ key: `${d.label}#${idx}`, source_label: d.label, source_id: d.source_id, idx, in_git: d.in_git, model: got.raw.model, claim_text: claim, fact_type: ft, actor, volatility: vol, as_of, event_at, passages, shape_errors: errs, problem, bucket, table: null });
+      cands.push({ key: `${d.label}#${idx}`, source_label: d.label, source_id: d.source_id, idx, in_git: d.in_git, model: got.raw.model, claim_text: claim, fact_type: ft, actor, volatility: vol, as_of, event_at, passages, shape_errors: errs, problem, bucket, table: null, version: got.raw.prompt_version });
     });
   }
   return { conf, event_id, docs, cands, builtFrom, missingOutput, tableNotes, tableRead };
@@ -319,7 +337,7 @@ function mergeItems(cands: Cand[]): MergeItem[] {
   return cands.filter((c) => c.bucket === "verified" && !c.table).map((c) => ({ key: c.key, doc: c.source_label, fact_type: c.fact_type, actor: c.actor, event_at: c.event_at, claim_text: c.claim_text }));
 }
 
-export function build(code: string, model: string, includeBls: boolean): { graph: Graph; cacheSide: Record<string, unknown> } {
+export function build(code: string, model: string, includeBls: boolean): { graph: Graph; cacheSide: Record<string, unknown>; ledger: { _what: string; labels: Record<string, string> } } {
   const { conf, event_id, docs, cands, builtFrom, missingOutput, tableNotes, tableRead } = collect(code, model);
   const perSource: Record<string, Record<string, number>> = {};
   for (const c of cands) {
@@ -405,10 +423,16 @@ export function build(code: string, model: string, includeBls: boolean): { graph
   const fact_sources: Record<string, unknown>[] = [];
   const cacheSide: Record<string, unknown> = { passages: {} as Record<string, string> };
   const keyToLabel = new Map<string, string>();
+  // label 장부 (P-5) — 한 번 붙은 label 은 그 사실(fact_id)에 남고, 새 사실은 장부의 다음 번호를 받는다. 사라진 사실의 label 은 다시 쓰지 않는다.
+  // 문서가 더해지거나 다시 뽑혀도 이미 사람이 부른 이름(D44 의 F564 · F668 등)이 다른 사실을 가리키지 않게. 장부가 없으면 예전대로 순서대로
+  const ledgerPath = join(conf.out, "labels.json");
+  const oldLedger = existsSync(ledgerPath) ? readJson<{ labels: Record<string, string> }>(ledgerPath).labels : null;
+  const ledgerLabels: Record<string, string> = { ...(oldLedger ?? {}) };
+  let nextNo = Math.max(0, ...Object.values(ledgerLabels).map((l) => Number(l.slice(1)))) + 1;
   ordered.forEach((members, gi) => {
     const head = members[0]!;
-    const fact_id = uuidFrom(`${code}|${PROMPT_VERSION}|${model}|${head.key}`);
-    const label = `F${String(gi + 1).padStart(3, "0")}`;
+    const fact_id = uuidFrom(`${code}|${head.table ? TABLE_ID_SALT : head.version}|${model}|${head.key}`);
+    const label = oldLedger ? (ledgerLabels[fact_id] ??= `F${String(nextNo++).padStart(3, "0")}`) : (ledgerLabels[fact_id] = `F${String(gi + 1).padStart(3, "0")}`);
     const conflicts: string[] = [];
     for (const m of members.slice(1)) for (const k of ["fact_type", "volatility", "actor", "as_of", "event_at"] as const) {
       if (m[k] !== head[k]) conflicts.push(`${m.key} ${k}: ${JSON.stringify(m[k])} (머리 ${JSON.stringify(head[k])})`);
@@ -416,7 +440,7 @@ export function build(code: string, model: string, includeBls: boolean): { graph
     facts.push({
       fact_id, label, claim_text: head.claim_text, fact_type: head.fact_type, actor: head.actor, volatility: head.volatility, as_of: head.volatility === "VOLATILE" ? head.as_of : null,
       event_at: head.event_at, event_id, storyline_id: null, storyline_version: null,
-      extraction_model: head.table ? null : head.model, extraction_version: head.table ? `${TABLE_RULES.version} (code)` : PROMPT_VERSION,
+      extraction_model: head.table ? null : head.model, extraction_version: head.table ? `${TABLE_RULES.version} (code)` : head.version,
       _from: members.map((m) => m.key),
       ...(head.table ? { _table: head.table } : {}),
       ...(members.length > 1 ? { _other_texts: members.slice(1).filter((m) => normClaim(m.claim_text) !== normClaim(head.claim_text)).map((m) => `${m.key}: ${m.claim_text}`) } : {}),
@@ -461,7 +485,7 @@ export function build(code: string, model: string, includeBls: boolean): { graph
   const graph: Graph = {
     _what: `${code} 의 Deep Fact Graph 초안 (P-3b · p3.ts 가 저장한 모델 출력 · 원문의 표에서 짓는다 — 손으로 고치지 않는다). facts · fact_sources 는 계약 모양 (DATA_MODEL §1 Fact · FactSource) + _ 주석. ` +
       `구절이 원문에서 글자 그대로 한 곳에 찾아지고 수량어 · 수 검사를 통과한 사실만 facts 에 있다. 표 사실(_table)은 코드가 칸을 짝지어 만들었다. 나머지는 아래에 따로 — 사람이 게이트에서 본다 (§10.1)`,
-    event: code, event_id, prompt_version: PROMPT_VERSION, model, match_rules: RULES.version, table_rules: TABLE_RULES.version, check_rules: CHECK_RULES.version, merge_version: MERGE_VERSION,
+    event: code, event_id, prompt_version: PROMPT_VERSION, prompt_compat: PROMPT_COMPAT, model, match_rules: RULES.version, table_rules: TABLE_RULES.version, check_rules: CHECK_RULES.version, merge_version: MERGE_VERSION,
     storyline: conf.storyline, built_from: builtFrom, missing_output: missingOutput, table_read: tableRead, table_notes: tableNotes,
     counts: {
       documents: docs.length, documents_text: docs.filter((d) => d.kind !== "TABLE").length, documents_with_output: builtFrom.length, candidates: cands.length,
@@ -485,7 +509,11 @@ export function build(code: string, model: string, includeBls: boolean): { graph
     quantifier_mismatch: cands.filter((c) => c.bucket === "quantifier_mismatch").map(outCand),
     number_mismatch: cands.filter((c) => c.bucket === "number_mismatch").map(outCand),
   };
-  return { graph, cacheSide };
+  const ledger = {
+    _what: `${code} 사실 label 장부 (p3.ts 가 쓴다 · 손으로 고치지 않는다). fact_id → label. 한 번 붙은 label 은 바뀌지 않고, 그래프에서 사라진 사실의 label 은 다시 쓰지 않는다 (P-5 — 사람이 부른 이름이 다른 사실을 가리키지 않게)`,
+    labels: Object.fromEntries(Object.entries(ledgerLabels).sort((a, b) => a[1].localeCompare(b[1]))),
+  };
+  return { graph, cacheSide, ledger };
 }
 
 const graphPath = (code: string, model: string) => join(EVENTS[code]!.out, model === DEFAULT_MODEL ? "graph.json" : `graph.${model}.json`);
@@ -537,17 +565,22 @@ async function main() {
     await mergeCall(code, model);
     return;
   }
-  const { graph, cacheSide } = build(code, model, model === DEFAULT_MODEL && conf.kind === "pack");
+  const { graph, cacheSide, ledger } = build(code, model, model === DEFAULT_MODEL && conf.kind === "pack");
   const body = JSON.stringify(graph, null, 2) + "\n";
+  const lBody = JSON.stringify(ledger, null, 2) + "\n";
   const p = graphPath(code, model);
+  const lp = join(conf.out, "labels.json");
+  const useLedger = model === DEFAULT_MODEL;
   if (argv.includes("--check")) {
     const same = existsSync(p) && readFileSync(p, "utf8") === body;
-    console.log(`p3 ${code} --check — 저장한 출력 · 원문에서 다시 지은 그래프가 ${p.replace(ROOT + "/", "")} 와 ${same ? "글자 단위로 같다" : "다르다"} (sha256 ${sha256(body).slice(0, 12)})`);
-    if (!same) process.exitCode = 1;
+    const lSame = !useLedger || (existsSync(lp) && readFileSync(lp, "utf8") === lBody);
+    console.log(`p3 ${code} --check — 저장한 출력 · 원문에서 다시 지은 그래프가 ${p.replace(ROOT + "/", "")} 와 ${same ? "글자 단위로 같다" : "다르다"} (sha256 ${sha256(body).slice(0, 12)}) · label 장부 ${lSame ? "같다" : "다르다"}`);
+    if (!same || !lSame) process.exitCode = 1;
     return;
   }
   mkdirSync(conf.out, { recursive: true });
   writeFileSync(p, body);
+  if (useLedger) writeFileSync(lp, lBody);
   if (Object.keys(cacheSide.passages as object).length) {
     mkdirSync(conf.cacheOut, { recursive: true });
     writeFileSync(join(conf.cacheOut, `graph-passages.${model}.json`), JSON.stringify(cacheSide, null, 2) + "\n");

@@ -8,10 +8,20 @@
 //   - "글의 모든 내용이 그 구절 안에" (P3-c) · 글의 수 · 날짜는 구절에 있는 것만 (해가 구절에 없으면 event_at 에만)
 //   - 스토리라인 문서의 범위 (P3-h) — 사용자 메시지에 문서마다
 //   - 본보기 "some participants → 일부 참가자" 를 뺐다 (P3-i — several 을 일부로 옮긴 것이 이 본보기에서 온 듯하다)
+//
+// p3-extract/3 (P-5 · D44 P4-j) — p3-extract/2 에서 바뀐 것:
+//   - 문서 범위의 셋째 갈래 "회의 뒤 문서" (scopeLine · doc.after). P-4 가 이 갈래를 더하고 판을 올리지 않았다 — 그 갈래로 부른 SP-HAM-1105 의 출력이 "/2" 로 적혀 있었다
+//   - 시스템 프롬프트 · 출력 모양 · 다른 갈래의 사용자 메시지는 글자 하나 바뀌지 않았다
+// 그래서 "/2" 로 저장한 출력은 **지금 판으로 다시 낸 요청이 글자 그대로 같을 때만** 쓴다 (PROMPT_COMPAT · p3.ts usableRaw — request_sha256 을 다시 내서 댄다).
+// 회의 뒤 문서는 /3 으로만 (그 갈래가 /2 에 없었다).
 // 같은 사실 묶기 제안 프롬프트 (MERGE_*) 도 이 파일에 있다 — p3-merge/1
 import { CHECK_RULES } from "./checks.ts";
 
-export const PROMPT_VERSION = "p3-extract/2";
+export const PROMPT_VERSION = "p3-extract/3";
+/** 앞 판 → 그 판의 출력을 지금 판에서 쓸 수 있는 조건 (코드가 지킨다 — p3.ts usableRaw) */
+export const PROMPT_COMPAT: Record<string, string> = {
+  "p3-extract/2": "회의 뒤 문서(after)가 아니고, 지금 판으로 다시 낸 요청의 sha256 이 저장한 출력의 request_sha256 과 같을 때 — 그 출력은 지금 판의 요청과 글자 그대로 같은 요청에서 나왔다",
+};
 
 export const FACT_TYPES = ["OFFICIAL_ACTION", "OFFICIAL_CLAIM", "OFFICIAL_LIMIT", "MEASUREMENT", "COURT_RULING", "COMPANY_DISCLOSURE", "INDEPENDENT_OBSERVATION"] as const;
 
@@ -89,7 +99,7 @@ export type DocContext = { label: string; title: string; publisher: string; publ
 
 /** 이 문서의 범위 — 스토리라인 문서는 스토리라인 전체 (P3-h) */
 export function scopeLine(ev: EventContext, doc: DocContext): string {
-  // P-4 — 회의 뒤 문서 (반대자의 회의 뒤 발언 등). 이 갈래가 없는 문서의 사용자 메시지는 글자 하나 바뀌지 않는다 (PROMPT_VERSION 그대로)
+  // P-4 — 회의 뒤 문서 (반대자의 회의 뒤 발언 등). p3-extract/3 에서 생긴 갈래 (P-5 가 판을 올렸다 — P4-j). 이 갈래가 없는 문서의 사용자 메시지는 /2 와 글자 하나 다르지 않다
   if (doc.after) return `이 문서는 사건 날짜(${ev.date}) 뒤에 나온 문서다 — 이 사건에 참여한 사람이 회의 뒤에 한 말. 범위: 이 사람의 경제 판단 · 통화정책 견해 · 이번 결정에 대한 설명. 사건 날짜 뒤에 말한 것이지만 뽑는다 (event_at 은 말한 날). 그 밖의 주제(이 사건과 무관한 것)는 뽑지 않는다`;
   if (doc.storyline) return `이 문서는 스토리라인 ${doc.storyline.code} (${doc.storyline.title}) 의 문서다. 범위: 이 스토리라인의 처음부터 사건 날짜(${ev.date})까지의 전개 전체 — 시작 · 주요 조치 · 전환점 · 지금 상태. 직전 회의 이후로 좁히지 않는다`;
   return `직전 회의(${ev.prev_meeting}) 이후 사건 날짜(${ev.date})까지가 중심 — 과거의 비슷한 결정 · 이 사건을 이해하는 데 필요한 앞선 일은 넣는다`;

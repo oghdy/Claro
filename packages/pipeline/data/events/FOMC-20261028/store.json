@@ -418,6 +418,17 @@
       "language": "en",
       "published_at": "2026-07-29T14:00-04:00",
       "ingested_at": "2026-09-18"
+    },
+    {
+      "source_id": "15137bd5-ec01-41ac-a42c-d39934abac82",
+      "label": "WH-COOK-1007",
+      "title": "Establishment of a Committee of Inquiry to Investigate Allegations of False Statements by Lisa DeNell Cook (The White House, Presidential Actions, 2026-10-07)",
+      "publisher": "whitehouse.gov",
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/10/establishment-of-a-committee-of-inquiry-to-investigate-allegations-of-false-statements-by-lisa-denell-cook/",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-10-07",
+      "ingested_at": "2026-11-10"
     }
   ],
   "source_documents": [],

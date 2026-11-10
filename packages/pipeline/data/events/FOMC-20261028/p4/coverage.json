@@ -1,29 +1,29 @@
 {
   "_what": "FOMC-20261028 의 Coverage 점검 (P-4 · p4.ts 가 저장한 모델 출력 · 표 규칙 · 성명문 문장 차이에서 짓는다 — 손으로 고치지 않는다). slot_checks 는 계약 SlotCheck 모양 (DATA_MODEL §1 · §12) — 요소 하나 = 한 줄. slots 는 사람이 보는 슬롯 표 (채움 / 일부 / 빔 은 계약 밖 — 요소에서 계산). per_fact 는 사실마다 붙인 요소와 근거 (모델의 why 또는 표 규칙)",
   "event": "FOMC-20261028",
-  "schema": "fomc-hold/1",
+  "schema": "fomc-hold/2",
   "graph": "packages/pipeline/data/events/FOMC-20261028/p3/graph.json",
-  "graph_sha256": "674cc116c70fea484b2f2de934af88f2c6f3b2db2a472605c1118c5114041a03",
+  "graph_sha256": "967739018c52369ef98a80199b99894b7c6a800e5fa3031888171fb798a7af34",
   "assign_version": "p4-assign/1",
   "unslotted_version": "p4-unslotted/1",
   "model": "claude-opus-5-5",
   "counts": {
-    "facts": 784,
-    "facts_table": 242,
-    "facts_model": 542,
-    "facts_with_element": 576,
-    "facts_without_element": 208,
+    "facts": 805,
+    "facts_table": 250,
+    "facts_model": 555,
+    "facts_with_element": 577,
+    "facts_without_element": 228,
     "slots": 15,
-    "slots_full": 10,
-    "slots_partial": 5,
+    "slots_full": 12,
+    "slots_partial": 3,
     "slots_empty": 0,
     "elements": 45,
-    "FOUND": 40,
-    "NOT_EXTRACTED": 2,
+    "FOUND": 42,
+    "NOT_EXTRACTED": 0,
     "SOURCE_UNAVAILABLE": 3,
     "NOT_APPLICABLE": 0,
     "STORYLINE_STALE": 0,
-    "unslotted_groups": 8,
+    "unslotted_groups": 7,
     "assign_problems": 0
   },
   "slots": [
@@ -161,7 +161,7 @@
       "from_09": "반대표 방향",
       "renamed": null,
       "state": "일부",
-      "n_facts": 69,
+      "n_facts": 68,
       "elements": [
         {
           "id": "S03.a",
@@ -198,35 +198,33 @@
           "id": "S03.c",
           "what": "반대자의 회의 뒤 정책 견해 (표결 설명은 아니어도 회의 뒤 공개 발언의 물가 · 정책 판단)",
           "status": "FOUND",
-          "n": 9,
+          "n": 8,
           "rep": {
-            "label": "F658",
+            "label": "F764",
             "docs": [
               "SP-HAM-1105"
             ],
-            "claim_text": "Hammack 총재는 3월 초 이후 물가상승률이 잘못된 방향으로 움직였다고 평가함"
+            "claim_text": "Hammack 총재는 3월 초 이 주제로 말한 이후 인플레이션이 잘못된 방향으로 움직였다고 말함"
           },
           "labels": [
-            "F658",
-            "F659",
-            "F660",
-            "F661",
-            "F662",
-            "F663",
-            "F664",
-            "F665",
-            "F667"
+            "F764",
+            "F765",
+            "F766",
+            "F767",
+            "F768",
+            "F769",
+            "F770",
+            "F771"
           ],
           "facts": [
-            "36be003b-b608-5357-bf13-0100d7c9b033",
-            "e04b3d01-241c-5ae8-a980-575b7237662b",
-            "47c50f5c-8b0d-5d21-b10d-f732f90be9c7",
-            "44435126-1b7e-5cd1-8e81-895fe414a9fd",
-            "b8c66d01-26ce-5981-a9bb-93d80f679827",
-            "1c4ec025-48f9-51da-ba52-6ace68d16f92",
-            "3431c59c-8a0f-5ac1-9e88-628e388e723a",
-            "10c6de5c-4c2d-5ed4-8865-6b7d1a94b5f0",
-            "6dd276be-7047-5177-84eb-3186eb60bba1"
+            "8645c011-c797-5e58-8968-3bf9bd65162f",
+            "2e6955c7-7dbe-5f0d-bf41-13f7da5ca524",
+            "feac9fb8-826b-530d-af79-2a90f59df45f",
+            "a0efbd08-3644-5702-85c0-a918b4115b40",
+            "a0649f00-e8dc-5b1d-b584-b7c7c3ab124b",
+            "06987184-4830-5faa-aeba-758556f41625",
+            "90756798-987d-5971-95d0-c363ea557559",
+            "a2322516-00b0-54e7-ac12-79ab7505559b"
           ]
         },
         {
@@ -502,8 +500,8 @@
       "name": "직전 정책 전망",
       "from_09": "직전 정책 전망",
       "renamed": null,
-      "state": "일부",
-      "n_facts": 65,
+      "state": "채움",
+      "n_facts": 67,
       "elements": [
         {
           "id": "S05.a",
@@ -689,15 +687,23 @@
         {
           "id": "S05.d",
           "what": "10월 회의에는 새 전망(SEP)이 없다는 것 · 다음 전망이 나오는 회의",
-          "status": "NOT_EXTRACTED",
-          "n": 0,
-          "rep": null,
-          "labels": [],
-          "facts": [],
-          "sources": [
-            "CAL"
+          "status": "FOUND",
+          "n": 2,
+          "rep": {
+            "label": "F758",
+            "docs": [
+              "CAL"
+            ],
+            "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — October 27-28 회의: * 표시 없음 (경제 전망 SEP 각주가 붙지 않은 회의)"
+          },
+          "labels": [
+            "F758",
+            "F759"
           ],
-          "basis": "CAL(연준 회의 일정 페이지)에 'December | 8-9*' · '* Meeting associated with a Summary of Economic Projections.' 가 있고 'October | 27-28' 에는 * 가 없다 — 자료는 있는데 P-3b 가 일정 줄을 뽑지 않았다 (P3b-e). 그래프를 손으로 고치지 않는다"
+          "facts": [
+            "95c4054d-b208-501b-a8b3-81fb3734cd3a",
+            "eeb1ff68-7417-572c-bb56-260004381d98"
+          ]
         }
       ]
     },
@@ -1226,7 +1232,7 @@
           "rep": null,
           "labels": [],
           "facts": [],
-          "basis": "10월 회의록은 아직 나오지 않았다 (2026-11-10 기준). CAL 사실 F530: 회의록은 결정일로부터 three 주 뒤 — 11/18 무렵. 나오면 다시 모은다"
+          "basis": "10월 회의록은 아직 나오지 않았다 (2026-11-10 기준). CAL 사실 F761 (P-5 에서 CAL 을 다시 뽑아 F530 → F761): 회의록은 결정일로부터 three weeks 뒤 — 11/18 무렵. 나오면 다시 모은다"
         }
       ]
     },
@@ -2150,21 +2156,27 @@
       "name": "다음 일정",
       "from_09": "다음 일정",
       "renamed": null,
-      "state": "일부",
-      "n_facts": 1,
+      "state": "채움",
+      "n_facts": 2,
       "elements": [
         {
           "id": "S15.a",
           "what": "다음 FOMC 회의 날짜 (그 회의에 SEP 가 있나)",
-          "status": "NOT_EXTRACTED",
-          "n": 0,
-          "rep": null,
-          "labels": [],
-          "facts": [],
-          "sources": [
-            "CAL"
+          "status": "FOUND",
+          "n": 1,
+          "rep": {
+            "label": "F759",
+            "docs": [
+              "CAL"
+            ],
+            "claim_text": "연준 FOMC 회의 일정 페이지 (2026 FOMC Meetings) — December 8-9* 회의: * 표시 있음 (각주 \"* Meeting associated with a Summary of Economic Projections.\")"
+          },
+          "labels": [
+            "F759"
           ],
-          "basis": "CAL 에 'December | 8-9*' 가 있다 — P-3b 가 CAL 의 일정 줄을 놓쳤다 (P3b-e · 9월에도 F38 을 놓침). 의장의 '6주 뒤 회의'(F060)는 날짜가 아니어서 모델이 붙이지 않았다"
+          "facts": [
+            "eeb1ff68-7417-572c-bb56-260004381d98"
+          ]
         },
         {
           "id": "S15.b",
@@ -2172,17 +2184,17 @@
           "status": "FOUND",
           "n": 1,
           "rep": {
-            "label": "F530",
+            "label": "F761",
             "docs": [
               "CAL"
             ],
-            "claim_text": "FOMC 회의 일정 페이지는 정례 회의의 회의록이 정책 결정일로부터 three 주 뒤에 공개된다고 설명함."
+            "claim_text": "FOMC 일정 페이지는 정례회의 회의록이 정책 결정일로부터 three weeks(3주) 뒤에 공개된다고 설명함"
           },
           "labels": [
-            "F530"
+            "F761"
           ],
           "facts": [
-            "1a71a694-033c-54f9-968f-8754d8ce8f89"
+            "5419a1e5-051c-5fca-85ed-715ecc5b9766"
           ]
         }
       ]
@@ -2261,15 +2273,14 @@
       "slot": "반대표 방향 / S03.c 반대자의 회의 뒤 정책 견해 (표결 설명은 아니어도 회의 뒤 공개 발언의 물가 · 정책 판단)",
       "status": "FOUND",
       "facts": [
-        "36be003b-b608-5357-bf13-0100d7c9b033",
-        "e04b3d01-241c-5ae8-a980-575b7237662b",
-        "47c50f5c-8b0d-5d21-b10d-f732f90be9c7",
-        "44435126-1b7e-5cd1-8e81-895fe414a9fd",
-        "b8c66d01-26ce-5981-a9bb-93d80f679827",
-        "1c4ec025-48f9-51da-ba52-6ace68d16f92",
-        "3431c59c-8a0f-5ac1-9e88-628e388e723a",
-        "10c6de5c-4c2d-5ed4-8865-6b7d1a94b5f0",
-        "6dd276be-7047-5177-84eb-3186eb60bba1"
+        "8645c011-c797-5e58-8968-3bf9bd65162f",
+        "2e6955c7-7dbe-5f0d-bf41-13f7da5ca524",
+        "feac9fb8-826b-530d-af79-2a90f59df45f",
+        "a0efbd08-3644-5702-85c0-a918b4115b40",
+        "a0649f00-e8dc-5b1d-b584-b7c7c3ab124b",
+        "06987184-4830-5faa-aeba-758556f41625",
+        "90756798-987d-5971-95d0-c363ea557559",
+        "a2322516-00b0-54e7-ac12-79ab7505559b"
       ],
       "sources": [],
       "storyline": null
@@ -2489,11 +2500,12 @@
     },
     {
       "slot": "직전 정책 전망 / S05.d 10월 회의에는 새 전망(SEP)이 없다는 것 · 다음 전망이 나오는 회의",
-      "status": "NOT_EXTRACTED",
-      "facts": [],
-      "sources": [
-        "a8e134b4-0685-4aac-8b50-57c12560ea3b"
+      "status": "FOUND",
+      "facts": [
+        "95c4054d-b208-501b-a8b3-81fb3734cd3a",
+        "eeb1ff68-7417-572c-bb56-260004381d98"
       ],
+      "sources": [],
       "storyline": null
     },
     {
@@ -3164,18 +3176,18 @@
     },
     {
       "slot": "다음 일정 / S15.a 다음 FOMC 회의 날짜 (그 회의에 SEP 가 있나)",
-      "status": "NOT_EXTRACTED",
-      "facts": [],
-      "sources": [
-        "a8e134b4-0685-4aac-8b50-57c12560ea3b"
+      "status": "FOUND",
+      "facts": [
+        "eeb1ff68-7417-572c-bb56-260004381d98"
       ],
+      "sources": [],
       "storyline": null
     },
     {
       "slot": "다음 일정 / S15.b 이번 회의 회의록이 나오는 때",
       "status": "FOUND",
       "facts": [
-        "1a71a694-033c-54f9-968f-8754d8ce8f89"
+        "5419a1e5-051c-5fca-85ed-715ecc5b9766"
       ],
       "sources": [],
       "storyline": null
@@ -3257,47 +3269,75 @@
     "state": "unslotted.claude-opus-5-5 적용",
     "groups": [
       {
-        "title": "의장 교체와 Warsh 의 새 프레임워크",
+        "title": "백악관의 Cook 이사 해임 사유 조사",
+        "labels": [
+          "F776",
+          "F777",
+          "F778",
+          "F779",
+          "F780",
+          "F781",
+          "F782",
+          "F783",
+          "F784",
+          "F785",
+          "F786",
+          "F787",
+          "F066"
+        ],
+        "facts": [
+          "8df4c3c6-1586-5549-b8bb-5a58966fdce3",
+          "3e78adcb-27be-568d-aeda-ff2803b49cbf",
+          "7a0e1285-faeb-5326-aaf1-01b28767d0c4",
+          "b635d4ab-93fb-5603-a45f-89f069534539",
+          "894839f7-b574-51b1-aa9a-5970b2914d38",
+          "03797f58-466b-506d-a8c3-900379bad43d",
+          "12572f29-d86a-55e4-b6e2-7f017ee3aaee",
+          "a56b2c22-fa0c-5583-861c-965d65d3d16b",
+          "857029ff-bcd0-5387-8155-9ca96bb6bded",
+          "27533676-14dc-5a98-869e-9d0acdb1c871",
+          "59ea67b1-7578-5e48-b17a-942faef94c32",
+          "62ee442b-f161-5473-ba1f-db2f7bb53d27",
+          "33668bd7-fd36-58e8-8e63-d77c5df5e89c"
+        ],
+        "why": "이번 회의 반대자인 Cook 이사를 두고 대통령이 조사위원회를 만들었다. 위원회는 12 U.S.C. 242 상 해임 '사유'가 있는지 보고해야 하며, 회의 직후인 11월 5일 백악관 비공개 청문회가 잡혀 있다. 현직 연준 이사의 해임 절차가 진행 중이라는 점이 이례적이다."
+      },
+      {
+        "title": "의장 교체: Powell 에서 Warsh 로",
         "labels": [
           "F040",
-          "F043",
-          "F042",
-          "F050",
           "F701",
           "F711",
-          "F723"
+          "F058"
         ],
         "facts": [
           "68760c50-aec3-5bb9-9d6f-90c57a409823",
-          "61faad1f-0d1d-588d-a7e6-6fdf297299b0",
-          "60d2e1f5-c2b5-562b-a6a2-5b20d279c89e",
-          "0f5bf304-d692-5a83-a3b2-96d3fb77fd73",
           "a03adb46-bd3b-52ce-8d71-9ca22ab67a6b",
           "1dd9aecb-cd3c-5a8e-80d5-270b3bdfe4c4",
-          "99940e60-b9c0-5a39-86eb-c0a4a5f66ec0"
+          "8ecc9737-96ec-53cf-9a97-407e1f0ffaac"
         ],
-        "why": "1·3·4월 표결 명단에는 Powell 의장이 있었으나, 이번 기자회견에서는 Warsh 가 다섯 달 전에 의장이 됐다고 말함. 새 의장은 Jackson Hole 에서 프레임워크를 제시하고, 느슨하거나 암묵적인 목표는 없으며 PCE 2% 라고 못박음."
+        "why": "1·3월 성명문의 찬성자 명단에는 Powell 이 의장으로 올라 있다. 지금 의장인 Warsh 는 다섯 달 전에 취임했다고 말해, 의장이 바뀐 뒤의 회의라는 점이 이전과 다르다. Warsh 는 정치가 이번 결정에 아무 역할도 하지 않았다고 따로 밝혔다."
       },
       {
-        "title": "태스크포스 신설과 일정",
+        "title": "의장 주도 태스크포스 신설과 일정",
         "labels": [
           "F467",
           "F052",
           "F053",
-          "F061",
-          "F054"
+          "F054",
+          "F061"
         ],
         "facts": [
           "ff36e9b8-d201-58b8-ad50-65bdeaeb0717",
           "f19de770-550c-5ff2-a342-3a7cb276af74",
           "b7b7f23c-f9ee-5947-83bf-199358e72187",
-          "10842859-57f7-5c11-8954-860caa6b766f",
-          "1b28c1a7-1f38-559f-82f3-2141e842f587"
+          "1b28c1a7-1f38-559f-82f3-2141e842f587",
+          "10842859-57f7-5c11-8954-860caa6b766f"
         ],
-        "why": "새 의장 아래 AI 관련 태스크포스를 포함한 다섯 개 태스크포스가 생겨 연말 기한을 받았음. Balance Sheet Task Force 권고는 내년 1분기 초에 나오고, Productivity and Jobs Task Force 는 11월 16일 현장 청문회를 여는 이례적 일정이 잡힘."
+        "why": "Warsh 의장은 AI 관련을 포함한 다섯 개 태스크포스를 만들고 연말 기한을 줬다. Balance Sheet Task Force 권고는 내년 1분기 초에 FOMC 로 가고, Productivity and Jobs Task Force 는 11월 16일 현장 청문회를 연다. 의장 취임 후 새로 생긴 기구들이다."
       },
       {
-        "title": "의장이 자기 전망을 내지 않음",
+        "title": "의장이 자기 경제전망을 내지 않음",
         "labels": [
           "F459",
           "F460"
@@ -3306,32 +3346,34 @@
           "1de1073b-5e03-516f-a839-233839a0e532",
           "548e64b4-24b7-53af-95d5-40f5d98edf4c"
         ],
-        "why": "Warsh 의장은 6월에 이어 9월에도 자신의 경제 전망을 제출하지 않았고, 경제 전망이 18명 동료의 것이라고 말함. 의장이 SEP 에 참여하지 않는 이례적 관행임."
+        "why": "Warsh 의장은 6월에 이어 9월에도 자신의 경제 전망을 내지 않았다. 그는 경제 전망이 자신의 것이 아니라 18명 동료의 전망이라고 말했는데, 의장이 전망을 제출하지 않는다는 점이 이례적이다."
       },
       {
-        "title": "반대자 Cook 관련 백악관 청문 절차",
+        "title": "인플레이션 목표·프레임워크 재천명",
         "labels": [
-          "F066"
+          "F042",
+          "F043",
+          "F050"
         ],
         "facts": [
-          "33668bd7-fd36-58e8-8e63-d77c5df5e89c"
+          "60d2e1f5-c2b5-562b-a6a2-5b20d279c89e",
+          "61faad1f-0d1d-588d-a7e6-6fdf297299b0",
+          "0f5bf304-d692-5a83-a3b2-96d3fb77fd73"
         ],
-        "why": "이번에 인상을 주장하며 반대한 Lisa Cook 이사를 두고 백악관 청문 절차가 진행 중임이 기자회견 질문으로 드러남. 현직 이사에 대한 행정부 절차라는 점이 이례적임."
+        "why": "Warsh 의장은 취임 후 2% 목표를 재확인했고 Jackson Hole 에서 프레임워크를 제시했다고 말했다. 또 느슨하거나 암묵적인 목표는 없고 목표는 PCE 2% 라고 못박았다. 목표 해석을 굳이 공개적으로 분명히 한 점이 새롭다."
       },
       {
-        "title": "정치 개입 부인 · 독립성 강조",
+        "title": "지준 관리 매입 중단",
         "labels": [
-          "F058",
-          "F666"
+          "F077"
         ],
         "facts": [
-          "8ecc9737-96ec-53cf-9a97-407e1f0ffaac",
-          "14435c32-c264-5ab0-b780-0ad7b338ecc9"
+          "f818fea2-ecdc-5df5-b7b8-f56b50387fbf"
         ],
-        "why": "의장이 정치가 이번 결정에 아무 역할도 하지 않았다고 따로 밝혔음. Hammack 총재도 회의 뒤 연설에서 연준 독립성이 2% 목표에 대한 신뢰에 결정적이라고 강조함."
+        "why": "Desk 가 지준 관리 매입(RMPs)을 중단했다는 것은 대차대조표 운용 방식이 바뀐 것이다."
       },
       {
-        "title": "재무부 외환 개입 · 미일 공동 엔화 지지",
+        "title": "미일 공동 엔화 지지 외환 개입",
         "labels": [
           "F080",
           "F081"
@@ -3340,37 +3382,7 @@
           "5c1dfd92-7333-5da6-bb17-4b28f8b023d4",
           "1910415a-1452-5ba3-b335-73d3c043b08d"
         ],
-        "why": "7월 말 엔화를 지지하려는 미일 공동 개입이 있었고, Desk 가 재무부 대리인으로 외환시장에 개입했음. 이 개입이 달러 약세에 직접 기여했다고 SOMA 매니저가 말함."
-      },
-      {
-        "title": "지준 관리 매입 중단",
-        "labels": [
-          "F077",
-          "F089"
-        ],
-        "facts": [
-          "f818fea2-ecdc-5df5-b7b8-f56b50387fbf",
-          "7b9165b6-0c3f-50fe-8673-9623b60b0294"
-        ],
-        "why": "Desk 가 지준 관리 매입(RMPs)을 중단했고, EFFR 은 IORB 보다 2bp 낮았음. 대차대조표 운용에서 달라진 점임."
-      },
-      {
-        "title": "BEA 연례 개정으로 물가 하향 수정",
-        "labels": [
-          "F351",
-          "F381",
-          "F376",
-          "F377",
-          "F378"
-        ],
-        "facts": [
-          "91e6dd8b-4c4d-5f16-bc4d-ab8c84d6a751",
-          "4a36d20e-2f13-5173-b6cf-44f29fd6a48f",
-          "365d3811-b644-57f7-bc17-f449e73d6be3",
-          "709e8cb2-c685-5ce5-8e6b-4388b3bea917",
-          "ee216cc7-7f4f-57a2-94df-746e44b8ff77"
-        ],
-        "why": "연례 개정이 2021년부터 다시 계산됐음. 이로써 2분기 PCE 물가 상승률은 5.0%, 근원은 3.3% 로 각각 0.3%p 하향 수정됐고, 1분기 국내 총구매 물가도 0.4%p 낮아짐."
+        "why": "7월 말 엔화를 지지하려는 미일 공동 외환시장 개입이 있었다. Desk 가 재무부 자금으로 집행했고 달러 약세에 직접 기여했다고 설명돼, 이례적인 시장 개입이다."
       }
     ]
   },
@@ -3378,7 +3390,7 @@
     "code": "SL-iran-war",
     "file": "packages/pipeline/data/storylines/SL-iran-war/v2.json",
     "version": 2,
-    "facts": 94
+    "fact_refs": 94
   },
   "assign_problems": [],
   "per_fact": {
@@ -8981,52 +8993,111 @@
       "why": "표 규칙 OMO → S14.a",
       "by": "table_rules (코드)"
     },
-    "15b9f49c-1e58-5177-8b9c-77e0f23070ca": {
-      "label": "F529",
+    "5b6b171a-c225-5718-9488-396eebea1f99": {
+      "label": "F752",
       "docs": [
         "CAL"
       ],
       "elements": [],
-      "why": "슬롯 밖 — 연간 정례 회의 수 설명",
-      "by": "p4-assign/1 · assign.486b828b019f"
+      "why": "표 규칙 없음 (CAL)",
+      "by": "table_rules (코드)"
     },
-    "1a71a694-033c-54f9-968f-8754d8ce8f89": {
-      "label": "F530",
+    "05431fc7-2b4c-59d5-9b57-39ef38f24c9e": {
+      "label": "F753",
+      "docs": [
+        "CAL"
+      ],
+      "elements": [],
+      "why": "표 규칙 없음 (CAL)",
+      "by": "table_rules (코드)"
+    },
+    "8885b6cf-715e-57fe-9abb-7bb8cf4abdd5": {
+      "label": "F754",
+      "docs": [
+        "CAL"
+      ],
+      "elements": [],
+      "why": "표 규칙 없음 (CAL)",
+      "by": "table_rules (코드)"
+    },
+    "48c44d1f-9c0b-5d7a-8da1-37f052750fa1": {
+      "label": "F755",
+      "docs": [
+        "CAL"
+      ],
+      "elements": [],
+      "why": "표 규칙 없음 (CAL)",
+      "by": "table_rules (코드)"
+    },
+    "c6420bac-b865-5a8e-a2f7-f1e66575d995": {
+      "label": "F756",
+      "docs": [
+        "CAL"
+      ],
+      "elements": [],
+      "why": "표 규칙 없음 (CAL)",
+      "by": "table_rules (코드)"
+    },
+    "076592a4-bb2e-5e5d-89bd-9f7bc9b0e358": {
+      "label": "F757",
+      "docs": [
+        "CAL"
+      ],
+      "elements": [],
+      "why": "표 규칙 없음 (CAL)",
+      "by": "table_rules (코드)"
+    },
+    "95c4054d-b208-501b-a8b3-81fb3734cd3a": {
+      "label": "F758",
+      "docs": [
+        "CAL"
+      ],
+      "elements": [
+        "S05.d"
+      ],
+      "why": "표 규칙 CAL /— October 27-28 회의/ → S05.d",
+      "by": "table_rules (코드)"
+    },
+    "eeb1ff68-7417-572c-bb56-260004381d98": {
+      "label": "F759",
+      "docs": [
+        "CAL"
+      ],
+      "elements": [
+        "S05.d",
+        "S15.a"
+      ],
+      "why": "표 규칙 CAL /— December 8-9\\* 회의/ → S05.d S15.a",
+      "by": "table_rules (코드)"
+    },
+    "203da650-72a8-5426-84c8-f577d843dee8": {
+      "label": "F760",
+      "docs": [
+        "CAL"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 한 해 정례회의 횟수(8회) 일반 설명",
+      "by": "p4-assign/1 · assign.6217e0b87409"
+    },
+    "5419a1e5-051c-5fca-85ed-715ecc5b9766": {
+      "label": "F761",
       "docs": [
         "CAL"
       ],
       "elements": [
         "S15.b"
       ],
-      "why": "'정례 회의의 회의록이 정책 결정일로부터 three 주 뒤에 공개' — 회의록 공개 시점",
-      "by": "p4-assign/1 · assign.486b828b019f"
+      "why": "'정례회의 회의록이 정책 결정일로부터 three weeks(3주) 뒤에 공개'가 회의록이 나오는 때에 닿음",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "1e716017-6bdb-55ac-bd1f-700a0b3f6d0f": {
-      "label": "F531",
+    "81b35081-e625-5754-854f-39798d20bff4": {
+      "label": "F762",
       "docs": [
         "CAL"
       ],
       "elements": [],
-      "why": "슬롯 밖 — 위원회 구성원 교체 시점",
-      "by": "p4-assign/1 · assign.486b828b019f"
-    },
-    "b5669da9-6520-560c-a28e-9e8aa351ef3f": {
-      "label": "F532",
-      "docs": [
-        "CAL"
-      ],
-      "elements": [],
-      "why": "슬롯 밖 — 회의 날짜 잠정성",
-      "by": "p4-assign/1 · assign.486b828b019f"
-    },
-    "1e64e71a-22e3-5bcc-bf78-131120e98bd0": {
-      "label": "F533",
-      "docs": [
-        "CAL"
-      ],
-      "elements": [],
-      "why": "슬롯 밖 — 2028년 1월 회의 일정 (다음 회의 아님)",
-      "by": "p4-assign/1 · assign.486b828b019f"
+      "why": "슬롯 밖 — 회의 날짜가 잠정적이라는 일정 페이지 단서",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
     "26ca6ced-db4a-547a-a400-a54aa1ed67e6": {
       "label": "F534",
@@ -10380,122 +10451,138 @@
       "why": "슬롯 밖 — 베이지북 성격에 대한 주석",
       "by": "p4-assign/1 · assign.844a281ae770"
     },
-    "147e59a9-afa5-5b1c-b436-0e03e3dfdaf9": {
-      "label": "F657",
+    "773e6547-7661-5403-9a1f-108cdba30097": {
+      "label": "F763",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [],
-      "why": "슬롯 밖 — 연설 견해의 개인성 면책 문구",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "슬롯 밖 — 연설 견해가 개인 것이라는 면책 문구",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "36be003b-b608-5357-bf13-0100d7c9b033": {
-      "label": "F658",
+    "8645c011-c797-5e58-8968-3bf9bd65162f": {
+      "label": "F764",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [
         "S03.c"
       ],
-      "why": "반대자 Hammack 의 회의 뒤 연설 '물가상승률이 잘못된 방향으로 움직였다'가 회의 뒤 물가 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "반대자 Hammack 의 회의 뒤(11/05) 연설에서 '인플레이션이 잘못된 방향으로 움직였다'는 물가 판단",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "e04b3d01-241c-5ae8-a980-575b7237662b": {
-      "label": "F659",
+    "2e6955c7-7dbe-5f0d-bf41-13f7da5ca524": {
+      "label": "F765",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [
         "S03.c"
       ],
-      "why": "반대자 Hammack 의 회의 뒤 연설 '9월 헤드라인 PCE 3.6%, 근원 3.1%' 언급이 회의 뒤 물가 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "반대자 Hammack 의 회의 뒤 연설에서 '9월 헤드라인 PCE 3.6%, 근원 PCE 3.1%'를 든 물가 판단 (8월 PCE 가 아니라 S07.b 아님)",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "47c50f5c-8b0d-5d21-b10d-f732f90be9c7": {
-      "label": "F660",
+    "feac9fb8-826b-530d-af79-2a90f59df45f": {
+      "label": "F766",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [
         "S03.c"
       ],
-      "why": "반대자 Hammack 의 '2% 목표를 크게 웃돌고' 평가가 회의 뒤 물가 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "반대자 Hammack 의 회의 뒤 연설에서 '2% 목표를 크게 웃돌고 올해 초보다 높다'는 물가 판단",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "44435126-1b7e-5cd1-8e81-895fe414a9fd": {
-      "label": "F661",
+    "a0efbd08-3644-5702-85c0-a918b4115b40": {
+      "label": "F767",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [
         "S03.c"
       ],
-      "why": "반대자 Hammack 의 '거의 6년 동안 목표를 웃돌았다'가 회의 뒤 물가 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "반대자 Hammack 의 회의 뒤 연설에서 '인플레이션이 거의 six 년 동안 목표를 웃돌아' 왔다는 물가 판단",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "b8c66d01-26ce-5981-a9bb-93d80f679827": {
-      "label": "F662",
+    "a0649f00-e8dc-5b1d-b584-b7c7c3ab124b": {
+      "label": "F768",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [
         "S03.c"
       ],
-      "why": "반대자 Hammack 의 '물가 압력이 비교적 광범위'·'공급과 수요 양쪽' 평가가 회의 뒤 물가 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "반대자 Hammack 의 회의 뒤 연설에서 '인플레이션 압력이 비교적 광범위'하다는 물가 판단",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "1c4ec025-48f9-51da-ba52-6ace68d16f92": {
-      "label": "F663",
+    "06987184-4830-5faa-aeba-758556f41625": {
+      "label": "F769",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [
         "S03.c"
       ],
-      "why": "반대자 Hammack 의 '통화정책이 긴축적 기조로 옮겨가야' 가 회의 뒤 정책 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "반대자 Hammack 의 회의 뒤 연설에서 '통화정책이 긴축적 기조로 옮겨가야' 한다는 정책 판단",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "3431c59c-8a0f-5ac1-9e88-628e388e723a": {
-      "label": "F664",
+    "90756798-987d-5971-95d0-c363ea557559": {
+      "label": "F770",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [
         "S03.c"
       ],
-      "why": "반대자 Hammack 의 '더 잦고 더 작은 조정' 선호가 회의 뒤 정책 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "반대자 Hammack 의 회의 뒤 연설에서 '더 잦고 더 작은 조정'을 선호한다는 정책 판단",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "10c6de5c-4c2d-5ed4-8865-6b7d1a94b5f0": {
-      "label": "F665",
+    "a2322516-00b0-54e7-ac12-79ab7505559b": {
+      "label": "F771",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [
         "S03.c"
       ],
-      "why": "반대자 Hammack 의 '정책이… 뒤처지고 인플레이션 심리가 자리 잡을 위험' 감소 언급이 회의 뒤 정책 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "반대자 Hammack 의 회의 뒤 연설에서 이 전략이 '정책이 뒤처지고 인플레이션 심리가 자리잡을 위험'을 줄인다는 정책 판단",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "14435c32-c264-5ab0-b780-0ad7b338ecc9": {
-      "label": "F666",
+    "8424f8cc-d946-5a55-8343-7cd8b68f78ed": {
+      "label": "F772",
       "docs": [
         "SP-HAM-1105"
       ],
       "elements": [],
-      "why": "슬롯 밖 — 연준 독립성과 의회 책임",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "why": "슬롯 밖 — 연준 독립성 · 의회 책임성",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
-    "6dd276be-7047-5177-84eb-3186eb60bba1": {
-      "label": "F667",
+    "bd866b81-5b2f-5cd1-ba92-ff549dad0a73": {
+      "label": "F773",
       "docs": [
         "SP-HAM-1105"
       ],
-      "elements": [
-        "S03.c"
+      "elements": [],
+      "why": "슬롯 밖 — 달러 가치 관리는 재무부 책임",
+      "by": "p4-assign/1 · assign.6217e0b87409"
+    },
+    "13b5ff78-d92d-5350-a490-e92f8cebe642": {
+      "label": "F774",
+      "docs": [
+        "SP-HAM-1105"
       ],
-      "why": "반대자 Hammack 의 '달러 가치가 물가와 경제 전반에 영향'·'지켜보는 것'이 회의 뒤 물가 판단에 닿음",
-      "by": "p4-assign/1 · assign.844a281ae770"
+      "elements": [],
+      "why": "슬롯 밖 — 달러 가치를 지켜본다는 일반 언급",
+      "by": "p4-assign/1 · assign.6217e0b87409"
+    },
+    "46d74e4f-557b-5b9c-bcb7-57b2f928657e": {
+      "label": "F775",
+      "docs": [
+        "SP-HAM-1105"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 물가안정 · 최대고용 목표 전념 일반 언급",
+      "by": "p4-assign/1 · assign.6217e0b87409"
     },
     "24d33f88-f3bd-5cfc-b9c9-35f22527512e": {
       "label": "F668",
@@ -11294,6 +11381,123 @@
       "elements": [],
       "why": "슬롯 밖 — 7월 성명문의 물가 안정 다짐",
       "by": "p4-assign/1 · assign.43286de52768"
+    },
+    "8df4c3c6-1586-5549-b8bb-5a58966fdce3": {
+      "label": "F776",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 대통령의 Cook 이사 모기지 의혹 조사위원회 설치",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "3e78adcb-27be-568d-aeda-ff2803b49cbf": {
+      "label": "F777",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — Cook 조사위원회 위원 구성",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "7a0e1285-faeb-5326-aaf1-01b28767d0c4": {
+      "label": "F778",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — Cook 해임 사유 조사·보고 지시",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "b635d4ab-93fb-5603-a45f-89f069534539": {
+      "label": "F779",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 부하 해임 권한에 대한 대통령의 주장",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "894839f7-b574-51b1-aa9a-5970b2914d38": {
+      "label": "F780",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 조사위원회의 법무부 등 협의 권한",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "03797f58-466b-506d-a8c3-900379bad43d": {
+      "label": "F781",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — Cook 청문회 일정(11월 5일) 지정",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "12572f29-d86a-55e4-b6e2-7f017ee3aaee": {
+      "label": "F782",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — Cook 서면 입장문 제출 조건",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "a56b2c22-fa0c-5583-861c-965d65d3d16b": {
+      "label": "F783",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — Cook 청문회 출석·신문 절차",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "857029ff-bcd0-5387-8155-9ca96bb6bded": {
+      "label": "F784",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 조사 증거의 Cook 제공",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "27533676-14dc-5a98-869e-9d0acdb1c871": {
+      "label": "F785",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 청문회 비공개·속기 방침",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "59ea67b1-7578-5e48-b17a-942faef94c32": {
+      "label": "F786",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 청문회 후 서면 진술 기한",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "62ee442b-f161-5473-ba1f-db2f7bb53d27": {
+      "label": "F787",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 조사위원회의 해임 사유 권고 제출",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
+    },
+    "1790ded6-aa7c-5a34-a11a-410f1a01c96f": {
+      "label": "F788",
+      "docs": [
+        "WH-COOK-1007"
+      ],
+      "elements": [],
+      "why": "슬롯 밖 — 각서의 Federal Register 게재 지시",
+      "by": "p4-assign/1 · assign.5d52a5acc04a"
     },
     "d2f0fb3b-6103-45a7-b7c3-4509c79a8219": {
       "label": "BLS-CES0000000001-2026M09",

@@ -13,7 +13,8 @@
               요소의 facts = 그 요소가 붙은 사실 전부 (CV_ASSIGN)
   D. 최신     coverage.json 의 graph_sha256 = 지금 그래프 (CV_STALE)
   E. 스토리라인 v2 — Storyline 한 줄 (골든과 같은 id · code) · StorylineVersion 1 부터 빠짐없이 · v1 줄 = 골든 · Storyline.version = 최대 ·
-              사실은 스토리라인 소유 (event_id 없음 · storyline_version ≤ version · 불변식 7) · 원래 그래프 사실과 칸이 같다 · FactSource 가 원래 것과 같다 (CV_STORYLINE)
+              **사실을 옮겨 적지 않는다 (P-5 · D44 P4-b — 한 사실은 한 곳에)**: v2 에 Fact · FactSource 가 없다 · _fact_refs 가 지금 그래프의 사실을 가리킨다 (fact_id 가 있고 label 이 같다 · 겹치지 않는다) ·
+              _graph_sha256 = 지금 그래프 (CV_STORYLINE)
   F. 권리     권리 미확인 문서(전문이 캐시에만)의 구절 글이 v2 · coverage 에 없다 (CV_RIGHTS)
 
 exit 0 OK · 1 FAIL
@@ -203,35 +204,27 @@ def check(b):
         gv1 = [{k: x for k, x in v.items() if not k.startswith('_')} for v in golden['storyline_versions'] if v['storyline_id'] == gsl['storyline_id']]
         if [{k: x for k, x in v.items() if not k.startswith('_')} for v in vers if v['version'] == 1] != gv1:
             E('CV_STORYLINE', 'v1 줄이 골든과 다르다 — 골든의 판은 고치지 않는다')
-        ids = set()
-        for f in v2.get('facts', []):
-            w = f'v2 {f.get("label")}'
-            if [k for k in f if not k.startswith('_')] != FACT_FIELDS:
-                E('CV_STORYLINE', f'{w}: Fact 필드가 계약과 다르다')
-            if f['fact_id'] in ids or not is_uuid(f['fact_id']):
-                E('CV_STORYLINE', f'{w}: fact_id 가 UUID 가 아니거나 겹친다')
-            ids.add(f['fact_id'])
-            if f['event_id'] is not None or f['storyline_id'] != row['storyline_id'] or not isinstance(f['storyline_version'], int) or not (1 <= f['storyline_version'] <= row['version']):
-                E('CV_STORYLINE', f'{w}: 소유가 스토리라인 하나 · 그 버전 안이 아니다 (불변식 7)')
-            o = facts.get(f.get('_graph_fact_id'))
+        if 'facts' in v2 or 'fact_sources' in v2:
+            E('CV_STORYLINE', 'v2 에 Fact · FactSource 가 있다 — 그래프의 사실을 옮겨 적지 않고 가리킨다 (D44 P4-b)')
+        if v2.get('_graph_sha256') != b['graph_sha256']:
+            E('CV_STORYLINE', 'v2 가 가리키는 그래프와 지금 그래프가 다르다 — p4 를 다시')
+        refs = v2.get('_fact_refs', [])
+        if not refs:
+            E('CV_STORYLINE', 'v2 가 가리키는 사실이 없다')
+        seen = set()
+        for r in refs:
+            o = facts.get(r.get('fact_id'))
             if not o:
-                E('CV_STORYLINE', f'{w}: 원래 그래프 사실이 없다')
+                E('CV_STORYLINE', f'v2 _fact_refs {r.get("label")}: 그래프에 없는 사실')
                 continue
-            for k in ('claim_text', 'fact_type', 'actor', 'volatility', 'as_of', 'event_at', 'extraction_model', 'extraction_version'):
-                if f[k] != o[k]:
-                    E('CV_STORYLINE', f'{w}: {k} 가 원래 그래프 사실 {o["label"]} 와 다르다')
-            want = sorted((r['source_id'], r['span_start'], r['span_end']) for r in g['fact_sources'] if r['fact_id'] == o['fact_id'])
-            have = sorted((r['source_id'], r['span_start'], r['span_end']) for r in v2.get('fact_sources', []) if r['fact_id'] == f['fact_id'])
-            if want != have:
-                E('CV_STORYLINE', f'{w}: FactSource 가 원래 사실과 다르다')
-        for r in v2.get('fact_sources', []):
-            if r['fact_id'] not in ids:
-                E('CV_STORYLINE', f'v2 FactSource 의 {r["fact_id"]} 가 v2 사실이 아니다')
-            if [k for k in r if not k.startswith('_')] != FS_FIELDS:
-                E('CV_STORYLINE', 'v2 FactSource 필드가 계약과 다르다')
-            # F
-            if r['source_id'] in b['cache_sources'] and '_passage' in r:
-                E('CV_RIGHTS', f'v2 FactSource {r["fact_id"]}: 권리 미확인 문서의 구절 글이 저장소 파일에 있다')
+            if o['label'] != r.get('label'):
+                E('CV_STORYLINE', f'v2 _fact_refs {r.get("label")}: label 이 그래프({o["label"]})와 다르다')
+            if r['fact_id'] in seen:
+                E('CV_STORYLINE', f'v2 _fact_refs {r.get("label")}: 두 번')
+            seen.add(r['fact_id'])
+    # F
+    if '_passage' in json.dumps(v2, ensure_ascii=False):
+        E('CV_RIGHTS', 'v2 에 구절 글이 있다 — 구절은 그래프에만')
     if '_passage' in json.dumps(cov, ensure_ascii=False):
         E('CV_RIGHTS', 'coverage.json 에 구절 글이 있다 — 구절은 그래프에만')
     return errs
@@ -245,7 +238,7 @@ def main():
     print(f'  {CODE} p4/coverage.json: 슬롯 {c["slots"]} (채움 {c["slots_full"]} · 일부 {c["slots_partial"]} · 빔 {c["slots_empty"]}) · 요소 {c["elements"]} '
           f'(FOUND {c["FOUND"]} · NOT_EXTRACTED {c["NOT_EXTRACTED"]} · SOURCE_UNAVAILABLE {c["SOURCE_UNAVAILABLE"]} · NOT_APPLICABLE {c["NOT_APPLICABLE"]} · STORYLINE_STALE {c["STORYLINE_STALE"]}) · '
           f'사실 {c["facts"]} 중 요소 있음 {c["facts_with_element"]}')
-    print(f'  SL-iran-war v2: 사실 {len(b["v2"]["facts"])} · FactSource {len(b["v2"]["fact_sources"])} · 판 {[v["version"] for v in b["v2"]["storyline_versions"]]}')
+    print(f'  SL-iran-war v2: 가리키는 그래프 사실 {len(b["v2"].get("_fact_refs", []))} · 판 {[v["version"] for v in b["v2"]["storyline_versions"]]}')
     if '--report' in sys.argv:
         for s in b['coverage']['slots']:
             print(f'    {s["id"]} {s["name"]} [{s["state"]}] ' + ' · '.join(f'{e["id"]} {e["status"]} {e["n"]}' for e in s['elements']))
