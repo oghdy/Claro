@@ -55,6 +55,7 @@ D1~D7은 `docs/FINDINGS.md` §12.1에서 이월.
 | D51 | API 비용 — 기사 한 편 ≤ 3 달러 목표 · 실험은 결정에 필요한 만큼 · W-6 (배치 · 캐시 · effort) 을 W-5 앞에 | **DECIDED** 2026-11-11 · 도윤 ("비용 잘 쓸 수 있게") · 방법은 PM |
 | D52 | 두 번째 기사를 지금 시작 — 분야 기술 · 산업 · 후보 찾기(E2-0) → 도윤이 고름 → P-2 (비용 0) → API 단계는 W-6 뒤 | **DECIDED** 2026-11-11 · 도윤 (분야) |
 | D53 | 게이트 1 — 두 번째 기사: 공정위 배달앱 최혜대우 제재 · 공공누리 1유형은 git (출처 표시) | **DECIDED** 2026-11-11 · 도윤 (사건) · PM (권리) |
+| D54 | W-4 게이트 — 계약 잔일 통과 (가져온 기록 · ComputedNumber · §7.3 방어용 둘째 줄 · event_facts) | **DECIDED** 2026-11-11 · PM (도윤 위임 D47) |
 
 ---
 
@@ -1663,4 +1664,28 @@ W-4 (Opus · 계약 — 계산된 수 · 가져온 기록 · P5-c · P5-b) → W
 
 ### 다음
 E2-1 소스 팩 (Opus · API 0) — **W-4 가 끝난 뒤** (W-4 가 `pack.ts` · `rights.ts` · `extract.ts` 를 고치는 중). 그다음 W-6 → E2 의 P-3 ~ (배치로)
+
+---
+
+## D54 · W-4 게이트 — 계약 잔일
+
+**상태**: DECIDED · 2026-11-11 · PM 판정 (도윤 위임 D47). 통과
+
+### 검수 (`17e3095` · 작업 세션 Opus 5.5 · API 0)
+- PM 재실행: verify-data-model · claims · bls-rates · fact-graph · coverage · article · observation · concept-identity · entailment · source-pack 전부 rc 0 · **compare-reader-text "등록 안 된 차이 0" — 독자 글 불변** · 키 0
+- 골든(fixtures) diff 를 직접 봤다: `_basis` → `basis` (주석이 칸이 됨 · 글 같음) · storyline v1 `event_facts: []` · store.documents 에 sha256 · fetched_url · fetched_at · extractor (P-1 기록에서). 독자 글 · 사실 글 변경 0
+- ComputedNumber 하나를 직접 읽었다: 8월 CPI 전월 대비 — inputs 334.131 / 332.813 (그래프 사실 둘) → **0.4%** · VOLATILE · as_of 11/10
+- 그래프 805 → 814 (bls.ts 가 기준 달 지수 9 를 사실로 — 코드로)
+
+### 판정
+| # | 판정 | 이유 |
+|---|---|---|
+| ComputedNumber 를 DERIVED 와 따로 | 수용 | 붙는 곳(사건 vs 기사 조각) · 기준(발행일 아님) · 입력(VOLATILE) 이 다르다 — 실물로 갈렸다 |
+| **W4-a 계산된 수를 기사에서 어떻게 보이나** (추천: 새 층 `computed` · "BLS 지수에서 BLS 방식으로 계산 · 11/10 기준") | **방향 수용 · P-7 에서.** 독자에게 보이는 문안은 도윤에게 올린다 | 독자가 보는 글이다 (§2 게이트) |
+| W4-b `event_facts` 로 가리킨 사실을 기사가 쓸 때 스토리라인 핀 | 필요 — P-7 | 발행물이 가리키는 판이 고정돼야 한다 (§2.3) |
+| W4-c 한 Source 에 받은 판 둘 · W4-d 구절 칸 (_open-m6) | 실물이 생길 때까지 그대로 | D24 — 실물 없이 설계하지 않는다 |
+| DC-08 · 14 의 "그래프에" · DC-14 "우리는" (해석 문장에 내부 말) | P-7 · 회의록 날의 /2 프롬프트 (한 문장 검사) 와 함께 | 독자 글에 내부 말이 가면 안 된다 |
+
+### 다음
+**E2-1 (소스 팩 · Opus · API 0) · W-6 (비용 · Opus · 재기 상한 4 달러) 를 함께** — 건드리는 파일이 다르다 (E2-1: pack · p1 · extract · rights · fetch / W-6: llm · p3 · p4 · p5 · rerun)
 

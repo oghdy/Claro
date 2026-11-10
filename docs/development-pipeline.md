@@ -5,7 +5,7 @@
 
 ## 현재 위치
 **2026-11-11 · P-5 까지 끝. 10월 회의록(11/18 무렵)을 기다린다 (D45 · 도윤).** 회의록이 나오면 수집 → P-3b → P-4 → P-5 를 다시 돌리고 P-6 (요점 · 게이트 2 — 도윤).
-정치는 D46 (공식 발언만 · 동기 해석 안 함 · 필요할 때만 · 양쪽). **그동안 잔일 W-1 ~ W-5 (D47)** — 아래 "잔일 Step". **도는 중: W-4 (Opus) · E2-0 (Opus — 두 번째 기사 후보, D52)** · W-3 · W-2 · W-1 닫힘 (D48 · D49 · D50). 회의록 날 명령: `pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10` (마른 실행) → `--go` (logs/pipeline/W-1.md ①).
+정치는 D46 (공식 발언만 · 동기 해석 안 함 · 필요할 때만 · 양쪽). **그동안 잔일 W-1 ~ W-5 (D47)** — 아래 "잔일 Step". **도는 중: W-6 (Opus — 비용) · E2-1 (Opus — 두 번째 기사 소스 팩)** · W-3 · W-2 · W-1 닫힘 (D48 · D49 · D50). 회의록 날 명령: `pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10` (마른 실행) → `--go` (logs/pipeline/W-1.md ①).
 사건 폴더: `packages/pipeline/data/events/FOMC-20261028/` (p3 · p4 · p5 · bls) · 스토리라인 `packages/pipeline/data/storylines/SL-iran-war/v2.json`
 명령: `pnpm --filter @claro/pipeline p1 | p2 <code> | p3 | p4 | p5` (각각 `--check` 로 다시 돌려 같은지). 검사: `scripts/verify-source-pack · verify-fact-graph · verify-coverage · verify-claims .py`
 비용 장부 23.43 달러 · **목표 기사 한 편 ≤ 3 달러 (D51)** (P-1 ~ P-5 16.70 + W-2 6.73 · W-3 0 · 크레딧 약 103 달러에서 · 콘솔 월 한도 권장 30 달러). 키: `packages/pipeline/.env.pipeline` (git 무시)
@@ -48,10 +48,10 @@
 | W-2 | 의미 대조 (D43) — 판정 단계 + 시험 묶음 · Opus ↔ Fable 견줌 · 상한 8 달러 | Fable | ☑ 2026-11-11 — **닫힘 (D49 — 이 단계 모델 Opus medium)** (`logs/pipeline/W-2.md` · `w2` 명령 · 프롬프트 `w2-entail/1` · 판정 ENTAILED / NEEDS_CONTEXT / EXCEEDS / CONTRADICTS / CANNOT_JUDGE + 가리킨 부분(글자 그대로 · 코드가 확인) · 글을 고쳐 쓰지 않음. 시험 묶음 107: 맞는 예 56 · 구절 부족 16 · 넘침 · 어긋남 31 (교정 전 골든 4 · Sonnet 수량어 2 · 10월 F449 · 일부러 24). **medium — Opus: 잘못 막음 2 · 구절 부족 16/16 · 넘침 28/31 · $1.05 / Fable: 1 · 15/16 · 27/31 · $1.50** (high: Opus 3 · 16 · 28 · $1.13 / Fable 1 · 15 · 28 · $2.72). 둘 다 놓침: 연준 수량어 Several → 일부 2 (코드 검사가 막는다) · F449. 원문이 저장된 맞는 예 49 에서 잘못 막음 0. 비용 $6.73 · 새 검사 verify-entailment (사본 18) · _open W2-a ~ k — 모델은 고르지 않았다) |
 | W-3 | BLS 지수 → 변화율 (BLS 방식 그대로 · 9월 골든 대조) · API 비용 0 | Opus | ☑ 2026-11-11 — **닫힘 (D48)** (`logs/pipeline/W-3.md` · `bls-rates` 명령 · 10월 계산 18 (9월 · 8월 × 측정 9 — 9월 CPI 1년 전 3.7% · 근원 2.6% · 취업자 +60천) + 9월 54 · **9월 골든 대조 34: CPI 23/23 같음 · PPI 3 · 취업자 3 다름 (받은 날 판 — 고쳐진 시리즈)** · 연준 인용 9/9 같음 · **계약 자리 없음 → 그래프 0 · 계산 기록 `bls/rates.json` · _open W3-a (추천: 계산된 수 타입 — W-4)** · 9월 CPI 회의 전 공개 미확인 (W3-c · 10/1 셧다운 F217) · 검사 verify-bls-rates · 사본 18) |
 | W-1 | 회의록 다시 돌리기 한 번에 (+ `bls-rates` · W3-c 체크포인트) · 해석 한 문장 검사 (P5-e) · `p1 --check` · 상한 2 달러 | Opus | ☑ 2026-11-11 — **닫힘 (D50)** (`logs/pipeline/W-1.md` · **`rerun <code> --doc <LABEL>` (기본 마른 실행 · `--go` 로 돈다)** — 수집 → 추출 · 묶음 → bls-rates → 붙이기 · Unslotted → 해석 · 반증, 단계마다 verify-* · 실패하면 멈춤 · 바뀐 것만 부름. **마른 시험 (WH-COOK-1007 을 새 문서인 척): 다섯 단계 끝까지 · 모델 0 · 전부 `--check` 같다** · 회의록 날 예상 부르기 6 · 대략 $2.9 · P-5 판 `p5-derive/2` · `p5-counter/2` (부르지 않음 — 한 문장 · "주장은 남기고 범위를 단다" · 회의록 = `[뒤 · 회의 기록]` (after 갈래 아님 · p3 판 그대로) · 체크포인트) · 한 문장 검사 CL_SENTENCE (/1 은 WARN 13 — 해석 원래 문장도 11/14 가 두 문장 이상) · W3-c = `checkpoints.json` (반증 부르기에 같이) · `p1 --check` 못 가져옴 13 요청 0 · 비용 $0 · _open W1-a (llm.ts STEP 을 그날 바꾼다) ~ j) |
-| W-4 | 계약 잔일 — 가져온 기록 (P1-a · J5) · **계산된 수 타입 (W3-a · D48)** · §7.3 줄 (P5-c · D50 규칙) · 스토리라인 판 → 사건 사실 (P5-b) · API 0 | Opus | ☑ 2026-11-11 — 검수 대기 (`logs/backend/W-4.md` · DATA_MODEL: SourceDocument `sha256` · `fetched_url` · `fetched_at` · `extractor` · SourceRegistry `basis` · **ComputedNumber (§6.5 · op 실물 셋 · 불변식 31 ~ 33)** · §7.3 방어용 둘째 줄 · StorylineVersion `event_facts` (불변식 34) · 불변식 29 · 30 · 그래프 805 → 814 (BLS 기준 달 사실 9 — 코드) · `bls/rates.json` computed 18 · **P5-c 4 건 전부 방어용 · 이상한 것 0** · _open W4-a (기사 표시 — 추천 새 층) · W4-b (핀) · W4-c (판 둘) · W4-d (m6 — 지시 밖) · 모델 0 · 망가뜨린 사본 +43) |
-| W-6 | **API 비용 줄이기 (D51)** — 장부 분석 · 배치 (값이 반) · 캐시가 먹는지 · effort · 보내는 양 (안) · 정답이 있는 곳에서 작게 잼 (상한 4 달러) · W1-a · 목표 한 편 ≤ 3 달러 | Opus | ☐ W-4 뒤 |
+| W-4 | 계약 잔일 — 가져온 기록 · ComputedNumber (§6.5) · §7.3 방어용 둘째 줄 · event_facts | Opus | ☑ 2026-11-11 — **닫힘 (D54)** (`17e3095` · `logs/backend/W-4.md` · 그래프 814 · rates computed 18 · 사본 +43 · 독자 글 불변 · _open W4-a ~ d) |
+| W-6 | **API 비용 줄이기 (D51)** — 장부 분석 · 배치 (값이 반) · 캐시가 먹는지 · effort · 보내는 양 (안) · 정답이 있는 곳에서 작게 잼 (상한 4 달러) · W1-a · 목표 한 편 ≤ 3 달러 | Opus | ⏳ 도는 중 (2026-11-11) |
 | E2-0 | **두 번째 기사 (기술 · 산업 — D52)** 사건 후보 3 ~ 4 · 비교표 · 추천 → 도윤이 고름 (게이트 1) · API 0 | Opus | ☑ 2026-11-11 — PM 검수 대기 → 게이트 1 (도윤) (`logs/pipeline/E2-0.md` · 후보 4: **A 미 · 중 수출 통제 휴전 두 달 연장** (BIS 91 FR 70789 · USTR 301 · MOFCOM 2026 제58호 · 한화 제재 유예 — 다음 노드 2027-01-10) · **B 공정위 배달앱 최혜대우 제재** (의결 10/29 · 발표 11/9 · 6,319억 잠정 · 공공누리 1유형) · C SK하이닉스 3Q · HBM4 (기업 문서만 — 권리 · 수집 막힘) · D 공정거래법 시행령 입법예고 (안 — B 의 다음 노드). **추천 B · 둘째 A (1월 세 번째 기사 후보)** · 버린 후보 8 · 저장 0 · API 0 · _open E2-a ~ i) |
-| E2-1 | **두 번째 기사 소스 팩 — 공정위 배달앱 최혜대우 제재 (D53)** · 1차 수집 · 권리 (공공누리 1유형 = git) · **FOMC 전용으로 굳은 곳 목록** · 슬롯 초안 · API 0 | Opus | ☐ W-4 뒤 |
+| E2-1 | **두 번째 기사 소스 팩 — 공정위 배달앱 최혜대우 제재 (D53)** · 1차 수집 · 권리 (공공누리 1유형 = git) · **FOMC 전용으로 굳은 곳 목록** · 슬롯 초안 · API 0 | Opus | ⏳ 도는 중 (2026-11-11) |
 | W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + **판 올려 10월 사실 다시 뽑기 (W-6 의 배치 길로 ≈ 1.8 달러 · D50 · D51)** + W2-b (`w2-entail/2` · Opus medium 다시 잼) + F046 · F449 확인 + 끝에 `rerun --pretend-new` | Opus | ☐ W-6 뒤 |
 
 **도윤이 준비할 것 (P-3 전)**: Claude API 키 — 비밀 값이다. 채팅에 붙이지 않고 `apps/web/.env.deploy` 처럼 git 밖 파일에. 사용 한도를 걸어 둔다.
@@ -68,7 +68,7 @@
 
 ## E2-1 · 두 번째 기사 — 소스 팩
 
-### 서브에이전트 지시 (Opus · W-4 뒤에 보낸다)
+### 서브에이전트 지시 (Opus)
 ```
 너는 Claro 프로젝트의 작업 세션이다. Step E2-1 (두 번째 기사 — 소스 팩)을 맡는다. PM(나)이 검수하고 도윤에게 보고한다.
 작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — 같은 작업 트리에서 W-6 세션이 `llm.ts` · `p3` · `p4` · `p5` · `rerun` 을 고칠 수 있다.
@@ -155,7 +155,7 @@ Claro 는 뉴스와 독자 사이의 지식 거리를 없애는 서비스다 (�
 
 ## W-6 · API 비용 줄이기
 
-### 서브에이전트 지시 (Opus · W-4 뒤에 보낸다)
+### 서브에이전트 지시 (Opus)
 ```
 너는 Claro 프로젝트의 작업 세션이다. Step W-6 (API 비용 줄이기)을 맡는다. PM(나)이 검수하고 도윤에게 보고한다.
 작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라.
