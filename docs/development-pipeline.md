@@ -5,7 +5,7 @@
 
 ## 현재 위치
 **2026-11-11 · P-5 까지 끝. 10월 회의록(11/18 무렵)을 기다린다 (D45 · 도윤).** 회의록이 나오면 수집 → P-3b → P-4 → P-5 를 다시 돌리고 P-6 (요점 · 게이트 2 — 도윤).
-정치는 D46 (공식 발언만 · 동기 해석 안 함 · 필요할 때만 · 양쪽). **그동안 잔일 W-1 ~ W-5 (D47)** — 아래 "잔일 Step". **도는 중: W-6 (Opus — 비용) · E2-1 (Opus — 두 번째 기사 소스 팩)** · W-3 · W-2 · W-1 닫힘 (D48 · D49 · D50). 회의록 날 명령: `pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10` (마른 실행) → `--go` (logs/pipeline/W-1.md ①).
+정치는 D46 (공식 발언만 · 동기 해석 안 함 · 필요할 때만 · 양쪽). **그동안 잔일 W-1 ~ W-5 (D47)** — 아래 "잔일 Step". **도는 중: W-6 (Opus — 비용) · E2-1 (Opus — 두 번째 기사 소스 팩)** — 이 둘까지만, 그다음 도윤과 다시 정리 (W-5 멈춤) · W-3 · W-2 · W-1 닫힘 (D48 · D49 · D50). 회의록 날 명령: `pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10` (마른 실행) → `--go` (logs/pipeline/W-1.md ①).
 사건 폴더: `packages/pipeline/data/events/FOMC-20261028/` (p3 · p4 · p5 · bls) · 스토리라인 `packages/pipeline/data/storylines/SL-iran-war/v2.json`
 명령: `pnpm --filter @claro/pipeline p1 | p2 <code> | p3 | p4 | p5` (각각 `--check` 로 다시 돌려 같은지). 검사: `scripts/verify-source-pack · verify-fact-graph · verify-coverage · verify-claims .py`
 비용 장부 23.43 달러 · **목표 기사 한 편 ≤ 3 달러 (D51)** (P-1 ~ P-5 16.70 + W-2 6.73 · W-3 0 · 크레딧 약 103 달러에서 · 콘솔 월 한도 권장 30 달러). 키: `packages/pipeline/.env.pipeline` (git 무시)
@@ -52,7 +52,7 @@
 | W-6 | **API 비용 줄이기 (D51)** — 장부 분석 · 배치 (값이 반) · 캐시가 먹는지 · effort · 보내는 양 (안) · 정답이 있는 곳에서 작게 잼 (상한 4 달러) · W1-a · 목표 한 편 ≤ 3 달러 | Opus | ⏳ 도는 중 (2026-11-11) |
 | E2-0 | **두 번째 기사 (기술 · 산업 — D52)** 사건 후보 3 ~ 4 · 비교표 · 추천 → 도윤이 고름 (게이트 1) · API 0 | Opus | ☑ 2026-11-11 — PM 검수 대기 → 게이트 1 (도윤) (`logs/pipeline/E2-0.md` · 후보 4: **A 미 · 중 수출 통제 휴전 두 달 연장** (BIS 91 FR 70789 · USTR 301 · MOFCOM 2026 제58호 · 한화 제재 유예 — 다음 노드 2027-01-10) · **B 공정위 배달앱 최혜대우 제재** (의결 10/29 · 발표 11/9 · 6,319억 잠정 · 공공누리 1유형) · C SK하이닉스 3Q · HBM4 (기업 문서만 — 권리 · 수집 막힘) · D 공정거래법 시행령 입법예고 (안 — B 의 다음 노드). **추천 B · 둘째 A (1월 세 번째 기사 후보)** · 버린 후보 8 · 저장 0 · API 0 · _open E2-a ~ i) |
 | E2-1 | **두 번째 기사 소스 팩 — 공정위 배달앱 최혜대우 제재 (D53)** · 1차 수집 · 권리 (공공누리 1유형 = git) · **FOMC 전용으로 굳은 곳 목록** · 슬롯 초안 · API 0 | Opus | ⏳ 도는 중 (2026-11-11) |
-| W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + **판 올려 10월 사실 다시 뽑기 (W-6 의 배치 길로 ≈ 1.8 달러 · D50 · D51)** + W2-b (`w2-entail/2` · Opus medium 다시 잼) + F046 · F449 확인 + 끝에 `rerun --pretend-new` | Opus | ☐ W-6 뒤 |
+| W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + **판 올려 10월 사실 다시 뽑기 (W-6 의 배치 길로 ≈ 1.8 달러 · D50 · D51)** + W2-b (`w2-entail/2` · Opus medium 다시 잼) + F046 · F449 확인 + 끝에 `rerun --pretend-new` | Opus | ⏸ 멈춤 (2026-11-11 · 도윤과 다시 정리) |
 
 **도윤이 준비할 것 (P-3 전)**: Claude API 키 — 비밀 값이다. 채팅에 붙이지 않고 `apps/web/.env.deploy` 처럼 git 밖 파일에. 사용 한도를 걸어 둔다.
 
