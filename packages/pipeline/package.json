@@ -11,6 +11,7 @@
     "p3": "node src/p3.ts",
     "p4": "node src/p4.ts",
     "p5": "node src/p5.ts",
+    "w2": "node src/w2.ts",
     "test": "vitest run",
     "typecheck": "tsc -p ."
   },

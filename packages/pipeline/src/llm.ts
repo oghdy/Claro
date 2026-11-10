@@ -25,6 +25,7 @@ export const STOP_AT_USD = 9.5;        // 이 Step 에서 쓴 돈 + 이번 부�
 export const PRICE: Record<string, { in: number; out: number; cache_write: number; cache_read: number }> = {
   "claude-sonnet-5-5": { in: 2, out: 10, cache_write: 2.5, cache_read: 0.1 },
   "claude-opus-5-5": { in: 4, out: 20, cache_write: 5, cache_read: 0.2 },
+  "claude-fable-5-2": { in: 8, out: 40, cache_write: 10, cache_read: 0.2 },   // W-2 — 의미 대조에서 Opus 와 견준다 (D2 · D47). 캐시 쓰기는 입력의 1.25배
 };
 
 export type Usage = { input_tokens: number; output_tokens: number; cache_creation_input_tokens: number; cache_read_input_tokens: number };
@@ -48,6 +49,8 @@ export function ledger(): LedgerLine[] {
 export const spent = () => ledger().reduce((a, l) => a + l.cost_usd, 0);
 /** 이 Step(STEP)에서 쓴 돈 */
 export const spentStep = () => ledger().filter((l) => l.step === STEP).reduce((a, l) => a + l.cost_usd, 0);
+/** 어느 Step 이 쓴 돈 (W-2 — Step 이름을 부르는 쪽이 준다) */
+export const spentOf = (step: string) => ledger().filter((l) => l.step === step).reduce((a, l) => a + l.cost_usd, 0);
 
 function loadKey(): string {
   if (!existsSync(ENV)) throw new Error("packages/pipeline/.env.pipeline 이 없다 — 키가 없다. 멈춘다");
@@ -96,7 +99,7 @@ export const requestSha = (a: Parameters<typeof requestParams>[0]) => sha256(JSO
 /** 한 번 부른다. JSON 을 받고 JSON 을 낸다 — 출력 글(text)을 그대로 돌려준다. 장부에 한 줄 */
 export async function callJson(a: {
   event: string; source_label: string; model: string; effort: "low" | "medium" | "high"; system: string; user: string; schema: object;
-  prompt_version: string; text_sha256: string; max_tokens: number;
+  prompt_version: string; text_sha256: string; max_tokens: number; step?: string;   // step — 장부의 Step 칸. 없으면 STEP
 }): Promise<CallResult> {
   const params = requestParams(a);
   const request_sha256 = sha256(JSON.stringify(params));
@@ -121,7 +124,7 @@ export async function callJson(a: {
     r = { ok: false, fatal: s.fatal, error: s.msg, model: null, stop_reason: null, usage: null, text: null, response_id: null, duration_ms: Date.now() - t0, cost_usd: 0, request_sha256 };
   }
   const line: LedgerLine = {
-    at: new Date().toISOString(), step: STEP, event: a.event, source_label: a.source_label, model_requested: a.model, model: r.model, effort: a.effort,
+    at: new Date().toISOString(), step: a.step ?? STEP, event: a.event, source_label: a.source_label, model_requested: a.model, model: r.model, effort: a.effort,
     prompt_version: a.prompt_version, request_sha256, text_sha256: a.text_sha256, stop_reason: r.stop_reason, usage: r.usage,
     duration_ms: r.duration_ms, cost_usd: Number(r.cost_usd.toFixed(6)), ok: r.ok, error: r.error, request_id: r.response_id,
   };
