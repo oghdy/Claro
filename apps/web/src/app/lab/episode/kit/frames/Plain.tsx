@@ -20,7 +20,7 @@ export function PlainFlipLead({ entry }: { entry: SolveEntry }) {
       <motion.div className="pl-thought" variants={rise} data-testid="plain-flip">
         <h2>{c.thought}</h2>
         <p>
-          <Txt item={entry.firstThought} />
+          <Txt item={entry.first_thought} />
         </p>
       </motion.div>
       <motion.div className="pl-thought" data-kind="breaker" variants={rise}>
@@ -85,9 +85,9 @@ export function PlainThreeCards({ plain: p }: { plain: PlainThree }) {
             ) : (
               <p className="pl-none">{c.differNone}</p>
             )}
-            {p.differNote ? (
+            {p.differ_note ? (
               <p className="pl-note">
-                <Txt item={p.differNote} />
+                <Txt item={p.differ_note} />
               </p>
             ) : null}
           </motion.div>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { CHROME } from "./chrome";
 import { SHELF, shelfOf } from "./shelf";
-import type { EpisodeData, ReaderId } from "./types";
+import { toolOf, type EpisodeData, type ReaderId } from "./types";
 
 // 내 개념 지도 (공통). 자리는 회차 데이터에 손으로 놓여 있다 (시안) — 배치를 계산하지 않는다.
 // 상태는 셋뿐이다: new (오늘 주움) · known (알던 것) · none (아직). **얼마나 아는지는 그리지 않는다** — 추정하지 않으니까.
@@ -19,12 +19,12 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false }
   const c = CHROME.map;
   const { at, edges, ghosts } = ep.map;
   const [picked, setPicked] = useState<Picked>(null);
-  const shown = ep.conceptOrder.filter((id) => states[id] !== "none");
+  const shown = ep.tools.map((x) => x.key).filter((id) => states[id] !== "none");
   const fresh = shown.filter((id) => states[id] === "new");
   const elsewhere = ep.readers[reader].elsewhere;
   // 자라는 모습: 알던 것이 먼저 있고, 오늘 주운 것이 하나씩 붙는다
   const delay = (id: string) => (grow && states[id] === "new" ? 0.7 + fresh.indexOf(id) * 0.28 : 0);
-  const xy = (id: string) => at[id] ?? ([50, 50] as const);
+  const xy = (id: string): readonly [number, number] => at[id] ?? [50, 50];
   const pickedElse = picked?.kind === "else" ? shelfOf(picked.series) : undefined;
 
   return (
@@ -76,7 +76,7 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false }
             transition={{ type: "spring", stiffness: 260, damping: 20, delay: delay(id) }}
             onClick={() => setPicked({ kind: "concept", id })}
           >
-            {ep.concepts[id]!.name}
+            {toolOf(ep, id).name}
           </motion.button>
         ))}
         {shown.length === 0 ? <p className="ep-map-empty">{c.emptyNew}</p> : null}
@@ -115,10 +115,10 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false }
             </p>
           ) : picked.kind === "concept" ? (
             <>
-              <h2>{ep.concepts[picked.id]!.name}</h2>
-              <p className="ep-map-where">{states[picked.id] === "new" ? ep.copy.map.whereToday.t : reader === "follower" ? c.whereBefore : c.whereSeed}</p>
-              <p>{ep.concepts[picked.id]!.short.t}</p>
-              <p className="ep-map-use">{ep.concepts[picked.id]!.use.t}</p>
+              <h2>{toolOf(ep, picked.id).name}</h2>
+              <p className="ep-map-where">{states[picked.id] === "new" ? ep.map.where_today.t : reader === "follower" ? c.whereBefore : c.whereSeed}</p>
+              <p>{toolOf(ep, picked.id).short.t}</p>
+              <p className="ep-map-use">{toolOf(ep, picked.id).use.t}</p>
             </>
           ) : picked.kind === "ghost" ? (
             <>
@@ -142,7 +142,7 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false }
           <h2>{c.shelfLabel}</h2>
           <ul>
             {SHELF.map((s) =>
-              s.series === ep.series.id ? (
+              s.series === ep.series.code ? (
                 <li key={s.series} data-here>
                   <strong>{s.name}</strong>
                   <span>

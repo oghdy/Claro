@@ -1,4 +1,4 @@
-// 모든 회차가 같이 쓰는 화면 글 (공통). 회차의 글은 episodes/*/data.ts 에 있다.
+// 모든 회차가 같이 쓰는 화면 글 (공통). 회차의 글은 골든 픽스처 (fixtures/episode-*.json — 회차 계약)에 있다.
 // UX-1 의 COPY.tools · keep · map · chrome 에서 회차와 상관없는 줄을 그대로 옮겼다 — 글자는 바꾸지 않았다
 // (whereElse 의 "(시안의 예시)" 만 뺐다: 다른 시리즈의 개념이 이제 진짜 회차의 것이다).
 export const CHROME = {

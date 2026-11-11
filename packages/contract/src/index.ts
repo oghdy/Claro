@@ -6,3 +6,5 @@ export * from "./describe";
 export * from "./data-model";
 export * from "./observation";
 export { deriveBlockDecisions } from "./decisions";
+export * from "./episode";
+export { validateEpisode, parseEpisode, solveProblems, type EpisodeValidation, type EpisodeContext, type EpisodeStats } from "./validate-episode";

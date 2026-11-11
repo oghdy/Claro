@@ -1,0 +1,1450 @@
+{
+  "_violation": {
+    "code": "DIFFER_ONE_SIDE",
+    "of": "episode-rate-2.json",
+    "rule": "§9-20 · D46 ④ — 서로 다르게 말하는 것은 양쪽을 나란히 (둘 이상이거나 빔)",
+    "what": "세 칸의 셋째 칸에 한쪽(10명)의 말만 남겼다",
+    "made_from": "fixtures/episode-rate-2.json + 위반 1개 (B-E1 · packages/contract/test/episode.test.ts 의 표)"
+  },
+  "episode_id": "d9556ce2-9e3a-441f-83b1-0378eee9714e",
+  "episode_version": 1,
+  "code": "fomc",
+  "event_ref": "013e49ec-c47f-4bdd-aa95-0bd04380d9a9",
+  "series": {
+    "series_id": "56551dfc-13ce-41a1-bfef-9608c1fe68b8",
+    "code": "rate",
+    "name": "금리는 어디로",
+    "sub": "연준과 물가, 그리고 브레이크"
+  },
+  "number": 2,
+  "track": [
+    {
+      "no": {
+        "t": "0화",
+        "ui": true
+      },
+      "title": {
+        "t": "지금까지의 이야기"
+      },
+      "state": "past"
+    },
+    {
+      "no": {
+        "t": "1화",
+        "ui": true
+      },
+      "title": {
+        "t": "3년 만에 금리를 올렸어요",
+        "src": [
+          "omo.2023",
+          "omo.2026"
+        ],
+        "calc": {
+          "3": "2026 − 2023 (마지막 인상 2023년 7월 · 다시 올린 2026년 9월)"
+        }
+      },
+      "state": "past"
+    },
+    {
+      "no": {
+        "t": "2화",
+        "ui": true
+      },
+      "title": {
+        "t": "물가가 높다면서, 왜 안 올렸을까"
+      },
+      "state": "now"
+    },
+    {
+      "no": {
+        "t": "다음 화"
+      },
+      "title": {
+        "t": "회의록이 나오면"
+      },
+      "state": "next"
+    }
+  ],
+  "docs": {
+    "ST-10": {
+      "source_id": "cf24cb79-2817-4ced-ad23-5d85ebc2972f",
+      "name": "연준 FOMC 성명문 (2026-10-28)"
+    },
+    "PC-10": {
+      "source_id": "da17b2b4-6e15-4a17-86b0-5381a4fe4353",
+      "name": "워시 의장 기자회견 녹취록 (2026-10-28 · 잠정본)"
+    },
+    "SP-COOK-0928": {
+      "source_id": "a99d6e13-386d-437b-a04a-24f365b50e60",
+      "name": "쿡 이사 연설 (2026-09-28)"
+    },
+    "ST-09": {
+      "source_id": "46967c02-9e96-466b-8e1e-eb75d95e3530",
+      "name": "연준 FOMC 성명문 (2026-09-16)"
+    },
+    "ST-07": {
+      "source_id": "b10c138c-b347-4758-944e-d9cf7520ac7f",
+      "name": "연준 FOMC 성명문 (2026-07-29)"
+    },
+    "SEP-09": {
+      "source_id": "70744561-8233-42e1-bb31-28a978e3bc49",
+      "name": "연준 경제전망 자료 (2026-09-16)"
+    },
+    "OMO": {
+      "source_id": "e8d68151-fdec-45c8-ad26-f14cb5ad88c6",
+      "name": "연준 — 목표금리 변경 이력 표"
+    },
+    "CAL": {
+      "source_id": "a8e134b4-0685-4aac-8b50-57c12560ea3b",
+      "name": "연준 — FOMC 회의 일정"
+    }
+  },
+  "quotes": {
+    "st10.date": {
+      "doc": "ST-10",
+      "quote": "October 28, 2026\nFederal Reserve issues FOMC statement"
+    },
+    "st10.vote": {
+      "doc": "ST-10",
+      "quote": "The Federal Open Market Committee approved the following statement for release by a 10 – 2 vote:"
+    },
+    "st10.hold": {
+      "doc": "ST-10",
+      "quote": "The Committee decided to maintain the target range for the federal funds rate at 3-3/4 to 4 percent"
+    },
+    "st10.econ": {
+      "doc": "ST-10",
+      "quote": "Economic activity is expanding at a strong pace."
+    },
+    "st10.infl": {
+      "doc": "ST-10",
+      "quote": "Inflation remains elevated."
+    },
+    "st10.more": {
+      "doc": "ST-10",
+      "quote": "The accumulation of more information will help the Committee determine the policy stance appropriate to ensure a timely return of inflation to the Committee's 2 percent goal."
+    },
+    "st10.dissent": {
+      "doc": "ST-10",
+      "quote": "Voting against the monetary policy action were Lisa D. Cook and Beth M. Hammack, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting."
+    },
+    "pc10.six": {
+      "doc": "PC-10",
+      "quote": "Americans, of course, are still dealing with inflation that has been running above\nthe Committee’s objective for close to 6 years."
+    },
+    "pc10.cond": {
+      "doc": "PC-10",
+      "quote": "Since our policy action in September, we have started to see some changes in financial\nand credit conditions. They have tightened for some businesses and households, much as we\nwould expect."
+    },
+    "pc10.nottight": {
+      "doc": "PC-10",
+      "quote": "And while overall financial conditions are tighter, I’m unwilling and unable to call\nthem tight."
+    },
+    "pc10.energy": {
+      "doc": "PC-10",
+      "quote": "But inflation is too high.\nEnergy and related prices have moved higher again in recent weeks."
+    },
+    "pc10.why": {
+      "doc": "PC-10",
+      "quote": "So why not just raise rates today?"
+    },
+    "pc10.calendar": {
+      "doc": "PC-10",
+      "quote": "quashing inflation is not about some fixed individual date on a calendar."
+    },
+    "pc10.acted": {
+      "doc": "PC-10",
+      "quote": "And so in September when we last met, we acted. We removed a dose\nof accommodation."
+    },
+    "pc10.notyet": {
+      "doc": "PC-10",
+      "quote": "you haven't delivered yet, you\nhaven't achieved price stability, you're right about that. But we're working on it."
+    },
+    "pc10.work": {
+      "doc": "PC-10",
+      "quote": "overwhelming judgment is that what we've done in this monetary medicine is starting to work\nsome, but there's no firm conclusions."
+    },
+    "pc10.clarity": {
+      "doc": "PC-10",
+      "quote": "take stock of where we are, evaluate what we're seeing out the window, ask ourselves\nwhether the period right in front of us is likely to provide more clarity on the appropriate\nprotocol. My judgment, the judgment of my overwhelming number of colleagues is that it would."
+    },
+    "pc10.means": {
+      "doc": "PC-10",
+      "quote": "dominant means in which this policy is going to be put into practice is we are tightening\nfinancial conditions. They've tightened a bit since we met last time. That isn't something that\nwe're uncomfortable with. That tells me that policy is working"
+    },
+    "pc10.dots18": {
+      "doc": "PC-10",
+      "quote": "I don't submit a dot. I don't plan on\nsubmitting a dot, but the 18 of them do."
+    },
+    "pc10.noprejudge": {
+      "doc": "PC-10",
+      "quote": "I also don't believe in prejudging meetings. A lot of things can\nhappen. So I'm not going to be able to share with you my musings about what happens when this\ngroup gets together six weeks from now."
+    },
+    "pc10.sched": {
+      "doc": "PC-10",
+      "quote": "2027, one meeting will focus exclusively on broad monetary policy strategy, with neither a vote\non the federal funds rate nor a policy statement anticipated."
+    },
+    "cook.date": {
+      "doc": "SP-COOK-0928",
+      "quote": "September 28, 2026\nAn Update on AI and the Economy\nGovernor Lisa D. Cook"
+    },
+    "cook.long": {
+      "doc": "SP-COOK-0928",
+      "quote": "This increase was to address inflation, which has been too high for too long."
+    },
+    "cook.pressure": {
+      "doc": "SP-COOK-0928",
+      "quote": "Furthermore, in coming months I expect to see continued pressure on inflation from the AI buildout, as discussed today, and from the pass-through of higher oil prices"
+    },
+    "st09.date": {
+      "doc": "ST-09",
+      "quote": "September 16, 2026\nFederal Reserve issues FOMC statement"
+    },
+    "st09.vote": {
+      "doc": "ST-09",
+      "quote": "The Federal Open Market Committee approved the following statement for release by a 12 – 0 vote:"
+    },
+    "st09.raise": {
+      "doc": "ST-09",
+      "quote": "The Committee decided to raise the target range for the federal funds rate by 1/4 percentage point to 3-3/4 to 4 percent"
+    },
+    "st09.econ": {
+      "doc": "ST-09",
+      "quote": "Economic activity is expanding at a solid pace."
+    },
+    "st09.infl": {
+      "doc": "ST-09",
+      "quote": "Inflation remains elevated. Today's policy action will support a timelier return to the Committee's 2 percent goal."
+    },
+    "st07.date": {
+      "doc": "ST-07",
+      "quote": "July 29, 2026\nFederal Reserve issues FOMC statement"
+    },
+    "st07.vote": {
+      "doc": "ST-07",
+      "quote": "The Federal Open Market Committee approved the following statement for release by a 9 – 3 vote:"
+    },
+    "st07.hold": {
+      "doc": "ST-07",
+      "quote": "The Committee decided to maintain the target range for the federal funds rate at 3-1/2 to 3-3/4 percent"
+    },
+    "st07.dissent": {
+      "doc": "ST-07",
+      "quote": "Voting against the monetary policy action were Beth M. Hammack, Neel Kashkari, and Lorie K. Logan, who preferred to raise the target range for the federal funds rate by 1/4 percentage point at this meeting."
+    },
+    "omo.2023": {
+      "doc": "OMO",
+      "quote": "2023\nDate | Increase | Decrease | Level (%)\nJuly 27 | 25 | 0 | 5.25-5.50"
+    },
+    "omo.after": {
+      "doc": "OMO",
+      "quote": "2025\nDate | Increase | Decrease | Level (%)\nDecember 11 | 0 | 25 | 3.50-3.75\nOctober 30 | 0 | 25 | 3.75-4.00\nSeptember 18 | 0 | 25 | 4.00-4.25\nBack to year navigation\n2024\nDate | Increase | Decrease | Level (%)\nDecember 19 | 0 | 25 | 4.25-4.50\nNovember 8 | 0 | 25 | 4.50-4.75\nSeptember 19 | 0 | 50 | 4.75-5.00"
+    },
+    "omo.2026": {
+      "doc": "OMO",
+      "quote": "2026\nDate | Increase | Decrease | Level (%)\nSeptember 17 | 25 | 0 | 3.75-4.00"
+    },
+    "sep.when": {
+      "doc": "SEP-09",
+      "quote": "In conjunction with the Federal Open Market Committee (FOMC) meeting held on September 15–16, 2026, meeting participants submitted their projections"
+    },
+    "sep.dots": {
+      "doc": "SEP-09",
+      "quote": "Midpoint of target range or target level (Percent) | 2026 | 2027 | 2028 | 2029 | Longer run\n4.500 | | | | |\n4.375 | 4 | 8 | | |\n4.250 | | | | |\n4.125 | 12 | 6 | 4 | |\n4.000 | | | | |\n3.875 | 2 | | 5 | 3 | 2"
+    },
+    "cal.eight": {
+      "doc": "CAL",
+      "quote": "The FOMC holds eight regularly scheduled meetings during the year and other meetings as needed."
+    },
+    "cal.minutes": {
+      "doc": "CAL",
+      "quote": "The minutes of regularly scheduled meetings are released three weeks after the date of the policy decision."
+    },
+    "cal.dec": {
+      "doc": "CAL",
+      "quote": "December\n8-9*\n* Meeting associated with a Summary of Economic Projections."
+    }
+  },
+  "voice_labels": {
+    "fact": "문서에 적힌 사실",
+    "official": "연준 · 위원이 한 말",
+    "explain": "Claro 가 풀어 쓴 설명"
+  },
+  "tools": [
+    {
+      "key": "rate",
+      "name": "기준금리",
+      "short": {
+        "t": "연준이 정하는 금리예요. 올리면 돈 빌리기가 비싸져요."
+      },
+      "body": [
+        {
+          "t": "미국 중앙은행인 연준이 정하는 금리예요. 연준 안의 회의(FOMC)가 한 해에 8번 정기적으로 모여서, 올릴지 내릴지 그대로 둘지를 정해요.",
+          "src": [
+            "cal.eight"
+          ],
+          "calc": {
+            "8": "원문의 “eight regularly scheduled meetings”"
+          },
+          "voice": "fact"
+        },
+        {
+          "t": "금리가 오르면 돈을 빌리는 일이 비싸져요. 대출을 받아 집을 사거나, 기업이 새 사업에 투자하기가 부담스러워지죠. 사람들이 지갑을 덜 열면 물가가 오르는 속도도 따라서 느려져요.",
+          "voice": "explain"
+        },
+        {
+          "t": "그래서 금리를 경제의 **브레이크 페달**에 빗대곤 해요.",
+          "voice": "explain"
+        }
+      ],
+      "use": {
+        "t": "오늘의 물음이 바로 이 브레이크예요. 왜 한 번 더 밟지 않았는지."
+      },
+      "basis": [
+        {
+          "concept_id": "70b67e38-ab9d-4c51-91ab-65eb36c08549",
+          "version": 1,
+          "part": null
+        },
+        {
+          "concept_id": "247d3e88-b62f-4811-9315-cf48de7e560e",
+          "version": 1,
+          "part": null
+        }
+      ]
+    },
+    {
+      "key": "target",
+      "name": "물가 목표",
+      "short": {
+        "t": "연준이 맞추려는 ‘물가가 오르는 속도’예요."
+      },
+      "body": [
+        {
+          "t": "뉴스에서 “물가가 높다”고 할 때의 물가는 값 자체가 아니라 **오르는 속도**예요. 라면이 얼마인지가 아니라, 작년보다 얼마나 빨리 비싸지고 있는지요.",
+          "voice": "explain"
+        },
+        {
+          "t": "연준은 이 속도가 한 해에 **2%** 정도면 적당하다고 봐요. 이게 물가 목표예요.",
+          "src": [
+            "st10.more"
+          ],
+          "voice": "fact"
+        },
+        {
+          "t": "지금은 그보다 빨라요. 의장 말로는, 목표를 웃돈 지 6년 가까이 됐어요.",
+          "src": [
+            "pc10.six"
+          ],
+          "voice": "official"
+        }
+      ],
+      "use": {
+        "t": "‘여전히 높다’는 말의 기준이에요. 목표보다 빠르다는 뜻이에요."
+      },
+      "basis": [
+        {
+          "concept_id": "8099c201-8ace-4262-acaf-8fda2a57b6d4",
+          "version": 4,
+          "part": null
+        },
+        {
+          "concept_id": "5941edb1-5d98-40d1-ba09-c25d372d5568",
+          "version": 1,
+          "part": null
+        }
+      ]
+    },
+    {
+      "key": "vote",
+      "name": "표결과 반대표",
+      "short": {
+        "t": "금리는 여럿이 투표로 정해요. 누가 반대했고 무엇을 원했는지도 공개돼요."
+      },
+      "body": [
+        {
+          "t": "금리는 한 사람이 정하지 않아요. 회의에서 투표권을 가진 **12명**이 표결로 정해요.",
+          "src": [
+            "st10.vote"
+          ],
+          "calc": {
+            "12": "10 + 2 (성명문의 “10 – 2 vote”)"
+          },
+          "voice": "explain"
+        },
+        {
+          "t": "결과는 성명문 첫 줄에 “10 대 2”처럼 적혀요. 반대한 사람의 이름과, 그 사람이 무엇을 원했는지도 같이 적히고요.",
+          "src": [
+            "st10.vote",
+            "st10.dissent"
+          ],
+          "voice": "fact"
+        },
+        {
+          "t": "그래서 ‘몇 대 몇’과 ‘반대가 어느 쪽이었나’를 보면, 회의 안에서 생각이 어떻게 갈렸는지 엿볼 수 있어요.",
+          "voice": "explain"
+        }
+      ],
+      "use": {
+        "t": "오늘의 표결을 읽는 법이에요. 반대한 둘이 어느 쪽이었는지가 열쇠였어요."
+      },
+      "basis": [
+        {
+          "concept_id": "70b67e38-ab9d-4c51-91ab-65eb36c08549",
+          "version": 1,
+          "part": null
+        },
+        {
+          "concept_id": "4b3796d2-cbee-4c2e-93d2-1a8ea8830723",
+          "version": 3,
+          "part": null
+        }
+      ]
+    },
+    {
+      "key": "conditions",
+      "name": "금융 여건",
+      "short": {
+        "t": "돈을 빌리기가 얼마나 쉬운지, 그 전반적인 형편이에요."
+      },
+      "body": [
+        {
+          "t": "연준이 정하는 금리는 하나지만, 우리가 실제로 만나는 건 대출 이자나 기업이 돈을 빌리는 조건 같은 것들이에요. 이런 ‘돈 빌리는 형편’을 통틀어 **금융 여건**이라고 불러요.",
+          "voice": "explain"
+        },
+        {
+          "t": "의장은 금리 정책이 듣는 주된 길이 바로 이 금융 여건을 조이는 것이라고 했어요.",
+          "src": [
+            "pc10.means"
+          ],
+          "voice": "official"
+        },
+        {
+          "t": "9월에 금리를 올린 뒤로 일부 기업과 가계에는 여건이 조여졌어요. 다만 의장은 전체를 두고 ‘빡빡하다’고 부를 수는 없다고 했어요.",
+          "src": [
+            "pc10.cond",
+            "pc10.nottight"
+          ],
+          "voice": "official"
+        }
+      ],
+      "use": {
+        "t": "금리와 물가 사이에 있는 가운데 고리예요. 연준이 지금 들여다보는 곳이고요."
+      },
+      "basis": []
+    },
+    {
+      "key": "dots",
+      "name": "점도표",
+      "short": {
+        "t": "회의 참가자들이 각자 적어 낸, 앞으로의 금리 예상이에요."
+      },
+      "body": [
+        {
+          "t": "연준은 한 해에 몇 차례, 회의 참가자들이 각자 생각하는 앞으로의 금리 예상을 이름 없이 모아 공개해요. 한 사람이 점 하나라서 **점도표**라고 불러요.",
+          "voice": "explain"
+        },
+        {
+          "t": "결정된 정책이 아니라 **각자의 예상**이에요. 약속이 아니에요.",
+          "voice": "explain"
+        },
+        {
+          "t": "표결은 12명이 하지만, 점은 투표권이 없는 참가자도 내요. 그래서 점은 18개예요. 의장은 내지 않고요.",
+          "src": [
+            "st09.vote",
+            "pc10.dots18"
+          ],
+          "voice": "fact"
+        }
+      ],
+      "use": {
+        "t": "다음 회차의 도구예요. 12월 회의에서 새 점도표가 나와요.",
+        "src": [
+          "cal.dec"
+        ]
+      },
+      "basis": [
+        {
+          "concept_id": "c02833e0-c337-4df6-ab2b-ff4abc6de0e4",
+          "version": 1,
+          "part": null
+        },
+        {
+          "concept_id": "4b3796d2-cbee-4c2e-93d2-1a8ea8830723",
+          "version": 3,
+          "part": null
+        }
+      ]
+    }
+  ],
+  "pickup": {
+    "tools": [
+      "rate",
+      "target",
+      "vote"
+    ],
+    "aha": [
+      "conditions"
+    ],
+    "next": [
+      "dots"
+    ]
+  },
+  "assembly": {
+    "new": [
+      "cover",
+      "zero",
+      "event",
+      "tools",
+      "aha",
+      "next",
+      "keep"
+    ],
+    "follower": [
+      "cover",
+      "event",
+      "tools",
+      "aha",
+      "compare",
+      "next",
+      "keep"
+    ]
+  },
+  "scenes": {
+    "cover": {
+      "episode": {
+        "t": "2화",
+        "ui": true
+      },
+      "title": "물가가 높다면서,\n왜 안 올렸을까",
+      "dek": {
+        "t": "미국 중앙은행이 금리를 그대로 뒀어요. 그런데 같은 날 낸 성명문에는 “물가는 여전히 높다”고 적혀 있었어요.",
+        "src": [
+          "st10.hold",
+          "st10.infl"
+        ]
+      },
+      "meta": {
+        "t": "2026년 10월 28일 결정 · 표결 10 대 2",
+        "src": [
+          "st10.date",
+          "st10.vote"
+        ]
+      },
+      "new_hint": {
+        "t": "이 시리즈가 처음이시네요. 지금까지의 이야기부터 짧게 볼게요."
+      },
+      "recap_label": "지난 이야기",
+      "recap": [
+        {
+          "t": "지난 화에서 연준은 3년 만에 금리를 올렸어요. 9월 16일, 12 대 0이었어요.",
+          "src": [
+            "st09.date",
+            "st09.vote",
+            "st09.raise",
+            "omo.2023"
+          ],
+          "calc": {
+            "3": "2026 − 2023 (마지막 인상 2023년 7월)"
+          }
+        },
+        {
+          "t": "물가가 갑자기 튀어서가 아니었어요. 내려오는 속도가 충분히 빠르지 않다고 봤기 때문이었죠."
+        }
+      ],
+      "ask_new": "이 이야기, 어디서 시작됐죠?",
+      "ask_follower": "그래서 이번엔 어떻게 됐죠?"
+    },
+    "zero": {
+      "kicker": {
+        "t": "0화와 1화 · 지금까지의 이야기",
+        "ui": true
+      },
+      "title": {
+        "t": "지난 회의에서는\n3년 만에 올렸어요",
+        "src": [
+          "omo.2023",
+          "st09.raise",
+          "st09.date"
+        ],
+        "calc": {
+          "3": "2026 − 2023 (마지막 인상 2023년 7월 · 다시 올린 2026년 9월)"
+        }
+      },
+      "beats": [
+        {
+          "when": {
+            "t": "2023년 7월",
+            "src": [
+              "omo.2023"
+            ]
+          },
+          "head": "마지막으로 올린 날",
+          "body": {
+            "t": "연준이 금리를 올린 건 이때가 마지막이었어요. 그 뒤로는 그대로 두거나 내리기만 했어요.",
+            "src": [
+              "omo.2023",
+              "omo.after"
+            ],
+            "voice": "fact"
+          }
+        },
+        {
+          "when": {
+            "t": "2026년 7월 29일",
+            "src": [
+              "st07.date"
+            ]
+          },
+          "head": "“올리자”는 세 사람",
+          "body": {
+            "t": "금리는 그대로였어요. 그런데 투표한 12명 가운데 3명이 “지금 올려야 한다”며 반대했어요.",
+            "src": [
+              "st07.vote",
+              "st07.hold",
+              "st07.dissent"
+            ],
+            "calc": {
+              "12": "9 + 3 (성명문의 “9 – 3 vote”)"
+            },
+            "voice": "fact"
+          }
+        },
+        {
+          "when": {
+            "t": "2026년 9월 16일",
+            "src": [
+              "st09.date"
+            ]
+          },
+          "head": "지난 화 · 모두가 “올리자”",
+          "body": {
+            "t": "이번엔 반대가 없었어요. 12 대 0. 금리는 0.25%포인트 올라 3.75~4%가 됐어요.",
+            "src": [
+              "st09.vote",
+              "st09.raise"
+            ],
+            "voice": "fact"
+          }
+        },
+        {
+          "when": {
+            "t": "2026년 10월 28일",
+            "src": [
+              "st10.date"
+            ]
+          },
+          "head": "그리고, 오늘",
+          "body": {
+            "t": "6주 뒤에 다시 모였어요. 물가는 아직 목표보다 높아요. 이번에도 올렸을까요?",
+            "src": [
+              "st09.date",
+              "st10.date",
+              "st10.infl"
+            ],
+            "calc": {
+              "6": "9월 16일 → 10월 28일 = 42일"
+            },
+            "voice": "explain"
+          }
+        }
+      ],
+      "ask": "그래서 이번엔 어떻게 됐죠?"
+    },
+    "event": {
+      "kicker": {
+        "t": "2화 · 오늘의 사건",
+        "ui": true
+      },
+      "title": "연준은 금리를\n그대로 뒀어요",
+      "lead": {
+        "t": "10월 28일, 미국 중앙은행인 연준은 기준금리를 3.75~4%로 그대로 두기로 했어요. 올리지도 내리지도 않은 거예요. 이런 결정을 흔히 ‘동결’이라고 불러요.",
+        "src": [
+          "st10.date",
+          "st10.hold"
+        ],
+        "voice": "fact"
+      },
+      "figures": [
+        {
+          "who": "기준금리",
+          "amount": {
+            "t": "3.75~4%",
+            "src": [
+              "st10.hold"
+            ]
+          },
+          "tag": "그대로"
+        },
+        {
+          "who": "표결",
+          "amount": {
+            "t": "10 대 2",
+            "src": [
+              "st10.vote"
+            ]
+          },
+          "tag": "반대 둘"
+        }
+      ],
+      "figure_note": {
+        "t": "반대한 두 사람은 내리자는 쪽이 아니었어요. 리사 쿡, 베스 해맥 두 위원 모두 “이번에 0.25%포인트 올리자”는 쪽이었어요.",
+        "src": [
+          "st10.dissent"
+        ],
+        "voice": "fact"
+      },
+      "quote_label": "같은 날, 성명문의 한 문장",
+      "quote": {
+        "t": "“물가 상승률은 여전히 높다.”",
+        "src": [
+          "st10.infl"
+        ],
+        "voice": "fact"
+      },
+      "quote_note": "영어로 된 성명문의 문장을 우리말로 옮긴 거예요.",
+      "riddle": [
+        {
+          "t": "이상하죠. 물가가 높으면 금리를 올려서 잡는다고들 하잖아요. 지난 회의에서는 실제로 올렸고요.",
+          "src": [
+            "st09.raise"
+          ],
+          "voice": "explain"
+        },
+        {
+          "t": "기자회견의 첫 질문도 이거였어요. **“그럼 왜 오늘 올리지 않았나요?”**",
+          "src": [
+            "pc10.why"
+          ],
+          "voice": "fact"
+        }
+      ],
+      "ask": "물가가 높다면서, 왜 안 올렸죠?"
+    },
+    "tools": {
+      "kicker": "도구 줍기",
+      "title_new": "풀기 전에,\n도구 세 개만 챙겨요",
+      "title_follower": "오늘 새로 필요한 도구는\n하나예요",
+      "sub_new": {
+        "t": "아는 건 “알아요”를 누르면 접혀요. 접어도 언제든 다시 펼 수 있어요."
+      },
+      "sub_follower": {
+        "t": "나머지 둘은 지난 화에서 주우셨어요. 접어 뒀어요."
+      },
+      "ask": "그래서, 왜 안 올린 거죠?"
+    },
+    "aha": {
+      "kicker": "풀이",
+      "real_label": "실제로 연준이 말한 것",
+      "real": [
+        {
+          "head": {
+            "t": "10 대 2",
+            "src": [
+              "st10.vote"
+            ]
+          },
+          "body": {
+            "t": "반대한 둘은 모두 올리자는 쪽이었어요. 내리자는 표는 없었어요. 표결에서 갈린 건 ‘올릴까 내릴까’가 아니라 **‘지금 올릴까, 그대로 둘까’**였어요.",
+            "src": [
+              "st10.vote",
+              "st10.dissent"
+            ],
+            "voice": "fact"
+          }
+        },
+        {
+          "head": {
+            "t": "6년 가까이",
+            "src": [
+              "pc10.six"
+            ]
+          },
+          "body": {
+            "t": "물가가 목표를 웃돈 기간이에요. 의장은 “물가는 너무 높다”고 했고, 최근 몇 주 사이 에너지값이 다시 올랐다고도 했어요.",
+            "src": [
+              "pc10.six",
+              "pc10.energy"
+            ],
+            "voice": "official"
+          }
+        },
+        {
+          "head": {
+            "t": "듣기 시작"
+          },
+          "body": {
+            "t": "9월에 올린 뒤 금융 여건이 조금 조여졌고, 의장은 이걸 정책이 듣고 있다는 신호로 읽었어요. 그러면서도 “확실한 결론은 없다”고 했어요.",
+            "src": [
+              "pc10.cond",
+              "pc10.means",
+              "pc10.work"
+            ],
+            "voice": "official"
+          }
+        }
+      ],
+      "verdict": {
+        "t": "그래서 의장의 답은 이랬어요. 물가를 잡는 일은 달력의 어느 하루에 달린 게 아니다. 지금까지 한 것을 점검하고, 곧 더 분명해질 것을 본 뒤에 정하겠다.",
+        "src": [
+          "pc10.calendar",
+          "pc10.clarity"
+        ],
+        "voice": "official"
+      },
+      "ask_new": "그럼 다음엔 올리나요?",
+      "ask_follower": "지난 회의와는 뭐가 달라졌죠?"
+    },
+    "compare": {
+      "kicker": "따라온 독자에게만",
+      "title": "결정은 달라졌고,\n걱정은 그대로예요",
+      "lead": {
+        "t": "지난 화에서 본 회의와 나란히 놓아 볼게요."
+      },
+      "cols": [
+        {
+          "t": "9월 16일",
+          "src": [
+            "st09.date"
+          ]
+        },
+        {
+          "t": "10월 28일",
+          "src": [
+            "st10.date"
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "label": "결정",
+          "a": {
+            "t": "0.25%포인트 올림",
+            "src": [
+              "st09.raise"
+            ]
+          },
+          "b": {
+            "t": "그대로 (3.75~4%)",
+            "src": [
+              "st10.hold"
+            ]
+          }
+        },
+        {
+          "label": "표결",
+          "a": {
+            "t": "12 대 0",
+            "src": [
+              "st09.vote"
+            ]
+          },
+          "b": {
+            "t": "10 대 2 (둘은 “올리자”)",
+            "src": [
+              "st10.vote",
+              "st10.dissent"
+            ]
+          }
+        },
+        {
+          "label": "경기를 본 말",
+          "a": {
+            "t": "‘견조한’ 속도로 커지는 중",
+            "src": [
+              "st09.econ"
+            ]
+          },
+          "b": {
+            "t": "‘강한’ 속도로 커지는 중",
+            "src": [
+              "st10.econ"
+            ]
+          }
+        },
+        {
+          "label": "물가를 본 말",
+          "a": {
+            "t": "여전히 높다",
+            "src": [
+              "st09.infl"
+            ]
+          },
+          "b": {
+            "t": "여전히 높다",
+            "src": [
+              "st10.infl"
+            ]
+          }
+        },
+        {
+          "label": "앞날을 본 말",
+          "a": {
+            "t": "오늘의 인상이 2% 복귀를 앞당길 것",
+            "src": [
+              "st09.infl"
+            ]
+          },
+          "b": {
+            "t": "정보가 더 쌓이면 알맞은 수준을 정하겠다",
+            "src": [
+              "st10.more"
+            ]
+          }
+        }
+      ],
+      "body": [
+        {
+          "t": "물가를 본 문장은 한 글자도 바뀌지 않았어요. 경기를 본 말은 오히려 한 단계 세졌고요. 그러니 ‘경기가 식어서 멈췄다’고 읽을 근거는 성명문에 없어요.",
+          "src": [
+            "st09.infl",
+            "st10.infl",
+            "st09.econ",
+            "st10.econ"
+          ],
+          "voice": "explain"
+        },
+        {
+          "t": "반대표의 흐름도 볼 만해요. 7월엔 3명이 “올리자”며 반대했고, 9월엔 반대가 없었고, 10월엔 다시 2명이 “올리자”며 반대했어요. 7월에 반대한 세 사람 가운데 이번에도 반대한 건 해맥 위원 한 사람이에요.",
+          "src": [
+            "st07.date",
+            "st07.vote",
+            "st07.dissent",
+            "st09.date",
+            "st09.vote",
+            "st10.date",
+            "st10.vote",
+            "st10.dissent"
+          ],
+          "voice": "fact"
+        }
+      ],
+      "ask": "그럼 다음엔 올리나요?"
+    },
+    "next": {
+      "kicker": "이어짐",
+      "title": "아직 몰라요.\n의장도 말하지 않았어요",
+      "lead": {
+        "t": "오늘은 이 시리즈의 한 회차예요. 어디까지 왔고, 무엇이 남았는지 볼게요."
+      },
+      "line": [
+        {
+          "when": {
+            "t": "2023. 7",
+            "src": [
+              "omo.2023"
+            ]
+          },
+          "what": "마지막 인상",
+          "state": "past"
+        },
+        {
+          "when": {
+            "t": "2026. 7. 29",
+            "src": [
+              "st07.date"
+            ]
+          },
+          "what": "동결 · “올리자” 셋",
+          "state": "past"
+        },
+        {
+          "when": {
+            "t": "2026. 9. 16",
+            "src": [
+              "st09.date"
+            ]
+          },
+          "what": "인상 · 반대 없음",
+          "state": "past"
+        },
+        {
+          "when": {
+            "t": "2026. 10. 28",
+            "src": [
+              "st10.date"
+            ]
+          },
+          "what": "동결 · “올리자” 둘",
+          "state": "now"
+        },
+        {
+          "when": {
+            "t": "다음"
+          },
+          "what": "?",
+          "state": "next"
+        }
+      ],
+      "here_label": "지금 여기",
+      "tool_lead": "가는 길에 도구 하나 더.",
+      "coming_label": "다음 회차가 될 일들",
+      "coming": [
+        {
+          "head": "회의록이 나오면",
+          "body": {
+            "t": "회의에서 오간 이야기를 적은 기록(회의록)은 결정 3주 뒤에 공개돼요. 이번 것은 11월 18일 무렵이에요. 10명과 2명이 각각 어떤 까닭을 댔는지는 거기서 볼 수 있어요.",
+            "src": [
+              "cal.minutes",
+              "st10.date",
+              "st10.vote"
+            ],
+            "calc": {
+              "3": "원문의 “three weeks”",
+              "11": "10월 28일 + 3주",
+              "18": "10월 28일 + 21일 = 11월 18일"
+            },
+            "voice": "fact"
+          }
+        },
+        {
+          "head": "올해 마지막 회의",
+          "body": {
+            "t": "다음 회의는 12월 8~9일이에요. 새 점도표도 이때 나와요. 9월 점도표에서는 18명 가운데 16명이 올해 안에 금리가 지금보다 높아질 거라고 봤어요. 그 예상이 그대로일지는 그때 알 수 있어요.",
+            "src": [
+              "cal.dec",
+              "sep.when",
+              "sep.dots",
+              "pc10.dots18"
+            ],
+            "calc": {
+              "16": "12 + 4 (2026년 말 금리를 4.125 · 4.375 로 본 사람 — 지금 범위의 가운데 3.875 보다 높다)"
+            },
+            "voice": "fact"
+          }
+        },
+        {
+          "head": "회의 방식도 바뀌어요",
+          "body": {
+            "t": "의장은 2027년부터 회의 한 번은 금리 표결 없이 큰 전략만 다루겠다고 했어요.",
+            "src": [
+              "pc10.sched"
+            ],
+            "voice": "official"
+          }
+        }
+      ],
+      "unknown_label": "아직 모르는 것",
+      "unknown": [
+        {
+          "t": "다음 회의에서 올릴지, 그대로 둘지"
+        },
+        {
+          "t": "반대한 두 위원이 직접 밝힌 까닭"
+        },
+        {
+          "t": "지난 인상의 힘이 물가까지 닿을지"
+        }
+      ],
+      "unknown_note": {
+        "t": "의장은 다음 회의를 미리 짐작해 말하지 않겠다고 했어요. 그래서 우리도 짐작하지 않을게요.",
+        "src": [
+          "pc10.noprejudge"
+        ],
+        "voice": "official"
+      },
+      "ask": "오늘 내가 얻은 건 뭐죠?"
+    },
+    "keep": {
+      "kicker": "남음",
+      "title": "수수께끼 하나를 풀었고,\n도구가 남았어요",
+      "line": "“금리를 그대로 뒀다”는\n“이제 됐다”가 아니라\n“아직 정하지 않았다”일 수 있다.",
+      "next_body": {
+        "t": "회의록이 나오면 열려요. 10명과 2명이 왜 갈렸는지 같이 볼게요.",
+        "src": [
+          "st10.vote"
+        ]
+      }
+    }
+  },
+  "solve": {
+    "entry": {
+      "first_thought": {
+        "t": "물가가 높으면 금리를 올려서 잡는다고들 해요. 그러니 올리지 않았다면 이제 괜찮다는 뜻 같아요.",
+        "voice": "explain"
+      },
+      "breaker": {
+        "t": "그런데 같은 날 성명문은 물가가 여전히 높다고 적었어요. 반대한 둘도 내리자가 아니라 올리자는 쪽이었고요.",
+        "src": [
+          "st10.infl",
+          "st10.dissent"
+        ],
+        "voice": "fact"
+      },
+      "flip": {
+        "label": "뒤집어 보면",
+        "a": "“금리를 그대로 뒀다”",
+        "op": "≠",
+        "b": "“이제 됐다”",
+        "note": {
+          "t": "‘그대로’는 ‘충분하다’가 아니라 **‘아직 정하지 않았다’**에 가까웠어요. 성명문은 물가가 여전히 높다고 했고, 의장도 물가 안정을 아직 이루지 못했다고 인정했어요. 알맞은 금리 수준은 정보가 더 쌓이면 정하겠다는 거예요.",
+          "src": [
+            "st10.infl",
+            "pc10.notyet",
+            "st10.more"
+          ],
+          "voice": "explain"
+        }
+      },
+      "not_drawn": [
+        "금리 · 물가의 값 — 그림의 수는 성명문의 표결 수뿐이다",
+        "올린 뒤 물가가 어떻게 되는지 — 아무도 모른다 (의장: 확실한 결론은 없다). 둘째 고리는 점선과 물음표",
+        "반대한 두 위원의 까닭 — 이번 표결을 설명한 글이 저장된 문서에 없다"
+      ],
+      "whose": {
+        "t": "여기까지는 **성명문과 의장의 말**이에요. 반대한 두 위원이 이번 표결을 직접 설명한 글은, 우리가 확인한 문서에 아직 없어요. 쿡 위원은 회의 한 달 전 연설에서 물가가 너무 오래 높았고, 앞으로 몇 달도 물가를 밀어 올리는 힘이 이어질 거라고 말했어요. 다만 그건 그때의 생각이지, 이번 반대의 설명은 아니에요.",
+        "src": [
+          "cook.date",
+          "cook.long",
+          "cook.pressure"
+        ]
+      },
+      "death": false
+    },
+    "lab": {
+      "title": "회의 자리에\n앉아 볼게요",
+      "seen_title": null,
+      "setup": [
+        {
+          "t": "당신은 금리를 정하는 12명 가운데 한 사람이에요. 먼저 지난 9월 회의로 돌아가 볼게요. 물가는 목표보다 높았고, 위원회는 브레이크를 밟기로 했어요.",
+          "src": [
+            "st09.date",
+            "st09.vote",
+            "st09.raise",
+            "st09.infl"
+          ],
+          "voice": "explain"
+        },
+        {
+          "t": "직접 밟아 보세요. 그리고 그 힘이 어디까지 가는지 지켜보세요.",
+          "voice": "explain"
+        }
+      ],
+      "frames": [
+        {
+          "kind": "chain",
+          "picture": {
+            "id": "rate-brake",
+            "tool": "conditions"
+          },
+          "tab": {
+            "t": "9월 회의",
+            "src": [
+              "st09.date"
+            ]
+          },
+          "nodes": [
+            {
+              "id": "rate",
+              "name": "기준금리",
+              "reach": "full",
+              "idle": "아직 그대로",
+              "after": {
+                "t": "올렸어요",
+                "src": [
+                  "st09.raise"
+                ]
+              }
+            },
+            {
+              "id": "cond",
+              "name": "돈 빌리는 형편",
+              "reach": "part",
+              "idle": "아직 그대로",
+              "after": {
+                "t": "일부에서 조여짐",
+                "src": [
+                  "pc10.cond"
+                ]
+              }
+            },
+            {
+              "id": "infl",
+              "name": "물가가 오르는 속도",
+              "reach": "none",
+              "still": {
+                "t": "여전히 높음",
+                "src": [
+                  "st10.infl"
+                ]
+              }
+            }
+          ],
+          "unknown": "닿을까?",
+          "action": "브레이크 밟기",
+          "again": "처음으로",
+          "caption": {
+            "before": {
+              "t": "9월 회의예요. 물가는 목표보다 높아요. 브레이크를 밟아 보세요.",
+              "src": [
+                "st09.date",
+                "st09.infl"
+              ]
+            },
+            "after": {
+              "t": "밟았어요. 힘이 가운데 고리까지는 갔어요. 돈 빌리는 형편이 일부 기업과 가계에서 조여졌거든요. 그런데 물가는 아직 그대로 높아요. **이 브레이크는 밟는 즉시 듣지 않아요.**",
+              "src": [
+                "st09.raise",
+                "pc10.cond",
+                "st10.infl"
+              ],
+              "voice": "explain"
+            }
+          },
+          "go_on": {
+            "t": "6주 뒤, 10월 회의로",
+            "src": [
+              "st09.date",
+              "st10.date"
+            ],
+            "calc": {
+              "6": "9월 16일 → 10월 28일 = 42일"
+            }
+          }
+        },
+        {
+          "kind": "seats",
+          "picture": {
+            "id": "fomc-seats",
+            "tool": "vote"
+          },
+          "tab": {
+            "t": "10월 회의",
+            "src": [
+              "st10.date"
+            ]
+          },
+          "ground": {
+            "body": "연준 FOMC",
+            "split": "official-dissent",
+            "record": [
+              "st10.vote",
+              "st10.dissent"
+            ]
+          },
+          "label": "회의 자리",
+          "you": "나",
+          "sides": [
+            {
+              "id": "wait",
+              "choose": "그대로 두고 더 본다",
+              "group": {
+                "t": "그대로 두자 · 10명",
+                "src": [
+                  "st10.vote"
+                ]
+              },
+              "count": 10,
+              "said": {
+                "t": "10명이 앉은 쪽이에요. 의장이 전한 판단은 이래요. 지금까지 한 처방이 듣기 시작했지만 확실한 결론은 없다. 곧 더 분명해질 테니, 그걸 보고 정하자.",
+                "src": [
+                  "st10.vote",
+                  "pc10.work",
+                  "pc10.clarity"
+                ],
+                "voice": "official"
+              },
+              "why": "in-doc",
+              "not_yet_note": null
+            },
+            {
+              "id": "raise",
+              "choose": "한 번 더 올린다",
+              "group": {
+                "t": "올리자 · 2명",
+                "src": [
+                  "st10.vote"
+                ]
+              },
+              "count": 2,
+              "said": {
+                "t": "2명이 앉은 쪽이에요. 쿡, 해맥 두 위원이 “이번에 0.25%포인트 올리자”고 했어요. 다만 두 사람이 이번 표결의 까닭을 직접 설명한 글은, 우리가 확인한 문서에 아직 없어요.",
+                "src": [
+                  "st10.vote",
+                  "st10.dissent"
+                ],
+                "voice": "fact"
+              },
+              "why": "not-yet",
+              "not_yet_note": "다만 두 사람이 이번 표결의 까닭을 직접 설명한 글은, 우리가 확인한 문서에 아직 없어요."
+            }
+          ],
+          "other": "다른 쪽에도 앉아 보기",
+          "result": {
+            "t": "실제 결과 · 10 대 2로 ‘그대로’",
+            "src": [
+              "st10.vote",
+              "st10.hold"
+            ]
+          },
+          "caption": {
+            "before": {
+              "t": "6주 뒤, 10월 회의예요. 12명이 같은 그림을 봤어요. 힘은 가운데까지 왔고, 물가는 아직 높아요. 당신이라면요?",
+              "src": [
+                "st09.date",
+                "st10.date",
+                "st10.vote",
+                "pc10.cond",
+                "st10.infl"
+              ],
+              "calc": {
+                "6": "9월 16일 → 10월 28일 = 42일",
+                "12": "10 + 2"
+              }
+            }
+          }
+        }
+      ],
+      "born": {
+        "lead": "방금 본 가운데 고리에는 이름이 있어요.",
+        "tool": "conditions"
+      }
+    },
+    "plain": {
+      "kind": "three",
+      "why": null,
+      "title": "오늘 나온 말을\n세 칸에 나눠 볼게요",
+      "lead": {
+        "t": "왜 안 올렸는지, 연준이 낸 문서에서 확인되는 것과 아직 아닌 것을 갈라 볼게요."
+      },
+      "known": [
+        {
+          "t": "10월 28일, 연준은 기준금리를 3.75~4%로 그대로 뒀어요.",
+          "src": [
+            "st10.date",
+            "st10.hold"
+          ],
+          "voice": "fact"
+        },
+        {
+          "t": "표결은 10 대 2였어요. 반대한 둘은 “이번에 0.25%포인트 올리자”는 쪽이었어요. 내리자는 표는 없었어요.",
+          "src": [
+            "st10.vote",
+            "st10.dissent"
+          ],
+          "voice": "fact"
+        },
+        {
+          "t": "성명문은 물가가 여전히 높다고 적었어요. 의장은 물가가 목표를 웃돈 지 6년 가까이 됐다고 했고요.",
+          "src": [
+            "st10.infl",
+            "pc10.six"
+          ],
+          "voice": "official"
+        },
+        {
+          "t": "9월에 금리를 올린 뒤로, 돈 빌리는 형편이 일부 기업과 가계에서 조여졌어요.",
+          "src": [
+            "pc10.cond"
+          ],
+          "voice": "official"
+        }
+      ],
+      "unknown": [
+        {
+          "t": "반대한 두 위원이 이번 표결의 까닭을 직접 설명한 글. 우리가 확인한 문서에 아직 없어요."
+        },
+        {
+          "t": "9월에 올린 힘이 물가까지 닿을지. 의장도 “확실한 결론은 없다”고 했어요.",
+          "src": [
+            "st09.date",
+            "pc10.work"
+          ],
+          "voice": "official"
+        },
+        {
+          "t": "다음 회의에서 올릴지, 그대로 둘지. 의장은 미리 짐작해 말하지 않겠다고 했어요.",
+          "src": [
+            "pc10.noprejudge"
+          ],
+          "voice": "official"
+        }
+      ],
+      "differ": [
+        {
+          "who": {
+            "t": "10명 · 그대로 두자",
+            "src": [
+              "st10.vote"
+            ]
+          },
+          "says": {
+            "t": "의장이 전한 판단은 이래요. 지금까지 한 처방이 듣기 시작했지만 확실한 결론은 없다. 곧 더 분명해질 테니, 그걸 보고 정하자.",
+            "src": [
+              "pc10.work",
+              "pc10.clarity"
+            ],
+            "voice": "official"
+          }
+        }
+      ],
+      "differ_note": {
+        "t": "같은 회의에서 같은 그림을 본 사람들의 판단이 갈렸어요. 어느 쪽이 맞는지는 우리가 정하지 않아요."
+      }
+    }
+  },
+  "map": {
+    "where_today": {
+      "t": "2화에서 주움",
+      "ui": true
+    },
+    "at": {
+      "rate": [
+        22,
+        70
+      ],
+      "conditions": [
+        50,
+        47
+      ],
+      "target": [
+        78,
+        68
+      ],
+      "vote": [
+        25,
+        23
+      ],
+      "dots": [
+        74,
+        21
+      ]
+    },
+    "edges": [
+      [
+        "rate",
+        "conditions"
+      ],
+      [
+        "conditions",
+        "target"
+      ],
+      [
+        "rate",
+        "vote"
+      ],
+      [
+        "vote",
+        "dots"
+      ]
+    ],
+    "ghosts": [
+      {
+        "name": "회의록",
+        "at": [
+          49,
+          9
+        ],
+        "from": "vote"
+      },
+      {
+        "name": "이중 책무",
+        "at": [
+          52,
+          91
+        ],
+        "from": "target"
+      }
+    ]
+  }
+}

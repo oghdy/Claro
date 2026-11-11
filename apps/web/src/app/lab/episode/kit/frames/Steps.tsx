@@ -33,7 +33,7 @@ function ChainPicture({ frame: f, after, carried }: { frame: ChainFrame; after: 
           <li key={n.id} data-node={n.id} data-state={n.reach === "none" ? "still" : !after ? "idle" : n.reach === "full" ? "on" : "part"}>
             <span className="fr-dot" aria-hidden="true" />
             <strong>{n.name}</strong>
-            <em>{n.reach === "none" ? n.still : after ? n.after : n.idle}</em>
+            <em>{n.reach === "none" ? n.still.t : after ? n.after.t : n.idle}</em>
           </li>
         );
         if (!next) return [node];
@@ -71,10 +71,12 @@ const cols = (f: SeatsFrame) => f.sides.map((s) => `${Math.max(2, Math.round(s.c
 
 /** choice: 내가 앉은 쪽 (null = 아직 안 골랐다) */
 function SeatsPicture({ frame: f, choice }: { frame: SeatsFrame; choice: string | null }) {
-  const total = f.sides[0].count + f.sides[1].count;
+  // 쪽은 둘이다 (계약 불변식 16)
+  const first = f.sides[0]!;
+  const total = first.count + f.sides[1]!.count;
   // 나를 뺀 자리들 — 내가 앉은 쪽은 그만큼 다른 사람이 하나 적다. 합은 늘 문서의 수다
   const others = Array.from({ length: total - 1 }, (_, i) => i);
-  const firstOthers = choice === f.sides[0].id ? f.sides[0].count - 1 : f.sides[0].count;
+  const firstOthers = choice === first.id ? first.count - 1 : first.count;
   return (
     <div className="fr-seats" data-split={choice ?? undefined} style={choice ? { gridTemplateColumns: cols(f) } : undefined} aria-label={f.label} data-picture={f.picture.id}>
       {choice === null ? (
@@ -207,9 +209,9 @@ export function StepsCard({ frames, seen = false }: { frames: readonly StepFrame
           <Rich text={caption.t} />
         </p>
 
-        {cur.kind === "chain" && isPressed && cur.goOn && phase < frames.length - 1 ? (
+        {cur.kind === "chain" && isPressed && cur.go_on && phase < frames.length - 1 ? (
           <motion.button type="button" className="ep-lab-nextrule" onClick={() => setPhase(phase + 1)} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.35 }} data-testid="lab-go-on">
-            {cur.goOn.t}
+            {cur.go_on.t}
             <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
               <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

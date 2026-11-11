@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LayoutGroup, motion, useAnimationControls } from "motion/react";
 import { CHROME } from "../chrome";
 import { Rich } from "../parts";
+import { PICTURES } from "./pictures";
 import type { ToggleFrame } from "./types";
 
 // 틀: 켜고 끄기 — 독자가 같은 버튼을 두 번 누른다.
@@ -25,7 +26,8 @@ export function ToggleCard({ frame: f, seen = false }: { frame: ToggleFrame; see
   const tag = useAnimationControls();
   const link = useAnimationControls();
 
-  const st = f.stage;
+  // 그림은 틀의 데이터가 아니다 — 개념의 그림 부품 (pictures.ts). 계약의 틀은 이름만 가리킨다
+  const st = PICTURES[f.picture.id]!;
   const [big, small] = st.sides;
   const guests = Array.from({ length: st.drawn.tokens }, (_, i) => i);
   const on = still || rule === "on";
@@ -45,7 +47,7 @@ export function ToggleCard({ frame: f, seen = false }: { frame: ToggleFrame; see
     void link.start({ scale: [1, 1.22, 1], transition: { duration: 0.45 } });
   };
 
-  const caption = rule === "off" ? (done.off ? f.caption.offAfter : f.caption.offBefore) : done.on ? f.caption.onAfter : f.caption.onBefore;
+  const caption = rule === "off" ? (done.off ? f.caption.off_after : f.caption.off_before) : done.on ? f.caption.on_after : f.caption.on_before;
 
   return (
     <LayoutGroup>
@@ -147,7 +149,7 @@ export function ToggleCard({ frame: f, seen = false }: { frame: ToggleFrame; see
 
             {rule === "off" && done.off ? (
               <motion.button type="button" className="ep-lab-nextrule" onClick={() => setRule("on")} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.35 }} data-testid="lab-go-on">
-                {f.goOn}
+                {f.go_on}
                 <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
                   <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

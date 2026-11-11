@@ -8,7 +8,7 @@ import { LabCard } from "./frames/LabCard";
 import { PlainFlipLead, PlainQuietBody, PlainThreeCards } from "./frames/Plain";
 import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
 import { SHELF } from "./shelf";
-import type { EpisodeData, ReaderId, SceneId, T } from "./types";
+import { toolOf, type EpisodeData, type ReaderId, type SceneId, type T } from "./types";
 
 // 한 회차 — 처음부터 끝까지 (공통 뼈대). 넘어가는 방법은 본 화면과 같다 (D26): 한 번에 한 장 · 물음 버튼 하나 · 누른 물음이 다음 장의 머리.
 // 달라진 것은 (1) 회차가 시리즈 안에 있다 (2) 독자가 아는 개념은 접힌다 (3) 끝에 내 개념 지도가 자란다 (D57).
@@ -16,7 +16,7 @@ import type { EpisodeData, ReaderId, SceneId, T } from "./types";
 //
 // UX-2: 두 회차(배달앱 · FOMC)가 이 한 부품 위에 올라간다.
 // UX-4: 풀이 장면도 회차의 부품이 아니다 — 회차는 **틀에 넣을 데이터**(ep.solve)만 주고, 틀 부품(kit/frames)이 화면을 세운다. 회차가 주는 것은 —
-//   ep    글 · 근거 · 개념 · 두 독자 · 조립 · 지도 자리 · 풀이 칸 (episodes/*/data.ts)
+//   ep    글 · 근거 · 도구 · 조립 · 지도 자리 · 풀이 칸 = 계약의 회차 (골든 픽스처 fixtures/episode-*.json — B-E1) + 시안 전용 (두 독자의 고정값 · 주소)
 //   Art   표지 그림            Glyph 도구 카드의 작은 그림
 // 장면 여덟의 모양과 차례는 여기 있고, 회차는 바꾸지 못한다.
 
@@ -49,7 +49,7 @@ function SeriesTrack() {
   const { ep } = useEp();
   return (
     <ol className="ep-track">
-      {ep.series.episodes.map((e) => (
+      {ep.track.map((e) => (
         <li key={e.no.t} data-state={e.state}>
           <span className="ep-track-dot" aria-hidden="true" />
           <span className="ep-track-no">{e.no.t}</span>
@@ -66,7 +66,7 @@ type ToolMode = { kind: "known" } | { kind: "fresh" } | { kind: "ask"; answer: A
 
 function ToolCard({ id, mode }: { id: string; mode: ToolMode }) {
   const { ep, Glyph } = useEp();
-  const c = ep.concepts[id]!;
+  const c = toolOf(ep, id);
   const copy = CHROME.tools;
   const folded0 = mode.kind === "known" || (mode.kind === "ask" && mode.answer === "seed");
   const [open, setOpen] = useState(false);
@@ -139,7 +139,7 @@ interface SceneProps {
 
 function Cover({ reader, onAsk }: SceneProps) {
   const { ep, Art } = useEp();
-  const c = ep.copy.cover;
+  const c = ep.scenes.cover;
   const follower = reader === "follower";
   return (
     <>
@@ -165,7 +165,7 @@ function Cover({ reader, onAsk }: SceneProps) {
       </motion.div>
       {follower ? (
         <motion.aside className="ep-recap" variants={rise}>
-          <h2>{c.recapLabel}</h2>
+          <h2>{c.recap_label}</h2>
           {c.recap.map((r) => (
             <p key={r.t}>
               <Txt item={r} />
@@ -174,16 +174,16 @@ function Cover({ reader, onAsk }: SceneProps) {
         </motion.aside>
       ) : (
         <motion.p className="ep-hint" variants={rise}>
-          <Txt item={c.newHint} />
+          <Txt item={c.new_hint} />
         </motion.p>
       )}
-      <Ask text={follower ? c.askFollower : c.askNew} onAsk={() => onAsk(follower ? c.askFollower : c.askNew)} />
+      <Ask text={follower ? c.ask_follower : c.ask_new} onAsk={() => onAsk(follower ? c.ask_follower : c.ask_new)} />
     </>
   );
 }
 
 function Zero({ asked, onAsk }: SceneProps) {
-  const c = useEp().ep.copy.zero;
+  const c = useEp().ep.scenes.zero;
   return (
     <>
       <Head asked={asked} kicker={c.kicker.t} title={c.title.t} />
@@ -206,7 +206,7 @@ function Zero({ asked, onAsk }: SceneProps) {
 }
 
 function Event({ asked, onAsk }: SceneProps) {
-  const c = useEp().ep.copy.event;
+  const c = useEp().ep.scenes.event;
   return (
     <>
       <Head asked={asked} kicker={c.kicker.t} title={c.title} />
@@ -223,14 +223,14 @@ function Event({ asked, onAsk }: SceneProps) {
         ))}
       </motion.div>
       <motion.p className="ep-note" variants={rise}>
-        <Txt item={c.figureNote} />
+        <Txt item={c.figure_note} />
       </motion.p>
       <motion.figure className="ep-demand" variants={rise}>
-        <figcaption>{c.quoteLabel}</figcaption>
+        <figcaption>{c.quote_label}</figcaption>
         <blockquote>
           <Txt item={c.quote} />
         </blockquote>
-        <p>{c.quoteNote}</p>
+        <p>{c.quote_note}</p>
       </motion.figure>
       <motion.div className="ep-riddle" variants={rise}>
         {c.riddle.map((r) => (
@@ -246,15 +246,17 @@ function Event({ asked, onAsk }: SceneProps) {
 
 function Tools({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
   const { ep } = useEp();
-  const c = ep.copy.tools;
+  const c = ep.scenes.tools;
   const follower = reader === "follower";
   const known = ep.readers[reader].known;
   // 따라온 독자: 새 도구를 먼저, 아는 도구는 접어서 아래에
-  const order = follower ? [...ep.toolOrder.filter((id) => !known.includes(id)), ...ep.toolOrder.filter((id) => known.includes(id))] : ep.toolOrder;
+  // 도구 줍기 장면의 도구 = 이 장면에서 줍는 도구 (계약 pickup.tools)
+  const tools = ep.pickup.tools;
+  const order = follower ? [...tools.filter((id) => !known.includes(id)), ...tools.filter((id) => known.includes(id))] : tools;
   return (
     <>
-      <Head asked={asked} kicker={c.kicker} title={follower ? c.titleFollower : c.titleNew} />
-      <P item={follower ? c.subFollower : c.subNew} />
+      <Head asked={asked} kicker={c.kicker} title={follower ? c.title_follower : c.title_new} />
+      <P item={follower ? c.sub_follower : c.sub_new} />
       <div className="ep-tools">
         {order.map((id) => (
           <ToolCard key={id} id={id} mode={follower ? (known.includes(id) ? { kind: "known" } : { kind: "fresh" }) : { kind: "ask", answer: answers[id], onAnswer: (a) => onAnswer(id, a) }} />
@@ -268,13 +270,13 @@ function Tools({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
 // 풀이 장면 = 입구(solve.entry) + [체험 | 기본 풀이] + 문서가 말한 것(copy.aha.real) + 누구의 말(entry.whose)
 function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
   const { ep } = useEp();
-  const c = ep.copy.aha;
+  const c = ep.scenes.aha;
   const { entry, lab, plain } = ep.solve;
   // 체험이 없는 회차는 늘 기본 풀이다. 체험이 있는 회차는 시안 스위치로만 기본 풀이를 본다
   const mode: SolveMode = !lab ? "plain" : solveMode === "plain" && !plain ? "lab" : solveMode;
   const seen = mode === "seen";
   const usePlain = mode === "plain" ? plain : null;
-  const ask = usePlain?.kind === "quiet" ? usePlain.ask : reader === "follower" ? c.askFollower : c.askNew;
+  const ask = usePlain?.kind === "quiet" ? usePlain.ask : reader === "follower" ? c.ask_follower : c.ask_new;
   const flip = entry.flip;
   const born = lab?.born;
 
@@ -294,7 +296,7 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
   const real = (
     <>
       <motion.h2 className="ep-sub" variants={rise}>
-        {c.realLabel}
+        {c.real_label}
       </motion.h2>
       <motion.ul className="ep-real" variants={rise}>
         {c.real.map((r) => (
@@ -344,7 +346,7 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
 
   return (
     <>
-      <Head asked={asked} kicker={c.kicker} title={lab.title} />
+      <Head asked={asked} kicker={c.kicker} title={seen && lab.seen_title ? lab.seen_title : lab.title} />
       {seen ? null : lab.setup.map((s) => <P key={s.t} item={s} />)}
       <motion.div variants={rise}>
         <LabCard frames={lab.frames} seen={seen} />
@@ -356,7 +358,7 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
           </motion.p>
           <div className="ep-tools">
             {/* 그림을 본 독자는 그 그림이 낳은 도구도 이미 가지고 있다 — 접어서 */}
-            <ToolCard id={born.concept} mode={seen ? { kind: "known" } : { kind: "fresh" }} />
+            <ToolCard id={born.tool} mode={seen ? { kind: "known" } : { kind: "fresh" }} />
           </div>
         </>
       ) : null}
@@ -369,7 +371,7 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
 }
 
 function Compare({ asked, onAsk }: SceneProps) {
-  const c = useEp().ep.copy.compare;
+  const c = useEp().ep.scenes.compare;
   return (
     <>
       <Head asked={asked} kicker={c.kicker} title={c.title} />
@@ -405,9 +407,10 @@ function Compare({ asked, onAsk }: SceneProps) {
 
 function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
   const { ep } = useEp();
-  const c = ep.copy.next;
+  const c = ep.scenes.next;
   const follower = reader === "follower";
-  const late = ep.lateTool;
+  // "이어짐" 장면에서 하나 더 줍는 도구 (계약 pickup.next — 실물 둘 다 하나)
+  const late = ep.pickup.next[0]!;
   return (
     <>
       <Head asked={asked} kicker={c.kicker} title={c.title} />
@@ -420,18 +423,18 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
               <Txt item={n.when} />
             </span>
             <span className="ep-line-what">{n.what}</span>
-            {n.state === "now" ? <em>{c.hereLabel}</em> : null}
+            {n.state === "now" ? <em>{c.here_label}</em> : null}
           </li>
         ))}
       </motion.ol>
       <motion.p className="ep-tool-lead" variants={rise}>
-        {c.toolLead}
+        {c.tool_lead}
       </motion.p>
       <div className="ep-tools">
         <ToolCard id={late} mode={ep.readers[reader].known.includes(late) ? { kind: "known" } : follower ? { kind: "fresh" } : { kind: "ask", answer: answers[late], onAnswer: (a) => onAnswer(late, a) }} />
       </div>
       <motion.h2 className="ep-sub" variants={rise}>
-        {c.comingLabel}
+        {c.coming_label}
       </motion.h2>
       <motion.ol className="ep-coming" variants={rise}>
         {c.coming.map((n, i) => (
@@ -447,14 +450,14 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
         ))}
       </motion.ol>
       <motion.div className="ep-unknown" variants={rise}>
-        <h2>{c.unknownLabel}</h2>
+        <h2>{c.unknown_label}</h2>
         <ul>
           {c.unknown.map((u) => (
             <li key={u.t}>{u.t}</li>
           ))}
         </ul>
         <p>
-          <Txt item={c.unknownNote} />
+          <Txt item={c.unknown_note} />
         </p>
       </motion.div>
       <Ask text={c.ask} onAsk={() => onAsk(c.ask)} />
@@ -464,11 +467,11 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
 
 function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
   const { ep } = useEp();
-  const c = ep.copy.keep;
+  const c = ep.scenes.keep;
   const k = CHROME.keep;
-  const fresh = ep.conceptOrder.filter((id) => states[id] === "new");
-  const old = ep.conceptOrder.filter((id) => states[id] === "known");
-  const others = SHELF.filter((s) => s.series !== ep.series.id);
+  const fresh = ep.tools.map((x) => x.key).filter((id) => states[id] === "new");
+  const old = ep.tools.map((x) => x.key).filter((id) => states[id] === "known");
+  const others = SHELF.filter((s) => s.series !== ep.series.code);
   return (
     <>
       <Head asked={asked} kicker={c.kicker} title={c.title} />
@@ -487,7 +490,7 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
             <h2>
               {k.newLabel} <b>{fresh.length}</b>
             </h2>
-            <p>{fresh.map((id) => ep.concepts[id]!.name).join(" · ")}</p>
+            <p>{fresh.map((id) => toolOf(ep, id).name).join(" · ")}</p>
           </div>
         ) : null}
         {old.length ? (
@@ -495,7 +498,7 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
             <h2>
               {reader === "follower" ? k.againLabel : k.seedLabel} <b>{old.length}</b>
             </h2>
-            <p>{old.map((id) => ep.concepts[id]!.name).join(" · ")}</p>
+            <p>{old.map((id) => toolOf(ep, id).name).join(" · ")}</p>
           </div>
         ) : null}
       </motion.div>
@@ -513,7 +516,7 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
       <motion.aside className="ep-nextup" variants={rise}>
         <h2>{k.nextTitle}</h2>
         <p>
-          <Txt item={c.nextBody} />
+          <Txt item={c.next_body} />
         </p>
       </motion.aside>
       {others.map((s) => (
@@ -562,13 +565,13 @@ function SourceSheet({ item, onClose }: { item: T; onClose: () => void }) {
             {CHROME.map.close}
           </button>
         </header>
-        {item.layer ? <p className="ep-sheet-layer">{ep.layerLabels[item.layer]}</p> : null}
+        {item.voice ? <p className="ep-sheet-layer">{ep.voice_labels[item.voice]}</p> : null}
         {item.calc ? <p className="ep-sheet-calc">{Object.entries(item.calc).map(([n, how]) => `${n} = ${how}`).join(" · ")}</p> : null}
         {item.src?.length ? (
           item.src.map((k) => (
             <blockquote key={k}>
-              <p>{ep.sources[k]?.quote}</p>
-              <cite>{ep.docs[ep.sources[k]?.doc ?? ""]?.name}</cite>
+              <p>{ep.quotes[k]?.quote}</p>
+              <cite>{ep.docs[ep.quotes[k]?.doc ?? ""]?.name}</cite>
             </blockquote>
           ))
         ) : (
@@ -601,7 +604,7 @@ export function Episode(parts: EpisodeParts) {
   // 개념의 상태 — 지도와 "남음"이 읽는다. 계산이 아니라 고정값 + 누른 것 + 지나온 장면이다
   const states = useMemo(() => {
     const out: Record<string, NodeState> = {};
-    for (const id of ep.conceptOrder) {
+    for (const { key: id } of ep.tools) {
       if (ep.readers[reader].known.includes(id)) out[id] = "known";
       else if (answers[id] === "seed") out[id] = "known";
       else if (answers[id] === "fresh" || passed.includes(id)) out[id] = "new";
@@ -609,8 +612,8 @@ export function Episode(parts: EpisodeParts) {
     }
     return out;
   }, [ep, reader, answers, passed]);
-  const count = ep.conceptOrder.filter((id) => states[id] !== "none").length + ep.readers[reader].elsewhere.reduce((n, e) => n + e.concepts.length, 0);
-  const others = SHELF.filter((s) => s.series !== ep.series.id);
+  const count = ep.tools.filter((x) => states[x.key] !== "none").length + ep.readers[reader].elsewhere.reduce((n, e) => n + e.concepts.length, 0);
+  const others = SHELF.filter((s) => s.series !== ep.series.code);
 
   const reset = useCallback((r: ReaderId) => {
     setReader(r);
@@ -624,8 +627,9 @@ export function Episode(parts: EpisodeParts) {
 
   const onAsk = useCallback(
     (question: string) => {
-      const picked = ep.pickedAfter[scene];
-      if (picked) setPassed((p) => [...new Set([...p, ...picked])]);
+      // 장면을 지나면 그 장면의 도구를 주운 것이다 (계약 pickup)
+      const picked = scene === "tools" || scene === "aha" || scene === "next" ? ep.pickup[scene] : [];
+      if (picked.length) setPassed((p) => [...new Set([...p, ...picked])]);
       setAsked((a) => [...a.slice(0, step), question]);
       setStep((s) => Math.min(s + 1, scenes.length - 1));
     },
@@ -645,7 +649,7 @@ export function Episode(parts: EpisodeParts) {
     <MotionConfig reducedMotion="user">
       <EpCtx.Provider value={parts}>
       <SrcCtx.Provider value={src}>
-        <div className="ep-root" data-episode={ep.id} data-reader={reader} data-scene={scene} data-solve={scene === "aha" ? solveMode : undefined} data-src={srcOn ? "" : undefined}>
+        <div className="ep-root" data-episode={ep.code} data-reader={reader} data-scene={scene} data-solve={scene === "aha" ? solveMode : undefined} data-src={srcOn ? "" : undefined}>
           <div className="ep-demo" role="group" aria-label={c.readersAria}>
             <span className="ep-demo-tag">{c.draft}</span>
             <div className="ep-demo-readers">
@@ -691,7 +695,7 @@ export function Episode(parts: EpisodeParts) {
             <p className="ep-bar-title">
               <span>{ep.series.name}</span>
               <span aria-hidden="true"> · </span>
-              <span>{ep.copy.cover.episode.t}</span>
+              <span>{ep.scenes.cover.episode.t}</span>
             </p>
             <span className="ep-count" aria-label={`${scenes.length}장 가운데 ${step + 1}장`}>
               {step + 1}/{scenes.length}

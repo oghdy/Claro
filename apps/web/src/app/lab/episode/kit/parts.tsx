@@ -27,7 +27,7 @@ export const SrcCtx = createContext<{ on: boolean; open: (item: T) => void }>({ 
 /** 글 한 덩이. "근거"를 켜면 근거가 있는 글에 밑줄이 생기고, 누르면 구절이 뜬다 */
 export function Txt({ item, className }: { item: T; className?: string }) {
   const { on, open } = useContext(SrcCtx);
-  const has = Boolean(item.src?.length || item.layer);
+  const has = Boolean(item.src?.length || item.voice);
   if (on && has) {
     return (
       <button type="button" className={`ep-src-hit ${className ?? ""}`} onClick={() => open(item)}>

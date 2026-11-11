@@ -631,6 +631,8 @@ def main(argv):
     if rep and not errs:
         report(c)
     for p in sorted(glob.glob(os.path.join(ROOT, 'fixtures/invalid/*.json'))):
+        if os.path.basename(p).startswith('episode-'):
+            continue  # 회차 계약(EPISODE)의 위반 픽스처 — packages/contract/test/episode.test.ts 가 본다 (B-E1)
         doc = read_json(p)
         rel = os.path.relpath(p, ROOT)
         viol = doc.get('_violation') or {}
