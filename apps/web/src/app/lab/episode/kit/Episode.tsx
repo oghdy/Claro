@@ -1,9 +1,12 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
-import { AnimatePresence, MotionConfig, motion, type Variants } from "motion/react";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { CHROME } from "./chrome";
 import { ConceptMap, type NodeState } from "./ConceptMap";
+import { LabCard } from "./frames/LabCard";
+import { PlainFlipLead, PlainQuietBody, PlainThreeCards } from "./frames/Plain";
+import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
 import { SHELF } from "./shelf";
 import type { EpisodeData, ReaderId, SceneId, T } from "./types";
 
@@ -11,17 +14,23 @@ import type { EpisodeData, ReaderId, SceneId, T } from "./types";
 // 달라진 것은 (1) 회차가 시리즈 안에 있다 (2) 독자가 아는 개념은 접힌다 (3) 끝에 내 개념 지도가 자란다 (D57).
 // **지식 상태를 추정하지 않는다.** 따라온 독자의 "아는 개념"은 회차 데이터의 고정값이고, 처음 온 독자는 "이거 알아요?" 에 누른 그대로다.
 //
-// UX-2: 두 회차(배달앱 · FOMC)가 이 한 부품 위에 올라간다. 회차가 주는 것은 셋이다 —
-//   ep    글 · 근거 · 개념 · 두 독자 · 조립 · 지도 자리 (episodes/*/data.ts)
-//   Art   표지 그림            Lab   풀이 장면 (독자가 직접 해 보는 자리)            Glyph 도구 카드의 작은 그림
+// UX-2: 두 회차(배달앱 · FOMC)가 이 한 부품 위에 올라간다.
+// UX-4: 풀이 장면도 회차의 부품이 아니다 — 회차는 **틀에 넣을 데이터**(ep.solve)만 주고, 틀 부품(kit/frames)이 화면을 세운다. 회차가 주는 것은 —
+//   ep    글 · 근거 · 개념 · 두 독자 · 조립 · 지도 자리 · 풀이 칸 (episodes/*/data.ts)
+//   Art   표지 그림            Glyph 도구 카드의 작은 그림
 // 장면 여덟의 모양과 차례는 여기 있고, 회차는 바꾸지 못한다.
 
 export interface EpisodeParts {
   ep: EpisodeData;
   Art: ComponentType;
-  Lab: ComponentType;
   Glyph: ComponentType<{ id: string }>;
 }
+
+/**
+ * 풀이를 어떻게 보이나 — **시안의 스위치다. 손으로 켠다** (지식 상태를 추정하지 않는다).
+ *   lab   체험 (틀)            plain 체험 없이 — 기본 풀이 (D61 ①)            seen  이 그림을 본 독자 — 설명 없이 그림과 오늘의 값만 (D61 ②)
+ */
+export type SolveMode = "lab" | "plain" | "seen";
 
 const EpCtx = createContext<EpisodeParts | null>(null);
 const useEp = () => {
@@ -33,81 +42,6 @@ const useEp = () => {
 /** 처음 온 독자가 "이거 알아요?" 에 답한 것 — seed: 알아요 · fresh: 처음 들어요 */
 type Answer = "seed" | "fresh";
 type Answers = Partial<Record<string, Answer>>;
-
-const EASE = [0.2, 0.7, 0.2, 1] as const;
-const stagger: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.075, delayChildren: 0.12 } } };
-const rise: Variants = { hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } } };
-
-// ─────────────────────────────────────────────────────────── 글
-
-function Rich({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|\n)/g).filter(Boolean);
-  return (
-    <>
-      {parts.map((p, i) => (p === "\n" ? <br key={i} /> : p.startsWith("**") ? <strong key={i}>{p.slice(2, -2)}</strong> : <span key={i}>{p}</span>))}
-    </>
-  );
-}
-
-const SrcCtx = createContext<{ on: boolean; open: (item: T) => void }>({ on: false, open: () => {} });
-
-/** 글 한 덩이. "근거"를 켜면 근거가 있는 글에 밑줄이 생기고, 누르면 구절이 뜬다 */
-function Txt({ item, className }: { item: T; className?: string }) {
-  const { on, open } = useContext(SrcCtx);
-  const has = Boolean(item.src?.length || item.layer);
-  if (on && has) {
-    return (
-      <button type="button" className={`ep-src-hit ${className ?? ""}`} onClick={() => open(item)}>
-        <Rich text={item.t} />
-      </button>
-    );
-  }
-  return (
-    <span className={className}>
-      <Rich text={item.t} />
-    </span>
-  );
-}
-
-function P({ item }: { item: T }) {
-  return (
-    <motion.p className="ep-p" variants={rise}>
-      <Txt item={item} />
-    </motion.p>
-  );
-}
-
-function Head({ asked, kicker, title }: { asked?: string; kicker: string; title: string }) {
-  return (
-    <>
-      {asked ? (
-        <motion.p className="ep-asked" variants={rise}>
-          <span aria-hidden="true">Q</span>
-          {asked}
-        </motion.p>
-      ) : null}
-      <motion.p className="ep-kicker" variants={rise}>
-        {kicker}
-      </motion.p>
-      <motion.h1 className="ep-title" variants={rise}>
-        <Rich text={title} />
-      </motion.h1>
-    </>
-  );
-}
-
-function Ask({ text, onAsk }: { text: string; onAsk: () => void }) {
-  return (
-    <motion.div className="ep-ask-wrap" variants={rise}>
-      <motion.button type="button" className="ep-ask" onClick={onAsk} whileTap={{ scale: 0.975 }} data-testid="ask">
-        <span>{text}</span>
-        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-          <path d="M10 3v13M4.5 10.5 10 16l5.5-5.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </motion.button>
-    </motion.div>
-  );
-}
 
 // ─────────────────────────────────────────────────────────── 시리즈 줄
 
@@ -193,6 +127,7 @@ function ToolCard({ id, mode }: { id: string; mode: ToolMode }) {
 
 interface SceneProps {
   reader: ReaderId;
+  solveMode: SolveMode;
   asked?: string;
   onAsk: (question: string) => void;
   answers: Answers;
@@ -330,38 +265,34 @@ function Tools({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
   );
 }
 
-function Aha({ reader, asked, onAsk }: SceneProps) {
-  const { ep, Lab } = useEp();
+// 풀이 장면 = 입구(solve.entry) + [체험 | 기본 풀이] + 문서가 말한 것(copy.aha.real) + 누구의 말(entry.whose)
+function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
+  const { ep } = useEp();
   const c = ep.copy.aha;
-  const ask = reader === "follower" ? c.askFollower : c.askNew;
-  return (
+  const { entry, lab, plain } = ep.solve;
+  // 체험이 없는 회차는 늘 기본 풀이다. 체험이 있는 회차는 시안 스위치로만 기본 풀이를 본다
+  const mode: SolveMode = !lab ? "plain" : solveMode === "plain" && !plain ? "lab" : solveMode;
+  const seen = mode === "seen";
+  const usePlain = mode === "plain" ? plain : null;
+  const ask = usePlain?.kind === "quiet" ? usePlain.ask : reader === "follower" ? c.askFollower : c.askNew;
+  const flip = entry.flip;
+  const born = lab?.born;
+
+  const flipFigure = flip ? (
     <>
-      <Head asked={asked} kicker={c.kicker} title={c.title} />
-      {c.setup.map((s) => (
-        <P key={s.t} item={s} />
-      ))}
-      <motion.div variants={rise}>
-        <Lab />
-      </motion.div>
-      {c.born ? (
-        <>
-          <motion.p className="ep-tool-lead" variants={rise}>
-            {c.born.lead}
-          </motion.p>
-          <div className="ep-tools">
-            <ToolCard id={c.born.concept} mode={{ kind: "fresh" }} />
-          </div>
-        </>
-      ) : null}
-      <motion.figure className="ep-flip" variants={rise}>
-        <figcaption>{c.flipLabel}</figcaption>
-        <p className="ep-flip-a">{c.flipA}</p>
+      <motion.figure className="ep-flip" variants={rise} data-big={usePlain?.kind === "flip" ? "" : undefined}>
+        <figcaption>{flip.label}</figcaption>
+        <p className="ep-flip-a">{flip.a}</p>
         <span className="ep-flip-eq" aria-hidden="true">
-          {c.flipOp}
+          {flip.op}
         </span>
-        <p className="ep-flip-b">{c.flipB}</p>
+        <p className="ep-flip-b">{flip.b}</p>
       </motion.figure>
-      <P item={c.flipNote} />
+      <P item={flip.note} />
+    </>
+  ) : null;
+  const real = (
+    <>
       <motion.h2 className="ep-sub" variants={rise}>
         {c.realLabel}
       </motion.h2>
@@ -378,9 +309,60 @@ function Aha({ reader, asked, onAsk }: SceneProps) {
         ))}
       </motion.ul>
       <P item={c.verdict} />
-      <motion.p className="ep-caveat" variants={rise}>
-        <Txt item={c.caveat} />
-      </motion.p>
+    </>
+  );
+  const whose = (
+    <motion.p className="ep-caveat" variants={rise}>
+      <Txt item={entry.whose} />
+    </motion.p>
+  );
+
+  if (usePlain) {
+    return (
+      <>
+        <Head asked={asked} kicker={c.kicker} title={usePlain.title} />
+        {usePlain.kind === "flip" ? (
+          <>
+            <PlainFlipLead entry={entry} />
+            {flipFigure}
+            {real}
+          </>
+        ) : usePlain.kind === "three" ? (
+          <>
+            <P item={usePlain.lead} />
+            <PlainThreeCards plain={usePlain} />
+          </>
+        ) : (
+          <PlainQuietBody plain={usePlain} />
+        )}
+        {whose}
+        <Ask text={ask} onAsk={() => onAsk(ask)} />
+      </>
+    );
+  }
+  if (!lab) return null;
+
+  return (
+    <>
+      <Head asked={asked} kicker={c.kicker} title={lab.title} />
+      {seen ? null : lab.setup.map((s) => <P key={s.t} item={s} />)}
+      <motion.div variants={rise}>
+        <LabCard frames={lab.frames} seen={seen} />
+      </motion.div>
+      {born ? (
+        <>
+          <motion.p className="ep-tool-lead" variants={rise}>
+            {born.lead}
+          </motion.p>
+          <div className="ep-tools">
+            {/* 그림을 본 독자는 그 그림이 낳은 도구도 이미 가지고 있다 — 접어서 */}
+            <ToolCard id={born.concept} mode={seen ? { kind: "known" } : { kind: "fresh" }} />
+          </div>
+        </>
+      ) : null}
+      {flipFigure}
+      {real}
+      {whose}
       <Ask text={ask} onAsk={() => onAsk(ask)} />
     </>
   );
@@ -609,6 +591,8 @@ export function Episode(parts: EpisodeParts) {
   const [mapOpen, setMapOpen] = useState(false);
   const [srcOn, setSrcOn] = useState(false);
   const [srcItem, setSrcItem] = useState<T | null>(null);
+  // 풀이 시안의 스위치 — 손으로 켠다. 독자를 바꾸거나 처음으로 가도 그대로 둔다
+  const [solveMode, setSolveMode] = useState<SolveMode>("lab");
   const scroller = useRef<HTMLDivElement>(null);
 
   const scenes = ep.assembly[reader];
@@ -651,7 +635,7 @@ export function Episode(parts: EpisodeParts) {
 
   useEffect(() => {
     scroller.current?.scrollTo({ top: 0 });
-  }, [step, reader]);
+  }, [step, reader, solveMode]);
 
   const Scene = SCENES[scene];
   const src = useMemo(() => ({ on: srcOn, open: setSrcItem }), [srcOn]);
@@ -661,7 +645,7 @@ export function Episode(parts: EpisodeParts) {
     <MotionConfig reducedMotion="user">
       <EpCtx.Provider value={parts}>
       <SrcCtx.Provider value={src}>
-        <div className="ep-root" data-episode={ep.id} data-reader={reader} data-scene={scene} data-src={srcOn ? "" : undefined}>
+        <div className="ep-root" data-episode={ep.id} data-reader={reader} data-scene={scene} data-solve={scene === "aha" ? solveMode : undefined} data-src={srcOn ? "" : undefined}>
           <div className="ep-demo" role="group" aria-label={c.readersAria}>
             <span className="ep-demo-tag">{c.draft}</span>
             <div className="ep-demo-readers">
@@ -683,6 +667,20 @@ export function Episode(parts: EpisodeParts) {
               </a>
             ))}
           </div>
+          {/* 풀이 시안의 스위치 둘 — 풀이 장면에서만 보인다 (UX-4). 제품의 일부가 아니다 */}
+          {scene === "aha" && ep.solve.lab ? (
+            <div className="ep-demo ep-demo-lab" role="group" aria-label={CHROME.lab.rowAria}>
+              <span className="ep-demo-labtag">{CHROME.lab.rowTag}</span>
+              {ep.solve.plain ? (
+                <button type="button" className="ep-demo-src" aria-pressed={solveMode === "plain"} onClick={() => setSolveMode((m) => (m === "plain" ? "lab" : "plain"))} data-testid="lab-plain">
+                  {CHROME.lab.plain}
+                </button>
+              ) : null}
+              <button type="button" className="ep-demo-src" aria-pressed={solveMode === "seen"} onClick={() => setSolveMode((m) => (m === "seen" ? "lab" : "seen"))} data-testid="lab-seen">
+                {CHROME.lab.seen}
+              </button>
+            </div>
+          ) : null}
 
           <header className="ep-bar">
             <button type="button" className="ep-back" onClick={back} disabled={step === 0} aria-label={c.back}>
@@ -714,7 +712,7 @@ export function Episode(parts: EpisodeParts) {
           <div className="ep-scroll" ref={scroller}>
             <AnimatePresence mode="wait" initial={false}>
               <motion.main
-                key={`${reader}-${scene}`}
+                key={`${reader}-${scene}${scene === "aha" ? `-${solveMode}` : ""}`}
                 className="ep-scene"
                 variants={stagger}
                 initial="hidden"
@@ -723,6 +721,7 @@ export function Episode(parts: EpisodeParts) {
               >
                 <Scene
                   reader={reader}
+                  solveMode={solveMode}
                   asked={step > 0 ? asked[step - 1] : undefined}
                   onAsk={onAsk}
                   answers={answers}

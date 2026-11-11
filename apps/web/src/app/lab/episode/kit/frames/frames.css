@@ -1,0 +1,445 @@
+/* UX-4 — 틀 부품(kit/frames)의 겉모습. 색 · 틀은 episode.css 의 --ep-* 를 그대로 쓴다.
+   켜고 끄기의 겉모습(.ep-lab · .ep-app-*)은 UX-1 때부터 episode.css 에 있다 — 옮기지 않았다.
+   아래 "어디서 멈추나 · 자리에 앉기"는 UX-2 의 episodes/fomc/fomc.css 에서 옮겼다 (.fm-* → .fr-* · 값은 그대로). */
+
+/* ── 틀: 어디서 멈추나 — 고리 (금리 2화: 기준금리 → 돈 빌리는 형편 → 물가가 오르는 속도) */
+.fr-chain {
+  list-style: none;
+  margin: 14px 0 4px;
+  padding: 4px 6px;
+}
+.fr-chain li[data-node] {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+}
+.fr-chain strong {
+  font-size: 15.5px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.fr-chain em {
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  padding: 5px 10px;
+  border-radius: 12px;
+  color: var(--ep-muted);
+  box-shadow: inset 0 0 0 1.5px var(--ep-rule);
+  transition: background-color 0.35s, color 0.35s, box-shadow 0.35s;
+}
+.fr-dot {
+  width: 30px;
+  height: 30px;
+  margin: 0 2px;
+  border-radius: 50%;
+  background: var(--ep-paper);
+  box-shadow: inset 0 0 0 2px var(--ep-ink);
+  transition: background 0.35s, box-shadow 0.35s;
+}
+.fr-chain li[data-state="on"] .fr-dot {
+  background: var(--ep-accent);
+  box-shadow: none;
+}
+.fr-chain li[data-state="on"] em {
+  background: var(--ep-accent);
+  color: #fff;
+  box-shadow: none;
+}
+/* 가운데 고리 — 반만 찼다: "일부에서" */
+.fr-chain li[data-state="part"] .fr-dot {
+  background: linear-gradient(to top, var(--ep-accent) 50%, var(--ep-paper) 50%);
+  box-shadow: inset 0 0 0 2px var(--ep-accent);
+  transition-delay: 0.6s;
+}
+.fr-chain li[data-state="part"] em {
+  color: var(--ep-accent-ink);
+  box-shadow: inset 0 0 0 1.5px var(--ep-accent);
+  transition-delay: 0.6s;
+}
+.fr-chain[data-carried] li[data-state="part"] .fr-dot,
+.fr-chain[data-carried] li[data-state="part"] em {
+  transition-delay: 0s;
+}
+.fr-chain li[data-state="still"] em {
+  color: var(--ep-ink);
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.fr-link {
+  position: relative;
+  height: 30px;
+  margin-left: 18px;
+  border-left: 2px solid var(--ep-rule);
+  transition: border-color 0.4s;
+}
+.fr-chain[data-after] .fr-link[data-kind="solid"] {
+  border-left-color: var(--ep-accent);
+}
+.fr-link[data-kind="open"] {
+  border-left-style: dashed;
+  border-left-color: var(--ep-muted);
+}
+/* 내려가는 힘 */
+.fr-link i {
+  position: absolute;
+  left: -7px;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: var(--ep-accent);
+}
+.fr-link b {
+  position: absolute;
+  left: -12px;
+  top: 4px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+}
+.fr-link span {
+  position: absolute;
+  left: 20px;
+  top: 5px;
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ep-muted);
+}
+
+/* ── 틀: 자리에 앉기 (금리 2화: 회의 자리 열둘) */
+.fr-seats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 10px 0 2px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--ep-paper);
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+/* 갈린 뒤 두 칸의 너비는 부품이 사람 수로 정한다 (Steps.tsx cols) */
+.fr-seats[data-split] {
+  padding: 10px;
+  background: transparent;
+  box-shadow: none;
+}
+.fr-group {
+  padding: 10px 10px 12px;
+  border-radius: 14px;
+  background: var(--ep-paper);
+  box-shadow: inset 0 0 0 1.5px var(--ep-rule);
+}
+.fr-group[data-mine] {
+  box-shadow: inset 0 0 0 2px var(--ep-ink);
+}
+.fr-group h3 {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ep-ink2);
+}
+.fr-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+}
+.fr-seat {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ep-ink);
+  opacity: 0.82;
+}
+.fr-seat[data-me] {
+  width: 24px;
+  height: 24px;
+  background: var(--ep-accent);
+  color: #fff;
+  opacity: 1;
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1;
+}
+.fr-choose {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.fr-choose button {
+  min-height: 54px;
+  padding: 8px 10px !important;
+  text-align: center !important;
+  border-radius: 14px;
+  background: var(--ep-accent) !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 750 !important;
+  line-height: 1.35;
+}
+.fr-real {
+  margin-top: 12px !important;
+  color: var(--ep-ink) !important;
+}
+.fr-steps .ep-lab-caption {
+  min-height: 6.6em;
+}
+
+/* ── 이 그림을 본 독자 (D61 ② 다시 쓰기) — 설명 없이 그림과 오늘의 값만 */
+.fr-seen {
+  margin: 0 2px 2px;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.4;
+  color: var(--ep-muted);
+}
+.ep-lab[data-seen] .ep-lab-stage {
+  margin-top: 10px;
+}
+.ep-root button.fr-redo {
+  display: block;
+  margin: 12px auto 0;
+  padding: 6px 10px;
+}
+.ep-root .fr-seats button.fr-group {
+  padding: 10px 10px 12px;
+  background: var(--ep-paper);
+  text-align: left;
+}
+.fr-steps .fr-seen-caption {
+  min-height: 0;
+}
+.fr-seen-caption[data-hint] {
+  color: var(--ep-muted);
+  font-size: 14px;
+}
+
+/* ── 기본 풀이 (D61 ①) — 가. 뒤집기만 */
+.pl-thought {
+  margin: 0 0 12px;
+  padding: 14px 18px 16px;
+  border-radius: 18px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.pl-thought[data-kind="breaker"] {
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.pl-thought h2 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ep-muted);
+}
+.pl-thought[data-kind="breaker"] h2 {
+  color: var(--ep-accent-ink);
+}
+.pl-thought p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.66;
+}
+.ep-flip[data-big] {
+  padding: 26px 18px 28px;
+}
+.ep-flip[data-big] p {
+  font-size: 21px;
+}
+.ep-flip[data-big] .ep-flip-b {
+  font-size: 25px !important;
+}
+.ep-flip[data-big] .ep-flip-eq {
+  width: 36px;
+  height: 36px;
+  font-size: 24px;
+}
+
+/* ── 기본 풀이 — 나. 세 칸 (차례로 연다) */
+.pl-three {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 20px;
+}
+.pl-card {
+  padding: 16px 18px 18px;
+  border-radius: 18px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.pl-card[data-state="closed"] {
+  padding-bottom: 16px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--ep-rule);
+}
+.pl-card h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--ep-ink);
+}
+.pl-card[data-state="closed"] h2 {
+  color: var(--ep-muted);
+}
+.pl-card ul {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+.pl-card li {
+  position: relative;
+  padding: 5px 0 5px 20px;
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+.pl-card li::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 15px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ep-ink);
+}
+/* 가운데 칸 — 이 꼴의 맛: 다른 데서는 안 해 주는 말 */
+.pl-card[data-kind="unknown"][data-state="open"] {
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+  box-shadow: none;
+}
+.pl-card[data-kind="unknown"][data-state="open"] h2 {
+  color: #f0a184;
+}
+.pl-card[data-kind="unknown"] li::before {
+  content: "?";
+  top: 5px;
+  left: 2px;
+  width: auto;
+  height: auto;
+  background: none;
+  font-weight: 800;
+  color: #f0a184;
+}
+.pl-card[data-kind="unknown"] .ep-src-hit {
+  color: inherit;
+}
+/* 셋째 칸 — 같은 무게로 나란히 (D46 ④) */
+.pl-differ {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.pl-differ > div {
+  padding: 12px 12px 14px;
+  border-radius: 14px;
+  background: var(--ep-paper);
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.pl-differ strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+.pl-differ p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ep-ink2);
+}
+.pl-note,
+.pl-none {
+  margin: 12px 2px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ep-muted);
+}
+.pl-open {
+  margin-top: 2px !important;
+}
+
+/* ── 기본 풀이 — 다. 조용히 (눌러 보기 없음 · 강조색 없음) */
+.pl-quiet {
+  margin: 4px 0 8px;
+}
+.pl-quiet section {
+  padding: 18px 0 16px;
+  border-top: 1px solid var(--ep-rule);
+}
+.pl-quiet h2 {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ep-muted);
+}
+.pl-quiet p {
+  margin: 0 0 8px;
+  font-size: 16.5px;
+  line-height: 1.75;
+}
+.ep-root[data-tone="quiet"] {
+  --ep-accent: #453d34;
+  --ep-accent-ink: #453d34;
+  --ep-accent-soft: #e9e2d4;
+}
+.ep-root[data-tone="quiet"] .ep-ask {
+  background: transparent !important;
+  color: var(--ep-ink) !important;
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.pl-sample {
+  margin: 0;
+  padding: 14px var(--ep-x);
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+}
+.pl-sample span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  opacity: 0.8;
+}
+
+/* ── 풀이 시안의 스위치 줄 — 풀이 장면에서만 (제품의 일부가 아니다) */
+.ep-demo-lab {
+  padding: 0 12px 7px;
+  gap: 6px;
+}
+.ep-demo-labtag {
+  padding: 5px 2px;
+  font-weight: 700;
+  opacity: 0.6;
+}
+.ep-demo-lab .ep-demo-src {
+  flex: 1;
+  text-align: center;
+}

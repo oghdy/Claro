@@ -3,7 +3,7 @@
 // 캐시에만 있는 문서(PR-1109-PDF · SL-TERMS-1013 · CO-CPNG-1109)는 읽기만 했고 구절을 싣지 않았다 — 공개 저장소다 (E2-1-a).
 // 글의 규칙은 kit/types.ts 머리에 (check.ts 가 본다). 굵게는 **이렇게** 적는다.
 // UX-2 에서 모양만 공통 틀(EpisodeData)로 옮겼다 — 독자가 읽는 글자는 바꾸지 않았다 (지도의 "다른 시리즈" 예시만 진짜 회차의 개념으로).
-import { t as kt, type Concept, type EpisodeCopy, type EpisodeData, type ReaderFixture, type ReaderId, type SeriesInfo, type Source, type T } from "../../kit/types";
+import { t as kt, type Concept, type EpisodeCopy, type EpisodeData, type ReaderFixture, type ReaderId, type SeriesInfo, type Solve, type Source, type T } from "../../kit/types";
 
 export type DocLabel = "PR-1109" | "LAW-MRFTA" | "SL-YGY-2020" | "SL-TF-0512" | "SL-CD-0618" | "SL-DECREE-1106";
 
@@ -266,16 +266,6 @@ export const COPY: EpisodeCopy = {
 
   aha: {
     kicker: "풀이",
-    title: "가게 사장님이\n되어 볼게요",
-    setup: [
-      t("당신은 앱 두 곳에 입점한 가게 사장님이에요. **큰 앱**은 손님이 많지만 수수료가 높아요. **새 앱**은 손님을 모으려고 수수료를 낮게 받아요.", undefined, { layer: "explain" }),
-      t("새 앱에서는 덜 떼이니까, 값을 조금 내려 팔 수 있어요. 한번 내려 볼까요?", undefined, { layer: "explain" }),
-    ],
-    flipLabel: "뒤집어 보면",
-    flipA: "“다른 앱보다 비싸게 팔지 마세요”",
-    flipOp: "=",
-    flipB: "“다른 앱에서 더 싸게 팔지 마세요”",
-    flipNote: t("같은 말이에요. 더 싼 곳이 생길 수 없으면, 손님은 옮길 이유가 없어요. 새 앱은 수수료를 낮춰도 손님을 데려오지 못하고, 큰 앱은 수수료를 내릴 이유가 없어져요.", ["pr.entrant", "ygy.mech"], { layer: "explain" }),
     realLabel: "실제로 공정위가 본 것",
     real: [
       {
@@ -292,7 +282,6 @@ export const COPY: EpisodeCopy = {
       },
     ],
     verdict: t("그래서 공정위의 결론은 이래요. 수수료와 메뉴값이 올랐고, 새 앱이 들어올 길이 막혔다.", ["pr.effect"], { layer: "official" }),
-    caveat: t("여기까지는 **공정위가 내린 판단**이에요. 두 회사의 반론은 이 회차에 아직 싣지 않았어요. 양쪽의 공식 입장을 나란히 놓을 수 있을 때 함께 실어요."),
     askNew: "그럼 이 이야기는 끝난 건가요?",
     askFollower: "지난번 요기요 때와는 뭐가 다르죠?",
   },
@@ -370,29 +359,74 @@ export const COPY: EpisodeCopy = {
   map: { whereToday: t("1화에서 주움", undefined, { ui: true }) },
 };
 
-// ─────────────────────────────────────────────────────────── 풀이 장면의 글 — 이 회차만의 것 (Mechanism.tsx 가 읽는다)
+// ─────────────────────────────────────────────────────────── 풀이 칸 — 틀에 넣을 데이터 (UX-4). 화면 부품은 kit/frames 가 세운다
+// 글은 UX-1 의 것 그대로다 (COPY.aha 의 머리 · 준비 글 · 뒤집기 · 누구의 말과 LAB 의 글을 칸만 옮겼다).
+// 새로 쓴 글은 셋뿐이다 — 입구의 첫 생각 · 깨는 사실, 기본 풀이의 머리. 전부 저장된 구절에서 (새 사실 없음).
 
-export const LAB = {
-  big: "큰 앱",
-  small: "새 앱",
-  feeHigh: "수수료 높음",
-  feeLow: "수수료 낮음",
-  price: "메뉴값",
-  tabOff: "요구가 없을 때",
-  tabOn: "요구가 있을 때",
-  action: "새 앱에서 값 내리기",
-  again: "처음으로",
-  goOn: "요구가 있을 때는 어떨까요?",
-  rule: "“다른 앱보다 비싸게 팔지 마세요”",
-  noRule: "요구 없음. 값은 가게가 앱마다 정해요.",
-  same: "같은 값",
-  cheaper: "더 싼 값",
-  blocked: "내릴 수 없어요",
-  guests: "손님",
-  offBefore: t("지금은 두 앱의 값이 같아요. 버튼을 눌러 보세요."),
-  offAfter: t("손님이 더 싼 새 앱으로 옮겨 가요. 큰 앱은 손님을 지키려면 수수료를 낮춰야 해요. **값이 내려가는 쪽으로 경쟁이 생겨요.**", ["pr.entrant"], { layer: "explain" }),
-  onBefore: t("이제 큰 앱이 요구해요. “우리 앱에서, 다른 앱보다 비싸게 팔지 마세요.” 그래도 눌러 보세요."),
-  onAfter: t("막혔어요. 새 앱에서 값을 내리면 큰 앱에서도 똑같이 내려야 해요. 그런데 큰 앱은 수수료가 높아서 그럴 여유가 없어요. **결국 두 앱의 값은 같은 자리에 묶여요.**", ["ygy.mech", "pr.both90"], { layer: "explain" }),
+export const SOLVE: Solve = {
+  // ① 틀의 입구 — 첫 생각 → 깨는 사실 → 뒤집기
+  entry: {
+    firstThought: t("“다른 앱보다 비싸게 팔지 마세요.” 손님에게는 좋은 얘기처럼 들려요. 어느 앱에서 시켜도 더 비싸지 않다는 거니까요.", undefined, { layer: "explain" }),
+    breaker: t("공정위가 본 건 달랐어요. 새로 들어오려는 앱은 수수료를 낮게 받아서 가게가 값을 내리게 하려 했는데, 이 요구가 그 길을 막았다는 거예요.", ["pr.entrant"], { layer: "official" }),
+    flip: {
+      label: "뒤집어 보면",
+      a: "“다른 앱보다 비싸게 팔지 마세요”",
+      op: "=",
+      b: "“다른 앱에서 더 싸게 팔지 마세요”",
+      note: t("같은 말이에요. 더 싼 곳이 생길 수 없으면, 손님은 옮길 이유가 없어요. 새 앱은 수수료를 낮춰도 손님을 데려오지 못하고, 큰 앱은 수수료를 내릴 이유가 없어져요.", ["pr.entrant", "ygy.mech"], { layer: "explain" }),
+    },
+    notDrawn: [
+      "메뉴값 · 수수료의 숫자 — 저장된 문서에 가게 한 곳의 값이 없다. 높낮이와 글자로만 그린다",
+      "요구가 없어진 뒤 값이 실제로 내릴지 — 공정위의 기대일 뿐이다",
+      "두 회사의 반론 — 저장된 공식 문서에 없다",
+    ],
+    whose: t("여기까지는 **공정위가 내린 판단**이에요. 두 회사의 반론은 이 회차에 아직 싣지 않았어요. 양쪽의 공식 입장을 나란히 놓을 수 있을 때 함께 실어요."),
+    death: false,
+  },
+
+  // 체험 — 틀: 켜고 끄기 (독자가 가게 사장님이 되어 같은 버튼을 두 번 누른다)
+  lab: {
+    title: "가게 사장님이\n되어 볼게요",
+    setup: [
+      t("당신은 앱 두 곳에 입점한 가게 사장님이에요. **큰 앱**은 손님이 많지만 수수료가 높아요. **새 앱**은 손님을 모으려고 수수료를 낮게 받아요.", undefined, { layer: "explain" }),
+      t("새 앱에서는 덜 떼이니까, 값을 조금 내려 팔 수 있어요. 한번 내려 볼까요?", undefined, { layer: "explain" }),
+    ],
+    frames: [
+      {
+        kind: "toggle",
+        // ③ 개념 ↔ 사건 — 이 그림은 사건이 아니라 개념(최혜대우)의 것이다. 최혜대우가 나오는 회차마다 다시 쓴다
+        picture: { id: "mfn-tie", concept: "mfn" },
+        tabs: { off: "요구가 없을 때", on: "요구가 있을 때" },
+        device: { on: "“다른 앱보다 비싸게 팔지 마세요”", off: "요구 없음. 값은 가게가 앱마다 정해요." },
+        action: "새 앱에서 값 내리기",
+        again: "처음으로",
+        goOn: "요구가 있을 때는 어떨까요?",
+        stage: {
+          kind: "pair",
+          sides: [
+            { name: "큰 앱", bar: "수수료 높음" },
+            { name: "새 앱", bar: "수수료 낮음" },
+          ],
+          tag: "메뉴값",
+          tie: "=",
+          tokens: "손님",
+          // 사실이 아니다 — 그림의 높낮이와 점의 수 (UX-1 의 값 그대로: 막대 너비 · 손님 여덟 · 새 앱에 둘 · 셋이 옮겨 간다)
+          drawn: { bars: [86, 34], tokens: 8, startInMover: 2, moved: 3 },
+        },
+        state: { idle: "같은 값", moved: "더 싼 값", blocked: "내릴 수 없어요" },
+        caption: {
+          offBefore: t("지금은 두 앱의 값이 같아요. 버튼을 눌러 보세요."),
+          offAfter: t("손님이 더 싼 새 앱으로 옮겨 가요. 큰 앱은 손님을 지키려면 수수료를 낮춰야 해요. **값이 내려가는 쪽으로 경쟁이 생겨요.**", ["pr.entrant"], { layer: "explain" }),
+          onBefore: t("이제 큰 앱이 요구해요. “우리 앱에서, 다른 앱보다 비싸게 팔지 마세요.” 그래도 눌러 보세요."),
+          onAfter: t("막혔어요. 새 앱에서 값을 내리면 큰 앱에서도 똑같이 내려야 해요. 그런데 큰 앱은 수수료가 높아서 그럴 여유가 없어요. **결국 두 앱의 값은 같은 자리에 묶여요.**", ["ygy.mech", "pr.both90"], { layer: "explain" }),
+        },
+      },
+    ],
+  },
+
+  // 기본 풀이 — 시안 전용 ("체험 없이 보기"로 견줘 본다). 꼴: 가. 뒤집기만 — 이 사건은 뒤집기(=)가 서고,
+  // "서로 다르게 말하는 것"에 놓을 회사 쪽 공식 문서가 저장돼 있지 않아 세 칸(나)은 셋째 칸이 빈다
+  plain: { kind: "flip", why: "demo", title: "한 문장을\n뒤집어 볼게요" },
 };
 
 // ─────────────────────────────────────────────────────────── 회차
@@ -416,7 +450,7 @@ export const DELIVERY: EpisodeData = {
     follower: ["cover", "event", "tools", "aha", "compare", "next", "keep"],
   },
   copy: COPY,
-  lab: LAB,
+  solve: SOLVE,
   // 지도 — UX-1 의 ConceptMap.tsx 에 있던 자리 · 선 그대로
   map: {
     at: { fee: [21, 72], mfn: [47, 45], dominance: [77, 66], provisional: [73, 22] },

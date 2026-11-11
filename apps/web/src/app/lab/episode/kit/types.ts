@@ -38,6 +38,9 @@ export interface T {
   layer?: "fact" | "official" | "explain";
 }
 
+export type { ChainFrame, Frame, Lab, NoLabWhy, PlainSolve, SeatsFrame, Solve, SolveEntry, ToggleFrame } from "./frames/types";
+import type { Solve } from "./frames/types";
+
 export const t = (text: string, src?: readonly string[], more?: Partial<T>): T => ({ t: text, ...(src ? { src } : {}), ...more });
 
 /** 개념 (도구) */
@@ -110,22 +113,13 @@ export interface EpisodeCopy {
     ask: string;
   };
   tools: { kicker: string; titleNew: string; titleFollower: string; subNew: T; subFollower: T; ask: string };
+  /** 풀이 장면에서 풀이(틀 · 기본 풀이)와 상관없이 늘 나오는 글. 머리 · 준비 글 · 뒤집기 · 누구의 말은 풀이 칸(EpisodeData.solve)에 있다 (UX-4) */
   aha: {
     kicker: string;
-    title: string;
-    setup: readonly T[];
-    /** 풀이에서 생기는 도구 — 풀이 장면 바로 뒤에 펼쳐서 보인다 (없는 회차도 있다) */
-    born?: { lead: string; concept: string };
-    flipLabel: string;
-    flipA: string;
-    /** 두 말 사이의 기호 ("=" · "≠") */
-    flipOp: string;
-    flipB: string;
-    flipNote: T;
+    /** 문서가 말한 것 */
     realLabel: string;
     real: readonly { head: T; body: T }[];
     verdict: T;
-    caveat: T;
     askNew: string;
     askFollower: string;
   };
@@ -174,8 +168,8 @@ export interface EpisodeData {
   /** 같은 회차 · 다른 조립 — 독자마다 새로 쓰지 않는다. 장면을 고르고 접을 뿐이다 */
   assembly: Record<ReaderId, readonly SceneId[]>;
   copy: EpisodeCopy;
-  /** 풀이 장면의 글 — 모양은 회차마다 다르다 (회차의 풀이 부품이 읽는다). check.ts 가 숫자를 보려고 여기 둔다 */
-  lab: Record<string, unknown>;
+  /** 풀이 칸 — 틀의 입구 + 체험(틀에 넣을 데이터) + 기본 풀이. 모양은 kit/frames/types.ts (UX-4). 화면 부품은 kit 이 세운다 */
+  solve: Solve;
   /** 지도 — 자리 · 선 · 다음 화의 개념. 손으로 놓았다 (배치를 계산하지 않는다 · UX1-d) */
   map: {
     at: Record<string, readonly [number, number]>;

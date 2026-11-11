@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { FomcEpisode } from "../episodes/fomc";
 import "../episode.css";
+import "../kit/frames/frames.css";
 import "../episodes/fomc/fomc.css";
 
 // UX-2 — 둘째 회차 시안: 2026-10-28 FOMC 를 시리즈 「금리는 어디로」 2화로. 배달앱 회차(../page.tsx)와 같은 뼈대(kit/) 위에 올라간다.

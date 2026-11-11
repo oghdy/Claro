@@ -52,4 +52,31 @@ export const CHROME = {
     seriesTag: "시리즈",
     switchSuffix: "회차",
   },
+  // ── UX-4: 풀이 시안의 스위치 둘 (제품의 일부가 아니다 — 풀이 장면에서만 보인다)
+  lab: {
+    rowAria: "풀이 시안 조종",
+    rowTag: "풀이",
+    plain: "체험 없이 보기",
+    seen: "이 그림을 본 독자",
+    back: "회차 시안으로",
+  },
+  // 이 그림을 본 독자 (D61 ② 다시 쓰기) — 설명 없이 그림과 오늘의 값만
+  seen: {
+    label: "전에 해 본 그림이에요. 오늘의 값만 볼게요.",
+    redo: "처음부터 다시 해 보기",
+    sideHint: "쪽을 누르면 그쪽이 한 말이 나와요.",
+  },
+  // 기본 풀이 (D61 ①) — 꼴마다의 칸 이름
+  plain: {
+    thought: "이렇게 생각하기 쉬워요",
+    breaker: "그런데 문서에는",
+    known: "확인된 것",
+    unknown: "아직 모르는 것",
+    differ: "서로 다르게 말하는 것",
+    differNone: "서로 다르게 말한 공식 입장은 아직 확인하지 못했어요.",
+    open: "다음 칸 열기",
+    quietWhat: "무슨 일이 있었나",
+    quietKnown: "지금 아는 것",
+    quietComing: "다음에 나올 것",
+  },
 } as const;

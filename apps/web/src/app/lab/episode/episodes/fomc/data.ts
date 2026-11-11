@@ -9,7 +9,7 @@
 //
 // 넣지 않은 것 (판단 — 로그 ⑧): 이란 전쟁 · 백악관 문서 · 쿡 이사 관련 절차 · 중간선거 물음 (D46 ③ — 오늘 요점을 이해하는 데 필요하지 않다).
 // 한국 독자의 "그래서 나는?" (환율 · 대출) — 저장된 1차 문서에 없다. 지어내지 않았다 (_open UX2-c).
-import { t as kt, type Concept, type DocRef, type EpisodeCopy, type EpisodeData, type ReaderFixture, type ReaderId, type SeriesInfo, type Source, type T } from "../../kit/types";
+import { t as kt, type Concept, type DocRef, type EpisodeCopy, type EpisodeData, type ReaderFixture, type ReaderId, type SeriesInfo, type Solve, type Source, type T } from "../../kit/types";
 
 export type DocLabel = "ST-10" | "PC-10" | "SP-COOK-0928" | "ST-09" | "ST-07" | "SEP-09" | "OMO" | "CAL";
 
@@ -306,21 +306,6 @@ export const COPY: EpisodeCopy = {
 
   aha: {
     kicker: "풀이",
-    title: "회의 자리에\n앉아 볼게요",
-    setup: [
-      t("당신은 금리를 정하는 12명 가운데 한 사람이에요. 먼저 지난 9월 회의로 돌아가 볼게요. 물가는 목표보다 높았고, 위원회는 브레이크를 밟기로 했어요.", ["st09.date", "st09.vote", "st09.raise", "st09.infl"], { layer: "explain" }),
-      t("직접 밟아 보세요. 그리고 그 힘이 어디까지 가는지 지켜보세요.", undefined, { layer: "explain" }),
-    ],
-    born: { lead: "방금 본 가운데 고리에는 이름이 있어요.", concept: "conditions" },
-    flipLabel: "뒤집어 보면",
-    flipA: "“금리를 그대로 뒀다”",
-    flipOp: "≠",
-    flipB: "“이제 됐다”",
-    flipNote: t(
-      "‘그대로’는 ‘충분하다’가 아니라 **‘아직 정하지 않았다’**에 가까웠어요. 성명문은 물가가 여전히 높다고 했고, 의장도 물가 안정을 아직 이루지 못했다고 인정했어요. 알맞은 금리 수준은 정보가 더 쌓이면 정하겠다는 거예요.",
-      ["st10.infl", "pc10.notyet", "st10.more"],
-      { layer: "explain" },
-    ),
     realLabel: "실제로 연준이 말한 것",
     real: [
       {
@@ -337,10 +322,6 @@ export const COPY: EpisodeCopy = {
       },
     ],
     verdict: t("그래서 의장의 답은 이랬어요. 물가를 잡는 일은 달력의 어느 하루에 달린 게 아니다. 지금까지 한 것을 점검하고, 곧 더 분명해질 것을 본 뒤에 정하겠다.", ["pc10.calendar", "pc10.clarity"], { layer: "official" }),
-    caveat: t(
-      "여기까지는 **성명문과 의장의 말**이에요. 반대한 두 위원이 이번 표결을 직접 설명한 글은, 우리가 확인한 문서에 아직 없어요. 쿡 위원은 회의 한 달 전 연설에서 물가가 너무 오래 높았고, 앞으로 몇 달도 물가를 밀어 올리는 힘이 이어질 거라고 말했어요. 다만 그건 그때의 생각이지, 이번 반대의 설명은 아니에요.",
-      ["cook.date", "cook.long", "cook.pressure"],
-    ),
     askNew: "그럼 다음엔 올리나요?",
     askFollower: "지난 회의와는 뭐가 달라졌죠?",
   },
@@ -419,53 +400,154 @@ export const COPY: EpisodeCopy = {
   map: { whereToday: t("2화에서 주움", undefined, { ui: true }) },
 };
 
-// ─────────────────────────────────────────────────────────── 풀이 장면의 글 — 이 회차만의 것 (Mechanism.tsx 가 읽는다)
+// ─────────────────────────────────────────────────────────── 풀이 칸
 // 그림의 수는 성명문의 표결 수(10 · 2 · 합 12)뿐이다. 금리 · 물가의 값은 그리지 않는다 (UX-1 J1 — 지어낸 숫자 금지).
 // 고리 셋의 상태는 전부 문서의 문장이다: 금리 = 9월에 올렸다 (ST-09) · 금융 여건 = 일부에서 조여졌다 (PC-10) · 물가 = 여전히 높다 (ST-10).
 // "물가까지 닿을지"는 그리지 않는다 — 의장도 "확실한 결론은 없다"고 했다. 그래서 둘째 고리는 점선과 물음표다.
 
-export const LAB = {
-  tabSep: t("9월 회의", ["st09.date"]),
-  tabOct: t("10월 회의", ["st10.date"]),
-  nodeRate: "기준금리",
-  nodeCond: "돈 빌리는 형편",
-  nodeInfl: "물가가 오르는 속도",
-  rateIdle: "아직 그대로",
-  rateOn: "올렸어요",
-  condIdle: "아직 그대로",
-  condPart: "일부에서 조여짐",
-  inflStill: "여전히 높음",
-  reach: "닿을까?",
-  action: "브레이크 밟기",
-  again: "처음으로",
-  goOn: t("6주 뒤, 10월 회의로", ["st09.date", "st10.date"], { calc: { "6": "9월 16일 → 10월 28일 = 42일" } }),
-  seats: "회의 자리",
-  you: "나",
-  chooseWait: "그대로 두고 더 본다",
-  chooseRaise: "한 번 더 올린다",
-  groupWait: t("그대로 두자 · 10명", ["st10.vote"]),
-  groupRaise: t("올리자 · 2명", ["st10.vote"]),
-  other: "다른 쪽에도 앉아 보기",
-  real: t("실제 결과 · 10 대 2로 ‘그대로’", ["st10.vote", "st10.hold"]),
-  sepBefore: t("9월 회의예요. 물가는 목표보다 높아요. 브레이크를 밟아 보세요.", ["st09.date", "st09.infl"]),
-  sepAfter: t(
-    "밟았어요. 힘이 가운데 고리까지는 갔어요. 돈 빌리는 형편이 일부 기업과 가계에서 조여졌거든요. 그런데 물가는 아직 그대로 높아요. **이 브레이크는 밟는 즉시 듣지 않아요.**",
-    ["st09.raise", "pc10.cond", "st10.infl"],
-    { layer: "explain" },
-  ),
-  octBefore: t("6주 뒤, 10월 회의예요. 12명이 같은 그림을 봤어요. 힘은 가운데까지 왔고, 물가는 아직 높아요. 당신이라면요?", ["st09.date", "st10.date", "st10.vote", "pc10.cond", "st10.infl"], {
-    calc: { "6": "9월 16일 → 10월 28일 = 42일", "12": "10 + 2" },
-  }),
-  octWait: t(
-    "10명이 앉은 쪽이에요. 의장이 전한 판단은 이래요. 지금까지 한 처방이 듣기 시작했지만 확실한 결론은 없다. 곧 더 분명해질 테니, 그걸 보고 정하자.",
-    ["st10.vote", "pc10.work", "pc10.clarity"],
-    { layer: "official" },
-  ),
-  octRaise: t(
-    "2명이 앉은 쪽이에요. 쿡, 해맥 두 위원이 “이번에 0.25%포인트 올리자”고 했어요. 다만 두 사람이 이번 표결의 까닭을 직접 설명한 글은, 우리가 확인한 문서에 아직 없어요.",
-    ["st10.vote", "st10.dissent"],
-    { layer: "fact" },
-  ),
+// 풀이 칸 — 틀에 넣을 데이터 (UX-4). 화면 부품은 kit/frames 가 세운다.
+// 글은 UX-2 의 것 그대로다 (COPY.aha 의 머리 · 준비 글 · 뒤집기 · 누구의 말과 LAB 의 글을 칸만 옮겼다).
+// 새로 쓴 글: 입구의 첫 생각 · 깨는 사실, 기본 풀이(세 칸)의 글. 전부 이 회차의 저장된 구절에서 (새 사실 없음).
+// 그림의 수는 성명문의 표결 수(10 · 2)뿐이다. 금리 · 물가의 값은 그리지 않는다. 올린 뒤 물가가 어떻게 되는지도 그리지 않는다.
+
+export const SOLVE: Solve = {
+  // ① 틀의 입구 — 첫 생각 → 깨는 사실 → 뒤집기
+  entry: {
+    firstThought: t("물가가 높으면 금리를 올려서 잡는다고들 해요. 그러니 올리지 않았다면 이제 괜찮다는 뜻 같아요.", undefined, { layer: "explain" }),
+    breaker: t("그런데 같은 날 성명문은 물가가 여전히 높다고 적었어요. 반대한 둘도 내리자가 아니라 올리자는 쪽이었고요.", ["st10.infl", "st10.dissent"], { layer: "fact" }),
+    flip: {
+      label: "뒤집어 보면",
+      a: "“금리를 그대로 뒀다”",
+      op: "≠",
+      b: "“이제 됐다”",
+      note: t(
+        "‘그대로’는 ‘충분하다’가 아니라 **‘아직 정하지 않았다’**에 가까웠어요. 성명문은 물가가 여전히 높다고 했고, 의장도 물가 안정을 아직 이루지 못했다고 인정했어요. 알맞은 금리 수준은 정보가 더 쌓이면 정하겠다는 거예요.",
+        ["st10.infl", "pc10.notyet", "st10.more"],
+        { layer: "explain" },
+      ),
+    },
+    notDrawn: [
+      "금리 · 물가의 값 — 그림의 수는 성명문의 표결 수뿐이다",
+      "올린 뒤 물가가 어떻게 되는지 — 아무도 모른다 (의장: 확실한 결론은 없다). 둘째 고리는 점선과 물음표",
+      "반대한 두 위원의 까닭 — 이번 표결을 설명한 글이 저장된 문서에 없다",
+    ],
+    whose: t(
+      "여기까지는 **성명문과 의장의 말**이에요. 반대한 두 위원이 이번 표결을 직접 설명한 글은, 우리가 확인한 문서에 아직 없어요. 쿡 위원은 회의 한 달 전 연설에서 물가가 너무 오래 높았고, 앞으로 몇 달도 물가를 밀어 올리는 힘이 이어질 거라고 말했어요. 다만 그건 그때의 생각이지, 이번 반대의 설명은 아니에요.",
+      ["cook.date", "cook.long", "cook.pressure"],
+    ),
+    death: false,
+  },
+
+  // 체험 — 틀 둘을 잇는다: 어디서 멈추나 (9월 회의) → 자리에 앉기 (10월 회의). 멈춘 그림 아래에 자리가 놓인다
+  lab: {
+    title: "회의 자리에\n앉아 볼게요",
+    setup: [
+      t("당신은 금리를 정하는 12명 가운데 한 사람이에요. 먼저 지난 9월 회의로 돌아가 볼게요. 물가는 목표보다 높았고, 위원회는 브레이크를 밟기로 했어요.", ["st09.date", "st09.vote", "st09.raise", "st09.infl"], { layer: "explain" }),
+      t("직접 밟아 보세요. 그리고 그 힘이 어디까지 가는지 지켜보세요.", undefined, { layer: "explain" }),
+    ],
+    frames: [
+      {
+        kind: "chain",
+        // ③ 개념 ↔ 사건 — 고리 그림은 개념(금융 여건 · 금리의 시차)의 것이다. 금리 회의마다 다시 쓰고, 오늘은 어디서 멈췄나만 바뀐다
+        picture: { id: "rate-brake", concept: "conditions" },
+        tab: t("9월 회의", ["st09.date"]),
+        // ② 사슬 엮기 — 고리 셋. 힘은 가운데까지만 갔다
+        nodes: [
+          { id: "rate", name: "기준금리", reach: "full", idle: "아직 그대로", after: "올렸어요" },
+          { id: "cond", name: "돈 빌리는 형편", reach: "part", idle: "아직 그대로", after: "일부에서 조여짐" },
+          { id: "infl", name: "물가가 오르는 속도", reach: "none", still: "여전히 높음" },
+        ],
+        unknown: "닿을까?",
+        action: "브레이크 밟기",
+        again: "처음으로",
+        caption: {
+          before: t("9월 회의예요. 물가는 목표보다 높아요. 브레이크를 밟아 보세요.", ["st09.date", "st09.infl"]),
+          after: t(
+            "밟았어요. 힘이 가운데 고리까지는 갔어요. 돈 빌리는 형편이 일부 기업과 가계에서 조여졌거든요. 그런데 물가는 아직 그대로 높아요. **이 브레이크는 밟는 즉시 듣지 않아요.**",
+            ["st09.raise", "pc10.cond", "st10.infl"],
+            { layer: "explain" },
+          ),
+        },
+        goOn: t("6주 뒤, 10월 회의로", ["st09.date", "st10.date"], { calc: { "6": "9월 16일 → 10월 28일 = 42일" } }),
+      },
+      {
+        kind: "seats",
+        picture: { id: "fomc-seats", concept: "vote" },
+        tab: t("10월 회의", ["st10.date"]),
+        // D61 ③ — 한 기관 안의 공식 이견이다 (성명문에 반대자의 이름과 원한 것이 적혀 있다). 사람이 채운 칸
+        ground: { body: "연준 FOMC", split: "official-dissent", record: ["st10.vote", "st10.dissent"] },
+        label: "회의 자리",
+        you: "나",
+        sides: [
+          {
+            id: "wait",
+            choose: "그대로 두고 더 본다",
+            group: t("그대로 두자 · 10명", ["st10.vote"]),
+            count: 10,
+            said: t(
+              "10명이 앉은 쪽이에요. 의장이 전한 판단은 이래요. 지금까지 한 처방이 듣기 시작했지만 확실한 결론은 없다. 곧 더 분명해질 테니, 그걸 보고 정하자.",
+              ["st10.vote", "pc10.work", "pc10.clarity"],
+              { layer: "official" },
+            ),
+            why: "in-doc",
+          },
+          {
+            id: "raise",
+            choose: "한 번 더 올린다",
+            group: t("올리자 · 2명", ["st10.vote"]),
+            count: 2,
+            said: t(
+              "2명이 앉은 쪽이에요. 쿡, 해맥 두 위원이 “이번에 0.25%포인트 올리자”고 했어요. 다만 두 사람이 이번 표결의 까닭을 직접 설명한 글은, 우리가 확인한 문서에 아직 없어요.",
+              ["st10.vote", "st10.dissent"],
+              { layer: "fact" },
+            ),
+            // 반대의 까닭은 회의록(11월 18일 무렵)에 나온다 — 그때까지 이 쪽은 반쪽이다 (3화가 채운다)
+            why: "not-yet",
+          },
+        ],
+        other: "다른 쪽에도 앉아 보기",
+        result: t("실제 결과 · 10 대 2로 ‘그대로’", ["st10.vote", "st10.hold"]),
+        caption: {
+          before: t("6주 뒤, 10월 회의예요. 12명이 같은 그림을 봤어요. 힘은 가운데까지 왔고, 물가는 아직 높아요. 당신이라면요?", ["st09.date", "st10.date", "st10.vote", "pc10.cond", "st10.infl"], {
+            calc: { "6": "9월 16일 → 10월 28일 = 42일", "12": "10 + 2" },
+          }),
+        },
+      },
+    ],
+    // 풀이에서 생기는 도구 — 고리 그림의 가운데 고리
+    born: { lead: "방금 본 가운데 고리에는 이름이 있어요.", concept: "conditions" },
+  },
+
+  // 기본 풀이 — 시안 전용 ("체험 없이 보기"로 견줘 본다). 꼴: 나. 세 칸 — 이 사건은 셋째 칸에 놓을 것이 저장된 문서에 있다
+  // (같은 회의 · 같은 자료 · 10명과 2명). 세 칸은 뒤집기가 없는 사건의 꼴이라, 여기서도 뒤집기 그림을 뺐다 (UX3-h 를 그대로 재 보려고).
+  plain: {
+    kind: "three",
+    why: "demo",
+    title: "오늘 나온 말을\n세 칸에 나눠 볼게요",
+    lead: t("왜 안 올렸는지, 연준이 낸 문서에서 확인되는 것과 아직 아닌 것을 갈라 볼게요."),
+    known: [
+      t("10월 28일, 연준은 기준금리를 3.75~4%로 그대로 뒀어요.", ["st10.date", "st10.hold"], { layer: "fact" }),
+      t("표결은 10 대 2였어요. 반대한 둘은 “이번에 0.25%포인트 올리자”는 쪽이었어요. 내리자는 표는 없었어요.", ["st10.vote", "st10.dissent"], { layer: "fact" }),
+      t("성명문은 물가가 여전히 높다고 적었어요. 의장은 물가가 목표를 웃돈 지 6년 가까이 됐다고 했고요.", ["st10.infl", "pc10.six"], { layer: "official" }),
+      t("9월에 금리를 올린 뒤로, 돈 빌리는 형편이 일부 기업과 가계에서 조여졌어요.", ["pc10.cond"], { layer: "official" }),
+    ],
+    unknown: [
+      t("반대한 두 위원이 이번 표결의 까닭을 직접 설명한 글. 우리가 확인한 문서에 아직 없어요."),
+      t("9월에 올린 힘이 물가까지 닿을지. 의장도 “확실한 결론은 없다”고 했어요.", ["st09.date", "pc10.work"], { layer: "official" }),
+      t("다음 회의에서 올릴지, 그대로 둘지. 의장은 미리 짐작해 말하지 않겠다고 했어요.", ["pc10.noprejudge"], { layer: "official" }),
+    ],
+    differ: [
+      {
+        who: t("10명 · 그대로 두자", ["st10.vote"]),
+        says: t("의장이 전한 판단은 이래요. 지금까지 한 처방이 듣기 시작했지만 확실한 결론은 없다. 곧 더 분명해질 테니, 그걸 보고 정하자.", ["pc10.work", "pc10.clarity"], { layer: "official" }),
+      },
+      {
+        who: t("2명 · 올리자", ["st10.vote"]),
+        says: t("쿡, 해맥 두 위원은 “이번에 0.25%포인트 올리자”고 했어요. 까닭은 문서에 아직 없어요.", ["st10.dissent"], { layer: "fact" }),
+      },
+    ],
+    differNote: t("같은 회의에서 같은 그림을 본 사람들의 판단이 갈렸어요. 어느 쪽이 맞는지는 우리가 정하지 않아요."),
+  },
 };
 
 // ─────────────────────────────────────────────────────────── 회차
@@ -493,7 +575,7 @@ export const FOMC: EpisodeData = {
     follower: ["cover", "event", "tools", "aha", "compare", "next", "keep"],
   },
   copy: COPY,
-  lab: LAB,
+  solve: SOLVE,
   // 지도 — 자리와 선은 손으로. 선 = 이 이야기에서 개념이 이어진 길 (금리 → 금융 여건 → 물가 · 금리는 표결로 · 표결 12명과 점 18개)
   map: {
     at: { rate: [22, 70], conditions: [50, 47], target: [78, 68], vote: [25, 23], dots: [74, 21] },
