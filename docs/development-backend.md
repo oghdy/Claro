@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**Phase 0 끝 (2026-10-13 · D38 — 0.5 게이트 닫음 · 배포 https://claro-lime-one.vercel.app).** F-3 은 미룸 (D39). 지금 일은 파이프라인 레인 — `docs/development-pipeline.md`. 계약 잔일(SourceDocument 해시 · 가져온 때 · §7.3 표 밖 4 · v2 참조 모양)은 그 문서 "잔일"에 모여 있다
+**2026-11-11 — B-E1 회차 계약 도는 중 (D62 · 두 실물 `/lab/episode` · `/lab/episode/fomc` 에서).** 그 이전: **Phase 0 끝 (2026-10-13 · D38 — 0.5 게이트 닫음 · 배포 https://claro-lime-one.vercel.app).** F-3 은 미룸 (D39). 지금 일은 파이프라인 레인 — `docs/development-pipeline.md`. 계약 잔일(SourceDocument 해시 · 가져온 때 · §7.3 표 밖 4 · v2 참조 모양)은 그 문서 "잔일"에 모여 있다
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -1230,3 +1230,55 @@ docs/development-backend.md 0.2a 체크 + 완료일
 - 프론트는 지금 이 값을 읽지 않는다(계산 없음, D12). `packages/contract` 는 비어 있지 않은 문자열로만 받는다 — 막히는 것 없음
 - **→ 0.2b 답 (D27 수용)**: `"YYYY-MM-DD"` 날짜만. 어느 날짜 · 어느 시간대로 자를지는 D6 (DATA_MODEL §5.3). `packages/contract` 는 그대로 맞다.
   ARTICLE_PACKAGE §1 의 `Date` 표기는 이번 수정 범위 밖이라 남아 있다
+
+## B-E1 · 회차 계약 — 두 실물에서 (D62)
+
+| Step | 내용 | 산출 | 상태 |
+|---|---|---|---|
+| **B-E1** | 회차 계약 — 배달앱 1화 · 금리 2화 (시안) 에서 도출 · Series / Episode / 장면 여덟 / 조립 / 풀이 (입구 · 틀 · 기본 풀이) · D61 · UX4-a 불변식 · UX1-b (Series ↔ Storyline · Episode ↔ ArticlePackage) · 골든 둘 + invalid · 시안이 계약 타입을 쓰게 (픽셀 0) · 서브에이전트 Fable | `docs/contract/EPISODE.md` · packages/contract · fixtures/episode-* · `logs/backend/B-E1.md` | ☐ 도는 중 (2026-11-11) |
+
+### 서브에이전트 지시 (Fable)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 백엔드 레인 (계약). Step B-E1 (회차 계약 — 두 실물에서)을 맡는다. PM(나)이 검수한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라.
+
+## 왜
+Claro 는 기사를 "회차"로 낸다 — 도윤이 확정했다 (D57 쌓인다 · 이어진다 · 맛 → D58 → **D59 회차 형식: 장면 여덟 · 중간의 체험** → D60 파이프라인이 회차를 찍게 → **D61 체험 틀 규칙** → D62). 실물이 둘 있다: `/lab/episode` (배달앱 · 「누가 값을 정하나」 1화) · `/lab/episode/fomc` (금리 · 「금리는 어디로」 2화). 둘 다 `apps/web/src/app/lab/episode/` 의 시안 코드이고, 그 모양은 시안의 타입 (`kit/types.ts` `EpisodeData` · `kit/frames/types.ts` 틀 입력)에만 있다.
+다음은 파이프라인이 회차를 찍는 일이다 (첫 시험 = 10월 회의록 → 「금리는 어디로」 3화 · 11/18 무렵). 파이프라인이 무엇을 내야 하는지가 계약이어야 한다 — 지금은 계약이 없다 (UX1-b). **이 Step 은 두 실물에서 회차 계약을 도출한다** (D24 — 계약은 실물에서. 상상으로 칸을 늘리지 마라 — 실물 둘에 없는 칸은 "미확인").
+
+## 할 것
+1. **계약 문서**: `docs/contract/EPISODE.md` (새 파일 — 다른 파일이 낫다면 까닭). 한 타입은 한 파일에만 (CLAUDE.md). 맨 위 CHANGELOG. 담을 것 — 실물 둘과 시안 타입에서:
+   - Series (시리즈) · Episode (회차 — 0화도 회차의 한 종류인가 · 회차 번호) · 장면 여덟 · 두 독자 조립 (처음 온 독자 / 따라온 독자 — 무엇이 접히고 · 빠지고 · 더해지나)
+   - 도구 (개념 — CONCEPT_IDENTITY 의 개념을 가리키나 · 라이브러리 바탕 / 손으로 쓴 것 표시) · 개념 지도 (선의 뜻은 정하지 않았다 — UX1-d 는 OPEN 으로 둔다)
+   - **풀이**: 입구 (첫 생각 · 깨는 사실 · 뒤집기 `A ≠ B` · 그리지 않을 것 · 누구의 말 · 사망 여부) · 체험 (틀: 어디서 멈추나 · 자리에 앉기 · 켜고 끄기 — 켜고 끄기의 그림은 데이터가 아니라 **개념의 그림 부품**을 가리킨다: UX-4 ③) · 기본 풀이 (가 뒤집기만 · 나 세 칸 · 다 조용히) · "이 그림을 본 독자"용 머리말 칸 (UX-4 ⑦-6 · PM 수용)
+   - 근거 구절 (quote + SourceDocument 참조 — DATA_MODEL) · 숫자 (구절 / 계산 / 화면 번호) · 누구의 말 꼬리표 (문서의 사실 / 기관의 판단 / Claro 의 설명)
+   - 이어짐 · 남음
+   - **불변식** — 시안 `check.ts` 가 이미 보는 것을 계약으로: 구절은 저장된 문서에 그대로 · 숫자는 근거 셋 중 하나 · **D61 ③** 자리에 앉기는 한 기관 안의 공식 이견에만 (정당 표결이면 거부) · **D61 ④** 사망이면 체험 없음 + 기본 풀이 "조용히" · 뒤집기가 없으면 틀을 고를 수 없다 · 서로 다르게 말하는 것은 양쪽 (D46) · **UX4-a (PM 판정)**: 자리에 앉기의 쪽마다 `why` — 공식으로 한 말이 문서에 있으면 된다 · 까닭이 아직 없으면 (`not-yet`) 허용하되 **화면에 "그 까닭은 아직 문서에 없다"는 글이 반드시** (없으면 거부)
+2. **이미 있는 계약과의 관계 — 정하고 까닭을 적어라** (UX1-b):
+   - Series ↔ Storyline (DATA_MODEL — 지금 스토리라인은 "이란 전쟁" 하나 · 사실의 흐름) — 같은 것인가 · 다른 것인가
+   - Episode ↔ ArticlePackage (ARTICLE_PACKAGE — 본 화면 `/` B5 가 쓰는 지금의 기사 모양) · ArticleRecord · Event — 회차는 Event 를 가리키나 · 판 (version) 은
+   - **ArticlePackage · 본 화면 · 기존 픽스처를 깨지 마라.** 본 화면을 회차로 옮기는 것은 뒤의 Step 이다 — 이 Step 에서는 나란히 선다
+3. **packages/contract**: 스키마 (기존 방식대로) + 검증. 골든 픽스처 `fixtures/episode-*.json` 둘 (실물 둘의 데이터를 그대로 — 독자 글 한 글자도 바꾸지 마라) · `fixtures/invalid/episode-*.json` (불변식마다 하나 이상 — 스키마가 거부해야 정상). 근거 문서는 이미 git 에 있는 것만 (배달앱: 공공누리 · 법령 / 금리: 미국 연방 저작물 — 권리 규칙 D53 · D40/D41). 조용히 견본 (`/lab/episode/quiet`)은 실물이 아니라 골든이 아니다
+4. **시안이 계약을 쓰게**: 한 타입은 한 곳에만 — 시안의 `kit/types.ts` · `kit/frames/types.ts` 의 회차 · 틀 타입은 `@claro/contract` 에서 가져오게 바꾸고, 두 회차가 골든 픽스처 (또는 같은 데이터)로 그려지게. **화면은 한 픽셀도 바뀌면 안 된다** — `shots.ts` 로 UX-4 의 `after/` 와 대조. 시안의 `check.ts` 는 계약 검증을 부르거나 겹치지 않게 정리 (화면 쪽 검사만 남긴다)
+
+## 하지 말 것 (CLAUDE.md "절대 하지 말 것" 그대로)
+- **지식 상태를 정하는 것** — 조립은 "어떤 조건이면 무엇을 보인다"를 데이터로만 적는다. 조건을 판정하는 함수 · 임계값 · 추정기 · Beta · SKIP/REFRESHER/FULL 임계 금지 (지식 상태 조회는 함수 하나 · 호출 지점 하나 — 그것은 뒤의 Step)
+- "이거 알아요?"의 답을 관찰 기록에 넣는 것 (UX1-c — OPEN 으로 둔다 · DECISIONS 에 올려라) · 지도 선의 뜻 (UX1-d) · 레벨 수 (D21) · 개인화 범위 (D4)
+- DB (packages/db) · 파이프라인 (packages/pipeline) · 본 화면 `/` · packages/tokens 수정. 개념 라이브러리 수정
+- 미정 항목을 임의로 정하지 마라 — `docs/DECISIONS.md` 에 OPEN 으로 올리고 그 칸은 "미확인"
+- 모델 API 호출 (비용 0) · 배포 · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/FINDINGS.md §1 · §15 · docs/contract/ 전부 (특히 ARTICLE_PACKAGE · DATA_MODEL 의 Storyline · SourceDocument · ArticleRecord · CONCEPT_IDENTITY 의 개념 참조)
+- docs/DECISIONS.md D24 · D46 · D53 · D57 ~ **D62**
+- logs/frontend/UX-1.md ⑥ (UX1-a ~ g) · UX-2.md ⑤ (공통 뼈대) · UX-3.md ⑥ (데이터 모양) · **UX-4.md 전부** (② 틀 입력 표 · ③ 잃은 것)
+- `apps/web/src/app/lab/episode/` 전부 · packages/contract/src 전부 · fixtures/ 의 기존 골든과 invalid
+
+## 끝낼 때
+- 로그 `logs/backend/B-E1.md` — ① 계약 한눈에 (타입 · 관계 그림) ② UX1-b 의 판단과 까닭 (Series ↔ Storyline · Episode ↔ ArticlePackage · 0화) ③ 불변식 목록과 invalid 픽스처 짝 ④ 실물 둘에 없어 "미확인"으로 둔 칸 ⑤ 시안이 계약을 쓰게 바꾼 것 · 픽셀 대조 결과 ⑥ 파이프라인이 낼 것 — 이 계약의 칸마다 p3 / p4 / p5 / 라이브러리 / 사람 (UX-4 ② 를 계약 칸으로) ⑦ OPEN 으로 올린 것 ⑧ _open. "작업 세션 모델: Fable 5.2"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (logs/frontend/F-2b 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · 골든 통과 · invalid 전부 거부 · 시안 `check.ts` · 스크린샷 대조. **결과를 로그에 붙인다**
+- 폰 서버: 포트 3200 (`pnpm --filter @claro/web phone`)을 끝날 때 다시 빌드해 띄워 둬라 (백그라운드 · LAN 200 확인)
+- docs/development-backend.md 의 B-E1 줄 (☐ 도는 중 → ☑ · 날짜 · 한 줄) · 계약 파일 CHANGELOG · 커밋 접두사 `B-E1` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` 금지
+- **나(PM)에게**: 25줄 안쪽 한국어 요약 — 커밋 · 계약 한 줄 · UX1-b 판단 · 불변식 수 / invalid 수 · 미확인 칸 · 픽셀 대조 · OPEN 으로 올린 것 · 파이프라인이 낼 칸 중 사람이 채워야 하는 것
+```
