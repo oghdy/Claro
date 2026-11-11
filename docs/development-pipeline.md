@@ -4,7 +4,7 @@
 **작업은 PM 이 서브에이전트에게 지시하고, 서브에이전트가 로그를 쓰고, PM 이 확인한 뒤 도윤에게 보고한다** (D39).
 
 ## 현재 위치
-**2026-11-11 · 회차 트랙 (D59 ~ D68) — 도는 중: E3-1 세 번째 회차 소스 팩 (개인정보위 과징금) · P-E1 파이프라인이 회차를 낸다 (금리 2화 재현 · 골든과 견줌 · 상한 3 달러)** · 회차 계약 B-E1 닫힘 (D68). 그 이전: **2026-11-11 · P-5 까지 끝. 10월 회의록(11/18 무렵)을 기다린다 (D45 · 도윤).** 회의록이 나오면 수집 → P-3b → P-4 → P-5 를 다시 돌리고 P-6 (요점 · 게이트 2 — 도윤).
+**2026-11-11 · 회차 트랙 (D59 ~ D68) — 도는 중: P-E1 파이프라인이 회차를 낸다 (금리 2화 재현 · 골든과 견줌 · 상한 3 달러) · E3-1b 개인정보위 문서 단위 권리** · E3-1 닫힘 (D69) · 회차 계약 B-E1 닫힘 (D68). 그 이전: **2026-11-11 · P-5 까지 끝. 10월 회의록(11/18 무렵)을 기다린다 (D45 · 도윤).** 회의록이 나오면 수집 → P-3b → P-4 → P-5 를 다시 돌리고 P-6 (요점 · 게이트 2 — 도윤).
 정치는 D46 (공식 발언만 · 동기 해석 안 함 · 필요할 때만 · 양쪽). **그동안 잔일 W-1 ~ W-5 (D47)** — 아래 "잔일 Step". **도는 것 없음 — 멈추고 도윤과 다시 정리 (2026-11-11)** · W-6 · E2-1 닫힘 (D55 · D56), 그다음 도윤과 다시 정리 (W-5 멈춤) · W-3 · W-2 · W-1 닫힘 (D48 · D49 · D50). 회의록 날 명령: `pnpm --filter @claro/pipeline rerun FOMC-20261028 --doc MIN-10` (마른 실행 · 배치 ≈ 1.45 달러) → `--go --step R-MIN10 --budget 3` (logs/pipeline/W-1.md ①).
 사건 폴더: `packages/pipeline/data/events/FOMC-20261028/` (p3 · p4 · p5 · bls) · 스토리라인 `packages/pipeline/data/storylines/SL-iran-war/v2.json`
 명령: `pnpm --filter @claro/pipeline p1 | p2 <code> | p3 | p4 | p5` (각각 `--check` 로 다시 돌려 같은지). 검사: `scripts/verify-source-pack · verify-fact-graph · verify-coverage · verify-claims .py`
@@ -53,6 +53,7 @@
 | E2-0 | **두 번째 기사 (기술 · 산업 — D52)** 사건 후보 3 ~ 4 · 비교표 · 추천 → 도윤이 고름 (게이트 1) · API 0 | Opus | ☑ 2026-11-11 — PM 검수 대기 → 게이트 1 (도윤) (`logs/pipeline/E2-0.md` · 후보 4: **A 미 · 중 수출 통제 휴전 두 달 연장** (BIS 91 FR 70789 · USTR 301 · MOFCOM 2026 제58호 · 한화 제재 유예 — 다음 노드 2027-01-10) · **B 공정위 배달앱 최혜대우 제재** (의결 10/29 · 발표 11/9 · 6,319억 잠정 · 공공누리 1유형) · C SK하이닉스 3Q · HBM4 (기업 문서만 — 권리 · 수집 막힘) · D 공정거래법 시행령 입법예고 (안 — B 의 다음 노드). **추천 B · 둘째 A (1월 세 번째 기사 후보)** · 버린 후보 8 · 저장 0 · API 0 · _open E2-a ~ i) |
 | E2-1 | **두 번째 기사 소스 팩 — 공정위 배달앱 최혜대우 제재 (D53)** · 1차 수집 · 권리 (공공누리 1유형 = git) · **FOMC 전용으로 굳은 곳 목록** · 슬롯 초안 · API 0 | Opus | ☑ 2026-11-11 — **닫힘 (D55)** (`a159999` · `logs/pipeline/E2-1.md` · 저장 15 (git 12 · 캐시 3) · 빈 슬롯 4 (의결서 등) · HWP 읽기 · **FOMC 전용으로 굳은 곳 R8 ~ R17 · L1 ~ L12** · 슬롯 초안 15) |
 | E3-1 | **세 번째 회차 소스 팩 — 개인정보위 과징금 (D63)** · 1차 확인 · 수집 · 권리 (pipc.go.kr 공공누리) · **회차 재료** (뒤집기 확인 · 넘겨 보기 칸 · 그리지 않을 것) · API 0 | Opus | ☑ 2026-11-12 — 검수 대기 (`logs/pipeline/E3-1.md` · 사건 1차 확인 (pipc.go.kr 보도자료 · 대교 32.55억 · 영훈 6.3억 · 위반 조항 §29) · 저장 12 (법령 git 6 · 개인정보위 캐시 6 — 공공누리가 문서 안 그림뿐 _open E3-1-a) · 빈 슬롯 5 (의결서 · 산정 · 회사 입장 둘) · 뒤집기 선다 (법 제64조의2 ① 9호 단서 — "털렸다 ≠ 벌받는다") · 넘겨 보기 6칸 (대교) · 그리지 않을 것 11 · 새로 막힌 곳 N1 ~ N11) |
+| E3-1b | **개인정보위 문서 단위 권리 (D69 · E3-1-a)** — 문서 안 공공누리 제1유형 표시가 있는 문서만 git · 게시물 · 일정은 캐시 · 다시 돌림 · API 0 | Opus | ☐ 도는 중 (2026-11-12) |
 | P-E1 | **파이프라인이 회차를 낸다 (D68)** — 회차 단계 (① 첫 생각 · 뒤집기 ② 사슬 ③ 개념 연결 ④ 틀 제안 · 채우기 ⑤ 장면 글 ⑥ 겹 검사) · 10월 FOMC 산출물로 금리 2화를 다시 만들어 골든 (`fixtures/episode-rate-2.json`) 과 견줌 · 사람 확인 목록 · 시안 `/lab/episode/fomc-auto` · 상한 3 달러 | Fable | ☐ 도는 중 (2026-11-11) |
 | W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + **판 올려 10월 사실 다시 뽑기 (W-6 의 배치 길로 ≈ 1.8 달러 · D50 · D51)** + W2-b (`w2-entail/2` · Opus medium 다시 잼) + F046 · F449 확인 + 끝에 `rerun --pretend-new` | Opus | ⏸ 멈춤 (2026-11-11 · 도윤과 다시 정리) |
 
@@ -797,4 +798,37 @@ Claro 는 기사를 "회차"로 낸다 (D59 — 장면 여덟 · 중간의 체�
 - 폰 서버: 끝날 때 포트 3200 (`pnpm --filter @claro/web phone`)을 다시 빌드해 띄워 둬라 (백그라운드 · LAN 200 · 다른 세션이 빌드 중이면 기다렸다가). 새 경로가 열리는지 확인
 - docs/development-pipeline.md 의 P-E1 줄 (☐ 도는 중 → ☑ · 날짜 · 한 줄 — 그 줄만 · 커밋 직전에 다시 읽고) · 커밋 접두사 `P-E1` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` 금지
 - **나(PM)에게**: 25줄 안쪽 한국어 요약 — 커밋 · 판정 한 줄 · 견주기에서 가장 큰 차이 셋 · 사람 시간 · 비용 (이번 · 한 편 몫) · 계약에 모자란 것 · 폰에서 여는 법 · _open
+```
+
+---
+
+## E3-1b · 개인정보위 문서 단위 권리
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 파이프라인 레인. Step E3-1b (개인정보위 문서의 권리 — 문서 단위 공공누리)를 맡는다. PM(나)이 검수한다. 작은 Step 이다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **같은 작업 트리에서 P-E1 세션이 돈다** (`packages/pipeline/src/llm.ts` · `episode*.ts` · `packages/pipeline/package.json` · `scripts/verify-ledger.py` · `packages/pipeline/data/events/FOMC-20261028/episode/` · `packages/pipeline/data/series/` · `apps/web/src/app/lab/episode/fomc-auto/` · `logs/pipeline/P-E1.md`). 그 파일들은 건드리지 마라.
+
+## 왜
+E3-1 (`739a20a` · `logs/pipeline/E3-1.md`) 이 개인정보위 과징금 사건 (`packages/pipeline/data/events/PIPC-20261028-SAFETY-MEASURES/`) 을 모았다. pipc.go.kr 은 사이트 꼬리말이 "All right reserved." 이고 공공누리 글이 없지만, **보도자료 PDF · HWPX 안에 공공누리 제1유형 ("OPEN · 출처표시") 그림이 있다** — 그래서 개인정보위 문서 6건이 전부 캐시에 있다 (_open E3-1-a).
+다음 Step (UX-5 — 세 번째 회차를 손으로) 는 근거 구절을 **git 에 있는 문서에서만** 단다 (공개 저장소 · UX-1 J2). 사건의 핵심 사실 (대교의 차례 · 알림 · 대응 소홀 · 다시 유출)은 보도자료 PDF 에만 있다.
+**PM 판정 (D69 · E3-1-a)**: (a) **문서 안의 공공누리 제1유형 표시를 근거로 그 문서만 git** — 표시가 있는 문서만. 표시 없는 게시물 페이지 · 일정 페이지는 캐시 그대로. 발행처 단위 (pipc.go.kr 전체)로 넓히지 않는다. 제3자 글이 길게 든 문서는 그대로 hold_text (D55).
+
+## 할 것
+1. **문서 단위 권리 길** — `pack.json` 항목에 문서 단위 권리 칸 (hold_text 의 반대 · 이름은 네가) + `rights.ts` 가 그것을 읽어 권리 행을 낸다. 근거 글에 **무엇을 봤나**를 남긴다: 어느 파일 · 몇 쪽 · 어떤 그림 (공공누리 제1유형 · 출처표시) · 그림의 해시 같은 다시 확인할 수 있는 값. 발행처 단위 목록 (KOGL_TYPE1) 은 건드리지 않는다
+2. **표시를 하나하나 확인** — pipc 의 PDF 셋 (`PR-1029-PDF` · `SL-SKT-0828` · `SL-STATS-0515`) 을 열어 공공누리 제1유형 그림이 있는지 본다 (캐시에 있는 원본에서 — 다시 받지 않아도 되면 받지 마라). **있는 것만** git. 없거나 다른 유형이면 캐시 그대로 · 적는다. 게시물 페이지 (`PR-1029` · `SL-FINE-1204`) · 일정 (`M21-AGENDA`) 은 캐시 그대로
+   - 문서 안에 언론 · 회사 · 개인의 글이 길게 들었는지 본다 — 있으면 그 문서는 hold_text (D55)
+3. **다시 돌린다** — pack 을 다시 돌려 표시가 확인된 문서가 `store.documents.json` 으로 옮겨지게. `--check` 같은 해시 · `scripts/verify-source-pack.py` · 권리 행 (store.json source_registry) 의 근거 글 확인
+4. 시험: 문서 단위 권리가 (i) 표시가 있는 문서만 git 으로 (ii) 같은 발행처의 다른 문서는 캐시로 남기는지 — 작은 시험 하나
+
+## 하지 말 것
+- 발행처 단위로 pipc.go.kr 전체를 git 으로 · 표시가 없는 문서를 git 으로 · 다른 사건 폴더 · P-E1 이 고치는 파일 (위) · 계약 · fixtures · apps/web
+- 모델 API 호출 (비용 0) · 우회 수집 · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 끝낼 때
+- 로그 `logs/pipeline/E3-1b.md` — ① 문서마다 표시를 봤나 · 결과 (git / 캐시 / hold) ② 문서 단위 권리 길 (칸 · 근거 글) ③ 검사 결과를 붙인다 ④ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `--check` · `verify-source-pack` · 파이썬 검사 · `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>` · P-E1 진행 중 변경으로 깨지면 적기만)
+- docs/development-pipeline.md 의 E3-1b 줄 (그 줄만 — 커밋 직전에 다시 읽고) · 커밋 접두사 `E3-1b` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` 금지
+- **나(PM)에게**: 15줄 안쪽 — 커밋 · 문서마다 결과 · git 으로 옮긴 문서 · _open
 ```
