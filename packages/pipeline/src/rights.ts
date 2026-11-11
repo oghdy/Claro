@@ -24,9 +24,15 @@ export const US_FEDERAL: Record<string, string> = {
 export const KOGL_TYPE1: Record<string, string> = {
   "ftc.go.kr": '공정거래위원회 (ftc.go.kr) — 게시물 페이지 꼬리말: "공정거래위원회 저작물은 " 공공누리 제1유형(출처명시) " 공공저작물의 출처를 명시하고, 상업적 활용여부에 관계없이 이용하며, 2차적저작물 작성등 변경하여 이용할 수 있다."',
 };
-// 한국 법령 — 발행처 → 무엇
+// 한국 법령 — 발행처 → 무엇. 저작권법 제7조 제1호 (법령) · 제2호 (국가의 고시 · 공고 · 훈령 …) — 고시(행정규칙)와 별표도 같다 (E3-1)
 export const KR_STATUTE: Record<string, string> = {
-  "law.go.kr": "국가법령정보센터 (법제처) — 법률 · 대통령령 본문",
+  "law.go.kr": "국가법령정보센터 (법제처) — 법률 · 대통령령 본문과 별표 · 행정규칙(고시) 본문",
+};
+// 공공누리를 찾아봤으나 git 의 근거가 되지 못한 발행처 — 무엇을 봤나 (권리는 미확인 그대로. 판정은 PM — E3-1)
+export const CHECKED_NOT_STORABLE: Record<string, string> = {
+  "pipc.go.kr":
+    '개인정보보호위원회 (pipc.go.kr) — 사이트 꼬리말: "Copyright ⓒ Personal Information Protection Commission. All right reserved." · 공공누리 표시 글 없음 (게시물 페이지 · 누리집 안내 · 도움말). ' +
+    "보도자료 첨부 (PDF · HWPX) 안에는 공공누리 제1유형 (출처표시) 그림이 있다 — 문서 단위 표시라 발행처 단위 목록(KOGL_TYPE1)에 넣지 않았다 (_open E3-1-a)",
 };
 
 export const rightsOf = (publisher: string): Rights =>
@@ -78,6 +84,8 @@ export function registryRow(publisher: string, reviewedAt: string, accessNote: s
   return {
     source: publisher, access_method: accessNote, can_ingest: null, can_store: null, can_quote: null, can_transform: null,
     commercial_use: null, attribution_required: null, terms_url: null, last_reviewed_at: null,
-    basis: "권리 미확인 — 미국 연방 정부가 아니다. 전문은 git 밖 캐시(packages/pipeline/.cache/text)에만 둔다. git 에는 서지 · 해시 · span 만 (P-1)",
+    basis: CHECKED_NOT_STORABLE[publisher]
+      ? `권리 미확인 — ${CHECKED_NOT_STORABLE[publisher]}. 전문은 git 밖 캐시에만 둔다. git 에는 서지 · 해시 · span 만 (P-1 · E3-1)`
+      : "권리 미확인 — 미국 연방 정부가 아니다. 전문은 git 밖 캐시(packages/pipeline/.cache/text)에만 둔다. git 에는 서지 · 해시 · span 만 (P-1)",
   };
 }

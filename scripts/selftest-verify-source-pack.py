@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""verify-source-pack 자체 시험 — 실물 사건 폴더(FOMC-20261028 · E2-1 의 KFTC-20261029-DELIVERY-APPS)는 통과하고, 망가뜨린 사본은 그 code 로 실패해야 한다.
+"""verify-source-pack 자체 시험 — 실물 사건 폴더(FOMC-20261028 · E2-1 의 KFTC-20261029-DELIVERY-APPS · E3-1 의 PIPC-20261028-SAFETY-MEASURES)는 통과하고, 망가뜨린 사본은 그 code 로 실패해야 한다.
 
     python3 scripts/selftest-verify-source-pack.py
 """
@@ -154,6 +154,30 @@ CASES2 = [
     ('E2-1 한국어 증거 글 다름', m2_evidence, 'PACK_PUBLISHED'),
 ]
 
+# E3-1 — 세 번째 사건 (공공누리 표시가 문서 안에만 있는 발행처 = 권리 미확인 · 법령 판 둘 · 고시)
+CODE3 = 'PIPC-20261028-SAFETY-MEASURES'
+base3 = V.load_event(os.path.join(V.EVENTS, CODE3))
+
+
+def m3_pipc_into_repo(b):  # 공공누리가 사이트에 없는 발행처(pipc.go.kr)의 보도자료를 기록이 저장소에 있다고 한다
+    rec(b, 'PR-1029-PDF')['text_in'] = 'store.documents.json'
+
+
+def m3_law_text(b):        # 위반 기간 판 법률의 원문 한 글자 (제64조의2 단서 "다한" → "다 한")
+    d = doc(b, 'LAW-PIPA-2024')
+    d['text'] = d['text'].replace('조치를 다한 경우', '조치를 다 한 경우', 1)
+
+
+def m3_evidence(b):        # 본문의 요일 오기를 증거 글로 — 저장한 PDF 머리는 "(목) 11:00" 이 맞고 "(수) 11:00" 은 없다
+    item(b, 'PR-1029-PDF')['published_evidence'] = '보도시점 2026.10.29.(수) 11:00'
+
+
+CASES3 = [
+    ('E3-1 개인정보위 보도자료를 저장소에', m3_pipc_into_repo, 'PACK_DOC_NOT_STORABLE'),
+    ('E3-1 법령 원문 한 글자', m3_law_text, 'PACK_DOC_HASH'),
+    ('E3-1 증거 글 요일 다름', m3_evidence, 'PACK_PUBLISHED'),
+]
+
 CASES = [
     ('원문 한 글자', m_hash, 'PACK_DOC_HASH'),
     ('권리 미확인 전문을 저장소에', m_unstorable, 'PACK_DOC_NOT_STORABLE'),
@@ -203,7 +227,18 @@ def main():
         hit = any(c.startswith(want) for c, _ in errs)
         print(f'  {"ok  " if hit else "FAIL"} {name} → {want}' + ('' if hit else f' (나온 것 {[c for c, _ in errs][:4]})'))
         fails += not hit
-    print(f'\nselftest-verify-source-pack: 사본 {len(CASES) + len(CASES2)} · ' + ('OK' if not fails else f'FAIL {fails}'))
+    errs, _ = V.check(base3, contract, p1_store, p1_docs)
+    ok = not errs
+    print(f'  {"ok  " if ok else "FAIL"} 실물 {CODE3} 통과' + ('' if ok else f' — {errs[:3]}'))
+    fails += not ok
+    for name, mut, want in CASES3:
+        b = copy.deepcopy(base3)
+        mut(b)
+        errs, _ = V.check(b, contract, p1_store, p1_docs)
+        hit = any(c.startswith(want) for c, _ in errs)
+        print(f'  {"ok  " if hit else "FAIL"} {name} → {want}' + ('' if hit else f' (나온 것 {[c for c, _ in errs][:4]})'))
+        fails += not hit
+    print(f'\nselftest-verify-source-pack: 사본 {len(CASES) + len(CASES2) + len(CASES3)} · ' + ('OK' if not fails else f'FAIL {fails}'))
     return 1 if fails else 0
 
 

@@ -157,7 +157,9 @@ async function main() {
       docs.push({ ...base, why: `요청하지 않음 — ${it.skip}` });
       continue;
     }
-    const old = prevDoc.get(it.label);
+    // 목록에서 주소를 바꾸면 다른 문서다 — 같은 label 의 옛 기록 · 캐시 바이트를 쓰지 않는다 (E3-1 — 전에는 옛 문서를 그대로 썼다)
+    const old0 = prevDoc.get(it.label);
+    const old = old0 && old0.url === it.url ? old0 : undefined;
     const kept = old?.status !== "STORED" ? undefined
       : old.text_in === "store.documents.json" ? storedText.get(old.source_id!)
       : old.text_in === "fixtures/store.documents.json" ? p1Text.get(old.source_id!)
@@ -182,12 +184,14 @@ async function main() {
       continue;
     }
     let got = !CHECK || old?.status === "STORED" ? readCached(code, it.label) : null;
+    if (got && got.meta.requested_url !== it.url) got = null;
     if (!got || got.meta.http_status !== 200) {
       if (CHECK && old?.status !== "STORED") {
         docs.push(old ?? base);
         continue;
       }
-      const failed = !CHECK && !RETRY ? readFailed(code, it.label) : null;
+      const failed0 = !CHECK && !RETRY ? readFailed(code, it.label) : null;
+      const failed = failed0 && failed0.meta.requested_url === it.url ? failed0 : null;
       if (failed) {
         // 한 번 못 가져온 것 — 다시 두드리지 않는다 (--retry 로만). 기록을 쓰기 전에 멈춘 실행이 있어도 그 결과를 쓴다
         docs.push({ ...base, robots: { ok: true, why: rb.why }, fetch: failed.meta, why: failed.why });
@@ -216,7 +220,7 @@ async function main() {
       ...base, robots: { ok: true, why: rb.why }, status: "STORED", fetch: meta, kind: ex.kind, extractor: ex.extractor, text_sha256: h, text_length: cpLength(ex.text),
       pdf_page_starts: ex.pages ? ex.pages.map((u) => cpLength(ex.text.slice(0, u))) : null, first_line: ex.text.split("\n", 1)[0] ?? "",
       text_in: !canStore(rights) || it.hold_text ? "cache" : p1same && p1Text.has(p1same.source_id) ? "fixtures/store.documents.json" : "store.documents.json",
-      source_id: p1same?.source_id ?? prevSid.get(it.label) ?? randomUUID(), same_as_p1: p1same?.label ?? null, policy_terms: countTerms(ex.text, pack.count_terms ?? POLICY_TERMS),
+      source_id: p1same?.source_id ?? (old0 && !old ? null : prevSid.get(it.label)) ?? randomUUID(), same_as_p1: p1same?.label ?? null, policy_terms: countTerms(ex.text, pack.count_terms ?? POLICY_TERMS),
     };
     if (CHECK) {
       const want = old?.text_sha256 ?? null;
