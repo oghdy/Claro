@@ -10,7 +10,7 @@
     {
       "host": "pipc.go.kr",
       "url": "https://pipc.go.kr/robots.txt",
-      "fetched_at": "2026-11-11T14:56:10.707Z",
+      "fetched_at": "2026-11-11T15:19:11.304Z",
       "http_status": 200,
       "sha256": "fc197e709ae9ef3e49a79cd6cb3c81698ab815598b14207d9b2a9486343538d7",
       "error": null,
@@ -106,8 +106,8 @@
         2772
       ],
       "first_line": "- 1 -",
-      "rights": "UNCONFIRMED",
-      "text_in": "cache",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
       "live": false,
       "same_as_p1": null,
       "policy_terms": {
@@ -475,8 +475,8 @@
         8841
       ],
       "first_line": "- 1 -",
-      "rights": "UNCONFIRMED",
-      "text_in": "cache",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
       "live": false,
       "same_as_p1": null,
       "policy_terms": {
@@ -569,8 +569,8 @@
         2734
       ],
       "first_line": "- 1 -",
-      "rights": "UNCONFIRMED",
-      "text_in": "cache",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
       "live": false,
       "same_as_p1": null,
       "policy_terms": {

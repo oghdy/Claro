@@ -11,6 +11,8 @@
               요청 기록이 없다 (D40 — 막힌 곳을 다시 두드리지 않는다) · 막힌 것은 까닭이 있다
   C. 원문     저장한 글의 sha256 · 길이 = 기록 · 권리가 can_store 가 아닌 발행처의 전문은 저장소에 없다 (공개 저장소) ·
               전문을 git 에 두는 권리는 STORABLE_RIGHTS 셋 (연방 · 공공누리 제1유형 · 한국 법령 — E2-1) · 목록의 hold_text 항목은 캐시에만 (PACK_DOC_HELD) ·
+              문서 단위 권리 (목록의 doc_rights — 발행처는 미확인인데 문서 안에 공공누리 제1유형 표시 · D69 · E3-1b) 만이 발행처 행 can_store 의 예외다:
+              표시를 본 바이트 해시 = 받은 바이트 해시 · 쪽 · 그림 해시가 있다 · 기록의 권리 = doc_rights · 발행처 행 근거 글이 그 문서와 그림 해시를 말한다 (PACK_DOC_RIGHTS) ·
               P-1 과 같은 글이면 fixtures/store.documents.json 의 그 글이고 Source 행이 P-1 행과 칸마다 같다 ·
               권리 미확인 원문은 git 밖 캐시 — 이 기계에 없으면 WARN, 해시가 다르면 FAIL ·
               W-4 — SourceDocument 가 계약 칸 그대로 (PACK_SHAPE) · 가져온 기록 칸(sha256 · fetched_url · fetched_at · extractor)이 글 · fetch.json 과 같다 (불변식 29 · PACK_DOC_HASH · PACK_DOC_RECORD) ·
@@ -30,6 +32,9 @@ P1_DOCS = os.path.join(ROOT, 'fixtures/store.documents.json')
 CACHE = os.path.join(ROOT, 'packages/pipeline/.cache/events')
 # 전문을 git 에 둘 수 있는 권리 (packages/pipeline/src/rights.ts STORABLE 과 같다 — E2-1 · D53)
 STORABLE_RIGHTS = ('US_FEDERAL_17USC105', 'KOGL_TYPE1', 'KR_STATUTE')
+# 문서 단위로 git 을 허락하는 권리 (rights.ts DocRights.rights — D69 · E3-1b). 공공누리 2 ~ 4 유형 · 표시 없음 = 미확인 (D53)
+DOC_RIGHTS = ('KOGL_TYPE1',)
+HEX64 = re.compile(r'^[0-9a-f]{64}$')
 SOURCE_FIELDS = ('source_id', 'label', 'title', 'publisher', 'url', 'kind', 'language', 'published_at', 'ingested_at')
 EMPTY_IN_P2 = ('facts', 'fact_sources', 'claims', 'goals', 'bridges', 'slot_checks', 'storylines', 'storyline_versions', 'source_documents')
 
@@ -62,6 +67,38 @@ def load_event(d):
             if os.path.exists(p):
                 b['cache'][x['label']] = open(p, encoding='utf-8').read()
     return b
+
+
+def doc_rights_problems(it, x, row):
+    """목록 항목의 doc_rights (문서 단위 권리) → 문제 글 목록. it = 목록 항목 · x = 가져온 기록 · row = 발행처 권리 행"""
+    d = it.get('doc_rights')
+    if not d:
+        return []
+    p, img = [], d.get('image') or {}
+    if d.get('rights') not in DOC_RIGHTS:
+        p.append(f'권리 {d.get("rights")!r} — 문서 단위는 {DOC_RIGHTS} 만')
+    if (row or {}).get('can_store') is True:
+        p.append('발행처 행이 이미 can_store — 문서 단위 권리가 필요 없다')
+    if not HEX64.match(str(d.get('raw_sha256'))) or not HEX64.match(str(img.get('stream_sha256'))):
+        p.append('표시를 본 바이트 · 그림 스트림의 sha256 이 없다 (다시 확인할 값)')
+    elif d['raw_sha256'] != ((x or {}).get('fetch') or {}).get('raw_sha256'):
+        p.append('표시를 본 바이트가 받은 바이트와 다르다 (fetch.raw_sha256) — 다른 파일이다')
+    pg, n = d.get('page'), d.get('pages')
+    if not (isinstance(pg, int) and isinstance(n, int) and 1 <= pg <= n):
+        p.append(f'쪽 {pg!r} / {n!r}')
+    elif (x or {}).get('pdf_page_starts') is not None and len(x['pdf_page_starts']) != n:
+        p.append(f'쪽 수 {n} ≠ 뽑은 글의 쪽 수 {len(x["pdf_page_starts"])}')
+    for k in ('mark', 'where', 'third_party', 'seen_by'):
+        if not d.get(k):
+            p.append(f'{k} 가 없다 — 무엇을 어디서 어떻게 봤나')
+    if VD.tp_range(d.get('checked_at')) is None:
+        p.append('checked_at 이 TimePoint 가 아니다')
+    if x and x.get('status') == 'STORED' and x.get('rights') != d.get('rights'):
+        p.append(f'기록의 권리 {x.get("rights")!r} ≠ doc_rights {d.get("rights")!r}')
+    basis = (row or {}).get('basis') or ''
+    if it['label'] not in basis or str(img.get('stream_sha256')) not in basis:
+        p.append('발행처 권리 행의 근거 글(basis)이 이 문서 · 그림 해시를 말하지 않는다')
+    return p
 
 
 def check(b, contract_text, p1_store, p1_docs):
@@ -177,8 +214,10 @@ def check(b, contract_text, p1_store, p1_docs):
             E('PACK_DOC_UNKNOWN', f'{code}: 원문 {d["source_id"]} — 기록 · Source 에 없다')
             continue
         w = f'{code} {x["label"]}'
-        if reg.get(sid[d['source_id']]['publisher'], {}).get('can_store') is not True:
-            E('PACK_DOC_NOT_STORABLE', f'{w}: 발행처가 can_store 가 아니다 — 권리 미확인 전문을 공개 저장소에 두지 않는다')
+        pub_row = reg.get(sid[d['source_id']]['publisher'], {})
+        by_doc = items.get(x['label'], {}).get('doc_rights') and not doc_rights_problems(items[x['label']], x, pub_row)
+        if pub_row.get('can_store') is not True and not by_doc:
+            E('PACK_DOC_NOT_STORABLE', f'{w}: 발행처가 can_store 가 아니고 문서 단위 권리(doc_rights)도 없다 — 권리 미확인 전문을 공개 저장소에 두지 않는다')
         if x.get('text_in') != 'store.documents.json':
             E('PACK_DOC_UNRECORDED', f'{w}: 기록은 원문이 {x.get("text_in")} 에 있다고 한다')
         if VD.sha256_text(d['text']) != x.get('text_sha256') or len(d['text']) != x.get('text_length'):
@@ -191,6 +230,13 @@ def check(b, contract_text, p1_store, p1_docs):
             E('PACK_DOC_HASH' if c_ == 'SOURCE_DOC_HASH' else 'PACK_DOC_RECORD', f'{w}: {m_}')
         texts[x['label']] = d['text']
     p1text = {d['source_id']: d['text'] for d in p1_docs.get('source_documents', [])}
+    # 문서 단위 권리 (D69 · E3-1b) — 칸 · 받은 바이트 · 근거 글. 없는데 기록이 git 권리를 말하면 그것도
+    for lab, it in items.items():
+        x, row = recs.get(lab), reg.get(it.get('publisher'), {})
+        for m_ in doc_rights_problems(it, x, row):
+            E('PACK_DOC_RIGHTS', f'{code} {lab}: doc_rights — {m_}')
+        if not it.get('doc_rights') and x and x.get('status') == 'STORED' and row.get('can_store') is not True and x.get('rights') in STORABLE_RIGHTS:
+            E('PACK_DOC_RIGHTS', f'{code} {lab}: 기록은 권리 {x.get("rights")!r} 라는데 발행처 행도 문서 단위 권리(doc_rights)도 그것을 말하지 않는다')
     for lab, x in recs.items():
         if x['status'] != 'STORED':
             continue

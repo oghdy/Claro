@@ -157,8 +157,8 @@
       "commercial_use": null,
       "attribution_required": null,
       "terms_url": null,
-      "last_reviewed_at": null,
-      "basis": "권리 미확인 — 개인정보보호위원회 (pipc.go.kr) — 사이트 꼬리말: \"Copyright ⓒ Personal Information Protection Commission. All right reserved.\" · 공공누리 표시 글 없음 (게시물 페이지 · 누리집 안내 · 도움말). 보도자료 첨부 (PDF · HWPX) 안에는 공공누리 제1유형 (출처표시) 그림이 있다 — 문서 단위 표시라 발행처 단위 목록(KOGL_TYPE1)에 넣지 않았다 (_open E3-1-a). 전문은 git 밖 캐시에만 둔다. git 에는 서지 · 해시 · span 만 (P-1 · E3-1)"
+      "last_reviewed_at": "2026-11-12",
+      "basis": "권리 미확인 (발행처 단위) — 개인정보보호위원회 (pipc.go.kr) — 사이트 꼬리말: \"Copyright ⓒ Personal Information Protection Commission. All right reserved.\" · 공공누리 표시 글 없음 (게시물 페이지 · 누리집 안내 · 도움말). 보도자료 첨부 (PDF · HWPX) 안에는 공공누리 제1유형 (출처표시) 그림이 있다 — 문서 단위 표시라 발행처 단위 목록(KOGL_TYPE1)에 넣지 않았다 (_open E3-1-a → D69: 표시를 확인한 문서만 문서 단위로 — pack.json doc_rights). 문서 단위 공공누리 제1유형 (출처표시 · D53 · D69) — 문서 안에 그 표시 그림 (OPEN · 출처표시 칸 하나) 을 본 아래 문서만 전문을 git 에 둔다 (출처 표시 필요). 본 것: PR-1029-PDF (받은 바이트 sha256 ce98046efbca01f1f81b4792b153ad70e0c7f878bd4e647fbb2ad2762887b460 · 4/5쪽 · 그림 Im5 객체 47 167×64 DCTDecode · 그림 스트림 sha256 30fd9bd9851fbef6d2f77cef7b68359263042491db86c7b7dbfbad8786cda851 · 본 날 2026-11-12) / SL-SKT-0828 (받은 바이트 sha256 4cb4dc66e5bc2ec97e048406b757873ebbf83b39ec7eb2fa8d717f8c46149d80 · 8/13쪽 · 그림 Im10 객체 80 404×163 DCTDecode · 그림 스트림 sha256 da6de29260cc31f90c6fe9f8f7c816d43220973c53340d4348f705720475634d · 본 날 2026-11-12) / SL-STATS-0515 (받은 바이트 sha256 5889fc59f66931953618abe86382c25e2f242355cc1c46450ddded6cae85b863 · 3/5쪽 · 그림 Im4 객체 38 166×66 DCTDecode · 그림 스트림 sha256 b895c79a892598ff9cfbe06656f533d74d60008a86f1a238af7a3807280240f5 · 본 날 2026-11-12). 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만. 이 행의 can_* 은 발행처 단위라 null 그대로 — 계약 SourceRegistry 는 발행처마다 한 행이고 문서 단위 칸이 없다 (_open E3-1b-a)"
     },
     {
       "source": "law.go.kr",

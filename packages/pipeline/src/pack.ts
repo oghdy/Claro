@@ -7,7 +7,7 @@
 // 사건마다 폴더 하나: packages/pipeline/data/events/<code>/
 //   pack.json              사람이 쓴 목록 (입력) — 무엇 · 누가 · 주소 · 왜(슬롯) · 주소를 어떻게 확인했나 · 공개 시각과 그 증거 글
 //   store.json             계약 모양 (DATA_MODEL §1) — events · sources · source_registry · source_documents(비움) · 나머지 칸은 빈 배열
-//   store.documents.json   SourceDocument — 원문 전문 + 가져온 기록의 칸 (can_store 인 발행처만 = 미국 연방 정부). P-1 과 같은 모양
+//   store.documents.json   SourceDocument — 원문 전문 + 가져온 기록의 칸 (권리가 git 을 허락하는 것만 — 발행처 단위 · 문서 단위 doc_rights). P-1 과 같은 모양
 //   fetch.json             가져온 기록 — 문서마다 요청 · 받은 때 · 리다이렉트 뒤 주소 · 해시 · robots · 못 가져온 까닭 (계약 밖 — P-1 _open P1-a)
 //   .cache (git 밖)        받은 바이트 · 권리 미확인 문서의 글 — packages/pipeline/.cache/events/<code>/
 //
@@ -21,7 +21,7 @@ import { randomUUID } from "node:crypto";
 import { EXTRACTOR, extract, sha256, sourceDocument } from "./extract.ts";
 import { USER_AGENT, fetchOnce, type Fetched } from "./fetch.ts";
 import { cpLength } from "./match.ts";
-import { canStore, registryRow, rightsOf, type Rights } from "./rights.ts";
+import { canStore, docRightsProblems, registryRow, rightsOfItem, type DocRights, type Rights } from "./rights.ts";
 import { ROBOTS_VERSION, robotsAllows, type RobotsRecord } from "./robots.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -48,6 +48,7 @@ export type PackItem = {
   language?: string;
   role?: "record";               // 이 사건 회의의 기록 (회의록) — 회의 뒤 공개 · 회의 안의 논의. pack.ts 는 읽지 않는다 · P-5 프롬프트의 [뒤 · 회의 기록] (W-1)
   hold_text?: string;             // 권리가 git 을 허락해도 전문을 캐시에만 두는 까닭 (문서 안의 긴 제3자 글 — E2-1). 판정은 PM
+  doc_rights?: DocRights;         // hold_text 의 반대 — 발행처는 미확인인데 문서 안에 공공누리 제1유형 표시가 있다 → 이 문서만 git (D69 · E3-1b). 무엇을 봤나 · 다시 확인할 값. 판정은 PM
 };
 export type Pack = { event: { code: string; title: string; occurred_at: string | null; storyline_code: string | null }; slots: string[]; items: PackItem[]; count_terms?: string[] } & Record<string, unknown>;
 
@@ -130,6 +131,11 @@ async function main() {
   const labels = pack.items.map((i) => i.label);
   if (new Set(labels).size !== labels.length) throw new Error("pack.json 의 label 이 겹친다");
   for (const it of pack.items) for (const s of it.slots) if (!pack.slots.includes(s)) throw new Error(`${it.label}: 목록에 없는 슬롯 "${s}"`);
+  const drBad = pack.items.flatMap(docRightsProblems);
+  if (drBad.length) throw new Error(drBad.join("\n"));
+  // 문서 단위 권리는 표시를 본 그 바이트에만 (D69) — 받은 바이트가 다르면 다른 파일이다. 다시 열어 보고 pack.json 을 고친다
+  const drMismatch = (it: PackItem, raw: string | undefined) =>
+    it.doc_rights && raw !== it.doc_rights.raw_sha256 ? `${it.label}: doc_rights 는 바이트 ${it.doc_rights.raw_sha256.slice(0, 16)} 에서 표시를 봤다 — 받은 바이트 ${raw?.slice(0, 16)} 와 다르다 (다른 파일). 표시를 다시 본다` : null;
 
   const STORE = join(dir, "store.json"), DOCS = join(dir, "store.documents.json"), RECORD = join(dir, "fetch.json");
   const prevStore = readJson<{ events?: { event_id: string; code: string }[]; sources?: { source_id: string; label: string }[] }>(STORE, {});
@@ -148,7 +154,7 @@ async function main() {
   const checkLines: string[] = [];
 
   for (const it of pack.items) {
-    const rights = rightsOf(it.publisher);
+    const rights = rightsOfItem(it);
     const base: PackDoc = {
       label: it.label, source_id: null, publisher: it.publisher, url: it.url, status: "NOT_FETCHED", why: null, robots: null, fetch: null, kind: null,
       extractor: null, text_sha256: null, text_length: null, pdf_page_starts: null, first_line: null, rights, text_in: null, live: !!it.live, same_as_p1: null, policy_terms: null,
@@ -168,6 +174,8 @@ async function main() {
     const placeMoved = old?.status === "STORED" && (old.text_in === "cache") !== (!canStore(rights) || !!it.hold_text);
     if (old?.status === "STORED" && kept != null && !CHECK && !placeMoved) {
       if (sha256(kept) !== old.text_sha256) throw new Error(`${it.label}: 저장된 글의 해시가 기록과 다르다 — 원문이 바뀌었다`);
+      const mm = drMismatch(it, old.fetch?.raw_sha256);
+      if (mm) throw new Error(mm);
       docs.push(old);
       texts.set(it.label, kept);
       continue;
@@ -206,6 +214,9 @@ async function main() {
       docs.push({ ...base, robots: { ok: true, why: rb.why }, fetch: meta, why: blockedWhy(meta, got.bytes) });
       continue;
     }
+    const mm = drMismatch(it, meta.raw_sha256);
+    if (mm && !CHECK) throw new Error(mm);
+    if (mm) checkLines.push(`  ${it.label.padEnd(12)} ${mm}`);
     let ex: Awaited<ReturnType<typeof extract>>;
     try {
       ex = await extract(got.bytes, meta.content_type);
@@ -231,7 +242,7 @@ async function main() {
       } else {
         const ex2 = await extract(fresh.bytes, fresh.meta.content_type);
         const h2 = sha256(ex2.text);
-        checkLines.push(`  ${it.label.padEnd(12)} 새로 받기             글 ${h2 === want ? "같음" : "다름"} · 바이트 ${fresh.meta.raw_sha256 === meta.raw_sha256 ? "같음" : "다름"}${rec.live ? "  (살아 있는 페이지 — 예외)" : ""}`);
+        checkLines.push(`  ${it.label.padEnd(12)} 새로 받기             글 ${h2 === want ? "같음" : "다름"} · 바이트 ${fresh.meta.raw_sha256 === meta.raw_sha256 ? "같음" : "다름"}${it.doc_rights ? ` · 표시를 본 바이트와 ${fresh.meta.raw_sha256 === it.doc_rights.raw_sha256 ? "같음" : "다름"}` : ""}${rec.live ? "  (살아 있는 페이지 — 예외)" : ""}`);
         if (h2 !== want) {
           const a = kept ?? ex.text;
           let i = 0;
@@ -308,13 +319,15 @@ async function main() {
     storylines: [], storyline_versions: [],
     sources,
     source_documents: [],
-    source_registry: pubs.map((p) => registryRow(p, prevReg.get(p)?.last_reviewed_at ?? today, "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)")),
+    source_registry: pubs.map((p) => registryRow(p, prevReg.get(p)?.last_reviewed_at ?? today, "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      pack.items.filter((i) => i.publisher === p && i.doc_rights).map((i) => ({ label: i.label, doc_rights: i.doc_rights!, held: !!i.hold_text })))),
     facts: [], fact_sources: [], claims: [], goals: [], bridges: [], slot_checks: [],
   };
   const documents = sources.filter((s) => docs.find((d) => d.label === s.label)!.text_in === "store.documents.json").map((s) => sourceDocument(s.source_id as string, texts.get(s.label as string)!, docs.find((d) => d.label === s.label)!));
+  const byDoc = pack.items.filter((i) => i.doc_rights && docs.find((d) => d.label === i.label)?.text_in === "store.documents.json").map((i) => i.label);
   writeFileSync(STORE, JSON.stringify(store, null, 2) + "\n");
   writeFileSync(DOCS, JSON.stringify({
-    _what: `${code} 의 SourceDocument (DATA_MODEL §1) — 원문 전문 + 가져온 기록의 칸 (sha256 · 가져온 주소 · 때 · 뽑은 방법 — W-4 P1-a). ${documents.every((d) => docs.find((x) => x.source_id === d.source_id)?.rights === "US_FEDERAL_17USC105") ? "미국 연방 정부 저작물만 (17 U.S.C. §105 · store.json source_registry)" : "권리가 git 을 허락하는 발행처의 것만 — 미국 연방 정부 (17 U.S.C. §105) · 공공누리 제1유형 · 한국 법령 (저작권법 제7조) (store.json source_registry · D53). 제3자 글이 긴 문서(hold_text)는 빼고"}. 권리 미확인 원문은 git 밖 캐시에만. pack.ts 가 쓴다 — 손으로 고치지 않는다`,
+    _what: `${code} 의 SourceDocument (DATA_MODEL §1) — 원문 전문 + 가져온 기록의 칸 (sha256 · 가져온 주소 · 때 · 뽑은 방법 — W-4 P1-a). ${documents.every((d) => docs.find((x) => x.source_id === d.source_id)?.rights === "US_FEDERAL_17USC105") ? "미국 연방 정부 저작물만 (17 U.S.C. §105 · store.json source_registry)" : "권리가 git 을 허락하는 발행처의 것만 — 미국 연방 정부 (17 U.S.C. §105) · 공공누리 제1유형 · 한국 법령 (저작권법 제7조) (store.json source_registry · D53). 제3자 글이 긴 문서(hold_text)는 빼고"}${byDoc.length ? `. 문서 단위 공공누리 제1유형 (발행처는 미확인 · 문서 안에 표시 — pack.json doc_rights · D69): ${byDoc.join(" · ")}` : ""}. 권리 미확인 원문은 git 밖 캐시에만. pack.ts 가 쓴다 — 손으로 고치지 않는다`,
     source_documents: documents,
   }, null, 2) + "\n");
   const n = (f: (d: PackDoc) => boolean) => docs.filter(f).length;

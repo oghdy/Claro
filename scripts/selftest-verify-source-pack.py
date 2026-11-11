@@ -154,13 +154,31 @@ CASES2 = [
     ('E2-1 한국어 증거 글 다름', m2_evidence, 'PACK_PUBLISHED'),
 ]
 
-# E3-1 — 세 번째 사건 (공공누리 표시가 문서 안에만 있는 발행처 = 권리 미확인 · 법령 판 둘 · 고시)
+# E3-1 — 세 번째 사건 (공공누리 표시가 문서 안에만 있는 발행처 = 발행처는 미확인 · 표시를 본 문서만 git (E3-1b) · 법령 판 둘 · 고시)
 CODE3 = 'PIPC-20261028-SAFETY-MEASURES'
 base3 = V.load_event(os.path.join(V.EVENTS, CODE3))
 
 
-def m3_pipc_into_repo(b):  # 공공누리가 사이트에 없는 발행처(pipc.go.kr)의 보도자료를 기록이 저장소에 있다고 한다
-    rec(b, 'PR-1029-PDF')['text_in'] = 'store.documents.json'
+def m3_pipc_into_repo(b):  # 공공누리 표시가 없는 게시물 페이지(pipc.go.kr — 문서 단위 권리 없음)를 기록이 저장소에 있다고 한다
+    rec(b, 'PR-1029')['text_in'] = 'store.documents.json'
+
+
+def m3b_doc_rights_lost(b):   # E3-1b — 문서 단위 권리를 지웠는데 PDF 전문은 저장소에 그대로
+    item(b, 'PR-1029-PDF').pop('doc_rights')
+
+
+def m3b_raw_differs(b):       # E3-1b — 표시를 본 바이트 ≠ 받은 바이트 (다른 파일에서 본 표시)
+    dr = item(b, 'SL-SKT-0828')['doc_rights']
+    dr['raw_sha256'] = ('0' if dr['raw_sha256'][0] != '0' else '1') + dr['raw_sha256'][1:]
+
+
+def m3b_page_claims_kogl(b):  # E3-1b — 표시가 없는 일정 페이지의 기록이 공공누리라고 한다 (문서 단위 권리 없이)
+    rec(b, 'M21-AGENDA')['rights'] = 'KOGL_TYPE1'
+
+
+def m3b_basis_silent(b):      # E3-1b — 발행처 권리 행의 근거 글에서 문서 하나가 빠졌다
+    r = next(r for r in b['store']['source_registry'] if r['source'] == 'pipc.go.kr')
+    r['basis'] = r['basis'].replace('SL-STATS-0515', 'SL-STATS-XXXX')
 
 
 def m3_law_text(b):        # 위반 기간 판 법률의 원문 한 글자 (제64조의2 단서 "다한" → "다 한")
@@ -173,7 +191,11 @@ def m3_evidence(b):        # 본문의 요일 오기를 증거 글로 — 저장
 
 
 CASES3 = [
-    ('E3-1 개인정보위 보도자료를 저장소에', m3_pipc_into_repo, 'PACK_DOC_NOT_STORABLE'),
+    ('E3-1 개인정보위 게시물 페이지 (표시 없음) 를 저장소에', m3_pipc_into_repo, 'PACK_DOC_NOT_STORABLE'),
+    ('E3-1b 문서 단위 권리를 지움 — PDF 는 저장소에 그대로', m3b_doc_rights_lost, 'PACK_DOC_NOT_STORABLE'),
+    ('E3-1b 표시를 본 바이트 ≠ 받은 바이트', m3b_raw_differs, 'PACK_DOC_RIGHTS'),
+    ('E3-1b 일정 페이지 기록이 공공누리라고 함', m3b_page_claims_kogl, 'PACK_DOC_RIGHTS'),
+    ('E3-1b 권리 행 근거 글에 문서가 빠짐', m3b_basis_silent, 'PACK_DOC_RIGHTS'),
     ('E3-1 법령 원문 한 글자', m3_law_text, 'PACK_DOC_HASH'),
     ('E3-1 증거 글 요일 다름', m3_evidence, 'PACK_PUBLISHED'),
 ]
