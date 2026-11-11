@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**2026-11-11 — B-E1 회차 계약 끝 · 검수 대기 (PM)** — `docs/contract/EPISODE.md` · 골든 둘 (`fixtures/episode-price-1.json` · `episode-rate-2.json`) · 불변식 20 · 위반 픽스처 29 · 시안이 골든을 읽어 그린다 (픽셀 0). 로그 `logs/backend/B-E1.md`. OPEN 넷 (D64 ~ D67). 그 이전: **Phase 0 끝 (2026-10-13 · D38 — 0.5 게이트 닫음 · 배포 https://claro-lime-one.vercel.app).** F-3 은 미룸 (D39). 지금 일은 파이프라인 레인 — `docs/development-pipeline.md`. 계약 잔일(SourceDocument 해시 · 가져온 때 · §7.3 표 밖 4 · v2 참조 모양)은 그 문서 "잔일"에 모여 있다
+**2026-11-11 — B-E1 회차 계약 닫힘 (D68 · PM 검수 통과) · 백엔드 레인에 도는 것 없음** — `docs/contract/EPISODE.md` · 골든 둘 (`fixtures/episode-price-1.json` · `episode-rate-2.json`) · 불변식 20 · 위반 픽스처 29 · 시안이 골든을 읽어 그린다 (픽셀 0). 로그 `logs/backend/B-E1.md`. OPEN 넷 (D64 ~ D67). 그 이전: **Phase 0 끝 (2026-10-13 · D38 — 0.5 게이트 닫음 · 배포 https://claro-lime-one.vercel.app).** F-3 은 미룸 (D39). 지금 일은 파이프라인 레인 — `docs/development-pipeline.md`. 계약 잔일(SourceDocument 해시 · 가져온 때 · §7.3 표 밖 4 · v2 참조 모양)은 그 문서 "잔일"에 모여 있다
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
