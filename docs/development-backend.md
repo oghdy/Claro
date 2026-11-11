@@ -1,7 +1,7 @@
 # development · backend
 
 ## 현재 위치
-**2026-11-11 — B-E1 회차 계약 닫힘 (D68 · PM 검수 통과) · 백엔드 레인에 도는 것 없음** — `docs/contract/EPISODE.md` · 골든 둘 (`fixtures/episode-price-1.json` · `episode-rate-2.json`) · 불변식 20 · 위반 픽스처 29 · 시안이 골든을 읽어 그린다 (픽셀 0). 로그 `logs/backend/B-E1.md`. OPEN 넷 (D64 ~ D67). 그 이전: **Phase 0 끝 (2026-10-13 · D38 — 0.5 게이트 닫음 · 배포 https://claro-lime-one.vercel.app).** F-3 은 미룸 (D39). 지금 일은 파이프라인 레인 — `docs/development-pipeline.md`. 계약 잔일(SourceDocument 해시 · 가져온 때 · §7.3 표 밖 4 · v2 참조 모양)은 그 문서 "잔일"에 모여 있다
+**2026-11-12 — B-E1 회차 계약 닫힘 (D68) · B-E2 문서 단위 권리 도는 중 (D70) · UX-5 가 EPISODE.md 넘겨 보기 칸을 쓴다 (백엔드 레인 몫)** — `docs/contract/EPISODE.md` · 골든 둘 (`fixtures/episode-price-1.json` · `episode-rate-2.json`) · 불변식 20 · 위반 픽스처 29 · 시안이 골든을 읽어 그린다 (픽셀 0). 로그 `logs/backend/B-E1.md`. OPEN 넷 (D64 ~ D67). 그 이전: **Phase 0 끝 (2026-10-13 · D38 — 0.5 게이트 닫음 · 배포 https://claro-lime-one.vercel.app).** F-3 은 미룸 (D39). 지금 일은 파이프라인 레인 — `docs/development-pipeline.md`. 계약 잔일(SourceDocument 해시 · 가져온 때 · §7.3 표 밖 4 · v2 참조 모양)은 그 문서 "잔일"에 모여 있다
 
 ## Phase 0 — 계약 확정
 계약이 없으면 구현이 없다. Phase 0의 산출물은 코드가 아니라 `docs/contract/` 3종이다.
@@ -1281,4 +1281,43 @@ Claro 는 기사를 "회차"로 낸다 — 도윤이 확정했다 (D57 쌓인다
 - 폰 서버: 포트 3200 (`pnpm --filter @claro/web phone`)을 끝날 때 다시 빌드해 띄워 둬라 (백그라운드 · LAN 200 확인)
 - docs/development-backend.md 의 B-E1 줄 (☐ 도는 중 → ☑ · 날짜 · 한 줄) · 계약 파일 CHANGELOG · 커밋 접두사 `B-E1` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` 금지
 - **나(PM)에게**: 25줄 안쪽 한국어 요약 — 커밋 · 계약 한 줄 · UX1-b 판단 · 불변식 수 / invalid 수 · 미확인 칸 · 픽셀 대조 · OPEN 으로 올린 것 · 파이프라인이 낼 칸 중 사람이 채워야 하는 것
+```
+
+## B-E2 · 문서 단위 권리를 계약으로 (D70)
+
+| Step | 내용 | 산출 | 상태 |
+|---|---|---|---|
+| **B-E2** | DATA_MODEL §4.4 문서 단위 권리 (문서 안 공공누리 제1유형 표시 · 근거 · 해시 필수 · 그 문서에 한해 발행처 행보다 앞선다) · 불변식 20 · P-1 문구 · 검증 · 파이프라인 산출물을 계약 모양으로 · 서브에이전트 Opus | DATA_MODEL · packages/contract · rights.ts · pack.ts · PIPC store.json · `logs/backend/B-E2.md` | ☐ 도는 중 (2026-11-12) |
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 백엔드 레인 (계약). Step B-E2 (문서 단위 권리를 계약으로)를 맡는다. PM(나)이 검수한다. 작은 Step 이다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **같은 작업 트리에서 다른 세션이 돈다**: P-E1 (`packages/pipeline/src/llm.ts` · `episode*.ts` · `packages/pipeline/package.json` · `scripts/verify-ledger.py` · `packages/pipeline/data/events/FOMC-20261028/episode/` · `packages/pipeline/data/series/` · `apps/web/src/app/lab/episode/fomc-auto/`) · UX-5 (`docs/contract/EPISODE.md` · `packages/contract/src/episode.ts` · `validate-episode.ts` · `fixtures/episode-*` · `apps/web/src/app/lab/episode/`). 그 파일들은 건드리지 마라. `packages/contract/src/index.ts` 도 꼭 필요할 때만 (UX-5 와 겹칠 수 있다 — 고치면 커밋 직전에 다시 읽고). 다른 세션 변경으로 typecheck · test 가 깨지면 고치지 말고 적어라.
+
+## 왜
+E3-1b (`3444043` · `logs/pipeline/E3-1b.md`) 가 개인정보위 문서의 권리를 **문서 단위로** 정했다 (D69 · D70): pipc.go.kr 은 사이트 꼬리말이 "All right reserved." 이지만 보도자료 PDF 셋 안에 공공누리 제1유형 그림이 있어, **그 표시를 본 문서만** 공개 저장소에 넣었다 (`pack.json` `doc_rights` · 무엇을 봤나 · 해시). 그런데 계약은 아직 발행처 단위다 — DATA_MODEL §4.4: "원문은 `can_store` 가 참인 **발행처** 것만 공개 저장소에" · "인용 블록은 `can_quote` 가 참인 출처에서만 (불변식 20)". 그래서 문서 단위 예외가 지금 `verify-source-pack.py` 에만 있고, 발행처 행의 `can_quote` 가 null 이라 이 문서들을 인용 블록으로 쓰면 불변식 20 과 부딪힌다 (_open E3-1b-a).
+**PM 판정 (D70)**: 계약에 문서 단위 권리를 넣는다 — 발행처 행이 미확인이어도, 문서 안에서 공공누리 제1유형 표시를 본 문서는 **그 문서만** 저장 · 인용할 수 있다. 근거 (무엇을 봤나 · 다시 확인할 수 있는 해시)가 반드시 있어야 한다.
+
+## 할 것
+1. **DATA_MODEL §4.4** — 문서 단위 권리를 어디에 두나 (Source 의 칸 · SourceRegistry 의 문서 행 · 따로 된 타입 — 실물 하나 (pipc PDF 셋)에서 가장 단순한 것 · 까닭). 규칙: 문서 단위 권리는 발행처 행보다 앞선다 (그 문서에 한해) · `basis` 필수 (파일 · 쪽 · 그림 · 받은 바이트 sha256 · 그림 sha256) · 근거가 직접 말하는 칸만 채운다 (공공누리 제1유형 = can_store · can_quote · can_transform · commercial_use · attribution_required — D53 의 KOGL 행과 같은 뜻) · 불변식 (번호를 이어서) · CHANGELOG 한 줄. 불변식 20 · P-1 문구를 "발행처 또는 문서 단위"로
+2. **packages/contract** — 타입 · 검증 · 시험 (문서 단위 행이 있으면 그 문서만 통과 · 같은 발행처의 다른 문서는 여전히 막힘 · basis 없으면 거부)
+3. **파이프라인 산출물을 계약 모양으로** — `rights.ts` · `pack.ts` 가 `doc_rights` 를 계약의 문서 단위 권리로 내게 · PIPC 사건 폴더의 `store.json` 다시 냄 (`--check` 같은 해시) · `verify-source-pack.py` 의 `PACK_DOC_RIGHTS` 를 계약 쪽 검사와 맞춤 (겹치면 하나로)
+4. 기존 사건 (FOMC · KFTC) 의 산출물이 바뀌지 않는지 확인 (문서 단위 권리가 없으면 그대로)
+
+## 하지 말 것
+- 발행처 단위로 pipc.go.kr 을 열기 · 표시를 보지 않은 문서를 git 으로 · 다른 사건 폴더의 권리를 바꾸기
+- EPISODE.md · episode.ts · validate-episode.ts · fixtures/episode-* · apps/web · P-E1 파일 (위)
+- 모델 API 호출 (비용 0) · 배포 · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/contract/DATA_MODEL.md §4 전부 · 불변식 20 · 29 · 30 · ARTICLE_PACKAGE §10 (인용 블록)
+- docs/DECISIONS.md D40 · D41 · D53 · D55 · D69 · **D70**
+- logs/pipeline/E3-1.md ② · **E3-1b.md 전부** · packages/pipeline/src (rights.ts · pack.ts) · scripts/verify-source-pack.py
+
+## 끝낼 때
+- 로그 `logs/backend/B-E2.md` — ① 어디에 뒀나 · 까닭 ② 불변식 · 시험 ③ 산출물 변화 (PIPC store.json 앞 · 뒤 · FOMC · KFTC 그대로) ④ 검사 결과를 붙인다 ⑤ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `pnpm --filter @claro/contract test` · `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>` · 다른 세션 변경으로 깨지면 적기만) · `verify-source-pack` · 파이썬 검사 전부 · `--check`
+- docs/development-backend.md 의 B-E2 줄 (☐ 도는 중 → ☑) · 계약 CHANGELOG · 커밋 접두사 `B-E2` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` 금지
+- **나(PM)에게**: 15줄 안쪽 — 커밋 · 어디에 뒀나 · 불변식 · 산출물 변화 · _open
 ```
