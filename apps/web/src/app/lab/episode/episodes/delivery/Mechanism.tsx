@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { LayoutGroup, motion, useAnimationControls } from "motion/react";
-import { COPY, type T } from "./data";
+import type { T } from "../../kit/types";
+import { LAB } from "./data";
 
 // "아!" 의 자리 — 독자가 가게 사장님이 되어 같은 버튼을 두 번 누른다.
 //   요구가 없을 때: 새 앱에서 값을 내린다 → 손님이 옮겨 간다
@@ -19,7 +20,7 @@ function Bold({ item }: { item: T }) {
 }
 
 export function Mechanism() {
-  const c = COPY.aha.lab;
+  const c = LAB;
   const [rule, setRule] = useState<Rule>("off");
   const [done, setDone] = useState<Record<Rule, boolean>>({ off: false, on: false });
   const tag = useAnimationControls();

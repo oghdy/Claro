@@ -1,27 +1,38 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { AnimatePresence, MotionConfig, motion, type Variants } from "motion/react";
-import { CoverArt } from "./Art";
+import { CHROME } from "./chrome";
 import { ConceptMap, type NodeState } from "./ConceptMap";
-import { Mechanism } from "./Mechanism";
-import { CONCEPTS, COPY, DOCS, READERS, SERIES, SOURCES, type ConceptId, type ReaderId, type T } from "./data";
+import { SHELF } from "./shelf";
+import type { EpisodeData, ReaderId, SceneId, T } from "./types";
 
-// 한 회차 — 처음부터 끝까지. 넘어가는 방법은 본 화면과 같다 (D26): 한 번에 한 장 · 물음 버튼 하나 · 누른 물음이 다음 장의 머리.
+// 한 회차 — 처음부터 끝까지 (공통 뼈대). 넘어가는 방법은 본 화면과 같다 (D26): 한 번에 한 장 · 물음 버튼 하나 · 누른 물음이 다음 장의 머리.
 // 달라진 것은 (1) 회차가 시리즈 안에 있다 (2) 독자가 아는 개념은 접힌다 (3) 끝에 내 개념 지도가 자란다 (D57).
-// **지식 상태를 추정하지 않는다.** 따라온 독자의 "아는 개념"은 data.ts 의 고정값이고, 처음 온 독자는 "이거 알아요?" 에 누른 그대로다.
+// **지식 상태를 추정하지 않는다.** 따라온 독자의 "아는 개념"은 회차 데이터의 고정값이고, 처음 온 독자는 "이거 알아요?" 에 누른 그대로다.
+//
+// UX-2: 두 회차(배달앱 · FOMC)가 이 한 부품 위에 올라간다. 회차가 주는 것은 셋이다 —
+//   ep    글 · 근거 · 개념 · 두 독자 · 조립 · 지도 자리 (episodes/*/data.ts)
+//   Art   표지 그림            Lab   풀이 장면 (독자가 직접 해 보는 자리)            Glyph 도구 카드의 작은 그림
+// 장면 여덟의 모양과 차례는 여기 있고, 회차는 바꾸지 못한다.
 
-type SceneId = "cover" | "zero" | "event" | "tools" | "aha" | "compare" | "next" | "keep";
+export interface EpisodeParts {
+  ep: EpisodeData;
+  Art: ComponentType;
+  Lab: ComponentType;
+  Glyph: ComponentType<{ id: string }>;
+}
 
-/** 같은 회차 · 다른 조립 — 독자마다 새로 쓰지 않는다. 장면을 고르고 접을 뿐이다 */
-const ASSEMBLY: Record<ReaderId, readonly SceneId[]> = {
-  new: ["cover", "zero", "event", "tools", "aha", "next", "keep"],
-  follower: ["cover", "event", "tools", "aha", "compare", "next", "keep"],
+const EpCtx = createContext<EpisodeParts | null>(null);
+const useEp = () => {
+  const v = useContext(EpCtx);
+  if (!v) throw new Error("EpCtx 밖");
+  return v;
 };
 
 /** 처음 온 독자가 "이거 알아요?" 에 답한 것 — seed: 알아요 · fresh: 처음 들어요 */
 type Answer = "seed" | "fresh";
-type Answers = Partial<Record<ConceptId, Answer>>;
+type Answers = Partial<Record<string, Answer>>;
 
 const EASE = [0.2, 0.7, 0.2, 1] as const;
 const stagger: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.075, delayChildren: 0.12 } } };
@@ -101,13 +112,14 @@ function Ask({ text, onAsk }: { text: string; onAsk: () => void }) {
 // ─────────────────────────────────────────────────────────── 시리즈 줄
 
 function SeriesTrack() {
+  const { ep } = useEp();
   return (
     <ol className="ep-track">
-      {SERIES.episodes.map((e) => (
+      {ep.series.episodes.map((e) => (
         <li key={e.no.t} data-state={e.state}>
           <span className="ep-track-dot" aria-hidden="true" />
           <span className="ep-track-no">{e.no.t}</span>
-          <span className="ep-track-title">{e.title}</span>
+          <span className="ep-track-title">{e.title.t}</span>
         </li>
       ))}
     </ol>
@@ -118,20 +130,21 @@ function SeriesTrack() {
 
 type ToolMode = { kind: "known" } | { kind: "fresh" } | { kind: "ask"; answer: Answer | undefined; onAnswer: (a: Answer) => void };
 
-function ToolCard({ id, mode }: { id: ConceptId; mode: ToolMode }) {
-  const c = CONCEPTS[id];
-  const copy = COPY.tools;
+function ToolCard({ id, mode }: { id: string; mode: ToolMode }) {
+  const { ep, Glyph } = useEp();
+  const c = ep.concepts[id]!;
+  const copy = CHROME.tools;
   const folded0 = mode.kind === "known" || (mode.kind === "ask" && mode.answer === "seed");
   const [open, setOpen] = useState(false);
   const asking = mode.kind === "ask" && mode.answer === undefined;
   const folded = folded0 && !open;
-  const status = mode.kind === "known" ? copy.foldedKnown : mode.kind === "ask" && mode.answer === "seed" ? copy.foldedSeed : asking ? null : "새 도구";
+  const status = mode.kind === "known" ? copy.foldedKnown : mode.kind === "ask" && mode.answer === "seed" ? copy.foldedSeed : asking ? null : copy.fresh;
 
   return (
     <motion.section className="ep-tool" variants={rise} layout data-state={asking ? "ask" : folded ? "folded" : folded0 ? "reopened" : "fresh"} data-testid={`tool-${id}`}>
       <motion.header layout="position" className="ep-tool-head">
         <span className="ep-tool-mark" aria-hidden="true">
-          <ToolGlyph id={id} />
+          <Glyph id={id} />
         </span>
         <h2>{c.name}</h2>
         {status ? <span className="ep-tool-status">{status}</span> : null}
@@ -176,36 +189,6 @@ function ToolCard({ id, mode }: { id: ConceptId; mode: ToolMode }) {
   );
 }
 
-function ToolGlyph({ id }: { id: ConceptId }) {
-  const s = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" } as const;
-  if (id === "fee")
-    return (
-      <svg viewBox="0 0 24 24" {...s}>
-        <circle cx="12" cy="12" r="8.5" />
-        <path d="M12 3.5V12l6 6" />
-      </svg>
-    );
-  if (id === "mfn")
-    return (
-      <svg viewBox="0 0 24 24" {...s}>
-        <path d="M5 9.5h14M5 14.5h14" />
-      </svg>
-    );
-  if (id === "dominance")
-    return (
-      <svg viewBox="0 0 24 24" {...s}>
-        <rect x="3.5" y="5" width="11" height="14" rx="2" />
-        <rect x="17" y="12" width="3.5" height="7" rx="1" />
-      </svg>
-    );
-  return (
-    <svg viewBox="0 0 24 24" {...s}>
-      <circle cx="12" cy="12" r="8.5" strokeDasharray="3.2 3.2" />
-      <path d="M8 12.6c1.3-1.8 2.7-1.8 4 0s2.7 1.8 4 0" />
-    </svg>
-  );
-}
-
 // ─────────────────────────────────────────────────────────── 장면
 
 interface SceneProps {
@@ -213,23 +196,24 @@ interface SceneProps {
   asked?: string;
   onAsk: (question: string) => void;
   answers: Answers;
-  onAnswer: (id: ConceptId, a: Answer) => void;
-  states: Record<ConceptId, NodeState>;
+  onAnswer: (id: string, a: Answer) => void;
+  states: Record<string, NodeState>;
   openMap: () => void;
   restart: () => void;
 }
 
 function Cover({ reader, onAsk }: SceneProps) {
-  const c = COPY.cover;
+  const { ep, Art } = useEp();
+  const c = ep.copy.cover;
   const follower = reader === "follower";
   return (
     <>
       <motion.div className="ep-series" variants={rise}>
-        <span>시리즈</span>
-        <strong>{SERIES.name}</strong>
+        <span>{CHROME.chrome.seriesTag}</span>
+        <strong>{ep.series.name}</strong>
       </motion.div>
       <motion.div className="ep-cover-art" variants={rise}>
-        <CoverArt />
+        <Art />
       </motion.div>
       <motion.p className="ep-episode-no" variants={rise}>
         {c.episode.t}
@@ -264,7 +248,7 @@ function Cover({ reader, onAsk }: SceneProps) {
 }
 
 function Zero({ asked, onAsk }: SceneProps) {
-  const c = COPY.zero;
+  const c = useEp().ep.copy.zero;
   return (
     <>
       <Head asked={asked} kicker={c.kicker.t} title={c.title.t} />
@@ -287,13 +271,13 @@ function Zero({ asked, onAsk }: SceneProps) {
 }
 
 function Event({ asked, onAsk }: SceneProps) {
-  const c = COPY.event;
+  const c = useEp().ep.copy.event;
   return (
     <>
       <Head asked={asked} kicker={c.kicker.t} title={c.title} />
       <P item={c.lead} />
       <motion.div className="ep-fines" variants={rise}>
-        {c.fines.map((f) => (
+        {c.figures.map((f) => (
           <div key={f.who}>
             <span className="ep-fine-who">{f.who}</span>
             <span className="ep-fine-amount">
@@ -304,14 +288,14 @@ function Event({ asked, onAsk }: SceneProps) {
         ))}
       </motion.div>
       <motion.p className="ep-note" variants={rise}>
-        <Txt item={c.fineNote} />
+        <Txt item={c.figureNote} />
       </motion.p>
       <motion.figure className="ep-demand" variants={rise}>
-        <figcaption>{c.demandLabel}</figcaption>
+        <figcaption>{c.quoteLabel}</figcaption>
         <blockquote>
-          <Txt item={c.demand} />
+          <Txt item={c.quote} />
         </blockquote>
-        <p>{c.demandNote}</p>
+        <p>{c.quoteNote}</p>
       </motion.figure>
       <motion.div className="ep-riddle" variants={rise}>
         {c.riddle.map((r) => (
@@ -325,14 +309,13 @@ function Event({ asked, onAsk }: SceneProps) {
   );
 }
 
-const TOOL_ORDER: readonly ConceptId[] = ["fee", "mfn", "dominance"];
-
 function Tools({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
-  const c = COPY.tools;
+  const { ep } = useEp();
+  const c = ep.copy.tools;
   const follower = reader === "follower";
-  const known = READERS[reader].known;
+  const known = ep.readers[reader].known;
   // 따라온 독자: 새 도구를 먼저, 아는 도구는 접어서 아래에
-  const order = follower ? [...TOOL_ORDER.filter((id) => !known.includes(id)), ...TOOL_ORDER.filter((id) => known.includes(id))] : TOOL_ORDER;
+  const order = follower ? [...ep.toolOrder.filter((id) => !known.includes(id)), ...ep.toolOrder.filter((id) => known.includes(id))] : ep.toolOrder;
   return (
     <>
       <Head asked={asked} kicker={c.kicker} title={follower ? c.titleFollower : c.titleNew} />
@@ -348,7 +331,8 @@ function Tools({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
 }
 
 function Aha({ reader, asked, onAsk }: SceneProps) {
-  const c = COPY.aha;
+  const { ep, Lab } = useEp();
+  const c = ep.copy.aha;
   const ask = reader === "follower" ? c.askFollower : c.askNew;
   return (
     <>
@@ -357,13 +341,23 @@ function Aha({ reader, asked, onAsk }: SceneProps) {
         <P key={s.t} item={s} />
       ))}
       <motion.div variants={rise}>
-        <Mechanism />
+        <Lab />
       </motion.div>
+      {c.born ? (
+        <>
+          <motion.p className="ep-tool-lead" variants={rise}>
+            {c.born.lead}
+          </motion.p>
+          <div className="ep-tools">
+            <ToolCard id={c.born.concept} mode={{ kind: "fresh" }} />
+          </div>
+        </>
+      ) : null}
       <motion.figure className="ep-flip" variants={rise}>
         <figcaption>{c.flipLabel}</figcaption>
         <p className="ep-flip-a">{c.flipA}</p>
         <span className="ep-flip-eq" aria-hidden="true">
-          =
+          {c.flipOp}
         </span>
         <p className="ep-flip-b">{c.flipB}</p>
       </motion.figure>
@@ -393,7 +387,7 @@ function Aha({ reader, asked, onAsk }: SceneProps) {
 }
 
 function Compare({ asked, onAsk }: SceneProps) {
-  const c = COPY.compare;
+  const c = useEp().ep.copy.compare;
   return (
     <>
       <Head asked={asked} kicker={c.kicker} title={c.title} />
@@ -428,8 +422,10 @@ function Compare({ asked, onAsk }: SceneProps) {
 }
 
 function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
-  const c = COPY.next;
+  const { ep } = useEp();
+  const c = ep.copy.next;
   const follower = reader === "follower";
+  const late = ep.lateTool;
   return (
     <>
       <Head asked={asked} kicker={c.kicker} title={c.title} />
@@ -450,7 +446,7 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
         {c.toolLead}
       </motion.p>
       <div className="ep-tools">
-        <ToolCard id="provisional" mode={follower ? { kind: "known" } : { kind: "ask", answer: answers.provisional, onAnswer: (a) => onAnswer("provisional", a) }} />
+        <ToolCard id={late} mode={ep.readers[reader].known.includes(late) ? { kind: "known" } : follower ? { kind: "fresh" } : { kind: "ask", answer: answers[late], onAnswer: (a) => onAnswer(late, a) }} />
       </div>
       <motion.h2 className="ep-sub" variants={rise}>
         {c.comingLabel}
@@ -484,60 +480,75 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
   );
 }
 
-const ALL: readonly ConceptId[] = ["fee", "mfn", "dominance", "provisional"];
-
 function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
-  const c = COPY.keep;
-  const fresh = ALL.filter((id) => states[id] === "new");
-  const old = ALL.filter((id) => states[id] === "known");
+  const { ep } = useEp();
+  const c = ep.copy.keep;
+  const k = CHROME.keep;
+  const fresh = ep.conceptOrder.filter((id) => states[id] === "new");
+  const old = ep.conceptOrder.filter((id) => states[id] === "known");
+  const others = SHELF.filter((s) => s.series !== ep.series.id);
   return (
     <>
       <Head asked={asked} kicker={c.kicker} title={c.title} />
       <motion.figure className="ep-oneline" variants={rise}>
-        <figcaption>{c.lineLabel}</figcaption>
+        <figcaption>{k.lineLabel}</figcaption>
         <p>
           <Rich text={c.line} />
         </p>
       </motion.figure>
       <motion.div className="ep-keep-map" variants={rise}>
-        <ConceptMap reader={reader} states={states} grow compact />
+        <ConceptMap ep={ep} reader={reader} states={states} grow compact />
       </motion.div>
       <motion.div className="ep-gain" variants={rise}>
         {fresh.length ? (
           <div data-kind="new">
             <h2>
-              {c.newLabel} <b>{fresh.length}</b>
+              {k.newLabel} <b>{fresh.length}</b>
             </h2>
-            <p>{fresh.map((id) => CONCEPTS[id].name).join(" · ")}</p>
+            <p>{fresh.map((id) => ep.concepts[id]!.name).join(" · ")}</p>
           </div>
         ) : null}
         {old.length ? (
           <div data-kind="known">
             <h2>
-              {reader === "follower" ? c.againLabel : c.seedLabel} <b>{old.length}</b>
+              {reader === "follower" ? k.againLabel : k.seedLabel} <b>{old.length}</b>
             </h2>
-            <p>{old.map((id) => CONCEPTS[id].name).join(" · ")}</p>
+            <p>{old.map((id) => ep.concepts[id]!.name).join(" · ")}</p>
           </div>
         ) : null}
       </motion.div>
-      <P item={c.promise} />
+      <motion.p className="ep-p" variants={rise}>
+        {k.promise}
+      </motion.p>
       <motion.div variants={rise}>
         <button type="button" className="ep-map-button" onClick={openMap} data-testid="open-map">
-          {c.mapButton}
+          {k.mapButton}
           <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
             <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </motion.div>
       <motion.aside className="ep-nextup" variants={rise}>
-        <h2>{c.nextTitle}</h2>
+        <h2>{k.nextTitle}</h2>
         <p>
           <Txt item={c.nextBody} />
         </p>
       </motion.aside>
+      {others.map((s) => (
+        <motion.a key={s.series} className="ep-other" href={s.path} variants={rise} data-testid={`other-${s.series}`}>
+          <span>{k.otherLabel}</span>
+          <strong>{s.name}</strong>
+          <em>
+            {s.episode} · {s.title}
+          </em>
+          <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </motion.a>
+      ))}
       <motion.div variants={rise}>
         <button type="button" className="ep-link ep-restart" onClick={restart}>
-          {c.restart}
+          {k.restart}
         </button>
       </motion.div>
     </>
@@ -546,13 +557,11 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
 
 const SCENES: Record<SceneId, (p: SceneProps) => ReactNode> = { cover: Cover, zero: Zero, event: Event, tools: Tools, aha: Aha, compare: Compare, next: Next, keep: Keep };
 
-/** 장면을 지나면 그 장면의 개념을 주운 것이다 */
-const PICKED_AFTER: Partial<Record<SceneId, readonly ConceptId[]>> = { tools: TOOL_ORDER, next: ["provisional"] };
-
 // ─────────────────────────────────────────────────────────── 근거 시트
 
 function SourceSheet({ item, onClose }: { item: T; onClose: () => void }) {
-  const c = COPY.chrome;
+  const { ep } = useEp();
+  const c = CHROME.chrome;
   return (
     <motion.div className="ep-sheet-back" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
       <motion.div
@@ -568,16 +577,16 @@ function SourceSheet({ item, onClose }: { item: T; onClose: () => void }) {
         <header>
           <h2>{c.srcTitle}</h2>
           <button type="button" onClick={onClose}>
-            {COPY.map.close}
+            {CHROME.map.close}
           </button>
         </header>
-        {item.layer ? <p className="ep-sheet-layer">{c.layer[item.layer]}</p> : null}
+        {item.layer ? <p className="ep-sheet-layer">{ep.layerLabels[item.layer]}</p> : null}
         {item.calc ? <p className="ep-sheet-calc">{Object.entries(item.calc).map(([n, how]) => `${n} = ${how}`).join(" · ")}</p> : null}
         {item.src?.length ? (
           item.src.map((k) => (
             <blockquote key={k}>
-              <p>{SOURCES[k].quote}</p>
-              <cite>{DOCS[SOURCES[k].doc].name}</cite>
+              <p>{ep.sources[k]?.quote}</p>
+              <cite>{ep.docs[ep.sources[k]?.doc ?? ""]?.name}</cite>
             </blockquote>
           ))
         ) : (
@@ -590,32 +599,34 @@ function SourceSheet({ item, onClose }: { item: T; onClose: () => void }) {
 
 // ─────────────────────────────────────────────────────────── 회차
 
-export function Episode() {
+export function Episode(parts: EpisodeParts) {
+  const { ep } = parts;
   const [reader, setReader] = useState<ReaderId>("new");
   const [step, setStep] = useState(0);
   const [asked, setAsked] = useState<readonly string[]>([]);
   const [answers, setAnswers] = useState<Answers>({});
-  const [passed, setPassed] = useState<readonly ConceptId[]>([]);
+  const [passed, setPassed] = useState<readonly string[]>([]);
   const [mapOpen, setMapOpen] = useState(false);
   const [srcOn, setSrcOn] = useState(false);
   const [srcItem, setSrcItem] = useState<T | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
 
-  const scenes = ASSEMBLY[reader];
+  const scenes = ep.assembly[reader];
   const scene = scenes[step]!;
 
   // 개념의 상태 — 지도와 "남음"이 읽는다. 계산이 아니라 고정값 + 누른 것 + 지나온 장면이다
   const states = useMemo(() => {
-    const out = {} as Record<ConceptId, NodeState>;
-    for (const id of ALL) {
-      if (READERS[reader].known.includes(id)) out[id] = "known";
+    const out: Record<string, NodeState> = {};
+    for (const id of ep.conceptOrder) {
+      if (ep.readers[reader].known.includes(id)) out[id] = "known";
       else if (answers[id] === "seed") out[id] = "known";
       else if (answers[id] === "fresh" || passed.includes(id)) out[id] = "new";
       else out[id] = "none";
     }
     return out;
-  }, [reader, answers, passed]);
-  const count = ALL.filter((id) => states[id] !== "none").length + READERS[reader].elsewhere.length;
+  }, [ep, reader, answers, passed]);
+  const count = ep.conceptOrder.filter((id) => states[id] !== "none").length + ep.readers[reader].elsewhere.reduce((n, e) => n + e.concepts.length, 0);
+  const others = SHELF.filter((s) => s.series !== ep.series.id);
 
   const reset = useCallback((r: ReaderId) => {
     setReader(r);
@@ -629,12 +640,12 @@ export function Episode() {
 
   const onAsk = useCallback(
     (question: string) => {
-      const picked = PICKED_AFTER[scene];
+      const picked = ep.pickedAfter[scene];
       if (picked) setPassed((p) => [...new Set([...p, ...picked])]);
       setAsked((a) => [...a.slice(0, step), question]);
       setStep((s) => Math.min(s + 1, scenes.length - 1));
     },
-    [scene, step, scenes.length],
+    [ep, scene, step, scenes.length],
   );
   const back = useCallback(() => setStep((s) => Math.max(0, s - 1)), []);
 
@@ -644,24 +655,33 @@ export function Episode() {
 
   const Scene = SCENES[scene];
   const src = useMemo(() => ({ on: srcOn, open: setSrcItem }), [srcOn]);
-  const c = COPY.chrome;
+  const c = CHROME.chrome;
 
   return (
     <MotionConfig reducedMotion="user">
+      <EpCtx.Provider value={parts}>
       <SrcCtx.Provider value={src}>
-        <div className="ep-root" data-reader={reader} data-scene={scene} data-src={srcOn ? "" : undefined}>
-          <div className="ep-demo" role="group" aria-label="시안 조종">
+        <div className="ep-root" data-episode={ep.id} data-reader={reader} data-scene={scene} data-src={srcOn ? "" : undefined}>
+          <div className="ep-demo" role="group" aria-label={c.readersAria}>
             <span className="ep-demo-tag">{c.draft}</span>
             <div className="ep-demo-readers">
-              {(Object.keys(READERS) as ReaderId[]).map((r) => (
+              {(Object.keys(ep.readers) as ReaderId[]).map((r) => (
                 <button key={r} type="button" aria-pressed={reader === r} onClick={() => reset(r)} data-testid={`reader-${r}`}>
-                  {READERS[r].label}
+                  {ep.readers[r].label}
                 </button>
               ))}
             </div>
             <button type="button" className="ep-demo-src" aria-pressed={srcOn} onClick={() => setSrcOn((v) => !v)} data-testid="src-toggle">
-              근거
+              {c.src}
             </button>
+            {others.map((s) => (
+              <a key={s.series} className="ep-demo-switch" href={s.path} data-testid={`switch-${s.series}`}>
+                {s.short} {c.switchSuffix}
+                <svg width="11" height="11" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            ))}
           </div>
 
           <header className="ep-bar">
@@ -671,9 +691,9 @@ export function Episode() {
               </svg>
             </button>
             <p className="ep-bar-title">
-              <span>{SERIES.name}</span>
+              <span>{ep.series.name}</span>
               <span aria-hidden="true"> · </span>
-              <span>{COPY.cover.episode.t}</span>
+              <span>{ep.copy.cover.episode.t}</span>
             </p>
             <span className="ep-count" aria-label={`${scenes.length}장 가운데 ${step + 1}장`}>
               {step + 1}/{scenes.length}
@@ -720,7 +740,7 @@ export function Episode() {
               <motion.div
                 className="ep-mapview"
                 role="dialog"
-                aria-label={COPY.map.title}
+                aria-label={CHROME.map.title}
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 24 }}
@@ -728,12 +748,12 @@ export function Episode() {
                 data-testid="map-view"
               >
                 <header>
-                  <h1>{COPY.map.title}</h1>
+                  <h1>{CHROME.map.title}</h1>
                   <button type="button" onClick={() => setMapOpen(false)}>
-                    {COPY.map.close}
+                    {CHROME.map.close}
                   </button>
                 </header>
-                <ConceptMap reader={reader} states={states} />
+                <ConceptMap ep={ep} reader={reader} states={states} />
               </motion.div>
             ) : null}
           </AnimatePresence>
@@ -741,6 +761,7 @@ export function Episode() {
           <AnimatePresence>{srcItem ? <SourceSheet item={srcItem} onClose={() => setSrcItem(null)} /> : null}</AnimatePresence>
         </div>
       </SrcCtx.Provider>
+      </EpCtx.Provider>
     </MotionConfig>
   );
 }

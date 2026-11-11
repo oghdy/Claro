@@ -1394,6 +1394,7 @@ html:has(.ep-root) body {
 }
 .ep-map-else > div {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 6px;
 }
@@ -1564,4 +1565,107 @@ html:has(.ep-root) body {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+}
+
+/* ── UX-2: 두 회차를 오가는 길 — 시안 조종 칸의 단추 · 지도 아래의 시리즈 목록 · "남음" 끝의 다른 시리즈 */
+.ep-demo-switch {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 9px;
+  border-radius: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ep-ink);
+  background: #f0a184;
+  text-decoration: none;
+}
+.ep-shelf {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ep-rule);
+}
+.ep-shelf h2 {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ep-muted);
+}
+.ep-shelf ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.ep-shelf li[data-here],
+.ep-shelf a {
+  display: grid;
+  gap: 2px;
+  padding: 13px 16px;
+  border-radius: 16px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+  color: inherit;
+  text-decoration: none;
+  line-height: 1.45;
+}
+.ep-shelf a {
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.ep-shelf strong {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.ep-shelf span {
+  font-size: 14px;
+  color: var(--ep-ink2);
+}
+.ep-shelf em {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-style: normal;
+  font-size: 12.5px;
+  font-weight: 750;
+  color: var(--ep-muted);
+}
+.ep-shelf a em {
+  color: var(--ep-accent-ink);
+}
+.ep-other {
+  position: relative;
+  display: grid;
+  gap: 1px;
+  margin: 14px 0 0;
+  padding: 14px 44px 14px 16px;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+  color: inherit;
+  text-decoration: none;
+  line-height: 1.45;
+}
+.ep-other span {
+  font-size: 12.5px;
+  font-weight: 750;
+  color: var(--ep-muted);
+}
+.ep-other strong {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.ep-other em {
+  font-style: normal;
+  font-size: 14px;
+  color: var(--ep-ink2);
+}
+.ep-other svg {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  translate: 0 -50%;
 }

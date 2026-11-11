@@ -1,30 +1,21 @@
 // UX-1 시안 — 한 "회차"의 글과 근거. **시안 데이터다. 계약(ARTICLE_PACKAGE)이 아니고, 파이프라인이 만든 것도 아니다.**
 // 손으로 썼다 (모델 API 0). 저장된 1차 문서에서만: packages/pipeline/data/events/KFTC-20261029-DELIVERY-APPS/store.documents.json (git 에 있는 12 문서).
 // 캐시에만 있는 문서(PR-1109-PDF · SL-TERMS-1013 · CO-CPNG-1109)는 읽기만 했고 구절을 싣지 않았다 — 공개 저장소다 (E2-1-a).
-//
-// 규칙 (check.ts 가 본다)
-//   1. 독자가 읽는 글은 전부 { t, src?, calc?, ui? } 꼴이다
-//   2. t 에 숫자가 있으면 src 가 가리키는 구절(SOURCES) 안에 그 숫자가 있어야 한다
-//   3. 구절(quote)은 저장된 문서의 글 그대로다 (빈칸 · 줄바꿈만 무시하고 대조)
-//   4. calc — 구절의 수로 계산한 수 (어떻게 계산했는지 적는다) · ui — 화면 번호(0화 · 1화)처럼 사실이 아닌 수
-// 굵게는 **이렇게** 적는다.
+// 글의 규칙은 kit/types.ts 머리에 (check.ts 가 본다). 굵게는 **이렇게** 적는다.
+// UX-2 에서 모양만 공통 틀(EpisodeData)로 옮겼다 — 독자가 읽는 글자는 바꾸지 않았다 (지도의 "다른 시리즈" 예시만 진짜 회차의 개념으로).
+import { t as kt, type Concept, type EpisodeCopy, type EpisodeData, type ReaderFixture, type ReaderId, type SeriesInfo, type Source, type T } from "../../kit/types";
 
 export type DocLabel = "PR-1109" | "LAW-MRFTA" | "SL-YGY-2020" | "SL-TF-0512" | "SL-CD-0618" | "SL-DECREE-1106";
 
 /** label → store.json 의 source_id */
-export const DOCS: Record<DocLabel, { source_id: string; name: string }> = {
-  "PR-1109": { source_id: "98897dcb-259e-480a-bfe3-fa1e35bbd12f", name: "공정위 보도자료 「배달앱 불공정행위 제재」 (2026-11-09)" },
-  "LAW-MRFTA": { source_id: "74c797a9-3fea-4fe6-8535-0a81e206d179", name: "공정거래법 [시행 2026. 10. 2.]" },
-  "SL-YGY-2020": { source_id: "11d8f90d-a0b3-4ecb-ba7d-e59f63f43ea2", name: "공정위 보도자료 — 요기요 최저가 보장제 제재 (2020-06-02)" },
-  "SL-TF-0512": { source_id: "668d96db-16a7-43a1-ac9c-d3dcf9660443", name: "공정위 보도참고자료 — 배달플랫폼 사건처리 전담팀 (2025-05-12)" },
-  "SL-CD-0618": { source_id: "07959564-241b-4224-8666-adbdaf3660df", name: "공정위 보도자료 — 동의의결 개시신청 기각 (2026-06-18)" },
-  "SL-DECREE-1106": { source_id: "19092e60-0e07-4150-baa5-8dd745ce578a", name: "공정위 보도참고자료 — 시행령 개정안 입법예고 (2026-11-06)" },
+export const DOCS: Record<DocLabel, { store: "kftc"; source_id: string; name: string }> = {
+  "PR-1109": { store: "kftc", source_id: "98897dcb-259e-480a-bfe3-fa1e35bbd12f", name: "공정위 보도자료 「배달앱 불공정행위 제재」 (2026-11-09)" },
+  "LAW-MRFTA": { store: "kftc", source_id: "74c797a9-3fea-4fe6-8535-0a81e206d179", name: "공정거래법 [시행 2026. 10. 2.]" },
+  "SL-YGY-2020": { store: "kftc", source_id: "11d8f90d-a0b3-4ecb-ba7d-e59f63f43ea2", name: "공정위 보도자료 — 요기요 최저가 보장제 제재 (2020-06-02)" },
+  "SL-TF-0512": { store: "kftc", source_id: "668d96db-16a7-43a1-ac9c-d3dcf9660443", name: "공정위 보도참고자료 — 배달플랫폼 사건처리 전담팀 (2025-05-12)" },
+  "SL-CD-0618": { store: "kftc", source_id: "07959564-241b-4224-8666-adbdaf3660df", name: "공정위 보도자료 — 동의의결 개시신청 기각 (2026-06-18)" },
+  "SL-DECREE-1106": { store: "kftc", source_id: "19092e60-0e07-4150-baa5-8dd745ce578a", name: "공정위 보도참고자료 — 시행령 개정안 입법예고 (2026-11-06)" },
 };
-
-export interface Source {
-  doc: DocLabel;
-  quote: string;
-}
 
 export const SOURCES = {
   // ── 오늘의 사건: 공정위 보도자료 (PR-1109)
@@ -112,44 +103,17 @@ export const SOURCES = {
 
 export type SrcKey = keyof typeof SOURCES;
 
-/** 독자가 읽는 글 한 덩이 */
-export interface T {
-  t: string;
-  /** 이 글의 근거 구절들 */
-  src?: readonly SrcKey[];
-  /** 구절의 수로 계산한 수 — { 수: 어떻게 } */
-  calc?: Record<string, string>;
-  /** 사실이 아닌 화면 번호 (0화 · 1화 …) */
-  ui?: true;
-  /**
-   * 이 글이 무엇인가 — 근거를 열었을 때 독자에게 보이는 꼬리표.
-   *   fact     문서에 적힌 사실
-   *   official 공정위의 판단 · 주장 (D46: 누가 말했는지와 함께)
-   *   explain  Claro 가 풀어 쓴 설명 (문서의 논리를 쉬운 말로)
-   */
-  layer?: "fact" | "official" | "explain";
-}
-
-const t = (text: string, src?: readonly SrcKey[], more?: Partial<T>): T => ({ t: text, ...(src ? { src } : {}), ...more });
+const t = (text: string, src?: readonly SrcKey[], more?: Partial<T>): T => kt(text, src, more);
 
 // ─────────────────────────────────────────────────────────── 개념 (도구)
 
 export type ConceptId = "fee" | "mfn" | "dominance" | "provisional";
 
-export interface Concept {
-  id: ConceptId;
-  name: string;
-  /** 접혔을 때의 한 줄 */
-  short: T;
-  /** 펼쳤을 때 */
-  body: readonly T[];
-  /** 이 회차에서 어디에 쓰이나 — 지도에서 보인다 */
-  use: T;
-}
-
+// 넷 다 개념 라이브러리에 없다 — 손으로 썼다 (UX1-f)
 export const CONCEPTS: Record<ConceptId, Concept> = {
   fee: {
     id: "fee",
+    from: "hand",
     name: "중개수수료",
     short: t("가게가 주문을 받을 때마다 앱에 내는 몫이에요."),
     body: [
@@ -161,6 +125,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
   },
   mfn: {
     id: "mfn",
+    from: "hand",
     name: "최혜대우",
     short: t("“다른 데보다 나쁜 조건으로 팔지 마세요”라는 요구예요."),
     body: [
@@ -171,6 +136,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
   },
   dominance: {
     id: "dominance",
+    from: "hand",
     name: "시장지배적 지위",
     short: t("시장의 값과 조건을 좌우할 만큼 큰 회사라는 뜻이에요."),
     body: [
@@ -183,6 +149,7 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
   },
   provisional: {
     id: "provisional",
+    from: "hand",
     name: "‘잠정’ 과징금",
     short: t("아직 확정되지 않은 금액이라는 표시예요."),
     body: [
@@ -197,21 +164,6 @@ export const CONCEPTS: Record<ConceptId, Concept> = {
 // 지식 상태를 추정하지 않는다 (CLAUDE.md "절대 하지 말 것"). 아래 known 은 계산한 것이 아니라 시안이 정해 둔 것이다.
 // 처음 온 독자는 "이거 알아요?" 에 스스로 답한 것만 접힌다 (D57 — 씨앗). 그것도 추정이 아니라 독자가 누른 그대로다.
 
-export type ReaderId = "new" | "follower";
-
-export interface ReaderFixture {
-  id: ReaderId;
-  label: string;
-  /** 시안 조종 칸에 보이는 설명 */
-  note: string;
-  /** 이미 아는 개념 (고정값) → 접힌다 */
-  known: readonly ConceptId[];
-  /** 0화를 읽었나 (고정값) */
-  readZero: boolean;
-  /** 다른 시리즈에서 주운 개념 — 지도에만 보인다 (고정값 · 예시) */
-  elsewhere: readonly { name: string; series: string }[];
-}
-
 export const READERS: Record<ReaderId, ReaderFixture> = {
   new: { id: "new", label: "처음 온 독자", note: "이 시리즈가 처음 · 개념 지도는 비어 있음", known: [], readZero: false, elsewhere: [] },
   follower: {
@@ -220,28 +172,27 @@ export const READERS: Record<ReaderId, ReaderFixture> = {
     note: "0화를 읽음 · 개념 세 개를 이미 앎",
     known: ["fee", "mfn", "provisional"],
     readZero: true,
-    elsewhere: [
-      { name: "기준금리", series: "금리는 어디로" },
-      { name: "점도표", series: "금리는 어디로" },
-    ],
+    // 「금리는 어디로」 2화까지 읽은 독자다 — 그 회차(episodes/fomc)의 진짜 개념 다섯. UX-1 에서는 지어낸 예시 둘이었다
+    elsewhere: [{ series: "rate", concepts: ["rate", "target", "dots", "vote", "conditions"] }],
   },
 };
 
 // ─────────────────────────────────────────────────────────── 시리즈
 
-export const SERIES = {
+export const SERIES: SeriesInfo = {
+  id: "price",
   name: "누가 값을 정하나",
   sub: "플랫폼과 가게, 그리고 규칙",
   episodes: [
-    { no: t("0화", undefined, { ui: true }), title: "지금까지의 이야기", state: "past" },
-    { no: t("1화", undefined, { ui: true }), title: "싸게 팔라는데, 왜 잘못일까", state: "now" },
-    { no: t("다음 화"), title: "결정문이 나오면", state: "next" },
+    { no: t("0화", undefined, { ui: true }), title: t("지금까지의 이야기"), state: "past" },
+    { no: t("1화", undefined, { ui: true }), title: t("싸게 팔라는데, 왜 잘못일까"), state: "now" },
+    { no: t("다음 화"), title: t("결정문이 나오면"), state: "next" },
   ],
-} as const;
+};
 
 // ─────────────────────────────────────────────────────────── 장면의 글
 
-export const COPY = {
+export const COPY: EpisodeCopy = {
   cover: {
     episode: t("1화", undefined, { ui: true }),
     title: "싸게 팔라는데,\n왜 잘못일까",
@@ -289,14 +240,14 @@ export const COPY = {
     kicker: t("1화 · 오늘의 사건", undefined, { ui: true }),
     title: "공정위는 두 회사가\n법을 어겼다고 봤어요",
     lead: t("10월 29일, 공정거래위원회는 배달의민족과 쿠팡에 “그만하라”는 명령(시정명령)과 과징금을 결정했어요. 발표는 11월 9일이었어요.", ["pr.decision", "pr.registered"], { layer: "fact" }),
-    fines: [
+    figures: [
       { who: "배달의민족", amount: t("3,311억 원", ["pr.decision"]), tag: "잠정" },
       { who: "쿠팡", amount: t("3,008억 원", ["pr.decision"]), tag: "잠정" },
     ],
-    fineNote: t("배민의 금액에는 다른 두 가지 행위의 몫도 들어 있어요. 오늘 이야기인 최혜대우 요구의 몫은 1,602억 원이에요. ‘잠정’은 아직 확정된 금액이 아니라는 뜻이고요.", ["pr.decision", "pr.breakdown"], { layer: "fact" }),
-    demandLabel: "문제가 된 요구",
-    demand: t("“우리 앱에서, 다른 앱보다 비싸게 팔지 마세요.”", ["pr.mfnDef"], { layer: "explain" }),
-    demandNote: "두 회사가 가게에 한 요구를 쉬운 말로 옮긴 거예요. 문서의 문장 그대로는 아니에요.",
+    figureNote: t("배민의 금액에는 다른 두 가지 행위의 몫도 들어 있어요. 오늘 이야기인 최혜대우 요구의 몫은 1,602억 원이에요. ‘잠정’은 아직 확정된 금액이 아니라는 뜻이고요.", ["pr.decision", "pr.breakdown"], { layer: "fact" }),
+    quoteLabel: "문제가 된 요구",
+    quote: t("“우리 앱에서, 다른 앱보다 비싸게 팔지 마세요.”", ["pr.mfnDef"], { layer: "explain" }),
+    quoteNote: "두 회사가 가게에 한 요구를 쉬운 말로 옮긴 거예요. 문서의 문장 그대로는 아니에요.",
     riddle: [
       t("잠깐, 손님에게는 좋은 얘기 아닌가요? 어느 앱에서 시켜도 더 비싸지 않다는 거니까요.", undefined, { layer: "explain" }),
       t("그런데 공정위는 이 요구 때문에 **수수료와 메뉴값이 올랐다**고 봤어요.", ["pr.effect"], { layer: "official" }),
@@ -310,14 +261,6 @@ export const COPY = {
     titleFollower: "오늘 새로 필요한 도구는\n하나예요",
     subNew: t("아는 건 “알아요”를 누르면 접혀요. 접어도 언제든 다시 펼 수 있어요."),
     subFollower: t("나머지 둘은 이미 가지고 계세요. 접어 뒀어요."),
-    askPrompt: "이거 알아요?",
-    yes: "알아요",
-    no: "처음 들어요",
-    foldedKnown: "이미 아는 도구",
-    foldedSeed: "알던 도구",
-    picked: "주웠어요",
-    open: "펼치기",
-    close: "접기",
     ask: "그래서, 왜 값이 오르는 거죠?",
   },
 
@@ -328,30 +271,9 @@ export const COPY = {
       t("당신은 앱 두 곳에 입점한 가게 사장님이에요. **큰 앱**은 손님이 많지만 수수료가 높아요. **새 앱**은 손님을 모으려고 수수료를 낮게 받아요.", undefined, { layer: "explain" }),
       t("새 앱에서는 덜 떼이니까, 값을 조금 내려 팔 수 있어요. 한번 내려 볼까요?", undefined, { layer: "explain" }),
     ],
-    lab: {
-      big: "큰 앱",
-      small: "새 앱",
-      feeHigh: "수수료 높음",
-      feeLow: "수수료 낮음",
-      price: "메뉴값",
-      tabOff: "요구가 없을 때",
-      tabOn: "요구가 있을 때",
-      action: "새 앱에서 값 내리기",
-      again: "처음으로",
-      goOn: "요구가 있을 때는 어떨까요?",
-      rule: "“다른 앱보다 비싸게 팔지 마세요”",
-      noRule: "요구 없음. 값은 가게가 앱마다 정해요.",
-      same: "같은 값",
-      cheaper: "더 싼 값",
-      blocked: "내릴 수 없어요",
-      guests: "손님",
-      offBefore: t("지금은 두 앱의 값이 같아요. 버튼을 눌러 보세요."),
-      offAfter: t("손님이 더 싼 새 앱으로 옮겨 가요. 큰 앱은 손님을 지키려면 수수료를 낮춰야 해요. **값이 내려가는 쪽으로 경쟁이 생겨요.**", ["pr.entrant"], { layer: "explain" }),
-      onBefore: t("이제 큰 앱이 요구해요. “우리 앱에서, 다른 앱보다 비싸게 팔지 마세요.” 그래도 눌러 보세요."),
-      onAfter: t("막혔어요. 새 앱에서 값을 내리면 큰 앱에서도 똑같이 내려야 해요. 그런데 큰 앱은 수수료가 높아서 그럴 여유가 없어요. **결국 두 앱의 값은 같은 자리에 묶여요.**", ["ygy.mech", "pr.both90"], { layer: "explain" }),
-    },
     flipLabel: "뒤집어 보면",
     flipA: "“다른 앱보다 비싸게 팔지 마세요”",
+    flipOp: "=",
     flipB: "“다른 앱에서 더 싸게 팔지 마세요”",
     flipNote: t("같은 말이에요. 더 싼 곳이 생길 수 없으면, 손님은 옮길 이유가 없어요. 새 앱은 수수료를 낮춰도 손님을 데려오지 못하고, 큰 앱은 수수료를 내릴 이유가 없어져요.", ["pr.entrant", "ygy.mech"], { layer: "explain" }),
     realLabel: "실제로 공정위가 본 것",
@@ -441,45 +363,72 @@ export const COPY = {
   keep: {
     kicker: "남음",
     title: "수수께끼 하나를 풀었고,\n도구가 남았어요",
-    lineLabel: "오늘의 한 줄",
     line: "“다른 데보다 비싸게 팔지 마”는\n“다른 데서 더 싸게 팔지 마”가 될 수 있다.",
-    newLabel: "오늘 새로 주운 개념",
-    seedLabel: "원래 알던 개념",
-    againLabel: "오늘 다시 만난 개념",
-    promise: t("다음에 이 개념들이 나오면 접어 둘게요. 새로 필요한 것만 꺼낼게요."),
-    mapButton: "내 개념 지도 보기",
-    nextTitle: "다음 화",
     nextBody: t("결정문이 나오면 열려요. ‘잠정’이 떨어지는지, 계산이 어떻게 나왔는지 같이 볼게요."),
-    restart: "처음부터 다시",
   },
 
+  map: { whereToday: t("1화에서 주움", undefined, { ui: true }) },
+};
+
+// ─────────────────────────────────────────────────────────── 풀이 장면의 글 — 이 회차만의 것 (Mechanism.tsx 가 읽는다)
+
+export const LAB = {
+  big: "큰 앱",
+  small: "새 앱",
+  feeHigh: "수수료 높음",
+  feeLow: "수수료 낮음",
+  price: "메뉴값",
+  tabOff: "요구가 없을 때",
+  tabOn: "요구가 있을 때",
+  action: "새 앱에서 값 내리기",
+  again: "처음으로",
+  goOn: "요구가 있을 때는 어떨까요?",
+  rule: "“다른 앱보다 비싸게 팔지 마세요”",
+  noRule: "요구 없음. 값은 가게가 앱마다 정해요.",
+  same: "같은 값",
+  cheaper: "더 싼 값",
+  blocked: "내릴 수 없어요",
+  guests: "손님",
+  offBefore: t("지금은 두 앱의 값이 같아요. 버튼을 눌러 보세요."),
+  offAfter: t("손님이 더 싼 새 앱으로 옮겨 가요. 큰 앱은 손님을 지키려면 수수료를 낮춰야 해요. **값이 내려가는 쪽으로 경쟁이 생겨요.**", ["pr.entrant"], { layer: "explain" }),
+  onBefore: t("이제 큰 앱이 요구해요. “우리 앱에서, 다른 앱보다 비싸게 팔지 마세요.” 그래도 눌러 보세요."),
+  onAfter: t("막혔어요. 새 앱에서 값을 내리면 큰 앱에서도 똑같이 내려야 해요. 그런데 큰 앱은 수수료가 높아서 그럴 여유가 없어요. **결국 두 앱의 값은 같은 자리에 묶여요.**", ["ygy.mech", "pr.both90"], { layer: "explain" }),
+};
+
+// ─────────────────────────────────────────────────────────── 회차
+
+export const DELIVERY: EpisodeData = {
+  id: "delivery",
+  path: "/lab/episode",
+  short: "배달앱",
+  stores: { kftc: "packages/pipeline/data/events/KFTC-20261029-DELIVERY-APPS/store.documents.json" },
+  docs: DOCS,
+  sources: SOURCES,
+  series: SERIES,
+  concepts: CONCEPTS,
+  conceptOrder: ["fee", "mfn", "dominance", "provisional"],
+  toolOrder: ["fee", "mfn", "dominance"],
+  lateTool: "provisional",
+  pickedAfter: { tools: ["fee", "mfn", "dominance"], next: ["provisional"] },
+  readers: READERS,
+  assembly: {
+    new: ["cover", "zero", "event", "tools", "aha", "next", "keep"],
+    follower: ["cover", "event", "tools", "aha", "compare", "next", "keep"],
+  },
+  copy: COPY,
+  lab: LAB,
+  // 지도 — UX-1 의 ConceptMap.tsx 에 있던 자리 · 선 그대로
   map: {
-    title: "내 개념 지도",
-    close: "닫기",
-    emptyNew: "아직 비어 있어요. 회차를 읽으면 여기에 개념이 붙어요.",
-    legendNew: "오늘 주움",
-    legendKnown: "알던 것",
-    legendGhost: "다음 화에서",
-    seriesLabel: "누가 값을 정하나",
-    elsewhereLabel: "다른 시리즈",
-    ghosts: ["의결서", "끼워팔기"],
-    tapHint: "개념을 누르면 설명이 나와요.",
-    whereToday: t("1화에서 주움", undefined, { ui: true }),
-    whereSeed: "원래 알던 것",
-    whereBefore: "전에 주운 것",
-    whereElse: "다른 시리즈에서 주움 (시안의 예시)",
-    whereGhost: "아직 줍지 않았어요. 다음 화에서 만나요.",
-    edgeNote: "선은 이 이야기에서 개념이 이어진 길이에요.",
+    at: { fee: [21, 72], mfn: [47, 45], dominance: [77, 66], provisional: [73, 22] },
+    edges: [
+      ["fee", "mfn"],
+      ["mfn", "dominance"],
+      ["dominance", "provisional"],
+    ],
+    ghosts: [
+      { name: "의결서", at: [28, 13], from: "provisional" },
+      { name: "끼워팔기", at: [52, 91], from: "dominance" },
+    ],
   },
-
-  chrome: {
-    draft: "시안",
-    readerLabel: "독자",
-    back: "앞 장으로",
-    mapAria: "내 개념 지도",
-    srcOpen: "근거 보기",
-    srcTitle: "이 문장의 근거",
-    layer: { fact: "문서에 적힌 사실", official: "공정위의 판단", explain: "Claro 가 풀어 쓴 설명" },
-    srcNone: "따로 붙은 구절이 없는 문장이에요.",
-  },
-} as const;
+  layerLabels: { fact: "문서에 적힌 사실", official: "공정위의 판단", explain: "Claro 가 풀어 쓴 설명" },
+};
