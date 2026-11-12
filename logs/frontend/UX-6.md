@@ -2,7 +2,8 @@
 
 ## UX-6 · 2026-11-12 · 서브에이전트 · 검수 대기(PM)
 
-**작업 세션 모델: Opus 5.5** (`claude-opus-5-5`). 모델 API 호출 0 · 비용 0 · 배포 안 함 · `docs/PM.md` 안 읽음.
+**작업 세션 모델: Opus 5.5** (`claude-opus-5-5`). 모델 API 호출 0 · 비용 0 · `docs/PM.md` 안 읽음.
+**배포**: 배포를 따로 하지 않았지만 **지시대로 한 push (`d39d475`)가 Vercel 배포를 일으켰다** — D76 (이 Step 도중 PM 커밋 `6cb1d93`) "main 에 push 하면 바로 배포". 바뀐 것은 lab 주소뿐 (`/` 0자). push 뒤 확인: `https://claro-lime-one.vercel.app/lab/episode/carry` 200 · `/rate-3` 200 (기다리는 한 장 — 배포의 서버 묶음에는 회차 파일이 없다 · UX6-g) · `/fomc` · `/pipc` 200.
 레인: 프론트 (`apps/web/src/app/lab/episode/`) + 백엔드 (계약 `docs/contract/EPISODE.md` 의 **3화 칸 셋만** — `packages/contract/src/episode.ts` · `validate-episode.ts` · `test/episode.test.ts` · `fixtures/invalid/episode-*` 새 셋).
 안 건드린 것: EPISODE.md 의 다른 칸 · 다른 계약 파일 · **골든 셋 (0자)** · 세 회차의 독자 글 (0자) · `fomc-auto/` · packages/pipeline · packages/db · 본 화면 `/` · packages/tokens. 기존 위반 픽스처 38 은 다시 써도 글자 그대로 (`git diff` 0).
 
