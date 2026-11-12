@@ -72,6 +72,7 @@ D1~D7은 `docs/FINDINGS.md` §12.1에서 이월.
 | D68 | B-E1 게이트 — 회차 계약 통과 (Series ≠ Storyline · Episode 는 ArticlePackage 의 형제 · 0화는 회차가 아니라 따라잡기 장면 · 불변식 20 / 위반 29 · 그림은 계약 밖) · _open E-1 · 4 · 7 · 10 · 11 · 12 수용 · 다음 P-E1 | **DECIDED** 2026-11-11 · PM (도윤 위임 D47 · D63) |
 | D69 | E3-1 게이트 — 개인정보위 사건 1차 확인 (대교 32억 5,500만 · 영훈 6억 3,000만 · §29) · **뒤집기 고침: "털렸다 ≠ 벌받는다 — 조치를 다 했으면 물리지 않는다"** · 회차의 축 = 대교 · 그리지 않을 것 (반사실 · 과징금 ÷ 명수 · "최대 10%") · 권리 = 문서 안 공공누리 표시가 있는 문서만 git (E3-1b) | **DECIDED** 2026-11-12 · PM (도윤 위임 D47 · D63) |
 | D70 | E3-1b 게이트 — 개인정보위 PDF 셋 git (문서 안 공공누리 제1유형 표시 · 해시) · 게시물 · 일정은 캐시 · **문서 단위 권리를 계약으로 (B-E2)** · 다음 UX-5 ∥ B-E2 | **DECIDED** 2026-11-12 · PM (도윤 위임 D47 · D63) |
+| D71 | B-E2 게이트 — 문서 단위 권리가 계약에 (`DocumentRights` · 불변식 35 ~ 37 · 20 · P-1 · §10.1 문구) · PIPC PDF 셋 행 · _open a · b · c 수용 | **DECIDED** 2026-11-12 · PM (도윤 위임 D47 · D63) |
 
 ---
 
@@ -1933,3 +1934,10 @@ D21 (레벨 수) · D4 (개인화 범위) 는 시안을 보고 도윤이 정한�
 - E3-1b-b 표시가 본문 끝 한 곳뿐이어도 붙임까지 한 문서 — 수용 (한 파일 · 한 표시)
 - E3-1b-c `doc_rights` 의 그림 칸이 PDF 모양 — 수용 (HWPX 에서 나오면 그때 넓힌다)
 **다음 (나란히 — 파일이 겹치지 않게 지시)**: **UX-5 세 번째 회차** (개인정보위 · 넘겨 보기 틀 부품 + EPISODE.md 넘겨 보기 칸 · Fable) ∥ **B-E2 문서 단위 권리를 계약으로** (DATA_MODEL §4.4 · Opus) ∥ P-E1 (도는 중)
+
+## D71 · B-E2 게이트 — 문서 단위 권리를 계약으로
+
+**상태**: DECIDED · 2026-11-12 · PM (도윤 위임 D47 · D63)
+**검수**: `60bc7cc` — 커밋 범위 13 (DATA_MODEL · data-model.ts · rights 시험 · rights.ts · pack.ts · e3 시험 · PIPC store.json · verify-data-model / verify-source-pack + selftest · 로그 · backend 줄) · 남의 미커밋 (P-E1 · UX-5) 안 건드림 · `pnpm --filter @claro/contract test` 115 통과 · verify-data-model OK · verify-source-pack OK (다시 돌림) · PIPC `document_rights` 3행 (can_store · can_quote 참 · can_ingest 칸 없음)
+**계약**: 따로 된 타입 `DocumentRights` + `DocumentRightsBasis` (DATA_MODEL §4.4) — Source 하나에 많아야 한 행 · 그 문서에 한해 칸마다 발행처 행보다 앞선다 · 공공누리 제1유형 = 칸 다섯 참 · `basis` 필수 (받은 바이트 sha256 · 쪽 · 그림 · 그림 sha256 · 본 것). 불변식 35 (행의 칸 · 근거) · 36 (앞서는 규칙) · 37 (받은 바이트 = 기록). 불변식 20 · P-1 · §10.1 은 "발행처 행 또는 문서 단위 행". 행이 없는 저장소 (골든 · FOMC · KFTC)는 0자
+**_open 판정**: a 그림 해시를 매번 대지 않음 수용 (받은 바이트가 같으면 그림도 같다) · b `pack.json doc_rights` ↔ 계약 행 두 곳 수용 (검사가 칸마다 댄다) · c KFTC store.json 의 법령 근거 글 어긋남 (E3-1 이 rights.ts 를 넓힌 뒤 KFTC 를 다시 내지 않음) — 다음에 KFTC 를 다시 낼 때 따라 바뀐다 (B-E2 는 되돌려 둠)
