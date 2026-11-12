@@ -1287,7 +1287,7 @@ Claro 는 기사를 "회차"로 낸다 — 도윤이 확정했다 (D57 쌓인다
 
 | Step | 내용 | 산출 | 상태 |
 |---|---|---|---|
-| **B-E2** | DATA_MODEL §4.4 문서 단위 권리 (문서 안 공공누리 제1유형 표시 · 근거 · 해시 필수 · 그 문서에 한해 발행처 행보다 앞선다) · 불변식 20 · P-1 문구 · 검증 · 파이프라인 산출물을 계약 모양으로 · 서브에이전트 Opus | DATA_MODEL · packages/contract · rights.ts · pack.ts · PIPC store.json · `logs/backend/B-E2.md` | ⏸ 멈춤 (2026-11-12 · 사용 한도) — 계약 · 검증 · rights/pack · store.json 까지 (미커밋) · selftest · 검사 · 로그 · 커밋이 남음 — `docs/PM.md` "재개할 때" |
+| **B-E2** | DATA_MODEL §4.4 문서 단위 권리 (문서 안 공공누리 제1유형 표시 · 근거 · 해시 필수 · 그 문서에 한해 발행처 행보다 앞선다) · 불변식 20 · P-1 문구 · 검증 · 파이프라인 산출물을 계약 모양으로 · 서브에이전트 Opus | DATA_MODEL · packages/contract · rights.ts · pack.ts · PIPC store.json · `logs/backend/B-E2.md` | 🔄 재개 · 도는 중 (2026-11-12 · 한도로 멈췄던 것) — 계약 · 검증 · rights/pack · store.json 까지 (미커밋) · selftest · 검사 · 로그 · 커밋이 남음 — `docs/PM.md` "재개할 때" |
 
 ### 서브에이전트 지시 (Opus)
 ```
