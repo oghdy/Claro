@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """verify-source-pack 자체 시험 — 실물 사건 폴더(FOMC-20261028 · E2-1 의 KFTC-20261029-DELIVERY-APPS · E3-1 의 PIPC-20261028-SAFETY-MEASURES)는 통과하고, 망가뜨린 사본은 그 code 로 실패해야 한다.
+기대 code 가 둘 이상(튜플)이면 전부 나와야 한다 (B-E2 — 문서 단위 행이 어긋나면 그 행이 거부되고 (PACK_DOC_RIGHTS) 그 문서의 git 원문도 막힌다 (PACK_DOC_NOT_STORABLE)).
 
     python3 scripts/selftest-verify-source-pack.py
 """
@@ -126,6 +127,13 @@ def m_secondary(b):        # 1차가 아닌 Source
     src(b, 'BEA-08')['kind'] = 'SECONDARY'
 
 
+def m_doc_row_by_hand(b):  # B-E2 — 권리 미확인(클리블랜드 연은) 연설에 문서 단위 행을 손으로 (목록에 doc_rights 없이 · 칸은 다 갖춘 채로)
+    b['store']['document_rights'] = [{'source_id': rec(b, 'SP-HAM-1012')['source_id'], 'rights': 'KOGL_TYPE1', 'can_store': True, 'can_quote': True,
+                                      'can_transform': True, 'commercial_use': True, 'attribution_required': True,
+                                      'basis': {'bytes_sha256': '0' * 64, 'page': 1, 'pages': 1, 'image': 'x', 'image_sha256': '1' * 64, 'seen': 'x'},
+                                      'last_reviewed_at': '2026-11-12'}]
+
+
 # E2-1 — 두 번째 사건 (한국 · 공공누리 · 법령 · hold_text)
 CODE2 = 'KFTC-20261029-DELIVERY-APPS'
 base2 = V.load_event(os.path.join(V.EVENTS, CODE2))
@@ -163,8 +171,42 @@ def m3_pipc_into_repo(b):  # 공공누리 표시가 없는 게시물 페이지(p
     rec(b, 'PR-1029')['text_in'] = 'store.documents.json'
 
 
-def m3b_doc_rights_lost(b):   # E3-1b — 문서 단위 권리를 지웠는데 PDF 전문은 저장소에 그대로
+def m3b_doc_rights_lost(b):   # E3-1b — 목록의 문서 단위 권리를 지움 (사람이 본 기록이 없다) — store.json 행 · PDF 전문은 그대로
     item(b, 'PR-1029-PDF').pop('doc_rights')
+
+
+def drow(b, label):
+    return next(r for r in b['store']['document_rights'] if r['source_id'] == rec(b, label)['source_id'])
+
+
+def m3e_row_lost(b):          # B-E2 — store.json 의 문서 단위 행을 지움 (목록은 그대로) — 계약으로는 발행처 행 (null) 만 남는다
+    b['store']['document_rights'].remove(drow(b, 'SL-STATS-0515'))
+
+
+def m3e_basis_lost(b):        # B-E2 — 문서 단위 행의 basis 를 지움 (불변식 35 — basis 없으면 거부)
+    drow(b, 'PR-1029-PDF')['basis'] = None
+
+
+def m3e_row_moved(b):         # B-E2 — 문서 단위 행을 같은 발행처의 다른 문서 (표시 없는 게시물 페이지 PR-1029) 로 옮김
+    drow(b, 'PR-1029-PDF')['source_id'] = rec(b, 'PR-1029')['source_id']
+
+
+def m3e_grant_false(b):       # B-E2 — 공공누리 제1유형인데 변경 불가라고 (근거가 말하는 칸 · D53)
+    drow(b, 'SL-SKT-0828')['can_transform'] = False
+
+
+def m3e_bytes_differ(b):      # B-E2 — 문서 단위 행의 받은 바이트 해시만 바꿈 (목록 · 기록은 그대로 — 불변식 37)
+    r = drow(b, 'SL-SKT-0828')['basis']
+    r['bytes_sha256'] = ('0' if r['bytes_sha256'][0] != '0' else '1') + r['bytes_sha256'][1:]
+
+
+def m3e_pages_differ(b):      # B-E2 — 쪽 수를 목록 · 행 둘 다 바꿈 (뽑은 글은 5쪽 — 불변식 37)
+    item(b, 'PR-1029-PDF')['doc_rights']['pages'] = 6
+    drow(b, 'PR-1029-PDF')['basis']['pages'] = 6
+
+
+def m3e_two_rows(b):          # B-E2 — 한 문서에 행 둘
+    b['store']['document_rights'].append(copy.deepcopy(drow(b, 'PR-1029-PDF')))
 
 
 def m3b_raw_differs(b):       # E3-1b — 표시를 본 바이트 ≠ 받은 바이트 (다른 파일에서 본 표시)
@@ -174,11 +216,6 @@ def m3b_raw_differs(b):       # E3-1b — 표시를 본 바이트 ≠ 받은 바
 
 def m3b_page_claims_kogl(b):  # E3-1b — 표시가 없는 일정 페이지의 기록이 공공누리라고 한다 (문서 단위 권리 없이)
     rec(b, 'M21-AGENDA')['rights'] = 'KOGL_TYPE1'
-
-
-def m3b_basis_silent(b):      # E3-1b — 발행처 권리 행의 근거 글에서 문서 하나가 빠졌다
-    r = next(r for r in b['store']['source_registry'] if r['source'] == 'pipc.go.kr')
-    r['basis'] = r['basis'].replace('SL-STATS-0515', 'SL-STATS-XXXX')
 
 
 def m3_law_text(b):        # 위반 기간 판 법률의 원문 한 글자 (제64조의2 단서 "다한" → "다 한")
@@ -192,10 +229,16 @@ def m3_evidence(b):        # 본문의 요일 오기를 증거 글로 — 저장
 
 CASES3 = [
     ('E3-1 개인정보위 게시물 페이지 (표시 없음) 를 저장소에', m3_pipc_into_repo, 'PACK_DOC_NOT_STORABLE'),
-    ('E3-1b 문서 단위 권리를 지움 — PDF 는 저장소에 그대로', m3b_doc_rights_lost, 'PACK_DOC_NOT_STORABLE'),
-    ('E3-1b 표시를 본 바이트 ≠ 받은 바이트', m3b_raw_differs, 'PACK_DOC_RIGHTS'),
+    ('E3-1b 목록의 문서 단위 권리를 지움 — store.json 행 · PDF 는 그대로', m3b_doc_rights_lost, 'PACK_DOC_RIGHTS'),
+    ('E3-1b 표시를 본 바이트 (목록) ≠ 받은 바이트', m3b_raw_differs, 'PACK_DOC_RIGHTS'),
     ('E3-1b 일정 페이지 기록이 공공누리라고 함', m3b_page_claims_kogl, 'PACK_DOC_RIGHTS'),
-    ('E3-1b 권리 행 근거 글에 문서가 빠짐', m3b_basis_silent, 'PACK_DOC_RIGHTS'),
+    ('B-E2 store.json 문서 단위 행을 지움 — PDF 는 저장소에 그대로', m3e_row_lost, ('PACK_DOC_NOT_STORABLE', 'PACK_DOC_RIGHTS')),
+    ('B-E2 문서 단위 행의 basis 를 지움', m3e_basis_lost, ('PACK_DOC_RIGHTS', 'PACK_DOC_NOT_STORABLE')),
+    ('B-E2 문서 단위 행을 같은 발행처의 다른 문서로 옮김', m3e_row_moved, ('PACK_DOC_RIGHTS', 'PACK_DOC_NOT_STORABLE')),
+    ('B-E2 문서 단위 행 — 공공누리 제1유형인데 변경 불가', m3e_grant_false, ('PACK_DOC_RIGHTS', 'PACK_DOC_NOT_STORABLE')),
+    ('B-E2 문서 단위 행의 받은 바이트 ≠ 기록', m3e_bytes_differ, 'PACK_DOC_RIGHTS'),
+    ('B-E2 문서 단위 행의 쪽 수 ≠ 뽑은 글의 쪽 수', m3e_pages_differ, 'PACK_DOC_RIGHTS'),
+    ('B-E2 한 문서에 문서 단위 행 둘', m3e_two_rows, ('PACK_DOC_RIGHTS', 'PACK_DOC_NOT_STORABLE')),
     ('E3-1 법령 원문 한 글자', m3_law_text, 'PACK_DOC_HASH'),
     ('E3-1 증거 글 요일 다름', m3_evidence, 'PACK_PUBLISHED'),
 ]
@@ -222,7 +265,12 @@ CASES = [
     ('W-4 SourceDocument 받은 주소 ≠ 기록', m_doc_url, 'PACK_DOC_RECORD'),
     ('W-4 SourceDocument 칸 빠짐', m_doc_field, 'PACK_SHAPE'),
     ('W-4 권리 행 근거 없음', m_reg_basis, 'PACK_REGISTRY'),
+    ('B-E2 목록에 doc_rights 없이 문서 단위 행을 손으로', m_doc_row_by_hand, 'PACK_DOC_RIGHTS'),
 ]
+
+
+def hits(errs, want):
+    return all(any(c.startswith(w) for c, _ in errs) for w in (want if isinstance(want, tuple) else (want,)))
 
 
 def main():
@@ -235,7 +283,7 @@ def main():
         b = copy.deepcopy(base)
         mut(b)
         errs, _ = V.check(b, contract, p1_store, p1_docs)
-        hit = any(c.startswith(want) for c, _ in errs)
+        hit = hits(errs, want)
         print(f'  {"ok  " if hit else "FAIL"} {name} → {want}' + ('' if hit else f' (나온 것 {[c for c, _ in errs][:4]})'))
         fails += not hit
     errs, _ = V.check(base2, contract, p1_store, p1_docs)
@@ -246,7 +294,7 @@ def main():
         b = copy.deepcopy(base2)
         mut(b)
         errs, _ = V.check(b, contract, p1_store, p1_docs)
-        hit = any(c.startswith(want) for c, _ in errs)
+        hit = hits(errs, want)
         print(f'  {"ok  " if hit else "FAIL"} {name} → {want}' + ('' if hit else f' (나온 것 {[c for c, _ in errs][:4]})'))
         fails += not hit
     errs, _ = V.check(base3, contract, p1_store, p1_docs)
@@ -257,7 +305,7 @@ def main():
         b = copy.deepcopy(base3)
         mut(b)
         errs, _ = V.check(b, contract, p1_store, p1_docs)
-        hit = any(c.startswith(want) for c, _ in errs)
+        hit = hits(errs, want)
         print(f'  {"ok  " if hit else "FAIL"} {name} → {want}' + ('' if hit else f' (나온 것 {[c for c, _ in errs][:4]})'))
         fails += not hit
     print(f'\nselftest-verify-source-pack: 사본 {len(CASES) + len(CASES2) + len(CASES3)} · ' + ('OK' if not fails else f'FAIL {fails}'))

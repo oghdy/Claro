@@ -177,6 +177,15 @@ def all_registry(m, **kv):
         r.update(kv)
 
 
+def doc_rights_row(sid, **kv):
+    """B-E2 — 문서 단위 권리 한 행 (시험 재료 · 칸은 계약 그대로). kv 로 칸을 바꾼다"""
+    r = {'source_id': sid, 'rights': 'KOGL_TYPE1', **{k: True for k in V.RIGHTS_COLUMNS},
+         'basis': {'bytes_sha256': 'a' * 64, 'page': 1, 'pages': 1, 'image': '시험 그림', 'image_sha256': 'b' * 64, 'seen': '시험 표시'},
+         'last_reviewed_at': '2026-11-12'}
+    r.update(kv)
+    return r
+
+
 def second_bridge(m):
     b2 = UID('bridge', 'other')
     m['bridges'][b2] = dict(m['bridges'][BID], bridge_id=b2, label='다른 브리지', concept_id=CONCEPT_ID['C-0001'],
@@ -237,6 +246,8 @@ def as_cache(st, fe, label, text):
 
 
 CACHE_TEXT = "x Markets are currently pricing a ~58% probability of a 25bp hike at next week's meeting y"
+CME_DOC = lambda: {'source_id': SRC['CME-2'], 'sha256': V.sha256_text(CACHE_TEXT), 'fetched_url': 'https://www.cmegroup.com/x',
+                   'fetched_at': '2026-10-30T05:00:00.000Z', 'extractor': 'p1-extract/1', 'text': CACHE_TEXT}
 
 
 def cme_span(st, fe):
@@ -298,6 +309,23 @@ DOC_CASES = [
      d_(lambda st, fe: next(r for r in st['source_registry'] if r['source'] == 'bea.gov').__setitem__('basis', None)), {'REGISTRY_BASIS'}),
     ('통과해야 한다 — W-4 불변식 30: 권리 칸이 전부 null 이면 basis 가 없어도 된다', None,
      d_(lambda st, fe: next(r for r in st['source_registry'] if r['source'] == 'cmegroup.com').__setitem__('basis', None)), set()),
+    # B-E2 — 문서 단위 권리 (불변식 35 · 36). 골든에는 행이 없다 — 행이 있을 때만 두는 목록
+    ('B-E2 불변식 36 — 권리 미확인(CME-2) 전문을 저장소에 넣고 그 문서에 문서 단위 행 → 저장 가능 (기록 없음만 남는다)', None,
+     d_(lambda st, fe: (st['source_documents'].append(CME_DOC()), st.__setitem__('document_rights', [doc_rights_row(SRC['CME-2'])]))),
+     {'SOURCE_DOC_UNRECORDED'}),
+    ('B-E2 불변식 36 — 문서 단위 행이 같은 발행처의 다른 문서(CME-1)에만 → CME-2 는 여전히 막힌다', None,
+     d_(lambda st, fe: (st['source_documents'].append(CME_DOC()), st.__setitem__('document_rights', [doc_rights_row(SRC['CME-1'])]))),
+     {'SOURCE_DOC_NOT_STORABLE', 'SOURCE_DOC_UNRECORDED'}),
+    ('B-E2 불변식 35 — basis 없는 문서 단위 행은 거부 · 아무것도 허락하지 않는다 (CME-2 저장도 막힌다)', None,
+     d_(lambda st, fe: (st['source_documents'].append(CME_DOC()), st.__setitem__('document_rights', [doc_rights_row(SRC['CME-2'], basis=None)]))),
+     {'DOC_RIGHTS', 'SOURCE_DOC_NOT_STORABLE', 'SOURCE_DOC_UNRECORDED'}),
+    ('B-E2 불변식 35 — 공공누리 제1유형인데 인용 불가 · 그림 해시가 sha256 아님', None,
+     d_(lambda st, fe: st.__setitem__('document_rights', [doc_rights_row(SRC['CME-1'], can_quote=False),
+                                                           doc_rights_row(SRC['CME-2'], basis=dict(doc_rights_row('x')['basis'], image_sha256='b' * 12))])),
+     {'DOC_RIGHTS'}),
+    ('B-E2 불변식 35 — 없는 Source · 한 문서에 두 행', None,
+     d_(lambda st, fe: st.__setitem__('document_rights', [doc_rights_row(UID('source', 'gone')), doc_rights_row(SRC['CME-1']), doc_rights_row(SRC['CME-1'])])),
+     {'DOC_RIGHTS'}),
 ]
 
 
@@ -580,6 +608,15 @@ CASES = [
      m_(lambda m: all_registry(m, can_quote=False)), {'QUOTE_NOT_ALLOWED'}),
     ('불변식 20 — 권리 검토 안 된 발행처 (null)', 'publish',
      m_(lambda m: all_registry(m, can_quote=None)), {'QUOTE_NOT_ALLOWED'}),
+    # B-E2 — 불변식 20 은 "발행처 행 또는 문서 단위 행" (불변식 36)
+    ('통과해야 한다 — B-E2 불변식 36: 발행처 행이 전부 null 이어도 인용 원문(SYN)에 문서 단위 행이 있으면 인용할 수 있다', 'publish',
+     m_(lambda m: (all_registry(m, can_quote=None), m['document_rights'].append(doc_rights_row(SYN)))), set()),
+    ('통과해야 한다 — B-E2 불변식 36: 문서 단위 행이 발행처 행의 거짓을 이긴다 (그 문서에 한해)', 'publish',
+     m_(lambda m: (all_registry(m, can_quote=False), m['document_rights'].append(doc_rights_row(SYN)))), set()),
+    ('B-E2 불변식 36 — 문서 단위 행이 같은 발행처의 다른 문서에만 있으면 인용 원문은 여전히 막힌다', 'publish',
+     m_(lambda m: (all_registry(m, can_quote=None), m['document_rights'].append(doc_rights_row(add_source(m, 'SIBLING'))))), {'QUOTE_NOT_ALLOWED'}),
+    ('B-E2 불변식 35 — 인용 원문의 문서 단위 행에 basis 가 없다 → 아무것도 허락하지 않는다', 'publish',
+     m_(lambda m: (all_registry(m, can_quote=None), m['document_rights'].append(doc_rights_row(SYN, basis=None)))), {'QUOTE_NOT_ALLOWED'}),
     # W-4 — §7.3 방어용 둘째 줄 (D50 P5-c) · 스토리라인 판의 사건 사실 (불변식 34) · 계약 칸
     ('통과해야 한다 — W-4 §7.3 새 줄: DEFENSIVE DC-B 에 NOT_REFUTED · SCOPED 물음을 더해도 방어용 (실물 DC-08 꼴)', 'publish',
      m_(lambda m: m['claims'][CID['DC-B']]['checks'].extend([
@@ -605,6 +642,12 @@ CASES = [
      lambda c: sub(c, '  sha256:      string               // sha256(UTF-8(text))', '  digest:      string               // sha256(UTF-8(text))'), {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     ('W-4 — ComputedNumber.op 에 실물 없는 op', 'contract',
      lambda c: sub(c, '"pct_change_12m" | "pct_change_1m" | "level_change_1m"', '"pct_change_12m" | "pct_change_1m" | "level_change_1m" | "ratio"'), {'CONTRACT_OP'}),
+    ('B-E2 — DocumentRights.basis 를 계약에서 뺌', 'contract',
+     lambda c: sub(c, '  basis:                DocumentRightsBasis   // 필수', '  // 필수'), {'CONTRACT_FIELD'}),
+    ('B-E2 — DocumentRights.rights 에 공공누리 제2유형', 'contract',
+     lambda c: sub(c, 'rights:               "KOGL_TYPE1"', 'rights:               "KOGL_TYPE1" | "KOGL_TYPE2"'), {'CONTRACT_ENUM'}),
+    ('B-E2 — 골든에 칸이 빠진 문서 단위 행 (모양)', 'bundle',
+     b_(lambda p, r, s: s.__setitem__('document_rights', [{'source_id': SRC['CME-1'], 'rights': 'KOGL_TYPE1'}])), {'STORE_SHAPE'}),
     ('W-4 — StorylineVersion.event_facts 를 계약에서 뺌', 'contract',
      lambda c: sub(c, '  event_facts:  FactRef[]           // 이 판에 붙은', '  // 이 판에 붙은'), {'CONTRACT_FIELD', 'STORE_SHAPE'}),
     ('ARTICLE_PACKAGE §6.2 — 대기 span 이 발행에 남음', 'publish',

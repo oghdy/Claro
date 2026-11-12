@@ -6,7 +6,8 @@
 //
 // 사건마다 폴더 하나: packages/pipeline/data/events/<code>/
 //   pack.json              사람이 쓴 목록 (입력) — 무엇 · 누가 · 주소 · 왜(슬롯) · 주소를 어떻게 확인했나 · 공개 시각과 그 증거 글
-//   store.json             계약 모양 (DATA_MODEL §1) — events · sources · source_registry · source_documents(비움) · 나머지 칸은 빈 배열
+//   store.json             계약 모양 (DATA_MODEL §1) — events · sources · source_registry · source_documents(비움) · 나머지 칸은 빈 배열 ·
+//                          document_rights (문서 단위 권리 — pack.json doc_rights 에서 · 행이 있을 때만. B-E2 · DATA_MODEL §4.4)
 //   store.documents.json   SourceDocument — 원문 전문 + 가져온 기록의 칸 (권리가 git 을 허락하는 것만 — 발행처 단위 · 문서 단위 doc_rights). P-1 과 같은 모양
 //   fetch.json             가져온 기록 — 문서마다 요청 · 받은 때 · 리다이렉트 뒤 주소 · 해시 · robots · 못 가져온 까닭 (계약 밖 — P-1 _open P1-a)
 //   .cache (git 밖)        받은 바이트 · 권리 미확인 문서의 글 — packages/pipeline/.cache/events/<code>/
@@ -21,7 +22,7 @@ import { randomUUID } from "node:crypto";
 import { EXTRACTOR, extract, sha256, sourceDocument } from "./extract.ts";
 import { USER_AGENT, fetchOnce, type Fetched } from "./fetch.ts";
 import { cpLength } from "./match.ts";
-import { canStore, docRightsProblems, registryRow, rightsOfItem, type DocRights, type Rights } from "./rights.ts";
+import { canStore, docRightsProblems, documentRightsRow, registryRow, rightsOfItem, type DocRights, type Rights } from "./rights.ts";
 import { ROBOTS_VERSION, robotsAllows, type RobotsRecord } from "./robots.ts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -311,16 +312,22 @@ async function main() {
     throw new Error(`published_at ${errs.length} 건 — 쓰지 않았다`);
   }
   const eventId = prevStore.events?.find((e) => e.code === code)?.event_id ?? randomUUID();
+  // 문서 단위 권리 — 계약 행 (DATA_MODEL DocumentRights · B-E2). 저장한 문서 (Source 가 된 것) 의 doc_rights 만. 없으면 칸을 두지 않는다 — 다른 사건 산출물은 그대로
+  const documentRights = pack.items.filter((i) => i.doc_rights).flatMap((i) => {
+    const s = sources.find((x) => x.label === i.label);
+    return s ? [documentRightsRow(s.source_id as string, i.doc_rights!)] : [];
+  });
   const pubs = [...new Set(pack.items.map((i) => i.publisher))];
   const prevReg = new Map(((readJson<{ source_registry?: { source: string; last_reviewed_at: string | null }[] }>(STORE, {}).source_registry) ?? []).map((r) => [r.source, r]));
   const store = {
-    _what: `${code} 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json`,
+    _what: `${code} 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json${documentRights.length ? ". 문서 단위 권리 (발행처는 미확인 · 문서 안에 공공누리 제1유형 표시 — 그 문서에 한해 발행처 행보다 앞선다) 는 document_rights (DATA_MODEL DocumentRights · B-E2 · pack.json doc_rights 에서)" : ""}`,
     events: [{ event_id: eventId, code, title: pack.event.title, occurred_at: pack.event.occurred_at, storyline_id: null }],
     storylines: [], storyline_versions: [],
     sources,
     source_documents: [],
     source_registry: pubs.map((p) => registryRow(p, prevReg.get(p)?.last_reviewed_at ?? today, "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
       pack.items.filter((i) => i.publisher === p && i.doc_rights).map((i) => ({ label: i.label, doc_rights: i.doc_rights!, held: !!i.hold_text })))),
+    ...(documentRights.length ? { document_rights: documentRights } : {}),
     facts: [], fact_sources: [], claims: [], goals: [], bridges: [], slot_checks: [],
   };
   const documents = sources.filter((s) => docs.find((d) => d.label === s.label)!.text_in === "store.documents.json").map((s) => sourceDocument(s.source_id as string, texts.get(s.label as string)!, docs.find((d) => d.label === s.label)!));

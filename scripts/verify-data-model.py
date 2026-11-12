@@ -21,6 +21,8 @@
                  W-4 — SourceDocument 의 가져온 기록 칸 (sha256 = 글의 해시 · fetched_at 시각 · extractor) 이 글 · 가져온 기록과 같다 (불변식 29 · SOURCE_DOC_HASH ·
                  SOURCE_DOC_RECORD) · 권리 칸에 값이 있으면 basis 가 있다 (불변식 30 · REGISTRY_BASIS) ·
                  StorylineVersion.event_facts 가 있는 사건 소유 사실이고 판들 사이에서 겹치지 않는다 (불변식 34 · SL_EVENT_FACTS)
+                 B-E2 — 문서 단위 권리 (DocumentRights · 저장소의 `document_rights` — 행이 있을 때만) 의 칸 · 근거가 다 있다 (불변식 35 · DOC_RIGHTS) ·
+                 원문 저장 (SOURCE_DOC_NOT_STORABLE) 과 인용 (QUOTE_NOT_ALLOWED) 은 그 문서의 권리로 읽는다 — 문서 행이 앞서고 없으면 발행처 행 (불변식 36 · effective_rights)
 
 exit 0 OK (WARN 은 있을 수 있다) · 1 FAIL
 """
@@ -68,6 +70,9 @@ REQUIRED_FIELDS = {
     'SourceDocument': ('source_id', 'sha256', 'fetched_url', 'fetched_at', 'extractor', 'text'),   # §5.5 원문 보관 · 가져온 기록 (W-4 P1-a)
     'SourceRegistry': ('source', 'access_method', 'can_ingest', 'can_store', 'can_quote', 'can_transform',
                        'commercial_use', 'attribution_required', 'terms_url', 'last_reviewed_at', 'basis'),   # §5.1 · basis (W-4 J5)
+    'DocumentRights': ('source_id', 'rights', 'can_store', 'can_quote', 'can_transform', 'commercial_use',
+                       'attribution_required', 'basis', 'last_reviewed_at'),                  # §4.4 문서 단위 권리 (B-E2 · D70)
+    'DocumentRightsBasis': ('bytes_sha256', 'page', 'pages', 'image', 'image_sha256', 'seen'),   # 파일 · 쪽 · 그림 · 받은 바이트 · 그림 해시 · 본 것
     'DerivedClaim': ('claim_id', 'label', 'event_id', 'statement', 'kind', 'basis', 'checks'),
     'CounterCheck': ('question', 'slot', 'recollected', 'answer', 'facts', 'outcome'),           # §7.2
     'Goal': ('goal_id', 'label', 'event_id', 'kind', 'statement', 'claims'),                    # 확정 §7.3 · D33
@@ -96,6 +101,7 @@ REQUIRED_ENUMS = {
     ('DerivedClaim', 'kind'): {'ASSERTED', 'DEFENSIVE'},                                       # 실물 DC-B
     ('CounterCheck', 'outcome'): {'NOT_REFUTED', 'SCOPED', 'UNRESOLVED'},                      # 실물 DC-A · C · B
     ('ComputedNumber', 'volatility'): {'STABLE', 'VOLATILE'},                                  # §6.5 — 입력이 VOLATILE 이면 VOLATILE
+    ('DocumentRights', 'rights'): {'KOGL_TYPE1'},                                              # §4.4 — 공공누리 제1유형만 (D53 · B-E2)
 }
 COMPUTED_OPS = {'pct_change_12m', 'pct_change_1m', 'level_change_1m'}                          # §6.5 실물 셋 (W-3 rates.json)
 OPS = {'days_inclusive', 'weeks', 'months', 'months_round', 'years', 'years_floor', 'year_of'}   # 실물 7
@@ -205,7 +211,7 @@ def check_contract(text, btypes):
     if got != FACT_TYPES:
         errs.append(('CONTRACT_ENUM', f'Fact.fact_type 값 {sorted(got)} ≠ 확정 §5.2 {sorted(FACT_TYPES)}'))
     for (t, f), want in REQUIRED_ENUMS.items():
-        got = set(re.findall(r'"([A-Z_]+)"', types.get(t, {}).get(f, '')))
+        got = set(re.findall(r'"([A-Z][A-Z0-9_]*)"', types.get(t, {}).get(f, '')))   # KOGL_TYPE1 — 숫자도 (B-E2)
         if got != want:
             errs.append(('CONTRACT_ENUM', f'{t}.{f} 값 {sorted(got)} ≠ {sorted(want)}'))
     for w in ('STABLE', 'DERIVED', 'VOLATILE'):                                  # D8 값 셋은 그대로
@@ -313,6 +319,9 @@ def count_in(text, frag):
 STORE_TYPES = {'events': 'Event', 'storylines': 'Storyline', 'storyline_versions': 'StorylineVersion', 'sources': 'Source',
                'source_documents': 'SourceDocument', 'source_registry': 'SourceRegistry', 'facts': 'Fact',
                'fact_sources': 'FactSource', 'claims': 'DerivedClaim', 'goals': 'Goal', 'bridges': 'Bridge', 'slot_checks': 'SlotCheck'}
+# 행이 있을 때만 두는 목록 — 없으면 빈 목록과 같다 (B-E2 · §4.4: 문서 단위 권리가 없는 저장소 · 골든은 바뀌지 않는다)
+OPTIONAL_STORE_TYPES = {'document_rights': 'DocumentRights'}
+NESTED_TYPES = {'DocumentRights': {'basis': 'DocumentRightsBasis'}}        # 칸 안의 계약 타입 — 모양을 같이 본다
 
 
 def check_origin(store, record, contract_text, fb, records_text):
@@ -334,6 +343,15 @@ def check_origin(store, record, contract_text, fb, records_text):
             if t == 'DerivedClaim' and isinstance(o, dict):
                 for j, k in enumerate(o.get('checks', [])):
                     shape(k, 'CounterCheck', f'{key}[{i}].checks[{j}]')
+    for key, t in OPTIONAL_STORE_TYPES.items():
+        if key in store and not isinstance(store[key], list):
+            E('STORE_SHAPE', f'저장소의 {key} 가 목록이 아니다')
+            continue
+        for i, o in enumerate(store.get(key, [])):
+            shape(o, t, f'{key}[{i}]')
+            for f_, t_ in NESTED_TYPES.get(t, {}).items():
+                if isinstance(o, dict) and isinstance(o.get(f_), dict):
+                    shape(o[f_], t_, f'{key}[{i}].{f_}')
     rec = {k for k in record if not k.startswith('_')}
     if rec != set(types['ArticleRecord']) - {'package'} or not isinstance(record.get('_package'), str):
         E('STORE_SHAPE', 'record 는 { article_id, article_version, authoring } + `_package`(패키지 파일 이름) 다 (§11)')
@@ -490,6 +508,82 @@ def registry_problems(r):
     return []
 
 
+# 문서 단위 권리 (B-E2 · §4.4 · D70) — 권리 칸 다섯은 SourceRegistry 의 같은 이름 칸과 같은 뜻. can_ingest 는 발행처 행만
+RIGHTS_COLUMNS = ('can_store', 'can_quote', 'can_transform', 'commercial_use', 'attribution_required')
+# 표시가 직접 말하는 칸 (D53 — 공공누리 제1유형 발행처 행과 같은 값)
+DOCUMENT_RIGHTS_GRANTS = {'KOGL_TYPE1': {k: True for k in RIGHTS_COLUMNS}}
+
+
+def document_rights_problems(row):
+    """불변식 35 — 문서 단위 권리 한 행 (칸 · 근거). -> [글]. verify-source-pack 도 쓴다. 어긋난 행은 아무것도 허락하지 않는다 (effective_rights)"""
+    if not isinstance(row, dict):
+        return ['행이 객체가 아니다']
+    out = []
+    try:
+        uuid.UUID(str(row.get('source_id')))
+    except ValueError:
+        out.append(f'source_id {row.get("source_id")!r} 가 UUID 가 아니다')
+    grants = DOCUMENT_RIGHTS_GRANTS.get(row.get('rights'))
+    if grants is None:
+        out.append(f'rights {row.get("rights")!r} — 문서 단위는 {sorted(DOCUMENT_RIGHTS_GRANTS)} 만 (D53)')
+    else:
+        for k, v in grants.items():
+            if row.get(k) is not v:
+                out.append(f'{k} = {row.get(k)!r} — {row.get("rights")} 표시가 말하는 값은 {v!r} (D53 · 근거가 직접 말하는 칸)')
+    for k in RIGHTS_COLUMNS:
+        if row.get(k) not in (True, False, None):
+            out.append(f'{k} 가 참 · 거짓 · null 이 아니다')
+    b = row.get('basis')
+    if not isinstance(b, dict):
+        out.append('basis 가 없다 — 무엇을 봤나 · 다시 확인할 값 (파일 · 쪽 · 그림 · 받은 바이트 해시 · 그림 해시) 이 있어야 한다')
+    else:
+        for k in ('bytes_sha256', 'image_sha256'):
+            if not SHA_RE.match(str(b.get(k))):
+                out.append(f'basis.{k} 가 sha256 (소문자 16진 64자) 이 아니다')
+        pg, n = b.get('page'), b.get('pages')
+        if not (type(pg) is int and type(n) is int and 1 <= pg <= n):
+            out.append(f'basis 쪽 {pg!r} / {n!r} — 1 ≤ page ≤ pages')
+        for k in ('image', 'seen'):
+            if not (isinstance(b.get(k), str) and b[k].strip()):
+                out.append(f'basis.{k} 가 비었다')
+    if tp_range(row.get('last_reviewed_at')) is None:
+        out.append(f'last_reviewed_at {row.get("last_reviewed_at")!r} 이 TimePoint 가 아니다')
+    return out
+
+
+def document_rights_table_problems(rows, source_ids):
+    """불변식 35 — 저장소의 document_rights 전부: 행마다 칸 · 있는 Source · Source 하나에 많아야 한 행. -> [(source_id, 글)]"""
+    out = []
+    for sid, n in Counter(r.get('source_id') for r in rows if isinstance(r, dict)).items():
+        if n > 1:
+            out.append((sid, f'한 문서에 문서 단위 행이 {n}개 — Source 하나에 많아야 한 행'))
+    for r in rows:
+        sid = r.get('source_id') if isinstance(r, dict) else None
+        out += [(sid, m) for m in document_rights_problems(r)]
+        if sid not in source_ids:
+            out.append((sid, '없는 Source 를 가리킨다'))
+    return out
+
+
+def valid_document_rights(rows):
+    """{source_id: 행} — 불변식 35 를 지킨 행만 · 한 문서에 둘 이상이면 그 문서는 뺀다 (어긋난 행은 아무것도 허락하지 않는다)"""
+    n = Counter(r.get('source_id') for r in rows if isinstance(r, dict))
+    return {r['source_id']: r for r in rows if isinstance(r, dict) and n[r.get('source_id')] == 1 and not document_rights_problems(r)}
+
+
+def effective_rights(source, registry, docrights):
+    """불변식 36 — 문서의 권리. registry = {발행처: 행} · docrights = valid_document_rights(…).
+    문서 행이 있으면 칸마다 그 값 (null 이면 발행처 행의 값), 없으면 발행처 행 그대로 — 그 문서에 한해서만. -> {칸: 값, 'by': 'DOCUMENT' | 'PUBLISHER' | None}"""
+    pub = registry.get(source.get('publisher')) or {}
+    doc = docrights.get(source.get('source_id'))
+    out = {'can_ingest': pub.get('can_ingest')}
+    for k in RIGHTS_COLUMNS:
+        v = doc.get(k) if doc else None
+        out[k] = v if v is not None else pub.get(k)
+    out['by'] = 'DOCUMENT' if doc else ('PUBLISHER' if pub else None)
+    return out
+
+
 def load_fetch():
     return json.load(open(FETCH, encoding='utf-8')) if os.path.exists(FETCH) else None
 
@@ -514,6 +608,10 @@ def check_documents(store, fetch, cache_dir=TEXT_CACHE):
     for r_ in store['source_registry']:
         for c_, m_ in registry_problems(r_):
             E(c_, m_)
+    drows = store.get('document_rights', [])
+    for sid_, m_ in document_rights_table_problems(drows, set(S)):
+        E('DOC_RIGHTS', f'문서 단위 권리 {lab(sid_)}: {m_} (불변식 35 · §4.4)')
+    docr = valid_document_rights(drows)
     for sid, n in Counter(d['source_id'] for d in store['source_documents']).items():
         if n > 1:
             E('SOURCE_DOC_DUP', f'SourceDocument {lab(sid)} 가 {n}번 — Source 하나에 원문 하나 (store.json · store.documents.json 을 합친 것)')
@@ -527,8 +625,8 @@ def check_documents(store, fetch, cache_dir=TEXT_CACHE):
         stored = r0 if r0 and r0.get('status') == 'STORED' and r0.get('text_in') == 'store.documents.json' else None   # 기록이 저장을 말할 때만 칸을 댄다 (아니면 아래 UNRECORDED)
         for c_, m_ in source_document_problems(d, stored):
             E(c_, f'{w}: {m_}')
-        if reg.get(S[sid]['publisher'], {}).get('can_store') is not True:
-            E('SOURCE_DOC_NOT_STORABLE', f'{w}: 발행처 {S[sid]["publisher"]} 가 can_store 가 아니다 — 권리 미확인 전문을 공개 저장소에 두지 않는다 (P-1 · §4.4)')
+        if effective_rights(S[sid], reg, docr)['can_store'] is not True:
+            E('SOURCE_DOC_NOT_STORABLE', f'{w}: 발행처 {S[sid]["publisher"]} 도 문서 단위 행도 can_store 가 아니다 — 권리 미확인 전문을 공개 저장소에 두지 않는다 (P-1 · §4.4 · 불변식 36)')
         r = recs.get(sid)
         if not r or r.get('status') != 'STORED' or r.get('text_in') != 'store.documents.json':
             E("SOURCE_DOC_UNRECORDED", f"{w}: 가져온 기록에 저장소 원문(store.documents.json)으로 적혀 있지 않다")
@@ -601,6 +699,7 @@ def load_model(b):
          'sources': {s_['source_id']: s_ for s_ in st['sources']},
          'documents': {**{d['source_id']: d['text'] for d in st['source_documents']}, **b.get('_cache_texts', {})},
          'registry': {r['source']: r for r in st['source_registry']},
+         'document_rights': list(st.get('document_rights', [])),     # B-E2 — 행이 있을 때만 (불변식 36 은 check_model 이 valid_document_rights 로 읽는다)
          'claims': {c['claim_id']: c for c in st['claims']}, 'goals': {g['goal_id']: g for g in st['goals']}, 'bridges': {x['bridge_id']: x for x in st['bridges']},
          'events': {e['event_id']: e for e in st['events']}, 'storylines': {x['storyline_id']: x for x in st['storylines']},
          'storyline_versions': st['storyline_versions'], 'slots': st['slot_checks']}
@@ -915,7 +1014,8 @@ def check_model(m, lib, publish=False):
         cur = m['storylines'][sid]['version']
         if pins.get(sid) != cur:
             P('STORYLINE_STALE', f'{m["storylines"][sid]["code"]}: 핀 {pins.get(sid)} ≠ 최신 {cur} (불변식 13 · §9.4)')
-    # 19 · 20 · 21 — 인용
+    # 19 · 20 · 21 — 인용. 권리는 그 문서의 권리 — 문서 단위 행이 앞선다 (불변식 36 · B-E2)
+    docr = valid_document_rights(m.get('document_rights', []))
     for lv in pkg['levels']:
         for i, s in enumerate(lv['slides']):
             for j, b in enumerate(s['blocks']):
@@ -933,8 +1033,8 @@ def check_model(m, lib, publish=False):
                     P('QUOTE_NO_COMMON_SOURCE', f'{w}: body 사실들에 공통 Source 가 없다 — 인용 하나 = 원문 하나 (불변식 19)')
                 elif not common:
                     P('QUOTE_SPAN_MISSING', f'{w}: 공통 Source 는 있으나 원문 위치(span)가 없다 — 어느 구간인지 기계가 모른다 (불변식 19)')
-                elif not any(m['registry'].get(S[x]['publisher'], {}).get('can_quote') is True for x in common):
-                    P('QUOTE_NOT_ALLOWED', f'{w}: 원문 발행처가 can_quote 가 아니다 (불변식 20 · §5.1)')
+                elif not any(effective_rights(S[x], m['registry'], docr)['can_quote'] is True for x in common):
+                    P('QUOTE_NOT_ALLOWED', f'{w}: 원문이 can_quote 가 아니다 — 발행처 행도 문서 단위 행도 (불변식 20 · 36 · §5.1)')
     # 24 — 슬롯
     for sl in m['slots']:
         w = f'Slot {sl["slot"]}'

@@ -12,6 +12,7 @@
 | 2026-10-09 | 골든 · 브리프를 이 모양으로 옮겼다 (§18) — `fixtures/store.json` · `fomc-2026-09.record.json` · 패키지의 참조를 층별 Ref 로. 계약에 더한 것: "닿는 Fact"의 뜻과 불변식 11 이 반증 답의 사실에도 걸린다는 것(§7.3 · §14) · `_source_note` 의 행선지(§11) · §15 대체 관계 줄(자리 없음) · §17 대기 21 이 풀린 기록 · §19 _open-m6 ~ m8. 타입은 안 바뀜 | B-0.2m-a |
 | 2026-10-09 | 계약이 살아 있는 실물의 글자 · 수를 적지 않게 — §17 대기 표는 날짜 붙은 기록으로, 불변식 25 는 어휘 · 층만 (목록 · 수는 검사가 실물에서 센다). 잠정 적용 → §19 _open-m1 | B-0.2m-a |
 | 2026-11-11 | 파이프라인 실물을 계약에 — SourceDocument 에 가져온 기록 (`sha256` · `fetched_url` · `fetched_at` · `extractor` — P1-a) · SourceRegistry `basis` (J5) · **ComputedNumber** 타입 (계산된 수 · §6.5 — D48 W3-a) · §7.3 표에 방어용 줄 (DEFENSIVE + UNRESOLVED + NOT_REFUTED · SCOPED — D50 P5-c) · StorylineVersion `event_facts` (스토리라인 판이 사건 사실을 가리킨다 — P5-b) · 불변식 23 · 29 ~ 34 · §20 _open W4 | W-4 |
+| 2026-11-12 | 문서 단위 권리 (D70) — **DocumentRights** · DocumentRightsBasis (§1 · §4.4 — 따로 된 타입, Source 하나에 많아야 한 행). 문서 안에서 공공누리 제1유형 표시를 본 문서만, 그 문서에 한해 발행처 행보다 앞선다 · `basis` 필수 (받은 바이트 · 쪽 · 그림 · 그림 해시 · 본 것) · 실물 pipc PDF 셋 (E3-1b) · 불변식 20 · §4.4 원문 저장 · §10.1 을 "발행처 또는 문서 단위"로 · 불변식 35 ~ 37 · §15 · §21 _open B-E2 | B-E2 |
 
 > **상태: 게이트 통과 (D27 · 2026-10-03). _open 3개 모두 판정됨 (§16).**
 > ARTICLE_PACKAGE 는 사실 · 해석 · 브리지 · 사건을 참조로만 가리켰다. 이 계약이 그 참조가 가리키는 것의 주인이다.
@@ -37,7 +38,7 @@
 
 ## 0. 범위
 
-**이 계약이 주인인 것** — Fact · FactSource · Source · SourceDocument · SourceRegistry · DerivedClaim · CounterCheck · Goal · Bridge ·
+**이 계약이 주인인 것** — Fact · FactSource · Source · SourceDocument · SourceRegistry · DocumentRights · DocumentRightsBasis · DerivedClaim · CounterCheck · Goal · Bridge ·
 Event · Storyline · StorylineVersion · TimeExpression · ComputedNumber · ArticleRecord · ArticleAuthoring · SlotCheck,
 그리고 참조 모양 FactRef · ClaimRef · BridgeRef · SourceRef · EventRef · StorylineRef · GoalRef · ComputedRef.
 
@@ -129,6 +130,27 @@ SourceRegistry {                    // 확정 §5.1 필드 그대로. 발행처 
   terms_url:            string | null
   last_reviewed_at:     TimePoint | null
   basis:                string | null    // 위 칸들의 근거 — 법 · 약관 · 그 밖. null = 근거 없음 (그러면 can_* 은 전부 null). 실물: "17 U.S.C. §105 — … 연방 정부" · "권리 미확인 — …" (P-1 J5)
+}
+
+DocumentRights {                    // 문서 하나의 권리 (§4.4 · D69 · D70 · B-E2). 발행처 행이 미확인이어도 문서 안에서 표시를 본 그 문서에 한해 발행처 행보다 앞선다. Source 하나에 많아야 한 행
+  source_id:            UUID             // 그 문서 (= 파일) — Source.source_id. 받은 주소는 SourceDocument.fetched_url
+  rights:               "KOGL_TYPE1"     // 본 표시 — 공공누리 제1유형만 (D53). 2 ~ 4 유형 · 표시 없음은 행을 만들지 않는다 (미확인 그대로)
+  can_store:            boolean | null   // 이 다섯 칸 = SourceRegistry 의 같은 이름 칸과 같은 뜻. 근거가 직접 말하는 칸만 — 공공누리 제1유형이면 다섯 다 참 (D53 의 KOGL 행 · 불변식 35)
+  can_quote:            boolean | null
+  can_transform:        boolean | null
+  commercial_use:       boolean | null
+  attribution_required: boolean | null
+  basis:                DocumentRightsBasis   // 필수 — 무엇을 봤나 · 다시 확인할 값 (불변식 35)
+  last_reviewed_at:     TimePoint        // 표시를 본 날
+}
+
+DocumentRightsBasis {               // 같은 바이트를 열어 그 쪽의 그 그림을 보면 다시 확인된다. 실물: pipc PDF 셋 (E3-1b)
+  bytes_sha256: string              // 표시를 본 받은 바이트(파일)의 sha256 — 소문자 16진 64자. 글의 해시(SourceDocument.sha256)가 아니다. 파이프라인 기록의 받은 바이트 해시와 같다 (불변식 37)
+  page:         integer             // 표시가 있는 쪽 — 1부터
+  pages:        integer             // 그 파일의 쪽 수
+  image:        string              // 표시 그림 — 파일 안에서 찾는 이름 ("Im5 객체 47 · 167×64 · DCTDecode")
+  image_sha256: string              // 그 그림의 바이트(파일 안 스트림 그대로)의 sha256 — 소문자 16진 64자
+  seen:         string              // 무엇을 봤나 — 그림의 모양 ("'OPEN' 과 칸 하나 (사람 모양 · '출처표시')" …)
 }
 
 DerivedClaim {                      // 사실에서 끌어낸 해석. Fact 가 아니다 (확정 §4.1). 발행물이 가리키면 고치지 않는다
@@ -424,11 +446,31 @@ ARTICLE_PACKAGE 의 span 은 층 하나에 refs 를 싣는다. refs 가 무엇�
 
 - `SourceRegistry` — 확정 §5.1 필드 그대로, 발행처마다 한 행. **실물 없음** — 채운 행이 하나도 없다. 브리프의 "성격" 열("미국 정부 저작물" · "주정부 자료" · "2차")이 가장 가까운 실물이다
 - "1차 자료를 쓰면 저작권 문제가 사라진다"는 사실이 아니다 (확정 §5.1) — 지역 연은 · 국제기구는 자체 저작권을 주장한다
-- 이 계약이 권리를 쓰는 곳: **인용 블록은 `can_quote` 가 참인 출처에서만** (§10 · 불변식 20) · **원문은 `can_store` 가 참인 발행처 것만 공개 저장소에** (P-1)
+- 이 계약이 권리를 쓰는 곳: **인용 블록은 `can_quote` 가 참인 출처에서만** (§10 · 불변식 20) · **원문은 `can_store` 가 참인 것만 공개 저장소에** (P-1) — 둘 다 그 문서의 권리로 읽는다: **발행처 행 또는 문서 단위 행** (아래 · 불변식 36 · B-E2)
 - **`basis` — 권리 칸의 근거 (W-4 · P-1 J5).** 실물: 연방 정부 7 발행처 "17 U.S.C. §105 — … 는 미국 연방 정부다 … → can_store · can_quote. 나머지 칸은 이 근거가 직접 말하지 않아 null" · 그 밖 "권리 미확인 — …".
   근거가 직접 말하는 칸만 채우고 나머지는 null 로 둔다 — 그래서 **can_* 에 값(참 · 거짓)이 하나라도 있으면 `basis` 가 있다** (불변식 30). 근거 없는 "가능"은 적지 않는다
-- SourceDocument 는 권리를 따로 적지 않는다 — 그 Source 의 발행처 행(`basis`)이 근거다 (한 곳). 행을 다시 검토해 값이 바뀌면 이미 보관한 원문이 어느 근거로 보관됐는지가 흐려진다 — 다시 검토한 실물이 없다 → **미확인** (§15)
+- SourceDocument 는 권리를 따로 적지 않는다 — 그 Source 의 발행처 행(`basis`) 또는 그 문서의 문서 단위 행(`DocumentRights.basis`)이 근거다 (문서마다 한 곳 — 문서 행이 있으면 그것). 행을 다시 검토해 값이 바뀌면 이미 보관한 원문이 어느 근거로 보관됐는지가 흐려진다 — 다시 검토한 실물이 없다 → **미확인** (§15)
 - `can_store` 가 거짓인 발행처는 원문 보관(§5.5)과 부딪힌다 — 그 출처로 Fact 를 지을 수 있는지 **미확인** (실물 없음)
+
+**문서 단위 권리 — `DocumentRights` (B-E2 · D69 · D70)**
+
+- **실물** — 개인정보위 (pipc.go.kr). 사이트 꼬리말은 "All right reserved." 이고 공공누리 글이 없다 → 발행처 행의 can_* 은 null (미확인). 그런데 보도자료 PDF 셋 — PR-1029-PDF (4/5쪽) · SL-SKT-0828 (8/13쪽) · SL-STATS-0515 (3/5쪽) — **안에** 공공누리 제1유형 그림이 있다 (E3-1b · `logs/pipeline/E3-1b.md` ①). 같은 발행처의 게시물 · 일정 페이지 셋에는 표시가 없다
+- **규칙 (D70)** — 발행처 행이 미확인이어도, 문서 안에서 공공누리 제1유형 표시를 본 문서는 **그 문서만** 저장 · 인용할 수 있다. 근거 (무엇을 봤나 · 다시 확인할 수 있는 해시) 가 반드시 있어야 한다. 발행처 단위로 넓히지 않는다 (D69)
+- **자리 — 따로 된 타입, Source 하나에 많아야 한 행.** 저장소 파일에서는 `document_rights` 목록 — 행이 있을 때만 둔다 (없으면 빈 목록과 같다). 셋을 견줬다:
+
+| 자리 | 실물 (PDF 셋) 에 | 까닭 |
+|---|---|---|
+| Source 의 칸 | 맞지만 무겁다 | 권리가 서지와 섞인다. 모든 Source 행에 칸이 는다 — 문서 단위 권리가 있는 Source 는 B-E2 때 사건 셋의 65 중 3. 기존 저장소 · 골든 · 다른 사건 산출물이 다 바뀐다 |
+| SourceRegistry 의 문서 행 | 어긋난다 | 행의 열쇠가 발행처 · 문서 둘이 된다 (`source` = `Source.publisher` 라는 뜻이 깨진다). 모든 행에 칸이 는다. `basis` 가 글이라 해시를 기계가 댈 수 없다 |
+| **따로 된 타입 `DocumentRights`** | **맞다** | 있는 타입 · 행이 그대로다. 권리 칸 다섯은 SourceRegistry 와 같은 이름 · 같은 뜻이라 읽는 쪽이 칸마다 고르면 된다. 근거를 칸 (`DocumentRightsBasis`) 으로 두어 받은 바이트 해시를 기계가 댄다 |
+
+- **앞선다 — 그 문서에 한해 (불변식 36).** 문서 행이 있으면 그 문서의 권리는 칸마다 문서 행의 값 (null 이면 발행처 행의 값) · 문서 행이 없으면 발행처 행 그대로. 같은 발행처의 다른 문서 (실물: 게시물 · 일정 페이지 셋) 는 발행처 행만 본다. 불변식 35 에 어긋난 행은 아무것도 허락하지 않는다
+- **근거가 직접 말하는 칸만.** 공공누리 제1유형 = `can_store` · `can_quote` · `can_transform` · `commercial_use` · `attribution_required` 가 참 — D53 의 KOGL 발행처 행 (ftc.go.kr) 과 같은 뜻. **`can_ingest` 칸은 없다** — 표시는 문서를 받아 연 뒤에야 보인다. 받아도 되나는 발행처 행 · robots 가 말한다
+- **`basis` 필수 — 다시 확인할 값.** 파일 = `source_id` 의 그 문서 · 받은 바이트 = `bytes_sha256` · 쪽 = `page` / `pages` · 그림 = `image` · 그림 해시 = `image_sha256` · 본 것 = `seen`. 같은 바이트를 열어 그 쪽의 그 그림을 보면 된다.
+  받은 바이트가 다르면 다른 파일이다 — 그 행은 그 파일을 말하지 않는다 (불변식 37). 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 파이프라인의 목록 (`pack.json` 의 `doc_rights`) 에 둔다 — 계약 칸이 아니다
+- 발행처 행의 `basis` 는 발행처 단위의 근거만 말한다 — 문서 행이 있다는 것은 문서 이름으로 가리키기만 한다 (해시는 문서 행 한 곳)
+- **제3자 글은 덮지 않는다.** 공공누리 표시는 기관의 저작물에 붙는다 (D55). 제3자 글이 긴 문서는 문서 행이 있어도 원문을 캐시에만 둔다 (파이프라인 `hold_text`). 인용 블록이 그 문서 안의 제3자 글을 옮기지 않았는지는 게이트 3
+- 실물 셋은 모두 PDF 다. HWPX · HTML 안의 표시 (`page` · `image` 의 모양) 는 그 실물이 나오면 칸을 다시 본다 (E3-1b-c · §15)
 
 ---
 
@@ -745,7 +787,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 - 그래서 **인용 블록의 출처 = body 의 FactRef → Fact → FactSource → Source.** 블록에 따로 Ref 를 싣지 않는다(패키지 모양 불변)
 - 규칙 (불변식 19 · 20)
   - 인용 블록의 body 사실들은 **공통 Source 하나**에 원문 위치(FactSource)를 갖는다 — 인용 하나 = 원문 하나. 원문의 어느 구간인지가 그 span 이다 (ARTICLE_PACKAGE §3 · §7.4 가 0.2 로 넘긴 것)
-  - 그 Source 의 발행처가 `can_quote` 이다 (확정 §5.1)
+  - 그 Source 가 `can_quote` 이다 — 발행처 행 또는 그 문서의 문서 단위 행 (확정 §5.1 · §4.4 · 불변식 36)
   - `attribution` 글이 그 Source 서지와 맞는지는 게이트 3 (날짜 · 화자 · 자리)
 - 골든 `_attribution_refs` 의 F32 ("8/28 잭슨홀에서 Warsh 는 … 신호를 보냄")는 발언의 **자리**(날짜 · 행사)를 대던 사실이다. 그 일은 Source 서지가 한다 → 옮길 때 버린다. F33 은 body refs 에 이미 있다
 
@@ -871,7 +913,7 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 
 **인용**
 19. 인용 블록 body 의 사실들은 공통 Source 하나에 FactSource 가 있다 (발행). 골든 이전 전: `_attribution_refs` ⊇ body refs (기계)
-20. (발행) 그 Source 발행처가 `can_quote`. `attribution` 글이 그 서지와 맞는지는 게이트 3
+20. (발행) 그 Source 가 `can_quote` — 발행처 행 또는 그 문서의 문서 단위 행 (불변식 36 · B-E2). `attribution` 글이 그 서지와 맞는지는 게이트 3
 21. 인용 블록 body 글이 따옴표로 시작하고 끝나지 않는다 (기계). 본문 따옴표가 누군가의 말로 읽히면 fact 층 + 원문에 그 말 — 게이트 3 (`--report` 후보)
 
 **DerivedClaim**
@@ -907,6 +949,14 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 **스토리라인 판 (W-4 · §9.2)**
 34. `event_facts` 의 원소는 있는 Fact 이고 사건 소유다 (`event_id` 가 있다) · 한 스토리라인의 판들 사이에서 겹치지 않는다 (기계 — 골든 `verify-data-model` · v2 `verify-coverage`)
 
+**문서 단위 권리 (B-E2 · §4.4 · D70)**
+35. DocumentRights — `source_id` 는 있는 Source 이고 Source 하나에 많아야 한 행 · `basis` 가 있고 칸이 다 찼다 (`bytes_sha256` · `image_sha256` 은 소문자 16진 64자 · 1 ≤ `page` ≤ `pages` · `image` · `seen` 이 비어 있지 않다) ·
+    `last_reviewed_at` 은 TimePoint · `rights` 가 KOGL_TYPE1 이면 권리 칸 다섯이 참 (D53 — 근거가 말하는 칸). 어긋난 행은 아무것도 허락하지 않는다 (기계 — `verify-data-model` · `verify-source-pack` · `packages/contract` `documentRightsProblems`)
+36. 문서의 권리 — 그 문서의 DocumentRights 행이 있으면 칸마다 그 행의 값 (null 이면 발행처 행의 값), 없으면 발행처 행 그대로. **그 문서에 한해서만** — 같은 발행처의 다른 문서는 발행처 행만 본다.
+    원문 공개 저장소 (§4.4 P-1) 와 인용 블록 (불변식 20) 이 이것으로 읽는다 (기계 — `verify-data-model` · `verify-source-pack` · `packages/contract` `sourceRights`)
+37. `basis.bytes_sha256` = 파이프라인 가져온 기록이 그 문서에 적은 받은 바이트 해시 — 표시를 본 파일이 받은 파일이다 · `pages` = 뽑은 글의 쪽 수 · 문서 행은 파이프라인 목록의 `doc_rights` 에서 나온다 (기계 — `verify-source-pack`).
+    그림 해시 (`image_sha256`) 는 받은 바이트를 다시 열어야 대 볼 수 있다 — 기계가 매번 대 보지 않는다 (§21 _open B-E2-a)
+
 ---
 
 ## 15. 미확인
@@ -935,6 +985,10 @@ CONCEPT_IDENTITY §6.3 규칙 1 은 "단계 A 를 옮긴 마지막 span 바로 �
 | ArticleRecord 의 저장 키 | D1 백엔드 OPEN |
 | 한 Source 에 받은 판이 둘일 때 SourceDocument 의 자리 (W-4) | D40 P1-c 는 "판은 그 아래 여럿일 수 있다"를 받았지만 둘을 저장한 실물이 없다 (§4.1 · §20 _open W4-c) |
 | 권리 행을 다시 검토해 값이 바뀌면 이미 보관한 원문의 근거 (W-4) | SourceDocument 는 권리를 따로 적지 않는다 — 행이 바뀐 실물이 없다 (§4.4) |
+| 문서 단위 권리의 다른 표시 — 공공누리 2 ~ 4 유형 · 그 밖의 이용 허락 (B-E2) | 실물 없음. `DocumentRights.rights` 는 KOGL_TYPE1 하나 — 다른 표시는 행을 만들지 않는다 (미확인 그대로 · D53) |
+| HWPX · HTML 안의 표시 — `page` · `image` 의 모양 (B-E2 · E3-1b-c) | 실물 셋이 모두 PDF 다. HWPX 의 그림은 쪽이 아니라 묶음 안 파일 이름 (`BinData/…`) 일 것 — 나오면 칸을 다시 본다 |
+| 문서 행이 있는데 제3자 글이 긴 문서 (hold_text) 의 인용 (B-E2) | 실물 없음. 원문은 캐시에만 두지만 행은 `can_quote` 참이다 — 기관의 글만 옮겼는지는 게이트 3 (§4.4) |
+| 같은 주소에서 다시 받은 바이트가 다를 때 문서 행 (B-E2) | 실물 없음 (`--check` 셋 모두 표시를 본 바이트와 같았다). 행은 본 바이트만 말한다 (불변식 37) — 새 바이트는 다시 본다. §20 _open W4-c (한 Source 에 판 둘) 와 같은 물음 |
 | 계산된 수가 기사 글에 어떻게 보이나 · 어느 층의 refs 가 가리키나 (W-4) | 기사가 없다 (P-7 전) — §6.5 · §20 _open W4-a |
 | 사건 사실을 가리키는 스토리라인 판의 핀 (W-4) | 그런 판을 쓴 기사가 없다 — §9.2 · §20 _open W4-b |
 
@@ -1116,3 +1170,14 @@ W-4 (계약 잔일 · 계산된 수)에서 나온 것. 판정 전이다 — 그 
 | _open W4-b | 사건 사실을 가리키는 스토리라인 판(`event_facts`)을 기사가 쓸 때 핀(§9.4 · 불변식 13)이 필요한가 | 불변식 13 은 스토리라인 **소유** 사실에만 | (a) 필요 — 기사가 닿는 사실이 어느 판의 `event_facts` 에 있으면 그 스토리라인의 핀 (b) 아니다 — 사건 사실은 사건이 안다. **추천 (a)** — 10월 기사가 v2 의 유가 사실을 쓰면 "이후 새로 확인된 내용"의 기준이 v2 다 (§9.4 의 까닭 1 그대로). P-7 의 첫 기사로 정한다 |
 | _open W4-c | 한 Source 에 받은 판이 둘일 때 (살아 있는 페이지 — D40 P1-c) | Source 하나에 SourceDocument 하나 (검사 SOURCE_DOC_DUP) | 판이 둘이 되는 첫 실물(같은 주소를 다른 날 다시 저장)이 나오면 — 키를 (source_id, fetched_at) 로 · FactSource 가 판을 가리킬 칸. 그 전에는 정하지 않는다 |
 | _open W4-d | _open-m6 (FactSource 의 1차 구절 칸) — D40 은 "P1-a 와 같이"라 했다 | W-4 지시 범위 밖이라 안 했다 — `_passage` 주석 그대로 | PM 이 정한다 — 지금 구절이 위치 없이 유일한 근거인 FactSource 가 있다 (P-1 못 찾은 17 · 원문 없는 31) |
+
+---
+
+## 21. _open — B-E2 (2026-11-12)
+
+B-E2 (문서 단위 권리를 계약으로 — D70) 에서 나온 것. 판정 전이다. 지금 계약은 아래 "지금" 그대로 두었다.
+
+| # | 무엇 | 지금 | 안 |
+|---|---|---|---|
+| _open B-E2-a | 그림 해시 (`basis.image_sha256`) 를 기계가 다시 대 보지 않는다 | 받은 바이트 해시만 기계가 댄다 (불변식 37 — `verify-source-pack`). 그림 해시는 사람이 다시 열어 볼 때 쓴다. PDF 안 그림을 꺼내는 도구가 저장소 의존에 없다 (E3-1b 는 작업 세션이 PyMuPDF 로 봤다) | (a) 그대로 — 받은 바이트가 같으면 그 안의 그림도 같다 (b) 검사가 캐시의 받은 바이트에서 그림을 꺼내 해시를 댄다 — 의존 하나가 는다. **추천 (a)** |
+| _open B-E2-b | 문서 단위 권리가 두 곳에 있다 — 사람이 쓰는 입력 (`pack.json` 의 `doc_rights`) 과 계약 행 (`store.json` 의 `document_rights` — `pack.ts` 가 낸다) | 검사가 둘을 칸마다 댄다 (`verify-source-pack` PACK_DOC_RIGHTS). 입력에만 있는 칸: 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것 | (a) 그대로 — 목록 (입력) → 계약 산출물은 Source 의 `published_at` 과 같은 꼴이다 (b) 입력을 계약 모양으로 바꾼다 — 계약 밖 칸이 갈 곳이 없다. **추천 (a)** |

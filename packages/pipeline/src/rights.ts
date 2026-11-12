@@ -5,8 +5,12 @@
 //   4. 그 밖 — 권리 **미확인**. 전문은 git 밖 캐시에만. git 에는 서지 · 해시 · span 만
 // 이 넷으로 못 가르면 미확인이다. 2 · 3 은 발행처(도메인)에 묶는다 — 그 기관 사이트 전체의 표시가 근거다. 공공누리 2 ~ 4 유형 · 표시 없음 = 미확인 (D53).
 // 문서 단위 (D69 · E3-1b): 발행처는 미확인이어도 **문서 안에** 공공누리 제1유형 표시가 있으면 그 문서만 git — pack.json 항목의 doc_rights (hold_text 의 반대).
-//   근거는 무엇을 봤나 — 받은 바이트의 해시 · 쪽 · 그림 · 그림 스트림의 해시. 발행처 행의 can_* 은 그대로 (발행처 단위로 넓히지 않는다) · 근거 글(basis)에 문서를 적는다.
+//   근거는 무엇을 봤나 — 받은 바이트의 해시 · 쪽 · 그림 · 그림 스트림의 해시. 발행처 행의 can_* 은 그대로 (발행처 단위로 넓히지 않는다).
+//   계약 모양 (B-E2 · DATA_MODEL §4.4 DocumentRights · D70): store.json 의 document_rights — doc_rights 하나에 행 하나 (documentRightsRow). 해시는 그 행 한 곳 · 발행처 행 근거 글은 문서 이름만.
 // 권리가 git 을 허락해도 문서 안에 **제3자의 글**이 길게 있으면 그 문서만 캐시에 둔다 — pack.json 항목의 hold_text (E2-1 · D40 "긴 제3자 글이 섞인 문서가 나오면 다시 본다"). SourceRegistry 의 칸은 이 근거가 직접 말하는 것만 채운다 (can_store · can_quote). 나머지는 null = 검토 안 함. 근거 글은 basis 칸 (W-4 J5).
+// 계약의 타입만 가져온다 (import type — 노드 타입 지우기로 돌 때 지워진다). 칸 이름 · 모양은 DATA_MODEL 이 원본
+import type { DocumentRights, SourceRegistry } from "../../contract/src/data-model.ts";
+
 export type Rights = "US_FEDERAL_17USC105" | "KOGL_TYPE1" | "KR_STATUTE" | "UNCONFIRMED";
 /** 전문을 공개 저장소(git)에 둘 수 있는 권리 — verify-source-pack.py 의 STORABLE_RIGHTS 와 같다 */
 export const STORABLE: readonly Rights[] = ["US_FEDERAL_17USC105", "KOGL_TYPE1", "KR_STATUTE"];
@@ -67,29 +71,32 @@ export function docRightsProblems(it: { label: string; publisher: string; doc_ri
 }
 /** 문서의 권리 — doc_rights 가 있으면 그것, 없으면 발행처의 권리 */
 export const rightsOfItem = (it: { publisher: string; doc_rights?: DocRights }): Rights => it.doc_rights?.rights ?? rightsOf(it.publisher);
-/** 근거 글의 한 문서 — 다시 확인할 수 있는 값 그대로 (어느 바이트 · 몇 쪽 · 어느 그림 · 그림의 해시). 자리 · 본 방법 · 제3자 글은 pack.json doc_rights */
-export const docRightsBasis = (label: string, d: DocRights) =>
-  `${label} (받은 바이트 sha256 ${d.raw_sha256} · ${d.page}/${d.pages}쪽 · 그림 ${d.image.name} 객체 ${d.image.xref} ${d.image.width}×${d.image.height} ${d.image.filter} · 그림 스트림 sha256 ${d.image.stream_sha256} · 본 날 ${d.checked_at})`;
+/** 공공누리 제1유형이 직접 말하는 칸 (D53) — 발행처 행 (KOGL_TYPE1 목록) 과 문서 단위 행이 같은 값을 쓴다 */
+const KOGL_TYPE1_GRANTS = { can_store: true, can_quote: true, can_transform: true, commercial_use: true, attribution_required: true } as const;
+
+/** pack.json 의 doc_rights (사람이 쓴 입력) → 계약의 문서 단위 권리 행 (DATA_MODEL DocumentRights · B-E2). 다시 확인할 값만 옮긴다 —
+ *  쪽 안의 자리 (where) · 본 방법 (seen_by) · 제3자 글 (third_party) 은 pack.json 에 그대로 (계약 칸이 아니다) */
+export function documentRightsRow(sourceId: string, d: DocRights): DocumentRights {
+  return {
+    source_id: sourceId, rights: d.rights, ...KOGL_TYPE1_GRANTS,
+    basis: {
+      bytes_sha256: d.raw_sha256, page: d.page, pages: d.pages,
+      image: `${d.image.name} 객체 ${d.image.xref} · ${d.image.width}×${d.image.height} · ${d.image.filter}`,
+      image_sha256: d.image.stream_sha256, seen: d.mark,
+    },
+    last_reviewed_at: d.checked_at,
+  };
+}
 
 export const rightsOf = (publisher: string): Rights =>
   publisher in US_FEDERAL ? "US_FEDERAL_17USC105" : publisher in KOGL_TYPE1 ? "KOGL_TYPE1" : publisher in KR_STATUTE ? "KR_STATUTE" : "UNCONFIRMED";
 export const canStore = (r: Rights) => STORABLE.includes(r);
 
-export type RegistryRow = {
-  source: string;
-  access_method: string;
-  can_ingest: boolean | null;
-  can_store: boolean | null;
-  can_quote: boolean | null;
-  can_transform: boolean | null;
-  commercial_use: boolean | null;
-  attribution_required: boolean | null;
-  terms_url: string | null;
-  last_reviewed_at: string | null;
-  basis: string;   // 권리 칸의 근거 (DATA_MODEL SourceRegistry.basis — W-4 J5). 전에는 `_basis` 주석
-};
+/** 계약 SourceRegistry 그대로 — 파이프라인은 근거(basis) 를 늘 쓴다 (W-4 J5. 전에는 `_basis` 주석) */
+export type RegistryRow = SourceRegistry & { basis: string };
 
-/** 발행처 하나의 권리 행. docs = 그 발행처의 문서 중 doc_rights 가 있는 것 (held = hold_text 로 캐시) — 행의 can_* 은 발행처 단위 그대로, 근거 글에 문서를 적는다 (D69 · E3-1b) */
+/** 발행처 하나의 권리 행. docs = 그 발행처의 문서 중 doc_rights 가 있는 것 (held = hold_text 로 캐시) — 행의 can_* 은 발행처 단위 그대로,
+ *  근거 글은 문서 이름만 가리킨다. 본 것 (해시 · 쪽 · 그림) 은 문서 단위 행 (store.json document_rights — B-E2) 한 곳 */
 export function registryRow(publisher: string, reviewedAt: string, accessNote: string, docs: { label: string; doc_rights: DocRights; held?: boolean }[] = []): RegistryRow {
   const fed = US_FEDERAL[publisher];
   if (fed) {
@@ -123,10 +130,11 @@ export function registryRow(publisher: string, reviewedAt: string, accessNote: s
       source: publisher, access_method: accessNote, can_ingest: null, can_store: null, can_quote: null, can_transform: null,
       commercial_use: null, attribution_required: null, terms_url: null, last_reviewed_at: docs.map((d) => d.doc_rights.checked_at).sort().at(-1)!,
       basis: `권리 미확인 (발행처 단위) — ${CHECKED_NOT_STORABLE[publisher] ?? "발행처 단위의 근거를 찾지 못했다"}. ` +
-        `문서 단위 공공누리 제1유형 (출처표시 · D53 · D69) — 문서 안에 그 표시 그림 (OPEN · 출처표시 칸 하나) 을 본 아래 문서만 전문을 git 에 둔다 (출처 표시 필요). ` +
-        `본 것: ${docs.map((d) => docRightsBasis(d.label, d.doc_rights) + (d.held ? " — 제3자 글이 길어 캐시 (hold_text · D55)" : "")).join(" / ")}. ` +
-        "쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만. " +
-        "이 행의 can_* 은 발행처 단위라 null 그대로 — 계약 SourceRegistry 는 발행처마다 한 행이고 문서 단위 칸이 없다 (_open E3-1b-a)",
+        "이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). " +
+        `문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): ` +
+        `${docs.map((d) => d.label + (d.held ? " (제3자 글이 길어 전문은 캐시 — hold_text · D55)" : "")).join(" · ")}. ` +
+        "본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. " +
+        "그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만",
     };
   }
   return {

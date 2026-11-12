@@ -1,5 +1,5 @@
 {
-  "_what": "PIPC-20261028-SAFETY-MEASURES 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json",
+  "_what": "PIPC-20261028-SAFETY-MEASURES 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json. 문서 단위 권리 (발행처는 미확인 · 문서 안에 공공누리 제1유형 표시 — 그 문서에 한해 발행처 행보다 앞선다) 는 document_rights (DATA_MODEL DocumentRights · B-E2 · pack.json doc_rights 에서)",
   "events": [
     {
       "event_id": "68cb384a-3ff4-49aa-8adb-5de45f570c42",
@@ -158,7 +158,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-11-12",
-      "basis": "권리 미확인 (발행처 단위) — 개인정보보호위원회 (pipc.go.kr) — 사이트 꼬리말: \"Copyright ⓒ Personal Information Protection Commission. All right reserved.\" · 공공누리 표시 글 없음 (게시물 페이지 · 누리집 안내 · 도움말). 보도자료 첨부 (PDF · HWPX) 안에는 공공누리 제1유형 (출처표시) 그림이 있다 — 문서 단위 표시라 발행처 단위 목록(KOGL_TYPE1)에 넣지 않았다 (_open E3-1-a → D69: 표시를 확인한 문서만 문서 단위로 — pack.json doc_rights). 문서 단위 공공누리 제1유형 (출처표시 · D53 · D69) — 문서 안에 그 표시 그림 (OPEN · 출처표시 칸 하나) 을 본 아래 문서만 전문을 git 에 둔다 (출처 표시 필요). 본 것: PR-1029-PDF (받은 바이트 sha256 ce98046efbca01f1f81b4792b153ad70e0c7f878bd4e647fbb2ad2762887b460 · 4/5쪽 · 그림 Im5 객체 47 167×64 DCTDecode · 그림 스트림 sha256 30fd9bd9851fbef6d2f77cef7b68359263042491db86c7b7dbfbad8786cda851 · 본 날 2026-11-12) / SL-SKT-0828 (받은 바이트 sha256 4cb4dc66e5bc2ec97e048406b757873ebbf83b39ec7eb2fa8d717f8c46149d80 · 8/13쪽 · 그림 Im10 객체 80 404×163 DCTDecode · 그림 스트림 sha256 da6de29260cc31f90c6fe9f8f7c816d43220973c53340d4348f705720475634d · 본 날 2026-11-12) / SL-STATS-0515 (받은 바이트 sha256 5889fc59f66931953618abe86382c25e2f242355cc1c46450ddded6cae85b863 · 3/5쪽 · 그림 Im4 객체 38 166×66 DCTDecode · 그림 스트림 sha256 b895c79a892598ff9cfbe06656f533d74d60008a86f1a238af7a3807280240f5 · 본 날 2026-11-12). 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만. 이 행의 can_* 은 발행처 단위라 null 그대로 — 계약 SourceRegistry 는 발행처마다 한 행이고 문서 단위 칸이 없다 (_open E3-1b-a)"
+      "basis": "권리 미확인 (발행처 단위) — 개인정보보호위원회 (pipc.go.kr) — 사이트 꼬리말: \"Copyright ⓒ Personal Information Protection Commission. All right reserved.\" · 공공누리 표시 글 없음 (게시물 페이지 · 누리집 안내 · 도움말). 보도자료 첨부 (PDF · HWPX) 안에는 공공누리 제1유형 (출처표시) 그림이 있다 — 문서 단위 표시라 발행처 단위 목록(KOGL_TYPE1)에 넣지 않았다 (_open E3-1-a → D69: 표시를 확인한 문서만 문서 단위로 — pack.json doc_rights). 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1029-PDF · SL-SKT-0828 · SL-STATS-0515. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
     },
     {
       "source": "law.go.kr",
@@ -172,6 +172,62 @@
       "terms_url": null,
       "last_reviewed_at": "2026-11-11",
       "basis": "저작권법 제7조 (보호받지 못하는 저작물 — 헌법 · 법률 · 조약 · 명령 …) — 국가법령정보센터 (법제처) — 법률 · 대통령령 본문과 별표 · 행정규칙(고시) 본문 → 전문 보관(can_store) · 인용(can_quote) (D53). 나머지 칸은 null — 사이트(국가법령정보센터) 이용약관은 검토하지 않았다 (E2-1)"
+    }
+  ],
+  "document_rights": [
+    {
+      "source_id": "ae47d854-a6af-4378-90d3-f51f1a8dcfbd",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "ce98046efbca01f1f81b4792b153ad70e0c7f878bd4e647fbb2ad2762887b460",
+        "page": 4,
+        "pages": 5,
+        "image": "Im5 객체 47 · 167×64 · DCTDecode",
+        "image_sha256": "30fd9bd9851fbef6d2f77cef7b68359263042491db86c7b7dbfbad8786cda851",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다)"
+      },
+      "last_reviewed_at": "2026-11-12"
+    },
+    {
+      "source_id": "78339d90-e4e7-41ad-9a08-2075578084d9",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "4cb4dc66e5bc2ec97e048406b757873ebbf83b39ec7eb2fa8d717f8c46149d80",
+        "page": 8,
+        "pages": 13,
+        "image": "Im10 객체 80 · 404×163 · DCTDecode",
+        "image_sha256": "da6de29260cc31f90c6fe9f8f7c816d43220973c53340d4348f705720475634d",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다)"
+      },
+      "last_reviewed_at": "2026-11-12"
+    },
+    {
+      "source_id": "05d81768-8ab0-4574-8844-731f96415885",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "5889fc59f66931953618abe86382c25e2f242355cc1c46450ddded6cae85b863",
+        "page": 3,
+        "pages": 5,
+        "image": "Im4 객체 38 · 166×66 · DCTDecode",
+        "image_sha256": "b895c79a892598ff9cfbe06656f533d74d60008a86f1a238af7a3807280240f5",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다)"
+      },
+      "last_reviewed_at": "2026-11-12"
     }
   ],
   "facts": [],
