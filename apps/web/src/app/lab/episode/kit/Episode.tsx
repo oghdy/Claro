@@ -663,8 +663,9 @@ export function Episode(parts: EpisodeParts) {
               {c.src}
             </button>
             {others.map((s) => (
-              <a key={s.series} className="ep-demo-switch" href={s.path} data-testid={`switch-${s.series}`}>
-                {s.short} {c.switchSuffix}
+              <a key={s.series} className="ep-demo-switch" data-many={others.length > 1 ? "" : undefined} href={s.path} data-testid={`switch-${s.series}`}>
+                {/* 다른 회차가 둘 이상이면 이름만 (좁은 화면에 한 줄로 — UX-5) */}
+                {others.length > 1 ? s.short : `${s.short} ${c.switchSuffix}`}
                 <svg width="11" height="11" viewBox="0 0 20 20" aria-hidden="true">
                   <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

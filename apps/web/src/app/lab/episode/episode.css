@@ -1669,3 +1669,24 @@ html:has(.ep-root) body {
   top: 50%;
   translate: 0 -50%;
 }
+
+/* UX-5 — 다른 회차가 둘 이상일 때: 건너가는 단추를 좁게 (한 줄에 들어가게) */
+.ep-demo-switch[data-many] {
+  padding: 9px 7px;
+  gap: 1px;
+  letter-spacing: -0.03em;
+}
+.ep-demo:has(.ep-demo-switch[data-many]) {
+  gap: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.ep-demo:has(.ep-demo-switch[data-many]) .ep-demo-readers button {
+  white-space: nowrap;
+  letter-spacing: -0.04em;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.ep-demo:has(.ep-demo-switch[data-many]) .ep-demo-src {
+  padding: 9px 7px !important;
+}

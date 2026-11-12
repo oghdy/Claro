@@ -4,6 +4,7 @@
 | 날짜 | 변경 | 세션 |
 |---|---|---|
 | 2026-11-11 | 생성 — 회차 계약. 실물 둘 (배달앱 「누가 값을 정하나」 1화 · 금리 「금리는 어디로」 2화 — `apps/web/src/app/lab/episode/` 의 시안 `9bf4ede`) 과 시안 타입 (`kit/types.ts` · `kit/frames/types.ts`) · 시안 검사 (`check.ts` A ~ E) · D46 · D57 ~ D62 에서 도출. 골든 `fixtures/episode-price-1.json` · `episode-rate-2.json` · 위반 픽스처 29. **게이트 전** | B-E1 |
+| 2026-11-12 | **넘겨 보기 틀** — `PagesFrame` · `PageCard` · `PagesCaption` (§1 · §7.8) · 불변식 21 ~ 24 (`PAGES_CARDS` · `PAGES_CARD_SRC` · `PAGES_WHEN` · `PAGES_STAR` · `PAGES_FUTURE` · `PAGES_ORDER`) · 서는 조합에 `[pages]` (불변식 15). 셋째 실물 하나 (개인정보위 「내 정보는 누가 지키나」 1화 — 시안 `/lab/episode/pipc`)에서 도출 — 그 실물에 없는 것은 미확인 (§10). 골든 셋째 `fixtures/episode-privacy-1.json` · 위반 픽스처 9. `Lab.seen_title` 의 첫 실물 · 조립에서 따라잡기와 견주기를 둘 다 보이는 첫 실물 (규칙은 그대로 미확인). **다른 틀 · 다른 칸은 바꾸지 않았다** | UX-5 |
 
 > **상태: 게이트 전 (B-E1 · 2026-11-11).** _open 은 §11.
 > 회차 (Episode) = Claro 가 기사를 내는 새 모양 (D59). 시리즈 안의 한 화 · 장면 여덟 · 가운데에 독자가 직접 해 보는 풀이.
@@ -17,6 +18,8 @@
 > - 결정 — D46 (정치 층) · D57 (조립) · D59 (장면 여덟) · D61 (체험 틀 규칙 ① ~ ④ · ⑥) · D62 (그림은 개념의 것 · UX4-a · 그림을 본 독자용 머리말)
 > - **원천이 아닌 것** — 조용히 견본 (`/lab/episode/quiet` — 실제 사건이 아니다) · UX-3 의 종이 위 카드 14건 (회차로 만들지 않았다) · 틀 여섯 가운데 코드가 없는 셋 (넘겨 보기 · 숫자 만지기 · 가르기)
 >
+> - **셋째 실물 (UX-5 · 2026-11-12)** — 개인정보위 과징금 「내 정보는 누가 지키나」 1화 (`fixtures/episode-privacy-1.json` · 재료 `logs/pipeline/E3-1.md` ③ · D69). **넘겨 보기 칸 (§7.8 · 불변식 21 ~ 24)만** 이 실물에서 더했다. 아래의 "실물 둘" · "두 회차"는 B-E1 때의 말 그대로 두었다 — 셋째 골든도 같은 모양을 통과한다
+>
 > **표시** — **실물** 두 회차에 있다 · **실물 하나** 한 회차에만 있다 · **실물 없음** 결정에서 왔지만 회차 실물이 없다 (첫 실물이 나오면 다시 본다) · **미확인** 정하지 않았다 (§10)
 >
 > **검사** — `pnpm --filter @claro/contract test` (`test/episode.test.ts` — 골든 둘 통과 · `fixtures/invalid/episode-*.json` 전부 거부 · `test/contract-docs.test.ts` — 이 문서의 타입 블록 ↔ 코드의 칸 목록).
@@ -27,7 +30,7 @@
 ## 0. 범위
 
 **이 계약이 주인인 것** — Episode · Series · TrackItem · EpisodeText · EpisodeDoc · EpisodeQuote · Tool · Pickup · Assembly · 장면 여덟의 글 (Scenes 와 그 아래) ·
-ToolMap · Solve · SolveEntry · Flip · Lab · PictureRef · 틀 셋 (ToggleFrame · ChainFrame · SeatsFrame) · 기본 풀이 셋 (PlainFlip · PlainThree · PlainQuiet).
+ToolMap · Solve · SolveEntry · Flip · Lab · PictureRef · 틀 넷 (ToggleFrame · ChainFrame · SeatsFrame · PagesFrame) · 기본 풀이 셋 (PlainFlip · PlainThree · PlainQuiet).
 
 **안 넣는 것**
 - **지식 상태.** 독자가 무엇을 아는지 · 누가 "처음 온 독자"인지 · 어느 도구를 접을지 판정하는 것은 이 계약에 없다. 회차는 **조립마다 어느 장면을 보이나**만 적는다 (§5).
@@ -58,7 +61,7 @@ SceneId    = "cover" | "zero" | "event" | "tools" | "aha" | "compare" | "next" |
 TrackState = "past" | "now" | "next"
 Voice      = "fact" | "official" | "explain"
 NoLabWhy   = "politics" | "death" | "no-source" | "no-flip"
-Frame      = ToggleFrame | ChainFrame | SeatsFrame       // kind 로 가른다
+Frame      = ToggleFrame | ChainFrame | SeatsFrame | PagesFrame   // kind 로 가른다
 ChainNode  = ReachedNode | StoppedNode                   // reach 로 가른다
 PlainSolve = PlainFlip | PlainThree | PlainQuiet         // kind 로 가른다
 
@@ -157,7 +160,7 @@ CoverScene {                        // 표지
   ask_follower: string
 }
 
-ZeroScene {                         // 따라잡기 — 지금까지의 이야기 (0화 · 지난 화의 요지). new 조립에만 (§3.2)
+ZeroScene {                         // 따라잡기 — 지금까지의 이야기 (0화 · 지난 화의 요지). 실물 둘은 new 조립에만 · 셋째는 두 조립 모두 (§3.2 · §5.2)
   kicker: EpisodeText
   title:  EpisodeText
   beats:  Beat[]                    // 연표 — 마지막 칸이 오늘
@@ -266,7 +269,7 @@ Flip { label: string, a: string, op: string, b: string, note: EpisodeText }
 
 Lab {                               // 체험 — 틀을 차례로 잇는다 (§7.2)
   title:      string                // 풀이 장면의 머리 — "회의 자리에\n앉아 볼게요"
-  seen_title: string | null         // 이 그림을 본 독자에게 보일 머리 (D62 ③). null 이면 title. 실물 없음 — 골든 둘 다 null
+  seen_title: string | null         // 이 그림을 본 독자에게 보일 머리 (D62 ③). null 이면 title. 실물 하나 — 셋째 골든 (첫 두 골든은 null)
   setup:      EpisodeText[]         // 준비 글 — 그림을 본 독자에게는 빠진다 (D61 ②)
   frames:     Frame[]               // 서는 조합만 (불변식 15)
   born:       Born | null           // 풀이에서 생기는 도구 (실물 하나)
@@ -275,7 +278,7 @@ Lab {                               // 체험 — 틀을 차례로 잇는다 (§
 Born { lead: string, tool: ToolKey }
 
 PictureRef {                        // 그림 부품을 가리킨다. 같은 id 가 다시 쓰는 단위다 (D61 ②)
-  id:   Id                          // "mfn-tie" · "rate-brake" · "fomc-seats"
+  id:   Id                          // "mfn-tie" · "rate-brake" · "fomc-seats" · "daekyo-breach"
   tool: ToolKey                     // 이 그림이 붙은 도구 (개념) — 실물 셋 다 있다. 개념에 붙지 않은 그림은 미확인
 }
 
@@ -355,6 +358,29 @@ SeatSide {
 }
 
 SeatsCaption { before: EpisodeText }
+
+PagesFrame {                        // 넘겨 보기 — 일의 차례를 한 칸씩 넘긴다 (§7.8). 실물 하나
+  kind:    "pages"
+  picture: PictureRef               // 이 차례의 이름. 그림은 칸들 자체다 — 따로 그림 부품이 없다 (§7.8)
+  label:   string                   // 차례의 이름 — "대교에서 있었던 일의 차례"
+  cards:   PageCard[]               // 셋 이상 · 넘기는 차례대로 · ★ 하나 · 앞날 칸 없음 (불변식 21 ~ 24)
+  ask:     string                   // ★ 칸을 넘기기 직전, 그 카드의 뒷면에 보이는 물음
+  action:  string                   // 넘기는 단추의 말
+  again:   string
+  caption: PagesCaption
+}
+
+PageCard {                          // 넘겨 보기의 한 칸
+  id:      Id
+  when:    EpisodeText | null       // 때 — 문서에 있는 만큼만 ("2024년 8월"). 문서에 없으면 null
+  no_date: string | null            // when 이 null 이면 필수 — 때의 자리에 보이는 글 ("날짜 없음"). when 이 있으면 null (불변식 22)
+  head:    string                   // 한 줄 머리
+  body:    EpisodeText              // 그 칸에서 있었던 일. 구절이 있어야 한다 (불변식 21)
+  state:   TrackState               // past | now. next (앞날)면 거부 — 사람이 채운다 (§8 · 불변식 24)
+  star:    boolean                  // "아!" 칸인가 — 정확히 하나 (불변식 23). 사람이 고른다 (§8)
+}
+
+PagesCaption { before: EpisodeText, after: EpisodeText }
 
 PlainFlip {                         // 가. 뒤집기만 — 새로 채울 칸이 없다. 입구 (첫 생각 · 깨는 사실 · 뒤집기)와 scenes.aha 가 화면이 된다
   kind:  "flip"
@@ -532,6 +558,7 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
   시안은 손으로 적은 고정값 둘로 보여 줄 뿐이다 (추정 0)
 - 조립은 **차례를 바꾸지 못한다** — 장면 여덟의 차례에서 빼기만 한다. `cover` 로 시작하고 `keep` 으로 끝나며 `aha` 가 있다 (불변식 6)
 - 조립이 둘뿐인가 · `new` 에 따라잡기가 꼭 있어야 하나 · `follower` 에 견주기가 꼭 있어야 하나 — 실물 둘이 그럴 뿐이다. 규칙으로 걸지 않았다 (**미확인**)
+- 셋째 골든 (개인정보 1화 — UX-5)의 `follower` 는 **다른 시리즈를 따라온 독자**다: 이 시리즈는 처음이라 따라잡기도 보고, 다른 시리즈의 회차와 견주기도 본다 (장면 여덟 전부). 위 표의 "빠지는 것"이 실물 둘의 것일 뿐임을 보여 준다 — 조립이 무엇을 뜻하는지 (같은 시리즈를 따라왔나 · 다른 시리즈를 읽었나)는 여전히 **미확인** (D66)
 - **"이 그림을 본 독자"** 는 조립이 아니다 — 풀이 칸 안의 일이다 (§7.6)
 
 ---
@@ -582,11 +609,11 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 
 ### 7.2 체험 — 틀을 잇는다
 
-- `frames` 의 조합은 넷뿐이다 (불변식 15): `[toggle]` (실물: 배달앱 1화) · `[chain, seats]` (실물: 금리 2화) · 그 부분인 `[chain]` · `[seats]` (**실물 없음** — 화면 부품은 받는다).
-  켜고 끄기를 다른 틀과 잇는 것 · 틀 셋을 잇는 것은 없다 (UX4-i)
+- `frames` 의 조합은 다섯뿐이다 (불변식 15): `[toggle]` (실물: 배달앱 1화) · `[chain, seats]` (실물: 금리 2화) · 그 부분인 `[chain]` · `[seats]` (**실물 없음** — 화면 부품은 받는다) · `[pages]` (실물: 개인정보 1화 — UX-5).
+  켜고 끄기 · 넘겨 보기를 다른 틀과 잇는 것 · 틀 셋을 잇는 것은 없다 (UX4-i)
 - 틀을 이으면 틀마다 `tab`, 앞 틀에 `go_on` (불변식 19). 앞 틀의 그림은 뒤 틀에서도 남는다 — 이미 일어난 일로 (화면의 일)
 - `born` — 풀이에서 생기는 도구. 그 도구는 `pickup.aha` 에 있어야 한다 (불변식 5)
-- 틀 여섯 (D61 ⑤) 가운데 **셋만 계약에 있다** — 실물이 있는 것만. 넘겨 보기 · 숫자 만지기 · 가르기는 그 회차가 생길 때 (D24)
+- 틀 여섯 (D61 ⑤) 가운데 **넷이 계약에 있다** — 실물이 있는 것만. 넘겨 보기는 §7.8 (UX-5). 숫자 만지기 · 가르기는 그 회차가 생길 때 (D24)
 
 ### 7.3 켜고 끄기 — 그림은 데이터가 아니다
 
@@ -621,6 +648,7 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 - **`lab.seen_title`** — 그 독자에게 보일 머리 (D62 ③). 지금 머리 ("회의 자리에 앉아 볼게요")는 앉지 않는 독자에게 안 맞는다 (UX4-f). **실물 없음**: 골든 둘 다 `null` 이고, `null` 이면 `title` 이 나온다.
   독자 글을 새로 쓰지 않았다 — 칸만 만들었다
 - 누가 "그 그림을 본 독자"인가는 지식 상태다 — 회차에 없다. 지난 회차의 값을 옆에 놓는 것 (UX4-c)은 3화가 실물이다 — **미확인**
+- **넘겨 보기에서의 다시 쓰기는 §7.8** — 같은 차례 (`picture.id`)의 다음 문서에서만 선다. `seen_title` 의 첫 실물도 그 골든이다 ("일의 차례를 펼쳐 놓을게요")
 
 ### 7.7 기본 풀이 — 체험 없음 (D61 ①)
 
@@ -634,6 +662,26 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 - **실물 둘은 체험과 기본 풀이를 둘 다 갖는다** — 도윤이 "체험 없이 보기"로 견줘 보려고 (UX-4 ④). 체험이 있으면 까닭이 없으니 `why` 는 `null` 이다 (시안의 `"demo"` 는 계약의 값이 아니다).
   제품이 체험이 있는 회차에도 기본 풀이를 같이 낼지는 **미확인** — 계약은 받기만 한다
 - 세 칸의 셋째 칸은 **양쪽을 나란히** — 둘 이상이거나 빔 (불변식 20 · D46 ④). 한쪽만 있으면 거부
+
+### 7.8 넘겨 보기 — 일의 차례를 한 칸씩 (UX-5 · 실물 하나)
+
+실물: 개인정보 1화 — 대교에서 있었던 일 여섯 칸 (열려 있던 길 → 첫 유출 → 알림 → **★ 대응을 소홀히** → 같은 방식으로 또 → 위원회의 결정). 재료는 `logs/pipeline/E3-1.md` ③-2 그대로다.
+독자가 하는 것: 뒤집힌 카드를 눌러 한 장씩 넘긴다. 넘긴 칸은 한 줄로 접혀 위에 쌓이고, 다 넘기면 차례 전체가 한 화면에 남는다 (화면의 일 — 시안 `kit/frames/Pages.tsx`).
+
+- **칸 (`cards`)은 넘기는 차례대로 · 셋 이상** (불변식 21). 위쪽 끝은 정하지 않았다 — 실물은 여섯이고 UX-3 의 종이 위 어림 ("3 ~ 5")을 이미 넘었다 (**미확인**)
+- **칸마다 구절** — `body` 는 구절이 붙는 글이다 (불변식 21). 문서에 없는 칸 (회사가 알게 된 때 · 신고 · 조사 착수)은 만들지 않는다. 실물의 여섯 칸은 전부 보도자료 한 문서의 구절이다
+- **때는 문서에 있는 만큼만 — 없으면 "날짜 없음"을 밝힌다** (불변식 22). `when` 은 글이다 ("2024년 8월" — 달까지만 있으면 달까지. 그 수는 불변식 9 가 구절에 댄다).
+  문서에 때가 없는 칸은 `when: null` 이고 **`no_date` 가 그 자리에 보인다** ("날짜 없음"). 둘 중 정확히 하나다. 실물: 여섯 가운데 둘이 날짜 없음 (열려 있던 길 — 상태 · ★ 대응 소홀 — 판단)
+- **★ 칸 (`star`)이 정확히 하나 · 첫 칸이 아니다** (불변식 23). "아!"는 그 앞 칸이 만든 기대 위에 선다 (실물: 알림이 왔어요 → ★). `ask` 는 ★ 칸을 넘기기 직전 그 카드의 뒷면에 보이는 물음이다
+- **앞날 칸 금지** (불변식 24 · UX-3 "다음 칸을 그려야 할 때 쓰지 않는다"). 칸마다 `state` 를 스스로 적는다 — `past` · `now` 만 서고 **`next` 면 거부한다**. `now` (이 회차의 사건)는 마지막 칸에만 온다 (실물: 여섯째 칸 "위원회의 결정").
+  다음에 올 일 (의결서 · 공표)은 넘겨 보기가 아니라 이어짐 장면 (`scenes.next.coming`)에 있다
+- **칸 사이에는 차례만 있다.** 까닭 (이 칸 때문에 다음 칸이)은 계약에 칸이 없다 — 화면도 화살표를 그리지 않는다. 문서가 차례만 말했기 때문이다 (실물의 `not_drawn` 첫 줄 — "그때 막았으면 둘째는 없었다").
+  문서가 까닭을 말하는 차례가 나오면 다시 본다 (**미확인**)
+- **그림은 칸들 자체다 — 개념의 것도 틀의 것도 아니고 사건의 것이다.** 켜고 끄기처럼 따로 만든 그림 부품이 없고 (화면 검사 S1 은 이 틀을 보지 않는다), 고리 · 자리처럼 값만 갈아 끼울 뼈 (고리의 이름 · 자리의 수)도 없다 — 칸 전부가 오늘의 값이다.
+  `picture.id` 는 그 차례의 이름 ("daekyo-breach")이고 `picture.tool` 은 그 차례가 걸리는 도구다 (실물: 안전조치의무)
+- **"이 그림을 본 독자" (§7.6)** — 넘기기 · 준비 글 없이 차례 전체가 펼쳐져 있고, 칸을 누르면 그 칸의 글이 나온다 (화면의 일). **다시 쓰기 (D61 ②)는 같은 차례의 다음 문서에서만 선다**: 의결서가 나오면 같은 `picture.id` 에 칸이 더해지고 "날짜 없음"이 날짜로 바뀐다 — 그것이 "값만 바뀐 같은 그림"이다 (**실물 없음** — 다음 회차).
+  다른 사건 (다른 회사의 유출)에는 서지 않는다 — 칸이 전부 새것이라 "본 그림"이 없다
+- **미확인 (이 실물에 없다)**: 전 → 후 꼴 (고쳐진 문구 둘 — UX-3 의 SK하이닉스 · 성명문 대조) · 넘겨 보기를 다른 틀과 잇기 (`tab` · `go_on` 칸이 없다 — 넣으면 `SCHEMA_KEY`) · 갈래가 둘인 차례 (두 회사를 나란히) · 때를 기계가 읽는 칸 (차례가 때의 차례인지는 검증기가 보지 않는다 — 사람) · 칸의 `voice` 를 꼭 달아야 하나 (실물은 여섯 다 달았다)
 
 ---
 
@@ -649,6 +697,9 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | `PlainSolve.why` | 체험이 없는 까닭 | 넷 중 하나인지 · 사망과 맞는지 |
 | `solve.entry.flip` | 뒤집기가 진짜인가 (UX-3 ⑦-1) | 있는지 없는지만 |
 | `solve.entry.not_drawn` | 그림이 넘지 말아야 할 선 | 읽지 않는다 |
+| `PageCard.state` | 그 칸이 이미 일어난 일인가 · 이 회차의 사건인가 · 앞날인가 | `next` 면 거부. 앞날의 일을 `past` 라고 적으면 통과한다 |
+| `PageCard.star` | 어느 칸이 "아!"인가 (UX-3 ⑥ "어느 칸이 아!인지만 고른다") | 정확히 하나인지 · 첫 칸이 아닌지만. 그 칸이 정말 뒤집는 칸인지는 못 본다 |
+| `PageCard.when` · `no_date` · 칸의 차례 | 때가 문서에 있나 · 칸이 때의 차례대로인가 | 둘 중 하나인지 · 때의 수가 구절에 있는지 (불변식 9)만. 차례는 못 본다 |
 
 파이프라인 단계마다 어느 칸을 채우는지 (p3 · p4 · p5 · 라이브러리 · 사람)는 `logs/backend/B-E1.md` ⑥.
 
@@ -674,12 +725,16 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | 12 | 체험도 기본 풀이도 없으면 안 된다 · 체험이 없으면 기본 풀이의 `why` 가 넷 중 하나 · 체험이 있으면 `why` 는 `null` | `SOLVE_EMPTY` · `PLAIN_WHY` | D61 ① · check E2 | `episode-no-lab-no-why` |
 | 13 | **D61 ④ — 사망이면 체험 없음 + 기본 풀이 "조용히"** + `why: death`. 거꾸로 `why: death` 면 `death` | `DEATH_LAB` · `DEATH_NOT_QUIET` · `DEATH_WHY` | D61 ④ · check E3 | `episode-death-with-lab` · `episode-death-not-quiet` |
 | 14 | **뒤집기가 없으면 틀을 고를 수 없다** — `flip` 이 `null` 이면 체험도 "뒤집기만"도 없다 | `NO_FLIP` | D61 ⑥ · check E4 | `episode-no-flip-with-lab` |
-| 15 | 틀의 조합은 `[toggle]` · `[chain]` · `[seats]` · `[chain, seats]` 뿐 | `FRAME_COMBO` | check E5 · UX-4 ② | `episode-frame-combo` |
+| 15 | 틀의 조합은 `[toggle]` · `[chain]` · `[seats]` · `[chain, seats]` · `[pages]` 뿐 | `FRAME_COMBO` | check E5 · UX-4 ② · UX-5 | `episode-frame-combo` · `episode-pages-combo` |
 | 16 | **D61 ③ — 자리에 앉기는 한 기관 안의 공식 이견에만** (`party-vote` 면 거부) · 표결 기록 구절이 있다 · 쪽은 둘 · 쪽마다 한 말에 구절 · 쪽마다의 수가 표결 기록에 | `SEATS_PARTY_VOTE` · `SEATS_RECORD` · `SEATS_SIDES` · `SEATS_SAID_SRC` · `SEATS_COUNT` | D61 ③ · D46 · check E6 | `episode-seats-party-vote` · `episode-seats-count-not-in-record` · `episode-seats-said-no-src` |
 | 17 | **UX4-a — `not-yet` 인 쪽은 `not_yet_note` 가 있고 그 문장이 `said.t` 안에 글자 그대로 있다.** `in-doc` 이면 `null` | `SEATS_NOT_YET` | D62 ② | `episode-seats-not-yet-unsaid` · `episode-seats-not-yet-not-on-screen` |
 | 18 | 고리 둘 ~ 넷 · 닿은 차례대로 · 멈춘 자리 하나 이상 · 오늘의 값 (`after` · `still`)에 구절 | `CHAIN_NODES` · `CHAIN_ORDER` · `CHAIN_NO_STOP` · `CHAIN_VALUE_SRC` | check E7 · UX4-e | `episode-chain-no-stop` · `episode-chain-out-of-order` · `episode-chain-value-no-src` |
 | 19 | 틀을 이으면 틀마다 `tab` · 뒤에 틀이 있는 고리에 `go_on` | `FRAME_TAB` | check E8 | `episode-frames-no-tab` |
 | 20 | **D46 ④ — 서로 다르게 말하는 것은 양쪽**: `differ` 는 둘 이상이거나 빔 · 저마다 한 말에 구절 | `DIFFER_ONE_SIDE` · `DIFFER_SRC` | D46 · check E9 | `episode-differ-one-side` · `episode-differ-no-src` |
+| 21 | **넘겨 보기 — 칸 셋 이상 · `id` 가 겹치지 않는다 · 칸마다 한 줄 (`body`)에 구절** | `PAGES_CARDS` · `PAGES_CARD_SRC` | UX-5 실물 · UX-3 ⑥ | `episode-pages-too-few` · `episode-pages-card-no-src` |
+| 22 | **칸의 때 — `when` 이 있거나, 없으면 `no_date` ("날짜 없음")가 화면에 있다.** 둘 중 정확히 하나 | `PAGES_WHEN` | UX-5 실물 · E3-1-f | `episode-pages-undated-unsaid` · `episode-pages-when-and-no-date` |
+| 23 | **★ 칸이 정확히 하나 · 첫 칸이 아니다** | `PAGES_STAR` | UX-5 실물 · UX-3 ⑥ | `episode-pages-no-star` · `episode-pages-two-stars` |
+| 24 | **앞날 칸 금지 — `state: next` 면 거부** · 지금 (`now`)은 마지막 칸에만 | `PAGES_FUTURE` · `PAGES_ORDER` | UX-3 ④ ("다음 칸을 그려야 할 때 쓰지 않는다") · UX-5 실물 | `episode-pages-future-card` · `episode-pages-now-not-last` |
 
 - 알림 (거부가 아니다): `SEAT_WHY_NOT_YET` — 그 쪽은 반쪽이다 (금리 2화에 하나) · `QUOTES_NOT_CHECKED` — 저장된 문서를 받지 못해 8 을 보지 않았다
 - `_` 로 시작하는 칸은 픽스처 주석이다. 무시하고, 돌려주는 회차에서는 뺀다 (ARTICLE_PACKAGE §9-10 과 같다)
@@ -702,7 +757,8 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | 구절 ↔ Fact (FactSource) · `voice` ↔ ARTICLE_PACKAGE 의 층 | 손으로 쓴 시안은 사실을 거치지 않았다 (§4.2 · §4.4) | P-E1 |
 | 개념의 그림 부품이 어디에 사나 · 틀의 글 가운데 개념의 것 (UX4-g · UX3-b) | 켜고 끄기의 실물이 하나다 — D67 OPEN | 둘째 개념 체험 |
 | 개념에 붙지 않은 그림 (`picture.tool` 이 없는) · 체험 없는 회차에서 풀이의 도구를 줍는 자리 (UX4-d) | 실물 없음 | 그 회차 |
-| 틀 넘겨 보기 · 숫자 만지기 · 가르기 · 고리의 가지 · 자리의 세 쪽 · 켜고 끄기를 잇기 (UX4-i) | 실물 없음 | 그 회차 (개인정보위 — 넘겨 보기 · D63) |
+| 틀 숫자 만지기 · 가르기 · 고리의 가지 · 자리의 세 쪽 · 켜고 끄기를 잇기 (UX4-i) | 실물 없음 | 그 회차 |
+| 넘겨 보기 — 전 → 후 꼴 (고쳐진 문구) · 다른 틀과 잇기 · 갈래가 둘인 차례 · 칸 수의 위쪽 끝 · 때를 기계가 읽는 칸 (차례 검사) · 칸 사이의 까닭 · 같은 차례에 칸이 더해지는 다음 회차 (다시 쓰기 — 지난 칸과 새 칸을 어떻게 가르나) (§7.8) | 실물이 하나다 (개인정보 1화) | 의결서가 나오는 회차 · 둘째 넘겨 보기 |
 | 기본 풀이 "조용히" · `why` 넷 | 견본뿐이다 — 타입과 불변식 13 은 D61 ④ 에서 왔다 (**실물 없음**) | 그 회차 |
 | 체험이 있는 회차에 기본 풀이를 같이 내나 | 시안의 견주기 스위치 때문에 실물 둘이 그렇다 (§7.7) | 도윤 (D62 ④) |
 | 큰 글자 · 문서가 말한 것 · 다음 일의 개수 (둘 · 셋 · 셋) | 실물 둘이 같지만 규칙으로 걸 근거가 없다 | — |
@@ -722,6 +778,9 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | E-7 | **체험이 있는 회차의 기본 풀이 `why` 를 `null` 로** (시안의 `"demo"` 를 계약에 들이지 않았다) | 체험 + 기본 풀이를 받는다 | 체험이 있으면 기본 풀이를 금지 — 골든에서 기본 풀이 글 (금리 13 덩이)이 빠진다 |
 | E-8 | **`episode_id` · `series_id` 를 발급했다** (골든 둘 · UUID). `code` 는 시안의 글자 (`fomc` · `rate`) 그대로 — Event 의 code (`FOMC-20261028`) 같은 규칙은 정하지 않았다 | 그대로 | code 규칙을 정한다 (예: `rate-2`) |
 | E-9 | `tools[]` 의 차례 = 지도 · "남음"의 차례. 시안에는 `conceptOrder` · `toolOrder` · `lateTool` · `pickedAfter` 넷이 있었다 — 같은 것을 두 번 적고 있어 `tools` 의 차례와 `pickup` 하나로 줄였다 | 줄였다 | — |
+| E-13 | **넘겨 보기에도 `picture: PictureRef` 를 뒀다** (UX-5). 이 틀의 그림은 개념의 것이 아니라 사건의 것이라 `tool` 이 억지일 수 있다 (실물은 안전조치의무에 걸었다) | 다른 틀과 같은 모양 — `picture.id` 가 다시 쓰는 단위 | `picture` 를 빼고 차례의 이름 (`id`)만 · 또는 `PictureRef.tool` 을 없어도 되는 칸으로 (다른 틀의 칸이 바뀐다) |
+| E-14 | **앞날 칸 금지를 스스로 적는 칸 (`PageCard.state`)으로 봤다** — `SeatsGround.split` 과 같은 방식 (금지된 값을 적으면 거부). 회차에 발행일이 없어 날짜로는 못 본다 | `TrackState` 를 다시 썼다 (`next` 거부) | 때를 기계가 읽는 칸 (`at`) + 사건일과 견주기 — DATA_MODEL 의 때 타입 · 발행일 칸이 생길 때 |
+| E-15 | **셋째 골든의 근거 문서 여덟 가운데 하나가 다른 사건의 문서다** — 견주기 장면이 「누가 값을 정하나」 1화의 공정위 보도자료 구절 둘 (git · 공공누리 제1유형)을 다시 쓴다. 금리 2화가 9월 문서를 쓰는 것과 같은 꼴 | 받는다 (계약은 문서가 어느 사건의 것인지 보지 않는다) | 회차의 구절은 그 사건의 소스 팩에서만 — 견주기를 같은 사건 안 (대교 ↔ 영훈)으로 바꾼다 |
 | E-10 | 고리의 `after` · `still` 에 구절을 달았다 (UX4-e) — 구절은 시안 주석의 것. `voice` 는 달지 않았다 | 구절만 | `voice` 도 (금리 = fact · 금융 여건 = official) |
 
 ---
@@ -749,6 +808,8 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | `Lab` | + `seen_title: null` | D62 ③ |
 | `PlainSolve.why: "demo"` | `null` | 시안 전용 값 |
 | 없으면 뺀 칸 (`tab?` · `goOn?` · `born?` · `differNote?`) | `null` 을 적는다 | `EpisodeText` 의 `src` · `calc` · `ui` · `voice` 만 뺄 수 있다 |
+
+셋째 골든 `fixtures/episode-privacy-1.json` (구절 44 · 문서 8 · 글 105 · 도구 5 — 전부 손으로)은 옮긴 것이 아니라 처음부터 이 계약의 모양으로 썼다 (UX-5). 시안 `/lab/episode/pipc` 가 그것을 읽어 그린다.
 
 골든: `fixtures/episode-price-1.json` (구절 39 · 문서 6 · 글 94 · 도구 4) · `fixtures/episode-rate-2.json` (구절 41 · 문서 8 · 글 129 — 시안의 126 + 고리의 값 3 · 도구 5).
 시안 (`/lab/episode` · `/lab/episode/fomc`)은 이 골든을 읽어 그린다.

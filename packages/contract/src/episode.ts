@@ -26,8 +26,8 @@ export type Voice = (typeof VOICES)[number];
 export const NO_LAB_WHYS = ["politics", "death", "no-source", "no-flip"] as const;
 export type NoLabWhy = (typeof NO_LAB_WHYS)[number];
 
-/** 서는 틀 조합 (불변식 15) — 실물: [toggle] 배달앱 1화 · [chain, seats] 금리 2화. [chain] · [seats] 는 그 부분 */
-export const FRAME_COMBOS: readonly (readonly Frame["kind"][])[] = [["toggle"], ["chain"], ["seats"], ["chain", "seats"]];
+/** 서는 틀 조합 (불변식 15) — 실물: [toggle] 배달앱 1화 · [chain, seats] 금리 2화 · [pages] 개인정보 1화 (UX-5). [chain] · [seats] 는 그 부분 */
+export const FRAME_COMBOS: readonly (readonly Frame["kind"][])[] = [["toggle"], ["chain"], ["seats"], ["chain", "seats"], ["pages"]];
 
 // ─────────────────────────────────────────────────────────── 가리키는 이름
 
@@ -382,7 +382,35 @@ export interface SeatsFrame {
   caption: SeatsCaption;
 }
 
-export type Frame = ToggleFrame | ChainFrame | SeatsFrame;
+/** 넘겨 보기의 한 칸 — 때가 문서에 있으면 when, 없으면 no_date ("날짜 없음"이 화면에 보인다 — 불변식 22) */
+export interface PageCard {
+  id: Id;
+  when: EpisodeText | null;
+  no_date: string | null;
+  head: string;
+  body: EpisodeText;
+  state: TrackState;
+  star: boolean;
+}
+
+export interface PagesCaption {
+  before: EpisodeText;
+  after: EpisodeText;
+}
+
+/** 넘겨 보기 — 일의 차례를 한 칸씩 넘긴다. ★ 칸 하나가 "아!"다 (UX-5 · §7.8). 앞날 칸은 없다 (불변식 24) */
+export interface PagesFrame {
+  kind: "pages";
+  picture: PictureRef;
+  label: string;
+  cards: PageCard[];
+  ask: string;
+  action: string;
+  again: string;
+  caption: PagesCaption;
+}
+
+export type Frame = ToggleFrame | ChainFrame | SeatsFrame | PagesFrame;
 
 export interface Born {
   lead: string;
@@ -638,6 +666,26 @@ export const EPISODE_SHAPES = {
     not_yet_note: "Fragment | null",
   } satisfies Shape<SeatSide>,
   SeatsCaption: { before: "EpisodeText" } satisfies Shape<SeatsCaption>,
+  PagesFrame: {
+    kind: '"pages"',
+    picture: "PictureRef",
+    label: "string",
+    cards: "PageCard[]",
+    ask: "string",
+    action: "string",
+    again: "string",
+    caption: "PagesCaption",
+  } satisfies Shape<PagesFrame>,
+  PageCard: {
+    id: "Id",
+    when: "EpisodeText | null",
+    no_date: "string | null",
+    head: "string",
+    body: "EpisodeText",
+    state: "TrackState",
+    star: "boolean",
+  } satisfies Shape<PageCard>,
+  PagesCaption: { before: "EpisodeText", after: "EpisodeText" } satisfies Shape<PagesCaption>,
   PlainFlip: { kind: '"flip"', why: "NoLabWhy | null", title: "string" } satisfies Shape<PlainFlip>,
   PlainThree: {
     kind: '"three"',
@@ -679,14 +727,14 @@ export const EPISODE_ALIASES = {
   TrackState: TRACK_STATES.map((v) => `"${v}"`).join(" | "),
   Voice: VOICES.map((v) => `"${v}"`).join(" | "),
   NoLabWhy: NO_LAB_WHYS.map((v) => `"${v}"`).join(" | "),
-  Frame: "ToggleFrame | ChainFrame | SeatsFrame",
+  Frame: "ToggleFrame | ChainFrame | SeatsFrame | PagesFrame",
   ChainNode: "ReachedNode | StoppedNode",
   PlainSolve: "PlainFlip | PlainThree | PlainQuiet",
 } as const;
 
 /** 갈래가 있는 타입 — 어느 칸의 값으로 갈래를 고르나 */
 export const EPISODE_UNIONS: Record<string, { tag: string; of: Record<string, EpisodeShapeName> }> = {
-  Frame: { tag: "kind", of: { toggle: "ToggleFrame", chain: "ChainFrame", seats: "SeatsFrame" } },
+  Frame: { tag: "kind", of: { toggle: "ToggleFrame", chain: "ChainFrame", seats: "SeatsFrame", pages: "PagesFrame" } },
   ChainNode: { tag: "reach", of: { full: "ReachedNode", part: "ReachedNode", none: "StoppedNode" } },
   PlainSolve: { tag: "kind", of: { flip: "PlainFlip", three: "PlainThree", quiet: "PlainQuiet" } },
 };

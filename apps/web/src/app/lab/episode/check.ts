@@ -3,9 +3,9 @@
 // packages/contract/src/validate-episode.ts · fixtures/invalid/episode-*.json · packages/contract/test/episode.test.ts).
 //   pnpm --filter @claro/web exec tsx src/app/lab/episode/check.ts
 // 보는 것
-//   계약   두 회차(골든 픽스처)가 계약 검증을 지난다 — 저장된 문서를 읽어 구절 대조(불변식 8)까지
+//   계약   세 회차(골든 픽스처)가 계약 검증을 지난다 — 저장된 문서를 읽어 구절 대조(불변식 8)까지
 //   S1     켜고 끄기의 그림 부품이 있다 (picture.id → kit/frames/pictures.ts) — 그림은 데이터가 아니라 코드라서 계약이 못 본다
-//   S2     틀의 조합을 세울 화면 부품이 있다 (kit/frames/LabCard)
+//   S2     틀의 조합을 세울 화면 부품이 있다 (kit/frames/LabCard — 켜고 끄기 · 고리 · 자리 · 넘겨 보기)
 //   S3     두 독자의 고정값(시안 전용)이 가리키는 도구 · 다른 시리즈가 있다
 //   S4     시안 전용 글(공통 화면 글 kit/chrome.ts · 조종 칸의 짧은 이름 · 조용히 견본)에 숫자가 없다
 //   S5     조용히 견본(회차가 아니다)의 풀이 칸이 계약의 풀이 규칙(§9 11 ~ 20)에 맞다
@@ -15,7 +15,7 @@ import path from "node:path";
 import { solveProblems, validateEpisode } from "@claro/contract";
 import { CHROME } from "./kit/chrome";
 import { QUIET_SAMPLE } from "./episodes/quiet-sample/data";
-import { isSteps, isToggle } from "./kit/frames/LabCard";
+import { isPages, isSteps, isToggle } from "./kit/frames/LabCard";
 import { PICTURES } from "./kit/frames/pictures";
 import { EPISODES, SHELF } from "./kit/shelf";
 
@@ -59,7 +59,7 @@ for (const e of EPISODES) {
   const errors: string[] = [];
   const has = (key: string) => e.tools.some((x) => x.key === key);
   for (const f of lab?.frames ?? []) if (f.kind === "toggle" && !PICTURES[f.picture.id]) errors.push(`S1 그림 부품 "${f.picture.id}" 가 kit/frames/pictures.ts 에 없다`);
-  if (lab && !isToggle(lab.frames) && !isSteps(lab.frames)) errors.push(`S2 틀의 조합 [${lab.frames.map((f) => f.kind).join(", ")}] 을 세울 화면 부품이 없다`);
+  if (lab && !isToggle(lab.frames) && !isSteps(lab.frames) && !isPages(lab.frames)) errors.push(`S2 틀의 조합 [${lab.frames.map((f) => f.kind).join(", ")}] 을 세울 화면 부품이 없다`);
   for (const rd of Object.values(readers)) {
     for (const id of rd.known) if (!has(id)) errors.push(`S3 readers.${rd.id}.known: 도구 "${id}" 가 이 회차에 없다`);
     for (const el of rd.elsewhere) {
@@ -93,4 +93,4 @@ if (failed) {
   console.log(`\nFAIL ${failed}`);
   process.exit(1);
 }
-console.log("\nOK — 두 회차 (계약 + 화면 쪽) · 조용히 견본 · 공통 글");
+console.log(`\nOK — 회차 ${EPISODES.length} (계약 + 화면 쪽) · 조용히 견본 · 공통 글`);

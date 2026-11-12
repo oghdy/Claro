@@ -443,3 +443,219 @@
   flex: 1;
   text-align: center;
 }
+
+/* ── 틀: 넘겨 보기 (UX-5 — 개인정보 1화: 대교에서 있었던 일 여섯 칸)
+   넘긴 칸은 세로줄 위에 쌓인다. 줄에는 화살표가 없다 — 차례일 뿐 까닭이 아니다. 때가 문서에 없는 칸은 점선 꼬리표. */
+.fr-pages {
+  padding-bottom: 14px;
+}
+.fr-pg-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 2px 4px 10px;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.4;
+  color: var(--ep-muted);
+}
+.fr-pg-label b {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ep-ink);
+}
+.fr-pg-list {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  perspective: 900px;
+}
+/* 세로줄 — 차례 */
+.fr-pg-list li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 20px;
+  bottom: -20px;
+  border-left: 2px solid var(--ep-rule);
+}
+.fr-pg-list li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 8px;
+  align-items: start;
+  padding: 3px 0;
+  transform-origin: 50% 0;
+}
+.fr-pg-dot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  margin: 13px 6px 0;
+  border-radius: 50%;
+  background: var(--ep-ink);
+  box-shadow: 0 0 0 3px var(--ep-card);
+  font-size: 0;
+}
+.fr-pg-list li[data-none] .fr-pg-dot {
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 2px var(--ep-muted), 0 0 0 3px var(--ep-card);
+}
+.fr-pg-list li[data-star] .fr-pg-dot {
+  width: 24px;
+  height: 24px;
+  margin: 8px 1px 0;
+  background: var(--ep-accent);
+  box-shadow: 0 0 0 3px var(--ep-card);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+}
+.fr-pg-card {
+  min-width: 0;
+  border-radius: 14px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+.fr-pg-list li[data-open] .fr-pg-card {
+  background: var(--ep-paper);
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.fr-pg-list li[data-star] .fr-pg-card {
+  background: var(--ep-accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--ep-accent);
+}
+.ep-root button.fr-pg-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 7px 12px;
+}
+.fr-pg-head strong {
+  font-size: 15.5px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+.fr-pg-list li[data-star] .fr-pg-head strong {
+  color: var(--ep-accent-ink);
+}
+.fr-pg-head em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1;
+  padding: 5px 7px;
+  border-radius: 7px;
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+}
+/* 때 — 꼬리표. 문서에 때가 없으면 점선 */
+.fr-pg-when {
+  flex: none;
+  font-size: 12.5px;
+  font-weight: 750;
+  line-height: 1.2;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: var(--ep-ink2);
+  background: rgba(30, 26, 22, 0.07);
+  font-variant-numeric: tabular-nums;
+}
+.fr-pg-when[data-none] {
+  background: transparent;
+  color: var(--ep-muted);
+  border: 1.5px dashed var(--ep-muted);
+  padding: 2.5px 7px;
+}
+.fr-pg-when .ep-src-hit {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}
+.fr-pg-body {
+  margin: 0;
+  padding: 0 12px 11px;
+  font-size: 15px;
+  line-height: 1.66;
+  color: var(--ep-ink2);
+}
+.fr-pg-foot {
+  scroll-margin: 24px;
+}
+/* 뒤집힌 카드 — 뒷면에는 그 칸의 때만. 뒤에 남은 장이 겹쳐 보인다 */
+.ep-root button.fr-pg-back {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: calc(100% - 34px);
+  min-height: 84px;
+  margin: 10px 0 8px 34px;
+  padding: 13px 14px 12px;
+  border-radius: 16px;
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+}
+.fr-pg-list + .fr-pg-foot .fr-pg-back {
+  margin-top: 8px;
+}
+.ep-root button.fr-pg-back[data-left="1"] {
+  box-shadow: 0 5px 0 -1px var(--ep-card), 0 5px 0 0.5px var(--ep-ink2);
+}
+.ep-root button.fr-pg-back[data-left="2"] {
+  box-shadow: 0 5px 0 -1px var(--ep-card), 0 5px 0 0.5px var(--ep-ink2), 0 10px 0 -2px var(--ep-card), 0 10px 0 -0.5px var(--ep-muted);
+  margin-bottom: 14px;
+}
+.fr-pg-back .fr-pg-when {
+  background: rgba(244, 238, 227, 0.16);
+  color: var(--ep-paper);
+}
+.fr-pg-back .fr-pg-when[data-none] {
+  background: transparent;
+  color: rgba(244, 238, 227, 0.8);
+  border-color: rgba(244, 238, 227, 0.6);
+}
+.fr-pg-back strong {
+  font-size: 16.5px;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+.fr-pg-back em {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-end;
+  margin-top: auto;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1;
+  color: rgba(244, 238, 227, 0.86);
+}
+.ep-root button.fr-pg-back[data-star] {
+  background: var(--ep-accent);
+}
+.fr-pg-back[data-star] em {
+  color: #fff;
+}
+.fr-pages .ep-lab-caption {
+  min-height: 0;
+  margin-top: 10px;
+}
+.fr-pages[data-done] .ep-lab-caption {
+  margin: 12px 4px 0 34px;
+}
+.fr-pages[data-seen] .fr-seen {
+  margin-bottom: 8px;
+}

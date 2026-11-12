@@ -16,6 +16,9 @@
 //   17 UX4-a 까닭이 아직 없는 쪽(not-yet)은 "아직 문서에 없다"는 글이 그쪽의 말 안에 있다
 //   18 고리 둘 ~ 넷 · 닿은 차례대로 · 멈춘 자리 · 오늘의 값(after · still)에 구절
 //   19 틀을 이으면 탭 · 넘어가는 말                     20 D46 ④ 서로 다르게 말하는 것은 둘 이상(또는 빔) · 저마다 구절
+//   21 넘겨 보기 — 칸 셋 이상 · id 가 겹치지 않는다 · 칸마다 한 줄(body)에 구절
+//   22 칸의 때 — when 이 있거나, 없으면 no_date("날짜 없음")가 있다. 둘 중 정확히 하나
+//   23 ★ 칸이 정확히 하나 · 첫 칸이 아니다           24 앞날 칸 금지 (state: next 거부) · 지금(now)은 마지막 칸에만
 //
 // 보지 않는 것
 //   글의 뜻이 구절에서 나오는가 (의미 대조 — 사람 · W-2) · 한글로 쓴 수 ("여섯 가지") · 그림 부품이 있는가 (코드 — 화면 쪽 검사)
@@ -108,14 +111,14 @@ export function solveProblems(solve: Solve, ep: { quotes: Record<string, Episode
 
   // 15
   const kinds = lab.frames.map((f) => f.kind);
-  if (!FRAME_COMBOS.some((c) => c.join() === kinds.join())) E("FRAME_COMBO", "/lab/frames", `서는 조합이 아니다 — [${kinds.join(", ")}] (켜고 끄기 하나 · 고리 · 자리 · 고리 → 자리)`);
+  if (!FRAME_COMBOS.some((c) => c.join() === kinds.join())) E("FRAME_COMBO", "/lab/frames", `서는 조합이 아니다 — [${kinds.join(", ")}] (켜고 끄기 하나 · 고리 · 자리 · 고리 → 자리 · 넘겨 보기 하나)`);
   if (lab.born && ep && !ep.tools.some((t) => t.key === lab.born!.tool)) E("REF_TOOL", "/lab/born/tool", `도구 "${lab.born.tool}" 가 이 회차에 없다`);
 
   lab.frames.forEach((f, i) => {
     const at = `/lab/frames/${i}`;
     if (ep && !ep.tools.some((t) => t.key === f.picture.tool)) E("REF_TOOL", `${at}/picture/tool`, `그림이 붙은 도구 "${f.picture.tool}" 가 이 회차에 없다`);
     // 19
-    if (lab.frames.length > 1 && f.kind !== "toggle") {
+    if (lab.frames.length > 1 && (f.kind === "chain" || f.kind === "seats")) {
       if (!f.tab) E("FRAME_TAB", `${at}/tab`, "틀을 이었는데 탭 이름이 없다");
       if (f.kind === "chain" && i < lab.frames.length - 1 && !f.go_on) E("FRAME_TAB", `${at}/go_on`, "뒤에 틀이 있는데 넘어가는 말이 없다");
     }
@@ -129,6 +132,26 @@ export function solveProblems(solve: Solve, ep: { quotes: Record<string, Episode
         const value = n.reach === "none" ? n.still : n.after;
         if (!hasSrc(value)) E("CHAIN_VALUE_SRC", `${at}/nodes/${k}/${n.reach === "none" ? "still" : "after"}`, `고리 "${n.id}" 의 오늘의 값에 근거 구절이 없다`);
       });
+    }
+    // 21 ~ 24 — 넘겨 보기 (UX-5 · §7.8)
+    if (f.kind === "pages") {
+      if (f.cards.length < 3) E("PAGES_CARDS", `${at}/cards`, `칸이 ${f.cards.length}개다 — 셋 이상이어야 "아!" 칸의 앞과 뒤가 선다`);
+      if (new Set(f.cards.map((c) => c.id)).size !== f.cards.length) E("PAGES_CARDS", `${at}/cards`, "칸의 id 가 겹친다");
+      f.cards.forEach((c, k) => {
+        const cp = `${at}/cards/${k}`;
+        // 21
+        if (!hasSrc(c.body)) E("PAGES_CARD_SRC", `${cp}/body`, `칸 "${c.id}" 의 한 줄에 근거 구절이 없다 — 문서에 없는 칸은 그리지 않는다`);
+        // 22
+        if (c.when === null && c.no_date === null) E("PAGES_WHEN", `${cp}/no_date`, `칸 "${c.id}" 에 때가 없는데, "날짜 없음"이라고 독자에게 말하는 글(no_date)도 없다`);
+        if (c.when !== null && c.no_date !== null) E("PAGES_WHEN", `${cp}/no_date`, `칸 "${c.id}" 에 때(when)가 있는데 "날짜 없음"(no_date)도 적었다 — 둘 중 하나다`);
+        // 24
+        if (c.state === "next") E("PAGES_FUTURE", `${cp}/state`, `칸 "${c.id}" 는 앞날이다 — 넘겨 보기는 다음 칸(아직 일어나지 않은 일)을 그리지 않는다 (UX-3)`);
+        if (c.state === "now" && f.cards.slice(k + 1).some((x) => x.state !== "next")) E("PAGES_ORDER", `${cp}/state`, `지금(now)인 칸 "${c.id}" 뒤에 칸이 더 있다 — 지금은 마지막 칸에만 온다`);
+      });
+      // 23
+      const stars = f.cards.filter((c) => c.star).length;
+      if (stars !== 1) E("PAGES_STAR", `${at}/cards`, `★ 칸이 ${stars}개다 — 정확히 하나`);
+      else if (f.cards[0]!.star) E("PAGES_STAR", `${at}/cards/0/star`, "★ 칸이 첫 칸이다 — 그 앞에 넘길 칸이 하나는 있어야 한다");
     }
     // 16 — D61 ③ · 17 — UX4-a
     if (f.kind === "seats") {

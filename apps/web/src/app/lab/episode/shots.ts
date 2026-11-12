@@ -1,11 +1,12 @@
 // 회차 시안 스크린샷 — 아이폰 크기(390×844). 켜 둔 서버를 찍는다 (테스트가 아니다 — e2e/ 에 넣지 않았다).
-//   pnpm --filter @claro/web exec tsx src/app/lab/episode/shots.ts http://localhost:3200 <나갈 폴더> [walk|extras|all]
+//   pnpm --filter @claro/web exec tsx src/app/lab/episode/shots.ts http://localhost:3200 <나갈 폴더> [walk|extras|maps|labclip|all] [회차 id — 그 회차만]
 //
 // UX-4: 풀이를 틀 부품(kit/frames)으로 옮기기 **전과 후**를 같은 차례 · 같은 이름으로 찍어 픽셀로 견준다 (diff.mjs).
 //   walk    두 회차 × 두 독자 — 장면마다 위에서부터 + 풀이의 누르는 단계마다 (전 · 후 둘 다 이것을 찍는다)
 //   extras  UX-4 에서 새로 생긴 것 — 체험 없이 보기 (기본 풀이) · 이 그림을 본 독자 (다시 쓰기) · 조용히 견본
 // 견줄 때는 시안 조종 칸의 둘째 줄(.ep-demo-lab — UX-4 에서 생겼다 · 풀이 장면에서만 보인다)을 숨기고 찍는다:
 // 그 줄만큼 화면이 밀리는 것은 틀로 옮긴 것과 상관없는 차이라서다. extras 는 숨기지 않는다 (도윤이 보는 그대로).
+// UX-5: 셋째 회차(pipc — 넘겨 보기)가 들어왔다. maps = 따라온 독자의 개념 지도 (세 시리즈가 한 지도에) · labclip = 풀이 그림만 오려서 (전 · 후 견주기).
 // UX-2 까지의 차례 (지도 · 근거 시트 · 건너가기)는 git 기록의 이 파일에 있다 (fd95c53).
 import { mkdirSync } from "node:fs";
 import path from "node:path";
@@ -14,6 +15,7 @@ import { chromium, type Page } from "@playwright/test";
 const BASE = process.argv[2] ?? "http://localhost:3200";
 const OUT = path.resolve(process.argv[3] ?? path.join(import.meta.dirname, "../../../../../../logs/frontend/UX-4"));
 const MODE = process.argv[4] ?? "all";
+const ONLY = process.argv[5];
 mkdirSync(OUT, { recursive: true });
 
 const settle = (page: Page, ms = 1500) => page.waitForTimeout(ms);
@@ -54,10 +56,13 @@ page.on("pageerror", (e) => errors.push(String(e)));
 page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
 page.on("response", (r) => r.status() >= 400 && errors.push(`${r.status()} ${r.url()}`));
 
-const EPISODES = [
-  { id: "delivery", url: `${BASE}/lab/episode` },
-  { id: "fomc", url: `${BASE}/lab/episode/fomc` },
-] as const;
+const EPISODES = (
+  [
+    { id: "delivery", url: `${BASE}/lab/episode` },
+    { id: "fomc", url: `${BASE}/lab/episode/fomc` },
+    { id: "pipc", url: `${BASE}/lab/episode/pipc` },
+  ] as const
+).filter((e) => !ONLY || e.id === ONLY);
 
 /** 풀이의 누르는 단계 — 회차마다 */
 async function labSteps(page: Page, id: string, name: string) {
@@ -73,6 +78,24 @@ async function labSteps(page: Page, id: string, name: string) {
     await page.getByTestId("lab-act").click();
     await settle(page, 1300);
     await shot(page, `${name}-lab-4-on-blocked`);
+    return;
+  }
+  if (id === "pipc") {
+    // 넘겨 보기 — 칸마다. 넘길 때마다 부품이 다음 카드를 화면 안으로 민다
+    await shot(page, `${name}-lab-0-before`);
+    for (let i = 1; (await page.getByTestId("lab-act").count()) > 0; i++) {
+      await page.getByTestId("lab-act").click();
+      await settle(page, 1300);
+      await shot(page, `${name}-lab-${i}-turned`);
+    }
+    // 다 넘긴 뒤 — 차례 전체와 끝의 글
+    await page.locator(".ep-scroll").evaluate((el) => el.scrollTo(0, el.querySelector<HTMLElement>("[data-testid=lab]")!.offsetTop - 70));
+    await page.waitForTimeout(400);
+    await shot(page, `${name}-lab-7-all`);
+    // 접힌 칸을 다시 펼친다 (★)
+    await page.getByTestId("pg-row-neglect").click();
+    await settle(page, 500);
+    await shot(page, `${name}-lab-8-star-reopened`);
     return;
   }
   await shot(page, `${name}-lab-1-sep-before`);
@@ -151,6 +174,12 @@ if (MODE === "extras" || MODE === "all") {
     await page.getByTestId("lab-seen").click();
     await settle(page, 900);
     await scene(page, `${e.id}-seen`);
+    if (e.id === "pipc") {
+      await toLab(page);
+      await page.getByTestId("pg-row-neglect").click();
+      await settle(page, 500);
+      await shot(page, `${e.id}-seen-lab-star`);
+    }
     if (e.id === "fomc") {
       await toLab(page);
       await page.getByTestId("seen-side-raise").click();
@@ -165,9 +194,80 @@ if (MODE === "extras" || MODE === "all") {
     await shot(page, `${e.id}-seen-redo`);
   }
   // 조용히 — 견본 (실제 사건 아님)
-  await page.goto(`${BASE}/lab/episode/quiet`);
+  if (!ONLY) await page.goto(`${BASE}/lab/episode/quiet`);
   await settle(page, 2000);
-  await scene(page, "quiet-sample");
+  if (!ONLY) await scene(page, "quiet-sample");
+}
+
+// ═══════════════════════════════════════════ maps — 따라온 독자의 개념 지도 (다른 시리즈가 같이 보인다) · 근거 시트 하나
+if (MODE === "maps" || MODE === "all") {
+  for (const e of EPISODES) {
+    await page.goto(e.url);
+    await settle(page, 2200);
+    await page.getByTestId("reader-follower").click();
+    await settle(page);
+    while ((await sceneId(page)) !== "keep") await ask(page);
+    await settle(page, 1800);
+    await page.getByTestId("open-map").click();
+    await settle(page, 900);
+    await shot(page, `${e.id}-map-follower`);
+    await page.getByTestId("map-view").evaluate((el) => el.scrollTo(0, el.scrollHeight));
+    await page.waitForTimeout(400);
+    await shot(page, `${e.id}-map-follower-b`);
+    if (e.id === "pipc") {
+      // 근거 — ★ 칸의 구절
+      await toAha(page, e.url, "new");
+      for (let i = 0; i < 4; i++) {
+        await page.getByTestId("lab-act").click();
+        await settle(page, 900);
+      }
+      await page.getByTestId("src-toggle").click();
+      await settle(page, 400);
+      await shot(page, `${e.id}-src-on`);
+      await page.locator("[data-card=neglect] .fr-pg-body .ep-src-hit").click();
+      await settle(page, 600);
+      await shot(page, `${e.id}-src-star`);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════ labclip — 풀이 그림만 (UX-5: 셋째 회차 · 넘겨 보기 틀을 더하기 전 · 후를 견준다)
+// 풀이 부품([data-testid=lab])만 오려 찍는다 — 시안 조종 칸(위쪽 줄)이 바뀌어도 그림은 그대로인지 본다. 처음 온 독자 · 누르는 단계마다.
+if (MODE === "labclip") {
+  const clip = async (name: string) => {
+    await page.waitForTimeout(200);
+    await page.locator("[data-testid=lab]").screenshot({ path: path.join(OUT, `${name}.png`) });
+  };
+  for (const e of EPISODES) {
+    await toAha(page, e.url, "new");
+    await clip(`${e.id}-clip-1`);
+    if (e.id === "pipc") continue;
+    await page.getByTestId("lab-act").click();
+    await settle(page, 1900);
+    await clip(`${e.id}-clip-2`);
+    await page.getByTestId("lab-go-on").click();
+    await settle(page, 1100);
+    await clip(`${e.id}-clip-3`);
+    if (e.id === "delivery") {
+      await page.getByTestId("lab-act").click();
+      await settle(page, 1500);
+      await clip(`${e.id}-clip-4`);
+    } else {
+      await page.getByTestId("lab-wait").click();
+      await settle(page, 1400);
+      await clip(`${e.id}-clip-4`);
+      await page.getByTestId("lab-other").click();
+      await settle(page, 1400);
+      await clip(`${e.id}-clip-5`);
+    }
+    // 이 그림을 본 독자 · 체험 없이 보기 — 장면의 글 전체 (조종 칸 아래)
+    for (const sw of ["lab-seen", "lab-plain"] as const) {
+      await toAha(page, e.url, "new");
+      await page.getByTestId(sw).click();
+      await settle(page, 1200);
+      await page.locator(".ep-scene").screenshot({ path: path.join(OUT, `${e.id}-clip-${sw}.png`) });
+    }
+  }
 }
 
 await browser.close();

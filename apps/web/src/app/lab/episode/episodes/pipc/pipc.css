@@ -1,0 +1,14 @@
+/* UX-5 — 개인정보 회차만의 겉모습: 표지 그림. 색 · 틀은 episode.css 의 --ep-* 를 그대로 쓴다.
+   풀이 장면의 겉모습(넘겨 보기)은 kit/frames/frames.css 에 있다 (틀 부품의 것이다). */
+.ep-art-line {
+  fill: none;
+  stroke: var(--ep-ink);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+.ep-art-ring {
+  fill: none;
+  stroke: var(--ep-accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}

@@ -1,5 +1,5 @@
 // 두 폴더의 같은 이름 PNG 를 픽셀로 견준다 (UX-4 — 풀이를 틀 부품으로 옮기기 전 · 후). 다른 픽셀 수와 가장 큰 채널 차이를 적는다.
-//   node src/app/lab/episode/diff.mjs <전 폴더> <후 폴더> <sharp 가 있는 node_modules>
+//   node src/app/lab/episode/diff.mjs <전 폴더> <후 폴더> <sharp 가 있는 node_modules> [위에서 건너뛸 px]
 // sharp 는 이 앱의 직접 의존이 아니다 (next 가 데려온 것) — 그래서 있는 곳을 셋째 인자로 준다:
 //   ls -d ../../node_modules/.pnpm/sharp@*/node_modules
 import { readdirSync, existsSync } from "node:fs";
@@ -8,6 +8,7 @@ import { createRequire } from "node:module";
 const require = createRequire(process.argv[4] + "/");
 const sharp = require("sharp");
 const [a, b] = [process.argv[2], process.argv[3]];
+const SKIP = Number(process.argv[5] ?? 0);
 const names = readdirSync(a).filter((f) => f.endsWith(".png")).sort();
 let same = 0, diff = 0, missing = 0;
 for (const n of names) {
@@ -16,7 +17,8 @@ for (const n of names) {
   if (x.info.width !== y.info.width || x.info.height !== y.info.height) { diff++; console.log(`크기  ${n}`); continue; }
   let px = 0, max = 0;
   const ch = x.info.channels;
-  for (let i = 0; i < x.data.length; i += ch) {
+  // 넷째 인자: 위에서 이만큼(px · 이미지 픽셀)은 보지 않는다 — 시안 조종 칸(위쪽 줄)이 바뀐 것과 풀이 그림을 가르려고 (UX-5)
+  for (let i = SKIP * x.info.width * ch; i < x.data.length; i += ch) {
     let d = 0;
     for (let c = 0; c < 3; c++) d = Math.max(d, Math.abs(x.data[i + c] - y.data[i + c]));
     if (d > 0) { px++; if (d > max) max = d; }

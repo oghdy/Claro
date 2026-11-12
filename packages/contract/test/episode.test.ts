@@ -1,4 +1,4 @@
-// 회차 계약 (docs/contract/EPISODE.md) — 골든 둘은 통과하고, fixtures/invalid/episode-*.json 은 전부 거부된다 (B-E1).
+// 회차 계약 (docs/contract/EPISODE.md) — 골든 셋은 통과하고, fixtures/invalid/episode-*.json 은 전부 거부된다 (B-E1 · 셋째 골든과 넘겨 보기 틀은 UX-5).
 // invalid 픽스처는 아래 표(VIOLATIONS)가 원본이다: 골든 + 위반 하나. 파일이 표와 어긋나면 실패한다.
 // 표를 고쳤으면 `WRITE_EPISODE_INVALID=1 pnpm --filter @claro/contract test` 로 파일을 다시 쓴다.
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -11,11 +11,14 @@ const read = (p: string): any => JSON.parse(readFileSync(root(p), "utf-8"));
 
 const PRICE = "episode-price-1.json";
 const RATE = "episode-rate-2.json";
-// 저장된 문서 — 골든 둘의 근거가 여기 있다 (전부 git 에 있다: 공공누리 제1유형 · 법령 · 미국 연방 저작물)
+// 셋째 골든 — 개인정보위 과징금 「내 정보는 누가 지키나」 1화. 넘겨 보기 틀의 첫 실물 (UX-5)
+const PRIVACY = "episode-privacy-1.json";
+// 저장된 문서 — 골든 셋의 근거가 여기 있다 (전부 git 에 있다: 공공누리 제1유형 · 법령 · 미국 연방 저작물 · 문서 안 공공누리 표시 — D70)
 const documents = [
   "fixtures/store.documents.json",
   "packages/pipeline/data/events/FOMC-20261028/store.documents.json",
   "packages/pipeline/data/events/KFTC-20261029-DELIVERY-APPS/store.documents.json",
+  "packages/pipeline/data/events/PIPC-20261028-SAFETY-MEASURES/store.documents.json",
 ].flatMap((p) => read(p).source_documents as { source_id: string; text: string }[]);
 
 const golden = (name: string) => read(`fixtures/${name}`);
@@ -43,8 +46,29 @@ describe("골든", () => {
     expect(r.episode.solve.lab?.frames.map((f) => f.kind)).toEqual(["chain", "seats"]);
   });
 
+  it("개인정보 1화 — 통과 · 경고 없음 · 넘겨 보기 하나 (칸 여섯 · ★ 하나 · 날짜 없음 둘 · 마지막 칸이 지금)", () => {
+    const r = validateEpisode(golden(PRIVACY), { documents });
+    if (!r.ok) throw new Error(r.errors.map((e) => `${e.code} ${e.path} ${e.message}`).join("\n"));
+    expect(r.warnings).toEqual([]);
+    expect(r.stats).toMatchObject({ quotes: 44, docs: 8, texts: 105, texts_with_digits: 29, tools: 5, tools_from_library: 0 });
+    expect(r.stats.exempt).toHaveLength(6); // 전부 화면 번호 (0화 · 1화) — 계산한 수는 없다
+    const frames = r.episode.solve.lab!.frames;
+    expect(frames.map((f) => f.kind)).toEqual(["pages"]);
+    const f = frames[0]!;
+    if (f.kind !== "pages") throw new Error("넘겨 보기가 아니다");
+    expect(f.cards).toHaveLength(6);
+    expect(f.cards.map((c) => c.star)).toEqual([false, false, false, true, false, false]);
+    expect(f.cards.map((c) => (c.when ? "때" : c.no_date))).toEqual(["날짜 없음", "때", "때", "날짜 없음", "때", "때"]);
+    expect(f.cards.map((c) => c.state)).toEqual(["past", "past", "past", "past", "past", "now"]);
+    // 이 그림을 본 독자용 머리말의 첫 실물 (D62 ③) · 기본 풀이는 뒤집기만
+    expect(r.episode.solve.lab!.seen_title).not.toBeNull();
+    expect(r.episode.solve.plain).toMatchObject({ kind: "flip", why: null });
+    // 조립 — 다른 시리즈를 따라온 독자는 따라잡기도 견주기도 본다 (조립 규칙은 미확인 — D66)
+    expect(r.episode.assembly.follower).toEqual(["cover", "zero", "event", "tools", "aha", "compare", "next", "keep"]);
+  });
+
   it("`_` 필드를 무시하고, 돌려주는 회차에는 남기지 않는다", () => {
-    for (const name of [PRICE, RATE]) {
+    for (const name of [PRICE, RATE, PRIVACY]) {
       expect(JSON.stringify(golden(name))).toMatch(/"_source"/);
       expect(JSON.stringify(parseEpisode(golden(name), { documents }))).not.toMatch(/"_/);
     }
@@ -83,6 +107,7 @@ interface Violation {
 }
 const seats = (e: any) => e.solve.lab.frames[1];
 const chain = (e: any) => e.solve.lab.frames[0];
+const pages = (e: any) => e.solve.lab.frames[0];
 
 const VIOLATIONS: Violation[] = [
   {
@@ -259,6 +284,61 @@ const VIOLATIONS: Violation[] = [
     what: "10명 쪽이 한 말에서 근거 구절을 뗐다",
     mutate: (e) => delete e.solve.plain.differ[0].says.src,
   },
+  // ── 넘겨 보기 (UX-5 · §7.8 · 불변식 21 ~ 24 · 15) — 셋째 골든 + 위반 하나
+  {
+    file: "episode-pages-too-few.json", of: PRIVACY, code: "PAGES_CARDS",
+    rule: "§9-21 — 넘겨 보기의 칸은 셋 이상이다. ★ 칸의 앞과 뒤가 있어야 차례가 선다",
+    what: "칸을 둘만 남겼다 (알림 · ★ 대응 소홀)",
+    mutate: (e) => (pages(e).cards = pages(e).cards.slice(2, 4)),
+  },
+  {
+    file: "episode-pages-card-no-src.json", of: PRIVACY, code: "PAGES_CARD_SRC",
+    rule: "§9-21 — 칸마다 한 줄에 구절이 있다. 문서에 없는 칸은 그리지 않는다",
+    what: "★ 칸 (대응을 소홀히 했어요)에서 근거 구절을 뗐다",
+    mutate: (e) => delete pages(e).cards[3].body.src,
+  },
+  {
+    file: "episode-pages-undated-unsaid.json", of: PRIVACY, code: "PAGES_WHEN",
+    rule: "§9-22 — 때가 문서에 없는 칸은 \"날짜 없음\"을 화면에 밝힌다 (no_date)",
+    what: "첫 칸 (열려 있던 길)은 때가 없는데 no_date 도 비웠다 — 독자는 그 칸에 날짜가 없는 줄 모른다",
+    mutate: (e) => (pages(e).cards[0].no_date = null),
+  },
+  {
+    file: "episode-pages-when-and-no-date.json", of: PRIVACY, code: "PAGES_WHEN",
+    rule: "§9-22 — 때 (when)와 \"날짜 없음\" (no_date)은 둘 중 정확히 하나다",
+    what: "때가 있는 칸 (첫 번째 유출 · 2024년 8월)에 \"날짜 없음\"도 적었다",
+    mutate: (e) => (pages(e).cards[1].no_date = "날짜 없음"),
+  },
+  {
+    file: "episode-pages-no-star.json", of: PRIVACY, code: "PAGES_STAR",
+    rule: "§9-23 — ★ 칸 (\"아!\")이 정확히 하나다",
+    what: "★ 칸의 표시를 뗐다 — 차례만 있고 \"아!\"가 없다",
+    mutate: (e) => (pages(e).cards[3].star = false),
+  },
+  {
+    file: "episode-pages-two-stars.json", of: PRIVACY, code: "PAGES_STAR",
+    rule: "§9-23 — ★ 칸 (\"아!\")이 정확히 하나다",
+    what: "둘째 유출 칸에도 ★ 을 달았다",
+    mutate: (e) => (pages(e).cards[4].star = true),
+  },
+  {
+    file: "episode-pages-future-card.json", of: PRIVACY, code: "PAGES_FUTURE",
+    rule: "§9-24 · UX-3 — 넘겨 보기는 다음 칸 (앞날)을 그리지 않는다",
+    what: "마지막에 \"의결서가 나오면\" 칸 (state: next)을 더했다 — 구절이 있어도 아직 일어나지 않은 일이다",
+    mutate: (e) => pages(e).cards.push({ id: "record", when: null, no_date: "날짜 없음", head: "의결서가 나오면", body: { t: "이유와 계산을 적은 의결서가 나와요.", src: ["notice.record"] }, state: "next", star: false }),
+  },
+  {
+    file: "episode-pages-now-not-last.json", of: PRIVACY, code: "PAGES_ORDER",
+    rule: "§9-24 — 지금 (now)은 마지막 칸에만 온다",
+    what: "둘째 칸 (첫 번째 유출)을 지금이라고 적었다 — 그 뒤에 칸이 넷 더 있다",
+    mutate: (e) => (pages(e).cards[1].state = "now"),
+  },
+  {
+    file: "episode-pages-combo.json", of: PRIVACY, code: "FRAME_COMBO",
+    rule: "§9-15 — 넘겨 보기는 혼자 선다. 다른 틀과 잇는 것은 실물이 없다",
+    what: "넘겨 보기 틀을 둘 이었다",
+    mutate: (e) => e.solve.lab.frames.push(JSON.parse(JSON.stringify(pages(e)))),
+  },
 ];
 
 const invalidPath = (file: string) => root(`fixtures/invalid/${file}`);
@@ -266,7 +346,7 @@ const build = (v: Violation) => {
   const { _source, ...body } = golden(v.of);
   v.mutate(body);
   return {
-    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (B-E1 · packages/contract/test/episode.test.ts 의 표)` },
+    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
     ...body,
   };
 };
@@ -295,6 +375,7 @@ describe("위반은 거부한다 — fixtures/invalid/episode-*.json", () => {
       "SCHEMA_KEY", "SCHEMA_TYPE", "ID_RANGE", "REF_DOC", "REF_QUOTE", "REF_TOOL", "ASSEMBLY_ORDER", "TRACK_NOW", "QUOTE_VERBATIM", "NUMBER_UNGROUNDED", "BARE_DIGIT",
       "BREAKER_SRC", "PLAIN_WHY", "DEATH_LAB", "DEATH_NOT_QUIET", "NO_FLIP", "FRAME_COMBO", "SEATS_PARTY_VOTE", "SEATS_COUNT", "SEATS_SAID_SRC", "SEATS_NOT_YET",
       "CHAIN_NO_STOP", "CHAIN_ORDER", "CHAIN_VALUE_SRC", "FRAME_TAB", "DIFFER_ONE_SIDE", "DIFFER_SRC",
+      "PAGES_CARDS", "PAGES_CARD_SRC", "PAGES_WHEN", "PAGES_STAR", "PAGES_FUTURE", "PAGES_ORDER",
     ])
       expect(covered.has(code), code).toBe(true);
   });
@@ -336,6 +417,19 @@ describe("픽스처 없이 보는 것", () => {
     const a = golden(RATE);
     seats(a).sides[1].why = "in-doc";
     expect(codes(a)).toEqual(["SEATS_NOT_YET"]);
+  });
+
+  it("넘겨 보기 — ★ 칸이 첫 칸 → PAGES_STAR · 칸의 id 가 겹침 → PAGES_CARDS · 넘겨 보기에 탭 칸 → SCHEMA_KEY (잇는 실물이 없다)", () => {
+    const a = golden(PRIVACY);
+    pages(a).cards[3].star = false;
+    pages(a).cards[0].star = true;
+    expect(codes(a)).toEqual(["PAGES_STAR"]);
+    const b = golden(PRIVACY);
+    pages(b).cards[2].id = "first";
+    expect(codes(b)).toEqual(["PAGES_CARDS"]);
+    const c = golden(PRIVACY);
+    pages(c).tab = { t: "대교" };
+    expect(codes(c)).toEqual(["SCHEMA_KEY"]);
   });
 
   it("체험 없는 회차 (조용히) — 사망 · 체험 없음 · 뒤집기 없음이 함께 선다 (풀이 칸만 — 실물 회차 없음)", () => {
