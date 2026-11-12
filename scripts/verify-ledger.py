@@ -25,14 +25,14 @@ PRICE = {
     'claude-fable-5-2': (8, 40, 10, 0.2),
 }
 BATCH = 0.5
-# Step 의 상한 (US$) — DECISIONS D42 · D43 · D44 · D45 · D47 (W-2) · D51 (W-6 재기 4)
-BUDGET = {'P-3': 15, 'P-3b': 12, 'P-4': 8, 'P-5': 10, 'W-2': 8, 'W-6': 4}
+# Step 의 상한 (US$) — DECISIONS D42 · D43 · D44 · D45 · D47 (W-2) · D51 (W-6 재기 4) · D68 (P-E1 회차 단계 3)
+BUDGET = {'P-3': 15, 'P-3b': 12, 'P-4': 8, 'P-5': 10, 'W-2': 8, 'W-6': 4, 'P-E1': 3}
 KEYS = ('at', 'step', 'event', 'source_label', 'model_requested', 'model', 'effort', 'prompt_version', 'request_sha256', 'text_sha256',
         'stop_reason', 'usage', 'duration_ms', 'cost_usd', 'ok', 'error', 'request_id')
 RAW_GLOBS = ('packages/pipeline/data/events/*/p3/raw/*.json', 'packages/pipeline/data/events/*/p3/merge.*.json', 'packages/pipeline/data/events/*/p4/raw/*.json',
              'packages/pipeline/data/events/*/p5/raw/*.json', 'packages/pipeline/data/p3-golden/*/raw/*.json', 'packages/pipeline/data/p3-golden/*/merge.*.json',
-             'packages/pipeline/data/w6/*/*.json')
-W2_RAW = ('packages/pipeline/data/w2/raw/*.jsonl', 'packages/pipeline/data/w6/w2/raw/*.jsonl')
+             'packages/pipeline/data/w6/*/*.json', 'packages/pipeline/data/events/*/episode/raw/*.json')
+W2_RAW = ('packages/pipeline/data/w2/raw/*.jsonl', 'packages/pipeline/data/w6/w2/raw/*.jsonl', 'packages/pipeline/data/events/*/episode/raw/*.jsonl')
 
 
 def load():

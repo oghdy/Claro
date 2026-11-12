@@ -1,0 +1,344 @@
+{
+  "_what": "P-E1 — 사람 확인 목록 (episode.ts 가 짓는다 · 결정적). 사건 FOMC-20261028 · 회차 fomc-auto. must = 사람이 꼭 정하는 칸 (EPISODE §8 · UX-3 ⑦) · blocked = 검사에 걸려 발행 못 하는 것 · look = 읽어 볼 것. minutes 는 어림이다",
+  "human_after_design": {
+    "frames": [
+      "chain",
+      "seats"
+    ],
+    "why": "자리에 앉기를 켠다. 조건이 선다 (한 기관 안의 공식 반대표 — 설계도 official-dissent 로 봤다). 소수 쪽의 까닭이 아직 문서에 없는 것은 막는 까닭이 아니다 (D62 ② · UX4-a — not-yet 쪽은 화면에 '그 까닭은 아직 문서에 없다'를 반드시 적으면 된다). 정치 절차 (반대자 한 명이 당사자)는 이 회차에 싣지 않는다 (D46 ③).",
+    "by": "P-E1 작업 세션 (Fable 5.2)이 편집자 자리에서 — 설계의 제안을 보기 전에 적어 둔 판단 그대로 (logs/pipeline/P-E1.md ② '사람이 했을 판단': 틀 [chain, seats]). 도윤 · PM 확인 전"
+  },
+  "frames_proposed": [
+    "chain"
+  ],
+  "frames": [
+    "chain",
+    "seats"
+  ],
+  "event": "FOMC-20261028",
+  "episode_code": "fomc-auto",
+  "writer": "claude-opus-5-5",
+  "design_version": "episode-design/1",
+  "write_version": "episode-write/1",
+  "minutes": {
+    "must": 29,
+    "blocked": 2,
+    "look": 4
+  },
+  "follower_known": [
+    "rate",
+    "target"
+  ],
+  "checks": {
+    "contract": {
+      "ok": false,
+      "errors": [
+        {
+          "code": "NUMBER_UNGROUNDED",
+          "path": "/tools/2/body/2",
+          "message": "숫자 4 이 근거 구절에 없다 — \"‘반대’만 보고 방향을 짐작하면 안 돼요. 올해 4월엔 내리자는 반대표가 있었고, 7월엔 …\" (src: F724, F745, F744, ST-07.date)"
+        }
+      ],
+      "warnings": [
+        {
+          "code": "SEAT_WHY_NOT_YET",
+          "path": "/solve/lab/frames/1/sides/1",
+          "message": "\"raise\" 쪽의 까닭은 아직 문서에 없다 (not-yet) — 그 문서가 나올 때까지 이 쪽은 반쪽이다"
+        }
+      ],
+      "stats": null
+    },
+    "entail": {
+      "model": "claude-opus-5-5",
+      "effort": "medium",
+      "prompt_version": "episode-entail/1",
+      "texts": 114,
+      "with_src": 83,
+      "judged": 2,
+      "not_judged": [
+        "cover.dek",
+        "cover.meta",
+        "cover.recap[0]",
+        "cover.recap[1]",
+        "zero.beats[0].body",
+        "zero.beats[1].body",
+        "zero.beats[3].body",
+        "event.lead",
+        "event.figure_note",
+        "event.riddle[0]",
+        "event.riddle[1]",
+        "tools[0].body[3]",
+        "tools[1].short",
+        "tools[1].body[1]",
+        "tools[1].body[2]",
+        "tools[1].body[3]",
+        "tools[1].use",
+        "tools[2].short",
+        "tools[2].body[0]",
+        "tools[2].body[1]",
+        "tools[2].body[2]",
+        "tools[3].body[2]",
+        "tools[3].use",
+        "tools[4].short",
+        "tools[4].body[1]",
+        "aha.real[0].body",
+        "aha.real[1].body",
+        "aha.real[2].body",
+        "aha.verdict",
+        "compare.rows[1].b",
+        "compare.rows[2].b",
+        "compare.rows[4].a",
+        "compare.rows[4].b",
+        "compare.body[0]",
+        "compare.body[1]",
+        "next.coming[0].body",
+        "next.coming[1].body",
+        "next.unknown_note",
+        "keep.next_body",
+        "entry.breaker",
+        "entry.flip.note",
+        "entry.whose",
+        "lab.setup[0]",
+        "lab.chain.nodes[1].value",
+        "lab.chain.caption_after",
+        "lab.seats.sides[0].said",
+        "lab.seats.sides[1].said",
+        "lab.seats.result",
+        "plain.three.known[0]",
+        "plain.three.known[1]",
+        "plain.three.known[2]",
+        "plain.three.known[3]",
+        "plain.three.unknown[1]",
+        "plain.three.unknown[2]",
+        "plain.three.differ[0].says",
+        "plain.three.differ[1].who",
+        "plain.three.differ[1].says"
+      ],
+      "ENTAILED": 2,
+      "NEEDS_CONTEXT": 0,
+      "EXCEEDS": 0,
+      "CONTRADICTS": 0,
+      "CANNOT_JUDGE": 0,
+      "flagged": []
+    },
+    "repairs": []
+  },
+  "items": [
+    {
+      "kind": "blocked",
+      "minutes": 2,
+      "what": "계약 검증에 걸렸다 — 발행 못 한다",
+      "where": "/tools/2/body/2",
+      "proposal": "NUMBER_UNGROUNDED",
+      "why": "숫자 4 이 근거 구절에 없다 — \"‘반대’만 보고 방향을 짐작하면 안 돼요. 올해 4월엔 내리자는 반대표가 있었고, 7월엔 …\" (src: F724, F745, F744, ST-07.date)"
+    },
+    {
+      "kind": "must",
+      "minutes": 3,
+      "what": "뒤집기가 진짜인가 — 그 첫 생각을 정말 흔히 하나 · 깨는 사실이 정말 깨나",
+      "where": "/solve/entry/flip",
+      "proposal": "첫 생각 “이번엔 금리를 안 올렸네요. 물가가 좀 잡혔나 봐요.” → 금리를 그대로 뒀다 ≠ 물가가 괜찮아졌다고 봤다",
+      "why": "1화에서 '물가 때문에 올렸다'를 배운 독자는 '안 올렸다 = 물가가 나아졌다'로 잇기 쉽다. 방어용 해석 DC-02가 막는 바로 그 오독이다. 문서 안 증거: 기자회견에서 '아직 물가 안정을 이루지 못했다'는 지적이 나왔고 의장이 그 말이 맞다고 답했다 (F045). (근거 F045) · 고른 까닭: 0번을 고른다. 깨는 사실이 성명문 본문에 있고 (9월과 글자 그대로 같은 '물가는 여전히 높다'), 의장이 '아직 물가 안정을 이루지 못했다'를 직접 인정해서 '물가가 괜찮아졌다고 봤다'와 양립할 수 없다. 1번은 진짜지만 독자가 흔히 하는 오해라는 증거가 약해 견주기에서 쓴다. 2번은 문서가 어느 쪽도 말하지 않아 뒤집기가 아니다. · 버린 후보: 동결에 반대했다 ≠ 금리를 내리자고 했다 / 이번에 멈췄다 ≠ 인상이 끝났다"
+    },
+    {
+      "kind": "must",
+      "minutes": 1,
+      "what": "사람이 숨진 사건 · 부고인가",
+      "where": "/solve/entry/death",
+      "proposal": "false",
+      "why": "사람이 숨진 사건이 아니다. 통화정책 결정이다."
+    },
+    {
+      "kind": "must",
+      "minutes": 1,
+      "what": "체험을 넣을 것인가 · 틀이 맞나 (정치 · 말투 · 자료)",
+      "where": "/solve/lab",
+      "proposal": "파이프라인의 제안 [chain] · 기본 풀이 three → 사람이 정한 것 [chain → seats] (자리에 앉기를 켠다. 조건이 선다 (한 기관 안의 공식 반대표 — 설계도 official-dissent 로 봤다). 소수 쪽의 까닭이 아직 문서에 없는 것은 막는 까닭이 아니다 (D62 ② · UX4-a — not-yet 쪽은 화면에 '그 까닭은 아직 문서에 없다'를 반드시 적으면 된다). 정치 절차 (반대자 한 명이 당사자)는 이 회차에 싣지 않는다 (D46 ③).)",
+      "why": "고른 뒤집기 (그대로 뒀다 ≠ 물가가 괜찮아졌다)를 사슬이 직접 실어 나른다. 밟은 브레이크가 금융 여건 일부까지 닿았고 물가는 '여전히 높다'에서 멈춘다. 라이브러리 비유의 한계선 (시차)과 같은 그림이고, 지난 화의 브레이크 비유를 이어받는다. 자리 틀은 조건은 맞지만 소수 쪽 까닭이 아직 없고 정치와 가까워서 쓰지 않는 쪽으로 기울였다. 표결 변화는 견주기 장면이 맡는다. 기본 풀이는 '확인된 것 / 아직 모르는 것 / 서로 다르게 말하는 것 (10 대 2)'이 그대로 맞아 three로 한다."
+    },
+    {
+      "kind": "must",
+      "minutes": 1,
+      "what": "자리에 앉기 — 한 기관 안의 공식 이견인가 (정당 표결이면 금지)",
+      "where": "/solve/lab/frames/*/ground/split",
+      "proposal": "official-dissent · 연준 FOMC (이번 표결 10 대 2, 합 12표)",
+      "why": "중앙은행 정책 위원회 안의 공식 반대표다. 성명문이 반대자 둘의 이름과 '이번 회의에서 1/4%포인트 인상을 선호'를 기록했다. 정당 표결이 아니다."
+    },
+    {
+      "kind": "must",
+      "minutes": 1,
+      "what": "자리 “금리를 3.75~4%에 그대로 두자” (10) — 그쪽의 까닭이 문서에 있나 · not-yet 이면 화면의 문장이 정말 그 뜻인가",
+      "where": "/solve/lab/frames/*/sides/hold/why",
+      "proposal": "in-doc",
+      "why": "문서에 있지만 얇다. 성명문이 든 까닭은 '이중 책무 지원' 하나다 (F003). '더 많은 정보가 쌓이면 도움이 된다' (F010)는 앞으로의 문구이고, '약이 듣기 시작했지만 확고한 결론은 없다' (F046)는 의장이 전한 회의의 압도적 판단이다. 이 둘을 동결의 이유로 직접 이은 문장은 없다 (DC-01). 찬성 10명의 이름도 사실로 뽑혀 있지 않다 (DC-07)."
+    },
+    {
+      "kind": "must",
+      "minutes": 1,
+      "what": "자리 “이번 회의에서 0.25%포인트 올리자” (2) — 그쪽의 까닭이 문서에 있나 · not-yet 이면 화면의 문장이 정말 그 뜻인가",
+      "where": "/solve/lab/frames/*/sides/raise/why",
+      "proposal": "not-yet",
+      "why": "성명문은 두 사람이 무엇을 원했는지만 적었고 왜인지는 적지 않았다. 본인의 표결 설명은 문서에 없다 (S03.b · DC-08). 회의 전 Cook의 연설 (F167)과 Hammack의 회의 전·뒤 연설은 그때의 견해이지 이번 표결의 설명이 아니다. Hammack 연설은 구절도 없다."
+    },
+    {
+      "kind": "must",
+      "minutes": 4,
+      "what": "채운 그림이 틀리게 가르치지 않나 — 빠진 고리 · 문서가 말하지 않은 인과 · 그리지 않을 것을 넘지 않았나 (겹 검사가 못 본다)",
+      "where": "/solve/lab/frames · /solve/entry/not_drawn",
+      "proposal": "고리: 기준금리 (full · 9월에 3.75~4%로 올렸고, 10월에는 그 자리에 그대로 뒀어요.) → 돈 빌리는 조건 (금융·신용 여건) (part · 의장은 일부 기업과 가계에는 조건이 빡빡해졌다고 했어요. '정책이 작동하고 있다'고도 했어요. 하지만 전체로 보면 '긴축적'이라 부를 수 없다고 했어요.) → 물가 (none · 성명문은 9월과 똑같이 '물가는 여전히 높다'고 썼어요. 의장은 아직 물가 안정을 이루지 못했다는 지적이 맞다고 했어요. 닿았다는 말은 문서에 없어요.) · 그리지 않을 것: 물가 고리 뒤는 그리지 않는다. 물가가 언제 2%로 내려오는지, 금리가 물가에 닿는 데 몇 달 걸리는지는 이번 문서에 없다. / 12월 회의 쪽 화살표 (올림 · 유지)는 그리지 않는다. 의장은 6주 뒤 회의에 대한 생각을 공유하지 않겠다고 했다. 9월 점도표의 '한 번 더'를 10월 뒤의 예정처럼 그리지 않는다. / 소비 · 투자 고리에 '닿았다 / 안 닿았다' 값을 매기지 않는다. 의장은 3분기 소비와 투자가 강하다고 했을 뿐 9월 인상과 잇지 않았다. / 에너지 · 유가를 사슬의 고리나 동결 · 반대의 원인으로 그리지 않는다 (DC-13). 국채 금리 수치를 '긴축'의 값으로 붙이지도 않는다 (DC-03). '긴축'은 의장의 금융 여건 평가다. / 반대 두 명의 까닭 칸은 채우지 않는다. '아직 문서에 없음'으로 비워 둔다.",
+      "why": "'밟았는데 아직 다 안 닿았다'는 이야기다. 의장이 직접 이은 것은 첫 고리다. 9월 조치 뒤 금융·신용 여건이 일부 기업·가계에 긴축됐고 (F033), 지난 회의 뒤 금융 여건이 다소 긴축돼 정책이 작동하고 있다고 했다 (F065). 같은 자리에서 전반적 여건은 긴축적이라 부를 수 없다고 했고 (F034), 물가는 여전히 높다고 했다 (F009 F024). 물가 고리는 의장이 '안 닿았다'고 말한 것이 아니라 '여전히 높다 · 확고한 결론은 없다'가 오늘의 값이다."
+    },
+    {
+      "kind": "must",
+      "minutes": 5,
+      "what": "라이브러리에 없는 도구 “반대표 — 표결 기록 읽기” — 콘텐츠 레인이 써야 한다 (Atom 규율). 지금 글은 사건의 사실 안에서만 쓴 임시다",
+      "where": "/tools/dissent",
+      "proposal": "반대표 — 표결 기록 읽기",
+      "why": "12 대 0이 10 대 2가 됐다. 성명문은 반대한 사람의 이름과 '무엇을 원했는지'까지 적고 '왜'는 적지 않는다. 이것을 알아야 '반대 = 내리자'로 읽지 않는다. 라이브러리에는 투표권자 12명 (C-0005)만 있고 반대표 개념은 없어 사람이 써야 한다."
+    },
+    {
+      "kind": "must",
+      "minutes": 5,
+      "what": "라이브러리에 없는 도구 “금융 여건 — 돈 빌리는 조건” — 콘텐츠 레인이 써야 한다 (Atom 규율). 지금 글은 사건의 사실 안에서만 쓴 임시다",
+      "where": "/tools/conditions",
+      "proposal": "금융 여건 — 돈 빌리는 조건",
+      "why": "사슬의 가운데 고리 이름이다. 의장이 기자회견에서 여러 번 쓴 말인데 (다소 긴축됐다 · 긴축적이라 부를 수는 없다) 라이브러리에 없다. C-0001의 '돈을 빌리는 일이 비싸진다'가 바탕이지만 카드 문안은 사람이 써야 한다."
+    },
+    {
+      "kind": "must",
+      "minutes": 5,
+      "what": "라이브러리에 없는 도구 “회의록 — 3주 뒤에 나오는 회의 안 이야기” — 콘텐츠 레인이 써야 한다 (Atom 규율). 지금 글은 사건의 사실 안에서만 쓴 임시다",
+      "where": "/tools/minutes",
+      "proposal": "회의록 — 3주 뒤에 나오는 회의 안 이야기",
+      "why": "오늘 '아직 모르는 것'의 대부분 (다수와 소수가 회의에서 무엇을 말했나)이 이 문서에 달려 있다. 다음 화의 재료다. 라이브러리에 없다."
+    },
+    {
+      "kind": "must",
+      "minutes": 2,
+      "what": "개념 지도 — 자리는 기계가 원 위에 놓았다 · 선과 다음 화의 개념은 제안이다 (D65)",
+      "where": "/map",
+      "proposal": "선 rate–conditions · conditions–target · dissent–minutes · 다음 화 점도표 — 12월의 새 전망 · 포워드 가이던스 (앞일을 미리 말하기)",
+      "why": "선의 뜻은 정해지지 않았다 (D65 OPEN)"
+    },
+    {
+      "kind": "look",
+      "minutes": 4,
+      "what": "글 통독 — 제목 (물음) · 수수께끼 · 오늘의 한 줄 · 말투. 근거 없는 글 (사람이 준 요지에서 온 지난 이야기 · 풀어 쓴 설명)은 함의 검사가 보지 않았다",
+      "where": "/scenes",
+      "proposal": "금리를 그대로 뒀어요. 물가가 잡혔다는 뜻일까요? · 금리를 그대로 뒀다고 물가가 잡힌 건 아니에요. 브레이크는 밟았고, 물가에 닿았다는 말은 아직 없어요.",
+      "why": "근거 없는 글 31 덩이 (전체 114)"
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "사슬의 물가 고리 (none)가 가장 약하다. 의장이 직접 이은 것은 '9월 조치 → 금융·신용 여건' (F033 F065)뿐이다. '물가에는 아직 안 닿았다'는 문장은 문서에 없고, '여전히 높다' (F009)와 '확고한 결론은 없다' (F046)를 오늘의 값으로 놓았다. 과하다고 보면 사슬을 두 고리로 줄이거나 체험 없이 기본 풀이로 가야 한다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "사슬 체험이 '효과를 보려고 멈췄다'는 동결 이유로 읽힐 위험이 있다. DC-01은 그 연결이 우리 쪽 연결이라고 못 박았다. 사슬은 '어디까지 닿았나'만 보여 주고 '왜 멈췄나'는 답하지 않는다는 것을 글 단계가 지켜야 한다. 제목 물음도 그래서 '왜 안 올렸나'가 아니라 '물가가 잡혔다는 뜻인가'로 잡았다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "소비 · 투자 고리 (C-0001의 가운데 단계)는 뺐다. 의장은 소비 · 투자가 강하다고 했지만 (F027) 9월 인상과 잇지 않았다. 라이브러리 그림과는 한 단계가 어긋난다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "자리 틀: 조건 (official-dissent)은 맞다고 보지만 제안에서 뺐다. 다수 쪽을 in-doc으로 둔 판정도 약하다. 성명문의 까닭은 '이중 책무 지원'뿐이다. 켤지는 사람이 정한다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "정치: 반대자 Cook은 백악관 조사위원회 절차 (10/7 설치 · 청문회 11/5)의 당사자다 (F776 F781). 오늘 요점에 꼭 필요하지 않다고 보고 장면 계획에서 전부 뺐다. 넣는다면 의장의 말 (F058 '정치는 아무 역할도 하지 않았다' · F066)까지만 쓴다. 넣을지는 사람이 판단한다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "Hammack의 회의 전·뒤 연설 사실 (F247~F276, F764~F772)과 Logan · Williams 연설은 전부 구절이 없어 근거로 못 붙인다. 반대자 견해를 다루려 해도 붙일 수 있는 것은 Cook의 9월 연설뿐이고, 그것도 표결 설명이 아니다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "F060의 구절이 짧다 ('group gets together six weeks from now.'). '말하지 않겠다'로 쓰기 전에 기자회견 원문의 앞 문장을 확인해야 한다. F045도 기자의 질문 원문은 사실 목록에 없고 의장의 답만 있다. 0번 뒤집기의 why_common 증거가 이것 하나다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "의장의 '물가 기대 지표는 옳은 방향' (F044 F051)은 뒤집기를 흐릴 수 있다. 숨기지 않고 '기대에 대한 말'로 한 줄 넣는 것이 정직하다고 본다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "우리가 계산한 수: 9/16→10/28 = 42일 (6주), 10/28 + 3주 = 11/18 무렵, 10 + 2 = 12표. 글에 쓰려면 계산임을 밝혀야 한다. 8월 물가 3.4%는 BEA 수치 (F350)를 쓴다. 9월 회의록의 스태프 추정 3.8% (F082)와 수가 다르다 (Waller는 정부 방법론 개정을 언급, F233). 둘을 섞지 않는다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "설계 단계가 자신 없다고 적은 것",
+      "where": "-",
+      "proposal": "hand 도구가 셋이다 (반대표 · 금융 여건 · 회의록). 콘텐츠 레인의 작업이 필요하다. '금융 여건' 카드는 '긴축됐다 (전보다 빡빡해졌다)'와 '긴축적이다 (경제를 누르는 수준이다)'의 차이를 다뤄야 한다. 의장의 두 문장 (F065 · F034)이 그 차이 위에 서 있다.",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "짓기 메모",
+      "where": "-",
+      "proposal": "tools.target.name: 맨 글자열에 숫자가 있어 덧붙인 말을 뗐다 — “물가 목표 — 2%” → “물가 목표”",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "짓기 메모",
+      "where": "-",
+      "proposal": "tools.minutes.name: 맨 글자열에 숫자가 있어 덧붙인 말을 뗐다 — “회의록 — 3주 뒤에 나오는 회의 안 이야기” → “회의록”",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "짓기 메모",
+      "where": "-",
+      "proposal": "seats.ground.body: 맨 글자열에 숫자가 있어 덧붙인 말을 뗐다 — “연준 FOMC (이번 표결 10 대 2, 합 12표)” → “연준 FOMC”",
+      "why": ""
+    },
+    {
+      "kind": "look",
+      "minutes": 0,
+      "what": "짓기 메모",
+      "where": "-",
+      "proposal": "map.ghosts: 맨 글자열에 숫자가 있어 덧붙인 말을 뗐다 — “점도표 — 12월의 새 전망” → “점도표”",
+      "why": ""
+    }
+  ]
+}

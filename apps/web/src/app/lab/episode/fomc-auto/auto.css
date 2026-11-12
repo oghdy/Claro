@@ -1,0 +1,45 @@
+/* P-E1 — 파이프라인이 만든 판의 맨 위 띠. 뼈대 (episode.css)는 고치지 않고, 이 주소에서만 뼈대를 띠만큼 내린다. */
+.auto-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: calc(30px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 12px 0;
+  background: #2e6657;
+  color: #fff;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.auto-banner strong {
+  font-weight: 800;
+}
+.auto-banner span {
+  opacity: 0.8;
+  flex: 1;
+}
+.auto-banner a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.auto-wrap .ep-root {
+  top: calc(30px + env(safe-area-inset-top));
+}
+.auto-wrap .ep-root .ep-demo {
+  padding-top: 6px;
+}
+.auto-broken {
+  margin: 60px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}

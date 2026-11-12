@@ -126,6 +126,17 @@ export function requestParams(a: Req) {
     output_config: { effort: a.effort, format: { type: "json_schema" as const, schema: a.schema as Record<string, unknown> } },
   };
 }
+/** P-E1 — 보내기 전에 입력 토큰을 센다 (count_tokens · 값 0 · 장부에 적지 않는다). 본문은 부르기와 같다 (requestParams). 세지 못하면 null (오류 종류만 출력) */
+export async function countTokens(a: Req): Promise<number | null> {
+  const p = requestParams(a);
+  try {
+    const r = await getClient().messages.countTokens({ model: p.model, system: p.system, messages: p.messages, output_config: p.output_config });
+    return r.input_tokens;
+  } catch (e) {
+    console.log(`  count_tokens 실패 — ${safeError(e).msg}`);
+    return null;
+  }
+}
 /** 요청의 지문 — 머리(키) 없이 본문만 */
 export const requestSha = (a: Req) => sha256(JSON.stringify(requestParams(a)));
 
