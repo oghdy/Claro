@@ -1,6 +1,6 @@
-import { color, effect, font, layout, motion, radius, space, type } from "./values";
+import { color, effect, font, layout, motion, paper, paperLayout, radius, space, type } from "./values";
 
-// 토큰 → CSS 변수. 웹만 쓴다. 이름: --c-* 색 · --t-{이름}-{size|line|weight} 글자 · --s-* 간격 · --r-* 모서리 · --m-* 움직임.
+// 토큰 → CSS 변수. 웹만 쓴다. 이름: --c-* 색 (옛 화면 — 다크) · --p-* 종이 톤 (회차 화면 · 첫 화면 — F-E1) · --t-{이름}-{size|line|weight} 글자 · --s-* 간격 · --r-* 모서리 · --m-* 움직임.
 // 값을 여기서 다시 적지 않는다 — 전부 values.ts 에서 온다.
 
 const kebab = (s: string) => s.replace(/[A-Z]+/g, (m) => `-${m.toLowerCase()}`);
@@ -8,6 +8,8 @@ const kebab = (s: string) => s.replace(/[A-Z]+/g, (m) => `-${m.toLowerCase()}`);
 export function cssVariables(): string {
   const out: [string, string][] = [];
   for (const [k, v] of Object.entries(color)) out.push([`--c-${kebab(k)}`, v]);
+  for (const [k, v] of Object.entries(paper)) out.push([`--p-${kebab(k)}`, v]);
+  out.push(["--p-page-x", `${paperLayout.pageX}px`], ["--p-column", `${paperLayout.column}px`]);
   out.push(["--font", font.family.map((f) => (/[^a-z-]/i.test(f) ? `"${f}"` : f)).join(", ")]);
   for (const [k, v] of Object.entries(font.tracking)) out.push([`--track-${k}`, `${v}em`]);
   for (const [k, v] of Object.entries(type)) {

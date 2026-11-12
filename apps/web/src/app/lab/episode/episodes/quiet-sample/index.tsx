@@ -1,9 +1,9 @@
 "use client";
 
 import { MotionConfig, motion } from "motion/react";
-import { CHROME } from "../../kit/chrome";
-import { PlainQuietBody } from "../../kit/frames/Plain";
-import { Ask, Head, Txt, rise, stagger } from "../../kit/parts";
+import { CHROME } from "../../../../../episode/kit/chrome";
+import { PlainQuietBody } from "../../../../../episode/kit/frames/Plain";
+import { Ask, Head, Txt, rise, stagger } from "../../../../../episode/kit/parts";
 import { QUIET_SAMPLE as S } from "./data";
 
 // 기본 풀이 "다. 조용히"의 견본 화면 (UX-4) — 풀이 장면 한 장만. 회차가 아니다 (표지 · 도구 · 지도가 없다).

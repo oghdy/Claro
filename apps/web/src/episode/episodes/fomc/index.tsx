@@ -60,6 +60,7 @@ export function Glyph({ id }: { id: string }) {
   );
 }
 
-export function FomcEpisode() {
-  return <Episode ep={FOMC} Art={CoverArt} Glyph={Glyph} />;
+/** real — 실제 화면 (/s/*). 없으면 시안 (/lab/episode/*) */
+export function FomcEpisode({ real }: { real?: boolean }) {
+  return <Episode ep={FOMC} Art={CoverArt} Glyph={Glyph} real={real} />;
 }

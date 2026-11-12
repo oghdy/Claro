@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Rate3Episode } from "./Rate3Episode";
 import { COPY, loadRate3 } from "./data";
-import "../episode.css";
-import "../kit/frames/frames.css";
-import "../episodes/fomc/fomc.css";
+import "../../../../episode/episode.css";
+import "../../../../episode/kit/frames/frames.css";
+import "../../../../episode/episodes/fomc/fomc.css";
 import "./rate3.css";
 
 // UX-6 — 「금리는 어디로」 3화의 자리 (P-E2 ① 10). 10월 회의록이 나오면 파이프라인이 회차 파일을 낸다 — 이 주소는 그 파일만 있으면 그린다.

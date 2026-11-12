@@ -1,12 +1,12 @@
 "use client";
 
 import { MotionConfig, motion } from "motion/react";
-import { Episode } from "../kit/Episode";
-import { CHROME } from "../kit/chrome";
-import { Rich, rise, stagger } from "../kit/parts";
-import { CoverArt } from "../episodes/fomc/Art";
-import { Glyph } from "../episodes/fomc";
-import type { EpisodeData, ReaderFixture, ReaderId } from "../kit/types";
+import { Episode } from "../../../../episode/kit/Episode";
+import { CHROME } from "../../../../episode/kit/chrome";
+import { Rich, rise, stagger } from "../../../../episode/kit/parts";
+import { CoverArt } from "../../../../episode/episodes/fomc/Art";
+import { Glyph } from "../../../../episode/episodes/fomc";
+import type { EpisodeData, ReaderFixture, ReaderId } from "../../../../episode/kit/types";
 import type { COPY, Rate3 } from "./data";
 
 // 3화 — 파일이 있으면 공통 뼈대 (kit/Episode)에 그대로 올리고, 없으면 기다리는 한 장. 표지 그림 · 도구 그림은 손 2화의 것 (같은 시리즈 · 같은 그림).

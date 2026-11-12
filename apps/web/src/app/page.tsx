@@ -1,34 +1,105 @@
-import type { Metadata } from "next";
-import { GOLDEN_RECORD, loadPackage, loadRaw } from "../lib/load";
-import { ClaroStudy } from "../study/Study";
-import "../reader/reader.css";
-import "../study/study.css";
+import type { Metadata, Viewport } from "next";
+import { paper } from "@claro/tokens";
+import { LIVE, realPath, today } from "../episode/catalog";
+import { HOME } from "../episode/home-copy";
+import { Rich } from "../episode/kit/parts";
+import "../episode/episode.css";
+import "../episode/episodes/fomc/fomc.css";
+import "../episode/episodes/pipc/pipc.css";
+import "./home.css";
 
-// **기사는 빌드할 때 싣는다 — 첫 화면은 데이터베이스를 읽지 않는다** (D35: 데이터베이스가 죽어도 기사는 뜬다).
-// 판은 불변이라 요청마다 읽을 이유가 없다. 이 페이지는 정적이다: 빌드가 픽스처에서 패키지와 판의 키를 읽어 HTML 에 넣는다.
-// 지금 보여주는 기사는 골든 한 판이다. 같은 판이 데이터베이스에도 있어야 기록이 그 판을 가리킬 수 있다 (`seed` — 화면의 패키지와 같은 글인지는 테스트가 본다).
-// 어느 기사를 보여줄지 고르는 일은 아직 없다
+// 첫 화면 (F-E1 · D76) — 종이 톤. Claro 가 무엇인지 두 줄 · 오늘의 회차 하나 (가장 최근 발표) · 시리즈 셋과 시리즈마다 최근 회차.
+// **정적이다** — 빌드할 때 골든 픽스처에서 읽어 HTML 에 싣는다. 데이터베이스를 읽지 않는다 · 아무것도 저장하지 않는다 · 독자가 누구인지 묻지 않는다.
+// 회차 · 시리즈의 글은 골든의 글자 그대로다 (제목의 줄바꿈만 한 줄 제목에서 빈칸으로). 화면의 글은 ../episode/home-copy.ts.
+// 옛 첫 화면 (9월 FOMC 기사 · 다크 · D26)은 /archive/fomc-2026-09 로 옮겼다 — 번호가 있는 옛 링크 (/?r=<UUID>)는 그리로 넘긴다 (next.config.ts).
 export const dynamic = "force-static";
 
-function article() {
-  const record = loadRaw(GOLDEN_RECORD) as { article_id: string; article_version: number; _package: string };
-  return { article_id: record.article_id, article_version: record.article_version, package: loadPackage(record._package) };
-}
+const og = { title: HOME.metaTitle, description: HOME.metaDescription };
+export const metadata: Metadata = { title: HOME.metaTitle, description: HOME.metaDescription, openGraph: { ...og, type: "website", siteName: "Claro", locale: "ko_KR" }, twitter: { card: "summary", ...og } };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: paper.paper };
 
-// 브랜드는 프론트가 붙인다 (§2)
-export function generateMetadata(): Metadata {
-  return { title: `Claro — ${article().package.title}` };
-}
+const Arrow = () => (
+  <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
 export default function Page() {
-  const a = article();
+  const t = today();
+  const c = t.ep.scenes.cover;
   return (
-    <>
-      {/* 스크립트가 없으면 등장 효과가 풀리지 않는다 — 첫 장은 그대로 읽히게 */}
-      <noscript>
-        <style>{".reader .r-card *, .reader .r-end { opacity: 1 !important; transform: none !important; filter: none !important; }"}</style>
-      </noscript>
-      <ClaroStudy pkg={a.package} article={{ article_id: a.article_id, article_version: a.article_version }} />
-    </>
+    <div className="ep-root hm-root" data-testid="home">
+      <div className="ep-scroll">
+        <main className="ep-scene hm">
+          <header className="hm-top">
+            <span className="hm-mark">{HOME.mark}</span>
+            <span className="hm-preview">{HOME.previewTag}</span>
+          </header>
+
+          <section className="hm-intro">
+            <h1>
+              <Rich text={HOME.title} />
+            </h1>
+            {HOME.intro.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </section>
+
+          <section className="hm-today" aria-labelledby="hm-today">
+            <h2 id="hm-today" className="hm-label">
+              {HOME.todayLabel}
+            </h2>
+            <a className="hm-today-card" href={realPath(t.ep)} data-testid="today">
+              <div className="ep-series">
+                <span>{HOME.seriesTag}</span>
+                <strong>{t.ep.series.name}</strong>
+              </div>
+              <div className="ep-cover-art">
+                <t.Art />
+              </div>
+              <p className="ep-episode-no">{c.episode.t}</p>
+              <h3 className="hm-today-title">
+                <Rich text={c.title} />
+              </h3>
+              <p className="hm-dek">{c.dek.t}</p>
+              <p className="ep-meta">{c.meta.t}</p>
+              <span className="hm-go">
+                {HOME.todayGo}
+                <Arrow />
+              </span>
+            </a>
+          </section>
+
+          <section className="hm-shelf" aria-labelledby="hm-series">
+            <h2 id="hm-series" className="hm-label">
+              {HOME.seriesLabel}
+            </h2>
+            {LIVE.map(({ ep }) => (
+              <a key={ep.series.code} className="hm-series" href={realPath(ep)} data-testid={`series-${ep.series.code}`}>
+                <strong>{ep.series.name}</strong>
+                <span className="hm-series-sub">{ep.series.sub}</span>
+                {/* 시리즈 줄 — 회차 표지의 것과 같은 데이터 · 같은 모양 (지나온 화 · 지금 · 다음 화) */}
+                <ol className="ep-track">
+                  {ep.track.map((e) => (
+                    <li key={e.no.t} data-state={e.state}>
+                      <span className="ep-track-dot" aria-hidden="true" />
+                      <span className="ep-track-no">{e.no.t}</span>
+                      <span className="ep-track-title">{e.title.t}</span>
+                    </li>
+                  ))}
+                </ol>
+                <span className="hm-series-go">
+                  <em>{HOME.latest}</em>
+                  {ep.scenes.cover.episode.t} {HOME.read}
+                  <Arrow />
+                </span>
+              </a>
+            ))}
+          </section>
+
+          <p className="hm-foot">{HOME.preview}</p>
+        </main>
+      </div>
+    </div>
   );
 }

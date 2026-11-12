@@ -9,6 +9,7 @@ import type { Probe } from "@claro/contract";
 import { expect, test, type APIRequestContext } from "@playwright/test";
 import { golden } from "./golden";
 import { lines, readings, study } from "./ledger";
+import { OLD } from "./reader";
 import { READERS, STRANGER, TEST_PROBES } from "./readers";
 import { probeProblems, type GoalRow } from "../src/server/probe-check";
 import { PROBES } from "../src/study/probes";
@@ -74,7 +75,7 @@ test("화면이 보여주는 기사(빌드할 때 실은 것)와 데이터베이
   const inDb = (await (await request.get(`/api/articles/${GOLDEN.article_id}/1`)).json()).package;
   expect(JSON.stringify(inDb)).toBe(JSON.stringify(strip(golden())));
   // 화면의 판의 키 — 정적 페이지가 실은 것. 데이터베이스의 판과 같은 키다
-  const html = await (await request.get("/")).text();
+  const html = await (await request.get(OLD)).text();
   expect(html).toContain(GOLDEN.article_id);
 });
 

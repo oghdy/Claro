@@ -1,6 +1,9 @@
-// 본 화면(/) 공용 — 독자처럼 움직인다: 물음 버튼을 눌러 앞으로, "지나온 길"로 뒤로. 쓸어서는 넘어가지 않는다 (D26)
+// 옛 화면 (/archive/fomc-2026-09 — F-E1 전에는 /) 공용 — 독자처럼 움직인다: 물음 버튼을 눌러 앞으로, "지나온 길"로 뒤로. 쓸어서는 넘어가지 않는다 (D26)
 import type { CDPSession, Page } from "@playwright/test";
 import type { UnitBlock, UnitSlide } from "./golden";
+
+/** 옛 화면 (B5 · 9월 FOMC 기사)의 주소 — F-E1 (D76)에서 `/` 를 회차 형식에 내주고 옮겼다. `/` 는 이제 회차 형식의 첫 화면이다 (e2e/episode.spec.ts) */
+export const OLD = "/archive/fomc-2026-09";
 
 export const NAMES: Record<string, string> = { basic: "입문", intermediate: "중급", advanced: "숙련" };
 export const MOBILE_SE = { width: 375, height: 667 };
@@ -11,7 +14,7 @@ export const card = (page: Page, i: number) => page.locator(`.r-card[data-slide-
 export const count = (page: Page) => page.locator(".r-count");
 
 export async function openLevel(page: Page, level: string) {
-  await page.goto("/");
+  await page.goto(OLD);
   if (level !== "basic") await page.getByRole("button", { name: NAMES[level], exact: true }).click();
   await page.locator(`.r-deck[data-level="${level}"]`).waitFor();
   await page.evaluate(() => document.fonts.ready);

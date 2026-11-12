@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { CHROME } from "./chrome";
-import { SHELF, shelfOf } from "./shelf";
+import { SHELF, hrefOf, shelfOf } from "./shelf";
 import { toolOf, type EpisodeData, type ReaderId } from "./types";
 
 // 내 개념 지도 (공통). 자리는 회차 데이터에 손으로 놓여 있다 (시안) — 배치를 계산하지 않는다.
@@ -15,7 +15,7 @@ export type NodeState = "new" | "known" | "none";
 
 type Picked = { kind: "concept"; id: string } | { kind: "ghost"; name: string } | { kind: "else"; series: string; id: string } | null;
 
-export function ConceptMap({ ep, reader, states, grow = false, compact = false }: { ep: EpisodeData; reader: ReaderId; states: Record<string, NodeState>; grow?: boolean; compact?: boolean }) {
+export function ConceptMap({ ep, reader, states, grow = false, compact = false, real = false }: { ep: EpisodeData; reader: ReaderId; states: Record<string, NodeState>; grow?: boolean; compact?: boolean; real?: boolean }) {
   const c = CHROME.map;
   const { at, edges, ghosts } = ep.map;
   const [picked, setPicked] = useState<Picked>(null);
@@ -152,7 +152,7 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false }
                 </li>
               ) : (
                 <li key={s.series}>
-                  <a href={s.path} data-testid={`shelf-${s.series}`}>
+                  <a href={hrefOf(s, real)} data-testid={`shelf-${s.series}`}>
                     <strong>{s.name}</strong>
                     <span>
                       {s.episode} · {s.title}

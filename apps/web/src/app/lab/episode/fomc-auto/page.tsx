@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { AutoEpisode } from "./AutoEpisode";
-import "../episode.css";
-import "../kit/frames/frames.css";
-import "../episodes/fomc/fomc.css";
+import "../../../../episode/episode.css";
+import "../../../../episode/kit/frames/frames.css";
+import "../../../../episode/episodes/fomc/fomc.css";
 import "./auto.css";
 
 // P-E1 — **파이프라인이 만든 판.** 손으로 만든 금리 2화 (../fomc — 골든 fixtures/episode-rate-2.json)와 견줘 보려고 같은 뼈대 (kit/) 위에 올린다.

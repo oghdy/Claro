@@ -8,8 +8,8 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { validateEpisode } from "@claro/contract";
-import { isSteps, isToggle } from "../kit/frames/LabCard";
-import { SHELF } from "../kit/shelf";
+import { isSteps, isToggle } from "../../../../episode/kit/frames/LabCard";
+import { SHELF } from "../../../../episode/kit/shelf";
 import { BANNER, READERS, STORES } from "./data";
 
 const REPO = path.join(import.meta.dirname, "../../../../../../..");

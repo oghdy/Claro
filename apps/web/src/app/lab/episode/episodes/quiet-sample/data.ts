@@ -1,6 +1,6 @@
 // UX-4 — 기본 풀이 "다. 조용히"의 견본 데이터. **실제 사건이 아니다.** 사실 · 숫자 · 이름 · 날짜가 하나도 없다 — 칸마다 무엇이 들어가는지만 적었다.
 // 실물 사건이 생기면 이 파일은 지운다 (계약은 실물에서 — D24). check.ts 가 숫자가 없는지 본다.
-import { t, type PlainSolve, type SolveEntry } from "../../kit/types";
+import { t, type PlainSolve, type SolveEntry } from "../../../../../episode/kit/types";
 
 export const QUIET_SAMPLE = {
   banner: "견본 — 실제 사건 아님",

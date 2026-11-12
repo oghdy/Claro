@@ -38,6 +38,7 @@ function Glyph({ id }: { id: string }) {
   );
 }
 
-export function DeliveryEpisode() {
-  return <Episode ep={DELIVERY} Art={CoverArt} Glyph={Glyph} />;
+/** real — 실제 화면 (/s/*). 없으면 시안 (/lab/episode/*) */
+export function DeliveryEpisode({ real }: { real?: boolean }) {
+  return <Episode ep={DELIVERY} Art={CoverArt} Glyph={Glyph} real={real} />;
 }

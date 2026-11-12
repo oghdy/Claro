@@ -11,8 +11,8 @@
 // 3화 (회의록)가 나오면 이 견본은 지운다 — 그때는 실물 (packages/pipeline/data/events/FOMC-20261028/episodes/rate-3/episode.json)이 지난 값을 싣는다 (../../rate-3).
 import { parseEpisode, type ChainBefore, type Episode, type EpisodeRef, type SeatBefore } from "@claro/contract";
 import golden from "../../../../../../../../fixtures/episode-rate-2.json";
-import { FOMC } from "../fomc/data";
-import type { EpisodeData } from "../../kit/types";
+import { FOMC } from "../../../../../episode/episodes/fomc/data";
+import type { EpisodeData } from "../../../../../episode/kit/types";
 
 /** 맨 위 띠 — 시안 전용 글 (숫자 없음 — check.ts S4) */
 export const CARRY_BANNER = {

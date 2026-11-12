@@ -10,17 +10,20 @@
 //   S4     시안 전용 글(공통 화면 글 kit/chrome.ts · 조종 칸의 짧은 이름 · 조용히 견본)에 숫자가 없다
 //   S5     조용히 견본(회차가 아니다)의 풀이 칸이 계약의 풀이 규칙(§9 11 ~ 20)에 맞다
 //   S6     지난 값 견본 (UX-6 — 금리 2화 + 시안 전용 지난 값 · 실제 아님)이 계약 검증을 지난다 (구절 대조 · 지난 회차 칸 불변식 25 · 26). 지난 값이 9월 구절에 기댄다
+//   S7     (F-E1) 실제 주소가 /s/<series.code>/<number> 다 · 발표된 날 (손으로 적은 값)이 표지 meta 의 날이다 · 실제 화면의 회차 = 책장의 회차 · 첫 화면 글에 숫자가 없다
 //   3화 (rate-3) · 파이프라인 2화 (fomc-auto)는 제 폴더의 check.ts 가 본다
 // 보지 않는 것: 글의 뜻이 구절에서 나오는가 (의미 대조 — 사람이 읽는다) · 한글로 쓴 수("여섯 가지") · 그림이 "그리지 않을 것"을 넘었나 (사람)
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { solveProblems, validateEpisode } from "@claro/contract";
-import { CHROME } from "./kit/chrome";
+import { CHROME } from "../../../episode/kit/chrome";
 import { QUIET_SAMPLE } from "./episodes/quiet-sample/data";
 import { CARRY, CARRY_BANNER, CARRY_EPISODE } from "./episodes/carry-sample/data";
-import { isPages, isSteps, isToggle } from "./kit/frames/LabCard";
-import { PICTURES } from "./kit/frames/pictures";
-import { EPISODES, SHELF } from "./kit/shelf";
+import { isPages, isSteps, isToggle } from "../../../episode/kit/frames/LabCard";
+import { PICTURES } from "../../../episode/kit/frames/pictures";
+import { EPISODES, SHELF } from "../../../episode/kit/shelf";
+import { LIVE, realPath, today } from "../../../episode/catalog";
+import { HOME } from "../../../episode/home-copy";
 
 const REPO = path.join(import.meta.dirname, "../../../../../..");
 let failed = 0;
@@ -41,7 +44,7 @@ function digits(where: string, v: unknown, out: string[]) {
 }
 
 for (const e of EPISODES) {
-  const { path: _path, short, stores, readers, ...episode } = e;
+  const { path: _path, real, announced, short, stores, readers, ...episode } = e;
   console.log(`\n■ ${e.series.name} · ${e.scenes.cover.episode.t} (${e.code})`);
   const documents = stores.flatMap((f) => (JSON.parse(readFileSync(path.join(REPO, f), "utf8")) as { source_documents: { source_id: string; text: string }[] }).source_documents);
   const r = validateEpisode(episode, { documents });
@@ -71,6 +74,11 @@ for (const e of EPISODES) {
       else for (const id of el.concepts) if (!shelf.concepts[id]) errors.push(`S3 readers.${rd.id}.elsewhere: 도구 "${id}" 가 시리즈 "${el.series}" 에 없다`);
     }
   }
+  // S7 (F-E1) — 실제 주소가 계약의 칸에서 나온 꼴이다 · 발표된 날 (손으로 적은 값)이 날짜 꼴이고 표지의 meta 글에 그 달 · 날이 있다
+  if (real !== realPath(e)) errors.push(`S7 real "${real}" 이 /s/<series.code>/<number> (${realPath(e)}) 가 아니다`);
+  const day = /^(\d{4})-(\d{2})-(\d{2})$/.exec(announced ?? "");
+  if (!day) errors.push(`S7 announced "${announced}" 가 YYYY-MM-DD 가 아니다`);
+  else if (!e.scenes.cover.meta.t.includes(`${Number(day[2])}월 ${Number(day[3])}일`)) errors.push(`S7 announced ${announced} 의 달 · 날이 표지 meta "${e.scenes.cover.meta.t}" 에 없다`);
   digits("short", short, errors);
   digits("readers", Object.values(readers).map((rd) => rd.label), errors);
   if (report(errors)) console.log("OK — 계약 검증을 지났고 (구절은 전부 저장된 문서에 있고, 글의 숫자는 전부 근거 구절 · 계산 · 화면 번호 중 하나다. 풀이 칸의 규칙도 맞다), 화면 쪽 검사도 맞다");
@@ -102,9 +110,12 @@ for (const e of EPISODES) {
   if (report(errors)) console.log("OK — 계약 검증을 지났고 (지난 값의 구절도 저장된 문서에 있다), 견본 띠에 숫자가 없다");
 }
 {
-  console.log("\n■ 공통 화면 글 (kit/chrome.ts)");
+  console.log("\n■ 공통 화면 글 (kit/chrome.ts) · 첫 화면 글 (home-copy.ts)");
   const errors: string[] = [];
   digits("CHROME", CHROME, errors);
+  digits("HOME", HOME, errors);
+  if (LIVE.length !== EPISODES.length || LIVE.some((x, i) => x.ep !== EPISODES[i])) errors.push("S7 실제 화면의 회차 (catalog.tsx LIVE)가 책장 (kit/shelf.ts EPISODES)과 다르다");
+  console.log(`실제 주소: ${LIVE.map((x) => realPath(x.ep)).join(" · ")} — 오늘의 회차 ${realPath(today().ep)} (발표 ${today().ep.announced})`);
   if (report(errors)) console.log("OK — 숫자가 든 글이 없다");
 }
 

@@ -3,7 +3,11 @@
 // 웹은 css.ts 가 CSS 변수로 옮기고(Motion 은 motion 을 그대로 읽는다), 앱(Expo · Reanimated)은 이 객체를 그대로 읽는다.
 // 겉모습의 근거: D26 — 다크 · 고딕 · 제목 26 · 본문 16.5 · 물음 버튼 17. 그 밖의 값은 /lab/b5 에서 도윤이 본 그대로 옮겼다.
 
-/** 색 — 바탕 · 면 두 단계 · 글 세 단계 · 선. 뜻에 따라 바뀌는 색은 없다 (D20: 판단을 싣는 색 금지) */
+/**
+ * 색 (옛 화면 — 다크). **D26 의 다크는 옛 B5 화면의 것이다** — 지금은 `/archive/fomc-2026-09` · `/news` · `/again` 이 쓴다 (F-E1).
+ * 회차 화면 · 첫 화면의 색은 아래 `paper` 다 (D58 "그냥 검은색에서 벗어난다").
+ * 바탕 · 면 두 단계 · 글 세 단계 · 선. 뜻에 따라 바뀌는 색은 없다 (D20: 판단을 싣는 색 금지)
+ */
 export const color = {
   bg: "#0f1113",
   surface: "#1a1d21",
@@ -17,6 +21,34 @@ export const color = {
   askFace: "#ecebe6",
   askInk: "#0f1113",
 } as const;
+
+/**
+ * 종이 톤 — 회차 화면 (/s/*) · 첫 화면 (/) · 시안 (/lab/episode/*)의 색 (D58 · UX1-a · F-E1). UX-1 시안의 `--ep-*` 값을 글자 그대로 옮겼다.
+ * 따뜻한 종이 + 먹색 글 + 감색 (감 열매) 하나 + 이끼색. 색은 "새것 / 알던 것"만 가른다 — 옳고 그름을 싣지 않는다 (D20):
+ *   accent = 새것 · 지금 · 누를 것        moss = 알던 것
+ */
+export const paper = {
+  /** 바탕 (종이) · 그 위의 면 */
+  paper: "#f4eee3",
+  card: "#fbf8f1",
+  /** 글 세 단계 */
+  ink: "#1e1a16",
+  ink2: "#453d34",
+  muted: "#73685b",
+  /** ink 의 13% · 7% — 선 */
+  rule: "rgba(30, 26, 22, 0.13)",
+  rule2: "rgba(30, 26, 22, 0.07)",
+  /** 강조 하나 (감색) — 면 · 글 · 옅은 면 */
+  accent: "#cb4821",
+  accentInk: "#ad3c18",
+  accentSoft: "#f7dfd2",
+  /** 알던 것 (이끼색) — 글 · 옅은 면 */
+  moss: "#2e6657",
+  mossSoft: "#dde9e0",
+} as const;
+
+/** 종이 톤 화면의 좌우 여백 (px) */
+export const paperLayout = { pageX: 22, column: 480 } as const;
 
 export const font = {
   /** 고딕. 웹은 Pretendard Variable 을 직접 싣는다. 앱은 같은 글꼴 파일을 싣는다 */
@@ -127,5 +159,5 @@ export const motion = {
   spring: Record<string, Spring>;
 };
 
-export const tokens = { color, font, type, space, radius, layout, motion, effect } as const;
+export const tokens = { color, paper, paperLayout, font, type, space, radius, layout, motion, effect } as const;
 export type Tokens = typeof tokens;

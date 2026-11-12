@@ -34,10 +34,17 @@ export interface ReaderFixture {
   elsewhere: readonly { series: string; concepts: readonly string[] }[];
 }
 
-/** 시안에만 있는 것 — 계약의 회차 옆에 붙인다 */
+/** 화면에만 있는 것 — 계약의 회차 옆에 붙인다 (계약이 아니다) */
 export interface LabOnly {
-  /** 이 회차의 주소 */
+  /** 이 회차의 시안 주소 (/lab/episode/*) */
   path: string;
+  /** 이 회차의 실제 주소 (/s/<시리즈>/<n> — F-E1). 실제 화면에 나가는 회차만 갖는다 (견본 · 파이프라인 시험판에는 없다) */
+  real?: string;
+  /**
+   * 발표된 날 (YYYY-MM-DD) — 첫 화면이 "오늘의 회차" (가장 최근 발표)를 고를 때만 쓴다. **손으로 적은 값이다**:
+   * 계약에 발행 시각 칸이 없다 (EPISODE §10 미확인). 표지의 meta 글에 있는 날을 옮겼다. 독자에게 보이지 않는다
+   */
+  announced?: string;
   /** 시안 조종 칸의 짧은 이름 */
   short: string;
   /** 근거 문서가 저장된 파일 (저장소 뿌리에서) — check.ts 가 구절을 대조할 때 읽는다 */

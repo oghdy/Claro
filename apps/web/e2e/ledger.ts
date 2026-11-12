@@ -1,5 +1,6 @@
 // 원장에 남은 것을 읽는다 — 켜져 있는 테스트 서버의 /api/peek (CLARO_PEEK=1 일 때만 있다). 독자 하나의 열람들
 import { expect, type APIRequestContext } from "@playwright/test";
+import { OLD } from "./reader";
 
 export interface PeekReading {
   reading_id: string;
@@ -64,7 +65,7 @@ export const unsent = (page: import("@playwright/test").Page) =>
  * 누르는 것이 곧 "사람이 손을 댔다"이다 (D35)
  */
 export async function enter(page: import("@playwright/test").Page, user_id: string, base = "") {
-  await page.goto(`${base}/?r=${user_id}`);
+  await page.goto(`${base}${OLD}?r=${user_id}`);
   await page.locator(".study, .r-deck").first().waitFor();
   if (await page.locator(".study").isVisible()) {
     await page.locator(".s-go").click(); // 알겠어요, 시작할게요

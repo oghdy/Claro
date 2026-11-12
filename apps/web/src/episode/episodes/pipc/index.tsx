@@ -51,6 +51,7 @@ function Glyph({ id }: { id: string }) {
   );
 }
 
-export function PipcEpisode() {
-  return <Episode ep={PIPC} Art={CoverArt} Glyph={Glyph} />;
+/** real — 실제 화면 (/s/*). 없으면 시안 (/lab/episode/*) */
+export function PipcEpisode({ real }: { real?: boolean }) {
+  return <Episode ep={PIPC} Art={CoverArt} Glyph={Glyph} real={real} />;
 }

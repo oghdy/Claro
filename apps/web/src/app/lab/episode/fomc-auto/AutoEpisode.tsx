@@ -1,7 +1,7 @@
 "use client";
 
-import { Episode } from "../kit/Episode";
-import { CoverArt } from "../episodes/fomc/Art";
+import { Episode } from "../../../../episode/kit/Episode";
+import { CoverArt } from "../../../../episode/episodes/fomc/Art";
 import { AUTO, AUTO_ERRORS, BANNER } from "./data";
 
 // 파이프라인이 만든 금리 2화 — 공통 뼈대 (kit/Episode)에 그대로 올린다. 화면 맨 위의 띠가 "파이프라인이 만든 판"임을 알린다.

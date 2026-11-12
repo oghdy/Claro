@@ -1,33 +1,33 @@
-/* UX-1 시안의 겉모습. 본 화면의 토큰(@claro/tokens — 다크)을 쓰지 않는다: 이 시안이 묻는 것이 바로 그 톤이다.
-   도윤이 방향을 고르면 그때 토큰으로 옮긴다 (_open UX1-a). 여기 값은 전부 --ep-* 한 곳에 있다.
+/* 회차 화면의 겉모습 (UX-1 시안에서 왔다 — F-E1 부터 실제 화면 /s/* 과 시안 /lab/episode/* 이 같이 쓴다).
+   색은 토큰이다 (@claro/tokens 의 paper → --p-* · UX1-a). 여기서는 --ep-* 이름으로 받아 쓴다 — 값을 다시 적지 않는다.
    방향: 따뜻한 종이 + 먹색 글 + 감색(감 열매) 하나. 색은 "새것 / 알던 것"만 가른다 — 옳고 그름을 싣지 않는다 (D20). */
 
 html:has(.ep-root),
 html:has(.ep-root) body {
-  background: #f4eee3;
+  background: var(--p-paper);
 }
 
 .ep-root {
-  --ep-paper: #f4eee3;
-  --ep-card: #fbf8f1;
-  --ep-ink: #1e1a16;
-  --ep-ink2: #453d34;
-  --ep-muted: #73685b;
-  --ep-rule: rgba(30, 26, 22, 0.13);
-  --ep-rule2: rgba(30, 26, 22, 0.07);
-  --ep-accent: #cb4821;
-  --ep-accent-ink: #ad3c18;
-  --ep-accent-soft: #f7dfd2;
-  --ep-moss: #2e6657;
-  --ep-moss-soft: #dde9e0;
-  --ep-x: 22px;
-  --ep-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ep-paper: var(--p-paper);
+  --ep-card: var(--p-card);
+  --ep-ink: var(--p-ink);
+  --ep-ink2: var(--p-ink2);
+  --ep-muted: var(--p-muted);
+  --ep-rule: var(--p-rule);
+  --ep-rule2: var(--p-rule2);
+  --ep-accent: var(--p-accent);
+  --ep-accent-ink: var(--p-accent-ink);
+  --ep-accent-soft: var(--p-accent-soft);
+  --ep-moss: var(--p-moss);
+  --ep-moss-soft: var(--p-moss-soft);
+  --ep-x: var(--p-page-x);
+  --ep-ease: var(--m-ease-out);
 
   position: fixed;
   inset: 0;
   display: flex;
   flex-direction: column;
-  max-width: 480px;
+  max-width: var(--p-column);
   margin: 0 auto;
   background: var(--ep-paper);
   color: var(--ep-ink);
@@ -162,6 +162,36 @@ html:has(.ep-root) body {
   font-weight: 750;
   color: var(--ep-ink);
   font-variant-numeric: tabular-nums;
+}
+
+/* ── 실제 화면 (F-E1) — 시안 띠가 없다: 위쪽 줄이 화면 맨 위다 */
+.ep-root[data-real] .ep-bar {
+  height: calc(48px + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
+}
+a.ep-back {
+  color: inherit;
+}
+.ep-bar-src {
+  height: 34px;
+  padding: 0 11px !important;
+  border-radius: 17px;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  line-height: 1 !important;
+  color: var(--ep-muted) !important;
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.ep-bar-src[aria-pressed="true"] {
+  background: var(--ep-ink) !important;
+  color: var(--ep-paper) !important;
+  box-shadow: none;
+}
+.ep-root a.ep-home {
+  display: block;
+  width: fit-content;
+  margin: 2px auto 0;
+  color: var(--ep-muted) !important;
 }
 
 /* ── 장면 */

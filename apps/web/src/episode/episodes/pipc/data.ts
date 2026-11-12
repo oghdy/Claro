@@ -2,7 +2,7 @@
 // (회차 계약 docs/contract/EPISODE.md 의 모양 — 손으로 썼다. 재료는 logs/pipeline/E3-1.md ③ · D69. 넘겨 보기 틀의 첫 실물).
 // 여기에는 시안 전용만 있다 — 주소 · 문서 파일의 자리 · 두 독자의 고정값.
 import { parseEpisode } from "@claro/contract";
-import golden from "../../../../../../../../fixtures/episode-privacy-1.json";
+import golden from "../../../../../../fixtures/episode-privacy-1.json";
 import type { EpisodeData, ReaderFixture, ReaderId } from "../../kit/types";
 
 // ─────────────────────────────────────────────────────────── 두 독자 — **손으로 적은 고정값이다**
@@ -29,6 +29,8 @@ export const READERS: Record<ReaderId, ReaderFixture> = {
 export const PIPC: EpisodeData = {
   ...parseEpisode(golden),
   path: "/lab/episode/pipc",
+  real: "/s/privacy/1",
+  announced: "2026-10-29",
   short: "개인정보",
   stores: [
     "packages/pipeline/data/events/PIPC-20261028-SAFETY-MEASURES/store.documents.json",

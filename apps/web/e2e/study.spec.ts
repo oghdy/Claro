@@ -1,12 +1,12 @@
 // F-3 첫 회의 흐름 셋 (B-0.5 · D37) — 화면 → 원장의 줄. 주소가 무리를 가른다.
-//   Claro 무리 `/?r=`      동의 → 읽기 전 물음 → 기사 → 직후 물음 셋 → 고맙다는 화면
+//   Claro 무리 `/archive/fomc-2026-09?r=` (F-E1 전에는 `/?r=` — 옛 링크는 넘어온다)      동의 → 읽기 전 물음 → 기사 → 직후 물음 셋 → 고맙다는 화면
 //   일반 기사 `/news?r=`   동의 → 읽기 전 물음 → 바깥 기사를 읽고 돌아온다 → 직후 물음 셋
 //   며칠 뒤 `/again?r=`    같은 물음 셋을 다시
 import { expect, test, type Page } from "@playwright/test";
 import { TEST_OUTSIDE_URL } from "./database";
 import { lines, study, unsent } from "./ledger";
 import { READERS, STRANGER } from "./readers";
-import { MOBILE_SE, ask, card, readToEnd } from "./reader";
+import { MOBILE_SE, OLD, ask, card, readToEnd } from "./reader";
 import { NOTICE, STUDY } from "../src/study/copy";
 import { PROBES } from "../src/study/probes";
 
@@ -53,7 +53,7 @@ test("Claro 무리 — 동의 → 읽기 전 물음 → 기사 → 직후 물음
   const cdp = await ctx.newCDPSession(page);
   const posts: string[] = [];
   page.on("request", (r) => r.method() === "POST" && posts.push(new URL(r.url()).pathname));
-  await page.goto(`/?r=${READERS.study}`);
+  await page.goto(`${OLD}?r=${READERS.study}`);
   // 동의 — 누르기 전에는 아무것도 기록하지 않는다 (기사도 아직 안 보인다)
   await expect(page.locator(".s-title")).toHaveText(NOTICE.title);
   await expect(page.locator(".s-text")).toHaveText([...NOTICE.lines]);
@@ -249,7 +249,7 @@ test("동의 화면에서 멈춘 독자 — 원장에 아무것도 없다. 다�
   test.setTimeout(60_000);
   const ctx = await browser.newContext(phone);
   const page = await ctx.newPage();
-  await page.goto(`/?r=${READERS.two}`);
+  await page.goto(`${OLD}?r=${READERS.two}`);
   await expect(page.locator(".s-title")).toHaveText(NOTICE.title);
   await page.touchscreen.tap(187, 500); // 손은 댔다 — 그래도 동의 전이다
   await page.waitForTimeout(1500);
@@ -264,7 +264,7 @@ test("동의 화면에서 멈춘 독자 — 원장에 아무것도 없다. 다�
 
   const other = await browser.newContext(phone); // 카카오톡 안의 브라우저 → Safari
   const p2 = await other.newPage();
-  await p2.goto(`/?r=${READERS.two}`);
+  await p2.goto(`${OLD}?r=${READERS.two}`);
   await p2.locator(".r-deck").waitFor(); // 안내 · 읽기 전 물음 없이 기사
   await expect(p2.locator(".study")).toHaveCount(0);
   await p2.touchscreen.tap(187, 30);

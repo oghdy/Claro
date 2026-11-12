@@ -7,7 +7,7 @@ import { expect, test } from "@playwright/test";
 import { testDatabase } from "./database";
 import { enter, lines, readings, settledLedger, unsent } from "./ledger";
 import { READERS } from "./readers";
-import { MOBILE_SE, ask, card, count, readToEnd } from "./reader";
+import { MOBILE_SE, OLD, ask, card, count, readToEnd } from "./reader";
 
 test.describe.configure({ mode: "serial" });
 
@@ -98,9 +98,9 @@ test("데이터베이스가 죽은 채 첫 화면을 연다 → 기사는 뜬다
 
   // 링크 없이 온 사람 — 기사가 지금처럼 뜬다. 처음 온 등록 독자 — 누구인지 못 물었다: 다시 시도하거나 기사만 읽는다 (기록 없이)
   const other = await ctx.newPage();
-  expect((await other.goto(`${BASE}/`))!.status()).toBe(200);
+  expect((await other.goto(`${BASE}${OLD}`))!.status()).toBe(200);
   await expect(card(other, 0).locator('[data-u="headline"]')).toContainText("금리를 올렸어요");
-  await other.goto(`${BASE}/?r=${READERS.shy}`);
+  await other.goto(`${BASE}${OLD}?r=${READERS.shy}`);
   await expect(other.locator(".s-title")).toHaveText("연결이 잘 안 돼요");
   await other.locator(".s-skip").click(); // 기사만 읽기
   await expect(card(other, 0).locator('[data-u="headline"]')).toContainText("금리를 올렸어요");
@@ -124,9 +124,9 @@ test("배포(Vercel) 빌드 — /test/* 가 닫혀 있다 · /api/peek 가 없�
   const status = async (path: string) => (await fetch(`${BASE}${path}`)).status;
   expect([await status("/test/moments"), await status("/test/unknown-type")], "/test/*").toEqual([404, 404]);
   expect([await status("/api/peek"), await status(`/api/peek?user_id=${READERS.killed}`)], "/api/peek").toEqual([404, 404]);
-  expect([await status("/"), await status("/news"), await status("/again")]).toEqual([200, 200, 200]);
+  expect([await status("/"), await status(OLD), await status("/s/price/1"), await status("/news"), await status("/again")]).toEqual([200, 200, 200, 200, 200]);
   expect(await (await fetch(`${BASE}/robots.txt`)).text()).toMatch(/User-Agent: \*\s+Disallow: \/\s*$/i);
-  for (const path of ["/", "/news", "/again"]) expect(await (await fetch(`${BASE}${path}`)).text(), path).toMatch(/<meta name="robots" content="noindex, nofollow[^"]*"/);
+  for (const path of ["/", OLD, "/s/price/1", "/s/rate/2", "/s/privacy/1", "/news", "/again"]) expect(await (await fetch(`${BASE}${path}`)).text(), path).toMatch(/<meta name="robots" content="noindex, nofollow[^"]*"/);
   const page = await (await browser.newContext(phone)).newPage();
   await page.goto(`${BASE}/news?r=${READERS.news}`);
   // 바깥 기사가 정해졌다 (study/flows.ts) — 흐름이 열려 있다: 안내부터. 링크는 그 주소로, 새 창으로

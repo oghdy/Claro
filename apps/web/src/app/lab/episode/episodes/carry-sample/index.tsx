@@ -1,8 +1,8 @@
 "use client";
 
-import { Episode } from "../../kit/Episode";
-import { CoverArt } from "../fomc/Art";
-import { Glyph } from "../fomc";
+import { Episode } from "../../../../../episode/kit/Episode";
+import { CoverArt } from "../../../../../episode/episodes/fomc/Art";
+import { Glyph } from "../../../../../episode/episodes/fomc";
 import { CARRY, CARRY_BANNER } from "./data";
 
 // 지난 값 견본 (UX-6) — 금리 2화에 시안 전용 지난 값을 붙여 공통 뼈대 (kit/Episode)에 올린다. 맨 위 띠가 "견본 · 실제 아님"을 크게 알린다.

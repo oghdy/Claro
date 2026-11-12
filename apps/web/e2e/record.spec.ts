@@ -1,10 +1,10 @@
 // 읽으면 원장에 남는다 (B-0.4b) — 화면의 순간 → 사건 → 원장의 줄. 끝에서 끝까지: 브라우저 → API → 데이터베이스(PGlite) → 원장에서 센 값.
-// 독자는 링크로 온다 (`/?r=<user_id>`). 테스트마다 다른 독자를 쓴다 (e2e/readers.ts).
+// 독자는 링크로 온다 (`/archive/fomc-2026-09?r=<user_id>` — F-E1 전에는 `/?r=`). 테스트마다 다른 독자를 쓴다 (e2e/readers.ts).
 // 장에서 멈출 때마다 끝까지 내린다 (readToEnd) — 짧은 장은 열자마자 끝이 나오고 긴 장은 내려야 나온다. 그 차이가 줄 수를 흔들지 않게.
 import { expect, test, type Page } from "@playwright/test";
 import { EVENT_FIELDS, PLAN_FIELDS, enter, lines, readings, settledLedger, study, unsent } from "./ledger";
 import { READERS, STRANGER } from "./readers";
-import { MOBILE_SE, ask, card, count, readToEnd, settled } from "./reader";
+import { MOBILE_SE, OLD, ask, card, count, readToEnd, settled } from "./reader";
 
 const phone = { viewport: MOBILE_SE, isMobile: true, hasTouch: true };
 const GOLDEN = { article_id: "6f4080a5-bada-412a-b870-bc5d16fe88b3", article_version: 1 };
@@ -12,8 +12,8 @@ const visit = (lv: string, i: number) => [`ENTERED ${lv} ${i}`, `END ${lv} ${i}`
 const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 
 /** 독자의 링크로 기사에 들어간다 (동의 · 읽기 전 물음을 지나서). 링크가 없으면 그냥 연다 */
-async function open(page: Page, reader: string | null, path = "/") {
-  if (reader && path === "/") return enter(page, reader);
+async function open(page: Page, reader: string | null, path = OLD) {
+  if (reader && path === OLD) return enter(page, reader);
   await page.goto(reader ? `${path}?r=${reader}` : path);
   await page.locator(".r-deck").waitFor();
   await page.evaluate(() => document.fonts.ready);
@@ -219,7 +219,7 @@ test("미리보기 로봇 — 연다 · 기다린다 · 떠난다 → 원장에 
   const bot = await browser.newContext({ viewport: { width: 1200, height: 630 } });
   const page = await bot.newPage();
   const calls = apiCalls(page);
-  await page.goto(`/?r=${READERS.robot}`);
+  await page.goto(`${OLD}?r=${READERS.robot}`);
   await page.locator(".study").waitFor();
   await page.waitForTimeout(4000);
   await page.evaluate(() => {
@@ -247,7 +247,7 @@ test("사람이 처음 손을 댄 뒤부터 보낸다 (D35) — 동의한 독자
   const ctx = await browser.newContext(phone);
   const page = await ctx.newPage();
   const sent = apiCalls(page);
-  await page.goto(`/?r=${READERS.robot}`);
+  await page.goto(`${OLD}?r=${READERS.robot}`);
   await page.locator(".r-deck").waitFor();
   await page.waitForTimeout(3500);
   expect(sent).toEqual(["GET /api/readers/…"]);

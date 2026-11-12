@@ -7,7 +7,7 @@ import { ConceptMap, type NodeState } from "./ConceptMap";
 import { LabCard } from "./frames/LabCard";
 import { PlainFlipLead, PlainQuietBody, PlainThreeCards } from "./frames/Plain";
 import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
-import { SHELF } from "./shelf";
+import { SHELF, hrefOf } from "./shelf";
 import { toolOf, type EpisodeData, type ReaderId, type SceneId, type T } from "./types";
 
 // 한 회차 — 처음부터 끝까지 (공통 뼈대). 넘어가는 방법은 본 화면과 같다 (D26): 한 번에 한 장 · 물음 버튼 하나 · 누른 물음이 다음 장의 머리.
@@ -24,6 +24,11 @@ export interface EpisodeParts {
   ep: EpisodeData;
   Art: ComponentType;
   Glyph: ComponentType<{ id: string }>;
+  /**
+   * 실제 화면 (F-E1 — /s/<시리즈>/<n>). 시안 띠 · 독자 스위치 · 풀이 스위치가 없고, 독자는 **처음 온 독자**다 (독자 기록이 아직 없다 — D64 ~ D67 OPEN.
+   * 누가 따라온 독자인지 추정하지 않는다). 근거 단추는 위쪽 줄로 온다. 다른 회차로 가는 길은 실제 주소다. 없으면 시안 (/lab/episode/*)
+   */
+  real?: boolean;
   /** 시안 전용 — 처음 열 장면 · 풀이 스위치 (견본 주소가 바로 그 화면을 열려고 — UX-6). 없으면 표지 · 체험 */
   start?: { scene?: SceneId; solve?: SolveMode };
 }
@@ -503,7 +508,7 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
 }
 
 function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
-  const { ep } = useEp();
+  const { ep, real = false } = useEp();
   const c = ep.scenes.keep;
   const k = CHROME.keep;
   const fresh = ep.tools.map((x) => x.key).filter((id) => states[id] === "new");
@@ -519,7 +524,7 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
         </p>
       </motion.figure>
       <motion.div className="ep-keep-map" variants={rise}>
-        <ConceptMap ep={ep} reader={reader} states={states} grow compact />
+        <ConceptMap ep={ep} reader={reader} states={states} real={real} grow compact />
       </motion.div>
       <motion.div className="ep-gain" variants={rise}>
         {fresh.length ? (
@@ -540,7 +545,8 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
         ) : null}
       </motion.div>
       <motion.p className="ep-p" variants={rise}>
-        {k.promise}
+        {/* 실제 화면은 아직 읽은 기록을 남기지 않는다 — 지키지 못할 약속 ("다음에 접어 둘게요") 대신 있는 그대로 말한다 */}
+        {real ? k.notSaved : k.promise}
       </motion.p>
       <motion.div variants={rise}>
         <button type="button" className="ep-map-button" onClick={openMap} data-testid="open-map">
@@ -557,7 +563,7 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
         </p>
       </motion.aside>
       {others.map((s) => (
-        <motion.a key={s.series} className="ep-other" href={s.path} variants={rise} data-testid={`other-${s.series}`}>
+        <motion.a key={s.series} className="ep-other" href={hrefOf(s, real)} variants={rise} data-testid={`other-${s.series}`}>
           <span>{k.otherLabel}</span>
           <strong>{s.name}</strong>
           <em>
@@ -572,6 +578,11 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
         <button type="button" className="ep-link ep-restart" onClick={restart}>
           {k.restart}
         </button>
+        {real ? (
+          <a className="ep-link ep-home" href="/" data-testid="home-link">
+            {k.home}
+          </a>
+        ) : null}
       </motion.div>
     </>
   );
@@ -622,7 +633,7 @@ function SourceSheet({ item, onClose }: { item: T; onClose: () => void }) {
 // ─────────────────────────────────────────────────────────── 회차
 
 export function Episode(parts: EpisodeParts) {
-  const { ep, start } = parts;
+  const { ep, start, real = false } = parts;
   const [reader, setReader] = useState<ReaderId>("new");
   const [step, setStep] = useState(() => Math.max(0, start?.scene ? ep.assembly.new.indexOf(start.scene) : 0));
   const [asked, setAsked] = useState<readonly string[]>([]);
@@ -686,7 +697,8 @@ export function Episode(parts: EpisodeParts) {
     <MotionConfig reducedMotion="user">
       <EpCtx.Provider value={parts}>
       <SrcCtx.Provider value={src}>
-        <div className="ep-root" data-episode={ep.code} data-reader={reader} data-scene={scene} data-solve={scene === "aha" ? solveMode : undefined} data-src={srcOn ? "" : undefined}>
+        <div className="ep-root" data-episode={ep.code} data-reader={reader} data-scene={scene} data-solve={scene === "aha" ? solveMode : undefined} data-src={srcOn ? "" : undefined} data-real={real ? "" : undefined}>
+          {real ? null : (
           <div className="ep-demo" role="group" aria-label={c.readersAria}>
             <span className="ep-demo-tag">{c.draft}</span>
             <div className="ep-demo-readers">
@@ -709,8 +721,9 @@ export function Episode(parts: EpisodeParts) {
               </a>
             ))}
           </div>
+          )}
           {/* 풀이 시안의 스위치 둘 — 풀이 장면에서만 보인다 (UX-4). 제품의 일부가 아니다 */}
-          {scene === "aha" && ep.solve.lab ? (
+          {!real && scene === "aha" && ep.solve.lab ? (
             <div className="ep-demo ep-demo-lab" role="group" aria-label={CHROME.lab.rowAria}>
               <span className="ep-demo-labtag">{CHROME.lab.rowTag}</span>
               {ep.solve.plain ? (
@@ -725,16 +738,31 @@ export function Episode(parts: EpisodeParts) {
           ) : null}
 
           <header className="ep-bar">
-            <button type="button" className="ep-back" onClick={back} disabled={step === 0} aria-label={c.back}>
-              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-                <path d="M12.5 4 6.5 10l6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+            {real && step === 0 ? (
+              // 실제 화면의 첫 장 — 앞 장이 없다. 그 자리는 첫 화면 (시리즈 목록)으로 가는 길이다
+              <a className="ep-back" href="/" aria-label={c.home} data-testid="bar-home">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M12.5 4 6.5 10l6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            ) : (
+              <button type="button" className="ep-back" onClick={back} disabled={step === 0} aria-label={c.back}>
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M12.5 4 6.5 10l6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            )}
             <p className="ep-bar-title">
               <span>{ep.series.name}</span>
               <span aria-hidden="true"> · </span>
               <span>{ep.scenes.cover.episode.t}</span>
             </p>
+            {real ? (
+              // 근거 — 켜면 근거가 있는 문장에 밑줄이 생기고, 누르면 원문 구절이 뜬다. 시안에서는 맨 위 띠에 있던 단추다
+              <button type="button" className="ep-bar-src" aria-pressed={srcOn} onClick={() => setSrcOn((v) => !v)} data-testid="src-toggle">
+                {c.src}
+              </button>
+            ) : null}
             <span className="ep-count" aria-label={`${scenes.length}장 가운데 ${step + 1}장`}>
               {step + 1}/{scenes.length}
             </span>
@@ -794,7 +822,7 @@ export function Episode(parts: EpisodeParts) {
                     {CHROME.map.close}
                   </button>
                 </header>
-                <ConceptMap ep={ep} reader={reader} states={states} />
+                <ConceptMap ep={ep} reader={reader} states={states} real={real} />
               </motion.div>
             ) : null}
           </AnimatePresence>

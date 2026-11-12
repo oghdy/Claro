@@ -5,7 +5,7 @@
 import { validateEpisode } from "@claro/contract";
 import built from "../../../../../../../packages/pipeline/data/events/FOMC-20261028/episode/episode.json";
 import review from "../../../../../../../packages/pipeline/data/events/FOMC-20261028/episode/review.json";
-import type { EpisodeData, ReaderFixture, ReaderId } from "../kit/types";
+import type { EpisodeData, ReaderFixture, ReaderId } from "../../../../episode/kit/types";
 
 /** 맨 위 띠 — 시안 전용 글 (숫자 없음) */
 export const BANNER = {

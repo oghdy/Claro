@@ -23,4 +23,4 @@ export const OUTSIDE_ARTICLE: { url: string; title: string } = {
 };
 
 /** 주소 — Claro 무리 · 일반 기사 무리 · 며칠 뒤 (두 무리 공통). 독자 번호는 어디서나 `?r=` 다 */
-export const PATHS = { claro: "/", news: "/news", again: "/again" } as const;
+export const PATHS = { claro: "/archive/fomc-2026-09", news: "/news", again: "/again" } as const;

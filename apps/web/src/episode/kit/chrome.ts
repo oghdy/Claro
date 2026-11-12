@@ -21,6 +21,9 @@ export const CHROME = {
     mapButton: "내 개념 지도 보기",
     nextTitle: "다음 화",
     restart: "처음부터 다시",
+    // F-E1 — 실제 화면. 읽은 기록을 아직 남기지 않는다 (D64 ~ D67 OPEN) — promise 대신 이 줄이 보인다
+    notSaved: "지금은 미리보기라, 이 지도는 아직 저장되지 않아요. 화면을 닫으면 처음으로 돌아가요.",
+    home: "첫 화면으로",
     otherLabel: "다른 시리즈",
   },
   map: {
@@ -46,6 +49,7 @@ export const CHROME = {
     readersAria: "시안 조종",
     src: "근거",
     back: "앞 장으로",
+    home: "첫 화면으로",
     mapAria: "내 개념 지도",
     srcTitle: "이 문장의 근거",
     srcNone: "따로 붙은 구절이 없는 문장이에요.",

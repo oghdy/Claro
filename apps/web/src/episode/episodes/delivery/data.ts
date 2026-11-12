@@ -2,7 +2,7 @@
 // (회차 계약 docs/contract/EPISODE.md 의 모양 — B-E1 이 UX-1 · UX-2 · UX-4 의 시안 데이터를 한 글자도 바꾸지 않고 옮겼다).
 // 여기에는 시안 전용만 남았다 — 주소 · 문서 파일의 자리 · 두 독자의 고정값.
 import { parseEpisode } from "@claro/contract";
-import golden from "../../../../../../../../fixtures/episode-price-1.json";
+import golden from "../../../../../../fixtures/episode-price-1.json";
 import type { EpisodeData, ReaderFixture, ReaderId } from "../../kit/types";
 
 // ─────────────────────────────────────────────────────────── 두 독자 — **손으로 적은 고정값이다**
@@ -25,6 +25,8 @@ export const READERS: Record<ReaderId, ReaderFixture> = {
 export const DELIVERY: EpisodeData = {
   ...parseEpisode(golden),
   path: "/lab/episode",
+  real: "/s/price/1",
+  announced: "2026-11-09",
   short: "배달앱",
   stores: ["packages/pipeline/data/events/KFTC-20261029-DELIVERY-APPS/store.documents.json"],
   readers: READERS,
