@@ -108,7 +108,25 @@
 
 ## ⑥ 배포 확인
 
-(push 뒤에 채운다 — 아래 "배포 뒤")
+커밋 `1917331` 을 push 했다 (검사가 다 지난 뒤 한 번). Vercel 배포는 **push 뒤 40초쯤**에 새 주소가 열렸다 (`/s/price/1` 이 404 → 200 이 될 때까지 12초마다 물었다).
+그 뒤에 이 ⑥ 과 `live-*` 그림을 싣는 커밋을 한 번 더 push 했다 (로그 · 그림뿐 — 화면 0자. push 라서 배포는 한 번 더 돈다 · UX-6 의 `df1ade1` 과 같은 일).
+
+`https://claro-lime-one.vercel.app` 에서 본 것 (`curl` · 2026-11-12)
+```
+200 /                      200 /s/price/1             200 /s/rate/2              200 /s/privacy/1
+404 /s/rate/3              200 /archive/fomc-2026-09
+200 /lab/episode           200 /lab/episode/fomc      200 /lab/episode/pipc      200 /lab/episode/rate-3    200 /lab/episode/carry
+200 /news                  200 /again                 200 /robots.txt
+404 /api/peek              404 /test/moments          (배포에서는 닫혀 있다 — 그대로)
+307 /?r=<UUID> → https://claro-lime-one.vercel.app/archive/fomc-2026-09?r=<UUID>
+```
+```
+/                <title>Claro — 뉴스 하나가 이야기 한 편이 돼요</title> · robots noindex, nofollow, nocache · og:title 같은 글
+/s/privacy/1     <title>해킹은 당한 건데, 왜 회사가 벌을 받을까 — 내 정보는 누가 지키나 1화 · Claro</title> · robots 그대로
+                 og:title "해킹은 당한 건데, 왜 회사가 벌을 받을까" · og:description = 표지의 한 줄 그대로
+```
+**눌러 본 것** (Chrome 390×844 · `scripts/shots-fe1.ts https://claro-lime-one.vercel.app live` — 로컬과 같은 스크립트): 첫 화면 → 회차 셋마다 표지 → 물음 버튼으로 풀이 장면까지 (처음 온 독자 · 5/7) → 답 감추기 → 그냥 열어 보기 → 남음까지 (7/7) → 지도 · 책장 → 근거 (문장 → 원문 구절) → 옛 화면. 전부 200 이고 그림 27장이 로컬 것과 같은 화면이다 (`live-home-1` · `live-price-1-lab` 을 눈으로 대 봤다).
+실제 폰으로는 보지 않았다 (_open F-E1-j) — 도윤이 폰으로: **`https://claro-lime-one.vercel.app`**
 
 ## ⑦ 도윤에게 물을 것 (추천과 함께)
 
