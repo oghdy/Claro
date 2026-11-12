@@ -45,12 +45,22 @@ Phase 0 끝 (배포됨). F-3 미룸 (D39). **Phase 1 파이프라인 A**: P-1 �
 **일하는 방식이 바뀌었다 (D39)**: PM 이 서브에이전트(Agent 도구)에게 지시 → 서브에이전트가 로그 · 커밋 → PM 검수 → 도윤에게 보고. 도윤은 프롬프트를 옮겨 붙이지 않는다.
 지시문은 `docs/development-pipeline.md` (등 레인 문서)에 남긴다. 서브에이전트가 돌고 있는지는 이 표의 "도는 중"과 커밋으로 확인한다 — PM 이 교체되면 새 PM 은 커밋 · 로그부터 본다.
 
-### 재개할 때 (2026-11-12 멈춤 — 도윤이 "재개"라고 하면)
-1. `git status` — 미커밋 50 줄이 **세 Step 의 것이 섞여 있다** (위 표의 "된 것"이 각자의 파일). 아무도 커밋 · stash · 되돌리기를 하지 않았다. 각 Step 은 **자기 파일만** 지정해 커밋한다
-2. 같은 PM 세션이 살아 있으면 세 서브에이전트에게 SendMessage 로 "이어서" (작업이 저장돼 있다). 아니면 새로 띄운다 — 지시문은 그대로 (P-E1: `development-pipeline.md` · UX-5: `development-frontend.md` · B-E2: `development-backend.md`) + 맨 앞에 "이어서: 위 표의 된 것 · 남은 것 · 남의 미커밋 목록"
-3. 순서: B-E2 (작다) · P-E1 (모델 부르기 없이 마무리) · UX-5 를 나란히 → 끝나는 대로 PM 검수 · 보고 (D63)
-4. 폰 서버는 꺼 두었다 — 필요할 때 `pnpm --filter @claro/web phone` (맥 주소는 그때 `ipconfig getifaddr en0`). `next dev` 가 만든 `apps/web/AGENTS.md` · `CLAUDE.md` 는 지웠다 (UX1-k)
-5. 11/18 무렵 10월 회의록 → 금리 3화 (P-E1 결과를 보고)
+### 재개할 때 (2026-11-12 저녁 — 와이파이가 잠깐 끊길 수 있어 적어 둠)
+**도는 것: F-E1 하나** (실제 주소를 회차 형식으로 · Fable · 지시문 `docs/development-frontend.md` F-E1). 끊기면 그 세션의 모델 호출이 실패해 멈출 수 있다 — 작업은 디스크에 남는다.
+- **F-E1 의 지금 (미커밋 · 아직 push 안 함 = 배포 안 됨)**: kit 를 `apps/web/src/app/lab/episode/kit` → `apps/web/src/episode/` 로 옮김 (git mv — **스테이지에 올라가 있다**) · 옛 첫 화면 `app/page.tsx` → `app/archive/fomc-2026-09/page.tsx` · 새 첫 화면 `app/page.tsx` + `home.css` · 회차 주소 `app/s/` · `episode/catalog.tsx` · `home-copy.ts` · packages/tokens (css · values) · e2e 여럿 · lab 주소들이 새 자리를 가리키게 · 로그 `logs/frontend/F-E1.md` 쓰는 중
+- **조심**: 이 일은 **한 번에 push 해야 한다** (반만 push 하면 실제 주소가 깨진 채 배포된다). 스테이지에 F-E1 의 이름 바꾸기가 올라가 있으니 **다른 커밋은 반드시 `git commit -m … -- <파일들>`** 로 (그냥 `git commit` 은 F-E1 의 것을 싣는다)
+- **이어 가기**: 같은 PM 세션이면 F-E1 서브에이전트에게 SendMessage "이어서". 아니면 새로 띄운다 — 지시문 그대로 + "이어서: 위의 미커밋이 네 것 · 검사 다 통과 뒤 한 번 push · push 뒤 실제 주소 확인"
+- 폰 서버 (3200) 는 켜져 있을 수 있다 · 실제 주소 `https://claro-lime-one.vercel.app` 는 push 할 때만 바뀐다
+
+### 도윤이 볼 것 (도윤: "실제 url 은 내일 자세히 보고 얘기해 줄게" · 2026-11-12)
+1. **F-E1 이 끝나면** 실제 주소 첫 화면 · 회차 셋 (끝나면 주소를 보고에 적는다) — 따라온 독자 단추 · "미리보기" 표시 (F-E1 _open)
+2. 셋째 회차 `https://claro-lime-one.vercel.app/lab/episode/pipc` — ① 넘기기만 하는 넘겨 보기가 체험으로 느껴지나 ② "털렸다 ≠ 벌받는다"가 오나 ③ "거기까지 말한 건 아니에요"가 믿음인가 김빠짐인가 (D74)
+3. 답 감추기 · 지난 값 (D77 c · d) — `/lab/episode/fomc` 풀이 · `/lab/episode/carry`
+4. 손 2화 `/lab/episode/fomc` ↔ 파이프라인 2화 `/lab/episode/fomc-auto` — 어느 쪽이 술술 읽히나 (D72)
+5. (전부터) 첫 회차 물을 것 12 · 둘째 14 — 추천대로 잠정 (D58 · D59)
+
+### 다음 (도윤 위임 D63 — 순서대로)
+F-E1 검수 · 보고 → **11/18 무렵 회의록 날 P-E3** (`logs/pipeline/P-E2.md` ① 한 장 · 3화 · F-E1 뒤면 실제 주소에도) → 기자회견 "왜" (PE1-c · 12월 FOMC 12/9 전) · 새 사건 비용 (≈ 6 달러 · D75) · "쌓인다" (D64 ~ D67 · 도윤)
 
 | 작업 | 커밋 | 상태 |
 |---|---|---|
