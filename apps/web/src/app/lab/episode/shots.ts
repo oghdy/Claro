@@ -7,6 +7,8 @@
 // 견줄 때는 시안 조종 칸의 둘째 줄(.ep-demo-lab — UX-4 에서 생겼다 · 풀이 장면에서만 보인다)을 숨기고 찍는다:
 // 그 줄만큼 화면이 밀리는 것은 틀로 옮긴 것과 상관없는 차이라서다. extras 는 숨기지 않는다 (도윤이 보는 그대로).
 // UX-5: 셋째 회차(pipc — 넘겨 보기)가 들어왔다. maps = 따라온 독자의 개념 지도 (세 시리즈가 한 지도에) · labclip = 풀이 그림만 오려서 (전 · 후 견주기).
+// UX-6: 풀이 장면의 아래 (답)가 체험을 마치기 전에는 접혀 있다 (lab-gate) — 처음 온 독자는 풀이의 누르는 단계 (labSteps)를 끝내면 열리고, 그 밖의 걸음은 "그냥 열어 보기"로 연다 (throughGate).
+//   carry  지난 값 견본 (/lab/episode/carry — 실제 아님) · gate  답 감추기 전 · 후 (세 회차) · rate3  3화 주소 (파일이 없으면 기다리는 한 장)
 // UX-2 까지의 차례 (지도 · 근거 시트 · 건너가기)는 git 기록의 이 파일에 있다 (fd95c53).
 import { mkdirSync } from "node:fs";
 import path from "node:path";
@@ -18,7 +20,9 @@ const MODE = process.argv[4] ?? "all";
 const ONLY = process.argv[5];
 mkdirSync(OUT, { recursive: true });
 
-const settle = (page: Page, ms = 1500) => page.waitForTimeout(ms);
+// SHOTS_SLOW=2 — 기다림을 두 배로 (전 · 후를 픽셀로 견줄 때 움직임이 덜 끝난 채 찍히는 것을 덜려고 — UX-6)
+const SLOW = Number(process.env.SHOTS_SLOW ?? 1);
+const settle = (page: Page, ms = 1500) => page.waitForTimeout(ms * SLOW);
 const shot = (page: Page, name: string) => page.screenshot({ path: path.join(OUT, `${name}.png`) });
 
 /** 지금 장면을 위에서부터 화면 높이만큼씩 내려가며 찍는다 */
@@ -38,6 +42,13 @@ const ask = async (page: Page) => {
   await settle(page);
 };
 const sceneId = (page: Page) => page.locator(".ep-root").getAttribute("data-scene");
+/** 풀이 장면의 아래가 접혀 있으면 (UX-6 lab-gate) "그냥 열어 보기"로 연다. 열었으면 true */
+const throughGate = async (page: Page) => {
+  if ((await page.getByTestId("lab-gate").count()) === 0) return false;
+  await page.getByTestId("lab-gate-open").click();
+  await settle(page, 900);
+  return true;
+};
 /** 풀이 부품을 화면 위쪽으로 */
 const toLab = async (page: Page) => {
   await page.locator(".ep-scroll").evaluate((el) => {
@@ -141,6 +152,8 @@ if (MODE === "walk" || MODE === "all") {
         if (id === "keep") await settle(page, 1400);
         await scene(page, name);
         if (id === "aha" && reader === "new") await labSteps(page, e.id, name);
+        // 체험을 마치면 열린다 (처음 온 독자) · 따라온 독자는 "그냥 열어 보기" — 열린 뒤의 장면도 찍는다 (UX-6)
+        if (id === "aha" && ((await throughGate(page)) || reader === "new")) await scene(page, `${name}-open`);
         if (id === "keep") break;
         await ask(page);
       }
@@ -206,7 +219,10 @@ if (MODE === "maps" || MODE === "all") {
     await settle(page, 2200);
     await page.getByTestId("reader-follower").click();
     await settle(page);
-    while ((await sceneId(page)) !== "keep") await ask(page);
+    while ((await sceneId(page)) !== "keep") {
+      await throughGate(page);
+      await ask(page);
+    }
     await settle(page, 1800);
     await page.getByTestId("open-map").click();
     await settle(page, 900);
@@ -231,6 +247,93 @@ if (MODE === "maps" || MODE === "all") {
   }
 }
 
+// ═══════════════════════════════════════════ carry — 지난 값 견본 (UX-6 · 실제 아님 — 금리 2화 + 시안 전용 지난 값). 풀이 장면 · 이 그림을 본 독자로 열린다
+if (MODE === "carry") {
+  await page.goto(`${BASE}/lab/episode/carry`);
+  await settle(page, 2200);
+  await scene(page, "carry-seen");
+  await toLab(page);
+  await shot(page, "carry-seen-lab");
+  await page.getByTestId("seen-side-wait").click();
+  await settle(page, 700);
+  await shot(page, "carry-seen-wait");
+  await page.getByTestId("seen-side-raise").click();
+  await settle(page, 700);
+  await shot(page, "carry-seen-raise");
+  // 처음 보는 독자 (체험) — 지난 값은 밀거나 앉은 뒤에만
+  await page.getByTestId("lab-seen").click();
+  await settle(page, 1200);
+  await toLab(page);
+  await shot(page, "carry-lab-1-before");
+  await page.getByTestId("lab-act").click();
+  await settle(page, 3000);
+  await shot(page, "carry-lab-2-pressed");
+  await page.getByTestId("lab-go-on").click();
+  await settle(page, 900);
+  await toLab(page);
+  await shot(page, "carry-lab-3-oct");
+  await page.getByTestId("lab-wait").click();
+  await settle(page, 1400);
+  await shot(page, "carry-lab-4-wait");
+  await page.locator(".ep-scroll").evaluate((el) => el.scrollBy(0, 300));
+  await page.waitForTimeout(300);
+  await shot(page, "carry-lab-5-wait-b");
+}
+
+// ═══════════════════════════════════════════ gate — 답 감추기 (UX-6 · D74 f): 체험을 마치기 전 (접힘) → 마친 뒤 (열림). 세 회차 · 처음 온 독자
+if (MODE === "gate") {
+  const finish: Record<string, (p: Page) => Promise<void>> = {
+    delivery: async (p) => {
+      await p.getByTestId("lab-act").click();
+      await settle(p, 1400);
+      await p.getByTestId("lab-go-on").click();
+      await settle(p, 900);
+      await p.getByTestId("lab-act").click();
+      await settle(p, 1400);
+    },
+    fomc: async (p) => {
+      await p.getByTestId("lab-act").click();
+      await settle(p, 1900);
+      await p.getByTestId("lab-go-on").click();
+      await settle(p, 900);
+      await p.getByTestId("lab-wait").click();
+      await settle(p, 1400);
+    },
+    pipc: async (p) => {
+      while ((await p.getByTestId("lab-act").count()) > 0) {
+        await p.getByTestId("lab-act").click();
+        await settle(p, 900);
+      }
+      await settle(p, 800);
+    },
+  };
+  const toGate = async (p: Page) => {
+    await p.locator(".ep-scroll").evaluate((el) => {
+      const g = el.querySelector<HTMLElement>("[data-testid=lab-gate]") ?? el.querySelector<HTMLElement>(".ep-tool-lead, .ep-flip");
+      el.scrollTo(0, (g?.offsetTop ?? 0) - 420);
+    });
+    await p.waitForTimeout(400);
+  };
+  for (const e of EPISODES) {
+    await toAha(page, e.url, "new");
+    await toGate(page);
+    await shot(page, `${e.id}-gate-1-closed`);
+    await finish[e.id]!(page);
+    await toGate(page);
+    await shot(page, `${e.id}-gate-2-opened`);
+    await page.locator(".ep-scroll").evaluate((el) => el.scrollBy(0, 600));
+    await page.waitForTimeout(400);
+    await shot(page, `${e.id}-gate-3-opened-b`);
+  }
+}
+
+// ═══════════════════════════════════════════ rate3 — 3화 주소 (UX-6). 파일이 없으면 "회의록을 기다리는 중" 한 장
+if (MODE === "rate3") {
+  await page.goto(`${BASE}/lab/episode/rate-3`);
+  await settle(page, 2200);
+  await scene(page, "rate3");
+}
+
 // ═══════════════════════════════════════════ labclip — 풀이 그림만 (UX-5: 셋째 회차 · 넘겨 보기 틀을 더하기 전 · 후를 견준다)
 // 풀이 부품([data-testid=lab])만 오려 찍는다 — 시안 조종 칸(위쪽 줄)이 바뀌어도 그림은 그대로인지 본다. 처음 온 독자 · 누르는 단계마다.
 if (MODE === "labclip") {
@@ -241,7 +344,15 @@ if (MODE === "labclip") {
   for (const e of EPISODES) {
     await toAha(page, e.url, "new");
     await clip(`${e.id}-clip-1`);
-    if (e.id === "pipc") continue;
+    if (e.id === "pipc") {
+      // 넘겨 보기 — 칸마다 (UX-6: 다 넘기면 아래가 열린다 — 풀이 그림은 그대로인지)
+      for (let i = 2; (await page.getByTestId("lab-act").count()) > 0; i++) {
+        await page.getByTestId("lab-act").click();
+        await settle(page, 1300);
+        await clip(`${e.id}-clip-${i}`);
+      }
+      continue;
+    }
     await page.getByTestId("lab-act").click();
     await settle(page, 1900);
     await clip(`${e.id}-clip-2`);

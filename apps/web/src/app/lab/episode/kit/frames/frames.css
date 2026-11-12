@@ -231,6 +231,77 @@
   font-size: 14px;
 }
 
+/* ── 같은 그림의 지난 값 (UX-6 · 계약 §7.9) — 고리 · 쪽마다 "지난 화" 한 줄. before 가 없는 회차에서는 아무것도 붙지 않는다 */
+.fr-chain li[data-before] {
+  grid-template-rows: auto auto;
+  row-gap: 1px;
+  padding: 3px 0;
+}
+.fr-chain li[data-before] .fr-dot {
+  grid-row: span 2;
+}
+.fr-before {
+  grid-column: 2 / -1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--ep-muted);
+}
+.fr-before b {
+  font-weight: 800;
+  color: var(--ep-ink2);
+}
+.fr-before[data-same] {
+  font-weight: 600;
+}
+/* 그때 닿은 데 — 작은 점 (고리의 점과 같은 말: 빔 · 반 · 참) */
+.fr-before i {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--ep-muted);
+}
+.fr-before i[data-reach="full"] {
+  background: var(--ep-muted);
+}
+.fr-before i[data-reach="part"] {
+  background: linear-gradient(to top, var(--ep-muted) 50%, transparent 50%);
+}
+.fr-before-seats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 2px 0;
+  font-size: 12.5px;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--ep-muted);
+}
+.fr-before-seats b {
+  font-weight: 800;
+  color: var(--ep-ink2);
+}
+.fr-before-seats span {
+  padding: 3px 9px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1.5px var(--ep-rule);
+}
+.fr-whynew {
+  margin: 10px 0 0 !important;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: var(--ep-moss-soft);
+  color: var(--ep-moss);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
 /* ── 기본 풀이 (D61 ①) — 가. 뒤집기만 */
 .pl-thought {
   margin: 0 0 12px;

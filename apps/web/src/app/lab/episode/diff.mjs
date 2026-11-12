@@ -15,15 +15,16 @@ for (const n of names) {
   if (!existsSync(path.join(b, n))) { missing++; console.log(`없음  ${n}`); continue; }
   const [x, y] = await Promise.all([a, b].map((d) => sharp(path.join(d, n)).raw().toBuffer({ resolveWithObject: true })));
   if (x.info.width !== y.info.width || x.info.height !== y.info.height) { diff++; console.log(`크기  ${n}`); continue; }
-  let px = 0, max = 0;
+  let px = 0, max = 0, top = -1, bottom = -1;
   const ch = x.info.channels;
   // 넷째 인자: 위에서 이만큼(px · 이미지 픽셀)은 보지 않는다 — 시안 조종 칸(위쪽 줄)이 바뀐 것과 풀이 그림을 가르려고 (UX-5)
   for (let i = SKIP * x.info.width * ch; i < x.data.length; i += ch) {
     let d = 0;
     for (let c = 0; c < 3; c++) d = Math.max(d, Math.abs(x.data[i + c] - y.data[i + c]));
-    if (d > 0) { px++; if (d > max) max = d; }
+    if (d > 0) { px++; if (d > max) max = d; const row = Math.floor(i / ch / x.info.width); if (top < 0) top = row; bottom = row; }
   }
-  if (px === 0) same++; else { diff++; console.log(`다름  ${n}  픽셀 ${px} (${(px / (x.info.width * x.info.height) * 100).toFixed(3)}%) · 가장 큰 차이 ${max}/255`); }
+  // UX-6: 다른 픽셀이 있는 줄의 범위 (이미지 픽셀 · 위에서부터) — 어느 자리가 달라졌나 (예: 풀이 그림 아래만)
+  if (px === 0) same++; else { diff++; console.log(`다름  ${n}  픽셀 ${px} (${(px / (x.info.width * x.info.height) * 100).toFixed(3)}%) · 가장 큰 차이 ${max}/255 · 줄 ${top}–${bottom} / ${x.info.height}`); }
 }
 const extra = readdirSync(b).filter((f) => f.endsWith(".png") && !names.includes(f));
 console.log(`\n${names.length}장 — 같음 ${same} · 다름 ${diff} · 없음 ${missing}${extra.length ? ` · 뒤에만 있음 ${extra.length}` : ""}`);

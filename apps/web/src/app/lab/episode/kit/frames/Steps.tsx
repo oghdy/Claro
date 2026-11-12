@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { LayoutGroup, motion } from "motion/react";
 import { CHROME } from "../chrome";
 import { Rich } from "../parts";
-import type { ChainFrame, SeatsFrame } from "./types";
+import type { ChainFrame, ChainNode, SeatSide, SeatsFrame } from "./types";
 
 // 틀 둘과 그 둘을 잇는 것 — 어디서 멈추나 (ChainPicture) · 자리에 앉기 (SeatsPicture) · StepsCard.
 // UX-2 의 금리 풀이(episodes/fomc/Mechanism.tsx)를 그대로 옮겼다 — 모양 · 움직임 값은 바꾸지 않았고, 글 · 고리 · 자리 수만 데이터로 뺐다.
@@ -16,11 +16,37 @@ import type { ChainFrame, SeatsFrame } from "./types";
 //
 // seen: 이 그림을 본 독자 (D61 ②) — 탭 · 누르기 · 설명 없이 그림의 끝 모습과 오늘의 값만 (고리마다의 상태 · 갈린 수 · 실제 결과).
 //   쪽을 누르면 그쪽이 한 말이 나온다 — 그 말은 설명이 아니라 오늘의 값이다. "다시 해 보기"로 처음처럼 해 볼 수 있다.
+//
+// 같은 그림의 지난 값 (UX-6 · 계약 §7.9 — 실물 전 · 3화에서 확인): 고리 · 쪽에 before 가 있으면 "지난 화" 한 줄을 오늘 값 옆에 놓는다.
+//   그림을 본 독자 — 처음부터 (그 독자에게는 달라진 것이 곧 오늘의 소식이다)
+//   처음 보는 독자 — 밀거나 앉은 **뒤에만** (밀기 전에 보이면 오늘의 값을 미리 알려 주는 셈이다 · 체험을 먼저)
+//   같으면 "지난 화와 같아요" · 다르면 그때 닿은 데 (작은 점) + 그때의 값. 쪽은 고른 쪽이 not-yet → in-doc 이면 "까닭이 이번에 들어왔어요"
+//   before 가 없는 회차 (골든 셋)는 아무것도 바뀌지 않는다.
+// onDone: 체험을 마쳤다 (마지막 틀 — 고리면 밀었다 · 자리면 앉았다). 풀이 장면이 접어 둔 아래 (답)를 연다 (UX-6 · D74 f)
 
 type StepFrame = ChainFrame | SeatsFrame;
 const SPRING = { type: "spring", stiffness: 170, damping: 22 } as const;
 
 // ─────────────────────────────────────────────────────────── 어디서 멈추나
+
+/** 고리의 지난 값 한 줄 — 같으면 "지난 화와 같아요", 다르면 그때 닿은 데 (작은 점) + 그때의 값 */
+function NodeBefore({ node: n, delay }: { node: ChainNode; delay: number }) {
+  const b = n.before!;
+  const same = b.reach === n.reach && b.value.t === (n.reach === "none" ? n.still : n.after).t;
+  return (
+    <motion.span className="fr-before" data-same={same ? "" : undefined} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay, duration: 0.35 }} data-testid={`before-${n.id}`}>
+      {same ? (
+        CHROME.carry.same
+      ) : (
+        <>
+          <b>{CHROME.carry.label}</b>
+          <i data-reach={b.reach} aria-hidden="true" />
+          {b.value.t}
+        </>
+      )}
+    </motion.span>
+  );
+}
 
 /** after: 밀었다 · carried: 앞 틀에서 이미 일어난 일 (움직임 없이) */
 function ChainPicture({ frame: f, after, carried }: { frame: ChainFrame; after: boolean; carried: boolean }) {
@@ -30,10 +56,12 @@ function ChainPicture({ frame: f, after, carried }: { frame: ChainFrame; after: 
       {f.nodes.flatMap((n, i) => {
         const next = f.nodes[i + 1];
         const node = (
-          <li key={n.id} data-node={n.id} data-state={n.reach === "none" ? "still" : !after ? "idle" : n.reach === "full" ? "on" : "part"}>
+          <li key={n.id} data-node={n.id} data-state={n.reach === "none" ? "still" : !after ? "idle" : n.reach === "full" ? "on" : "part"} data-before={after && n.before ? "" : undefined}>
             <span className="fr-dot" aria-hidden="true" />
             <strong>{n.name}</strong>
             <em>{n.reach === "none" ? n.still.t : after ? n.after.t : n.idle}</em>
+            {/* 지난 값 — 민 뒤에만 (그림을 본 독자는 처음부터 민 뒤다). 힘이 그 고리에 닿을 즈음 나온다 */}
+            {after && n.before ? <NodeBefore node={n} delay={carried ? 0 : i * 0.8 + 0.5} /> : null}
           </li>
         );
         if (!next) return [node];
@@ -121,9 +149,35 @@ function SeatsSeen({ frame: f, picked, onPick }: { frame: SeatsFrame; picked: st
   );
 }
 
+/** 쪽의 지난 값 — "지난 화" + 쪽마다 그때 자리 위의 말 (지난 값이 있는 쪽만) */
+function SeatsBefore({ frame: f }: { frame: SeatsFrame }) {
+  const sides = f.sides.filter((s) => s.before);
+  if (!sides.length) return null;
+  return (
+    <motion.div className="fr-before-seats" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25, duration: 0.35 }} data-testid="before-seats">
+      <b>{CHROME.carry.label}</b>
+      {sides.map((s) => (
+        <span key={s.id} data-side={s.id} data-same={s.before!.group.t === s.group.t ? "" : undefined}>
+          {s.before!.group.t}
+        </span>
+      ))}
+    </motion.div>
+  );
+}
+/** 지난 화에는 까닭이 아직 문서에 없던 쪽 (not-yet)이 오늘 문서에 들어왔다 (in-doc) — 지난 화의 약속에 답했다 */
+const whyNew = (s: SeatSide | undefined) => s?.before?.why === "not-yet" && s.why === "in-doc";
+function WhyNew({ side }: { side: SeatSide | undefined }) {
+  return whyNew(side) ? (
+    <motion.p className="fr-whynew" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} data-testid="why-new">
+      {CHROME.carry.whyNew}
+    </motion.p>
+  ) : null;
+}
+const hasBefore = (frames: readonly StepFrame[]) => frames.some((f) => (f.kind === "chain" ? f.nodes.some((n) => n.before) : f.sides.some((s) => s.before)));
+
 // ─────────────────────────────────────────────────────────── 잇기
 
-export function StepsCard({ frames, seen = false }: { frames: readonly StepFrame[]; seen?: boolean }) {
+export function StepsCard({ frames, seen = false, onDone }: { frames: readonly StepFrame[]; seen?: boolean; onDone?: () => void }) {
   const [redo, setRedo] = useState(false);
   const [phase, setPhase] = useState(0);
   /** 민 고리 틀 (틀의 차례 번호) */
@@ -131,20 +185,37 @@ export function StepsCard({ frames, seen = false }: { frames: readonly StepFrame
   /** 자리 틀마다 내가 앉은 쪽 */
   const [choice, setChoice] = useState<Record<number, string | null>>({});
   const [picked, setPicked] = useState<string | null>(null);
+  // 체험을 마쳤나 — 마지막 틀이 고리면 밀었다 · 자리면 앉았다
+  const last = frames.length - 1;
+  const complete = frames[last]?.kind === "chain" ? pressed.includes(last) : (choice[last] ?? null) !== null;
+  useEffect(() => {
+    if (complete) onDone?.();
+  }, [complete, onDone]);
 
   if (seen && !redo) {
     const seats = frames.find((f) => f.kind === "seats");
-    const said = seats?.sides.find((s) => s.id === picked)?.said;
+    const pickedSide = seats?.sides.find((s) => s.id === picked);
+    const said = pickedSide?.said;
     return (
       <div className="ep-lab fr-steps" data-seen="" data-testid="lab">
-        <p className="fr-seen">{CHROME.seen.label}</p>
-        {frames.map((f, i) => (f.kind === "chain" ? <ChainPicture key={i} frame={f} after carried /> : <SeatsSeen key={i} frame={f} picked={picked} onPick={setPicked} />))}
+        <p className="fr-seen">{hasBefore(frames) ? CHROME.seen.labelCarry : CHROME.seen.label}</p>
+        {frames.map((f, i) =>
+          f.kind === "chain" ? (
+            <ChainPicture key={i} frame={f} after carried />
+          ) : (
+            <Fragment key={i}>
+              <SeatsSeen frame={f} picked={picked} onPick={setPicked} />
+              <SeatsBefore frame={f} />
+            </Fragment>
+          ),
+        )}
         {seats ? (
           <>
             <p className="ep-lab-state fr-real">{seats.result.t}</p>
             <p className="ep-lab-caption fr-seen-caption" aria-live="polite" data-testid="lab-caption" data-hint={said ? undefined : ""}>
               {said ? <Rich text={said.t} /> : CHROME.seen.sideHint}
             </p>
+            <WhyNew side={pickedSide} />
           </>
         ) : null}
         <button type="button" className="ep-link fr-redo" onClick={() => setRedo(true)} data-testid="seen-redo">
@@ -178,7 +249,10 @@ export function StepsCard({ frames, seen = false }: { frames: readonly StepFrame
             // 뒤 틀로 넘어가면 앞 틀의 일은 이미 일어난 일이다 — 고리의 상태는 "민 뒤"
             <ChainPicture key={i} frame={f} after={i < phase || pressed.includes(i)} carried={i < phase} />
           ) : i === phase ? (
-            <SeatsPicture key={i} frame={f} choice={choice[i] ?? null} />
+            <Fragment key={i}>
+              <SeatsPicture frame={f} choice={choice[i] ?? null} />
+              {(choice[i] ?? null) !== null ? <SeatsBefore frame={f} /> : null}
+            </Fragment>
           ) : null,
         )}
 
@@ -208,6 +282,7 @@ export function StepsCard({ frames, seen = false }: { frames: readonly StepFrame
         <p className="ep-lab-caption" aria-live="polite" data-testid="lab-caption">
           <Rich text={caption.t} />
         </p>
+        {cur.kind === "seats" ? <WhyNew side={side} /> : null}
 
         {cur.kind === "chain" && isPressed && cur.go_on && phase < frames.length - 1 ? (
           <motion.button type="button" className="ep-lab-nextrule" onClick={() => setPhase(phase + 1)} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.35 }} data-testid="lab-go-on">

@@ -5,6 +5,7 @@
 |---|---|---|
 | 2026-11-11 | 생성 — 회차 계약. 실물 둘 (배달앱 「누가 값을 정하나」 1화 · 금리 「금리는 어디로」 2화 — `apps/web/src/app/lab/episode/` 의 시안 `9bf4ede`) 과 시안 타입 (`kit/types.ts` · `kit/frames/types.ts`) · 시안 검사 (`check.ts` A ~ E) · D46 · D57 ~ D62 에서 도출. 골든 `fixtures/episode-price-1.json` · `episode-rate-2.json` · 위반 픽스처 29. **게이트 전** | B-E1 |
 | 2026-11-12 | **넘겨 보기 틀** — `PagesFrame` · `PageCard` · `PagesCaption` (§1 · §7.8) · 불변식 21 ~ 24 (`PAGES_CARDS` · `PAGES_CARD_SRC` · `PAGES_WHEN` · `PAGES_STAR` · `PAGES_FUTURE` · `PAGES_ORDER`) · 서는 조합에 `[pages]` (불변식 15). 셋째 실물 하나 (개인정보위 「내 정보는 누가 지키나」 1화 — 시안 `/lab/episode/pipc`)에서 도출 — 그 실물에 없는 것은 미확인 (§10). 골든 셋째 `fixtures/episode-privacy-1.json` · 위반 픽스처 9. `Lab.seen_title` 의 첫 실물 · 조립에서 따라잡기와 견주기를 둘 다 보이는 첫 실물 (규칙은 그대로 미확인). **다른 틀 · 다른 칸은 바꾸지 않았다** | UX-5 |
+| 2026-11-12 | **지난 회차 칸 셋 — 실물 전 · 3화에서 확인** (D75 · P-E2 ⑦ N-1 ~ N-3): 지난 회차를 가리키는 칸 `Episode.previous?: EpisodeRef` (§3.4) · 지난 회차에서 온 구절의 키 꼴 `<code>:<key>` (§4.5) · 같은 그림의 지난 값 `ReachedNode` · `StoppedNode` 의 `before?: ChainBefore` · `SeatSide.before?: SeatBefore` (§7.9). 불변식 25 · 26 (`PREV_MISSING` · `PREV_VALUE_SRC` · `PREV_KEY`) · 지난 회차를 받으면 대 보는 것 (`PREV_MISMATCH` · 알림 `PREVIOUS_NOT_CHECKED`) · 위반 픽스처 셋. 모양은 P-E2 가 지어 본 이어 쓰기 (`review.json` 의 `carry` · `packages/pipeline/src/episode.ts`)에 맞췄다. **고를 수 있는 칸 (`?`)이라 골든 셋은 0자 · 다른 칸은 바꾸지 않았다** | UX-6 |
 
 > **상태: 게이트 전 (B-E1 · 2026-11-11).** _open 은 §11.
 > 회차 (Episode) = Claro 가 기사를 내는 새 모양 (D59). 시리즈 안의 한 화 · 장면 여덟 · 가운데에 독자가 직접 해 보는 풀이.
@@ -19,8 +20,11 @@
 > - **원천이 아닌 것** — 조용히 견본 (`/lab/episode/quiet` — 실제 사건이 아니다) · UX-3 의 종이 위 카드 14건 (회차로 만들지 않았다) · 틀 여섯 가운데 코드가 없는 셋 (넘겨 보기 · 숫자 만지기 · 가르기)
 >
 > - **셋째 실물 (UX-5 · 2026-11-12)** — 개인정보위 과징금 「내 정보는 누가 지키나」 1화 (`fixtures/episode-privacy-1.json` · 재료 `logs/pipeline/E3-1.md` ③ · D69). **넘겨 보기 칸 (§7.8 · 불변식 21 ~ 24)만** 이 실물에서 더했다. 아래의 "실물 둘" · "두 회차"는 B-E1 때의 말 그대로 두었다 — 셋째 골든도 같은 모양을 통과한다
+> - **지난 회차 칸 셋 (UX-6 · 2026-11-12) — 실물 전 · 3화에서 확인.** 같은 시리즈의 회차 둘이 아직 없다 (§10). 3화 (「금리는 어디로」 · 10월 회의록 · 11/18 무렵)가 첫 실물이다.
+>   원천은 실물 회차가 아니라 결정 (D61 ② "같은 그림 · 오늘 값만" · D62 ③ "3화에서 지난 값을 옆에" · D30 판 가리키기 · D75)과 P-E2 가 지어 본 이어 쓰기 (`logs/pipeline/P-E2.md` ⑦ · `review.json` 의 `carry` — 시험 "이어 쓰기" 넷)다.
+>   그래서 칸은 전부 **고를 수 있는 칸 (`?`)** 이고 표시는 **실물 전** — 3화가 나오면 다시 본다 (모양 · `?` 를 `| null` 로 바꿀지 — §11 E-16)
 >
-> **표시** — **실물** 두 회차에 있다 · **실물 하나** 한 회차에만 있다 · **실물 없음** 결정에서 왔지만 회차 실물이 없다 (첫 실물이 나오면 다시 본다) · **미확인** 정하지 않았다 (§10)
+> **표시** — **실물** 두 회차에 있다 · **실물 하나** 한 회차에만 있다 · **실물 없음** 결정에서 왔지만 회차 실물이 없다 (첫 실물이 나오면 다시 본다) · **실물 전** 결정과 파이프라인의 시험에서 왔고 다음 회차 (3화)가 첫 실물이다 — 고를 수 있는 칸 · **미확인** 정하지 않았다 (§10)
 >
 > **검사** — `pnpm --filter @claro/contract test` (`test/episode.test.ts` — 골든 둘 통과 · `fixtures/invalid/episode-*.json` 전부 거부 · `test/contract-docs.test.ts` — 이 문서의 타입 블록 ↔ 코드의 칸 목록).
 > 검증기는 `packages/contract/src/validate-episode.ts` 의 `validateEpisode(회차, { documents })`.
@@ -29,8 +33,8 @@
 
 ## 0. 범위
 
-**이 계약이 주인인 것** — Episode · Series · TrackItem · EpisodeText · EpisodeDoc · EpisodeQuote · Tool · Pickup · Assembly · 장면 여덟의 글 (Scenes 와 그 아래) ·
-ToolMap · Solve · SolveEntry · Flip · Lab · PictureRef · 틀 넷 (ToggleFrame · ChainFrame · SeatsFrame · PagesFrame) · 기본 풀이 셋 (PlainFlip · PlainThree · PlainQuiet).
+**이 계약이 주인인 것** — Episode · Series · TrackItem · EpisodeRef · EpisodeText · EpisodeDoc · EpisodeQuote · Tool · Pickup · Assembly · 장면 여덟의 글 (Scenes 와 그 아래) ·
+ToolMap · Solve · SolveEntry · Flip · Lab · PictureRef · 틀 넷 (ToggleFrame · ChainFrame · SeatsFrame · PagesFrame) · 같은 그림의 지난 값 (ChainBefore · SeatBefore) · 기본 풀이 셋 (PlainFlip · PlainThree · PlainQuiet).
 
 **안 넣는 것**
 - **지식 상태.** 독자가 무엇을 아는지 · 누가 "처음 온 독자"인지 · 어느 도구를 접을지 판정하는 것은 이 계약에 없다. 회차는 **조립마다 어느 장면을 보이나**만 적는다 (§5).
@@ -47,7 +51,7 @@ ToolMap · Solve · SolveEntry · Flip · Lab · PictureRef · 틀 넷 (ToggleFr
 ## 1. 한눈에
 
 ```ts
-QuoteKey   = string                // Episode.quotes 의 키 — "st10.vote"
+QuoteKey   = string                // Episode.quotes 의 키 — "st10.vote" · 지난 회차에서 온 구절은 "fomc:omo.2023" (§4.5 · 실물 전)
 DocLabel   = string                // Episode.docs 의 키 — "ST-10"
 ToolKey    = string                // Tool.key — "rate"
 Id         = string                // 가리키는 이름 — 독자 글이 아니다
@@ -73,6 +77,7 @@ Episode {                           // 회차 하나 = 발행 한 번. 통째로
   series:          Series           // 이 회차가 든 시리즈 (§3)
   number:          integer          // 몇 화인가 — 1부터. 0화는 회차가 아니다 (§3.2)
   track:           TrackItem[]      // 시리즈 줄 — 지난 화 · 지금 · 다음 화 (§3.3)
+  previous?:       EpisodeRef       // 지난 회차 — 이 회차가 그림 · 구절을 이어 받은 같은 시리즈의 앞 화 (§3.4). 실물 전 · 3화에서 확인
   docs:            Record<DocLabel, EpisodeDoc>      // 근거 문서 (§4.2)
   quotes:          Record<QuoteKey, EpisodeQuote>    // 근거 구절 — 저장된 문서의 글 그대로 (§4.2)
   voice_labels:    VoiceLabels      // 누구의 말 꼬리표의 이름 — 회차마다 다르다 (§4.4)
@@ -96,6 +101,8 @@ TrackItem {                         // 시리즈 줄의 한 줄
   title: EpisodeText
   state: TrackState
 }
+
+EpisodeRef { episode_id: UUID, episode_version: integer }   // 회차 하나의 한 판을 가리킨다 — OBSERVATION ArticleRef 와 같은 방식 (D30). 실물 전
 
 EpisodeText {                       // 독자가 읽는 글 한 덩이 (§4.1). 굵게는 **이렇게**, 줄바꿈은 \n
   t:      TextBody
@@ -317,6 +324,7 @@ ReachedNode {                       // 힘이 닿은 고리
   reach: "full" | "part"
   idle:  string                     // 밀기 전의 말
   after: EpisodeText                // 민 뒤 — **오늘의 값.** 구절이 있어야 한다 (불변식 18 · UX4-e)
+  before?: ChainBefore              // 같은 그림의 지난 값 — 지난 회차의 같은 고리 (§7.9). 실물 전 · 3화에서 확인
 }
 
 StoppedNode {                       // 힘이 닿지 않은 고리 — 밀기 전에도 뒤에도 같은 말이다
@@ -324,6 +332,12 @@ StoppedNode {                       // 힘이 닿지 않은 고리 — 밀기 �
   name:  string
   reach: "none"
   still: EpisodeText                // 오늘의 값. 구절이 있어야 한다
+  before?: ChainBefore              // 같은 그림의 지난 값 (§7.9). 실물 전
+}
+
+ChainBefore {                       // 지난 회차의 같은 고리 — 그 회차의 값 그대로 (§7.9 · 불변식 25). 실물 전
+  reach: "full" | "part" | "none"   // 그때 힘이 닿은 데
+  value: EpisodeText                // 그때의 값 (after · still) — 근거 구절까지 그대로. 구절이 있어야 한다
 }
 
 ChainCaption { before: EpisodeText, after: EpisodeText }
@@ -355,6 +369,12 @@ SeatSide {
   said:         EpisodeText         // 그쪽이 공식으로 한 말 — 구절이 있어야 한다
   why:          "in-doc" | "not-yet"   // 그쪽의 까닭이 문서에 있나 (UX4-a · D62 ②)
   not_yet_note: Fragment | null     // not-yet 이면 필수 — said.t 안에서 "그 까닭은 아직 문서에 없다"고 말하는 문장 (불변식 17)
+  before?:      SeatBefore          // 같은 그림의 지난 값 — 지난 회차의 같은 쪽 (§7.9). 실물 전 · 3화에서 확인
+}
+
+SeatBefore {                        // 지난 회차의 같은 쪽 — 그 회차의 값 그대로 (§7.9). 실물 전
+  group: EpisodeText                // 그때 그쪽 자리 위의 말 ("올리자 · 2명")
+  why:   "in-doc" | "not-yet"       // 그때 그쪽의 까닭이 문서에 있었나 — not-yet → in-doc 이 "지난 화의 약속에 답했다"다
 }
 
 SeatsCaption { before: EpisodeText }
@@ -418,6 +438,7 @@ PlainQuiet {                        // 다. 조용히 — 무슨 일 → 지금 
 Series (독자가 따라가는 묶음) ─┐
                                ├─ Episode ──event_ref──▶ Event (DATA_MODEL) ◀──event_ref── ArticlePackage (본 화면 `/`)
           회차 번호 · 시리즈 줄 ─┘     │                     ▲                                ▲
+                                      ├─ previous ──▶ 지난 회차 (EpisodeRef — 실물 전 · §3.4)
                                       │                     └── Storyline (사실의 흐름 — 시리즈가 아니다. §2.1)
                                       ├─ docs ──source_id──▶ SourceDocument (DATA_MODEL · 저장된 원문)
                                       ├─ quotes ─ 그 원문의 글 그대로
@@ -455,6 +476,7 @@ Series (독자가 따라가는 묶음) ─┐
   한 사건에 ArticlePackage 와 Episode 가 둘 다 있을 수 있다 — 지금은 겹치는 사건이 없다 (본 화면의 기사는 9월 FOMC, 회차는 10월 FOMC 와 배달앱)
 - **회차끼리 · 회차와 기사끼리 가리키지 않는다.** 금리 2화의 시리즈 줄 "1화 · 3년 만에 금리를 올렸어요"는 본 화면의 9월 기사 (ArticlePackage)다 — 회차 (Episode)가 아니다.
   그래서 `track` 은 글 (번호 · 제목 · 상태)만 싣고 아무것도 가리키지 않는다. 지난 화를 무엇으로 가리킬지는 **미확인** (§10)
+- **덧붙임 (UX-6 · 실물 전)**: 회차가 **지난 회차 (Episode)** 의 그림 · 구절을 이어 받았으면 그 회차를 `previous` 로 가리킨다 (§3.4). 회차가 아닌 지난 화 (본 화면의 기사)는 여전히 가리키지 않는다 — `track` 은 그대로 글이다
 - **본 화면은 그대로다.** ArticlePackage · ArticleRecord · 기존 골든 · 본 화면 (`/`)은 한 글자도 바뀌지 않았다. 본 화면을 회차로 옮기는 것은 뒤의 Step 이다
 
 ### 2.3 판 (version) — ArticleRecord 의 방식을 따른다. 저작 데이터의 자리는 미확인
@@ -495,6 +517,15 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
   `number` 와 그 글자의 대응 ("N화")은 검사하지 않는다 — 글자의 꼴은 글의 일이다
 - `track` — 지난 화 · 지금 · 다음 화. `state` 가 `now` 인 줄이 정확히 하나. 다음 화의 `no` 는 번호가 아닐 수 있다 (실물 "다음 화")
 
+### 3.4 지난 회차 — `previous` (N-2 · **실물 전 · 3화에서 확인**)
+
+- **`previous?: EpisodeRef { episode_id, episode_version }`** — 이 회차가 그림 · 구절을 이어 받은 회차의 **한 판**. OBSERVATION 의 `ArticleRef { article_id, article_version }` 와 같은 방식이다 (D30) — 회차는 통째로 불변이고 (§2.3) 판이 오르면 다른 회차가 된다.
+  지금까지는 파이프라인이 픽스처 주석 `_source.previous` 에 지난 회차의 **code** 만 적었다 (검증기가 무시한다) — 그것을 칸으로 올렸다. code 가 아니라 UUID + 판인 까닭: 3화가 가리키는 것은 "2화"가 아니라 "그때 읽은 2화의 그 판"이다 (2화에 새 판이 생겨도 3화의 지난 값은 그 판의 값이다)
+- **고를 수 있는 칸이다.** 시리즈의 첫 화 · 지난 화가 회차가 아닌 화 (금리 2화의 1화 = 본 화면의 기사)에는 없다. 골든 셋 다 없다
+- **있어야 하는 때** (불변식 25): 같은 그림의 지난 값 (`before` — §7.9)이 있거나, 지난 회차에서 온 구절 (`code:key` — §4.5)이 있으면. 무엇의 지난 값인지 · 어디서 온 구절인지 모르면 화면이 "지난 화"라고 말할 수 없다
+- **같은 시리즈의 앞 화다.** 바로 앞 화 (N − 1화)인지는 걸지 않았다 — 파이프라인은 지금 바로 앞 화만 받는다 (`episode.ts` 의 `prev.number + 1`). 검증기는 지난 회차를 받았을 때만 시리즈 · 앞뒤를 댄다 (`PREV_MISMATCH`)
+- "이 그림을 본 독자"가 누구인가 (D64 · D66)는 이 칸으로 정해지지 않는다 — 어느 회차가 그 그림을 썼는지가 데이터에 생겼을 뿐이다. 지식 상태는 여전히 이 계약 밖이다 (§0)
+
 ---
 
 ## 4. 글과 근거
@@ -531,6 +562,17 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 
 - 없어도 된다 (실물: 표지 · 머리 · 큰 글자에는 없다). ARTICLE_PACKAGE 의 층 다섯 (`fact` · `claim` · `concept` · `bridge` · `writing`)과 다른 어휘다 — 대응은 **미확인** (§11 _open E-3)
 - 풀이 장면의 끝에는 늘 `solve.entry.whose` — "여기까지는 ○○의 판단"
+
+### 4.5 지난 회차에서 온 구절 — 키의 꼴 (N-3 · **실물 전 · 3화에서 확인**)
+
+이어 쓰는 회차는 지난 회차의 글 몇 덩이 (시리즈 줄의 지난 화 제목 · 같은 그림의 지난 값)를 **근거 구절째** 받는다. 그 구절의 키를 그대로 두면 한 회차의 `quotes` 에 키의 꼴이 둘이 되고 (파이프라인의 `F001` · 손 2화의 `omo.2023`), **사건이 다른 회차끼리는 키가 부딪친다** — 4화 (12월 사건)의 `F001` 과 3화 (10월 사건)의 `F001` 은 다른 사실이다.
+
+- **꼴: `<그 구절이 처음 실린 회차의 code>:<그 회차에서의 키>`** — 예 `fomc:omo.2023` (손 2화 `fomc` 의 `omo.2023`). 이 회차의 구절은 `:` 없이 쓴다
+- **앞머리는 하나.** 3화가 2화에서 받은 `fomc:omo.2023` 을 4화가 다시 받으면 그대로 `fomc:omo.2023` 이다 (`rate-3:fomc:omo.2023` 이 아니다). 그래서 (처음 실린 회차의 code · 키) 가 회차를 넘어 구절 하나를 가리킨다 — code 는 유일 · 불변이다 (§1)
+- 코드: `CARRIED_KEY` (꼴) · `carriedKey(지난 회차의 code, 키)` (옮길 때의 키 — 이미 옮겨 온 키는 그대로) — `packages/contract/src/episode.ts`
+- 옮겨 온 구절도 이 회차의 `quotes` · `docs` 에 있다 — 글의 `src` 는 이 회차의 구절만 가리킨다 (불변식 4). 문서 (`docs` 의 라벨)는 옮겨도 라벨을 바꾸지 않는다 — 같은 라벨이 다른 문서를 가리키면 지난 회차를 받았을 때 `PREV_MISMATCH` 로 걸린다
+- 검증기가 보는 것 (불변식 25 · 26): `:` 가 든 키가 있으면 `previous` 가 있다 · 앞머리는 하나 · 앞머리가 이 회차의 code 가 아니다. **보지 않는 것**: 지난 회차에서 왔는데 `:` 없이 적은 구절 (꼴로는 이 회차의 구절과 같아 보인다) — 지난 회차를 받으면 `before` 의 근거로 걸린다 (`PREV_MISMATCH`)
+- **구절 ↔ Fact (§4.2 · E-2)와는 따로다.** 이 꼴은 회차 사이에서 키가 부딪치지 않게 할 뿐이다
 
 ---
 
@@ -647,7 +689,7 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 - 같은 `picture.id` 를 본 독자에게는 준비 글 (`setup`) · 탭 · 누르기가 빠지고 그림의 끝 모습과 오늘의 값만 보인다 (UX-4 ⑤). 무엇이 빠지는지는 화면의 규칙이다 — 회차가 따로 적지 않는다
 - **`lab.seen_title`** — 그 독자에게 보일 머리 (D62 ③). 지금 머리 ("회의 자리에 앉아 볼게요")는 앉지 않는 독자에게 안 맞는다 (UX4-f). **실물 없음**: 골든 둘 다 `null` 이고, `null` 이면 `title` 이 나온다.
   독자 글을 새로 쓰지 않았다 — 칸만 만들었다
-- 누가 "그 그림을 본 독자"인가는 지식 상태다 — 회차에 없다. 지난 회차의 값을 옆에 놓는 것 (UX4-c)은 3화가 실물이다 — **미확인**
+- 누가 "그 그림을 본 독자"인가는 지식 상태다 — 회차에 없다. 지난 회차의 값을 옆에 놓는 것 (UX4-c)은 **§7.9 (실물 전 — 3화가 첫 실물)**
 - **넘겨 보기에서의 다시 쓰기는 §7.8** — 같은 차례 (`picture.id`)의 다음 문서에서만 선다. `seen_title` 의 첫 실물도 그 골든이다 ("일의 차례를 펼쳐 놓을게요")
 
 ### 7.7 기본 풀이 — 체험 없음 (D61 ①)
@@ -682,6 +724,19 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 - **"이 그림을 본 독자" (§7.6)** — 넘기기 · 준비 글 없이 차례 전체가 펼쳐져 있고, 칸을 누르면 그 칸의 글이 나온다 (화면의 일). **다시 쓰기 (D61 ②)는 같은 차례의 다음 문서에서만 선다**: 의결서가 나오면 같은 `picture.id` 에 칸이 더해지고 "날짜 없음"이 날짜로 바뀐다 — 그것이 "값만 바뀐 같은 그림"이다 (**실물 없음** — 다음 회차).
   다른 사건 (다른 회사의 유출)에는 서지 않는다 — 칸이 전부 새것이라 "본 그림"이 없다
 - **미확인 (이 실물에 없다)**: 전 → 후 꼴 (고쳐진 문구 둘 — UX-3 의 SK하이닉스 · 성명문 대조) · 넘겨 보기를 다른 틀과 잇기 (`tab` · `go_on` 칸이 없다 — 넣으면 `SCHEMA_KEY`) · 갈래가 둘인 차례 (두 회사를 나란히) · 때를 기계가 읽는 칸 (차례가 때의 차례인지는 검증기가 보지 않는다 — 사람) · 칸의 `voice` 를 꼭 달아야 하나 (실물은 여섯 다 달았다)
+
+### 7.9 같은 그림의 지난 값 — `before` (N-1 · **실물 전 · 3화에서 확인**)
+
+D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 ③ "그림을 본 독자는 그림 + 오늘 값 (3화에서 지난 값을 옆에)". **같은 그림에 값이 달라지는 것이 곧 "이어진다"** 인데, 지금까지는 오늘 값만 화면에 나갔다 — 파이프라인은 지난 값을 `review.json` 의 `carry` 에만 실었다 (P-E2 ⑦ N-1).
+
+- **무엇이 같은 그림인가** — 지난 회차 (`previous`)에 **같은 kind 의 틀**이 **같은 `picture.id`** 로 있다. 지난 값은 그 틀의 **같은 `id`** 의 고리 · 쪽에 붙는다 (고리의 이름 · 쪽의 고르는 말은 그림의 말이라 지난 회차의 것을 받는다 — P-E2 ② "그림의 말만 그대로" · PE2-i).
+  이름이 아니라 id 로 대는 까닭: 고리의 이름은 그림의 말이라 다듬어질 수 있고, id 는 P-E2 의 설계 프롬프트가 "바꾸지 않는다"고 한 것이다
+- **고리 — `ChainBefore { reach, value }`**: 그때 힘이 닿은 데와 그때의 값 (`after` 또는 `still`) — 글 · 근거 구절까지 그 회차의 것 그대로 (구절의 키는 §4.5 꼴). P-E2 의 `carry` 가 `"<값> (<reach>)"` 로 적던 것을 칸으로 나눴다. **닿은 데가 바뀐 것** (안 닿음 → 일부)이 고리 그림에서 가장 큰 오늘의 소식이라 `reach` 를 따로 둔다
+- **쪽 — `SeatBefore { group, why }`**: 그때 그쪽 자리 위의 말 (수가 든 글 — 근거는 불변식 9 가 본다)과 그때 까닭이 문서에 있었나. P-E2 의 `carry` 가 `"<group> · 까닭 <why>"` 로 적던 것. **`not-yet` → `in-doc` 이 "지난 화가 '아직 문서에 없다'고 한 약속에 이번 화가 답했다"** 이다 (UX4-a · 3화 = 회의록이 반대 둘의 까닭을 채우는 회차 — D61 ⑨). 그때의 `said` 는 싣지 않는다 — `why` 가 그 뜻을 다 싣고, 그때의 말은 지난 회차에 있다
+- **달라졌든 아니든 싣는다.** 같은 id 의 고리 · 쪽이 지난 회차에 있으면 `before` 를 단다 (P-E2 의 `carryPairs` 와 같다 — 바뀐 것만 고르지 않는다). 같은지 다른지는 화면이 오늘 값과 대 본다 ("지난 화와 같아요")
+- **고를 수 있는 칸이다** — 지난 회차가 없거나 그 고리 · 쪽이 새것이면 없다. 켜고 끄기 · 넘겨 보기에는 두지 않았다: 켜고 끄기의 그림은 개념의 것이라 다시 쓸 때 오늘의 값이 거의 없고 (UX-4 ⑤), 넘겨 보기의 다시 쓰기는 같은 차례에 칸이 더해지는 꼴이라 (§7.8) 모양이 다르다 — 그 실물이 나올 때 (§10)
+- 검증기 (불변식 25): `before` 가 있으면 `previous` 가 있다 · 고리의 지난 값에 구절 (오늘의 값과 같은 규칙 — 불변식 18). **지난 회차를 받으면** (`validateEpisode(ep, { previous })`) 대 본다 — 받은 회차가 `previous` 의 그 판인가 · 같은 시리즈의 앞 화인가 · 같은 그림 (kind · `picture.id` · 고리 · 쪽 id)인가 · 지난 값이 그 회차의 값과 글자 · 닿은 데 · 까닭 · 근거 (키는 §4.5 로 옮겨) 그대로인가 · 옮겨 온 구절이 그 회차의 구절 그대로인가 (`PREV_MISMATCH`). 안 받으면 알림 `PREVIOUS_NOT_CHECKED`
+- **화면 (시안 `kit/frames/Steps.tsx`)**: "이 그림을 본 독자"에게는 처음부터 · 처음 보는 독자에게는 밀거나 앉은 **뒤에** 고리 · 쪽마다 "지난 화" 한 줄 (같으면 "지난 화와 같아요"). 쪽은 자리 그림 아래 "지난 화" 칩 (그때 자리 위의 말) · 고른 쪽이 `not-yet` → `in-doc` 이면 "지난 화에 ‘아직 문서에 없다’던 이 쪽의 까닭이 이번에 들어왔어요." 무엇을 어떻게 보이나는 화면의 일이다 — 회차는 값만 싣는다
 
 ---
 
@@ -735,10 +790,13 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | 22 | **칸의 때 — `when` 이 있거나, 없으면 `no_date` ("날짜 없음")가 화면에 있다.** 둘 중 정확히 하나 | `PAGES_WHEN` | UX-5 실물 · E3-1-f | `episode-pages-undated-unsaid` · `episode-pages-when-and-no-date` |
 | 23 | **★ 칸이 정확히 하나 · 첫 칸이 아니다** | `PAGES_STAR` | UX-5 실물 · UX-3 ⑥ | `episode-pages-no-star` · `episode-pages-two-stars` |
 | 24 | **앞날 칸 금지 — `state: next` 면 거부** · 지금 (`now`)은 마지막 칸에만 | `PAGES_FUTURE` · `PAGES_ORDER` | UX-3 ④ ("다음 칸을 그려야 할 때 쓰지 않는다") · UX-5 실물 | `episode-pages-future-card` · `episode-pages-now-not-last` |
+| 25 | **지난 값 · 지난 회차에서 온 구절이 있으면 지난 회차 칸이 있다** — `before` 나 `code:key` 구절이 있는데 `previous` 가 없으면 거부 · 고리의 지난 값 (`before.value`)에 구절 · `previous` 의 판 ≥ 1 이고 이 회차 자신이 아니다 (`ID_RANGE`). **실물 전** | `PREV_MISSING` · `PREV_VALUE_SRC` | D61 ② · D62 ③ · P-E2 ⑦ N-1 · N-2 (UX-6) | `episode-before-no-previous` · `episode-before-value-no-src` |
+| 26 | **지난 회차에서 온 구절의 키는 `<처음 실린 회차의 code>:<키>`** — 앞머리 하나 · 이 회차의 code 가 아니다 (§4.5). **실물 전** | `PREV_KEY` | P-E2 ⑦ N-3 (UX-6) | `episode-quote-key-double-prefix` |
 
-- 알림 (거부가 아니다): `SEAT_WHY_NOT_YET` — 그 쪽은 반쪽이다 (금리 2화에 하나) · `QUOTES_NOT_CHECKED` — 저장된 문서를 받지 못해 8 을 보지 않았다
+- 알림 (거부가 아니다): `SEAT_WHY_NOT_YET` — 그 쪽은 반쪽이다 (금리 2화에 하나) · `QUOTES_NOT_CHECKED` — 저장된 문서를 받지 못해 8 을 보지 않았다 · `PREVIOUS_NOT_CHECKED` — `previous` 가 있는데 지난 회차를 받지 못해 아래를 보지 않았다
+- **지난 회차를 받으면 (`validateEpisode(ep, { previous })` — 실물 전 · §7.9)**: 받은 회차가 `previous` 의 그 판인가 · 같은 시리즈의 앞 화인가 · `before` 가 붙은 틀이 같은 그림 (kind · `picture.id`)이고 그 고리 · 쪽 id 가 지난 회차에 있나 · 지난 값이 그 회차의 값 그대로인가 · 옮겨 온 구절이 그 회차의 구절 그대로인가 → 아니면 `PREV_MISMATCH`. 문서를 받아야 보는 8 처럼, 지난 회차를 받아야 본다 — 위반 픽스처는 문서만 받으므로 이 코드는 시험이 픽스처 없이 본다
 - `_` 로 시작하는 칸은 픽스처 주석이다. 무시하고, 돌려주는 회차에서는 뺀다 (ARTICLE_PACKAGE §9-10 과 같다)
-- **검증기가 보지 않는 것**: 글의 뜻이 구절에서 나오는가 · §8 의 칸이 참인가 · ConceptRef 가 가리킨 개념 · `event_ref` 의 사건이 있는가 (저장소가 있어야 한다 — 발행 검사) · 그림 부품이 있는가 (코드 — 시안 `check.ts` S1)
+- **검증기가 보지 않는 것**: 글의 뜻이 구절에서 나오는가 · §8 의 칸이 참인가 · ConceptRef 가 가리킨 개념 · `event_ref` 의 사건이 있는가 (저장소가 있어야 한다 — 발행 검사) · 그림 부품이 있는가 (코드 — 시안 `check.ts` S1) · `previous` 가 가리키는 회차가 있는가 (저장소 — 발행 검사. 받으면 위처럼 댄다) · 지난 회차에서 왔는데 `:` 없이 적은 구절 (§4.5)
 
 ---
 
@@ -748,7 +806,8 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 
 | 무엇 | 왜 못 정했나 | 언제 |
 |---|---|---|
-| 같은 시리즈의 회차 둘 — Series 가 따로 저장되나 · 지난 화를 무엇으로 가리키나 · 따라잡기 · 지나온 줄이 어디서 오나 (UX2-d) · 같은 그림의 지난 값 (UX4-c) · 지도의 자리가 시리즈의 것인가 | 시리즈마다 회차가 하나뿐이다 | 금리 3화 |
+| 같은 시리즈의 회차 둘 — Series 가 따로 저장되나 · 따라잡기 · 지나온 줄이 어디서 오나 (UX2-d) · 지도의 자리가 시리즈의 것인가 | 시리즈마다 회차가 하나뿐이다 | 금리 3화 |
+| **실물 전 칸 셋 (UX-6)** — 지난 회차를 가리키는 칸 (§3.4) · 지난 회차에서 온 구절의 키 (§4.5) · 같은 그림의 지난 값 (§7.9). 칸은 있다 — 모양 · `?` 를 그대로 둘지 · 바로 앞 화만 받나 · 켜고 끄기 · 넘겨 보기의 지난 값은 정하지 않았다 | 결정과 P-E2 의 시험에서 왔다 — 회차 실물이 아직 없다 | 금리 3화 (11/18 무렵) |
 | 독립된 0화 | 0화는 장면과 시리즈 줄의 한 줄로만 있다 (§3.2) | 그 실물이 생길 때 |
 | 무엇이 회차의 새 판을 만드나 · 저작 데이터 (시간 표현 · 스토리라인 핀)의 자리 · 발행 시각 · 언어 | 판이 둘인 실물 · 저작 데이터의 실물이 없다 (§2.3). ArticlePackage 의 `published_at` · `lang` 에 해당하는 칸도 실물에 없다 | 회차를 발행할 때 |
 | 독자 기록이 회차를 가리키는 모양 · "이거 알아요?" 의 답 (UX1-c) | 회차를 읽은 기록이 없다 · D64 OPEN | OBSERVATION 개정 |
@@ -782,6 +841,10 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | E-14 | **앞날 칸 금지를 스스로 적는 칸 (`PageCard.state`)으로 봤다** — `SeatsGround.split` 과 같은 방식 (금지된 값을 적으면 거부). 회차에 발행일이 없어 날짜로는 못 본다 | `TrackState` 를 다시 썼다 (`next` 거부) | 때를 기계가 읽는 칸 (`at`) + 사건일과 견주기 — DATA_MODEL 의 때 타입 · 발행일 칸이 생길 때 |
 | E-15 | **셋째 골든의 근거 문서 여덟 가운데 하나가 다른 사건의 문서다** — 견주기 장면이 「누가 값을 정하나」 1화의 공정위 보도자료 구절 둘 (git · 공공누리 제1유형)을 다시 쓴다. 금리 2화가 9월 문서를 쓰는 것과 같은 꼴 | 받는다 (계약은 문서가 어느 사건의 것인지 보지 않는다) | 회차의 구절은 그 사건의 소스 팩에서만 — 견주기를 같은 사건 안 (대교 ↔ 영훈)으로 바꾼다 |
 | E-10 | 고리의 `after` · `still` 에 구절을 달았다 (UX4-e) — 구절은 시안 주석의 것. `voice` 는 달지 않았다 | 구절만 | `voice` 도 (금리 = fact · 금융 여건 = official) |
+| E-16 | **지난 회차 칸 셋을 `?` (빼도 되는 칸)로 뒀다 (UX-6).** 이 계약은 "없으면 `null` 을 적는다" (§12)인데, 그러면 골든 셋에 `previous: null` · `before: null` 을 더해야 한다 — 실물 전 칸으로 골든을 고치지 않으려고 | `?` | 3화가 나온 뒤 `\| null` 로 (골든 셋에 칸이 더해진다) |
+| E-17 | **구절 키의 앞머리가 회차의 code 다** (§4.5) — `previous` 는 UUID + 판인데 키는 code 로 가리킨다. 키를 읽을 수 있게 · 짧게. 그래서 검증기는 지난 회차를 받기 전에는 앞머리가 그 회차인지 못 본다 | code | `EpisodeRef` 에 `code` 도 둔다 (D30 의 ArticleRef 에는 없다) · 또는 앞머리를 UUID 로 (읽기 어렵다) |
+| E-18 | **쪽의 지난 값에 수 (`count`) · 그때의 말 (`said`)을 두지 않았다** — P-E2 의 `carry` 가 `group` · `why` 만 적었다. 화면은 자리 위의 말로 그때의 수를 보인다 (점을 다시 그리지 않는다) | `group` · `why` | `count` 를 더해 지난 화의 자리 그림을 그린다 (3화는 같은 표결이라 수가 같다) |
+| E-19 | **지난 값은 고리 · 쪽에만** — 켜고 끄기 · 넘겨 보기 · 자리의 실제 결과 (`result`) · 머리 (`label`)에는 없다 | 고리 · 쪽 | 그 실물이 나올 때 (§10) |
 
 ---
 
@@ -807,7 +870,7 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | `SeatSide.why` | + `not_yet_note` | UX4-a |
 | `Lab` | + `seen_title: null` | D62 ③ |
 | `PlainSolve.why: "demo"` | `null` | 시안 전용 값 |
-| 없으면 뺀 칸 (`tab?` · `goOn?` · `born?` · `differNote?`) | `null` 을 적는다 | `EpisodeText` 의 `src` · `calc` · `ui` · `voice` 만 뺄 수 있다 |
+| 없으면 뺀 칸 (`tab?` · `goOn?` · `born?` · `differNote?`) | `null` 을 적는다 | `EpisodeText` 의 `src` · `calc` · `ui` · `voice` 만 뺄 수 있다 — UX-6 이 더한 실물 전 칸 셋 (`previous` · 고리 · 쪽의 `before`)도 뺄 수 있다 (E-16) |
 
 셋째 골든 `fixtures/episode-privacy-1.json` (구절 44 · 문서 8 · 글 105 · 도구 5 — 전부 손으로)은 옮긴 것이 아니라 처음부터 이 계약의 모양으로 썼다 (UX-5). 시안 `/lab/episode/pipc` 가 그것을 읽어 그린다.
 

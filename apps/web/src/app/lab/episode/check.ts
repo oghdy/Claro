@@ -9,12 +9,15 @@
 //   S3     두 독자의 고정값(시안 전용)이 가리키는 도구 · 다른 시리즈가 있다
 //   S4     시안 전용 글(공통 화면 글 kit/chrome.ts · 조종 칸의 짧은 이름 · 조용히 견본)에 숫자가 없다
 //   S5     조용히 견본(회차가 아니다)의 풀이 칸이 계약의 풀이 규칙(§9 11 ~ 20)에 맞다
+//   S6     지난 값 견본 (UX-6 — 금리 2화 + 시안 전용 지난 값 · 실제 아님)이 계약 검증을 지난다 (구절 대조 · 지난 회차 칸 불변식 25 · 26). 지난 값이 9월 구절에 기댄다
+//   3화 (rate-3) · 파이프라인 2화 (fomc-auto)는 제 폴더의 check.ts 가 본다
 // 보지 않는 것: 글의 뜻이 구절에서 나오는가 (의미 대조 — 사람이 읽는다) · 한글로 쓴 수("여섯 가지") · 그림이 "그리지 않을 것"을 넘었나 (사람)
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { solveProblems, validateEpisode } from "@claro/contract";
 import { CHROME } from "./kit/chrome";
 import { QUIET_SAMPLE } from "./episodes/quiet-sample/data";
+import { CARRY, CARRY_BANNER, CARRY_EPISODE } from "./episodes/carry-sample/data";
 import { isPages, isSteps, isToggle } from "./kit/frames/LabCard";
 import { PICTURES } from "./kit/frames/pictures";
 import { EPISODES, SHELF } from "./kit/shelf";
@@ -83,6 +86,22 @@ for (const e of EPISODES) {
   if (report(errors)) console.log("OK — 숫자가 든 글이 없고, 풀이 칸의 규칙이 맞다");
 }
 {
+  console.log("\n■ 지난 값 견본 — 실제 아님 (episodes/carry-sample · /lab/episode/carry)");
+  const errors: string[] = [];
+  const documents = CARRY.stores.flatMap((f) => (JSON.parse(readFileSync(path.join(REPO, f), "utf8")) as { source_documents: { source_id: string; text: string }[] }).source_documents);
+  const r = validateEpisode(CARRY_EPISODE, { documents });
+  if (!r.ok) errors.push(...r.errors.map((x) => `S6 ${x.code} ${x.path}: ${x.message}`));
+  else {
+    const befores = r.episode.solve.lab!.frames.flatMap((f) => (f.kind === "chain" ? f.nodes.filter((n) => n.before).map((n) => `${n.id} ${n.before!.reach} “${n.before!.value.t}” (${n.before!.value.src?.join(" ")})`) : f.kind === "seats" ? f.sides.filter((x) => x.before).map((x) => `${x.id} “${x.before!.group.t}” · 까닭 ${x.before!.why}`) : []));
+    console.log(`지난 값 ${befores.length}: ${befores.join(" / ")}`);
+    for (const w of r.warnings) console.log(`  알림 — ${w.code} ${w.path}`);
+    if (!r.warnings.some((w) => w.code === "PREVIOUS_NOT_CHECKED")) errors.push("S6 견본의 지난 회차는 회차가 아니다 — PREVIOUS_NOT_CHECKED 알림이 있어야 한다");
+  }
+  digits("CARRY_BANNER", CARRY_BANNER, errors);
+  digits("short", CARRY.short, errors);
+  if (report(errors)) console.log("OK — 계약 검증을 지났고 (지난 값의 구절도 저장된 문서에 있다), 견본 띠에 숫자가 없다");
+}
+{
   console.log("\n■ 공통 화면 글 (kit/chrome.ts)");
   const errors: string[] = [];
   digits("CHROME", CHROME, errors);
@@ -93,4 +112,4 @@ if (failed) {
   console.log(`\nFAIL ${failed}`);
   process.exit(1);
 }
-console.log(`\nOK — 회차 ${EPISODES.length} (계약 + 화면 쪽) · 조용히 견본 · 공통 글`);
+console.log(`\nOK — 회차 ${EPISODES.length} (계약 + 화면 쪽) · 조용히 견본 · 지난 값 견본 · 공통 글`);

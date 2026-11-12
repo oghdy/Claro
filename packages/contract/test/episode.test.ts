@@ -1,4 +1,4 @@
-// 회차 계약 (docs/contract/EPISODE.md) — 골든 셋은 통과하고, fixtures/invalid/episode-*.json 은 전부 거부된다 (B-E1 · 셋째 골든과 넘겨 보기 틀은 UX-5).
+// 회차 계약 (docs/contract/EPISODE.md) — 골든 셋은 통과하고, fixtures/invalid/episode-*.json 은 전부 거부된다 (B-E1 · 셋째 골든과 넘겨 보기 틀은 UX-5 · 지난 회차 칸 셋은 UX-6 — 실물 전).
 // invalid 픽스처는 아래 표(VIOLATIONS)가 원본이다: 골든 + 위반 하나. 파일이 표와 어긋나면 실패한다.
 // 표를 고쳤으면 `WRITE_EPISODE_INVALID=1 pnpm --filter @claro/contract test` 로 파일을 다시 쓴다.
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -108,6 +108,8 @@ interface Violation {
 const seats = (e: any) => e.solve.lab.frames[1];
 const chain = (e: any) => e.solve.lab.frames[0];
 const pages = (e: any) => e.solve.lab.frames[0];
+// 지난 회차 칸 (UX-6 · 실물 전) — 위반 픽스처에 쓰는 지난 회차. 실제 회차가 아니다 (픽스처는 지난 회차를 받지 않는다 — 대 보기는 "픽스처 없이"에서)
+const SOME_PREVIOUS = { episode_id: "00000000-0000-4000-8000-000000000002", episode_version: 1 };
 
 const VIOLATIONS: Violation[] = [
   {
@@ -333,6 +335,29 @@ const VIOLATIONS: Violation[] = [
     what: "둘째 칸 (첫 번째 유출)을 지금이라고 적었다 — 그 뒤에 칸이 넷 더 있다",
     mutate: (e) => (pages(e).cards[1].state = "now"),
   },
+  // ── 지난 회차 칸 셋 (UX-6 · §3.4 · §4.5 · §7.9 · 불변식 25 · 26 — 실물 전) — 금리 2화 + 위반 하나
+  {
+    file: "episode-before-no-previous.json", of: RATE, code: "PREV_MISSING",
+    rule: "§9-25 · §7.9 — 같은 그림의 지난 값이 있으면 지난 회차 칸(previous)이 있다. 무엇의 지난 값인지 모르면 화면이 '지난 화'라고 말할 수 없다",
+    what: "가운데 고리(돈 빌리는 형편)에 지난 값을 달았는데 지난 회차 칸이 없다",
+    mutate: (e) => (chain(e).nodes[1].before = { reach: "none", value: { t: "아직 그대로", src: ["pc10.cond"] } }),
+  },
+  {
+    file: "episode-before-value-no-src.json", of: RATE, code: "PREV_VALUE_SRC",
+    rule: "§9-25 · §7.9 — 고리의 지난 값에도 구절이 있다 (오늘의 값과 같은 규칙 — 불변식 18)",
+    what: "지난 회차 칸을 두고 가운데 고리의 지난 값을 구절 없이 적었다",
+    mutate: (e) => ((e.previous = SOME_PREVIOUS), (chain(e).nodes[1].before = { reach: "none", value: { t: "아직 그대로" } })),
+  },
+  {
+    file: "episode-quote-key-double-prefix.json", of: RATE, code: "PREV_KEY",
+    rule: "§9-26 · §4.5 — 지난 회차에서 온 구절의 키는 <처음 실린 회차의 code>:<키> 하나다. 앞머리를 거듭 붙이지 않는다",
+    what: "시리즈 줄의 지난 화 제목이 기대는 구절(omo.2023)을 앞머리 둘(rate-3:fomc:omo.2023)로 옮겨 실었다 — 3화 → 4화로 이어 쓰며 앞머리를 또 붙인 꼴",
+    mutate: (e) => {
+      e.previous = SOME_PREVIOUS;
+      e.quotes["rate-3:fomc:omo.2023"] = e.quotes["omo.2023"];
+      e.track[1].title.src = ["rate-3:fomc:omo.2023", "omo.2026"];
+    },
+  },
   {
     file: "episode-pages-combo.json", of: PRIVACY, code: "FRAME_COMBO",
     rule: "§9-15 — 넘겨 보기는 혼자 선다. 다른 틀과 잇는 것은 실물이 없다",
@@ -346,7 +371,7 @@ const build = (v: Violation) => {
   const { _source, ...body } = golden(v.of);
   v.mutate(body);
   return {
-    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
+    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.code.startsWith("PREV_") ? "UX-6" : v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
     ...body,
   };
 };
@@ -376,6 +401,7 @@ describe("위반은 거부한다 — fixtures/invalid/episode-*.json", () => {
       "BREAKER_SRC", "PLAIN_WHY", "DEATH_LAB", "DEATH_NOT_QUIET", "NO_FLIP", "FRAME_COMBO", "SEATS_PARTY_VOTE", "SEATS_COUNT", "SEATS_SAID_SRC", "SEATS_NOT_YET",
       "CHAIN_NO_STOP", "CHAIN_ORDER", "CHAIN_VALUE_SRC", "FRAME_TAB", "DIFFER_ONE_SIDE", "DIFFER_SRC",
       "PAGES_CARDS", "PAGES_CARD_SRC", "PAGES_WHEN", "PAGES_STAR", "PAGES_FUTURE", "PAGES_ORDER",
+      "PREV_MISSING", "PREV_VALUE_SRC", "PREV_KEY",
     ])
       expect(covered.has(code), code).toBe(true);
   });
@@ -430,6 +456,94 @@ describe("픽스처 없이 보는 것", () => {
     const c = golden(PRIVACY);
     pages(c).tab = { t: "대교" };
     expect(codes(c)).toEqual(["SCHEMA_KEY"]);
+  });
+
+  // ── 지난 회차 칸 셋 (UX-6 · 실물 전) — 금리 2화 (손 · 골든)를 지난 회차로 받는 "3화 꼴" 회차를 만들어 본다. 3화의 실물이 아니다 (글은 2화 그대로)
+  const RATE_ID = golden(RATE).episode_id;
+  /** 2화를 이어 받은 3화 꼴: 같은 그림 · 고리 셋 · 쪽 둘에 지난 값 (2화의 값 그대로 · 구절은 fomc: 꼴로 옮김) · 시리즈 줄의 지난 화 구절도 fomc: 꼴 */
+  const third = () => {
+    const prev = golden(RATE);
+    const e = golden(RATE);
+    delete e._source;
+    Object.assign(e, { episode_id: "00000000-0000-4000-8000-000000000003", code: "rate-3", number: 3, previous: { episode_id: RATE_ID, episode_version: 1 } });
+    e.scenes.cover.episode = { t: "3화", ui: true };
+    e.track[2].no = { t: "3화", ui: true };
+    const carry = (t: any) => {
+      for (const k of t.src ?? []) e.quotes[`fomc:${k}`] = prev.quotes[k];
+      return { ...t, src: (t.src ?? []).map((k: string) => `fomc:${k}`) };
+    };
+    e.track[1].title = carry(prev.track[1].title); // 이 회차의 다른 글은 제 구절 (omo.2023 …)을 그대로 쓴다 — 같은 구절이 두 키로 있어도 된다
+    chain(e).nodes.forEach((n: any, i: number) => {
+      const p = chain(prev).nodes[i];
+      n.before = { reach: p.reach, value: carry(p.reach === "none" ? p.still : p.after) };
+    });
+    seats(e).sides.forEach((s: any, i: number) => {
+      const p = seats(prev).sides[i];
+      s.before = { group: carry(p.group), why: p.why };
+    });
+    return e;
+  };
+  const previous = parseEpisode(golden(RATE), { documents });
+  const codesWith = (doc: unknown, ctx: object) => {
+    const r = validateEpisode(doc, { documents, ...ctx });
+    return r.ok ? [] : [...new Set(r.errors.map((x) => x.code))].sort();
+  };
+  const fail = (r: ReturnType<typeof validateEpisode>) => (r.ok ? "" : r.errors.map((x) => `${x.code} ${x.path} ${x.message}`).join("\n"));
+
+  it("지난 회차 칸 셋이 다 찬 3화 꼴 — 통과 · 지난 회차를 안 주면 알림 PREVIOUS_NOT_CHECKED · 주면 대 보고 통과 · 칸이 없는 골든 셋도 그대로", () => {
+    const a = validateEpisode(third(), { documents });
+    expect(fail(a)).toBe("");
+    expect(a.warnings.map((w) => w.code).sort()).toEqual(["PREVIOUS_NOT_CHECKED", "SEAT_WHY_NOT_YET"]);
+    const b = validateEpisode(third(), { documents, previous });
+    expect(fail(b)).toBe("");
+    expect(b.warnings.map((w) => w.code)).toEqual(["SEAT_WHY_NOT_YET"]);
+    for (const name of [PRICE, RATE, PRIVACY]) expect(codes(golden(name)), name).toEqual([]);
+  });
+
+  it("지난 회차를 받으면 대 본다 → PREV_MISMATCH (다른 판 · 다른 그림 · 지난 값 · 까닭 · 근거가 그 회차의 것이 아님 · 앞 화가 아님 · 옮겨 온 구절의 문서가 다름)", () => {
+    const a = third();
+    a.previous.episode_version = 2;
+    expect(codesWith(a, { previous })).toEqual(["PREV_MISMATCH"]);
+    const b = third();
+    chain(b).picture.id = "rate-brake-2";
+    expect(codesWith(b, { previous })).toEqual(["PREV_MISMATCH"]);
+    const c = third();
+    chain(c).nodes[1].before.reach = "full"; // 2화에서는 일부 (part) 였다
+    expect(codesWith(c, { previous })).toEqual(["PREV_MISMATCH"]);
+    const d = third();
+    seats(d).sides[1].before.why = "in-doc"; // 2화에서는 아직 (not-yet) 이었다
+    expect(codesWith(d, { previous })).toEqual(["PREV_MISMATCH"]);
+    const f = third();
+    chain(f).nodes[1].before.value.src = ["pc10.cond"]; // 이 회차의 구절 키 — 지난 회차의 값이라면 fomc:pc10.cond
+    expect(codesWith(f, { previous })).toEqual(["PREV_MISMATCH"]);
+    const g = third();
+    g.number = 2;
+    g.scenes.cover.episode = { t: "2화", ui: true };
+    g.track[2].no = { t: "2화", ui: true };
+    expect(codesWith(g, { previous })).toEqual(["PREV_MISMATCH"]);
+    const h = third();
+    h.quotes["fomc:omo.2023"] = { doc: "CAL", quote: "The FOMC holds eight regularly scheduled meetings during the year and other meetings as needed." }; // 문서에는 있는 구절 — 지난 회차의 그 구절이 아니다
+    expect(codesWith(h, {})).toEqual([]);
+    expect(codesWith(h, { previous })).toEqual(["PREV_MISMATCH"]);
+  });
+
+  it("지난 회차 칸 — 지난 회차에서 온 구절인데 previous 없음 → PREV_MISSING · 쪽의 지난 값만 있어도 → PREV_MISSING · 앞머리가 이 회차의 code → PREV_KEY · 지난 회차가 자신 → ID_RANGE", () => {
+    const a = third();
+    delete a.previous;
+    chain(a).nodes.forEach((n: any) => delete n.before);
+    seats(a).sides.forEach((s: any) => delete s.before);
+    expect(codesWith(a, {})).toEqual(["PREV_MISSING"]); // fomc:omo.2023 · fomc:omo.2026 만 남았다
+    const b = golden(RATE);
+    seats(b).sides[1].before = { group: { t: "올리자 · 2명", src: ["st10.vote"] }, why: "not-yet" };
+    expect(codes(b)).toEqual(["PREV_MISSING"]);
+    const c = golden(RATE);
+    c.previous = SOME_PREVIOUS;
+    c.quotes["fomc:omo.2023"] = c.quotes["omo.2023"];
+    c.track[1].title.src = ["fomc:omo.2023", "omo.2026"];
+    expect(codes(c)).toEqual(["PREV_KEY"]); // 금리 2화의 code 가 fomc 다 — 제 구절에 제 앞머리
+    const d = third();
+    d.previous.episode_id = d.episode_id;
+    expect(codesWith(d, {})).toEqual(["ID_RANGE"]);
   });
 
   it("체험 없는 회차 (조용히) — 사망 · 체험 없음 · 뒤집기 없음이 함께 선다 (풀이 칸만 — 실물 회차 없음)", () => {

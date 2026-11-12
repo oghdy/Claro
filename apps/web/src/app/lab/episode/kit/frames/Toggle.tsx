@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LayoutGroup, motion, useAnimationControls } from "motion/react";
 import { CHROME } from "../chrome";
 import { Rich } from "../parts";
@@ -14,17 +14,21 @@ import type { ToggleFrame } from "./types";
 // 그림에는 숫자가 없다 — 지어낸 값을 쓰지 않으려고. 높낮이와 글자로만 말한다 (drawn 의 수는 높낮이 · 점의 수일 뿐이다).
 //
 // seen: 이 그림을 본 독자 (D61 ②) — 탭 · 버튼 · 설명 없이 그림의 끝 모습(켜졌고 · 막혔다)만. "다시 해 보기"로 처음처럼 해 볼 수 있다.
+// onDone: 체험을 마쳤다 — 켜진 쪽에서 눌러 막혔다 (두 번째 누름). 풀이 장면이 접어 둔 아래 (답)를 연다 (UX-6 · D74 f)
 
 type Rule = "off" | "on";
 const SPRING = { type: "spring", stiffness: 170, damping: 22 } as const;
 
-export function ToggleCard({ frame: f, seen = false }: { frame: ToggleFrame; seen?: boolean }) {
+export function ToggleCard({ frame: f, seen = false, onDone }: { frame: ToggleFrame; seen?: boolean; onDone?: () => void }) {
   const [redo, setRedo] = useState(false);
   const still = seen && !redo;
   const [rule, setRule] = useState<Rule>("off");
   const [done, setDone] = useState<Record<Rule, boolean>>({ off: false, on: false });
   const tag = useAnimationControls();
   const link = useAnimationControls();
+  useEffect(() => {
+    if (done.on) onDone?.();
+  }, [done.on, onDone]);
 
   // 그림은 틀의 데이터가 아니다 — 개념의 그림 부품 (pictures.ts). 계약의 틀은 이름만 가리킨다
   const st = PICTURES[f.picture.id]!;

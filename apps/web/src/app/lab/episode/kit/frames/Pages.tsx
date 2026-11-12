@@ -18,6 +18,7 @@ import type { PageCard, PagesFrame } from "./types";
 //
 // seen: 이 그림을 본 독자 (D61 ②) — 넘기기 · 물음 없이 차례 전체가 펼쳐져 있다. 칸을 누르면 그 칸의 글. "다시 해 보기"로 처음처럼 넘겨 볼 수 있다.
 //   값만 바뀌는 다시 쓰기는 **같은 차례의 다음 문서**에서만 선다 (칸이 더해지고 "날짜 없음"이 날짜로) — 그 실물은 아직 없다.
+// onDone: 체험을 마쳤다 — 마지막 칸까지 넘겼다. 풀이 장면이 접어 둔 아래 (답)를 연다 (UX-6 · D74 f)
 
 function When({ card }: { card: PageCard }) {
   return card.when ? (
@@ -62,7 +63,7 @@ function Row({ card, open, onToggle, fresh }: { card: PageCard; open: boolean; o
   );
 }
 
-export function PagesCard({ frame: f, seen = false }: { frame: PagesFrame; seen?: boolean }) {
+export function PagesCard({ frame: f, seen = false, onDone }: { frame: PagesFrame; seen?: boolean; onDone?: () => void }) {
   const [redo, setRedo] = useState(false);
   const still = seen && !redo;
   const n = f.cards.length;
@@ -78,6 +79,9 @@ export function PagesCard({ frame: f, seen = false }: { frame: PagesFrame; seen?
   useEffect(() => {
     if (turned > 0) foot.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [turned]);
+  useEffect(() => {
+    if (turned === n) onDone?.();
+  }, [turned, n, onDone]);
 
   if (still) {
     return (

@@ -991,6 +991,46 @@ html:has(.ep-root) body {
   line-height: 1.62;
   color: var(--ep-ink2);
 }
+/* 체험을 마치기 전 — 아래의 답을 접어 둔 자리 (UX-6 · D74 f). 체험을 마치거나 "그냥 열어 보기"로 열린다 */
+.ep-gate {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 4px 12px;
+  margin: 2px 0 0;
+  padding: 14px 16px 10px;
+  border-radius: 18px;
+  border: 1.5px dashed var(--ep-rule);
+  color: var(--ep-ink2);
+}
+.ep-gate-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--ep-rule2);
+  color: var(--ep-muted);
+}
+.ep-gate p {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.45;
+}
+.ep-gate strong {
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--ep-ink);
+}
+.ep-gate span {
+  font-size: 13.5px;
+  color: var(--ep-muted);
+}
+.ep-gate .ep-link {
+  grid-column: 2;
+  justify-self: start;
+}
 .ep-caveat {
   margin: 6px 0 0;
   padding: 12px 14px;

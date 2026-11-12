@@ -16,10 +16,11 @@ export const isSteps = (frames: readonly Frame[]): frames is readonly (ChainFram
 export const isToggle = (frames: readonly Frame[]) => frames.length === 1 && frames[0]!.kind === "toggle";
 export const isPages = (frames: readonly Frame[]) => frames.length === 1 && frames[0]!.kind === "pages";
 
-export function LabCard({ frames, seen }: { frames: readonly Frame[]; seen: boolean }) {
+/** onDone — 체험을 마쳤을 때 한 번 (틀마다: 켜고 끄기 = 막혔다 · 고리 → 자리 = 앉았다 · 넘겨 보기 = 다 넘겼다). 풀이 장면이 접어 둔 답을 연다 (UX-6 · D74 f) */
+export function LabCard({ frames, seen, onDone }: { frames: readonly Frame[]; seen: boolean; onDone?: () => void }) {
   const first = frames[0];
-  if (frames.length === 1 && first?.kind === "toggle") return <ToggleCard frame={first} seen={seen} />;
-  if (frames.length === 1 && first?.kind === "pages") return <PagesCard frame={first} seen={seen} />;
-  if (isSteps(frames)) return <StepsCard frames={frames} seen={seen} />;
+  if (frames.length === 1 && first?.kind === "toggle") return <ToggleCard frame={first} seen={seen} onDone={onDone} />;
+  if (frames.length === 1 && first?.kind === "pages") return <PagesCard frame={first} seen={seen} onDone={onDone} />;
+  if (isSteps(frames)) return <StepsCard frames={frames} seen={seen} onDone={onDone} />;
   return null;
 }

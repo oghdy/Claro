@@ -19,6 +19,9 @@
 //   21 넘겨 보기 — 칸 셋 이상 · id 가 겹치지 않는다 · 칸마다 한 줄(body)에 구절
 //   22 칸의 때 — when 이 있거나, 없으면 no_date("날짜 없음")가 있다. 둘 중 정확히 하나
 //   23 ★ 칸이 정확히 하나 · 첫 칸이 아니다           24 앞날 칸 금지 (state: next 거부) · 지금(now)은 마지막 칸에만
+//   25 지난 값 (before) · 지난 회차에서 온 구절 (`code:key`)이 있으면 지난 회차 칸 (previous)이 있다 · 고리의 지난 값에 구절   (실물 전 — UX-6)
+//   26 지난 회차에서 온 구절의 키 꼴 — 앞머리 하나 · 이 회차의 code 가 아니다                                                    (실물 전 — UX-6)
+//   지난 회차를 받으면 (ctx.previous) 대 본다 — 같은 회차 · 같은 시리즈 · 같은 그림 (kind · picture.id · 고리 · 쪽 id) · 지난 값 · 옮겨 온 구절이 그 회차의 것 그대로 (PREV_MISMATCH)
 //
 // 보지 않는 것
 //   글의 뜻이 구절에서 나오는가 (의미 대조 — 사람 · W-2) · 한글로 쓴 수 ("여섯 가지") · 그림 부품이 있는가 (코드 — 화면 쪽 검사)
@@ -27,14 +30,18 @@
 //   `_` 필드 — 픽스처 주석이다. 무시하고, 돌려주는 회차에서는 뺀다
 import { isUUID } from "./describe";
 import {
+  CARRIED_KEY,
   EPISODE_ALIASES,
   EPISODE_SHAPES,
   EPISODE_UNIONS,
   FRAME_COMBOS,
   SCENE_IDS,
+  carriedKey,
+  type ChainBefore,
   type Episode,
   type EpisodeText,
   type EpisodeQuote,
+  type SeatBefore,
   type Solve,
   type Tool,
 } from "./episode";
@@ -58,6 +65,8 @@ export type EpisodeValidation =
 export interface EpisodeContext {
   /** 저장된 문서 (DATA_MODEL SourceDocument 의 source_id · text). 주면 불변식 8 을 본다 */
   documents?: readonly { source_id: string; text: string }[];
+  /** 지난 회차 (Episode.previous 가 가리키는 것 — 계약 검증을 지난 회차). 주면 같은 그림 · 지난 값 · 옮겨 온 구절을 대 본다 (§7.9 · PREV_MISMATCH) */
+  previous?: Episode;
 }
 
 type Obj = Record<string, unknown>;
@@ -341,6 +350,9 @@ export function validateEpisode(input: unknown, ctx: EpisodeContext = {}): Episo
   if (now.length !== 1) E("TRACK_NOW", "/track", `시리즈 줄에 지금(now)이 ${now.length}개다 — 정확히 하나`);
   else if (now[0]!.no.t !== ep.scenes.cover.episode.t) E("TRACK_NOW", "/track", `시리즈 줄의 지금 번호 "${now[0]!.no.t}" 가 표지의 번호 "${ep.scenes.cover.episode.t}" 와 다르다`);
 
+  // 25 · 26 — 지난 회차 (실물 전 · 3화에서 확인 — UX-6 · §3.4 · §4.5 · §7.9)
+  previousProblems(ep, ctx.previous, E, warnings);
+
   // 11 ~ 20
   const solve = solveProblems(ep.solve, ep);
   errors.push(...solve.errors);
@@ -357,6 +369,78 @@ export function validateEpisode(input: unknown, ctx: EpisodeContext = {}): Episo
     tools_from_library: ep.tools.filter((t) => t.basis.length > 0).length,
   };
   return { ok: true, episode: ep, warnings, stats };
+}
+
+// ─────────────────────────────────────────────────────────── 지난 회차 (불변식 25 · 26 · PREV_MISMATCH)
+
+type Before = { path: string; frame: number; id: string } & ({ kind: "chain"; before: ChainBefore } | { kind: "seats"; before: SeatBefore });
+
+function previousProblems(ep: Episode, prev: Episode | undefined, E: (code: string, path: string, message: string) => void, warnings: Issue[]) {
+  const befores: Before[] = [];
+  (ep.solve.lab?.frames ?? []).forEach((f, i) => {
+    if (f.kind === "chain") f.nodes.forEach((n, k) => n.before && befores.push({ path: `/solve/lab/frames/${i}/nodes/${k}/before`, kind: "chain", frame: i, id: n.id, before: n.before }));
+    if (f.kind === "seats") f.sides.forEach((s, k) => s.before && befores.push({ path: `/solve/lab/frames/${i}/sides/${k}/before`, kind: "seats", frame: i, id: s.id, before: s.before }));
+  });
+  const carried = Object.keys(ep.quotes).filter((k) => k.includes(":"));
+  // 25
+  if (!ep.previous) {
+    for (const b of befores) E("PREV_MISSING", b.path, `지난 값이 있는데 지난 회차 칸 (previous)이 없다 — 무엇의 지난 값인지 모른다`);
+    for (const k of carried) E("PREV_MISSING", `/quotes/${k}`, `지난 회차에서 온 구절 (${k})인데 지난 회차 칸 (previous)이 없다`);
+  } else {
+    if (ep.previous.episode_version < 1) E("ID_RANGE", "/previous/episode_version", "지난 회차의 판은 1부터다");
+    if (ep.previous.episode_id === ep.episode_id) E("ID_RANGE", "/previous/episode_id", "지난 회차가 이 회차 자신이다");
+  }
+  for (const b of befores) if (b.kind === "chain" && !hasSrc(b.before.value)) E("PREV_VALUE_SRC", `${b.path}/value`, `고리 "${b.id}" 의 지난 값에 근거 구절이 없다 — 오늘의 값과 같은 규칙 (불변식 18)`);
+  // 26
+  for (const k of carried) {
+    const m = CARRIED_KEY.exec(k);
+    if (!m) E("PREV_KEY", `/quotes/${k}`, `구절 키 "${k}" — 지난 회차에서 온 구절의 키는 \`<처음 실린 회차의 code>:<그 회차의 키>\` 하나다 (앞머리를 거듭 붙이지 않는다)`);
+    else if (m[1] === ep.code) E("PREV_KEY", `/quotes/${k}`, `구절 키 "${k}" 의 앞머리가 이 회차의 code 다 — 이 회차의 구절은 앞머리 없이 쓴다`);
+  }
+  if (!ep.previous) return;
+  if (!prev) {
+    warnings.push({ code: "PREVIOUS_NOT_CHECKED", path: "/previous", message: "지난 회차를 주지 않아 같은 그림인지 · 지난 값이 그 회차의 값인지 · 옮겨 온 구절이 그 회차의 것인지는 보지 않았다" });
+    return;
+  }
+  // 지난 회차를 받았다 — 대 본다
+  const M = (path: string, message: string) => E("PREV_MISMATCH", path, message);
+  if (prev.episode_id !== ep.previous.episode_id || prev.episode_version !== ep.previous.episode_version) return M("/previous", `받은 지난 회차 (${prev.code} · ${prev.episode_id} v${prev.episode_version})가 previous 칸이 가리키는 회차가 아니다`);
+  if (prev.series.series_id !== ep.series.series_id) M("/previous", `지난 회차 ${prev.code} 는 다른 시리즈다 (${prev.series.code})`);
+  if (prev.number >= ep.number) M("/previous", `지난 회차 ${prev.code} 는 ${prev.number}화 — 이 회차 (${ep.number}화)의 앞 화가 아니다`);
+  const ck = (k: string) => carriedKey(prev.code, k);
+  const sameSrc = (a: EpisodeText, b: EpisodeText) => JSON.stringify(a.src ?? []) === JSON.stringify((b.src ?? []).map(ck));
+  for (const b of befores) {
+    const frame = ep.solve.lab!.frames[b.frame]!;
+    const pf = (prev.solve.lab?.frames ?? []).find((x) => x.kind === frame.kind && x.picture.id === frame.picture.id);
+    if (!pf) {
+      M(b.path, `같은 그림이 아니다 — 지난 회차 ${prev.code} 에 그림 "${frame.picture.id}" 인 ${frame.kind} 틀이 없다`);
+      continue;
+    }
+    if (pf.kind === "chain" && b.kind === "chain") {
+      const pn = pf.nodes.find((n) => n.id === b.id);
+      const bv = b.before;
+      if (!pn) M(b.path, `지난 회차의 그림 "${pf.picture.id}" 에 고리 "${b.id}" 가 없다`);
+      else {
+        const pv = pn.reach === "none" ? pn.still : pn.after;
+        if (bv.reach !== pn.reach || bv.value.t !== pv.t || !sameSrc(bv.value, pv)) M(b.path, `고리 "${b.id}" 의 지난 값이 지난 회차의 값과 다르다 — 지난 회차: ${pn.reach} · “${pv.t}” (${(pv.src ?? []).map(ck).join(", ")}) / 적은 것: ${bv.reach} · “${bv.value.t}” (${(bv.value.src ?? []).join(", ")})`);
+      }
+    }
+    if (pf.kind === "seats" && b.kind === "seats") {
+      const ps = pf.sides.find((s) => s.id === b.id);
+      const bv = b.before;
+      if (!ps) M(b.path, `지난 회차의 그림 "${pf.picture.id}" 에 쪽 "${b.id}" 가 없다`);
+      else if (bv.why !== ps.why || bv.group.t !== ps.group.t || !sameSrc(bv.group, ps.group)) M(b.path, `쪽 "${b.id}" 의 지난 값이 지난 회차의 값과 다르다 — 지난 회차: “${ps.group.t}” · 까닭 ${ps.why} / 적은 것: “${bv.group.t}” · 까닭 ${bv.why}`);
+    }
+  }
+  for (const k of carried) {
+    const m = CARRIED_KEY.exec(k);
+    if (!m) continue;
+    const pk = m[1] === prev.code ? m[2]! : k;
+    const pq = prev.quotes[pk];
+    const q = ep.quotes[k]!;
+    if (!pq) M(`/quotes/${k}`, `지난 회차 ${prev.code} 에 구절 "${pk}" 가 없다`);
+    else if (pq.quote !== q.quote || prev.docs[pq.doc]?.source_id !== ep.docs[q.doc]?.source_id) M(`/quotes/${k}`, `옮겨 온 구절이 지난 회차 ${prev.code} 의 구절 "${pk}" 와 다르다 (글 · 문서)`);
+  }
 }
 
 /** 검증을 통과한 회차를 돌려주고, 아니면 모든 위반을 담아 던진다 */

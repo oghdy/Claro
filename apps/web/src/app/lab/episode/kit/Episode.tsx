@@ -24,6 +24,8 @@ export interface EpisodeParts {
   ep: EpisodeData;
   Art: ComponentType;
   Glyph: ComponentType<{ id: string }>;
+  /** 시안 전용 — 처음 열 장면 · 풀이 스위치 (견본 주소가 바로 그 화면을 열려고 — UX-6). 없으면 표지 · 체험 */
+  start?: { scene?: SceneId; solve?: SolveMode };
 }
 
 /**
@@ -267,7 +269,33 @@ function Tools({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
   );
 }
 
+/** 체험을 마치기 전 — 아래의 답을 접어 둔 자리 (UX-6 · D74 f). "그냥 열어 보기"로 체험 없이도 연다 (독자를 가두지 않는다) */
+function LabGate({ onOpen }: { onOpen: () => void }) {
+  const g = CHROME.gate;
+  return (
+    <motion.div className="ep-gate" variants={rise} data-testid="lab-gate">
+      <span className="ep-gate-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 20 20">
+          <circle cx="4.5" cy="10" r="1.8" fill="currentColor" />
+          <circle cx="10" cy="10" r="1.8" fill="currentColor" />
+          <circle cx="15.5" cy="10" r="1.8" fill="currentColor" />
+        </svg>
+      </span>
+      <p>
+        <strong>{g.note}</strong>
+        <span>{g.sub}</span>
+      </p>
+      <button type="button" className="ep-link" onClick={onOpen} data-testid="lab-gate-open">
+        {g.open}
+      </button>
+    </motion.div>
+  );
+}
+
 // 풀이 장면 = 입구(solve.entry) + [체험 | 기본 풀이] + 문서가 말한 것(copy.aha.real) + 누구의 말(entry.whose)
+// UX-6 (D74 f): 체험을 마치기 전에는 체험 아래 (풀이에서 생기는 도구 · 뒤집기 · 문서가 말한 것 · 누구의 말 · 물음 버튼)를 접어 둔다 — 스크롤로 답이 먼저 보이지 않게.
+//   체험을 마치면 (틀 부품의 onDone) 또는 "그냥 열어 보기"를 누르면 열리고, 한 번 열리면 다시 접지 않는다 ("처음으로"를 눌러도).
+//   이 그림을 본 독자 · 체험 없이 보기에서는 처음부터 열려 있다 (그 독자에게는 감출 답이 없다 — 다시 쓰기 · 기본 풀이).
 function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
   const { ep } = useEp();
   const c = ep.scenes.aha;
@@ -279,6 +307,9 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
   const ask = usePlain?.kind === "quiet" ? usePlain.ask : reader === "follower" ? c.ask_follower : c.ask_new;
   const flip = entry.flip;
   const born = lab?.born;
+  const [opened, setOpened] = useState(false);
+  const open = seen || opened;
+  const onDone = useCallback(() => setOpened(true), []);
 
   const flipFigure = flip ? (
     <>
@@ -349,23 +380,29 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
       <Head asked={asked} kicker={c.kicker} title={seen && lab.seen_title ? lab.seen_title : lab.title} />
       {seen ? null : lab.setup.map((s) => <P key={s.t} item={s} />)}
       <motion.div variants={rise}>
-        <LabCard frames={lab.frames} seen={seen} />
+        <LabCard frames={lab.frames} seen={seen} onDone={onDone} />
       </motion.div>
-      {born ? (
+      {open ? (
         <>
-          <motion.p className="ep-tool-lead" variants={rise}>
-            {born.lead}
-          </motion.p>
-          <div className="ep-tools">
-            {/* 그림을 본 독자는 그 그림이 낳은 도구도 이미 가지고 있다 — 접어서 */}
-            <ToolCard id={born.tool} mode={seen ? { kind: "known" } : { kind: "fresh" }} />
-          </div>
+          {born ? (
+            <>
+              <motion.p className="ep-tool-lead" variants={rise}>
+                {born.lead}
+              </motion.p>
+              <div className="ep-tools">
+                {/* 그림을 본 독자는 그 그림이 낳은 도구도 이미 가지고 있다 — 접어서 */}
+                <ToolCard id={born.tool} mode={seen ? { kind: "known" } : { kind: "fresh" }} />
+              </div>
+            </>
+          ) : null}
+          {flipFigure}
+          {real}
+          {whose}
+          <Ask text={ask} onAsk={() => onAsk(ask)} />
         </>
-      ) : null}
-      {flipFigure}
-      {real}
-      {whose}
-      <Ask text={ask} onAsk={() => onAsk(ask)} />
+      ) : (
+        <LabGate onOpen={onDone} />
+      )}
     </>
   );
 }
@@ -585,9 +622,9 @@ function SourceSheet({ item, onClose }: { item: T; onClose: () => void }) {
 // ─────────────────────────────────────────────────────────── 회차
 
 export function Episode(parts: EpisodeParts) {
-  const { ep } = parts;
+  const { ep, start } = parts;
   const [reader, setReader] = useState<ReaderId>("new");
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(() => Math.max(0, start?.scene ? ep.assembly.new.indexOf(start.scene) : 0));
   const [asked, setAsked] = useState<readonly string[]>([]);
   const [answers, setAnswers] = useState<Answers>({});
   const [passed, setPassed] = useState<readonly string[]>([]);
@@ -595,7 +632,7 @@ export function Episode(parts: EpisodeParts) {
   const [srcOn, setSrcOn] = useState(false);
   const [srcItem, setSrcItem] = useState<T | null>(null);
   // 풀이 시안의 스위치 — 손으로 켠다. 독자를 바꾸거나 처음으로 가도 그대로 둔다
-  const [solveMode, setSolveMode] = useState<SolveMode>("lab");
+  const [solveMode, setSolveMode] = useState<SolveMode>(start?.solve ?? "lab");
   const scroller = useRef<HTMLDivElement>(null);
 
   const scenes = ep.assembly[reader];

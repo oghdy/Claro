@@ -29,6 +29,13 @@ export type NoLabWhy = (typeof NO_LAB_WHYS)[number];
 /** 서는 틀 조합 (불변식 15) — 실물: [toggle] 배달앱 1화 · [chain, seats] 금리 2화 · [pages] 개인정보 1화 (UX-5). [chain] · [seats] 는 그 부분 */
 export const FRAME_COMBOS: readonly (readonly Frame["kind"][])[] = [["toggle"], ["chain"], ["seats"], ["chain", "seats"], ["pages"]];
 
+// ─────────────────────────────────────────────────────────── 지난 회차에서 온 구절의 키 (§4.5 · 실물 전 · 3화에서 확인 — UX-6)
+
+/** 지난 회차에서 온 구절의 키 꼴 — `<그 구절이 처음 실린 회차의 code>:<그 회차에서의 키>` ("fomc:omo.2023"). 이 회차의 구절은 `:` 없이 쓴다 */
+export const CARRIED_KEY = /^([^:]+):([^:]+)$/;
+/** 지난 회차 (code) 의 구절 키를 이 회차로 옮길 때의 키 — 이미 옮겨 온 키 (`x:k`)는 그대로 둔다 (앞머리를 거듭 붙이지 않는다) */
+export const carriedKey = (previousCode: string, key: string): string => (key.includes(":") ? key : `${previousCode}:${key}`);
+
 // ─────────────────────────────────────────────────────────── 가리키는 이름
 
 /** Episode.quotes 의 키 */
@@ -91,6 +98,12 @@ export interface TrackItem {
   no: EpisodeText;
   title: EpisodeText;
   state: TrackState;
+}
+
+/** 지난 회차를 가리킨다 — ArticleRef (OBSERVATION · D30) 와 같은 방식. 실물 전 · 3화에서 확인 (UX-6 · §3.4) */
+export interface EpisodeRef {
+  episode_id: UUID;
+  episode_version: number;
 }
 
 export interface Tool {
@@ -321,14 +334,22 @@ export interface ReachedNode {
   reach: "full" | "part";
   idle: string;
   after: EpisodeText;
+  before?: ChainBefore;
 }
 export interface StoppedNode {
   id: Id;
   name: string;
   reach: "none";
   still: EpisodeText;
+  before?: ChainBefore;
 }
 export type ChainNode = ReachedNode | StoppedNode;
+
+/** 같은 그림의 지난 값 — 지난 회차 (Episode.previous)의 같은 고리 (같은 picture.id · 같은 고리 id). 실물 전 · 3화에서 확인 (UX-6 · §7.9) */
+export interface ChainBefore {
+  reach: "full" | "part" | "none";
+  value: EpisodeText;
+}
 
 export interface ChainCaption {
   before: EpisodeText;
@@ -362,6 +383,13 @@ export interface SeatSide {
   said: EpisodeText;
   why: "in-doc" | "not-yet";
   not_yet_note: Fragment | null;
+  before?: SeatBefore;
+}
+
+/** 같은 그림의 지난 값 — 지난 회차의 같은 쪽 (같은 picture.id · 같은 쪽 id). 실물 전 · 3화에서 확인 (UX-6 · §7.9) */
+export interface SeatBefore {
+  group: EpisodeText;
+  why: "in-doc" | "not-yet";
 }
 
 export interface SeatsCaption {
@@ -475,6 +503,7 @@ export interface Episode {
   series: Series;
   number: number;
   track: TrackItem[];
+  previous?: EpisodeRef;
   docs: Record<DocLabel, EpisodeDoc>;
   quotes: Record<QuoteKey, EpisodeQuote>;
   voice_labels: VoiceLabels;
@@ -500,6 +529,7 @@ export const EPISODE_SHAPES = {
     series: "Series",
     number: "integer",
     track: "TrackItem[]",
+    "previous?": "EpisodeRef",
     docs: "Record<DocLabel, EpisodeDoc>",
     quotes: "Record<QuoteKey, EpisodeQuote>",
     voice_labels: "VoiceLabels",
@@ -512,6 +542,7 @@ export const EPISODE_SHAPES = {
   } satisfies Shape<Episode>,
   Series: { series_id: "UUID", code: "Id", name: "string", sub: "string" } satisfies Shape<Series>,
   TrackItem: { no: "EpisodeText", title: "EpisodeText", state: "TrackState" } satisfies Shape<TrackItem>,
+  EpisodeRef: { episode_id: "UUID", episode_version: "integer" } satisfies Shape<EpisodeRef>,
   EpisodeText: { t: "TextBody", "src?": "QuoteKey[]", "calc?": "Record<string, Note>", "ui?": "true", "voice?": "Voice" } satisfies Shape<EpisodeText>,
   EpisodeDoc: { source_id: "UUID", name: "SourceText" } satisfies Shape<EpisodeDoc>,
   EpisodeQuote: { doc: "DocLabel", quote: "SourceText" } satisfies Shape<EpisodeQuote>,
@@ -640,8 +671,9 @@ export const EPISODE_SHAPES = {
     caption: "ChainCaption",
     go_on: "EpisodeText | null",
   } satisfies Shape<ChainFrame>,
-  ReachedNode: { id: "Id", name: "string", reach: '"full" | "part"', idle: "string", after: "EpisodeText" } satisfies Shape<ReachedNode>,
-  StoppedNode: { id: "Id", name: "string", reach: '"none"', still: "EpisodeText" } satisfies Shape<StoppedNode>,
+  ReachedNode: { id: "Id", name: "string", reach: '"full" | "part"', idle: "string", after: "EpisodeText", "before?": "ChainBefore" } satisfies Shape<ReachedNode>,
+  StoppedNode: { id: "Id", name: "string", reach: '"none"', still: "EpisodeText", "before?": "ChainBefore" } satisfies Shape<StoppedNode>,
+  ChainBefore: { reach: '"full" | "part" | "none"', value: "EpisodeText" } satisfies Shape<ChainBefore>,
   ChainCaption: { before: "EpisodeText", after: "EpisodeText" } satisfies Shape<ChainCaption>,
   SeatsFrame: {
     kind: '"seats"',
@@ -664,7 +696,9 @@ export const EPISODE_SHAPES = {
     said: "EpisodeText",
     why: '"in-doc" | "not-yet"',
     not_yet_note: "Fragment | null",
+    "before?": "SeatBefore",
   } satisfies Shape<SeatSide>,
+  SeatBefore: { group: "EpisodeText", why: '"in-doc" | "not-yet"' } satisfies Shape<SeatBefore>,
   SeatsCaption: { before: "EpisodeText" } satisfies Shape<SeatsCaption>,
   PagesFrame: {
     kind: '"pages"',
