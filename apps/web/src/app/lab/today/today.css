@@ -1,0 +1,482 @@
+/* UX-7 — "오늘" 시안 화면 · 짧은 이야기 · 지도 견본 (lab 전용). 회차 화면과 같은 뿌리 (.ep-root — 글꼴 · 폭 · 색 변수)를 쓴다.
+   색은 전부 --ep-* 다 (값을 적지 않는다) — 그래서 색 시안 넷이 같은 화면에 그대로 걸린다. 색 시안에만 있는 변수 셋은 지금의 값을 기본값으로 둔다. */
+.td-root,
+.st-root {
+  --td-on-accent: var(--ep-on-accent, #fff);
+  --td-accent-on-ink: var(--ep-accent-on-ink, #f0a184);
+  --td-shade: var(--ep-shade, var(--ep-ink));
+}
+.td-root a {
+  color: inherit;
+  text-decoration: none;
+}
+.td {
+  padding-top: 18px;
+  gap: 0;
+}
+.td > * {
+  animation: td-rise 0.5s var(--ep-ease) both;
+}
+.td > :nth-child(2) { animation-delay: 0.06s; }
+.td > :nth-child(3) { animation-delay: 0.12s; }
+.td > :nth-child(4) { animation-delay: 0.18s; }
+.td > :nth-child(5) { animation-delay: 0.24s; }
+@keyframes td-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .td > * { animation: none; }
+}
+
+.td-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+.td-mark {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.td-intro h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: -0.035em;
+}
+.td-intro p {
+  margin: 0 0 22px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ep-ink2);
+}
+
+/* ── 카드 — 무게 둘: 긴 이야기 (면이 있다) · 짧은 이야기 (얇다) */
+.td-list {
+  display: grid;
+  gap: 12px;
+}
+.td-card {
+  position: relative;
+  border-radius: 20px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.td-main {
+  position: relative;
+  display: block;
+  padding: 16px 44px 16px 18px;
+}
+.td-main:active {
+  transform: scale(0.985);
+  transition: transform 0.12s var(--ep-ease);
+}
+.td-card[data-lead] {
+  border-radius: 22px;
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink), 0 14px 30px -20px color-mix(in srgb, var(--td-shade) 50%, transparent);
+}
+.td-card[data-lead] .td-main {
+  padding: 18px;
+}
+.td-topic {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 7px;
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.3;
+}
+.td-topic span {
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ep-muted);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.td-topic strong {
+  font-weight: 750;
+}
+/* 이어지는 이야기 — 꼬리표가 강조색으로 차고, 번호가 붙는다 */
+.td-card[data-cont] .td-topic span {
+  background: var(--ep-accent);
+  color: var(--td-on-accent);
+  box-shadow: none;
+}
+.td-topic em {
+  font-style: normal;
+  font-weight: 800;
+  color: var(--ep-accent-ink);
+}
+.td-topic i {
+  font-style: normal;
+  color: var(--ep-muted);
+}
+.td-topic i::before {
+  content: "· ";
+}
+.td-art {
+  margin: 10px -4px 2px;
+}
+.td-title {
+  margin: 0 0 8px;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.32;
+  letter-spacing: -0.03em;
+}
+.td-card[data-lead] .td-title {
+  margin-bottom: 12px;
+  font-size: 29px;
+  line-height: 1.26;
+  letter-spacing: -0.035em;
+}
+.td-dek {
+  margin: 0 0 8px;
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--ep-ink2);
+}
+.td-card[data-lead] .td-dek {
+  font-size: 15.5px;
+  color: var(--ep-ink);
+}
+.td-meta {
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ep-muted);
+}
+.td-weight {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: var(--ep-ink2);
+}
+.td-weight b {
+  font-weight: 800;
+  color: var(--ep-ink);
+}
+.td-weight span::before {
+  content: "· ";
+  color: var(--ep-muted);
+}
+.td-weight span[data-lab] {
+  font-weight: 700;
+  color: var(--ep-accent-ink);
+}
+.td-card[data-lead] .td-weight {
+  margin-bottom: 16px;
+}
+.td-go {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: 0 18px 0 20px;
+  border-radius: 16px;
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+  font-size: 16.5px;
+  font-weight: 700;
+}
+.td-go svg {
+  color: var(--td-accent-on-ink);
+}
+.td-arrow {
+  position: absolute;
+  right: 16px;
+  top: 18px;
+  color: var(--ep-accent-ink);
+}
+.td-card[data-kind="short"] {
+  background: none;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.td-card[data-kind="short"] .td-main {
+  padding: 13px 44px 13px 16px;
+}
+.td-card[data-kind="short"] .td-title {
+  font-size: 17.5px;
+  font-weight: 750;
+  margin-bottom: 6px;
+}
+.td-card[data-kind="short"] .td-arrow {
+  top: 14px;
+}
+.td-card[data-kind="empty"] {
+  padding: 18px 18px 16px;
+  background: none;
+  box-shadow: none;
+  border: 1.5px dashed color-mix(in srgb, var(--ep-ink) 30%, transparent);
+  text-align: center;
+}
+.td-card[data-kind="empty"] strong {
+  display: block;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ep-muted);
+}
+.td-card[data-kind="empty"] p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ep-muted);
+}
+
+/* 지난 이야기 30초 — 이어지는 이야기에만 */
+.td-recap {
+  margin: 0 12px 12px;
+  border-radius: 12px;
+  background: var(--ep-accent-soft);
+}
+.td-recap summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+  padding: 0 14px;
+  font-size: 13.5px;
+  font-weight: 750;
+  color: var(--ep-accent-ink);
+  cursor: pointer;
+  list-style: none;
+}
+.td-recap summary::-webkit-details-marker {
+  display: none;
+}
+.td-recap[open] summary svg {
+  transform: rotate(180deg);
+}
+.td-recap p {
+  margin: 0;
+  padding: 0 14px 12px;
+  font-size: 14.5px;
+  line-height: 1.62;
+  color: var(--ep-ink);
+}
+
+/* ── 아래 — 이어지는 이야기 · 주제 · 개념 */
+.td-sec {
+  margin-top: 34px;
+}
+.td-label {
+  margin: 0 0 4px;
+  font-size: 13.5px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ep-accent-ink);
+}
+.td-sublabel {
+  margin: 22px 0 4px;
+  font-size: 13.5px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ep-ink2);
+}
+.td-secnote {
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ep-muted);
+}
+.td-series {
+  display: grid;
+  gap: 2px;
+  padding: 18px 18px 14px;
+  border-radius: 20px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+  line-height: 1.4;
+}
+.td-series > strong {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.td-series-sub {
+  font-size: 14px;
+  color: var(--ep-muted);
+}
+.td-series .ep-track {
+  margin: 10px 0 6px;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+.td-next {
+  margin: 2px 0 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px dashed color-mix(in srgb, var(--ep-ink) 28%, transparent);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ep-ink2);
+}
+.td-next em {
+  display: block;
+  margin-bottom: 2px;
+  font-style: normal;
+  font-size: 12.5px;
+  font-weight: 750;
+  color: var(--ep-accent-ink);
+}
+.td-series-go {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ep-rule);
+  font-size: 15px;
+  font-weight: 700;
+}
+.td-series-go svg {
+  margin-left: auto;
+  color: var(--ep-accent-ink);
+}
+.td-shelf {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.td-shelf a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 10px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+  line-height: 1.4;
+}
+.td-shelf strong {
+  font-size: 16px;
+  font-weight: 750;
+}
+.td-shelf span {
+  font-size: 12.5px;
+  color: var(--ep-muted);
+}
+.td-concepts {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.td-concepts li {
+  display: grid;
+  gap: 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+  line-height: 1.45;
+}
+.td-concepts li > a {
+  order: 1;
+  font-size: 15px;
+  font-weight: 750;
+}
+.td-concepts li > a[data-end] {
+  order: 3;
+}
+/* 두 이야기 사이 — 함께 만나는 개념이 이음매다 */
+.td-concepts p {
+  order: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 8px 5px;
+  padding: 8px 0 8px 14px;
+  border-left: 2px solid var(--ep-moss);
+}
+.td-concepts p span {
+  flex-basis: 100%;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ep-muted);
+}
+.td-concepts b {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--ep-moss-soft);
+  font-size: 13.5px;
+  font-weight: 750;
+  color: var(--ep-moss);
+}
+a.td-mapgo {
+  color: var(--td-on-accent) !important;
+  box-sizing: border-box;
+}
+.td-foot {
+  margin: 26px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--ep-rule);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ep-muted);
+}
+.td-foot a {
+  font-weight: 700;
+  color: var(--ep-accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── 지도 견본 */
+.td-map .ep-keep-map {
+  margin-bottom: 18px;
+}
+
+/* ── 짧은 이야기 — 긴 이야기의 겉모습 그대로. 다른 것만 */
+.st-art {
+  margin: 14px 40px 0;
+}
+.st-root .ep-shelf {
+  /* 지도 아래의 "시리즈" 책장 (N화 · 지금 읽는 중)은 번호가 없는 이야기에 맞지 않는다 — 시안에서는 감춘다 */
+  display: none;
+}
+.st-unknown {
+  margin-top: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px dashed color-mix(in srgb, var(--ep-ink) 28%, transparent);
+  color: var(--ep-ink2);
+}
+.st-root .ep-home {
+  margin-left: 16px;
+}
+.st-advice {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.st-advice h2 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ep-accent-ink);
+}
+.st-advice p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.66;
+}

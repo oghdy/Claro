@@ -1,0 +1,84 @@
+/* UX-7 — 색 스위치 띠 (lab 전용). 띠 자체는 색 시안을 따르지 않는다 — 어느 색에서도 같은 조종 칸이다. */
+.pd {
+  --pd-h: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--pd-h);
+  padding: calc(5px + env(safe-area-inset-top)) 10px 5px;
+  background: #16181d;
+  color: #f2f3f5;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.pd[data-floating] {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-width: var(--p-column);
+  margin: 0 auto;
+}
+/* 회차 시안 화면 (.ep-root 는 화면 전체에 붙어 있다) — 색 스위치가 떠 있으면 그만큼 내린다 */
+html[data-dock] .pd-host .ep-root {
+  top: 44px;
+}
+.pd-tag {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 5px 7px;
+  border-radius: 5px;
+  background: #f2f3f5;
+  color: #16181d;
+}
+.pd-label {
+  font-weight: 700;
+  color: rgba(242, 243, 245, 0.72);
+}
+.pd-set {
+  display: flex;
+  flex: 1;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 9px;
+  background: rgba(242, 243, 245, 0.12);
+}
+.pd-set button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 30px;
+  padding: 0 2px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  font: inherit;
+  font-weight: 650;
+  color: rgba(242, 243, 245, 0.78);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.pd-set button[aria-pressed="true"] {
+  background: #f2f3f5;
+  color: #16181d;
+}
+.pd-set button i {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(242, 243, 245, 0.55);
+}
+.pd-set button[aria-pressed="true"] i {
+  box-shadow: 0 0 0 1px rgba(22, 24, 29, 0.4);
+}
+.pd-set button:focus-visible {
+  outline: 2px solid #f2f3f5;
+  outline-offset: 1px;
+}

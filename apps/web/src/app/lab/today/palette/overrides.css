@@ -1,0 +1,51 @@
+/* 만든 파일이다 — 손으로 고치지 않는다. gen-overrides.mjs 가 src/episode 의 CSS 에서 글자 그대로 적힌 색을 찾아 만든다 (UX-7 · lab 전용).
+   색 시안이 켜졌을 때만 (html[data-palette]) 걸린다. */
+/* episode/episode.css — 28 */
+html[data-palette] .ep-demo-tag { color: var(--ep-on-accent); }
+html[data-palette] .ep-demo-readers { background: color-mix(in srgb, var(--ep-paper) 12%, transparent); }
+html[data-palette] .ep-demo-readers button { color: color-mix(in srgb, var(--ep-paper) 72%, transparent); }
+html[data-palette] .ep-demo-src { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ep-paper) 30%, transparent); }
+html[data-palette] .ep-ask { box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--ep-shade) 55%, transparent); }
+html[data-palette] .ep-ask svg { color: var(--ep-accent-on-ink); }
+html[data-palette] .ep-art-shadow { fill: color-mix(in srgb, var(--ep-ink) 7%, transparent); }
+html[data-palette] .ep-art-eqline { stroke: var(--ep-on-accent); }
+html[data-palette] .ep-demand figcaption { color: var(--ep-accent-on-ink); }
+html[data-palette] .ep-demand p { color: color-mix(in srgb, var(--ep-paper) 62%, transparent); }
+html[data-palette] .ep-lab { box-shadow: inset 0 0 0 1px var(--ep-rule), 0 14px 30px -22px color-mix(in srgb, var(--ep-shade) 45%, transparent); }
+html[data-palette] .ep-lab-tabs { background: color-mix(in srgb, var(--ep-ink) 7%, transparent); }
+html[data-palette] .ep-lab-tabs button[aria-selected="true"] { box-shadow: 0 1px 3px color-mix(in srgb, var(--ep-shade) 16%, transparent); }
+html[data-palette] .ep-app-tag[data-low] { color: var(--ep-on-accent); }
+html[data-palette] .ep-lab-link span { color: var(--ep-on-accent); }
+html[data-palette] .ep-lab-act { color: var(--ep-on-accent) !important; }
+html[data-palette] .ep-lab-act:disabled { background: color-mix(in srgb, var(--ep-ink) 10%, transparent) !important; }
+html[data-palette] .ep-flip-eq { color: var(--ep-on-accent); }
+html[data-palette] .ep-compare-cols strong:last-child { color: var(--ep-accent-on-ink); }
+html[data-palette] .ep-line em { color: var(--ep-on-accent); }
+html[data-palette] .ep-coming li { border: 1.5px dashed color-mix(in srgb, var(--ep-ink) 28%, transparent); }
+html[data-palette] .ep-oneline figcaption { color: var(--ep-accent-on-ink); }
+html[data-palette] .ep-map-button { color: var(--ep-on-accent) !important; }
+html[data-palette] .ep-nextup { border: 1.5px dashed color-mix(in srgb, var(--ep-ink) 28%, transparent); }
+html[data-palette] .ep-map-field { background: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--ep-ink) 13%, transparent) 1px, transparent 1.2px) 0 0 / 18px 18px,
+    var(--ep-card); }
+html[data-palette] .ep-node[data-state="new"] { color: var(--ep-on-accent) !important; box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--ep-accent-ink) 70%, transparent); }
+html[data-palette] .ep-sheet-back { background: color-mix(in srgb, var(--ep-ink) 42%, transparent); }
+html[data-palette] .ep-demo-switch { background: var(--ep-accent-on-ink); }
+/* episode/episode.css — 다시 적은 것 2 (덮인 선택자에 상태를 덧붙인 규칙) */
+html[data-palette] .ep-demo-readers button[aria-pressed="true"] { color: var(--ep-ink); }
+html[data-palette] .ep-lab-act:disabled { color: var(--ep-muted) !important; }
+/* episode/kit/frames/frames.css — 12 */
+html[data-palette] .fr-chain li[data-state="on"] em { color: var(--ep-on-accent); }
+html[data-palette] .fr-seat[data-me] { color: var(--ep-on-accent); }
+html[data-palette] .fr-choose button { color: var(--ep-on-accent) !important; }
+html[data-palette] .pl-card[data-kind="unknown"][data-state="open"] h2 { color: var(--ep-accent-on-ink); }
+html[data-palette] .pl-card[data-kind="unknown"] li::before { color: var(--ep-accent-on-ink); }
+html[data-palette] .ep-root[data-tone="quiet"] { --ep-accent: var(--ep-ink2); --ep-accent-ink: var(--ep-ink2); --ep-accent-soft: color-mix(in srgb, var(--ep-ink) 9%, var(--ep-paper)); }
+html[data-palette] .fr-pg-list li[data-star] .fr-pg-dot { color: var(--ep-on-accent); }
+html[data-palette] .fr-pg-when { background: color-mix(in srgb, var(--ep-ink) 7%, transparent); }
+html[data-palette] .fr-pg-back .fr-pg-when { background: color-mix(in srgb, var(--ep-paper) 16%, transparent); }
+html[data-palette] .fr-pg-back .fr-pg-when[data-none] { color: color-mix(in srgb, var(--ep-paper) 80%, transparent); border-color: color-mix(in srgb, var(--ep-paper) 60%, transparent); }
+html[data-palette] .fr-pg-back em { color: color-mix(in srgb, var(--ep-paper) 86%, transparent); }
+html[data-palette] .fr-pg-back[data-star] em { color: var(--ep-on-accent); }
+/* episode/kit/frames/frames.css — 다시 적은 것 2 (덮인 선택자에 상태를 덧붙인 규칙) */
+html[data-palette] .fr-pg-when[data-none] { background: transparent; }
+html[data-palette] .fr-pg-back .fr-pg-when[data-none] { background: transparent; }
