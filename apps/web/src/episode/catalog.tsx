@@ -16,6 +16,7 @@
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
 import yeonghun from "../../../../fixtures/episode-short-privacy-yeonghun.json";
+import licenseNotice from "../../../../packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice/story.json";
 import { CoverArt as DeliveryArt } from "./episodes/delivery/Art";
 import { DELIVERY } from "./episodes/delivery/data";
 import { Glyph as DeliveryGlyph } from "./episodes/delivery/Glyph";
@@ -113,6 +114,8 @@ export const STORIES: readonly Line[] = [
   long(FOMC, { ...FOMC_LOOK, place: "해외", category: "돈" }),
   long(PIPC, { ...PIPC_LOOK, place: "국내", category: "기술" }),
   short(yeonghun, { Art: YeonghunArt, place: "국내", category: "기술" }),
+  // P-S1 — 파이프라인이 쓴 첫 짧은 이야기 (홀로 선다 · PM 게이트 D89 · 짧은 이야기라 큰 카드가 아닌 끝에). day 없음 — 아침 고르기로 낸 것이 아니라 시험 (10/29 아침 한 장 c142)
+  short(licenseNotice, { place: "국내", category: "나라와 법" }),
 ];
 
 // ─────────────────────────────────────────────────────────── 목록에서 나오는 것

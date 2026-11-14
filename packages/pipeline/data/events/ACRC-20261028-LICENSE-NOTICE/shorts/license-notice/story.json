@@ -1,11 +1,11 @@
 {
   "_source": {
     "what": "짧은 이야기 「면허 정지가 취소됐다는데, 잘못이 없었다는 걸까」 — 파이프라인이 낸 것 (P-S1 · short.ts). 골든이 아니다. 사람 게이트 (human.json) 전에는 내지 않는다",
-    "made_by": "글 short-write/1 · claude-fable-5-2 (medium) · 고치기 episode-repair/2 · claude-opus-5-5 · 사람의 고침 0",
+    "made_by": "글 short-write/1 · claude-fable-5-2 (medium) · 고치기 episode-repair/2 · claude-opus-5-5 · 사람의 고침 3",
     "event_code": "ACRC-20261028-LICENSE-NOTICE",
     "picked_from": "packages/pipeline/data/collect/days/2026-10-29/sheet.md c142",
     "documents": "packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/store.documents.json (PR-1028-PDF)",
-    "human_gate": "아직"
+    "human_gate": "넘김 — PM (Claude Opus 5.5 · 편집자 자리 · D63)"
   },
   "episode_id": "3f10b504-2b5c-52db-a291-0746e244f78c",
   "episode_version": 1,
@@ -101,7 +101,7 @@
     "cover": {
       "title": "면허 정지가 취소됐다는데,\n잘못이 없었다는 걸까",
       "dek": {
-        "t": "운전면허 정지처분을 받은 세 사람이 행정심판을 청구했어요. 중앙행정심판위원회는 세 사건 모두에서 정지처분을 취소했어요.",
+        "t": "운전면허 정지처분을 받은 세 사람이 처분을 다시 따져 달라며 행정심판을 청구했어요. 중앙행정심판위원회는 세 사건 모두에서 정지처분을 취소했어요.",
         "src": [
           "p04",
           "p05",
@@ -136,10 +136,11 @@
           "voice": "fact"
         },
         {
-          "t": "의견 낼 기한이 끝나기도 전에 결정부터 난 거잖아요. ㄷ씨 사건에서는 통지서에 의견 낼 기한이 2026년 8월 21일까지로 적혀 있었는데, 결정은 2026년 8월 10일에 났고요.",
+          "t": "ㄱ씨에게는 알리기도 전에 결정부터 난 거잖아요. ㄷ씨 사건에서는 통지서에 의견 낼 기한이 2026년 8월 21일까지로 적혀 있었는데, 결정은 2026년 8월 10일에 났고요.",
           "src": [
+            "p04",
             "p06",
-            "p07"
+            "p14"
           ],
           "voice": "fact"
         }
@@ -167,7 +168,7 @@
             "t": "기한 전에 결정했어요"
           },
           "body": {
-            "t": "위원회는 세 사건 모두 통지서에 적힌 의견 낼 기한이 끝나기 전에 정지처분이 결정됐다고 봤어요. ㄴ씨 사건에서는 통지서를 발급한 2026년 8월 11일, 바로 그날 결정이 났어요.",
+            "t": "ㄴ씨 사건에서는 통지서를 발급한 2026년 8월 11일, 바로 그날 결정이 났어요. 위원회는 세 사건 모두 의견 낼 기한이 끝나기 전에 결정됐다고 봤어요.",
             "src": [
               "p04",
               "p05",

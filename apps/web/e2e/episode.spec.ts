@@ -56,7 +56,7 @@ test("첫 화면 = 오늘 — 종이 톤 · 이야기 넷 (긴 셋 + 짧은 하�
   for (const s of [SHORT.series.name, SHORT.scenes.cover.title, SHORT.scenes.cover.meta.t, "국내", "기술", "짧은 이야기", "체험 없음"]) expect(flat(await short.innerText()), s).toContain(flat(s));
   expect(await short.innerText()).not.toMatch(/\d화/);
   // 차례 — 목록의 차례 그대로 · 맨 위가 큰 카드
-  expect(await page.locator(".td-list .td-card").evaluateAll((els) => els.map((e) => e.getAttribute("data-testid")))).toEqual(["card-delivery", "card-fomc", "card-pipc", `card-${SHORT.code}`]);
+  expect(await page.locator(".td-list .td-card").evaluateAll((els) => els.map((e) => e.getAttribute("data-testid")))).toEqual(["card-delivery", "card-fomc", "card-pipc", `card-${SHORT.code}`, "card-license-notice"]);
   await expect(page.locator(".td-card[data-lead]")).toHaveCount(1);
   await expect(page.getByTestId("card-delivery")).toHaveAttribute("data-lead", "");
   // 읽는 시간을 내지 않는다 (D82)
