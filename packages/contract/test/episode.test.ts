@@ -84,8 +84,8 @@ describe("골든", () => {
     expect(s.solve.plain).toEqual({ kind: "flip", why: "short", title: "뚫린 곳은\n병원 안내 홈페이지였어요" });
     // 곁 이야기 = 도구의 이야기 = 개인정보 1화 (같은 사건 · 같은 시리즈 · 번호 없이)
     const long = golden(PRIVACY);
-    expect(s.sibling.episode).toEqual({ episode_id: long.episode_id, episode_version: 1 });
-    expect(s.tools_from).toEqual({ episode: s.sibling.episode, keys: ["safety", "fine", "order"] });
+    expect(s.sibling!.episode).toEqual({ episode_id: long.episode_id, episode_version: 1 });
+    expect(s.tools_from).toEqual({ episode: s.sibling!.episode, keys: ["safety", "fine", "order"] });
     expect([s.event_ref, s.series]).toEqual([long.event_ref, long.series]);
   });
 
@@ -434,6 +434,13 @@ const VIOLATIONS: Violation[] = [
     what: "체험이 없는 까닭을 비웠다 (null — UX-7 시안의 lab 꼴 그대로)",
     mutate: (e) => (e.solve.plain.why = null),
   },
+  // ── 홀로 선 짧은 이야기 (P-S1 · §13.9 · 불변식 30) — 넷째 골든 + 위반 하나
+  {
+    file: "episode-short-alone-tool-text.json", of: SHORT, code: "SHORT_ALONE",
+    rule: "§9-30 · §13.9 — 가리킨 도구가 없으면 (tools_from null) 도구 · 지도를 말하는 글 (tool_lead · map_note · gain_label)도 없다. 없는 것을 있는 것처럼 보이지 않는다",
+    what: "가리킨 도구를 비웠는데 (tools_from null) '긴 이야기에서 줍는 것과 같은 도구예요' · 지도의 글 · 만난 개념의 이름표를 그대로 뒀다",
+    mutate: (e) => (e.tools_from = null),
+  },
   {
     file: "episode-pages-combo.json", of: PRIVACY, code: "FRAME_COMBO",
     rule: "§9-15 — 넘겨 보기는 혼자 선다. 다른 틀과 잇는 것은 실물이 없다",
@@ -447,7 +454,7 @@ const build = (v: Violation) => {
   const { _source, ...body } = golden(v.of);
   v.mutate(body);
   return {
-    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.of === SHORT ? "B-E3" : v.code.startsWith("PREV_") ? "UX-6" : v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
+    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.code === "SHORT_ALONE" ? "P-S1" : v.of === SHORT ? "B-E3" : v.code.startsWith("PREV_") ? "UX-6" : v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
     ...body,
   };
 };
@@ -662,6 +669,56 @@ describe("픽스처 없이 보는 것", () => {
     const c = golden(SHORT);
     c.tools_from.episode.episode_version = 0;
     expect(codes(c)).toEqual(["ID_RANGE"]);
+  });
+
+  it("홀로 선 짧은 이야기 (P-S1 · 불변식 30) — 곁 이야기 · 가리킨 도구는 null 일 수 있다. 도구가 없으면 도구 · 지도의 글도 null · 있으면 글도 있다 → SHORT_ALONE", () => {
+    const alone = () => {
+      const e = golden(SHORT);
+      e.sibling = null;
+      e.tools_from = null;
+      e.scenes.why.tool_lead = null;
+      e.scenes.keep.map_note = null;
+      e.scenes.keep.gain_label = null;
+      return e;
+    };
+    const r = validateShortStory(alone(), { documents, episodes });
+    if (!r.ok) throw new Error(r.errors.map((e) => `${e.code} ${e.path} ${e.message}`).join("\n"));
+    expect(r.warnings).toEqual([]); // 가리킨 것이 없으니 "보지 않았다"는 알림도 없다
+    expect(r.stats.tools_from).toBe(0);
+    expect(validateShortStory(alone(), { documents }).ok && validateShortStory(alone(), { documents }).warnings).toEqual([]);
+    // 곁 이야기만 없다 (도구는 가리킨다) — 받는다. 실물은 없다 (§13.9 미확인)
+    const a = golden(SHORT);
+    a.sibling = null;
+    expect(codes(a)).toEqual([]);
+    // 도구가 없는데 글이 하나라도 남음
+    for (const [scene, cell] of [["why", "tool_lead"], ["keep", "map_note"], ["keep", "gain_label"]] as const) {
+      const b = alone();
+      b.scenes[scene][cell] = golden(SHORT).scenes[scene][cell];
+      expect(codes(b), cell).toEqual(["SHORT_ALONE"]);
+    }
+    // 도구를 가리키는데 글이 없음
+    const c = golden(SHORT);
+    c.scenes.keep.map_note = null;
+    expect(codes(c)).toEqual(["SHORT_ALONE"]);
+    // 칸을 빼는 것은 안 된다 — null 로 적는다 (모양)
+    const d = alone();
+    delete d.tools_from;
+    expect(codes(d)).toEqual(["SCHEMA_MISSING"]);
+  });
+
+  it("홀로 선 짧은 이야기의 실물 (P-S1 — 파이프라인 산출물 license-notice · 골든이 아니다) — 통과 · 알림 없음 · 곁 이야기 · 도구 · 그 글이 null", () => {
+    const dir = "packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE";
+    const story = read(`${dir}/shorts/license-notice/story.json`);
+    const r = validateShortStory(story, { documents: read(`${dir}/store.documents.json`).source_documents, episodes });
+    if (!r.ok) throw new Error(r.errors.map((e) => `${e.code} ${e.path} ${e.message}`).join("\n"));
+    expect(r.warnings).toEqual([]);
+    expect(r.stats).toMatchObject({ docs: 1, tools_from: 0 });
+    const s = r.story;
+    expect([s.sibling, s.tools_from, s.scenes.why.tool_lead, s.scenes.keep.map_note, s.scenes.keep.gain_label]).toEqual([null, null, null, null, null]);
+    expect(s.scenes.cover.hint.t).toBeTruthy(); // 표지의 귀띔은 곁 이야기가 없어도 싣는다 (§13.9)
+    expect(s.solve.plain.why).toBe("short");
+    expect(s.solve.entry.flip).not.toBeNull();
+    expect(episodes.some((e) => e.event_ref === s.event_ref || e.series.series_id === s.series.series_id)).toBe(false); // 같은 사건 · 같은 선반의 긴 이야기가 없다
   });
 
   it("짧은 이야기 — 입구의 규칙은 그대로: 뒤집기 없음 → NO_FLIP · 깨는 사실에 구절 없음 → BREAKER_SRC · 사람이 숨진 사건 → 조용히가 아니라 거부 (짧은 이야기로 낼 수 없다)", () => {

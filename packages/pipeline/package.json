@@ -16,6 +16,7 @@
     "w6": "node src/w6.ts",
     "episode": "node src/episode.ts",
     "collect": "node src/collect.ts",
+    "short": "node src/short.ts",
     "test": "vitest run",
     "typecheck": "tsc -p ."
   },

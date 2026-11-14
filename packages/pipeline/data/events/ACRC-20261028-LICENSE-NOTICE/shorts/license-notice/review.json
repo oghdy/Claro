@@ -1,0 +1,188 @@
+{
+  "_what": "짧은 이야기의 검사 결과 · 사람이 확인할 것 (short.ts 가 쓴다 — 손으로 고치지 않는다). 사람의 확인은 같은 폴더 human.json 에",
+  "short": "license-notice",
+  "event": "ACRC-20261028-LICENSE-NOTICE",
+  "write": {
+    "prompt_version": "short-write/1",
+    "model": "claude-fable-5-2",
+    "effort": "medium",
+    "request_sha256": "66a4105f8564f7df75303d8ee664649cba89cc4eb5f89c2864e9096f4bb94bc8"
+  },
+  "contract": {
+    "ok": true,
+    "errors": [],
+    "warnings": [],
+    "stats": {
+      "quotes": 16,
+      "docs": 1,
+      "texts": 19,
+      "texts_with_digits": 4,
+      "exempt": [],
+      "tools_from": 0
+    }
+  },
+  "entail": {
+    "prompt_version": "episode-entail/2",
+    "model": "claude-opus-5-5",
+    "effort": "low",
+    "texts": 19,
+    "with_src": 12,
+    "risky": 11,
+    "judged": [
+      {
+        "id": "cover.dek",
+        "risk": [
+          "한글 수"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "entry.breaker",
+        "risk": [
+          "기관의 판단"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "where.body[0]",
+        "risk": [
+          "숫자",
+          "인과"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "where.body[1]",
+        "risk": [
+          "숫자",
+          "고친 글"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "entry.flip_note",
+        "risk": [
+          "기관의 판단",
+          "인과"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.lead",
+        "risk": [
+          "문서의 일",
+          "인과"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.real[0].body",
+        "risk": [
+          "숫자",
+          "기관의 판단"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.real[1].body",
+        "risk": [
+          "기관의 판단",
+          "인과"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.real[2].body",
+        "risk": [
+          "기관의 판단",
+          "인과"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.verdict",
+        "risk": [
+          "기관의 판단"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "keep.advice",
+        "risk": [
+          "기관의 판단"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      }
+    ],
+    "not_judged": [],
+    "low_risk_skipped": [
+      "cover.meta"
+    ]
+  },
+  "repairs": [
+    {
+      "id": "where.body[1]",
+      "round": 1,
+      "action": "fix",
+      "before": "알리기도 전에 결정부터 난 거잖아요. ㄷ씨 사건에서는 통지서에 의견 낼 기한이 2026년 8월 21일까지로 적혀 있었는데, 결정은 2026년 8월 10일에 났고요.",
+      "after": "의견 낼 기한이 끝나기도 전에 결정부터 난 거잖아요. ㄷ씨 사건에서는 통지서에 의견 낼 기한이 2026년 8월 21일까지로 적혀 있었는데, 결정은 2026년 8월 10일에 났고요.",
+      "why": "ㄷ씨 사건은 통지서가 먼저 나왔고 문제는 의견제출 기한 전에 결정한 것이므로, '알리기도 전에'를 '의견 낼 기한이 끝나기도 전에'로 바꾸고, 더는 쓰지 않는 ㄱ씨 근거(p04, p14)는 빼고 p07을 더했다."
+    }
+  ],
+  "human_cells": {
+    "flip": {
+      "proposal": "“정지처분 취소” ≠ “운전자는 잘못이 없다는 판단”",
+      "strength": "strong",
+      "basis": "중앙행심위는 의견제출 기한 전에 결정한 것이 사전 통지 절차 위반이라서 위법·부당하다고 보았다고 문서가 글자로 적었다. 취소의 까닭으로 문서가 든 것은 절차뿐이고, 운전자의 위반 여부는 어느 쪽으로도 판단하지 않았다.",
+      "basis_src": [
+        "p03",
+        "p07",
+        "p13"
+      ],
+      "ok": null
+    },
+    "not_drawn": {
+      "proposal": [
+        "세 사람이 무슨 일로 정지처분을 받았는지(음주·벌점 등) — 문서에 없다. 짐작해서 쓰지 않는다",
+        "운전자에게 잘못이 있었다 / 없었다 — 문서는 어느 쪽도 말하지 않는다. '잘못은 있었지만 절차 때문에 살았다'로 미끄러지지 않는다",
+        "'의견을 들었다면 결과가 달랐을 것' · '기한만 지켰으면 처분이 유지됐을 것' — 반사실",
+        "'경찰은 늘 · 흔히 이렇게 한다' — 문서는 사례 셋만 말한다. 관행으로 넓히지 않는다",
+        "경찰서장이 왜 먼저 결정했는지, 동의란을 누가 왜 넣었는지, 세 사람이 실제로 동의란에 표시했는지 — 문서는 '설령 표시했다고 하더라도'라는 가정으로만 말한다"
+      ],
+      "ok": null
+    },
+    "death": {
+      "proposal": false,
+      "checked": null
+    },
+    "weight": {
+      "proposal": "short",
+      "why": "뒤집기가 하나(취소의 까닭은 절차)이고, 날짜 두 개가 어긋난 사례 하나로 보여 줄 수 있다.",
+      "ok": null
+    },
+    "series": {
+      "proposal": {
+        "series_id": "6334045f-4a04-5353-95da-4f6c1fe6f804",
+        "code": "appeal",
+        "name": "처분은 어떻게 뒤집히나",
+        "sub": "행정심판과 절차, 그리고 따져 물을 권리"
+      },
+      "ok": null
+    },
+    "sibling": null,
+    "tools_from": null
+  },
+  "blocked": [],
+  "publishable": false
+}

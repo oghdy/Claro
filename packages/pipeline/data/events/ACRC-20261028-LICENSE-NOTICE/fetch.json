@@ -1,0 +1,111 @@
+{
+  "_what": "ACRC-20261028-LICENSE-NOTICE 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "ACRC-20261028-LICENSE-NOTICE",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.korea.kr",
+      "url": "https://www.korea.kr/robots.txt",
+      "fetched_at": "2026-11-14T09:06:52.725Z",
+      "http_status": 200,
+      "sha256": "98d411637ae27a333b95d03c7b691eae06992f5d0d061ff6e3a77ffaace7ebf8",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "PR-1028-PDF",
+      "source_id": "e6ec49af-a833-46d3-a451-ae2be48f6a27",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198578508&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198578508&tblKey=GMN",
+        "fetched_at": "2026-11-14T09:06:53.164Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198578508&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "a09b37cc84957c2a45d0703d62a47a0ced5d5585890b990f39753236e4b2d25a",
+        "raw_bytes": 189606,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "c2b10bce20adcae873c6d80a3551b6d3e66af70e592028e611db6b3783d2ce6c",
+      "text_length": 1841,
+      "pdf_page_starts": [
+        0,
+        787,
+        1613
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "사전 통지": 8,
+        "의견제출": 5,
+        "위법·부당": 7,
+        "취소": 2,
+        "재결": 5,
+        "정지처분": 17
+      }
+    },
+    {
+      "label": "PR-1028",
+      "source_id": "83b23f2f-b702-4671-9c43-a3e8e42a52f0",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156786734",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156786734",
+        "fetched_at": "2026-11-14T09:06:54.846Z",
+        "final_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156786734",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "1d4e0e4b49a96d73e156c67200ba716254b40b140a5f80aa46fe4a3f512d9a50",
+        "raw_bytes": 151620,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "2c22c03c27ff21e1e000790fd3837e202419426e34f59c663f2cf57e75026972",
+      "text_length": 3306,
+      "pdf_page_starts": null,
+      "first_line": "본문 바로가기 메인메뉴 바로가기",
+      "rights": "UNCONFIRMED",
+      "text_in": "cache",
+      "live": true,
+      "same_as_p1": null,
+      "policy_terms": {
+        "사전 통지": 0,
+        "의견제출": 3,
+        "위법·부당": 0,
+        "취소": 3,
+        "재결": 0,
+        "정지처분": 3
+      }
+    }
+  ],
+  "spans": []
+}

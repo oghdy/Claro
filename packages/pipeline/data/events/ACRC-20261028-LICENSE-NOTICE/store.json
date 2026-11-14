@@ -1,0 +1,80 @@
+{
+  "_what": "ACRC-20261028-LICENSE-NOTICE 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json. 문서 단위 권리 (발행처는 미확인 · 문서 안에 공공누리 제1유형 표시 — 그 문서에 한해 발행처 행보다 앞선다) 는 document_rights (DATA_MODEL DocumentRights · B-E2 · pack.json doc_rights 에서)",
+  "events": [
+    {
+      "event_id": "90a14f16-7a2a-49fe-b91d-c86785bb4198",
+      "code": "ACRC-20261028-LICENSE-NOTICE",
+      "title": "중앙행정심판위원회 — 의견제출 기한 전에 결정한 자동차운전면허 정지처분을 위법 · 부당하다고 보아 취소 (재결 사례 셋 · 2026-10-28 발표)",
+      "occurred_at": "2026-10-28",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "e6ec49af-a833-46d3-a451-ae2be48f6a27",
+      "label": "PR-1028-PDF",
+      "title": "(261028) 의견제출 기한이 지나지도 않았는데 행정절차 위반한 운전면허 정지처분 취소(최종).pdf (국민권익위원회 보도자료 · 3쪽)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198578508&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-10-28T08:30+09:00",
+      "ingested_at": "2026-11-14"
+    },
+    {
+      "source_id": "83b23f2f-b702-4671-9c43-a3e8e42a52f0",
+      "label": "PR-1028",
+      "title": "\"의견제출 기한이 지나지도 않았는데\"… 행정절차 위반한 운전면허 정지처분 '취소' (정책브리핑 보도자료 게시물 페이지 — 국민권익위원회 보도자료 전재)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156786734",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-10-28",
+      "ingested_at": "2026-11-14"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "korea.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": null,
+      "can_quote": null,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-14",
+      "basis": "권리 미확인 (발행처 단위) — 발행처 단위의 근거를 찾지 못했다. 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1028-PDF. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
+    }
+  ],
+  "document_rights": [
+    {
+      "source_id": "e6ec49af-a833-46d3-a451-ae2be48f6a27",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "a09b37cc84957c2a45d0703d62a47a0ced5d5585890b990f39753236e4b2d25a",
+        "page": 3,
+        "pages": 3,
+        "image": "Im10 객체 49 · 335×129 · DCTDecode",
+        "image_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 페이지 (PR-1028) 에도 글로 '이 자료는 텍스트에 한하여 공공누리 제1유형(출처표시)의 조건에 따라 이용할 수 있습니다.' (S1-a 의 그 줄 — 페이지는 캐시)"
+      },
+      "last_reviewed_at": "2026-11-14"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

@@ -1,4 +1,4 @@
-// docs/contract/EPISODE.md §1 을 코드로 옮긴 것 (B-E1 · 짧은 이야기 ShortStory 는 B-E3 — §13). 원본은 그 문서다.
+// docs/contract/EPISODE.md §1 을 코드로 옮긴 것 (B-E1 · 짧은 이야기 ShortStory 는 B-E3 — §13 · 홀로 선 짧은 이야기의 `| null` 다섯 칸은 P-S1 — §13.9). 원본은 그 문서다.
 // 계약에 없는 칸을 여기서 만들지 않는다. 문서와 어긋나면 test/contract-docs.test.ts 가 실패한다.
 // UUID · EventRef · ConceptRef 는 ARTICLE_PACKAGE(./types) 가 코드로 옮긴 것을 쓴다 — 여기서 다시 정의하지 않는다
 // (주인은 DATA_MODEL §2 · CONCEPT_IDENTITY §3.2).
@@ -562,7 +562,8 @@ export interface ShortWhyScene {
   real_label: string;
   real: RealItem[];
   verdict: EpisodeText;
-  tool_lead: string;
+  /** 가리킨 도구 앞의 말 — 가리킨 도구가 없으면 (tools_from null) null (§13.9 · 불변식 30) */
+  tool_lead: string | null;
   ask: string;
 }
 
@@ -572,8 +573,9 @@ export interface ShortKeepScene {
   line: string;
   advice_label: string;
   advice: EpisodeText;
-  map_note: string;
-  gain_label: string;
+  /** 지도 · 만난 도구의 글 — 가리킨 도구가 없으면 (tools_from null) 둘 다 null (§13.9 · 불변식 30) */
+  map_note: string | null;
+  gain_label: string | null;
 }
 
 export interface ShortScenes {
@@ -597,11 +599,13 @@ export interface ShortStory {
   event_ref: EventRef;
   weight: "short";
   series: Series;
-  sibling: Sibling;
+  /** 같은 사건의 곁 이야기 — 없으면 null (홀로 선 짧은 이야기 · §13.9 · P-S1) */
+  sibling: Sibling | null;
   docs: Record<DocLabel, EpisodeDoc>;
   quotes: Record<QuoteKey, EpisodeQuote>;
   voice_labels: VoiceLabels;
-  tools_from: ToolsFrom;
+  /** 다른 이야기의 도구 — 가리킬 도구가 없으면 null (그 장면에 도구 · 지도가 없다 · §13.9 · P-S1) */
+  tools_from: ToolsFrom | null;
   scenes: ShortScenes;
   solve: ShortSolve;
 }
@@ -844,11 +848,11 @@ export const EPISODE_SHAPES = {
     event_ref: "EventRef",
     weight: '"short"',
     series: "Series",
-    sibling: "Sibling",
+    sibling: "Sibling | null",
     docs: "Record<DocLabel, EpisodeDoc>",
     quotes: "Record<QuoteKey, EpisodeQuote>",
     voice_labels: "VoiceLabels",
-    tools_from: "ToolsFrom",
+    tools_from: "ToolsFrom | null",
     scenes: "ShortScenes",
     solve: "ShortSolve",
   } satisfies Shape<ShortStory>,
@@ -864,7 +868,7 @@ export const EPISODE_SHAPES = {
     real_label: "string",
     real: "RealItem[]",
     verdict: "EpisodeText",
-    tool_lead: "string",
+    tool_lead: "string | null",
     ask: "string",
   } satisfies Shape<ShortWhyScene>,
   ShortKeepScene: {
@@ -873,8 +877,8 @@ export const EPISODE_SHAPES = {
     line: "string",
     advice_label: "string",
     advice: "EpisodeText",
-    map_note: "string",
-    gain_label: "string",
+    map_note: "string | null",
+    gain_label: "string | null",
   } satisfies Shape<ShortKeepScene>,
   ShortSolve: { entry: "SolveEntry", plain: "PlainFlip" } satisfies Shape<ShortSolve>,
 } as const;

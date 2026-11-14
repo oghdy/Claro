@@ -26,8 +26,9 @@
 // 짧은 이야기 (ShortStory · §13 · B-E3) — validateShortStory. 위의 1 · 2 (판) · 3 · 4 · 8 · 9 · 10 · 11 · 13 · 14 를 같이 보고, 더해서
 //   27 무게 — 짧은 이야기의 체험이 없는 까닭은 무게 (short) · 긴 이야기의 까닭은 무게가 아니다 (PLAIN_WHY)
 //   28 짧은 이야기에는 번호 · 시리즈 줄 · 체험 · 장면 넷 밖의 장면 칸이 없다 — 모양 (1) 이 거부한다 (SCHEMA_KEY)
-//   29 다른 이야기를 가리키기 — 도구 하나 이상 · 겹침 없음 (REF_TOOL) · 가리킨 이야기의 판 ≥ 1 · 자신이 아니다 (ID_RANGE)
+//   29 다른 이야기를 가리키기 (가리킨 것이 있을 때만) — 도구 하나 이상 · 겹침 없음 (REF_TOOL) · 가리킨 이야기의 판 ≥ 1 · 자신이 아니다 (ID_RANGE)
 //      가리킨 이야기를 받으면 (ctx.episodes) 대 본다 — 곁 이야기가 같은 사건 (SIBLING_MISMATCH) · 도구가 그 이야기에 있다 (REF_TOOL)
+//   30 홀로 선 짧은 이야기 (P-S1 · §13.9) — sibling · tools_from 은 null 일 수 있다. 가리킨 도구가 없으면 그것을 말하는 글 (tool_lead · map_note · gain_label)도 null · 있으면 글도 있다 (SHORT_ALONE)
 //   validateStory — weight 가 "short" 면 짧은 이야기로, 아니면 (칸이 없으면) 긴 이야기로 본다
 //
 // 보지 않는 것
@@ -535,7 +536,7 @@ export function validateShortStory(input: unknown, ctx: EpisodeContext = {}): Sh
   if (s.episode_version < 1) E("ID_RANGE", "/episode_version", "판은 1부터다");
   // 3 · 8 · 4 · 9
   const { exempt, withDigits } = groundProblems(s, shape.texts, ctx.documents, E, warnings);
-  // 29 — 다른 이야기를 가리키기
+  // 29 · 30 — 다른 이야기를 가리키기 · 홀로 선 짧은 이야기
   shortRefProblems(s, ctx.episodes, E, warnings);
   // 11 · 13 · 14 · 27 — 풀이 = 입구 + 뒤집기만 (체험 칸이 없다)
   const solve = solveProblems({ entry: s.solve.entry, lab: null, plain: s.solve.plain }, { quotes: s.quotes, tools: [] }, "/solve", "short");
@@ -549,30 +550,46 @@ export function validateShortStory(input: unknown, ctx: EpisodeContext = {}): Sh
     texts: shape.texts.length,
     texts_with_digits: withDigits,
     exempt,
-    tools_from: s.tools_from.keys.length,
+    tools_from: s.tools_from?.keys.length ?? 0,
   };
   return { ok: true, story: s, warnings, stats };
 }
 
 function shortRefProblems(s: ShortStory, episodes: readonly Episode[] | undefined, E: (code: string, path: string, message: string) => void, warnings: Issue[]) {
-  const keys = s.tools_from.keys;
-  if (!keys.length) E("REF_TOOL", "/tools_from/keys", "가리킨 도구가 없다 — 하나 이상 (그 장면의 글이 도구를 말한다)");
+  // 30 — 홀로 선 짧은 이야기 (§13.9 · P-S1): 가리킨 도구가 없으면 (tools_from null) 도구 · 지도를 말하는 글도 없다 (null) · 있으면 그 글이 있다
+  const pair = (has: boolean, what: string, cells: [string, unknown][]) => {
+    for (const [at, v] of cells) {
+      if (has && v === null) E("SHORT_ALONE", at, `${what}가 있는데 그것을 말하는 글이 없다 (null)`);
+      if (!has && v !== null) E("SHORT_ALONE", at, `${what}가 없는데 (null) 그것을 말하는 글이 있다 — 없는 것을 있는 것처럼 보이지 않는다`);
+    }
+  };
+  pair(s.tools_from !== null, "가리킨 도구 (tools_from)", [
+    ["/scenes/why/tool_lead", s.scenes.why.tool_lead],
+    ["/scenes/keep/map_note", s.scenes.keep.map_note],
+    ["/scenes/keep/gain_label", s.scenes.keep.gain_label],
+  ]);
+  // 29 — 다른 이야기를 가리키기 (가리킨 것이 있을 때만)
+  const keys = s.tools_from?.keys ?? [];
+  if (s.tools_from && !keys.length) E("REF_TOOL", "/tools_from/keys", "가리킨 도구가 없다 — 하나 이상 (그 장면의 글이 도구를 말한다). 가리킬 도구가 없으면 tools_from 을 null 로");
   if (new Set(keys).size !== keys.length) E("REF_TOOL", "/tools_from/keys", "가리킨 도구가 겹친다");
-  const refs: [string, EpisodeRef][] = [
-    ["/sibling/episode", s.sibling.episode],
-    ["/tools_from/episode", s.tools_from.episode],
-  ];
+  const refs: [string, EpisodeRef][] = [];
+  if (s.sibling) refs.push(["/sibling/episode", s.sibling.episode]);
+  if (s.tools_from) refs.push(["/tools_from/episode", s.tools_from.episode]);
   for (const [at, ref] of refs) {
     if (ref.episode_version < 1) E("ID_RANGE", `${at}/episode_version`, "가리킨 이야기의 판은 1부터다");
     if (ref.episode_id === s.episode_id) E("ID_RANGE", `${at}/episode_id`, "가리킨 이야기가 이 이야기 자신이다");
   }
   const find = (ref: EpisodeRef) => episodes?.find((e) => e.episode_id === ref.episode_id && e.episode_version === ref.episode_version);
-  const sibling = find(s.sibling.episode);
-  if (!sibling) warnings.push({ code: "SIBLING_NOT_CHECKED", path: "/sibling", message: "곁 이야기를 받지 못해 같은 사건인지는 보지 않았다" });
-  else if (sibling.event_ref !== s.event_ref) E("SIBLING_MISMATCH", "/sibling/episode", `곁 이야기 ${sibling.code} 는 다른 사건 (${sibling.event_ref})이다 — 곁 이야기는 같은 사건의 이야기다`);
-  const from = find(s.tools_from.episode);
-  if (!from) warnings.push({ code: "TOOLS_FROM_NOT_CHECKED", path: "/tools_from", message: "도구를 가져온 이야기를 받지 못해 그 도구가 거기 있는지는 보지 않았다" });
-  else keys.forEach((k, i) => from.tools.some((t) => t.key === k) || E("REF_TOOL", `/tools_from/keys/${i}`, `도구 "${k}" 가 ${from.code} 에 없다 — 다른 이야기의 도구는 가리키기만 한다 (새로 쓰지 않는다)`));
+  if (s.sibling) {
+    const sibling = find(s.sibling.episode);
+    if (!sibling) warnings.push({ code: "SIBLING_NOT_CHECKED", path: "/sibling", message: "곁 이야기를 받지 못해 같은 사건인지는 보지 않았다" });
+    else if (sibling.event_ref !== s.event_ref) E("SIBLING_MISMATCH", "/sibling/episode", `곁 이야기 ${sibling.code} 는 다른 사건 (${sibling.event_ref})이다 — 곁 이야기는 같은 사건의 이야기다`);
+  }
+  if (s.tools_from) {
+    const from = find(s.tools_from.episode);
+    if (!from) warnings.push({ code: "TOOLS_FROM_NOT_CHECKED", path: "/tools_from", message: "도구를 가져온 이야기를 받지 못해 그 도구가 거기 있는지는 보지 않았다" });
+    else keys.forEach((k, i) => from.tools.some((t) => t.key === k) || E("REF_TOOL", `/tools_from/keys/${i}`, `도구 "${k}" 가 ${from.code} 에 없다 — 다른 이야기의 도구는 가리키기만 한다 (새로 쓰지 않는다)`));
+  }
 }
 
 /** 검증을 통과한 짧은 이야기를 돌려주고, 아니면 모든 위반을 담아 던진다 */
