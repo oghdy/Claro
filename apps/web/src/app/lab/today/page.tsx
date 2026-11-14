@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { paper } from "@claro/tokens";
 import { Rich } from "../../../episode/kit/parts";
 import { COUNT_NOUN, COUNT_WORD, TODAY_COPY as C } from "./copy";
-import { TODAY, continues, minutesOfLong, minutesOfShort, sharedConcepts, type TodayItem } from "./data";
+import { TODAY, continues, sharedConcepts, type TodayItem } from "./data";
 import { PaletteDock } from "./palette/PaletteDock";
 
 // UX-7 — "오늘" 첫 화면 **시안** (D79). 실제 첫 화면 (/)은 그대로다 — 여기는 lab.
@@ -20,14 +20,11 @@ const Arrow = () => (
 );
 const oneLine = (s: string) => s.replace(/\n/g, " ");
 
-function Weight({ long, minutes, lab }: { long: boolean; minutes: number; lab: boolean }) {
+// 무게 (긴 이야기 · 짧은 이야기) · 체험이 있나 — 읽는 시간은 내지 않는다 (D82: 읽기 전부터 "N분이나?")
+function Weight({ long, lab }: { long: boolean; lab: boolean }) {
   return (
     <p className="td-weight" data-weight={long ? "long" : "short"}>
       <b>{long ? C.long : C.short}</b>
-      <span>
-        {C.about} {minutes}
-        {C.minutes}
-      </span>
       <span data-lab={lab ? "" : undefined}>{lab ? C.lab : C.noLab}</span>
     </p>
   );
@@ -56,7 +53,7 @@ function Long({ item, lead }: { item: Extract<TodayItem, { kind: "long" }>; lead
         </h3>
         <p className="td-dek">{c.dek.t}</p>
         <p className="td-meta">{c.meta.t}</p>
-        <Weight long minutes={minutesOfLong(ep)} lab={ep.solve.lab !== null} />
+        <Weight long lab={ep.solve.lab !== null} />
         {lead ? (
           <span className="td-go">
             {C.go}
@@ -100,7 +97,7 @@ function Short({ item }: { item: Extract<TodayItem, { kind: "short" }> }) {
           <i>{C.sibling}</i>
         </p>
         <h3 className="td-title">{oneLine(c.title)}</h3>
-        <Weight long={false} minutes={minutesOfShort(story)} lab={false} />
+        <Weight long={false} lab={false} />
         <span className="td-arrow" aria-hidden="true">
           <Arrow />
         </span>
@@ -123,7 +120,9 @@ export default function Page() {
       <div className="ep-scroll">
         <main className="ep-scene td">
           <header className="td-top">
-            <span className="td-mark">{C.mark}</span>
+            <span className="td-mark">
+              <span>{C.mark}</span>
+            </span>
           </header>
           <section className="td-intro">
             <h1>{C.title}</h1>

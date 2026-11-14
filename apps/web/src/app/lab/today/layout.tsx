@@ -5,6 +5,7 @@ import "../../../episode/episodes/fomc/fomc.css";
 import "../../../episode/episodes/pipc/pipc.css";
 import "./palette/dock.css";
 import "./palette/overrides.css";
+import "./palette/marker.css";
 import "./today.css";
 
 // UX-7 — /lab/today (오늘 시안 · 짧은 이야기 · 지도 견본)의 공통: 색 시안의 CSS 와 첫 그림 전에 색을 거는 스크립트. lab 전용.

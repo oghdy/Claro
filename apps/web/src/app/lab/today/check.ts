@@ -1,4 +1,4 @@
-// UX-7 시안의 검사 — "오늘" 화면 · 짧은 이야기 · 색 시안. (회차 셋은 ../episode/check.ts 가 계약으로 본다 — 여기서 다시 보지 않는다.)
+// UX-7 · UX-7b 시안의 검사 — "오늘" 화면 · 짧은 이야기 · 색 시안. (회차 셋은 ../episode/check.ts 가 계약으로 본다 — 여기서 다시 보지 않는다.)
 //   pnpm --filter @claro/web exec tsx src/app/lab/today/check.ts
 // 보는 것
 //   T1  짧은 이야기의 구절이 전부 **git 에 있는** 저장 문서의 글 그대로다 (빈칸 · 줄바꿈만 무시 — 계약 불변식 8 과 같은 대조). 문서 파일이 git 에 올라 있는 파일인지도 본다
@@ -7,7 +7,8 @@
 //   T4  그리지 않을 것 (E3-1 ③ 9 · 10 · 11) — 공표명령 · "안 모았으면" · 진료 기록의 안전 / 유출 · 한 사람 몫이 글에 없다 (낱말로만 본다. 뜻은 사람이 읽는다)
 //   T5  풀이 칸을 계약의 규칙 (solveProblems)에 넣으면 **PLAIN_WHY 하나만** 걸린다 — 계약에 "짧아서 체험이 없다"는 까닭이 없다는 것 (D80 의 실물). 다른 것이 걸리면 실패
 //   T6  "오늘"의 번호 규칙 — 번호 · 지난 이야기가 보이는 카드는 Episode.number ≥ 2 인 것뿐이다 · 화면 글의 숫자는 "지난 이야기 30초" 하나뿐이다
-//   T7  색 시안 셋 — 재는 짝 전부 대비 4.5 이상 (WCAG AA) · 바탕 · 강조가 피할 결 (크림 · 베이지 바탕 / 테라코타 · 코랄 · 주황 강조)이 아니다
+//   T7  색 시안 — 재는 짝 전부 대비 4.5 이상 (WCAG AA) · **Claude 결이 아니다** (채도 있는 크림 · 베이지 바탕 / 주황 쪽 강조 — UX-7b 에서 고친 규칙: 따뜻한 바탕은 막지 않는다)
+//       · 따뜻하고 부드러운 셋 (미색 · 쑥 · 형광펜)은 **눈 피로 기준** (본문 대비 범위 · 새하얀 바탕 피함 · 바탕 채도 낮게 · 따뜻한 쪽)
 //   T8  덮는 규칙 (palette/overrides.css)이 src/episode 의 CSS 와 맞는다 (다시 만들어 견준다)
 // 보지 않는 것: 글의 뜻이 구절에서 나오는가 (사람) · 색이 예쁜가 (도윤)
 import { execFileSync } from "node:child_process";
@@ -16,8 +17,8 @@ import path from "node:path";
 import { solveProblems, type EpisodeText } from "@claro/contract";
 import { PIPC } from "../../../episode/episodes/pipc/data";
 import { TODAY_COPY } from "./copy";
-import { TODAY, continues, minutesOfLong, minutesOfShort, sharedConcepts } from "./data";
-import { CONTRAST_PAIRS, PALETTES, contrast } from "./palette/palettes";
+import { TODAY, continues, sharedConcepts } from "./data";
+import { CONTRAST_PAIRS, HL_PAIRS, PALETTES, contrast } from "./palette/palettes";
 import { SHORT, SHORT_CHROME, SHORT_STORES } from "./short/data";
 
 const REPO = path.join(import.meta.dirname, "../../../../../..");
@@ -110,8 +111,8 @@ console.log("\n■ 오늘 — 카드");
       const { ep } = item;
       const cont = continues(ep);
       if (cont !== ep.number >= 2) fail("T6", `${ep.code}: 번호 규칙이 Episode.number 와 다르다`);
-      console.log(`  긴 이야기  ${ep.series.name}${cont ? ` · ${ep.scenes.cover.episode.t} (이어지는 이야기 — 번호 · 시리즈 줄 · 지난 이야기)` : " (주제 이름만 — 번호 없음)"} · 약 ${minutesOfLong(ep)}분 · 체험 ${ep.solve.lab ? "있음" : "없음"} → ${ep.path}`);
-    } else if (item.kind === "short") console.log(`  짧은 이야기 ${item.story.shelf.name} (주제 이름만 — 번호 없음) · 약 ${minutesOfShort(item.story)}분 · 체험 없음 → ${item.path}`);
+      console.log(`  긴 이야기  ${ep.series.name}${cont ? ` · ${ep.scenes.cover.episode.t} (이어지는 이야기 — 번호 · 시리즈 줄 · 지난 이야기)` : " (주제 이름만 — 번호 없음)"} · 체험 ${ep.solve.lab ? "있음" : "없음"} → ${ep.path}`);
+    } else if (item.kind === "short") console.log(`  짧은 이야기 ${item.story.shelf.name} (주제 이름만 — 번호 없음) · 체험 없음 → ${item.path}`);
     else console.log("  자리만     견본 자리 — 글 없음");
   }
   for (const [k, v] of Object.entries(TODAY_COPY)) if (/\d/.test(v) && k !== "recap") fail("T6", `화면 글 ${k} 에 숫자가 있다 — "${v}"`);
@@ -119,7 +120,12 @@ console.log("\n■ 오늘 — 카드");
 }
 
 // ─────────────────────────────────────────────────────────── 색
-console.log("\n■ 색 시안 — 대비 (WCAG 2 · AA = 4.5 이상)");
+console.log("\n■ 색 시안 — 대비 (WCAG 2 · AA = 4.5 이상) · Claude 결 · 눈 피로");
+/** 경계값 (UX-7b — 까닭은 logs/frontend/UX-7b.md ④) */
+const CREAM_SAT = 30; // 따뜻한 밝은 바탕의 채도 (HSL %) — 이것을 넘으면 크림 · 베이지로 읽는다. 종이 44 · 새 셋 14 ~ 24 — 그 사이에 금을 그었다
+const SOFT_SAT = 26; // 새 셋의 바탕 채도 위 끝 — CREAM_SAT 보다 안쪽
+const [BODY_MIN, BODY_MAX, CARD_MAX] = [10, 14.5, 15.5]; // 본문 대비 범위 (바탕) · 면 위의 위 끝
+const [BG_L_MAX, CARD_L_MAX] = [94, 98]; // 바탕 · 면의 밝기 (HSL %) 위 끝 — 새하얀 바탕을 피한다
 {
   const hsl = (hex: string) => {
     const n = Number.parseInt(hex.slice(1), 16);
@@ -133,17 +139,47 @@ console.log("\n■ 색 시안 — 대비 (WCAG 2 · AA = 4.5 이상)");
   };
   for (const p of PALETTES) {
     const rows = CONTRAST_PAIRS.map(([a, b, what]) => ({ what, ratio: contrast(p.colors[a], p.colors[b]) }));
+    // 형광펜이 있는 색 — 글 위에 형광펜이 겹치는 짝도 잰다
+    const hl = p.colors.hl;
+    if (hl) for (const [a, what] of HL_PAIRS) rows.push({ what, ratio: contrast(p.colors[a], hl) });
     const worst = rows.reduce((m, x) => (x.ratio < m.ratio ? x : m));
     const bg = hsl(p.colors.paper);
+    const card = hsl(p.colors.card);
     const ac = hsl(p.colors.accent);
-    console.log(`  ${p.name} (${p.id}) — ${p.note}`);
+    const body = contrast(p.colors.ink, p.colors.paper);
+    const bodyCard = contrast(p.colors.ink, p.colors.card);
+    console.log(`  ${p.name} (${p.id})${p.dock ? "" : " [견본 — 스위치에 없음 · ?c= 로만]"} — ${p.note}`);
     console.log(`    ${rows.map((x) => `${x.what} ${x.ratio.toFixed(2)}`).join(" · ")}`);
-    console.log(`    가장 낮은 짝: ${worst.what} ${worst.ratio.toFixed(2)} · 바탕 색상 ${bg.h}° 채도 ${bg.s}% · 강조 색상 ${ac.h}°`);
+    console.log(`    가장 낮은 짝: ${worst.what} ${worst.ratio.toFixed(2)} · 바탕 색상 ${bg.h}° 채도 ${bg.s}% 밝기 ${bg.l}% · 면 밝기 ${card.l}% · 강조 색상 ${ac.h}° · 본문 대비 ${body.toFixed(2)} (면 ${bodyCard.toFixed(2)})`);
     for (const x of rows) if (x.ratio < 4.5) fail("T7", `${p.name}: ${x.what} ${x.ratio.toFixed(2)} — AA 아래`);
-    if (p.id === "paper") continue;
-    // 피할 결 — 따뜻한 (노랑 ~ 주황 쪽) 밝은 바탕 · 주황 ~ 코랄 ~ 테라코타 강조
-    if (bg.l > 60 && bg.s > 6 && bg.h >= 15 && bg.h <= 70) fail("T7", `${p.name}: 바탕이 따뜻한 종이 결이다 (색상 ${bg.h}° 채도 ${bg.s}%)`);
-    if ((ac.h >= 0 && ac.h <= 45) || ac.h >= 350) fail("T7", `${p.name}: 강조가 주황 · 코랄 · 테라코타 쪽이다 (색상 ${ac.h}°)`);
+
+    // ── Claude 결 (UX-7b 에서 고친 규칙). 예전 규칙은 "따뜻한 밝은 바탕"을 통째로 막았다 (채도 6% 넘으면 실패) — 도윤이 고른 것이 바로 그 따뜻함이라 (D82) 그 규칙으로는 새 셋을 만들 수 없다.
+    //    Claude 결은 따뜻함이 아니라 **채도 있는 크림 · 베이지 바탕**과 **주황 쪽 강조**다 (D83). 그래서 둘을 따로 본다 — 하나만 걸려도 멈춘다 (반쪽만 닮아도 그 결로 읽힌다):
+    //      크림 · 베이지 바탕   밝고 (밝기 60% 넘음) 따뜻한 쪽 (색상 15 ~ 70° — 주황 ~ 노랑)인데 채도가 CREAM_SAT 를 넘는다. 지금 종이는 39° · 44% 다
+    //      주황 쪽 강조         색상 345° ~ 50° (코랄 · 테라코타 · 주황 · 호박). 지금 종이는 14° 다
+    const cream = bg.l > 60 && bg.h >= 15 && bg.h <= 70 && bg.s > CREAM_SAT;
+    const orange = ac.h <= 50 || ac.h >= 345;
+    if (p.id === "paper") {
+      // 지금의 종이는 재 보기만 한다 (도윤이 고른 뒤 실제 화면 Step 에서 바뀐다) — 이 규칙이 종이를 Claude 결로 읽는다는 것이 규칙의 눈금이다
+      console.log(`    Claude 결 규칙: 바탕 ${cream ? "걸림" : "안 걸림"} (채도 ${bg.s}% > ${CREAM_SAT}%) · 강조 ${orange ? "걸림" : "안 걸림"} (색상 ${ac.h}°) — 종이는 지금 값이라 멈추지 않는다`);
+      if (!cream || !orange) fail("T7", "눈금이 틀렸다 — 지금 종이 (Claude 결이라고 한 색)가 규칙에 걸리지 않는다");
+      continue;
+    }
+    if (cream) fail("T7", `${p.name}: 바탕이 채도 있는 크림 · 베이지 결이다 (색상 ${bg.h}° 채도 ${bg.s}% > ${CREAM_SAT}%)`);
+    if (orange) fail("T7", `${p.name}: 강조가 주황 · 코랄 · 테라코타 쪽이다 (색상 ${ac.h}°)`);
+
+    // ── 눈 피로 (UX-7b 의 따뜻하고 부드러운 셋만 — soft)
+    if (!p.soft) continue;
+    //   본문 대비 BODY_MIN ~ BODY_MAX — 최대 (21)로 밀지 않는다. 위: 도윤이 "눈이 안 피곤하다"고 한 지금 종이 (14.97)보다 세지 않게. 아래: AAA (7) 위로 넉넉히 — 둘째 글 · 옅은 글이 같은 바탕에서 AA 를 지킬 자리가 남는다
+    if (body < BODY_MIN || body > BODY_MAX) fail("T7", `${p.name}: 본문 대비 ${body.toFixed(2)} 가 범위 (${BODY_MIN} ~ ${BODY_MAX}) 밖이다`);
+    if (bodyCard > CARD_MAX) fail("T7", `${p.name}: 면 위의 본문 대비 ${bodyCard.toFixed(2)} 가 ${CARD_MAX} 를 넘는다`);
+    //   새하얀 바탕 · 면을 피한다
+    if (bg.l > BG_L_MAX) fail("T7", `${p.name}: 바탕이 너무 밝다 (밝기 ${bg.l}% > ${BG_L_MAX}%)`);
+    if (card.l > CARD_L_MAX) fail("T7", `${p.name}: 면이 새하얗다 (밝기 ${card.l}% > ${CARD_L_MAX}%)`);
+    //   바탕 채도 낮게 — 어느 색상이든
+    if (bg.s > SOFT_SAT) fail("T7", `${p.name}: 바탕 채도 ${bg.s}% 가 ${SOFT_SAT}% 를 넘는다`);
+    //   따뜻하다 — 바탕이 노랑 ~ 연두 쪽 (색상 20 ~ 100°)이고 채도가 0 이 아니다 (서늘한 회청 · 무채색 흰색이 아니다)
+    if (!(bg.h >= 20 && bg.h <= 100 && bg.s >= 8)) fail("T7", `${p.name}: 바탕이 따뜻하지 않다 (색상 ${bg.h}° 채도 ${bg.s}%)`);
   }
 }
 
@@ -159,4 +195,4 @@ if (failed) {
   console.log(`\nFAIL ${failed}`);
   process.exit(1);
 }
-console.log("\nOK — 짧은 이야기 (구절 · 숫자 · 그리지 않을 것) · 오늘 (번호 규칙) · 색 시안 셋 (AA) · 덮는 규칙");
+console.log("\nOK — 짧은 이야기 (구절 · 숫자 · 그리지 않을 것) · 오늘 (번호 규칙) · 색 시안 (AA · Claude 결 · 눈 피로) · 덮는 규칙");

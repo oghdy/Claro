@@ -1,4 +1,4 @@
-// "오늘" 시안 (UX-7 · D79) — /lab/today · 짧은 이야기 · 색 시안. lab 전용이다: 실제 주소 (/ · /s/*)는 색도 화면도 그대로여야 한다.
+// "오늘" 시안 (UX-7 · D79 · UX-7b) — /lab/today · 짧은 이야기 · 색 시안 (종이 + 미색 · 쑥 · 형광펜). lab 전용이다: 실제 주소 (/ · /s/*)는 색도 화면도 그대로여야 한다.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
@@ -36,6 +36,10 @@ test("오늘 — 긴 이야기 셋 (골든의 글 그대로) · 짧은 이야기
   await expect(page.getByTestId("card-short").locator("a")).toHaveAttribute("href", "/lab/today/short");
   expect(await page.getByTestId("card-short").innerText()).not.toMatch(/\d화/);
   await expect(page.getByTestId("card-empty")).toContainText("견본 자리 — 글 없음");
+  // 읽는 시간을 내지 않는다 (D82) — 무게 · 체험만
+  const list = await page.locator(".td-list").innerText();
+  expect(list).not.toMatch(/약\s*\d+\s*분/);
+  for (const s of ["긴 이야기", "짧은 이야기", "체험 있음"]) expect(list).toContain(s);
   // 이어지는 이야기 — 금리만. 시리즈 줄에 "다음 화" 칸이 없다 (예고는 날짜가 있을 때만 따로)
   await expect(page.locator("[data-testid^=cont-]")).toHaveCount(1);
   await expect(page.getByTestId("cont-rate").locator(".ep-track li")).toHaveCount(3);
@@ -45,7 +49,9 @@ test("색 시안 — 스위치로 같은 화면이 바뀐다 · 회차 시안 �
   await page.goto("/lab/today");
   expect(await bg(page)).toBe(PAPER);
   const seen = new Set<string>([PAPER]);
-  for (const id of ["news", "mist", "night"]) {
+  // 스위치 — 종이 + 새 셋 (UX-7b). UX-7 의 신문 · 안개 · 밤은 스위치에 없다
+  await expect(page.locator("[data-testid^=palette-]:not([data-testid=palette-dock])")).toHaveCount(4);
+  for (const id of ["hanji", "ssuk", "marker"]) {
     await page.getByTestId(`palette-${id}`).click();
     await expect(page.locator("html")).toHaveAttribute("data-palette", id);
     seen.add(await bg(page));
@@ -53,6 +59,10 @@ test("색 시안 — 스위치로 같은 화면이 바뀐다 · 회차 시안 �
   expect(seen.size, "네 색의 바탕이 서로 다르다").toBe(4);
   // 고른 색이 회차 시안 화면에 이어진다 (스위치도 뜬다)
   const night = await bg(page);
+  // 형광펜 — 첫 화면에서는 Claro 글자 한 군데에만 그어진다 (제목 · 단추에는 없다)
+  const stroke = (sel: string) => page.evaluate((q) => getComputedStyle(document.querySelector(q)!).backgroundImage, sel);
+  expect(await stroke(".td-mark > span")).toContain("gradient");
+  for (const sel of [".td-title", ".td-go", ".td-intro h1"]) expect(await stroke(sel), sel).toBe("none");
   await page.getByTestId("card-pipc").locator("a.td-main").click();
   await expect(page).toHaveURL(/\/lab\/episode\/pipc$/);
   await expect(page.getByTestId("palette-dock")).toBeVisible();
@@ -71,6 +81,17 @@ test("색 시안 — 스위치로 같은 화면이 바뀐다 · 회차 시안 �
   await page.getByTestId("palette-paper").click();
   await expect(page.locator("html")).not.toHaveAttribute("data-palette", /.*/);
   expect(await bg(page)).toBe(PAPER);
+  // 종이에서는 형광펜이 없다
+  expect(await page.evaluate(() => getComputedStyle(document.querySelector(".td-mark > span")!).backgroundImage)).toBe("none");
+});
+
+test("UX-7 의 견본 색 (신문 · 안개 · 밤)은 주소의 ?c= 로만 열린다 — 그때만 스위치에 한 칸 더 보인다", async ({ page }) => {
+  await page.goto("/lab/today?c=night");
+  await expect(page.locator("html")).toHaveAttribute("data-palette", "night");
+  await expect(page.getByTestId("palette-night")).toBeVisible();
+  await expect(page.locator("[data-testid^=palette-]:not([data-testid=palette-dock])")).toHaveCount(5);
+  await page.getByTestId("palette-hanji").click();
+  await expect(page.getByTestId("palette-night")).toHaveCount(0);
 });
 
 test("곧장 연 회차 시안 화면은 지금 그대로다 — 색 스위치가 없다 (주소에 ?c= 가 있으면 뜬다)", async ({ page }) => {
