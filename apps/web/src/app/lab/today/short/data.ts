@@ -5,6 +5,8 @@
 // 여기에는 시안 전용만 있다 — 문서 파일의 자리 · 화면의 글.
 import { parseShortStory, type ShortStory } from "@claro/contract";
 import golden from "../../../../../../../fixtures/episode-short-privacy-yeonghun.json";
+import type { ShortLine } from "../../../../episode/catalog";
+import { CoverArt } from "../../../../episode/episodes/pipc-hospital/Art";
 import { PIPC } from "../../../../episode/episodes/pipc/data";
 
 /** 짧은 이야기 = 골든 넷째. 곁 이야기 · 도구는 개인정보 1화 (PIPC) 를 가리킨다 — 받아서 대 본다 (같은 사건 · 도구가 거기 있다) */
@@ -12,6 +14,12 @@ export const SHORT: ShortStory = parseShortStory(golden, { episodes: [PIPC] });
 // 이 시안은 곁 이야기 · 도구의 이야기로 PIPC 하나만 그린다 (지도 · 접힌 카드 · 곁 이야기로 가는 길)
 for (const ref of [SHORT.sibling?.episode, SHORT.tools_from?.episode])
   if (!ref || ref.episode_id !== PIPC.episode_id || ref.episode_version !== PIPC.episode_version) throw new Error("짧은 이야기 시안은 개인정보 1화 (PIPC) 곁의 이야기만 그린다");
+
+/**
+ * 이 견본의 목록 한 줄 — **실제 목록 (episode/catalog.tsx STORIES)에는 없다**. F-E3 에서 실제 화면에서 내렸다: 개인정보 긴 이야기와 같은 사건의 짧은 판이라 (한 사건 = 이야기 하나 · D91 ①).
+ * 골든은 그대로고, 시안 "오늘" (../data.ts — 곁의 긴 이야기 바로 아래)과 /lab/today/short 가 이 줄을 쓴다. 꼬리표는 내리기 전 목록에 적혀 있던 값 그대로
+ */
+export const HOSPITAL: ShortLine = { kind: "short", story: SHORT, Art: CoverArt, place: "국내", category: "기술" };
 
 /** 근거 문서가 저장된 파일 (저장소 뿌리에서) — check.ts 가 구절을 대조할 때 읽는다. git 에 있는 파일이다 */
 export const SHORT_STORES = ["packages/pipeline/data/events/PIPC-20261028-SAFETY-MEASURES/store.documents.json"] as const;

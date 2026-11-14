@@ -3,15 +3,14 @@ import { numbered, oneLine, type Line, type LongLine, type ShortLine } from "../
 import { Rich } from "../kit/parts";
 
 // "오늘"의 카드 (UX-7 시안 → F-E2 에서 실제 첫 화면과 한 벌로). 실제 `/` 와 시안 `/lab/today` 가 같은 부품을 쓴다 — 다른 것은 가는 주소와 화면의 글 (copy)뿐이다.
-// 카드에 놓이는 것: 물음 제목 · 주제 이름 · 무게 (긴 · 짧은) · 체험이 있나 · 날 (골든의 meta 글 그대로) · 국내 / 해외 꼬리표 · 카테고리. **읽는 시간은 내지 않는다** (D82).
+// 카드에 놓이는 것: 물음 제목 · 주제 이름 · 무게 (긴 · 짧은) · 날 (골든의 meta 글 그대로) · 국내 / 해외 꼬리표 · 카테고리. **읽는 시간은 내지 않는다** (D82).
+// **"체험 있음 · 없음"도 적지 않는다** (D91 ② · F-E3) — 체험이라고 내세우기엔 아직 약하다 (체험을 체험답게 하는 일은 UX-9 시안).
 // 번호 ("N화") · 지난 이야기는 번호 화면 규칙을 지난 것에만 (catalog.numbered — D88 E-20). 이야기의 글은 전부 골든의 글자 그대로다.
 
 /** 카드가 쓰는 화면 글 — 실제 (home-copy.ts HOME) · 시안 (lab/today/copy.ts TODAY_COPY) 둘 다 이 칸들을 갖는다 */
 export interface CardCopy {
   long: string;
   short: string;
-  lab: string;
-  noLab: string;
   topic: string;
   go: string;
   recap: string;
@@ -27,12 +26,11 @@ export const Arrow = () => (
 /** 이어지는 이야기인가 — 번호를 보이는 시리즈의 긴 이야기 (시안의 옛 규칙 number ≥ 2 와 지금 목록에서 같은 답이다) */
 export const continues = (line: LongLine): boolean => numbered(line.ep.series.code);
 
-// 무게 (긴 이야기 · 짧은 이야기) · 체험이 있나 — 읽는 시간은 내지 않는다 (D82: 읽기 전부터 "N분이나?")
-function Weight({ C, long, lab }: { C: CardCopy; long: boolean; lab: boolean }) {
+// 무게 (긴 이야기 · 짧은 이야기)만 — 체험 표시는 뺐다 (D91 ② · F-E3) · 읽는 시간은 내지 않는다 (D82: 읽기 전부터 "N분이나?")
+function Weight({ C, long }: { C: CardCopy; long: boolean }) {
   return (
     <p className="td-weight" data-weight={long ? "long" : "short"}>
       <b>{long ? C.long : C.short}</b>
-      <span data-lab={lab ? "" : undefined}>{lab ? C.lab : C.noLab}</span>
     </p>
   );
 }
@@ -71,7 +69,7 @@ export function LongCard({ line, href, lead, C }: { line: LongLine; href: string
         </h3>
         <p className="td-dek">{c.dek.t}</p>
         <When line={line} meta={c.meta.t} />
-        <Weight C={C} long lab={ep.solve.lab !== null} />
+        <Weight C={C} long />
         {lead ? (
           <span className="td-go">
             {C.go}
@@ -116,7 +114,7 @@ export function ShortCard({ line, href, C, aside }: { line: ShortLine; href: str
         </p>
         <h3 className="td-title">{oneLine(c.title)}</h3>
         <When line={line} meta={c.meta.t} />
-        <Weight C={C} long={false} lab={false} />
+        <Weight C={C} long={false} />
         <span className="td-arrow" aria-hidden="true">
           <Arrow />
         </span>

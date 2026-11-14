@@ -16,8 +16,6 @@ export const HOME = {
   restLabel: "지난 이야기",
   long: "긴 이야기",
   short: "짧은 이야기",
-  lab: "체험 있음",
-  noLab: "체험 없음",
   topic: "주제",
   go: "이 이야기 읽기",
   recap: "지난 이야기 30초",

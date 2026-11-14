@@ -1,5 +1,6 @@
 // "오늘" 시안 (UX-7 · D79 · UX-7b) — /lab/today · 짧은 이야기 · 색 시안 (종이 + 미색 · 쑥 · 형광펜). lab 전용이다: 실제 주소 (/ · /s/*)는 색이 종이 그대로여야 한다.
 // F-E2 부터 실제 첫 화면 (/)도 이 꼴이다 (같은 카드 부품 · 같은 이야기 목록) — 실제 쪽은 episode.spec.ts 가 본다. 여기는 시안에만 있는 것 (색 스위치 · 견본 자리 · 시안 주소)을 본다.
+// F-E3: 병원 짧은 이야기는 실제 목록에서 내렸고 (한 사건 = 이야기 하나 · D91 ①) 시안에는 견본으로 남는다 (곁의 긴 이야기 바로 아래 · /lab/today/short). 카드에 체험 표시가 없다 (D91 ②).
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
@@ -12,7 +13,7 @@ const bg = (page: import("@playwright/test").Page) => page.evaluate(() => getCom
 
 test.use(PHONE);
 
-test("오늘 — 긴 이야기 셋 (골든의 글 그대로) · 짧은 이야기 하나 · 자리만 있는 칸. 번호는 이어지는 이야기 (금리 2화)에만", async ({ page }) => {
+test("오늘 — 긴 이야기 셋 (골든의 글 그대로) · 짧은 이야기 (견본 병원 + 실제 목록의 면허 정지) · 자리만 있는 칸 · 체험 표시 없음. 번호는 이어지는 이야기 (금리 2화)에만", async ({ page }) => {
   const res = await page.goto("/lab/today");
   expect(res!.status()).toBe(200);
   const cards = [
@@ -33,14 +34,20 @@ test("오늘 — 긴 이야기 셋 (골든의 글 그대로) · 짧은 이야기
   // 지난 이야기 30초 — 골든의 글 그대로
   await page.getByTestId("recap-fomc").locator("summary").click();
   for (const r of cards[1]!.ep.scenes.cover.recap) expect(flat(await page.getByTestId("recap-fomc").innerText())).toContain(flat(r.t));
-  // 짧은 이야기 · 자리만 있는 칸
+  // 짧은 이야기 · 자리만 있는 칸 — 견본 (병원)은 실제 목록에서 내렸어도 시안에는 곁의 긴 이야기 바로 아래 (내리기 전 자리)에 남는다 · 시안 주소로 간다
   await expect(page.getByTestId("card-pipc-hospital").locator("a")).toHaveAttribute("href", "/lab/today/short");
   expect(await page.getByTestId("card-pipc-hospital").innerText()).not.toMatch(/\d화/);
+  await expect(page.getByTestId("card-license-notice").locator("a")).toHaveAttribute("href", "/short/license-notice");
   await expect(page.getByTestId("card-empty")).toContainText("견본 자리 — 글 없음");
-  // 읽는 시간을 내지 않는다 (D82) — 무게 · 체험만
+  expect(await page.locator(".td-list .td-card").evaluateAll((els) => els.map((e) => e.getAttribute("data-testid")))).toEqual(["card-delivery", "card-fomc", "card-pipc", "card-pipc-hospital", "card-license-notice", "card-empty"]);
+  // 읽는 시간을 내지 않는다 (D82) · 체험 표시도 없다 (D91 ②) — 무게만
   const list = await page.locator(".td-list").innerText();
   expect(list).not.toMatch(/약\s*\d+\s*분/);
-  for (const s of ["긴 이야기", "짧은 이야기", "체험 있음"]) expect(list).toContain(s);
+  expect(list).not.toMatch(/체험\s*(있음|없음)/);
+  for (const s of ["긴 이야기", "짧은 이야기"]) expect(list).toContain(s);
+  // 개념으로 이어짐 — 견본 (병원)과 개인정보가 같은 도구를 만난다 (tools_from)
+  await expect(page.locator(".td-concepts li")).toHaveCount(1);
+  await expect(page.locator(".td-concepts li a")).toHaveCount(2);
   // 이어지는 이야기 — 금리만. 시리즈 줄에 "다음 화" 칸이 없다 (예고는 날짜가 있을 때만 따로)
   await expect(page.locator("[data-testid^=cont-]")).toHaveCount(1);
   await expect(page.getByTestId("cont-rate").locator(".ep-track li")).toHaveCount(3);

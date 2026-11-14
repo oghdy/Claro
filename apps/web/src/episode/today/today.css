@@ -186,14 +186,6 @@
   font-weight: 800;
   color: var(--ep-ink);
 }
-.td-weight span::before {
-  content: "· ";
-  color: var(--ep-muted);
-}
-.td-weight span[data-lab] {
-  font-weight: 700;
-  color: var(--ep-accent-ink);
-}
 .td-card[data-lead] .td-weight {
   margin-bottom: 16px;
 }

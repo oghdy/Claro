@@ -8,8 +8,6 @@ export const TODAY_COPY = {
   draftNote: "시안이에요. 긴 이야기 셋은 지금 실제 주소에 있는 것 그대로고, 날짜는 저마다의 발표일이에요.",
   long: "긴 이야기",
   short: "짧은 이야기",
-  lab: "체험 있음",
-  noLab: "체험 없음",
   topic: "주제",
   go: "이 이야기 읽기",
   recap: "지난 이야기 30초",

@@ -1,5 +1,5 @@
 // 실제 화면에 나가는 이야기 — **목록은 여기 한 곳이다** (F-E2 · D86 · D88). 첫 화면 `/` ("오늘") · 긴 이야기 `/s/<시리즈>/<번호>` · 짧은 이야기 `/short/<code>` ·
-// 개념 지도 `/map` · 회차 화면의 책장 (kit/shelf.ts) · 시안 `/lab/today` 가 전부 STORIES 하나를 읽는다.
+// 개념 지도 `/map` · 회차 화면의 책장 (kit/shelf.ts) · 시안 `/lab/today` 가 전부 STORIES 하나를 읽는다 (시안은 여기 없는 견본 하나 — 병원 짧은 이야기 — 를 제 쪽에 따로 얹는다 · lab/today/short/data.ts).
 // **이야기의 글 · 근거 · 풀이 칸은 계약 검증을 지난 파일에 있다** (fixtures/episode-*.json — 긴 이야기는 Episode · 짧은 이야기는 ShortStory). 여기는 어느 이야기가 나가는지와 화면의 것만 적는다.
 // 데이터베이스를 읽지 않는다 — 빌드할 때 정적 페이지에 실린다 (판은 불변이라 요청마다 읽을 이유가 없다).
 //
@@ -15,7 +15,6 @@
 // 이 파일은 화면 뼈대 (kit/Episode)를 읽지 않는다 — kit/shelf.ts 가 이 목록을 읽기 때문이다 (서로 물리지 않게). 화면은 ./Screen.tsx 가 세운다.
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
-import yeonghun from "../../../../fixtures/episode-short-privacy-yeonghun.json";
 import licenseNotice from "../../../../packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice/story.json";
 import { CoverArt as DeliveryArt } from "./episodes/delivery/Art";
 import { DELIVERY } from "./episodes/delivery/data";
@@ -26,7 +25,6 @@ import { Glyph as FomcGlyph } from "./episodes/fomc/Glyph";
 import { CoverArt as PipcArt } from "./episodes/pipc/Art";
 import { PIPC } from "./episodes/pipc/data";
 import { Glyph as PipcGlyph } from "./episodes/pipc/Glyph";
-import { CoverArt as YeonghunArt } from "./episodes/pipc-hospital/Art";
 import { PlainArt, PlainGlyph } from "./kit/PlainLook";
 import type { EpisodeData, ReaderFixture, ReaderId } from "./kit/types";
 
@@ -107,13 +105,14 @@ const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
 
 /**
  * 꼬리표 · 카테고리의 자리 = S-1 고르기 종이 시험의 그날 표 (logs/pipeline/S-1.md ③ — 10/28 "[돈] (해) FOMC" · 10/29 "[기술] 개인정보위" · 11/9 "[기술] 공정위 배달앱").
- * 짧은 이야기 (병원)는 개인정보위의 같은 발표라 같은 칸이다. 배달앱은 S-1 도 "기술 ↔ 돈 ↔ 생활"로 애매하다고 적었다 (_open F-E2-b)
+ * 배달앱은 S-1 도 "기술 ↔ 돈 ↔ 생활"로 애매하다고 적었다 (_open F-E2-b)
+ * **한 사건 = 이야기 하나** (D91 ① · F-E3) — 긴 이야기의 같은 사건을 짧게 다시 쓴 것 (곁 이야기 · sibling)은 목록에 올리지 않는다.
+ * 그래서 병원 짧은 이야기 (골든 fixtures/episode-short-privacy-yeonghun.json — 개인정보 긴 이야기와 같은 발표)는 F-E3 에서 내렸다 → /short/pipc-hospital 은 404. 골든은 그대로고 시안 (/lab/today · /lab/today/short)에만 견본으로 남는다
  */
 export const STORIES: readonly Line[] = [
   long(DELIVERY, { ...DELIVERY_LOOK, place: "국내", category: "기술" }),
   long(FOMC, { ...FOMC_LOOK, place: "해외", category: "돈" }),
   long(PIPC, { ...PIPC_LOOK, place: "국내", category: "기술" }),
-  short(yeonghun, { Art: YeonghunArt, place: "국내", category: "기술" }),
   // P-S1 — 파이프라인이 쓴 첫 짧은 이야기 (홀로 선다 · PM 게이트 D89 · 짧은 이야기라 큰 카드가 아닌 끝에). day 없음 — 아침 고르기로 낸 것이 아니라 시험 (10/29 아침 한 장 c142)
   short(licenseNotice, { place: "국내", category: "나라와 법" }),
 ];
