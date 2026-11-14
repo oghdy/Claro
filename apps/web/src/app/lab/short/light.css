@@ -1,0 +1,174 @@
+/* UX-8 — 짧은 이야기 손 견본 (/lab/short)의 겉모습. lab 전용 — 실제 주소의 CSS (src/episode) 는 한 줄도 바꾸지 않았다.
+   긴 이야기의 것을 그대로 쓴다 (ep-* — 뼈대 · 글 · 뒤집기 · 한 줄 · 도구 카드 · 근거 시트). 여기 있는 것은 이 꼴에만 있는 넷:
+   문서의 문장 (lt-cite) · 고르기 (lt-pick) · 흐름의 이음 (lt-flow) · 견줘 읽기 (lt-compare). 색은 전부 --ep-* (토큰)이다. */
+
+.lt-art-mark {
+  stroke: var(--ep-ink);
+  stroke-width: 1.8;
+  stroke-dasharray: 3 4;
+  stroke-linecap: round;
+}
+
+/* 흐름 — 한 장면 안에서 글이 끊기지 않고 내려간다. 문단은 긴 이야기의 "수수께끼" 글 크기 (조금 크게 · 줄 넉넉히) */
+.lt-flow .ep-p {
+  margin-bottom: 16px;
+  font-size: 17.5px;
+  line-height: 1.74;
+}
+.lt-flow .ep-p strong {
+  background: linear-gradient(transparent 62%, var(--ep-accent-soft) 62%);
+}
+.lt-lead {
+  margin: 0 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ep-rule);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--ep-ink2);
+}
+.lt-lead b {
+  margin-right: 8px;
+  font-weight: 800;
+  color: var(--ep-accent);
+}
+
+/* 문서의 문장 — 글자 그대로 */
+.lt-cite {
+  margin: 4px 0 20px;
+  padding: 16px 18px 15px;
+  border-radius: 6px 20px 20px 20px;
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+}
+.lt-cite figcaption {
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #f0a184;
+}
+.lt-cite blockquote {
+  margin: 8px 0 0;
+  font-size: 20px;
+  font-weight: 750;
+  line-height: 1.45;
+  letter-spacing: -0.03em;
+}
+.lt-cite .ep-src-hit {
+  text-decoration-color: #f0a184 !important;
+}
+
+/* 고르기 — 예상 한 번 */
+.lt-pick {
+  margin: 4px 0 18px;
+  padding: 16px 16px 16px;
+  border-radius: 20px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.lt-pick > p {
+  margin: 0 0 14px;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.62;
+}
+.lt-pick-set {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.lt-pick-set button {
+  min-height: 54px;
+  padding: 0 10px !important;
+  border-radius: 16px;
+  background: var(--ep-ink) !important;
+  color: var(--ep-paper) !important;
+  font-size: 16.5px !important;
+  font-weight: 750 !important;
+  text-align: center !important;
+}
+.lt-pick[data-picked] .lt-pick-set button {
+  background: transparent !important;
+  color: var(--ep-muted) !important;
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.lt-pick[data-picked] .lt-pick-set button[aria-pressed="true"] {
+  background: var(--ep-accent-soft) !important;
+  color: var(--ep-accent-ink) !important;
+  box-shadow: inset 0 0 0 1.5px var(--ep-accent);
+}
+.lt-pick .ep-src-hit {
+  color: inherit;
+}
+.lt-reply {
+  margin: 14px 0 0 !important;
+  padding-top: 14px;
+  border-top: 1px dashed var(--ep-rule);
+  font-size: 16.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.7 !important;
+}
+.lt-wait {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  color: var(--ep-muted);
+  text-align: center;
+}
+
+/* 흐름의 끝 — 한 줄 · 낱말 · 누구의 말이 같은 장면에 이어 붙는다 */
+.lt-end {
+  margin-top: 14px;
+}
+.lt-words-label {
+  margin: 22px 0 10px;
+  font-size: 13.5px;
+  font-weight: 750;
+  line-height: 1.3;
+  color: var(--ep-accent-ink);
+}
+.lt-words-label b {
+  font-weight: 800;
+  font-size: 15px;
+}
+.lt-end .ep-tools {
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+.lt-end .ep-caveat {
+  margin-bottom: 22px;
+}
+
+/* 견줘 읽기 — 시안에서만 */
+.lt-compare {
+  margin: 26px 0 0;
+  padding: 16px 16px 6px;
+  border-radius: 16px;
+  border: 1.5px dashed var(--ep-rule);
+}
+.lt-compare h2 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 750;
+  color: var(--ep-muted);
+}
+.lt-compare > p {
+  margin: 0 0 4px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ep-muted);
+}
+.lt-compare .ep-other {
+  margin: 10px 0;
+}
+.lt-compare .ep-other strong {
+  font-size: 15.5px;
+}
+.lt-foot {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 16px;
+}
+.lt-foot .ep-restart {
+  margin: 0;
+}

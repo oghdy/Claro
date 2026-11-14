@@ -1,0 +1,80 @@
+{
+  "_what": "KDCA-20261109-OBESITY 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json. 문서 단위 권리 (발행처는 미확인 · 문서 안에 공공누리 제1유형 표시 — 그 문서에 한해 발행처 행보다 앞선다) 는 document_rights (DATA_MODEL DocumentRights · B-E2 · pack.json doc_rights 에서)",
+  "events": [
+    {
+      "event_id": "8a74dbc0-cb10-4219-9636-9f6783aa2975",
+      "code": "KDCA-20261109-OBESITY",
+      "title": "질병관리청 — 「2025 지역사회건강조사」 비만 관련 지표 심층분석 결과 발표 (성인 비만율 35.4% · 10년 전에 비해 약 26.9%(7.5%p) 증가 · 2026-11-09 발표)",
+      "occurred_at": "2026-11-09",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "2332a609-e0a7-425b-879e-052d206ad5b1",
+      "label": "PR-1109-PDF",
+      "title": "[11.10.화.조간] 남성 30~40대 2명 중 1명 비만 성인 비만율 10년 새 26.9% 증가.pdf (질병관리청 보도자료 · 15쪽 — 본문 7쪽 + 붙임 셋)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198586388&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-09T12:00+09:00",
+      "ingested_at": "2026-11-14"
+    },
+    {
+      "source_id": "73dfc859-5f2e-4cf8-94f8-19ec108daf50",
+      "label": "PR-1109",
+      "title": "[11.10.화.조간] 남성 30~40대 2명 중 1명 비만 성인 비만율 10년 새 26.9% 증가 (정책브리핑 보도자료 게시물 페이지 — 질병관리청 보도자료 전재)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156788433",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-09",
+      "ingested_at": "2026-11-14"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "korea.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": null,
+      "can_quote": null,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-14",
+      "basis": "권리 미확인 (발행처 단위) — 발행처 단위의 근거를 찾지 못했다. 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1109-PDF. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
+    }
+  ],
+  "document_rights": [
+    {
+      "source_id": "2332a609-e0a7-425b-879e-052d206ad5b1",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "7cd912fd508e51220c966cac60a2be6b89160091abfee6a2bfa78f9c0cd6355e",
+        "page": 7,
+        "pages": 15,
+        "image": "Im23 객체 169 · 132×51 · DCTDecode",
+        "image_sha256": "a4e0b62cbfc1e0228705f243e20da585be0d12607a00e5edc601d1d66fa033ea",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). **전재한 정책브리핑 페이지 (PR-1109) 에는 글로 된 제1유형 줄이 없다** — 그 페이지에는 '공공누리가 부착되지 않은 자료는 담당자와 협의한 후에 사용하여 주시기 바랍니다.' 만 있다 (P-S1 이 이 까닭으로 c039 를 뺐다 — logs/pipeline/P-S1.md ②). 근거는 이 PDF 안의 그림 하나다 (D70 의 문서 단위 길 그대로) — 판정은 PM (logs/frontend/UX-8.md ⑨ _open)"
+      },
+      "last_reviewed_at": "2026-11-14"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

@@ -1,0 +1,123 @@
+{
+  "_what": "KDCA-20261109-OBESITY 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "KDCA-20261109-OBESITY",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.korea.kr",
+      "url": "https://www.korea.kr/robots.txt",
+      "fetched_at": "2026-11-14T09:52:31.106Z",
+      "http_status": 200,
+      "sha256": "98d411637ae27a333b95d03c7b691eae06992f5d0d061ff6e3a77ffaace7ebf8",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "PR-1109-PDF",
+      "source_id": "2332a609-e0a7-425b-879e-052d206ad5b1",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198586388&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198586388&tblKey=GMN",
+        "fetched_at": "2026-11-14T09:52:31.913Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198586388&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "7cd912fd508e51220c966cac60a2be6b89160091abfee6a2bfa78f9c0cd6355e",
+        "raw_bytes": 2811944,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "bd1432b4eea497c7979f8e527ba1a40059c8069c22341c03fd239259ebb9d804",
+      "text_length": 6580,
+      "pdf_page_starts": [
+        0,
+        1128,
+        1944,
+        2656,
+        3131,
+        3640,
+        4084,
+        4681,
+        4795,
+        4889,
+        4984,
+        5071,
+        5162,
+        5213,
+        5995
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "비만율": 50,
+        "%p": 9,
+        "상대": 3,
+        "변화율": 4,
+        "체질량지수": 2,
+        "증가": 15
+      }
+    },
+    {
+      "label": "PR-1109",
+      "source_id": "73dfc859-5f2e-4cf8-94f8-19ec108daf50",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156788433",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156788433",
+        "fetched_at": "2026-11-14T09:52:33.280Z",
+        "final_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156788433",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "ba454af0be30a6aad17a566e8bdd416e029984613a5ee18c1ab6aff3397e3446",
+        "raw_bytes": 149999,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "8a453a423acf2053ce3008d7f6ac00c358449e59aac693684eeaf5d54d8c2fc3",
+      "text_length": 3144,
+      "pdf_page_starts": null,
+      "first_line": "본문 바로가기 메인메뉴 바로가기",
+      "rights": "UNCONFIRMED",
+      "text_in": "cache",
+      "live": true,
+      "same_as_p1": null,
+      "policy_terms": {
+        "비만율": 3,
+        "%p": 0,
+        "상대": 0,
+        "변화율": 0,
+        "체질량지수": 0,
+        "증가": 3
+      }
+    }
+  ],
+  "spans": []
+}
