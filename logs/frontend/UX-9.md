@@ -307,3 +307,14 @@ web e2e 의 기존 70 (실제 주소 · 골든 글이 화면과 같은지 포함
 - 배달앱: `price-1-scene` 장면 머리 · **`price-2-before` 고르기 전** · `price-3-dragging` 끄는 중 · **`price-4-picked` 고른 뒤** · `price-5-sold` 그 값으로 팔았다 · `price-6-demand-m1 ~ m6` 요구가 오는 순간 · `price-6-tied` 내 값이 끌려 올라갔다 (점선) · `price-7-dragging-both` 두 값표가 같이 끌려온다 · `price-8-blocked-m1 ~ m6` 튕기는 순간 · **`price-8-blocked` 결과** · `price-9-answer-open` 답이 열렸다
 - 금리: `rate-1-brake-before` · `rate-2-brake-after` 9월 회의 (틀 부품 그대로) · **`rate-3-ballot-before` 고르기 전** · **`rate-4-ballot-picked` 고른 뒤** (그대로 + 이제 잡힐 것 같아서) · `rate-5-open-m1 ~ m6` 표가 열리는 순간 · **`rate-5-result-wait` · `rate-6-result-wait-mine` 결과** · `rate-7 · 8-result-cut` 내린다 (나 혼자) · `rate-9-result-raise-mine` 올린다 (까닭이 아직 문서에 없다)
 - 개인정보: `privacy-1-scene` 장면 머리 · **`privacy-2-before` 고르기 전** · **`privacy-3-pinned` 고른 뒤** · `privacy-4-turning-ask` ★ 칸의 뒷면 · `privacy-5-star-m1 ~ m6` ★ 이 찍히는 순간 · `privacy-5-star` · `privacy-6-all-turned` 다 넘김 · **`privacy-7-compare` 결과** (핀 ≠ ★) · `privacy-8-compare-same` 다시 꽂음 (핀 = ★ · 처음 꽂은 칸이 남는다)
+
+## 배포 확인 — push 뒤 실제 주소 (`c3eafec` · 2026-11-14)
+
+```
+https://claro-lime-one.vercel.app
+200 /lab/play   200 /lab/play/price   200 /lab/play/rate   200 /lab/play/privacy   200 /lab/play/rate?at=play
+200 /   200 /s/price/1   200 /s/rate/2   200 /s/privacy/1   200 /short/pipc-hospital   200 /short/license-notice   200 /map
+200 /lab/episode   200 /lab/short   200 /lab/today
+```
+배포된 세 주소를 폰 크기 (390×844)로 처음부터 끝까지 해 봤다 (`shots.ts` 를 배포 주소에 돌림 — 값표 끌기 · 표 셋 · 핀 둘 · 페이지 오류 0). 그림 셋: `live-price-8-blocked` · `live-rate-6-result-wait-mine` · `live-privacy-7-compare`.
+띄운 서버 (개발 3100 · 로컬 빌드 3210)는 모두 껐다. `next dev` 가 만든 `apps/web/AGENTS.md` · `CLAUDE.md` 는 없었다. 빌드 폴더 `.next-ux9` 는 지웠다 (git 밖).
