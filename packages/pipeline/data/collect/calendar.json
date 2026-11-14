@@ -1,0 +1,14 @@
+{
+  "_what": "S-2 · 달력 — 기다림 목록의 '날짜 있는 것'. 사람이 적는다. 날짜는 낸 곳의 날짜 (미국 것은 미국 날짜 — 한국에서는 그날 밤 ~ 다음 날 새벽이라 다음 날 아침 창에 든다). 근거 (basis)가 저장소 실물에 있는 것만 적었다 — 모르는 날짜는 unknown 에. 연준 회의 줄은 collect 가 연준 달력 쪽에서 스스로 읽어 더한다 (여기 적지 않아도 된다). orgs · keys 가 있으면 그날 후보 가운데 맞는 것에 '달력' 꼬리표가 붙는다. 못 가져오는 곳 (BLS)은 url 만 보여 준다 — 사람이 연다",
+  "entries": [
+    { "date": "2026-11-06", "approx": false, "what": "미 10월 고용 (BLS Employment Situation)", "story": "rate", "orgs": [], "keys": [], "url": "https://www.bls.gov/news.release/empsit.htm", "basis": "S-1 ③ 11/6 · ⑥ (날짜대로 왔다)" },
+    { "date": "2026-11-10", "approx": false, "what": "미 10월 소비자물가 (BLS CPI)", "story": "rate", "orgs": [], "keys": [], "url": "https://www.bls.gov/news.release/cpi.htm", "basis": "S-1 ③ 11/10 · ⑥ (날짜대로 왔다)" },
+    { "date": "2026-11-18", "approx": true, "what": "연준 10월 회의의 회의록 (결정 3주 뒤 — '무렵')", "story": "rate", "orgs": ["연준", "Federal Reserve"], "keys": ["Minutes of the Federal Open Market Committee"], "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm", "basis": "골든 episode-rate-2 남음 장면 '회의록이 나오면' · P-E2" },
+    { "date": "2026-12-16", "approx": false, "what": "공정거래법 시행령 개정안 — 의견 받기 끝나는 날", "story": "price", "orgs": ["공정거래위원회"], "keys": ["공정거래법 시행령"], "url": "https://www.ftc.go.kr/www/selectBbsNttList.do?bordCd=3&key=12", "basis": "골든 episode-price-1 남음 장면 '규칙도 바뀌는 중' (11/6 ~ 12/16)" }
+  ],
+  "unknown": [
+    { "what": "미 11월 고용 · 11월 소비자물가 발표일 (BLS)", "why": "bls.gov 가 우리 신원 표시에 403 — 일정 쪽을 못 읽는다. 사람이 일정표를 보고 entries 에 적는다" },
+    { "what": "한국은행 금통위 (통화정책방향 결정회의) 날짜", "why": "저장소 실물에 날짜가 없다 · 한은 목록은 스크립트로 그려져 못 읽는다. 사람이 적는다" },
+    { "what": "국내 지표 (소비자물가 · 고용동향 · 가계대출) 다음 달 치 발표일", "why": "정부 주간 일정표를 이 Step 에서 열어 보지 않았다 — 지금 낸 이야기 셋의 '남은 것'이 아니라서 뒤로 뒀다" }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "_what": "S-2 · 기다림 목록 — 지금 낸 이야기 셋의 '남은 것'. 사람이 적는다 (이야기를 낼 때 · 남은 것이 왔을 때). collect 가 읽어 그날 후보에 '이어질 거리' 꼬리표를 붙인다 (모델 없음). head 는 골든 (fixtures/episode-*.json) 의 남음 장면 scenes.next.coming[].head 글자 그대로 — 시험이 둘을 맞대 본다. 맞추는 법 (D86): 기관 + (사건 번호 · 회사 · 조항) 하나 더. 기관만 같으면 '같은 기관'으로만 적고 올리지 않는다. 숫자 · 점수 없음. since = 그 이야기 · 그 회차를 고른 아침 — 그 뒤 아침부터 보인다 (지난 날짜로 돌려 볼 때 그날 몰랐던 것이 섞이지 않게). gists 는 회차마다 한 줄 — 그 아침에 알던 가장 뒤의 것을 모델에 보인다",
+  "stories": [
+    {
+      "code": "rate",
+      "name": "금리는 어디로",
+      "fixture": "fixtures/episode-rate-2.json",
+      "since": "2026-09-17",
+      "gists": [
+        {
+          "since": "2026-09-17",
+          "gist": "미 연준이 9월 16일 금리를 0.25%포인트 올렸다 (2023년 7월 뒤 처음 · 표결 12 대 0). 물가가 내려오는 속도가 충분히 빠르지 않다고 봤기 때문이다."
+        },
+        {
+          "since": "2026-10-29",
+          "gist": "미 연준이 10월 28일 금리를 그대로 뒀다 (표결 10 대 2 · 반대 둘은 '올리자'). 성명문은 물가가 여전히 높다고 적었다."
+        }
+      ],
+      "orgs": [
+        "연준",
+        "Federal Reserve"
+      ],
+      "keys": [
+        "FOMC",
+        "Federal Open Market Committee"
+      ],
+      "items": [
+        {
+          "head": "회의록이 나오면",
+          "kind": "dated",
+          "date": "2026-11-18",
+          "approx": true,
+          "where": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+          "watch": {
+            "type": "fomc-minutes",
+            "meeting_last_day": "2026-10-28"
+          },
+          "keys": [
+            "Minutes of the Federal Open Market Committee"
+          ],
+          "becomes": "새 회차 (3화 · P-E3)",
+          "since": "2026-10-29"
+        },
+        {
+          "head": "올해 마지막 회의",
+          "kind": "dated",
+          "date": "2026-12-09",
+          "approx": false,
+          "where": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+          "watch": {
+            "type": "calendar"
+          },
+          "keys": [
+            "FOMC statement"
+          ],
+          "becomes": "새 회차",
+          "since": "2026-10-29"
+        },
+        {
+          "head": "회의 방식도 바뀌어요",
+          "kind": "undated",
+          "date": null,
+          "approx": false,
+          "where": "https://www.federalreserve.gov/json/ne-press.json",
+          "watch": {
+            "type": "list"
+          },
+          "keys": [
+            "schedule of Federal Open Market Committee meetings"
+          ],
+          "becomes": "덧붙임 (11/12 에 2027 일정이 나왔다 — S-1 ⑥)",
+          "since": "2026-10-29"
+        }
+      ]
+    },
+    {
+      "code": "privacy",
+      "name": "내 정보는 누가 지키나",
+      "fixture": "fixtures/episode-privacy-1.json",
+      "since": "2026-10-30",
+      "gists": [
+        {
+          "since": "2026-10-30",
+          "gist": "개인정보위가 10월 28일 해킹으로 회원 정보가 털린 두 곳 (대교 · 영훈의료재단)에 과징금 38억 8,500만 원을 매겼다. 털린 쪽이 벌을 받는 까닭은 지킬 의무 (안전조치 의무)를 다하지 않았기 때문이다."
+        }
+      ],
+      "orgs": [
+        "개인정보보호위원회",
+        "개인정보위"
+      ],
+      "keys": [
+        "안전조치",
+        "대교",
+        "영훈"
+      ],
+      "items": [
+        {
+          "head": "의결서가 나오면",
+          "kind": "undated",
+          "date": null,
+          "approx": false,
+          "where": "https://www.pipc.go.kr/np/default/agenda.do?mCode=E030010000",
+          "watch": {
+            "type": "pipc-case",
+            "cases": [
+              "2024조일0049",
+              "2025조이0028"
+            ]
+          },
+          "keys": [
+            "2024조일0049",
+            "2025조이0028"
+          ],
+          "becomes": "새 회차 또는 덧붙임 — 결정문 게시판은 제목에 회사 이름이 없다. 사건 번호로 맞춘다 (E3-1 · S-1 ⑥)",
+          "since": "2026-10-30"
+        },
+        {
+          "head": "대교가 공표하면",
+          "kind": "undated",
+          "date": null,
+          "approx": false,
+          "where": "회사 홈페이지 — 주소를 정해 둔 적이 없다",
+          "watch": {
+            "type": "none"
+          },
+          "keys": [],
+          "becomes": "덧붙임 — 확인할 곳이 없다 (사람이 생각날 때)",
+          "since": "2026-10-30"
+        },
+        {
+          "head": "병원 쪽 이야기는 따로",
+          "kind": "idea",
+          "date": null,
+          "approx": false,
+          "where": "-",
+          "watch": {
+            "type": "none"
+          },
+          "keys": [
+            "영훈"
+          ],
+          "becomes": "기다리는 문서가 아니다 — 따로 쓸 거리",
+          "since": "2026-10-30"
+        }
+      ]
+    },
+    {
+      "code": "price",
+      "name": "누가 값을 정하나",
+      "fixture": "fixtures/episode-price-1.json",
+      "since": "2026-11-10",
+      "gists": [
+        {
+          "since": "2026-11-10",
+          "gist": "공정위가 배달의민족과 쿠팡 (쿠팡이츠)에 과징금을 매겼다 (10월 29일 결정 · 11월 9일 발표). 가게에 '다른 데보다 싸게 팔라'고 한 요구 (최혜대우)가 문제였다."
+        }
+      ],
+      "orgs": [
+        "공정거래위원회",
+        "공정위"
+      ],
+      "keys": [
+        "배달",
+        "쿠팡",
+        "우아한형제들",
+        "최혜대우"
+      ],
+      "items": [
+        {
+          "head": "결정문이 나오면",
+          "kind": "undated",
+          "date": null,
+          "approx": false,
+          "where": "https://case.ftc.go.kr/ocp/co/ltfr.do",
+          "watch": {
+            "type": "human-weekly"
+          },
+          "keys": [],
+          "becomes": "새 회차 또는 덧붙임 — robots 가 막는 게시판이다. 사람이 주 1회 눈으로 (D86). 의결에서 게시까지 한 달쯤 (S-1 ⑥)",
+          "since": "2026-11-10"
+        },
+        {
+          "head": "규칙도 바뀌는 중",
+          "kind": "dated",
+          "date": "2026-12-16",
+          "approx": false,
+          "where": "https://www.ftc.go.kr/www/selectBbsNttList.do?bordCd=3&key=12",
+          "watch": {
+            "type": "calendar"
+          },
+          "keys": [
+            "공정거래법 시행령"
+          ],
+          "becomes": "덧붙임 — 12/16 은 의견 받기가 끝나는 날. 마무리는 2027년 상반기 예정 (골든)",
+          "since": "2026-11-10"
+        },
+        {
+          "head": "따로 남은 숙제",
+          "kind": "undated",
+          "date": null,
+          "approx": false,
+          "where": "https://www.ftc.go.kr/www/selectBbsNttList.do?bordCd=3&key=12",
+          "watch": {
+            "type": "list"
+          },
+          "keys": [
+            "끼워팔기"
+          ],
+          "becomes": "새 회차 — 쿠팡 끼워팔기 재심사",
+          "since": "2026-11-10"
+        }
+      ]
+    }
+  ]
+}
