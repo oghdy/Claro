@@ -1,0 +1,5 @@
+/* UX-8b — 이 견본에는 맨 아래 "견줘 읽기" 칸을 두지 않는다 (지시: 빼거나 /lab/short 하나만).
+   화면 부품 (../short/Light.tsx)은 고치지 않고 불러 쓰므로, 그 칸은 여기서 가린다. 견줄 것은 빈 목록으로 넘긴다 (page.tsx). */
+.lt-compare {
+  display: none;
+}
