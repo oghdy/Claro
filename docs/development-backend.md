@@ -1288,6 +1288,7 @@ Claro 는 기사를 "회차"로 낸다 — 도윤이 확정했다 (D57 쌓인다
 | Step | 내용 | 산출 | 상태 |
 |---|---|---|---|
 | **B-E2** | DATA_MODEL §4.4 문서 단위 권리 (문서 안 공공누리 제1유형 표시 · 근거 · 해시 필수 · 그 문서에 한해 발행처 행보다 앞선다) · 불변식 20 · P-1 문구 · 검증 · 파이프라인 산출물을 계약 모양으로 · 서브에이전트 Opus | DATA_MODEL · packages/contract · rights.ts · pack.ts · PIPC store.json · `logs/backend/B-E2.md` | ☑ 2026-11-12 · 검수 대기 (PM) — 따로 된 타입 DocumentRights (+ DocumentRightsBasis · Source 하나에 한 행 · 칸마다 발행처 행보다 앞선다 · can_ingest 없음) · 불변식 20 · P-1 · §10.1 "발행처 또는 문서 단위" · 불변식 35 ~ 37 · PIPC store.json document_rights 3 행 (발행처 행 null 그대로) · FOMC · KFTC 0자 · 사본 +12 +7 · 시험 +18 +3 · API 0 · _open B-E2-a ~ c |
+| **B-E3** | **짧은 이야기 · 번호 없는 이야기 계약 (D80 · D86)** — 무게 · 짧은 조립 (장면 넷) · 번호 · 시리즈 줄을 고를 수 있게 (선반) · 같은 사건의 곁 이야기 · 다른 이야기의 도구 가리키기 · 체험 없는 까닭 = 무게 · 실물 = UX-7 짧은 이야기 (영훈) · 골든 넷째 · 서브에이전트 Opus | EPISODE.md · packages/contract · fixtures · `logs/backend/B-E3.md` | ☐ 도는 중 (2026-11-14) |
 
 ### 서브에이전트 지시 (Opus)
 ```
@@ -1321,3 +1322,43 @@ E3-1b (`3444043` · `logs/pipeline/E3-1b.md`) 가 개인정보위 문서의 권�
 - docs/development-backend.md 의 B-E2 줄 (☐ 도는 중 → ☑) · 계약 CHANGELOG · 커밋 접두사 `B-E2` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` 금지
 - **나(PM)에게**: 15줄 안쪽 — 커밋 · 어디에 뒀나 · 불변식 · 산출물 변화 · _open
 ```
+
+## B-E3 · 짧은 이야기 · 번호 없는 이야기를 계약으로 (D80 · D86)
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 백엔드 레인 (계약). Step B-E3 (짧은 이야기 · 번호 없는 이야기를 계약으로)을 맡는다. PM(나)이 검수한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **다른 세션 S-2 (`packages/pipeline/src/collect*` · `packages/pipeline/data/collect/` · `logs/pipeline/S-2*` · `docs/development-pipeline.md`)가 같은 때 돈다.** 그 파일들은 건드리지 마라.
+push = Vercel 배포 (실제 주소) — 검사가 다 통과한 뒤 한 번.
+
+## 왜
+도윤 (D79 · D83 · D86): 하루 보통 3 ~ 5편 · **긴 이야기 0 ~ 2 + 짧은 이야기** · **시리즈는 약속이 아니라 결과** — 번호 · 시리즈 줄은 둘째 이야기가 실제로 생겼을 때만. MVP = 실제 주소에 매일 "오늘". 그런데 계약 (`docs/contract/EPISODE.md`)은 장면 여덟 · `series` + `number ≥ 1` + `track` 필수 · 체험 없는 까닭 넷뿐이라 **짧은 이야기도, 번호 없는 이야기도 적을 길이 없다** (D80 OPEN).
+실물이 생겼다 (D24): UX-7 의 짧은 이야기 견본 — 영훈의료재단 "병원이 털렸다는데, 어디가 털린 걸까" (`apps/web/src/app/lab/today/short/types.ts` · `data.ts` — lab 전용 꼴 · 「모자람 1 ~ 6」) · 그리고 `logs/frontend/UX-7.md` ③ 의 표 (모자란 칸 여섯) · 오늘 화면의 번호 규칙 (`number ≥ 2` 에서 "이어지는 이야기"를 읽음).
+
+## 할 것
+1. **EPISODE.md 에 칸을 더한다 — UX-7 ③ 의 여섯을 실물대로.** 모양은 네가 정하고 까닭 (UX-7 시안의 꼴을 따르되 계약답게):
+   - 무게 (긴 · 짧은) · 짧은 조립 (장면 넷 — 표지 · 어디가 · 문서가 말한 것 · 남음 — 실물 그대로. 다른 장면 수는 미확인)
+   - 번호 없는 이야기 — 시리즈를 가리키되 번호 · 줄이 없다 (선반). **번호를 언제 붙이나**: 같은 시리즈에 둘째가 실제로 생길 때 (D86) — 첫 이야기가 나중에 "1화"가 되는 일 (발행된 이야기의 판이 오르나 · 화면만 바뀌나)은 실물이 없다 → 고를 수 있는 칸 · "미확인"으로 적고 _open
+   - 같은 사건의 곁 이야기 (sibling) · 다른 이야기의 도구를 가리키기 (tools_from — 글자 그대로 · 새로 쓰지 않음) · 체험 없는 까닭에 "무게" (짧은 이야기)
+   - 긴 이야기 (지금 골든 셋)는 **한 글자도 바뀌지 않고 통과**해야 한다 (무게 칸이 없으면 긴 이야기 · 번호 있는 것 그대로)
+   - 덧붙임 (후속 문서 한 줄) · 개념 이야기 (D86 "큰 뉴스인데 1차 없음 → 개념으로")는 **실물이 없다 — 칸을 만들지 말고** 문서에 "미확인 · 실물 생길 때"로만
+2. **골든 넷째** — 영훈 짧은 이야기를 계약 모양으로 (`fixtures/episode-short-privacy-yeonghun.json` 같은 이름 — 네가 정함). 글 · 구절 · 숫자는 UX-7 data.ts 와 **한 글자도 다르지 않게** (구절은 git 의 개인정보위 보도자료 PDF · 법 — UX-7 check.ts 가 대조했다 · 너도 다시 대조). 위반 픽스처 (꼭 필요한 것만 — 짧은 이야기에 장면 여덟 · 번호 없는데 track · 무게 짧은데 체험 등)
+3. **검증 · 시험** — `packages/contract` 의 validate-episode · 시험. lab 의 짧은 이야기 화면이 계약 타입을 쓰게 바꿀지는 네 판단 (바꾸면 화면 그림이 같아야 한다 — UX-7 e2e)
+4. CHANGELOG 한 줄 · 불변식 번호 이어서
+
+## 하지 말 것
+- 긴 이야기 골든 셋 · 그 글 · 다른 계약 파일 (DATA_MODEL 등 — 꼭 필요하면 _open) · packages/pipeline · packages/db · 실제 주소 화면 (`/` · `/s/*` · `src/episode` 의 동작) · `docs/development-pipeline.md` · `logs/pipeline/*`
+- 짧은 이야기 글 고치기 · 실물 없는 칸 (덧붙임 · 개념 이야기) · 지식 상태 · 임계값 · 모델 API · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D24 · D30 · D61 · D68 · D74 · D77 · **D79 ~ D86**
+- docs/contract/EPISODE.md 전부 · logs/backend/B-E1.md · logs/frontend/UX-7.md (③ 전부) · `apps/web/src/app/lab/today/` (short/ · data.ts · check.ts) · 골든 셋
+
+## 끝낼 때
+- 로그 `logs/backend/B-E3.md` — ① 더한 칸 (모양 · 까닭 · 실물 대응) ② 번호 규칙 · 미확인 ③ 골든 넷째 · 구절 대조 결과 ④ 불변식 · 위반 ⑤ 긴 이야기 골든이 그대로인지 ⑥ F-E2 (실제 `/` 를 "오늘"로) 가 쓸 것 ⑦ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (F-2b 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `pnpm --filter @claro/contract test` · 두 lab `check.ts` · 골든 셋 0자. **결과를 로그에 붙인다**
+- docs/development-backend.md 의 B-E3 줄 (☑) · 커밋 접두사 `B-E3` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` 금지 · 끝날 때 띄운 서버는 끈다
+- **나(PM)에게**: 15줄 안쪽 — 커밋 · 더한 칸 · 번호 규칙 · 골든 넷째 · 불변식 수 · F-E2 가 쓸 것 · _open
+```
+
