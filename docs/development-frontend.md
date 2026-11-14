@@ -24,6 +24,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **F-E1** | **실제 주소를 회차 형식으로 (D76)** — 첫 화면 (시리즈 셋 · 오늘의 회차) · 회차 셋 실제 주소 · kit 한 벌 · 종이 톤 토큰 · 옛 B5 는 다른 주소로 · 시안 띠 · lab 스위치 · 파이프라인 시험판 뺌 · push = 배포 (검사 뒤 한 번) · 서브에이전트 Fable | ☑ 2026-11-12 · 검수 대기(PM) — 첫 화면 `/` (종이 톤 · Claro 두 줄 · 오늘의 회차 = 배달앱 1화 · 시리즈 셋과 시리즈 줄 · "미리보기" 꼬리표) · 회차 `/s/price/1` · `/s/rate/2` · `/s/privacy/1` (계약의 `series.code` · `number` · 정적 · DB 안 읽음) · 부품 한 벌 `apps/web/src/episode/` (시안은 같은 부품 + 띠 · 스위치 — `real` 하나로 가른다) · 실제 화면 = 처음 온 독자 · 근거 단추는 위쪽 줄 · 다른 시리즈 길은 실제 주소 · 남음 장면의 "접어 둘게요" 대신 "아직 저장되지 않아요" · 토큰 `paper` → `--p-*` (`--ep-*` 는 그것을 가리킨다 · D26 다크는 옛 화면의 것으로 남김) · 옛 B5 = `/archive/fomc-2026-09` (0자 · `/?r=` 는 그리로 307) · OG 제목 · 설명 · robots 그대로 · 3화 = 게이트 뒤 `catalog.tsx` 한 줄 (안) · web e2e 62 (새 6) · contract 121 · 골든 0자 · `logs/frontend/F-E1.md` · _open F-E1-a ~ j |
 | **UX-7** | **오늘 3 ~ 5편 · 시리즈는 결과 · 색 시안 (D79)** — `/lab/today` 첫 화면 시안 (긴 이야기 · 짧은 이야기 · 이어지는 이야기가 섞인 "오늘") · 번호는 둘째 이야기가 생길 때만 · 짧은 이야기 견본 하나 (영훈의료재단 · E3-1 소스 팩) · 색 시안 셋 + 지금 베이지 (같은 화면에서 바꿔 보기) · 실제 주소 · 계약 그대로 · 서브에이전트 Fable | ☑ 2026-11-14 — `/lab/today` (긴 이야기 셋 · 짧은 이야기 하나 · 자리만 칸 · 번호는 `Episode.number ≥ 2` 인 금리에만 · 지난 이야기 30초 · 개념으로 이어짐) · 짧은 이야기 `/lab/today/short` (영훈의료재단 · 장면 넷 · 구절 18 전부 git 문서 · 계약에 모자란 칸 여섯 = D80 실물) · 색 넷 스위치 (종이 = 지금 · 신문 · 안개 · 밤 — 셋 다 AA · lab 전용 덮는 규칙 · 실제 주소 · 토큰 · `src/episode` 0줄) · web e2e 67 (새 5) · `logs/frontend/UX-7.md` · PM 검수 끝 (D81) · 도윤 고를 차례 |
 | **UX-7b** | **따뜻하고 부드러운 색 셋 다시 (D82 · D83)** — 미색 한지 + 청록 · 쑥 종이 + 남색 · 따뜻한 회색 + 남색 + 형광펜 · 같은 스위치 (종이와 나란히) · 눈 피로 기준 · 카드의 읽는 시간 뺌 (D82) · lab 만 · 서브에이전트 Fable | ☑ 2026-11-14 — 스위치 = 종이 + **미색** (`hanji` · 한지 미색 + 먹 + 청록) · **쑥** (`ssuk` · 쑥색 종이 + 남색) · **형광펜** (`marker` · 따뜻한 회색 + 남색 + 형광펜) · 바탕 채도 14 ~ 24% (종이 44%) · 본문 대비 12.2 ~ 12.6 (범위 10 ~ 14.5) · 재는 짝 전부 AA · 형광펜은 뒤집기의 뒤쪽 말 · 남는 한 줄 · ★ 칸 이름 · Claro 글자에만 · `check.ts` T7 = AA + Claude 결 (채도 있는 크림 바탕 / 주황 쪽 강조) + 눈 피로 · 카드의 "약 N분" 뺌 · UX-7 의 신문 · 안개 · 밤은 `?c=` 로만 · 실제 주소 · 토큰 · `src/episode` 0줄 · web e2e 68 (새 1) · `logs/frontend/UX-7b.md` · PM 검수 대기 |
+| **F-E2** | **실제 `/` 를 "오늘"로 (D86 · D88 · MVP)** — 종이 · 긴 · 짧은 카드 (무게 · 체험 있음 · 읽는 시간 없음) · 번호는 같은 시리즈에 긴 이야기 둘째가 있을 때만 (회차 안쪽도) · 짧은 이야기 실제 주소 · 목록 한 줄로 이야기 더하기 · push = 배포 · 서브에이전트 Fable | ☐ 도는 중 (2026-11-14) |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -789,5 +790,45 @@ UX-7 (D81) 의 색 셋 (신문 · 안개 · 밤)을 보고 도윤이 **종이를
 - 검사: `pnpm -s typecheck` · `pnpm -s test` (F-2b 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `pnpm --filter @claro/contract test` · 두 `check.ts` · `next build` · 실제 주소 화면이 그대로인지. **결과를 로그에 붙인다**
 - docs/development-frontend.md 의 UX-7b 줄 (☑) · 커밋 접두사 `UX-7b` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`) · 배포 뒤 `https://claro-lime-one.vercel.app/lab/today` 확인. stash · autostash · reset --hard · `git add -A` 금지 · `next dev` 가 만든 `apps/web/AGENTS.md` · `CLAUDE.md` 는 지운다 · 끝날 때 띄운 서버는 모두 끈다
 - **나(PM)에게**: 15줄 안쪽 — 커밋 · 색 셋 이름 한 줄씩 · 형광펜 · 도윤에게 물을 것 · _open
+```
+
+## F-E2 · 실제 `/` 를 "오늘"로
+
+도윤 (D86): 색은 종이 그대로 · 고르기 규칙 확정 · **MVP = 실제 주소에 매일 "오늘"** · "MVP 뒤에 고치면 된다". D82: 읽는 시간은 카드에 내지 않는다. D88: 짧은 이야기 계약 (`ShortStory`) · 번호는 화면 규칙.
+
+### 서브에이전트 지시 (Fable)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 프론트 레인. Step F-E2 (실제 `/` 를 "오늘"로)를 맡는다. PM(나)이 검수하고 도윤에게 보인다. 도윤은 폰으로 본다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **다른 세션 P-S1 (`packages/pipeline/src/short*` · `packages/pipeline/data/events/*/short/` · `docs/contract/EPISODE.md` §13 · `packages/contract` 의 짧은 이야기 칸 · `logs/pipeline/P-S1*` · `docs/development-pipeline.md`)이 같은 때 돈다.** 그 파일들은 건드리지 마라. P-S1 이 `ShortStory` 의 `sibling` · `tools_from` 을 고를 수 있게 (`| null`) 바꿀 수 있다 — 네 코드는 둘 다 받게 써라.
+**main 에 push 하면 Vercel 이 바로 배포한다** (https://claro-lime-one.vercel.app) — 검사가 다 통과한 뒤 한 번 push · 배포 뒤 실제 주소 확인.
+
+## 왜
+지금 실제 `/` (F-E1)는 "시리즈 셋 + 오늘의 회차" 꼴이다. 도윤이 정한 다음 꼴 (D79 · D83 · D86 · D88)은 **"오늘"** — 하루 보통 3 ~ 5편 (약속 아님) · 긴 이야기 0 ~ 2 + 짧은 이야기 · 시리즈는 약속이 아니라 결과 (번호는 둘째가 생길 때만) · 이어짐은 개념 지도. 시안은 `/lab/today` (UX-7 · UX-7b) — 도윤이 보고 **종이**를 골랐다. 이 Step 은 그 꼴을 실제 주소로 옮긴다. MVP 의 화면 쪽 마지막 조각이다.
+
+## 만들 것
+1. **실제 `/` = "오늘"** — `/lab/today` 의 꼴 (종이 · `packages/tokens` `paper` 그대로 · 색 스위치 없음 · 시안 띠 없음 · 견본 자리 없음). 카드: 물음 제목 · 주제 이름 · 무게 (긴 · 짧은) · 체험 있음 · 날짜 · **읽는 시간 없음** (D82) · 국내 / 해외 꼬리표 · 카테고리 (D83 다섯 — 지금 이야기 넷에 손으로 붙이고 그 자리를 적는다 · 계약에 칸이 없으면 _open). 이어지는 이야기면 "이어지는 이야기 · N화" + 지난 이야기 30초. 아래에 개념 지도로 가는 길
+   - 지금 이야기는 넷 (긴 셋 + 짧은 하나 · 10/28 ~ 11/9) — "오늘"이 아닌 날짜다. **오늘 낸 것이 없을 때 머리를 어떻게 쓰나** ("오늘의 이야기" / "최근 이야기" 등 · 날짜를 속이지 않는다) — 네 판단 · 까닭
+   - 이야기 목록은 **한 곳** (예 `catalog.tsx`)에 — 긴 이야기 · 짧은 이야기 모두 **목록에 한 줄 + 데이터 파일 하나로 더해지게** (P-S1 · P-E3 의 새 이야기가 그렇게 들어온다)
+2. **번호 화면 규칙 (D88 E-20)** — 같은 시리즈에 **긴 이야기가 둘 이상 실제로 있을 때만** "N화" · 시리즈 줄 · "다음 화"를 보인다 (카드 · 회차 화면 안쪽 표지 · 시리즈 줄 · 다음 화 장면 모두). 데이터 (골든)는 그대로 — 화면이 목록을 보고 정한다. 지금은 금리만 (손 2화 + 1화 줄) — 금리 1화는 데이터가 따로 없다 (2화의 `track`) · 이 경우를 어떻게 읽나는 네 판단 · 까닭
+3. **짧은 이야기 실제 주소** — `ShortStory` (계약 · `fixtures/episode-short-privacy-yeonghun.json`)를 실제 주소로 (주소 꼴은 네가 · 까닭 — 짧은 이야기엔 번호가 없다 · `code`). `/lab/today/short` 와 같은 부품 한 벌 (F-E1 처럼 `real` 로 가름)
+4. **긴 이야기 주소** `/s/<시리즈>/<번호>` 는 그대로 (지금 링크가 안 깨지게). 옛 B5 `/archive/...` 그대로
+5. **lab** — `/lab/today` 는 시안으로 남김 (색 스위치 · 견본). 실제와 같은 부품이면 좋다
+
+## 하지 말 것
+- 계약 · 골든 · fixtures (읽기만) · packages/pipeline · packages/db · `packages/tokens` 값 · 회차 · 짧은 이야기 글 · P-S1 의 파일
+- 색 바꾸기 (종이 그대로 — D86) · 읽는 시간 · 독자 기록 · 지식 상태 · 모델 API · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D76 · D78 · **D79 ~ D88**
+- logs/frontend/F-E1.md · UX-7.md · UX-7b.md · logs/backend/B-E3.md (⑥ F-E2 가 쓸 것) · docs/contract/EPISODE.md §3 · §13
+- `apps/web/src/episode/` · `apps/web/src/app/page.tsx` · `apps/web/src/app/s/` · `apps/web/src/app/lab/today/` · apps/web/e2e
+
+## 끝낼 때
+- 로그 `logs/frontend/F-E2.md` — ① 실제 주소 (첫 화면 · 긴 셋 · 짧은 하나) ② "오늘" 설계 (머리 · 카드 · 순서 · 카테고리 · 꼬리표) ③ 번호 화면 규칙 · 금리 1화 ④ 이야기 더하는 법 (목록 한 줄 + 파일 — P-S1 · P-E3 에게) ⑤ 배포 확인 (스크린샷) ⑥ 도윤에게 물을 것 ⑦ _open. "작업 세션 모델: Fable 5.2"
+- 스크린샷 390×844 (배포 전 로컬 + 배포 뒤 실제 주소) → `logs/frontend/F-E2/`
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (F-2b 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `pnpm --filter @claro/contract test` · lab `check.ts` 둘 · `next build` · 골든 글이 화면과 한 글자도 다르지 않은지 (e2e). **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 F-E2 줄 (☑) · 커밋 접두사 `F-E2` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`) · 배포 뒤 실제 주소 200 · 그림. stash · autostash · reset --hard · `git add -A` 금지 · `next dev` 가 만든 `apps/web/AGENTS.md` · `CLAUDE.md` 는 지운다 · 끝날 때 서버 모두 끔
+- **나(PM)에게**: 15줄 안쪽 — 커밋 · 실제 주소들 · 머리 · 번호 규칙 · 이야기 더하는 법 · 도윤에게 물을 것 · _open
 ```
 
