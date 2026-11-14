@@ -369,3 +369,14 @@ web e2e 의 기존 69 (실제 주소 · 골든 글이 화면과 같은지 포함
 
 `1-cover` 표지 · `2-story-first-thought` 첫 생각 → 깨는 사실 → 문서의 문장 · `3-story-cite-name` 이름 둘 · `4-story-flip` 뒤집기 · `5-story-pick-before` 고르기 전 (아래가 없다) · `6-story-pick-after` 고른 뒤 (받는 말 · 이어지는 글) · `7-story-land-oneline` 내려앉기 · 남는 한 줄 · `8-story-words-whose` 낱말 카드 (하나 펼침) · 누구의 말 · `9-compare` 견줘 읽기 · `10-source-sheet` 근거 시트 (계산한 수 · 구절)
 견줌: `cmp-license-2-where` · `cmp-license-3-why` · `cmp-license-3-why-list` (짚은 것 1 · 2 · 3) · `cmp-hospital-*` 같은 자리
+
+## 배포 확인 — push 뒤 실제 주소 (`95ac564` · 2026-11-14)
+
+```
+https://claro-lime-one.vercel.app
+200 /lab/short          (글 "왜 더하면 안 맞을까" 확인)
+200 /   200 /s/price/1   200 /s/rate/2   200 /s/privacy/1   200 /short/pipc-hospital   200 /short/license-notice   200 /map
+200 /lab/today   200 /lab/today/short
+```
+배포된 `/lab/short` 를 폰 크기 (390×844)로 표지 → 이야기 → 고르기 → 끝까지 넘겼다 (페이지 오류 0 · `shots.ts` 를 배포 주소에 돌림). 그림 넷: `live-1-cover` · `live-4-story-flip` · `live-6-story-pick-after` · `live-7-story-land-oneline`.
+띄운 서버 (개발 3100 · 로컬 빌드 3210)는 모두 껐다. `next dev` 가 만든 `apps/web/AGENTS.md` · `CLAUDE.md` 는 없었다.
