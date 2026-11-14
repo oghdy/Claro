@@ -93,7 +93,7 @@ function Short({ item }: { item: Extract<TodayItem, { kind: "short" }> }) {
       <a className="td-main" href={path}>
         <p className="td-topic">
           <span>{C.topic}</span>
-          <strong>{story.shelf.name}</strong>
+          <strong>{story.series.name}</strong>
           <i>{C.sibling}</i>
         </p>
         <h3 className="td-title">{oneLine(c.title)}</h3>
@@ -185,7 +185,7 @@ export default function Page() {
             <p className="td-secnote">{C.shelfNote}</p>
             <ul className="td-shelf">
               {single.map(({ ep }) => {
-                const withShort = shorts.some((x) => x.story.shelf.code === ep.series.code);
+                const withShort = shorts.some((x) => x.story.series.code === ep.series.code);
                 return (
                   <li key={ep.code}>
                     <a href={ep.path}>

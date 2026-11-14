@@ -1,11 +1,12 @@
 // UX-7 · UX-7b 시안의 검사 — "오늘" 화면 · 짧은 이야기 · 색 시안. (회차 셋은 ../episode/check.ts 가 계약으로 본다 — 여기서 다시 보지 않는다.)
 //   pnpm --filter @claro/web exec tsx src/app/lab/today/check.ts
 // 보는 것
-//   T1  짧은 이야기의 구절이 전부 **git 에 있는** 저장 문서의 글 그대로다 (빈칸 · 줄바꿈만 무시 — 계약 불변식 8 과 같은 대조). 문서 파일이 git 에 올라 있는 파일인지도 본다
-//   T2  짧은 이야기의 글이 가리키는 구절 · 문서 · 도구가 전부 있다
-//   T3  글의 숫자는 전부 근거 구절 안에 있다 (계약 불변식 9 와 같은 셈) · 맨 글자열 (제목 · 물음 · 한 줄)에는 숫자가 없다
+//   T1  짧은 이야기의 근거 문서 파일이 **git 에 올라 있는** 파일이다 (계약은 문서의 글만 받는다 — 파일이 git 에 있는지는 여기서 본다)
+//   T5  짧은 이야기 (골든 넷째)가 **계약 검증을 경고 없이 지난다** — validateShortStory (저장된 문서 · 곁 이야기 PIPC 를 받아): 구절이 문서의 글 그대로 (8) · 가리키는 구절 · 문서 (3 · 4) ·
+//       글의 숫자 (9) · 맨 글자열의 숫자 (10) · 입구 (11 · 14) · 무게 (27) · 장면 넷 · 번호 · 체험 칸 없음 (28) · 같은 사건 · 도구가 PIPC 에 (29). (B-E3 전의 T2 · T3 의 이야기 쪽은 이것으로 옮겼다.
+//       UX-7 때 T5 는 "PLAIN_WHY 하나만 걸린다" — 계약에 무게가 없다는 D80 의 실물 — 를 봤다. B-E3 이 무게 (short)를 계약에 넣어 이제 지난다)
+//   T3  화면의 글 (SHORT_CHROME)에 숫자가 없다 — 이야기의 글은 계약 (9 · 10)이 본다
 //   T4  그리지 않을 것 (E3-1 ③ 9 · 10 · 11) — 공표명령 · "안 모았으면" · 진료 기록의 안전 / 유출 · 한 사람 몫이 글에 없다 (낱말로만 본다. 뜻은 사람이 읽는다)
-//   T5  풀이 칸을 계약의 규칙 (solveProblems)에 넣으면 **PLAIN_WHY 하나만** 걸린다 — 계약에 "짧아서 체험이 없다"는 까닭이 없다는 것 (D80 의 실물). 다른 것이 걸리면 실패
 //   T6  "오늘"의 번호 규칙 — 번호 · 지난 이야기가 보이는 카드는 Episode.number ≥ 2 인 것뿐이다 · 화면 글의 숫자는 "지난 이야기 30초" 하나뿐이다
 //   T7  색 시안 — 재는 짝 전부 대비 4.5 이상 (WCAG AA) · **Claude 결이 아니다** (채도 있는 크림 · 베이지 바탕 / 주황 쪽 강조 — UX-7b 에서 고친 규칙: 따뜻한 바탕은 막지 않는다)
 //       · 따뜻하고 부드러운 셋 (미색 · 쑥 · 형광펜)은 **눈 피로 기준** (본문 대비 범위 · 새하얀 바탕 피함 · 바탕 채도 낮게 · 따뜻한 쪽)
@@ -14,7 +15,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { solveProblems, type EpisodeText } from "@claro/contract";
+import { validateShortStory, type EpisodeText } from "@claro/contract";
 import { PIPC } from "../../../episode/episodes/pipc/data";
 import { TODAY_COPY } from "./copy";
 import { TODAY, continues, sharedConcepts } from "./data";
@@ -27,12 +28,10 @@ const fail = (code: string, message: string) => {
   failed += 1;
   console.log(`  FAIL ${code} ${message}`);
 };
-const squash = (s: string) => s.replace(/\s+/g, "");
-const runs = (s: string) => (s.replace(/(\d),(?=\d)/g, "$1").match(/\d+/g) ?? []).map((n) => String(Number(n)));
 const isText = (v: unknown): v is EpisodeText => typeof v === "object" && v !== null && typeof (v as { t?: unknown }).t === "string";
 
 // ─────────────────────────────────────────────────────────── 짧은 이야기
-console.log(`■ 짧은 이야기 — ${SHORT.scenes.cover.title.replace(/\n/g, " ")} (${SHORT.code})`);
+console.log(`■ 짧은 이야기 — ${SHORT.scenes.cover.title.replace(/\n/g, " ")} (${SHORT.code} · 골든 넷째 · 계약 ShortStory)`);
 {
   // T1
   for (const f of SHORT_STORES) {
@@ -43,20 +42,16 @@ console.log(`■ 짧은 이야기 — ${SHORT.scenes.cover.title.replace(/\n/g, 
     }
   }
   const documents = SHORT_STORES.flatMap((f) => (JSON.parse(readFileSync(path.join(REPO, f), "utf8")) as { source_documents: { source_id: string; text: string }[] }).source_documents);
-  const used = new Set<string>();
-  for (const [key, q] of Object.entries(SHORT.quotes)) {
-    const doc = SHORT.docs[q.doc];
-    if (!doc) {
-      fail("T2", `구절 ${key} 의 문서 "${q.doc}" 가 docs 에 없다`);
-      continue;
-    }
-    const stored = documents.find((d) => d.source_id === doc.source_id);
-    if (!stored) fail("T1", `구절 ${key}: 문서 ${q.doc} (${doc.source_id}) 가 git 의 저장 문서에 없다`);
-    else if (!squash(stored.text).includes(squash(q.quote))) fail("T1", `구절 ${key} 가 저장된 문서의 글과 다르다 — "${q.quote.slice(0, 40)}…"`);
-    else used.add(doc.source_id);
-  }
 
-  // T2 · T3 — 글을 전부 걷는다
+  // T5 — 계약 검증
+  const r = validateShortStory(SHORT, { documents, episodes: [PIPC] });
+  if (!r.ok) for (const e of r.errors) fail("T5", `${e.code} ${e.path} — ${e.message}`);
+  for (const w of r.warnings) fail("T5", `알림 ${w.code} ${w.path} — ${w.message} (문서 · 곁 이야기를 다 줬는데 알림이 났다)`);
+
+  // T3 — 화면의 글
+  for (const [k, v] of Object.entries(SHORT_CHROME)) if (/\d/.test(v)) fail("T3", `화면 글 ${k} 에 숫자가 있다 — "${v}"`);
+
+  // T4 — 이야기의 글을 전부 걷는다
   const texts: { where: string; item: EpisodeText }[] = [];
   const bare: { where: string; s: string }[] = [];
   const walk = (v: unknown, where: string) => {
@@ -65,42 +60,24 @@ console.log(`■ 짧은 이야기 — ${SHORT.scenes.cover.title.replace(/\n/g, 
     else if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${where}[${i}]`));
     else if (typeof v === "object" && v !== null) for (const [k, x] of Object.entries(v)) walk(x, `${where}.${k}`);
   };
+  const { entry, plain } = SHORT.solve;
   walk(SHORT.scenes, "scenes");
-  walk({ first_thought: SHORT.entry.first_thought, breaker: SHORT.entry.breaker, flip: SHORT.entry.flip, whose: SHORT.entry.whose }, "entry");
-  walk(SHORT.plain.title, "plain.title");
-  walk(SHORT.sibling, "sibling");
-  walk(SHORT_CHROME, "chrome");
-  let withDigits = 0;
-  for (const { where, item } of texts) {
-    for (const k of item.src ?? []) if (!SHORT.quotes[k]) fail("T2", `${where}: 구절 "${k}" 가 quotes 에 없다`);
-    const need = runs(item.t);
-    if (!need.length) continue;
-    withDigits += 1;
-    const pool = (item.src ?? []).flatMap((k) => runs(SHORT.quotes[k]?.quote ?? ""));
-    for (const n of need) if (!pool.includes(n) && !item.ui) fail("T3", `${where}: 숫자 ${n} 이 근거 구절에 없다 — "${item.t}"`);
-  }
-  for (const { where, s } of bare) if (/\d/.test(s)) fail("T3", `${where}: 맨 글자열에 숫자가 있다 — "${s}"`);
-  for (const key of SHORT.tools_from.keys) if (!PIPC.tools.some((x) => x.key === key)) fail("T2", `도구 "${key}" 가 긴 이야기 (${SHORT.tools_from.episode})에 없다`);
-  if (SHORT.event_ref !== PIPC.event_ref) fail("T2", "event_ref 가 긴 이야기와 다르다 — 같은 발표다");
-
-  // T4
-  const all = [...texts.map((x) => ({ where: x.where, s: x.item.t })), ...bare].filter((x) => !x.where.startsWith("chrome"));
+  walk({ first_thought: entry.first_thought, breaker: entry.breaker, flip: entry.flip, whose: entry.whose }, "solve.entry");
+  walk(plain.title, "solve.plain.title");
+  walk({ label: SHORT.sibling.label, note: SHORT.sibling.note }, "sibling");
   const banned: [RegExp, string][] = [
     [/공표/, "공표명령 (영훈의료재단에는 없다 — ③ 9)"],
     [/안 모았|모으지 않았(다면|으면)|없었다면|없었을/, "반사실 (“안 모았으면 안 털렸다” — ③ 10)"],
     [/진료 기록(은|이|도)? ?(안전|무사|유출|빠져|털렸[어다]요?\.)/, "진료 기록의 안전 / 유출을 말함 (문서에 없다 — ③ 11)"],
     [/한 명당|한 사람당|1인당|배나? |곱절/, "과징금 ÷ 명수 · 배수 견주기"],
   ];
-  for (const { where, s } of all) for (const [re, what] of banned) if (re.test(s)) fail("T4", `${where}: ${what} — "${s}"`);
+  for (const { where, s } of [...texts.map((x) => ({ where: x.where, s: x.item.t })), ...bare]) for (const [re, what] of banned) if (re.test(s)) fail("T4", `${where}: ${what} — "${s}"`);
 
-  // T5 — 계약의 풀이 규칙에 넣어 본다
-  const r = solveProblems({ entry: SHORT.entry, lab: null, plain: SHORT.plain }, { quotes: SHORT.quotes, tools: PIPC.tools });
-  const codes = r.errors.map((e) => e.code);
-  if (codes.join() !== "PLAIN_WHY") fail("T5", `계약의 풀이 규칙에서 걸린 것이 PLAIN_WHY 하나가 아니다 — [${codes.join(", ")}]`);
-
-  console.log(`  구절 ${Object.keys(SHORT.quotes).length} (문서 ${used.size} — 전부 git 의 store.documents.json) · 글 ${texts.length} — 숫자가 든 글 ${withDigits} · 맨 글자열 ${bare.length}`);
-  console.log(`  장면 넷 · 체험 없음 · 뒤집기 A ${SHORT.entry.flip?.op} B · 다시 만나는 도구 ${SHORT.tools_from.keys.join(" · ")} (긴 이야기 ${SHORT.tools_from.episode} 의 카드 그대로)`);
-  console.log(`  계약의 풀이 규칙: ${r.errors.map((e) => `${e.code} ${e.path} — ${e.message}`).join(" / ")}  ← 계약에 모자란 칸 (D80 실물 · 실패가 아니다)`);
+  if (r.ok) {
+    const st = r.stats;
+    console.log(`  계약 검증 OK (경고 ${r.warnings.length}) — 구절 ${st.quotes} (문서 ${st.docs} — 전부 git 의 store.documents.json) · 글 ${st.texts} — 숫자가 든 글 ${st.texts_with_digits} · 맨 글자열 (그리지 않을 것 검사) ${bare.length}`);
+    console.log(`  무게 ${SHORT.weight} · 장면 ${Object.keys(SHORT.scenes).length} · 번호 없음 (선반: ${SHORT.series.name}) · 체험 없음 (까닭 ${plain.why}) · 뒤집기 A ${entry.flip?.op} B · 다시 만나는 도구 ${SHORT.tools_from.keys.join(" · ")} (긴 이야기 ${PIPC.code} ${PIPC.episode_version}판의 카드 그대로)`);
+  }
 }
 
 // ─────────────────────────────────────────────────────────── 오늘
@@ -112,7 +89,7 @@ console.log("\n■ 오늘 — 카드");
       const cont = continues(ep);
       if (cont !== ep.number >= 2) fail("T6", `${ep.code}: 번호 규칙이 Episode.number 와 다르다`);
       console.log(`  긴 이야기  ${ep.series.name}${cont ? ` · ${ep.scenes.cover.episode.t} (이어지는 이야기 — 번호 · 시리즈 줄 · 지난 이야기)` : " (주제 이름만 — 번호 없음)"} · 체험 ${ep.solve.lab ? "있음" : "없음"} → ${ep.path}`);
-    } else if (item.kind === "short") console.log(`  짧은 이야기 ${item.story.shelf.name} (주제 이름만 — 번호 없음) · 체험 없음 → ${item.path}`);
+    } else if (item.kind === "short") console.log(`  짧은 이야기 ${item.story.series.name} (주제 이름만 — 번호 없음) · 체험 없음 → ${item.path}`);
     else console.log("  자리만     견본 자리 — 글 없음");
   }
   for (const [k, v] of Object.entries(TODAY_COPY)) if (/\d/.test(v) && k !== "recap") fail("T6", `화면 글 ${k} 에 숫자가 있다 — "${v}"`);
@@ -195,4 +172,4 @@ if (failed) {
   console.log(`\nFAIL ${failed}`);
   process.exit(1);
 }
-console.log("\nOK — 짧은 이야기 (구절 · 숫자 · 그리지 않을 것) · 오늘 (번호 규칙) · 색 시안 (AA · Claude 결 · 눈 피로) · 덮는 규칙");
+console.log("\nOK — 짧은 이야기 (계약 검증 · 그리지 않을 것) · 오늘 (번호 규칙) · 색 시안 (AA · Claude 결 · 눈 피로) · 덮는 규칙");

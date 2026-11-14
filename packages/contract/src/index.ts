@@ -7,4 +7,17 @@ export * from "./data-model";
 export * from "./observation";
 export { deriveBlockDecisions } from "./decisions";
 export * from "./episode";
-export { validateEpisode, parseEpisode, solveProblems, type EpisodeValidation, type EpisodeContext, type EpisodeStats } from "./validate-episode";
+export {
+  validateEpisode,
+  parseEpisode,
+  solveProblems,
+  validateShortStory,
+  parseShortStory,
+  validateStory,
+  type EpisodeValidation,
+  type EpisodeContext,
+  type EpisodeStats,
+  type ShortStoryValidation,
+  type ShortStoryStats,
+  type StoryValidation,
+} from "./validate-episode";

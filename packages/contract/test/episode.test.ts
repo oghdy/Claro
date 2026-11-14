@@ -1,10 +1,10 @@
-// 회차 계약 (docs/contract/EPISODE.md) — 골든 셋은 통과하고, fixtures/invalid/episode-*.json 은 전부 거부된다 (B-E1 · 셋째 골든과 넘겨 보기 틀은 UX-5 · 지난 회차 칸 셋은 UX-6 — 실물 전).
+// 회차 계약 (docs/contract/EPISODE.md) — 골든 넷은 통과하고, fixtures/invalid/episode-*.json 은 전부 거부된다 (B-E1 · 셋째 골든과 넘겨 보기 틀은 UX-5 · 지난 회차 칸 셋은 UX-6 — 실물 전 · 짧은 이야기 (골든 넷째)는 B-E3).
 // invalid 픽스처는 아래 표(VIOLATIONS)가 원본이다: 골든 + 위반 하나. 파일이 표와 어긋나면 실패한다.
 // 표를 고쳤으면 `WRITE_EPISODE_INVALID=1 pnpm --filter @claro/contract test` 로 파일을 다시 쓴다.
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { parseEpisode, solveProblems, validateEpisode } from "../src";
+import { parseEpisode, parseShortStory, solveProblems, validateEpisode, validateShortStory, validateStory } from "../src";
 
 const root = (p: string) => fileURLToPath(new URL(`../../../${p}`, import.meta.url));
 const read = (p: string): any => JSON.parse(readFileSync(root(p), "utf-8"));
@@ -13,6 +13,8 @@ const PRICE = "episode-price-1.json";
 const RATE = "episode-rate-2.json";
 // 셋째 골든 — 개인정보위 과징금 「내 정보는 누가 지키나」 1화. 넘겨 보기 틀의 첫 실물 (UX-5)
 const PRIVACY = "episode-privacy-1.json";
+// 넷째 골든 — 짧은 이야기 「병원이 털렸다는데, 어디가 털린 걸까」 (영훈의료재단 · 같은 발표의 병원 쪽). 장면 넷 · 번호 없음 · 체험 없음 · 도구는 개인정보 1화의 것을 가리킨다 (B-E3 · §13)
+const SHORT = "episode-short-privacy-yeonghun.json";
 // 저장된 문서 — 골든 셋의 근거가 여기 있다 (전부 git 에 있다: 공공누리 제1유형 · 법령 · 미국 연방 저작물 · 문서 안 공공누리 표시 — D70)
 const documents = [
   "fixtures/store.documents.json",
@@ -22,8 +24,10 @@ const documents = [
 ].flatMap((p) => read(p).source_documents as { source_id: string; text: string }[]);
 
 const golden = (name: string) => read(`fixtures/${name}`);
+// 짧은 이야기가 가리키는 긴 이야기 (sibling · tools_from) — 골든 셋을 받아 대 본다 (불변식 29). 긴 이야기의 검증은 이것을 쓰지 않는다
+const episodes = [PRICE, RATE, PRIVACY].map((name) => parseEpisode(golden(name), { documents }));
 const codes = (doc: unknown) => {
-  const r = validateEpisode(doc, { documents });
+  const r = validateStory(doc, { documents, episodes });
   return r.ok ? [] : [...new Set(r.errors.map((e) => e.code))].sort();
 };
 
@@ -67,11 +71,49 @@ describe("골든", () => {
     expect(r.episode.assembly.follower).toEqual(["cover", "zero", "event", "tools", "aha", "compare", "next", "keep"]);
   });
 
+  it("짧은 이야기 (영훈) — 통과 · 가리킨 긴 이야기를 받으면 경고 없음 · 장면 넷 · 번호 · 시리즈 줄 · 체험 칸 없음 · 까닭 = 무게 (B-E3)", () => {
+    const r = validateShortStory(golden(SHORT), { documents, episodes });
+    if (!r.ok) throw new Error(r.errors.map((e) => `${e.code} ${e.path} ${e.message}`).join("\n"));
+    expect(r.warnings).toEqual([]);
+    expect(r.stats).toEqual({ quotes: 18, docs: 2, texts: 18, texts_with_digits: 3, exempt: [], tools_from: 3 });
+    const s = r.story;
+    expect(s.weight).toBe("short");
+    expect(Object.keys(s.scenes)).toEqual(["cover", "where", "why", "keep"]);
+    for (const k of ["number", "track", "previous", "tools", "pickup", "map", "assembly"]) expect(k in s, k).toBe(false);
+    expect("lab" in s.solve).toBe(false);
+    expect(s.solve.plain).toEqual({ kind: "flip", why: "short", title: "뚫린 곳은\n병원 안내 홈페이지였어요" });
+    // 곁 이야기 = 도구의 이야기 = 개인정보 1화 (같은 사건 · 같은 시리즈 · 번호 없이)
+    const long = golden(PRIVACY);
+    expect(s.sibling.episode).toEqual({ episode_id: long.episode_id, episode_version: 1 });
+    expect(s.tools_from).toEqual({ episode: s.sibling.episode, keys: ["safety", "fine", "order"] });
+    expect([s.event_ref, s.series]).toEqual([long.event_ref, long.series]);
+  });
+
+  it("짧은 이야기 — 가리킨 긴 이야기를 주지 않으면 같은 사건 · 도구를 보지 않고 그렇다고 알린다", () => {
+    const r = validateShortStory(golden(SHORT), { documents });
+    expect(r.ok).toBe(true);
+    expect(r.warnings.map((w) => w.code)).toEqual(["SIBLING_NOT_CHECKED", "TOOLS_FROM_NOT_CHECKED"]);
+  });
+
+  it("이야기 하나 (validateStory) — weight 가 short 면 짧은 이야기, 칸이 없거나 long 이면 긴 이야기", () => {
+    for (const name of [PRICE, RATE, PRIVACY]) {
+      const r = validateStory(golden(name), { documents });
+      expect(r.ok && "episode" in r, name).toBe(true);
+    }
+    const s = validateStory(golden(SHORT), { documents, episodes });
+    expect(s.ok && "story" in s).toBe(true);
+    const long = { ...golden(PRICE), weight: "long" };
+    expect(codes(long)).toEqual([]);
+    expect(codes({ ...golden(PRICE), weight: "short" }).sort()).toEqual(["SCHEMA_KEY", "SCHEMA_MISSING"]); // 긴 이야기의 모양에 무게만 짧게 — 짧은 이야기로 읽혀 모양이 거부한다
+  });
+
   it("`_` 필드를 무시하고, 돌려주는 회차에는 남기지 않는다", () => {
     for (const name of [PRICE, RATE, PRIVACY]) {
       expect(JSON.stringify(golden(name))).toMatch(/"_source"/);
       expect(JSON.stringify(parseEpisode(golden(name), { documents }))).not.toMatch(/"_/);
     }
+    expect(JSON.stringify(golden(SHORT))).toMatch(/"_source"/);
+    expect(JSON.stringify(parseShortStory(golden(SHORT), { documents }))).not.toMatch(/"_/);
   });
 
   it("문서를 주지 않으면 구절 대조(불변식 8)를 건너뛰고 그렇다고 알린다", () => {
@@ -358,6 +400,40 @@ const VIOLATIONS: Violation[] = [
       e.track[1].title.src = ["rate-3:fomc:omo.2023", "omo.2026"];
     },
   },
+  // ── 짧은 이야기 (B-E3 · §13 · 불변식 27 · 28) — 넷째 골든 + 위반 하나
+  {
+    file: "episode-short-numbered.json", of: SHORT, code: "SCHEMA_KEY",
+    rule: "§9-28 · §13.3 · D86 — 짧은 이야기는 번호 없는 이야기다 (선반). 번호 · 시리즈 줄 칸이 없다 — 같은 발표의 곁 이야기는 '2화'가 아니다 (UX-7 ⑤ 4)",
+    what: "병원 이야기에 번호(2화)와 시리즈 줄(1화 대교 · 2화 병원)을 붙였다",
+    mutate: (e) => {
+      e.number = 2;
+      e.track = [
+        { no: { t: "1화", ui: true }, title: { t: "해킹은 당한 건데, 왜 회사가 벌을 받을까" }, state: "past" },
+        { no: { t: "2화", ui: true }, title: { t: "병원이 털렸다는데, 어디가 털린 걸까" }, state: "now" },
+      ];
+    },
+  },
+  {
+    file: "episode-short-eight-scenes.json", of: SHORT, code: "SCHEMA_KEY",
+    rule: "§9-28 · §13.2 — 짧은 이야기의 장면은 넷이다 (표지 · 어디가 · 문서가 말한 것 · 남음). 긴 이야기의 장면 칸이 없다",
+    what: "짧은 이야기에 긴 이야기 (개인정보 1화)의 장면 여섯 (따라잡기 · 사건 · 도구 줍기 · 풀이 · 견주기 · 이어짐)을 더해 장면 여덟로",
+    mutate: (e) => {
+      const long = golden(PRIVACY).scenes;
+      for (const k of ["zero", "event", "tools", "aha", "compare", "next"]) e.scenes[k] = long[k];
+    },
+  },
+  {
+    file: "episode-short-with-lab.json", of: SHORT, code: "SCHEMA_KEY",
+    rule: "§9-28 · §13.6 · D79 ③ — 짧은 이야기에는 체험이 없다. 풀이는 입구 + 뒤집기만이고 체험 칸이 없다",
+    what: "짧은 이야기에 긴 이야기 (개인정보 1화)의 체험 (대교 넘겨 보기)을 붙였다",
+    mutate: (e) => (e.solve.lab = golden(PRIVACY).solve.lab),
+  },
+  {
+    file: "episode-short-why-not-weight.json", of: SHORT, code: "PLAIN_WHY",
+    rule: "§9-27 · §13.6 — 짧은 이야기의 체험이 없는 까닭은 무게 (short)다",
+    what: "체험이 없는 까닭을 비웠다 (null — UX-7 시안의 lab 꼴 그대로)",
+    mutate: (e) => (e.solve.plain.why = null),
+  },
   {
     file: "episode-pages-combo.json", of: PRIVACY, code: "FRAME_COMBO",
     rule: "§9-15 — 넘겨 보기는 혼자 선다. 다른 틀과 잇는 것은 실물이 없다",
@@ -371,7 +447,7 @@ const build = (v: Violation) => {
   const { _source, ...body } = golden(v.of);
   v.mutate(body);
   return {
-    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.code.startsWith("PREV_") ? "UX-6" : v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
+    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.of === SHORT ? "B-E3" : v.code.startsWith("PREV_") ? "UX-6" : v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
     ...body,
   };
 };
@@ -544,6 +620,60 @@ describe("픽스처 없이 보는 것", () => {
     const d = third();
     d.previous.episode_id = d.episode_id;
     expect(codesWith(d, {})).toEqual(["ID_RANGE"]);
+  });
+
+  // ── 짧은 이야기 (B-E3 · 불변식 27 · 29) — 가리킨 이야기를 받아야 보는 것 · 무게의 까닭
+  it("무게 — 긴 이야기가 체험이 없는 까닭을 무게(short)라고 적음 → PLAIN_WHY · 체험이 있는데 short → PLAIN_WHY", () => {
+    const a = golden(RATE);
+    a.solve.lab = null;
+    a.solve.plain.why = "short";
+    expect(codes(a)).toEqual(["PLAIN_WHY"]);
+    const b = golden(PRICE);
+    b.solve.plain.why = "short";
+    expect(codes(b)).toEqual(["PLAIN_WHY"]);
+  });
+
+  it("짧은 이야기 — 가리킨 도구가 그 이야기에 없음 · 없음 · 겹침 → REF_TOOL (받았을 때만 · 안 받으면 알림)", () => {
+    const a = golden(SHORT);
+    a.tools_from.keys = ["safety", "fine", "proviso2"];
+    expect(codes(a)).toEqual(["REF_TOOL"]);
+    expect(validateShortStory(a, { documents }).ok).toBe(true);
+    const b = golden(SHORT);
+    b.tools_from.keys = [];
+    expect(codes(b)).toEqual(["REF_TOOL"]);
+    const c = golden(SHORT);
+    c.tools_from.keys = ["safety", "fine", "fine"];
+    expect(codes(c)).toEqual(["REF_TOOL"]);
+    const d = golden(SHORT); // 도구를 다른 사건의 이야기 (금리 2화)에서 — 받기는 받는다. 그 이야기에 없는 key 면 거부
+    d.tools_from.episode = { episode_id: golden(RATE).episode_id, episode_version: 1 };
+    expect(codes(d)).toEqual(["REF_TOOL"]);
+    d.tools_from.keys = ["rate"];
+    expect(codes(d)).toEqual([]);
+  });
+
+  it("짧은 이야기 — 곁 이야기가 다른 사건 → SIBLING_MISMATCH (받았을 때만) · 가리킨 이야기가 자신 · 판 0 → ID_RANGE", () => {
+    const a = golden(SHORT);
+    a.sibling.episode = { episode_id: golden(PRICE).episode_id, episode_version: 1 };
+    expect(codes(a)).toEqual(["SIBLING_MISMATCH"]);
+    expect(validateShortStory(a, { documents }).ok).toBe(true);
+    const b = golden(SHORT);
+    b.sibling.episode.episode_id = b.episode_id;
+    expect(codes(b)).toEqual(["ID_RANGE"]);
+    const c = golden(SHORT);
+    c.tools_from.episode.episode_version = 0;
+    expect(codes(c)).toEqual(["ID_RANGE"]);
+  });
+
+  it("짧은 이야기 — 입구의 규칙은 그대로: 뒤집기 없음 → NO_FLIP · 깨는 사실에 구절 없음 → BREAKER_SRC · 사람이 숨진 사건 → 조용히가 아니라 거부 (짧은 이야기로 낼 수 없다)", () => {
+    const a = golden(SHORT);
+    a.solve.entry.flip = null;
+    expect(codes(a)).toEqual(["NO_FLIP"]);
+    const b = golden(SHORT);
+    delete b.solve.entry.breaker.src;
+    expect(codes(b)).toEqual(["BREAKER_SRC"]);
+    const c = golden(SHORT);
+    c.solve.entry.death = true;
+    expect(codes(c)).toEqual(["DEATH_NOT_QUIET", "DEATH_WHY"]);
   });
 
   it("체험 없는 회차 (조용히) — 사망 · 체험 없음 · 뒤집기 없음이 함께 선다 (풀이 칸만 — 실물 회차 없음)", () => {

@@ -1,4 +1,4 @@
-// docs/contract/EPISODE.md §1 을 코드로 옮긴 것 (B-E1). 원본은 그 문서다.
+// docs/contract/EPISODE.md §1 을 코드로 옮긴 것 (B-E1 · 짧은 이야기 ShortStory 는 B-E3 — §13). 원본은 그 문서다.
 // 계약에 없는 칸을 여기서 만들지 않는다. 문서와 어긋나면 test/contract-docs.test.ts 가 실패한다.
 // UUID · EventRef · ConceptRef 는 ARTICLE_PACKAGE(./types) 가 코드로 옮긴 것을 쓴다 — 여기서 다시 정의하지 않는다
 // (주인은 DATA_MODEL §2 · CONCEPT_IDENTITY §3.2).
@@ -22,9 +22,17 @@ export type TrackState = (typeof TRACK_STATES)[number];
 export const VOICES = ["fact", "official", "explain"] as const;
 export type Voice = (typeof VOICES)[number];
 
-/** 체험이 없는 까닭 (D61 ① ③ ④) */
-export const NO_LAB_WHYS = ["politics", "death", "no-source", "no-flip"] as const;
+/** 체험이 없는 까닭 (D61 ① ③ ④) · short = 무게 — 짧은 이야기라서 (B-E3 · D79 ③ · D86) */
+export const NO_LAB_WHYS = ["politics", "death", "no-source", "no-flip", "short"] as const;
 export type NoLabWhy = (typeof NO_LAB_WHYS)[number];
+
+/** 무게 — 긴 이야기 (Episode · 장면 여덟) / 짧은 이야기 (ShortStory · 장면 넷). 칸이 없으면 긴 이야기 (§13 · B-E3) */
+export const STORY_WEIGHTS = ["long", "short"] as const;
+export type StoryWeight = (typeof STORY_WEIGHTS)[number];
+
+/** 짧은 이야기의 장면 넷 — 차례는 고정이다 · 조립은 하나 (§13.2 · 실물 하나: 영훈의료재단) */
+export const SHORT_SCENE_IDS = ["cover", "where", "why", "keep"] as const;
+export type ShortSceneId = (typeof SHORT_SCENE_IDS)[number];
 
 /** 서는 틀 조합 (불변식 15) — 실물: [toggle] 배달앱 1화 · [chain, seats] 금리 2화 · [pages] 개인정보 1화 (UX-5). [chain] · [seats] 는 그 부분 */
 export const FRAME_COMBOS: readonly (readonly Frame["kind"][])[] = [["toggle"], ["chain"], ["seats"], ["chain", "seats"], ["pages"]];
@@ -500,6 +508,8 @@ export interface Episode {
   episode_version: number;
   code: Id;
   event_ref: EventRef;
+  /** 무게 — 없으면 긴 이야기 (골든 셋은 이 칸이 없다). 짧은 이야기는 ShortStory 다 (§13) */
+  weight?: "long";
   series: Series;
   number: number;
   track: TrackItem[];
@@ -515,6 +525,90 @@ export interface Episode {
   map: ToolMap;
 }
 
+// ─────────────────────────────────────────────────────────── 짧은 이야기 (§13 · B-E3 — 실물 하나: UX-7 영훈의료재단)
+
+/** 같은 사건의 곁 이야기 — 긴 이야기의 한 판을 가리킨다 (실물: 대교 쪽 「내 정보는 누가 지키나」 1화) */
+export interface Sibling {
+  episode: EpisodeRef;
+  label: string;
+  note: string;
+}
+
+/** 다른 이야기의 도구를 가리킨다 — 그 이야기의 Tool 카드를 글자 그대로 쓴다 (새로 쓰지 않는다) */
+export interface ToolsFrom {
+  episode: EpisodeRef;
+  keys: ToolKey[];
+}
+
+export interface ShortCoverScene {
+  title: string;
+  dek: EpisodeText;
+  meta: EpisodeText;
+  hint: EpisodeText;
+  ask: string;
+}
+
+export interface ShortWhereScene {
+  kicker: string;
+  body: EpisodeText[];
+  unknown: EpisodeText;
+  ask: string;
+}
+
+export interface ShortWhyScene {
+  kicker: string;
+  title: string;
+  lead: EpisodeText;
+  real_label: string;
+  real: RealItem[];
+  verdict: EpisodeText;
+  tool_lead: string;
+  ask: string;
+}
+
+export interface ShortKeepScene {
+  kicker: string;
+  title: string;
+  line: string;
+  advice_label: string;
+  advice: EpisodeText;
+  map_note: string;
+  gain_label: string;
+}
+
+export interface ShortScenes {
+  cover: ShortCoverScene;
+  where: ShortWhereScene;
+  why: ShortWhyScene;
+  keep: ShortKeepScene;
+}
+
+/** 짧은 이야기의 풀이 — 입구 + 기본 풀이 "뒤집기만". 체험 칸이 없다 (plain.why = "short") */
+export interface ShortSolve {
+  entry: SolveEntry;
+  plain: PlainFlip;
+}
+
+/** 짧은 이야기 — 장면 넷 · 번호 없음 (선반 — 시리즈에 놓이되 번호 · 시리즈 줄이 없다) · 체험 없음 (§13) */
+export interface ShortStory {
+  episode_id: UUID;
+  episode_version: number;
+  code: Id;
+  event_ref: EventRef;
+  weight: "short";
+  series: Series;
+  sibling: Sibling;
+  docs: Record<DocLabel, EpisodeDoc>;
+  quotes: Record<QuoteKey, EpisodeQuote>;
+  voice_labels: VoiceLabels;
+  tools_from: ToolsFrom;
+  scenes: ShortScenes;
+  solve: ShortSolve;
+}
+
+/** 이야기 하나 — 긴 이야기 (Episode) 또는 짧은 이야기 (ShortStory). weight 로 가른다 (없으면 긴 이야기 · §13.1). 칸이 아니라 갈래라 아래 표에 없다 */
+export type Story = Episode | ShortStory;
+
 // ─────────────────────────────────────────────────────────── 칸 목록 (값) — 문서의 타입 블록과 글자로 같다
 
 /** T 의 칸 이름을 빠짐없이 · 남김없이. 없어도 되는 칸은 이름 끝에 `?` */
@@ -526,6 +620,7 @@ export const EPISODE_SHAPES = {
     episode_version: "integer",
     code: "Id",
     event_ref: "EventRef",
+    "weight?": '"long"',
     series: "Series",
     number: "integer",
     track: "TrackItem[]",
@@ -741,6 +836,47 @@ export const EPISODE_SHAPES = {
     coming: "EpisodeText[]",
     ask: "string",
   } satisfies Shape<PlainQuiet>,
+  // 짧은 이야기 (§13 · B-E3)
+  ShortStory: {
+    episode_id: "UUID",
+    episode_version: "integer",
+    code: "Id",
+    event_ref: "EventRef",
+    weight: '"short"',
+    series: "Series",
+    sibling: "Sibling",
+    docs: "Record<DocLabel, EpisodeDoc>",
+    quotes: "Record<QuoteKey, EpisodeQuote>",
+    voice_labels: "VoiceLabels",
+    tools_from: "ToolsFrom",
+    scenes: "ShortScenes",
+    solve: "ShortSolve",
+  } satisfies Shape<ShortStory>,
+  Sibling: { episode: "EpisodeRef", label: "string", note: "string" } satisfies Shape<Sibling>,
+  ToolsFrom: { episode: "EpisodeRef", keys: "ToolKey[]" } satisfies Shape<ToolsFrom>,
+  ShortScenes: { cover: "ShortCoverScene", where: "ShortWhereScene", why: "ShortWhyScene", keep: "ShortKeepScene" } satisfies Shape<ShortScenes>,
+  ShortCoverScene: { title: "string", dek: "EpisodeText", meta: "EpisodeText", hint: "EpisodeText", ask: "string" } satisfies Shape<ShortCoverScene>,
+  ShortWhereScene: { kicker: "string", body: "EpisodeText[]", unknown: "EpisodeText", ask: "string" } satisfies Shape<ShortWhereScene>,
+  ShortWhyScene: {
+    kicker: "string",
+    title: "string",
+    lead: "EpisodeText",
+    real_label: "string",
+    real: "RealItem[]",
+    verdict: "EpisodeText",
+    tool_lead: "string",
+    ask: "string",
+  } satisfies Shape<ShortWhyScene>,
+  ShortKeepScene: {
+    kicker: "string",
+    title: "string",
+    line: "string",
+    advice_label: "string",
+    advice: "EpisodeText",
+    map_note: "string",
+    gain_label: "string",
+  } satisfies Shape<ShortKeepScene>,
+  ShortSolve: { entry: "SolveEntry", plain: "PlainFlip" } satisfies Shape<ShortSolve>,
 } as const;
 
 export type EpisodeShapeName = keyof typeof EPISODE_SHAPES;
@@ -761,7 +897,9 @@ export const EPISODE_ALIASES = {
   TrackState: TRACK_STATES.map((v) => `"${v}"`).join(" | "),
   Voice: VOICES.map((v) => `"${v}"`).join(" | "),
   NoLabWhy: NO_LAB_WHYS.map((v) => `"${v}"`).join(" | "),
-  Frame: "ToggleFrame | ChainFrame | SeatsFrame | PagesFrame",
+  StoryWeight: STORY_WEIGHTS.map((v) => `"${v}"`).join(" | "),
+  ShortSceneId: SHORT_SCENE_IDS.map((v) => `"${v}"`).join(" | "),
+  Frame:"ToggleFrame | ChainFrame | SeatsFrame | PagesFrame",
   ChainNode: "ReachedNode | StoppedNode",
   PlainSolve: "PlainFlip | PlainThree | PlainQuiet",
 } as const;

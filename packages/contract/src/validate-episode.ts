@@ -23,6 +23,13 @@
 //   26 지난 회차에서 온 구절의 키 꼴 — 앞머리 하나 · 이 회차의 code 가 아니다                                                    (실물 전 — UX-6)
 //   지난 회차를 받으면 (ctx.previous) 대 본다 — 같은 회차 · 같은 시리즈 · 같은 그림 (kind · picture.id · 고리 · 쪽 id) · 지난 값 · 옮겨 온 구절이 그 회차의 것 그대로 (PREV_MISMATCH)
 //
+// 짧은 이야기 (ShortStory · §13 · B-E3) — validateShortStory. 위의 1 · 2 (판) · 3 · 4 · 8 · 9 · 10 · 11 · 13 · 14 를 같이 보고, 더해서
+//   27 무게 — 짧은 이야기의 체험이 없는 까닭은 무게 (short) · 긴 이야기의 까닭은 무게가 아니다 (PLAIN_WHY)
+//   28 짧은 이야기에는 번호 · 시리즈 줄 · 체험 · 장면 넷 밖의 장면 칸이 없다 — 모양 (1) 이 거부한다 (SCHEMA_KEY)
+//   29 다른 이야기를 가리키기 — 도구 하나 이상 · 겹침 없음 (REF_TOOL) · 가리킨 이야기의 판 ≥ 1 · 자신이 아니다 (ID_RANGE)
+//      가리킨 이야기를 받으면 (ctx.episodes) 대 본다 — 곁 이야기가 같은 사건 (SIBLING_MISMATCH) · 도구가 그 이야기에 있다 (REF_TOOL)
+//   validateStory — weight 가 "short" 면 짧은 이야기로, 아니면 (칸이 없으면) 긴 이야기로 본다
+//
 // 보지 않는 것
 //   글의 뜻이 구절에서 나오는가 (의미 대조 — 사람 · W-2) · 한글로 쓴 수 ("여섯 가지") · 그림 부품이 있는가 (코드 — 화면 쪽 검사)
 //   split · death · not_yet_note 가 **참인가** — 스스로 적는 칸이다. 검사는 빠뜨리지 못하게 할 뿐이다 (사람이 채운다 — §8)
@@ -39,11 +46,15 @@ import {
   carriedKey,
   type ChainBefore,
   type Episode,
+  type EpisodeDoc,
+  type EpisodeRef,
   type EpisodeText,
   type EpisodeQuote,
   type SeatBefore,
+  type ShortStory,
   type Solve,
   type Tool,
+  type StoryWeight,
 } from "./episode";
 import { stripAnnotations, type Issue } from "./validate";
 
@@ -62,11 +73,29 @@ export type EpisodeValidation =
   | { ok: true; episode: Episode; warnings: Issue[]; stats: EpisodeStats }
   | { ok: false; errors: Issue[]; warnings: Issue[] };
 
+/** 짧은 이야기 — 도구는 제 것이 없고 다른 이야기를 가리킨다 (tools_from) */
+export interface ShortStoryStats {
+  quotes: number;
+  docs: number;
+  texts: number;
+  texts_with_digits: number;
+  exempt: string[];
+  tools_from: number;
+}
+
+export type ShortStoryValidation =
+  | { ok: true; story: ShortStory; warnings: Issue[]; stats: ShortStoryStats }
+  | { ok: false; errors: Issue[]; warnings: Issue[] };
+
+export type StoryValidation = EpisodeValidation | ShortStoryValidation;
+
 export interface EpisodeContext {
   /** 저장된 문서 (DATA_MODEL SourceDocument 의 source_id · text). 주면 불변식 8 을 본다 */
   documents?: readonly { source_id: string; text: string }[];
   /** 지난 회차 (Episode.previous 가 가리키는 것 — 계약 검증을 지난 회차). 주면 같은 그림 · 지난 값 · 옮겨 온 구절을 대 본다 (§7.9 · PREV_MISMATCH) */
   previous?: Episode;
+  /** 짧은 이야기만 — 가리킨 긴 이야기들 (sibling · tools_from — 계약 검증을 지난 회차). 주면 같은 사건 · 도구가 그 이야기에 있는지 대 본다 (§13 · 불변식 29) */
+  episodes?: readonly Episode[];
 }
 
 type Obj = Record<string, unknown>;
@@ -88,8 +117,11 @@ const hasSrc = (t: EpisodeText) => (t.src?.length ?? 0) > 0;
 
 // ─────────────────────────────────────────────────────────── 풀이 칸의 규칙 (불변식 11 ~ 20)
 
-/** 풀이 칸만 본다 — 회차가 아닌 풀이 견본(시안의 조용히 견본)에도 쓴다. ep 가 없으면 구절 · 도구를 가리키는 것은 보지 않는다 */
-export function solveProblems(solve: Solve, ep: { quotes: Record<string, EpisodeQuote>; tools: readonly Tool[] } | null, base = "/solve"): { errors: Issue[]; warnings: Issue[] } {
+/**
+ * 풀이 칸만 본다 — 회차가 아닌 풀이 견본(시안의 조용히 견본)에도 쓴다. ep 가 없으면 구절 · 도구를 가리키는 것은 보지 않는다.
+ * weight — 무게 (불변식 27): 긴 이야기 (기본) 는 체험이 없는 까닭이 무게일 수 없고, 짧은 이야기 (ShortStory 의 풀이) 는 까닭이 무게다
+ */
+export function solveProblems(solve: Solve, ep: { quotes: Record<string, EpisodeQuote>; tools: readonly Tool[] } | null, base = "/solve", weight: StoryWeight = "long"): { errors: Issue[]; warnings: Issue[] } {
   const errors: Issue[] = [];
   const warnings: Issue[] = [];
   const E = (code: string, path: string, message: string) => errors.push({ code, path: `${base}${path}`, message });
@@ -98,9 +130,14 @@ export function solveProblems(solve: Solve, ep: { quotes: Record<string, Episode
 
   // 11
   if (!entry.death && !hasSrc(entry.breaker)) E("BREAKER_SRC", "/entry/breaker", "깨는 사실에 근거 구절이 없다");
-  // 12
+  // 12 · 27 (무게 — B-E3)
   if (!lab && !plain) E("SOLVE_EMPTY", "", "체험도 기본 풀이도 없다");
-  if (!lab && plain && plain.why === null) E("PLAIN_WHY", "/plain/why", "체험이 없는 회차인데 까닭이 없다 — 정치 · 사망 · 자료 · 뒤집기 없음 가운데 하나여야 한다");
+  if (weight === "short") {
+    if (plain && !entry.death && plain.why !== "short") E("PLAIN_WHY", "/plain/why", `짧은 이야기인데 체험이 없는 까닭이 무게(short)가 아니다 — ${plain.why} (불변식 27)`);
+  } else {
+    if (!lab && plain && plain.why === null) E("PLAIN_WHY", "/plain/why", "체험이 없는 회차인데 까닭이 없다 — 정치 · 사망 · 자료 · 뒤집기 없음 가운데 하나여야 한다");
+    if (!lab && plain?.why === "short") E("PLAIN_WHY", "/plain/why", "긴 이야기인데 체험이 없는 까닭을 무게(short)라고 적었다 — 무게는 짧은 이야기의 까닭이다 (불변식 27)");
+  }
   if (lab && plain && plain.why !== null) E("PLAIN_WHY", "/plain/why", `체험이 있는데 체험이 없는 까닭(${plain.why})을 적었다`);
   // 13 — D61 ④
   if (entry.death) {
@@ -184,16 +221,16 @@ export function solveProblems(solve: Solve, ep: { quotes: Record<string, Episode
   return { errors, warnings };
 }
 
-// ─────────────────────────────────────────────────────────── 회차
+// ─────────────────────────────────────────────────────────── 모양 (불변식 1 · 10) — 긴 이야기 · 짧은 이야기가 같이 쓴다
 
-export function validateEpisode(input: unknown, ctx: EpisodeContext = {}): EpisodeValidation {
+type Texts = { path: string; item: EpisodeText }[];
+
+/** 1 · 10 — 타입 식을 읽어 값을 본다. 지나간 글 한 덩이 (EpisodeText)를 모아 돌려준다 */
+function shapeProblems(root: string, doc: unknown): { errors: Issue[]; texts: Texts } {
   const errors: Issue[] = [];
-  const warnings: Issue[] = [];
   const E = (code: string, path: string, message: string) => errors.push({ code, path, message });
-  const doc = stripAnnotations(input);
-  const texts: { path: string; item: EpisodeText }[] = [];
+  const texts: Texts = [];
 
-  // 1 — 모양. 타입 식을 읽어 값을 본다
   function fits(type: string, v: unknown, path: string): void {
     if (type.endsWith(" | null")) {
       if (v !== null) fits(type.slice(0, -" | null".length), v, path);
@@ -272,17 +309,21 @@ export function validateEpisode(input: unknown, ctx: EpisodeContext = {}): Episo
     }
     if (type === "EpisodeText") texts.push({ path, item: v as unknown as EpisodeText });
   }
-  fits("Episode", doc, "");
-  if (errors.length) return { ok: false, errors, warnings };
-  const ep = doc as Episode;
+  fits(root, doc, "");
+  return { errors, texts };
+}
 
-  if (ep.scenes.compare.cols.length !== 2) E("SCHEMA_LENGTH", "/scenes/compare/cols", "견주기의 칸 머리는 둘이다");
-  // 2
-  if (ep.episode_version < 1) E("ID_RANGE", "/episode_version", "판은 1부터다");
-  if (ep.number < 1) E("ID_RANGE", "/number", "회차 번호는 1부터다 — 0화는 회차가 아니라 따라잡기 장면이다 (§3)");
+// ─────────────────────────────────────────────────────────── 근거 (불변식 3 · 8 · 4 · 9) — 긴 이야기 · 짧은 이야기가 같이 쓴다
 
+function groundProblems(
+  ep: { docs: Record<string, EpisodeDoc>; quotes: Record<string, EpisodeQuote> },
+  texts: Texts,
+  documents: EpisodeContext["documents"],
+  E: (code: string, path: string, message: string) => void,
+  warnings: Issue[],
+): { exempt: string[]; withDigits: number } {
   // 3 · 8
-  const textOf = ctx.documents ? new Map(ctx.documents.map((d) => [d.source_id, squash(d.text)])) : null;
+  const textOf = documents ? new Map(documents.map((d) => [d.source_id, squash(d.text)])) : null;
   if (!textOf) warnings.push({ code: "QUOTES_NOT_CHECKED", path: "/quotes", message: "저장된 문서를 주지 않아 구절이 문서에 그대로 있는지(불변식 8)는 보지 않았다" });
   for (const [key, q] of Object.entries(ep.quotes)) {
     const ref = ep.docs[q.doc];
@@ -317,6 +358,30 @@ export function validateEpisode(input: unknown, ctx: EpisodeContext = {}): Episo
     }
     if (calc.length) exempt.push(`${path}: "${item.t.replace(/\n/g, " ").slice(0, 60)}${item.t.length > 60 ? "…" : ""}" (계산 — ${Object.entries(item.calc!).map(([n, how]) => `${n} = ${how}`).join(" · ")})`);
   }
+  return { exempt, withDigits };
+}
+
+// ─────────────────────────────────────────────────────────── 회차 (긴 이야기)
+
+export function validateEpisode(input: unknown, ctx: EpisodeContext = {}): EpisodeValidation {
+  const errors: Issue[] = [];
+  const warnings: Issue[] = [];
+  const E = (code: string, path: string, message: string) => errors.push({ code, path, message });
+  const doc = stripAnnotations(input);
+
+  // 1 — 모양. 타입 식을 읽어 값을 본다
+  const shape = shapeProblems("Episode", doc);
+  if (shape.errors.length) return { ok: false, errors: shape.errors, warnings };
+  const { texts } = shape;
+  const ep = doc as Episode;
+
+  if (ep.scenes.compare.cols.length !== 2) E("SCHEMA_LENGTH", "/scenes/compare/cols", "견주기의 칸 머리는 둘이다");
+  // 2
+  if (ep.episode_version < 1) E("ID_RANGE", "/episode_version", "판은 1부터다");
+  if (ep.number < 1) E("ID_RANGE", "/number", "회차 번호는 1부터다 — 0화는 회차가 아니라 따라잡기 장면이다 (§3)");
+
+  // 3 · 8 · 4 · 9
+  const { exempt, withDigits } = groundProblems(ep, texts, ctx.documents, E, warnings);
 
   // 5
   const keys = ep.tools.map((t) => t.key);
@@ -451,4 +516,76 @@ export function parseEpisode(input: unknown, ctx?: EpisodeContext): Episode {
     throw new Error(`Episode 계약 위반 ${r.errors.length}건\n${lines}`);
   }
   return r.episode;
+}
+
+// ─────────────────────────────────────────────────────────── 짧은 이야기 (§13 · 불변식 27 ~ 29 · B-E3)
+
+export function validateShortStory(input: unknown, ctx: EpisodeContext = {}): ShortStoryValidation {
+  const errors: Issue[] = [];
+  const warnings: Issue[] = [];
+  const E = (code: string, path: string, message: string) => errors.push({ code, path, message });
+  const doc = stripAnnotations(input);
+
+  // 1 · 10 · 28 — 장면 넷 · 번호 · 시리즈 줄 · 체험 칸이 없다 (넣으면 SCHEMA_KEY)
+  const shape = shapeProblems("ShortStory", doc);
+  if (shape.errors.length) return { ok: false, errors: shape.errors, warnings };
+  const s = doc as ShortStory;
+
+  // 2 — 판 (번호는 없다)
+  if (s.episode_version < 1) E("ID_RANGE", "/episode_version", "판은 1부터다");
+  // 3 · 8 · 4 · 9
+  const { exempt, withDigits } = groundProblems(s, shape.texts, ctx.documents, E, warnings);
+  // 29 — 다른 이야기를 가리키기
+  shortRefProblems(s, ctx.episodes, E, warnings);
+  // 11 · 13 · 14 · 27 — 풀이 = 입구 + 뒤집기만 (체험 칸이 없다)
+  const solve = solveProblems({ entry: s.solve.entry, lab: null, plain: s.solve.plain }, { quotes: s.quotes, tools: [] }, "/solve", "short");
+  errors.push(...solve.errors);
+  warnings.push(...solve.warnings);
+
+  if (errors.length) return { ok: false, errors, warnings };
+  const stats: ShortStoryStats = {
+    quotes: Object.keys(s.quotes).length,
+    docs: new Set(Object.values(s.quotes).map((q) => q.doc)).size,
+    texts: shape.texts.length,
+    texts_with_digits: withDigits,
+    exempt,
+    tools_from: s.tools_from.keys.length,
+  };
+  return { ok: true, story: s, warnings, stats };
+}
+
+function shortRefProblems(s: ShortStory, episodes: readonly Episode[] | undefined, E: (code: string, path: string, message: string) => void, warnings: Issue[]) {
+  const keys = s.tools_from.keys;
+  if (!keys.length) E("REF_TOOL", "/tools_from/keys", "가리킨 도구가 없다 — 하나 이상 (그 장면의 글이 도구를 말한다)");
+  if (new Set(keys).size !== keys.length) E("REF_TOOL", "/tools_from/keys", "가리킨 도구가 겹친다");
+  const refs: [string, EpisodeRef][] = [
+    ["/sibling/episode", s.sibling.episode],
+    ["/tools_from/episode", s.tools_from.episode],
+  ];
+  for (const [at, ref] of refs) {
+    if (ref.episode_version < 1) E("ID_RANGE", `${at}/episode_version`, "가리킨 이야기의 판은 1부터다");
+    if (ref.episode_id === s.episode_id) E("ID_RANGE", `${at}/episode_id`, "가리킨 이야기가 이 이야기 자신이다");
+  }
+  const find = (ref: EpisodeRef) => episodes?.find((e) => e.episode_id === ref.episode_id && e.episode_version === ref.episode_version);
+  const sibling = find(s.sibling.episode);
+  if (!sibling) warnings.push({ code: "SIBLING_NOT_CHECKED", path: "/sibling", message: "곁 이야기를 받지 못해 같은 사건인지는 보지 않았다" });
+  else if (sibling.event_ref !== s.event_ref) E("SIBLING_MISMATCH", "/sibling/episode", `곁 이야기 ${sibling.code} 는 다른 사건 (${sibling.event_ref})이다 — 곁 이야기는 같은 사건의 이야기다`);
+  const from = find(s.tools_from.episode);
+  if (!from) warnings.push({ code: "TOOLS_FROM_NOT_CHECKED", path: "/tools_from", message: "도구를 가져온 이야기를 받지 못해 그 도구가 거기 있는지는 보지 않았다" });
+  else keys.forEach((k, i) => from.tools.some((t) => t.key === k) || E("REF_TOOL", `/tools_from/keys/${i}`, `도구 "${k}" 가 ${from.code} 에 없다 — 다른 이야기의 도구는 가리키기만 한다 (새로 쓰지 않는다)`));
+}
+
+/** 검증을 통과한 짧은 이야기를 돌려주고, 아니면 모든 위반을 담아 던진다 */
+export function parseShortStory(input: unknown, ctx?: EpisodeContext): ShortStory {
+  const r = validateShortStory(input, ctx);
+  if (!r.ok) {
+    const lines = r.errors.map((e) => `  ${e.code} ${e.path}: ${e.message}`).join("\n");
+    throw new Error(`ShortStory 계약 위반 ${r.errors.length}건\n${lines}`);
+  }
+  return r.story;
+}
+
+/** 이야기 하나 — weight 가 "short" 면 짧은 이야기, 아니면 (칸이 없거나 "long") 긴 이야기 (회차)로 본다 (§13.1) */
+export function validateStory(input: unknown, ctx: EpisodeContext = {}): StoryValidation {
+  return isObj(input) && input.weight === "short" ? validateShortStory(input, ctx) : validateEpisode(input, ctx);
 }

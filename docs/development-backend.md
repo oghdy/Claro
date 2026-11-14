@@ -1288,7 +1288,7 @@ Claro 는 기사를 "회차"로 낸다 — 도윤이 확정했다 (D57 쌓인다
 | Step | 내용 | 산출 | 상태 |
 |---|---|---|---|
 | **B-E2** | DATA_MODEL §4.4 문서 단위 권리 (문서 안 공공누리 제1유형 표시 · 근거 · 해시 필수 · 그 문서에 한해 발행처 행보다 앞선다) · 불변식 20 · P-1 문구 · 검증 · 파이프라인 산출물을 계약 모양으로 · 서브에이전트 Opus | DATA_MODEL · packages/contract · rights.ts · pack.ts · PIPC store.json · `logs/backend/B-E2.md` | ☑ 2026-11-12 · 검수 대기 (PM) — 따로 된 타입 DocumentRights (+ DocumentRightsBasis · Source 하나에 한 행 · 칸마다 발행처 행보다 앞선다 · can_ingest 없음) · 불변식 20 · P-1 · §10.1 "발행처 또는 문서 단위" · 불변식 35 ~ 37 · PIPC store.json document_rights 3 행 (발행처 행 null 그대로) · FOMC · KFTC 0자 · 사본 +12 +7 · 시험 +18 +3 · API 0 · _open B-E2-a ~ c |
-| **B-E3** | **짧은 이야기 · 번호 없는 이야기 계약 (D80 · D86)** — 무게 · 짧은 조립 (장면 넷) · 번호 · 시리즈 줄을 고를 수 있게 (선반) · 같은 사건의 곁 이야기 · 다른 이야기의 도구 가리키기 · 체험 없는 까닭 = 무게 · 실물 = UX-7 짧은 이야기 (영훈) · 골든 넷째 · 서브에이전트 Opus | EPISODE.md · packages/contract · fixtures · `logs/backend/B-E3.md` | ☐ 도는 중 (2026-11-14) |
+| **B-E3** | **짧은 이야기 · 번호 없는 이야기 계약 (D80 · D86)** — 무게 · 짧은 조립 (장면 넷) · 번호 · 시리즈 줄을 고를 수 있게 (선반) · 같은 사건의 곁 이야기 · 다른 이야기의 도구 가리키기 · 체험 없는 까닭 = 무게 · 실물 = UX-7 짧은 이야기 (영훈) · 골든 넷째 · 서브에이전트 Opus | EPISODE.md · packages/contract · fixtures · `logs/backend/B-E3.md` | ☑ 2026-11-14 · 검수 대기 (PM) — 따로 선 타입 `ShortStory` (장면 넷 · `series` 만 — 번호 · 시리즈 줄 칸 없음 · `sibling` · `tools_from` = EpisodeRef · `solve` = 입구 + 뒤집기만) · `weight` (Episode 에 `weight?: "long"` 하나 — 없으면 긴 이야기) · `NoLabWhy` + `short` · §13 · 불변식 27 ~ 29 · 골든 넷째 `episode-short-privacy-yeonghun.json` (lab 글 0자 · 구절 18 다시 대조) · 위반 4 · 긴 골든 셋 0자 · lab `/lab/today/short` 가 골든을 읽음 (그림 46 장 픽셀 0 차이) · 번호 = 긴 이야기 `number ≥ 2` 일 때만 보임 (화면 규칙) · 첫 이야기가 나중에 1화 · 덧붙임 · 개념 이야기는 미확인 · contract 시험 132 · API 0 · _open E-20 ~ E-23 |
 
 ### 서브에이전트 지시 (Opus)
 ```

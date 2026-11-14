@@ -6,6 +6,7 @@
 | 2026-11-11 | 생성 — 회차 계약. 실물 둘 (배달앱 「누가 값을 정하나」 1화 · 금리 「금리는 어디로」 2화 — `apps/web/src/app/lab/episode/` 의 시안 `9bf4ede`) 과 시안 타입 (`kit/types.ts` · `kit/frames/types.ts`) · 시안 검사 (`check.ts` A ~ E) · D46 · D57 ~ D62 에서 도출. 골든 `fixtures/episode-price-1.json` · `episode-rate-2.json` · 위반 픽스처 29. **게이트 전** | B-E1 |
 | 2026-11-12 | **넘겨 보기 틀** — `PagesFrame` · `PageCard` · `PagesCaption` (§1 · §7.8) · 불변식 21 ~ 24 (`PAGES_CARDS` · `PAGES_CARD_SRC` · `PAGES_WHEN` · `PAGES_STAR` · `PAGES_FUTURE` · `PAGES_ORDER`) · 서는 조합에 `[pages]` (불변식 15). 셋째 실물 하나 (개인정보위 「내 정보는 누가 지키나」 1화 — 시안 `/lab/episode/pipc`)에서 도출 — 그 실물에 없는 것은 미확인 (§10). 골든 셋째 `fixtures/episode-privacy-1.json` · 위반 픽스처 9. `Lab.seen_title` 의 첫 실물 · 조립에서 따라잡기와 견주기를 둘 다 보이는 첫 실물 (규칙은 그대로 미확인). **다른 틀 · 다른 칸은 바꾸지 않았다** | UX-5 |
 | 2026-11-12 | **지난 회차 칸 셋 — 실물 전 · 3화에서 확인** (D75 · P-E2 ⑦ N-1 ~ N-3): 지난 회차를 가리키는 칸 `Episode.previous?: EpisodeRef` (§3.4) · 지난 회차에서 온 구절의 키 꼴 `<code>:<key>` (§4.5) · 같은 그림의 지난 값 `ReachedNode` · `StoppedNode` 의 `before?: ChainBefore` · `SeatSide.before?: SeatBefore` (§7.9). 불변식 25 · 26 (`PREV_MISSING` · `PREV_VALUE_SRC` · `PREV_KEY`) · 지난 회차를 받으면 대 보는 것 (`PREV_MISMATCH` · 알림 `PREVIOUS_NOT_CHECKED`) · 위반 픽스처 셋. 모양은 P-E2 가 지어 본 이어 쓰기 (`review.json` 의 `carry` · `packages/pipeline/src/episode.ts`)에 맞췄다. **고를 수 있는 칸 (`?`)이라 골든 셋은 0자 · 다른 칸은 바꾸지 않았다** | UX-6 |
+| 2026-11-14 | **짧은 이야기 · 번호 없는 이야기 (D80 · D86)** — 따로 선 타입 `ShortStory` (+ `Sibling` · `ToolsFrom` · 장면 넷 `ShortScenes` · `ShortSolve`) · 무게 (`StoryWeight` · Episode 에 고를 수 있는 칸 `weight?: "long"` — 없으면 긴 이야기) · `NoLabWhy` 에 `"short"` · `ShortSceneId` · §13 · 불변식 27 ~ 29 (`PLAIN_WHY` · `SCHEMA_KEY` · `REF_TOOL` · `ID_RANGE` · `SIBLING_MISMATCH` · 알림 `SIBLING_NOT_CHECKED` · `TOOLS_FROM_NOT_CHECKED`) · 검증 `validateShortStory` · `validateStory`. 실물 하나 (UX-7 짧은 이야기 — 영훈의료재단 · `lab/today/short`)에서 도출 · 골든 넷째 `fixtures/episode-short-privacy-yeonghun.json` · 위반 픽스처 4. 덧붙임 · 개념 이야기 · 첫 이야기가 나중에 "1화"가 되는 판 처리는 칸 없음 (미확인 · §13.7). **긴 이야기의 다른 칸 · 골든 셋은 바꾸지 않았다** | B-E3 |
 
 > **상태: 게이트 전 (B-E1 · 2026-11-11).** _open 은 §11.
 > 회차 (Episode) = Claro 가 기사를 내는 새 모양 (D59). 시리즈 안의 한 화 · 장면 여덟 · 가운데에 독자가 직접 해 보는 풀이.
@@ -23,18 +24,21 @@
 > - **지난 회차 칸 셋 (UX-6 · 2026-11-12) — 실물 전 · 3화에서 확인.** 같은 시리즈의 회차 둘이 아직 없다 (§10). 3화 (「금리는 어디로」 · 10월 회의록 · 11/18 무렵)가 첫 실물이다.
 >   원천은 실물 회차가 아니라 결정 (D61 ② "같은 그림 · 오늘 값만" · D62 ③ "3화에서 지난 값을 옆에" · D30 판 가리키기 · D75)과 P-E2 가 지어 본 이어 쓰기 (`logs/pipeline/P-E2.md` ⑦ · `review.json` 의 `carry` — 시험 "이어 쓰기" 넷)다.
 >   그래서 칸은 전부 **고를 수 있는 칸 (`?`)** 이고 표시는 **실물 전** — 3화가 나오면 다시 본다 (모양 · `?` 를 `| null` 로 바꿀지 — §11 E-16)
+> - **넷째 실물 (B-E3 · 2026-11-14) — 짧은 이야기.** UX-7 의 「병원이 털렸다는데, 어디가 털린 걸까」 (영훈의료재단 — 개인정보위 같은 발표의 병원 쪽 · `apps/web/src/app/lab/today/short/` 의 lab 꼴 「모자람 1 ~ 6」 · `logs/frontend/UX-7.md` ③) ·
+>   오늘 화면의 번호 규칙 (`number ≥ 2` 에서 "이어지는 이야기") · 결정 D79 ① ③ · D86. **짧은 이야기 (ShortStory)와 무게 · 번호 없는 이야기 칸은 §13 에만** — 실물이 하나라 표시는 전부 **실물 하나**. 긴 이야기 (Episode)의 칸은 고를 수 있는 칸 `weight?` 하나 말고 그대로다 (골든 셋 0자)
 >
 > **표시** — **실물** 두 회차에 있다 · **실물 하나** 한 회차에만 있다 · **실물 없음** 결정에서 왔지만 회차 실물이 없다 (첫 실물이 나오면 다시 본다) · **실물 전** 결정과 파이프라인의 시험에서 왔고 다음 회차 (3화)가 첫 실물이다 — 고를 수 있는 칸 · **미확인** 정하지 않았다 (§10)
 >
-> **검사** — `pnpm --filter @claro/contract test` (`test/episode.test.ts` — 골든 둘 통과 · `fixtures/invalid/episode-*.json` 전부 거부 · `test/contract-docs.test.ts` — 이 문서의 타입 블록 ↔ 코드의 칸 목록).
-> 검증기는 `packages/contract/src/validate-episode.ts` 의 `validateEpisode(회차, { documents })`.
+> **검사** — `pnpm --filter @claro/contract test` (`test/episode.test.ts` — 골든 넷 (긴 셋 · 짧은 하나) 통과 · `fixtures/invalid/episode-*.json` 전부 거부 · `test/contract-docs.test.ts` — 이 문서의 타입 블록 ↔ 코드의 칸 목록).
+> 검증기는 `packages/contract/src/validate-episode.ts` 의 `validateEpisode(회차, { documents })` · 짧은 이야기는 `validateShortStory(이야기, { documents, episodes })` · 어느 쪽인지 모르면 `validateStory` (§13.1).
 
 ---
 
 ## 0. 범위
 
 **이 계약이 주인인 것** — Episode · Series · TrackItem · EpisodeRef · EpisodeText · EpisodeDoc · EpisodeQuote · Tool · Pickup · Assembly · 장면 여덟의 글 (Scenes 와 그 아래) ·
-ToolMap · Solve · SolveEntry · Flip · Lab · PictureRef · 틀 넷 (ToggleFrame · ChainFrame · SeatsFrame · PagesFrame) · 같은 그림의 지난 값 (ChainBefore · SeatBefore) · 기본 풀이 셋 (PlainFlip · PlainThree · PlainQuiet).
+ToolMap · Solve · SolveEntry · Flip · Lab · PictureRef · 틀 넷 (ToggleFrame · ChainFrame · SeatsFrame · PagesFrame) · 같은 그림의 지난 값 (ChainBefore · SeatBefore) · 기본 풀이 셋 (PlainFlip · PlainThree · PlainQuiet) ·
+짧은 이야기 (ShortStory · Sibling · ToolsFrom · ShortScenes 와 장면 넷 · ShortSolve — §13 · B-E3).
 
 **안 넣는 것**
 - **지식 상태.** 독자가 무엇을 아는지 · 누가 "처음 온 독자"인지 · 어느 도구를 접을지 판정하는 것은 이 계약에 없다. 회차는 **조립마다 어느 장면을 보이나**만 적는다 (§5).
@@ -64,7 +68,9 @@ Edge       = [ToolKey, ToolKey]
 SceneId    = "cover" | "zero" | "event" | "tools" | "aha" | "compare" | "next" | "keep"
 TrackState = "past" | "now" | "next"
 Voice      = "fact" | "official" | "explain"
-NoLabWhy   = "politics" | "death" | "no-source" | "no-flip"
+NoLabWhy   = "politics" | "death" | "no-source" | "no-flip" | "short"   // short = 무게 — 짧은 이야기라서 (§13.6)
+StoryWeight = "long" | "short"     // 무게 — 긴 이야기 (Episode) / 짧은 이야기 (ShortStory) (§13.1)
+ShortSceneId = "cover" | "where" | "why" | "keep"   // 짧은 이야기의 장면 넷 — 차례 고정 (§13.2)
 Frame      = ToggleFrame | ChainFrame | SeatsFrame | PagesFrame   // kind 로 가른다
 ChainNode  = ReachedNode | StoppedNode                   // reach 로 가른다
 PlainSolve = PlainFlip | PlainThree | PlainQuiet         // kind 로 가른다
@@ -74,6 +80,7 @@ Episode {                           // 회차 하나 = 발행 한 번. 통째로
   episode_version: integer          // 1부터. (episode_id · episode_version) 은 전체에서 유일. 무엇이 새 판을 만드나는 미확인
   code:            Id               // 사람이 부르는 이름 — "delivery" · "fomc" (실물). 유일 · 불변
   event_ref:       EventRef         // 이 회차가 다루는 사건 — DATA_MODEL Event 의 UUID (§2.2)
+  weight?:         "long"           // 무게 — 없으면 긴 이야기 (골든 셋은 이 칸이 없다). 짧은 이야기는 ShortStory (§13.1)
   series:          Series           // 이 회차가 든 시리즈 (§3)
   number:          integer          // 몇 화인가 — 1부터. 0화는 회차가 아니다 (§3.2)
   track:           TrackItem[]      // 시리즈 줄 — 지난 화 · 지금 · 다음 화 (§3.3)
@@ -430,6 +437,78 @@ PlainQuiet {                        // 다. 조용히 — 무슨 일 → 지금 
   coming: EpisodeText[]
   ask:    string                    // 낮춘 물음 말 — 장면의 물음 (scenes.aha.ask_*) 대신
 }
+
+// ── 짧은 이야기 (§13 · B-E3) — 실물 하나: UX-7 영훈의료재단 (골든 넷째). 글과 근거 (§4) · 입구 (§7.1) · 뒤집기만 (§7.7) 은 위의 타입 그대로
+
+ShortStory {                        // 짧은 이야기 하나 = 발행 한 번. 통째로 불변. 장면 넷 · 번호 없음 (선반) · 체험 없음 (§13)
+  episode_id:      UUID             // Episode 와 같은 방식 · 같은 이름 공간 — EpisodeRef 가 가리킬 수 있다
+  episode_version: integer          // 1부터
+  code:            Id               // "pipc-hospital" (실물). 회차의 code 와 겹치지 않는다 · 불변
+  event_ref:       EventRef         // 이 이야기가 다루는 사건 — 곁 이야기와 같다 (§13.4)
+  weight:          "short"          // 무게 (§13.1)
+  series:          Series           // 선반 — 이 이야기가 놓인 시리즈. 번호 · 시리즈 줄 · 지난 회차 칸이 없다 (§13.3)
+  sibling:         Sibling          // 같은 사건의 곁 이야기 (§13.4)
+  docs:            Record<DocLabel, EpisodeDoc>
+  quotes:          Record<QuoteKey, EpisodeQuote>
+  voice_labels:    VoiceLabels
+  tools_from:      ToolsFrom        // 다른 이야기의 도구 — 제 도구 · 줍는 자리 · 지도가 없다 (§13.5)
+  scenes:          ShortScenes      // 장면 넷의 글 (§13.2)
+  solve:           ShortSolve       // 입구 + 뒤집기만. 체험 칸이 없다 (§13.6)
+}
+
+Sibling {                           // 같은 사건의 곁 이야기 — 긴 이야기의 한 판 (실물: 대교 쪽 「내 정보는 누가 지키나」 1화)
+  episode: EpisodeRef
+  label:   string                   // "같은 발표의 긴 이야기" — 남음 장면의 길 위에
+  note:    string                   // "대교 쪽 이야기 · 긴 이야기 · 체험 있음"
+}
+
+ToolsFrom {                         // 다른 이야기의 도구 — 그 이야기의 Tool 카드를 글자 그대로 (새로 쓰지 않는다)
+  episode: EpisodeRef
+  keys:    ToolKey[]                // 그 이야기의 Tool.key. 차례 = 화면의 차례 · 하나 이상 · 겹침 없음 (불변식 29)
+}
+
+ShortScenes { cover: ShortCoverScene, where: ShortWhereScene, why: ShortWhyScene, keep: ShortKeepScene }
+
+ShortCoverScene {                   // 표지 — 번호 자리에 무게의 이름 ("짧은 이야기" — 화면의 글)
+  title: string                     // 물음 제목
+  dek:   EpisodeText
+  meta:  EpisodeText
+  hint:  EpisodeText                // 곁 이야기와 한 묶음이라는 말
+  ask:   string
+}
+
+ShortWhereScene {                   // 어디가 — 머리는 solve.plain.title · 입구 (첫 생각 · 깨는 사실) · 뒤집기는 solve 에서
+  kicker:  string
+  body:    EpisodeText[]            // 깨는 사실 아래의 글
+  unknown: EpisodeText              // 문서에 없는 것을 없다고 말한다 (UX7-j)
+  ask:     string
+}
+
+ShortWhyScene {                     // 문서가 말한 것 — 가리킨 도구 (tools_from)가 여기서 접혀 보인다
+  kicker:     string
+  title:      string
+  lead:       EpisodeText
+  real_label: string
+  real:       RealItem[]
+  verdict:    EpisodeText
+  tool_lead:  string                // 가리킨 도구 앞의 말
+  ask:        string
+}
+
+ShortKeepScene {                    // 남음 — 다음 화 예고가 없다. 곁 이야기로 가는 길 (sibling)
+  kicker:       string
+  title:        string
+  line:         string              // 남는 한 줄
+  advice_label: string
+  advice:       EpisodeText
+  map_note:     string
+  gain_label:   string
+}
+
+ShortSolve {                        // 풀이 = 입구 + 기본 풀이 "뒤집기만" (§13.6)
+  entry: SolveEntry
+  plain: PlainFlip                  // why = "short" (불변식 27)
+}
 ```
 
 관계 한 장:
@@ -446,6 +525,13 @@ Series (독자가 따라가는 묶음) ─┐
                                       ├─ scenes (장면 여덟) · assembly (조립 둘 — 어느 장면을)
                                       ├─ solve.entry → lab.frames[].picture.id ──▶ 그림 부품 (코드 — 계약 밖)
                                       └─ map (개념 지도)
+
+ShortStory (짧은 이야기 — §13) ──event_ref──▶ Event (곁 이야기와 같은 사건)
+     ├─ series (선반 — 번호 · 시리즈 줄 없음)
+     ├─ sibling.episode ──────▶ 긴 이야기 (Episode)의 한 판 — 같은 사건 · 다른 쪽
+     ├─ tools_from.episode ───▶ 그 이야기의 Tool 카드 (글자 그대로 · 지도도 그 이야기의 것)
+     ├─ docs · quotes (§4 그대로) · scenes (장면 넷)
+     └─ solve (입구 + 뒤집기만 · why = short)
 ```
 
 ---
@@ -516,6 +602,7 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 - `number` — 몇 화인가 (정수). 독자가 읽는 글자는 `scenes.cover.episode` ("2화" · ui)이고, 시리즈 줄의 지금 (`now`) 줄과 같아야 한다 (불변식 7).
   `number` 와 그 글자의 대응 ("N화")은 검사하지 않는다 — 글자의 꼴은 글의 일이다
 - `track` — 지난 화 · 지금 · 다음 화. `state` 가 `now` 인 줄이 정확히 하나. 다음 화의 `no` 는 번호가 아닐 수 있다 (실물 "다음 화")
+- **번호를 언제 보이나 · 붙이나 (D86 — 둘째 이야기가 실제로 생겼을 때만)는 §13.3.** 칸은 그대로다 — 화면이 `number ≥ 2` 일 때만 번호 · 시리즈 줄을 보인다 (UX-7 실물). 번호가 없는 이야기는 짧은 이야기 (ShortStory)뿐이다
 
 ### 3.4 지난 회차 — `previous` (N-2 · **실물 전 · 3화에서 확인**)
 
@@ -700,7 +787,8 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 | 나. `three` 세 칸 | 확인된 것 / 아직 모르는 것 / 서로 다르게 말하는 것 | `lead` · `known` · `unknown` · `differ` · `differ_note` | 금리 2화 |
 | 다. `quiet` 조용히 | 무슨 일 → 지금 아는 것 → 다음에 나올 것. 눌러 보기 없음 · 물음 말도 낮춘다 | `what` · `known` · `coming` · `ask` | **실물 없음** (견본뿐 — 골든이 아니다) |
 
-- **`why` — 체험이 없는 까닭**: `politics` (당파 표결 — D46 · D61 ③) · `death` (D61 ④) · `no-source` (틀을 채울 문서가 없다) · `no-flip` (뒤집을 믿음이 없다). **넷 다 실물 없음** — 실물 둘은 체험이 있다
+- **`why` — 체험이 없는 까닭**: `politics` (당파 표결 — D46 · D61 ③) · `death` (D61 ④) · `no-source` (틀을 채울 문서가 없다) · `no-flip` (뒤집을 믿음이 없다). **넷 다 실물 없음** — 실물 둘은 체험이 있다.
+  다섯째 `short` (무게 — 짧은 이야기라서)는 짧은 이야기에만 쓴다 (§13.6 · 불변식 27 — 실물 하나: 골든 넷째). 긴 이야기는 이 까닭을 적을 수 없다
 - **실물 둘은 체험과 기본 풀이를 둘 다 갖는다** — 도윤이 "체험 없이 보기"로 견줘 보려고 (UX-4 ④). 체험이 있으면 까닭이 없으니 `why` 는 `null` 이다 (시안의 `"demo"` 는 계약의 값이 아니다).
   제품이 체험이 있는 회차에도 기본 풀이를 같이 낼지는 **미확인** — 계약은 받기만 한다
 - 세 칸의 셋째 칸은 **양쪽을 나란히** — 둘 이상이거나 빔 (불변식 20 · D46 ④). 한쪽만 있으면 거부
@@ -755,6 +843,8 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | `PageCard.state` | 그 칸이 이미 일어난 일인가 · 이 회차의 사건인가 · 앞날인가 | `next` 면 거부. 앞날의 일을 `past` 라고 적으면 통과한다 |
 | `PageCard.star` | 어느 칸이 "아!"인가 (UX-3 ⑥ "어느 칸이 아!인지만 고른다") | 정확히 하나인지 · 첫 칸이 아닌지만. 그 칸이 정말 뒤집는 칸인지는 못 본다 |
 | `PageCard.when` · `no_date` · 칸의 차례 | 때가 문서에 있나 · 칸이 때의 차례대로인가 | 둘 중 하나인지 · 때의 수가 구절에 있는지 (불변식 9)만. 차례는 못 본다 |
+| 무게 (Episode 인가 ShortStory 인가 · `weight`) | 긴 이야기로 낼까 짧은 이야기로 낼까 — 아침 고르기에서 사람이 (D86 "긴 0 ~ 2 + 짧은 나머지" · D3) | 모양만 — 짧은 이야기에 긴 이야기의 장면 · 번호 · 체험 칸이 있으면 거부 (불변식 28) · 까닭이 무게와 맞는지 (27) |
+| `ShortStory.sibling` | 같은 사건의 어느 긴 이야기 곁인가 | 가리킨 이야기를 받으면 같은 사건 (`event_ref`)인지만 |
 
 파이프라인 단계마다 어느 칸을 채우는지 (p3 · p4 · p5 · 라이브러리 · 사람)는 `logs/backend/B-E1.md` ⑥.
 
@@ -792,8 +882,13 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | 24 | **앞날 칸 금지 — `state: next` 면 거부** · 지금 (`now`)은 마지막 칸에만 | `PAGES_FUTURE` · `PAGES_ORDER` | UX-3 ④ ("다음 칸을 그려야 할 때 쓰지 않는다") · UX-5 실물 | `episode-pages-future-card` · `episode-pages-now-not-last` |
 | 25 | **지난 값 · 지난 회차에서 온 구절이 있으면 지난 회차 칸이 있다** — `before` 나 `code:key` 구절이 있는데 `previous` 가 없으면 거부 · 고리의 지난 값 (`before.value`)에 구절 · `previous` 의 판 ≥ 1 이고 이 회차 자신이 아니다 (`ID_RANGE`). **실물 전** | `PREV_MISSING` · `PREV_VALUE_SRC` | D61 ② · D62 ③ · P-E2 ⑦ N-1 · N-2 (UX-6) | `episode-before-no-previous` · `episode-before-value-no-src` |
 | 26 | **지난 회차에서 온 구절의 키는 `<처음 실린 회차의 code>:<키>`** — 앞머리 하나 · 이 회차의 code 가 아니다 (§4.5). **실물 전** | `PREV_KEY` | P-E2 ⑦ N-3 (UX-6) | `episode-quote-key-double-prefix` |
+| 27 | **무게 — 짧은 이야기의 체험이 없는 까닭은 무게 (`short`)다.** 거꾸로 긴 이야기 (Episode)는 체험이 없는 까닭을 무게라고 적을 수 없다. **실물 하나** | `PLAIN_WHY` | D79 ③ · UX-7 ③ 모자람 6 (B-E3) | `episode-short-why-not-weight` |
+| 28 | **짧은 이야기에는 번호 · 시리즈 줄 · 체험 · 장면 넷 밖의 장면 칸이 없다** — 넣으면 모양이 거부한다 (불변식 1 — 칸이 없다). **실물 하나** | `SCHEMA_KEY` | D86 · UX-7 ③ 모자람 1 · 3 · 6 · UX-7 ⑤ 4 (B-E3) | `episode-short-numbered` · `episode-short-eight-scenes` · `episode-short-with-lab` |
+| 29 | **다른 이야기를 가리키기** — 가리킨 도구 (`tools_from.keys`) 하나 이상 · 겹침 없음 · 가리킨 이야기 (`sibling` · `tools_from`)의 판 ≥ 1 · 이 이야기 자신이 아니다. **가리킨 이야기를 받으면**: 곁 이야기가 같은 사건 · 도구가 그 이야기에 있다. **실물 하나** | `REF_TOOL` · `ID_RANGE` · `SIBLING_MISMATCH` | UX-7 ③ 모자람 4 · 5 (B-E3) | 픽스처 없이 (시험 — 받아야 보는 것이 반이다) |
 
-- 알림 (거부가 아니다): `SEAT_WHY_NOT_YET` — 그 쪽은 반쪽이다 (금리 2화에 하나) · `QUOTES_NOT_CHECKED` — 저장된 문서를 받지 못해 8 을 보지 않았다 · `PREVIOUS_NOT_CHECKED` — `previous` 가 있는데 지난 회차를 받지 못해 아래를 보지 않았다
+- **짧은 이야기 (`validateShortStory`)가 보는 것**: 1 · 2 (판만 — 번호가 없다) · 3 · 4 · 8 · 9 · 10 · 11 · 13 · 14 · 27 ~ 29. 그 칸이 없어 안 보는 것: 5 ~ 7 · 12 (긴 이야기 쪽) · 15 ~ 26 (체험 · 넘겨 보기 · 지난 회차)
+- 알림 (거부가 아니다): `SEAT_WHY_NOT_YET` — 그 쪽은 반쪽이다 (금리 2화에 하나) · `QUOTES_NOT_CHECKED` — 저장된 문서를 받지 못해 8 을 보지 않았다 · `PREVIOUS_NOT_CHECKED` — `previous` 가 있는데 지난 회차를 받지 못해 아래를 보지 않았다 ·
+  `SIBLING_NOT_CHECKED` · `TOOLS_FROM_NOT_CHECKED` — 짧은 이야기가 가리킨 긴 이야기를 받지 못해 같은 사건인지 · 도구가 거기 있는지 보지 않았다 (29)
 - **지난 회차를 받으면 (`validateEpisode(ep, { previous })` — 실물 전 · §7.9)**: 받은 회차가 `previous` 의 그 판인가 · 같은 시리즈의 앞 화인가 · `before` 가 붙은 틀이 같은 그림 (kind · `picture.id`)이고 그 고리 · 쪽 id 가 지난 회차에 있나 · 지난 값이 그 회차의 값 그대로인가 · 옮겨 온 구절이 그 회차의 구절 그대로인가 → 아니면 `PREV_MISMATCH`. 문서를 받아야 보는 8 처럼, 지난 회차를 받아야 본다 — 위반 픽스처는 문서만 받으므로 이 코드는 시험이 픽스처 없이 본다
 - `_` 로 시작하는 칸은 픽스처 주석이다. 무시하고, 돌려주는 회차에서는 뺀다 (ARTICLE_PACKAGE §9-10 과 같다)
 - **검증기가 보지 않는 것**: 글의 뜻이 구절에서 나오는가 · §8 의 칸이 참인가 · ConceptRef 가 가리킨 개념 · `event_ref` 의 사건이 있는가 (저장소가 있어야 한다 — 발행 검사) · 그림 부품이 있는가 (코드 — 시안 `check.ts` S1) · `previous` 가 가리키는 회차가 있는가 (저장소 — 발행 검사. 받으면 위처럼 댄다) · 지난 회차에서 왔는데 `:` 없이 적은 구절 (§4.5)
@@ -818,7 +913,11 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | 개념에 붙지 않은 그림 (`picture.tool` 이 없는) · 체험 없는 회차에서 풀이의 도구를 줍는 자리 (UX4-d) | 실물 없음 | 그 회차 |
 | 틀 숫자 만지기 · 가르기 · 고리의 가지 · 자리의 세 쪽 · 켜고 끄기를 잇기 (UX4-i) | 실물 없음 | 그 회차 |
 | 넘겨 보기 — 전 → 후 꼴 (고쳐진 문구) · 다른 틀과 잇기 · 갈래가 둘인 차례 · 칸 수의 위쪽 끝 · 때를 기계가 읽는 칸 (차례 검사) · 칸 사이의 까닭 · 같은 차례에 칸이 더해지는 다음 회차 (다시 쓰기 — 지난 칸과 새 칸을 어떻게 가르나) (§7.8) | 실물이 하나다 (개인정보 1화) | 의결서가 나오는 회차 · 둘째 넘겨 보기 |
-| 기본 풀이 "조용히" · `why` 넷 | 견본뿐이다 — 타입과 불변식 13 은 D61 ④ 에서 왔다 (**실물 없음**) | 그 회차 |
+| 기본 풀이 "조용히" · `why` 넷 (`short` 밖의) | 견본뿐이다 — 타입과 불변식 13 은 D61 ④ 에서 왔다 (**실물 없음**) | 그 회차 |
+| **번호 (B-E3 · §13.3)** — 번호 칸이 없는 긴 이야기 · **첫 이야기가 나중에 "1화"가 되는 일** (발행된 이야기의 판이 오르나 · 화면만 바뀌나 — 짧은 이야기가 첫 이야기일 때도) · 번호 있는 짧은 이야기 · 1화인 긴 이야기의 화면 안쪽 ("1화" · 시리즈 줄 · "다음 화" — UX7-b) | 실물은 번호 없는 짧은 이야기 하나와 1화인 긴 이야기 둘 (칸은 1 · 오늘 화면이 숨김)뿐이다. 같은 시리즈에 둘째가 생긴 실물이 회차로는 없다 | 같은 시리즈의 둘째가 실제로 생길 때 · _open E-20 |
+| **홀로 선 짧은 이야기** (곁 이야기 없음 — S-1 의 짧은 이야기 대부분) — 도구를 어디서 (제 카드 · 다른 이야기 · 개념 라이브러리) · 지도 · 남음 장면의 길 · 짧은 이야기끼리의 곁 이야기 | 실물은 곁 이야기가 있는 하나다 (§13.4) | P-S1 의 첫 짧은 이야기 · _open E-21 |
+| 짧은 이야기의 다른 장면 수 · 조립이 갈리나 · 작은 체험 · 세 칸 / 조용히 (사람이 숨진 사건) · 다른 사건 이야기에서 가져온 도구 · 개념 라이브러리를 바로 가리키기 | 실물 하나 (§13.2 · §13.5 · §13.6) | 그 짧은 이야기 |
+| 덧붙임 (후속 문서 한 줄) · 개념 이야기 (1차 문서 없는 큰 뉴스 → 개념으로) | **실물 없음 — 칸을 만들지 않았다** (§13.7) | 실물 생길 때 |
 | 체험이 있는 회차에 기본 풀이를 같이 내나 | 시안의 견주기 스위치 때문에 실물 둘이 그렇다 (§7.7) | 도윤 (D62 ④) |
 | 큰 글자 · 문서가 말한 것 · 다음 일의 개수 (둘 · 셋 · 셋) | 실물 둘이 같지만 규칙으로 걸 근거가 없다 | — |
 
@@ -845,6 +944,10 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | E-17 | **구절 키의 앞머리가 회차의 code 다** (§4.5) — `previous` 는 UUID + 판인데 키는 code 로 가리킨다. 키를 읽을 수 있게 · 짧게. 그래서 검증기는 지난 회차를 받기 전에는 앞머리가 그 회차인지 못 본다 | code | `EpisodeRef` 에 `code` 도 둔다 (D30 의 ArticleRef 에는 없다) · 또는 앞머리를 UUID 로 (읽기 어렵다) |
 | E-18 | **쪽의 지난 값에 수 (`count`) · 그때의 말 (`said`)을 두지 않았다** — P-E2 의 `carry` 가 `group` · `why` 만 적었다. 화면은 자리 위의 말로 그때의 수를 보인다 (점을 다시 그리지 않는다) | `group` · `why` | `count` 를 더해 지난 화의 자리 그림을 그린다 (3화는 같은 표결이라 수가 같다) |
 | E-19 | **지난 값은 고리 · 쪽에만** — 켜고 끄기 · 넘겨 보기 · 자리의 실제 결과 (`result`) · 머리 (`label`)에는 없다 | 고리 · 쪽 | 그 실물이 나올 때 (§10) |
+| E-20 | **번호 (B-E3)** — 짧은 이야기는 번호 칸이 없고, 긴 이야기는 `number ≥ 1` 그대로다 (화면이 `number ≥ 2` 일 때만 보인다 — §13.3). **첫 이야기가 나중에 "1화"가 되는 일** (판이 오르나 · 화면만 바뀌나) · 번호 칸 없는 긴 이야기는 미확인 | 칸을 바꾸지 않았다 (실제 주소 `/s/<시리즈>/<번호>` · 파이프라인 `prev.number + 1` 그대로) | 긴 이야기의 `number` · `track` 을 고를 수 있게 — 새 시리즈의 첫 긴 이야기가 "1화" 글 · 시리즈 줄 · "다음 화"를 싣지 않게 (실제 주소 · 파이프라인 · 시안이 함께 바뀐다). 둘째가 생길 때 첫 이야기의 판을 올린다 · 또는 카탈로그가 둘째를 보고 화면에서만 "1화"를 단다 |
+| E-21 | **`sibling` · `tools_from` 이 필수다** — 실물이 곁 이야기가 있는 하나라서 (§13.4) | 필수 | `\| null` — 홀로 선 짧은 이야기 (그때 도구 · 지도 · 남음 장면의 길을 함께 · P-S1) |
+| E-22 | **짧은 이야기를 따로 선 타입으로 뒀다** (§13.1) — Episode 를 넓히지 않았다 | `ShortStory` (+ Episode 의 `weight?: "long"`) | Episode 하나에 무게로 가르는 고를 수 있는 칸 (장면 · 번호 · 도구 · 지도) — Episode 를 읽는 코드가 다 바뀐다 |
+| E-23 | **옮기며 고친 셋** (§13.8) — lab 의 `shelf` (Series 의 셋)을 `series` (Series 통째로 — `sub` 는 긴 이야기 골든의 값) · `scenes.cover.weight_label` ("짧은 이야기")을 빼 화면의 글로 · `sibling` · `tools_from` 을 code 가 아니라 EpisodeRef 로 | 그렇게 했다 | lab 그대로 (`shelf` · `weight_label` · code) — E-17 (code 로 가리키기)과 같은 물음 |
 
 ---
 
@@ -876,3 +979,110 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 
 골든: `fixtures/episode-price-1.json` (구절 39 · 문서 6 · 글 94 · 도구 4) · `fixtures/episode-rate-2.json` (구절 41 · 문서 8 · 글 129 — 시안의 126 + 고리의 값 3 · 도구 5).
 시안 (`/lab/episode` · `/lab/episode/fomc`)은 이 골든을 읽어 그린다.
+
+---
+
+## 13. 짧은 이야기 · 번호 없는 이야기 (B-E3 · D79 · D80 · D86 — 실물 하나)
+
+실물: UX-7 의 짧은 이야기 「병원이 털렸다는데, 어디가 털린 걸까」 — 영훈의료재단 (대전선병원 · 유성선병원). 개인정보위 2026-10-28 의결 · 10-29 발표의 병원 쪽이고, 같은 발표의 대교 쪽이 「내 정보는 누가 지키나」 1화 (긴 이야기 · 골든 셋째)다.
+lab 의 꼴 (`apps/web/src/app/lab/today/short/types.ts` 의 「모자람 1 ~ 6」 · `logs/frontend/UX-7.md` ③ 표) · 오늘 화면의 번호 규칙 (`number ≥ 2` 에서 "이어지는 이야기"를 읽음) · 결정 D79 ① ③ (시리즈는 결과 · 무게 둘) · D86 (번호 · 시리즈 줄은 둘째 이야기가 실제로 생겼을 때만 · 긴 0 ~ 2 + 짧은 나머지 · "정할 것은 추천대로" = UX-7 ⑤ 2 ~ 4).
+골든 넷째 `fixtures/episode-short-privacy-yeonghun.json`. 실물이 하나라 이 절의 칸은 전부 **실물 하나**다.
+
+| UX-7 ③ | 모자란 것 | 이 계약 | |
+|---|---|---|---|
+| 모자람 2 | 무게 | `weight` — ShortStory 는 `"short"` (필수) · Episode 는 고를 수 있는 칸 `weight?: "long"` (없으면 긴 이야기) | §13.1 |
+| 모자람 1 | 짧은 조립 (장면 넷) | ShortStory 의 `scenes` = 장면 넷 (`ShortScenes`) · 조립 칸 없음 (차례 고정) | §13.2 |
+| 모자람 3 | 번호 없는 이야기 (선반) | ShortStory 는 `series` (Series 그대로)만 — `number` · `track` · `previous` 칸이 없다 | §13.3 |
+| 모자람 4 | 같은 사건의 곁 이야기 | `sibling: Sibling { episode: EpisodeRef, label, note }` | §13.4 |
+| 모자람 5 | 다른 이야기의 도구 가리키기 | `tools_from: ToolsFrom { episode: EpisodeRef, keys }` — `tools` · `pickup` · `map` 칸이 없다 | §13.5 |
+| 모자람 6 | 체험이 없는 까닭 = 무게 | `NoLabWhy` 에 `"short"` · `solve` = `ShortSolve { entry, plain: PlainFlip }` — 체험 칸이 없다 | §13.6 |
+
+### 13.1 무게 — 모양이 둘이다. `weight` 로 가른다
+
+- **판단: 짧은 이야기는 Episode 의 한 꼴이 아니라 따로 선 타입 (`ShortStory`)이다.**
+  - 실물이 그렇다 — 겹치는 것은 글과 근거 (§4 전부) · 입구 (§7.1) · "뒤집기만" (§7.7)뿐이고 뼈대 (장면 · 번호 · 도구의 자리 · 지도 · 조립)가 다 다르다 (UX-7 ③ "모자란 것은 뼈대다")
+  - Episode 를 넓히면 (장면 · 번호 · 도구 · 지도를 고를 수 있게) 긴 이야기의 불변식 (장면 여덟 · 조립 · 시리즈 줄 · 줍는 자리 · 지도)마다 "짧은 이야기가 아니면"이 붙고, 긴 이야기에서 빠진 칸이 거부되지 않는다
+  - 지금 Episode 를 읽는 코드가 `number` · `track` · `scenes.zero` 를 그대로 읽는다 — 실제 주소 (`/s/<시리즈 code>/<번호>` · `apps/web/src/episode/catalog.tsx`) · 파이프라인 (`episode.ts` 의 `prev.number + 1`) · 시안 · e2e. **Episode 의 칸은 고를 수 있는 칸 `weight?` 하나 말고 바꾸지 않았다** — 골든 셋 0자 · 그 코드 0줄
+- 같이 쓰는 타입 (EpisodeText · EpisodeDoc · EpisodeQuote · VoiceLabels · Series · EpisodeRef · SolveEntry · Flip · PlainFlip · RealItem)은 다시 정의하지 않는다 — 한 타입은 한 곳에
+- **`weight`** — ShortStory 는 `"short"` (필수). Episode 는 `weight?: "long"` — **칸이 없으면 긴 이야기**다 (골든 셋은 칸이 없다). 이야기 하나를 받으면 `weight` 가 `"short"` 면 짧은 이야기, 아니면 긴 이야기다 (`validateStory` · 코드의 `Story = Episode | ShortStory`)
+- `episode_id` · `episode_version` · `code` 는 Episode 와 같은 방식 · 같은 이름 공간 — EpisodeRef 가 어느 쪽이든 가리킬 수 있다 (독자 기록이 회차를 가리키는 모양은 여전히 미확인 — D64). 짧은 이야기도 발행 한 번 = 하나 · 통째로 불변 (§2.3). Event 를 가리키는 것 (`event_ref`)도 같다 — ArticlePackage · Episode 와 형제다 (§2.2)
+- 무게는 사람이 정한다 — 아침 고르기 (D86 · D3 — 스스로 적는 칸 §8). 화면이 무게로 가르는 것: 카드의 꼴 · 장면 수 · 체험. 읽는 시간은 내지 않는다 (D82)
+
+### 13.2 짧은 조립 — 장면 넷
+
+- **표지 `cover` → 어디가 `where` → 문서가 말한 것 `why` → 남음 `keep`** (`ShortSceneId` · 코드 `SHORT_SCENE_IDS`). 차례는 고정이고 장면 넷의 글을 전부 싣는다. **조립 칸이 없다** — 실물은 조립이 하나다 (처음 온 독자 · 따라온 독자가 같은 넷을 본다. 짧은 이야기에서 조립이 갈리는지는 미확인)
+- 장면마다 무엇이 화면이 되나 (시안 `lab/today/short/Short.tsx` — 넘어가는 법 · 글 부품 · 근거 시트 · 지도는 긴 이야기의 것 그대로):
+
+| 장면 | 화면 | 칸 |
+|---|---|---|
+| `cover` 표지 | 시리즈 이름 (선반) · 무게의 이름 ("짧은 이야기" — 화면의 글) · 물음 제목 · 한 줄 · 날 · 곁 이야기와 한 묶음이라는 말 · 물음 | `series.name` · `scenes.cover` |
+| `where` 어디가 | 물음 → 머리 (`solve.plain.title`) · 첫 생각 · 깨는 사실 · 아래 글 · 뒤집기 `A ≠ B` 크게 + 한 문단 · 문서에 없는 것은 없다고 · 물음 | `solve.entry` · `solve.plain` · `scenes.where` |
+| `why` 문서가 말한 것 | 머리 · 이끄는 글 · 문서가 짚은 것 (`real`) · 판정 · 가리킨 도구 (접어서 — §13.5) · 누구의 말 (`solve.entry.whose`) · 물음 | `scenes.why` · `tools_from` · `solve.entry.whose` |
+| `keep` 남음 | 남는 한 줄 · 당부 · 지도 (가리킨 이야기의 것 — §13.5) · 만난 도구 · 곁 이야기로 가는 길 · **다음 화 예고 없음** | `scenes.keep` · `sibling` |
+
+- 긴 이야기의 장면 (따라잡기 · 사건과 끌림 · 도구 줍기 · 견주기 · 이어짐)은 칸이 없다 — 넣으면 거부 (불변식 28). **다른 장면 수 (셋 · 다섯)는 미확인** — 실물이 넷 하나다 (D79 ③ 의 "장면 서넛"은 어림이다)
+- `scenes.cover` 에 무게의 이름이 없다 — lab 은 `weight_label: "짧은 이야기"` 로 실었지만 `weight` 에서 나오는 화면의 글이다 (긴 이야기의 "이거 알아요?" 같은 공통 화면 글 — §0). 화면이 단다 (E-23)
+
+### 13.3 번호 없는 이야기 (선반) · 번호를 언제 붙이나
+
+- **번호 없는 이야기 = 시리즈에 놓이되 번호 · 시리즈 줄이 없다.** ShortStory 의 `series` 는 Episode 의 `series` 와 같은 Series 다 (발행 때의 시리즈 표기를 품는다 — §3.1). `number` · `track` · `previous` 칸이 없다 — 넣으면 거부 (불변식 28).
+  lab 은 `shelf: {series_id, code, name}` 으로 줄여 실었다 — 계약은 Series 하나로 (같은 묶음을 한 모양으로 · `sub` 는 긴 이야기 골든의 그 값이고 짧은 이야기 화면에는 안 보인다 — E-23)
+- **번호를 언제 붙이나 (D86 — "번호 · 시리즈 줄은 둘째 이야기가 실제로 생겼을 때만")**
+  - **짧은 이야기에는 번호가 없다.** 같은 발표의 곁 이야기는 "2화"가 아니다 — 곁 이야기에 번호를 주면 "이어진다"는 뜻이 흐려진다 (UX-7 ⑤ 4 · D86 "추천대로"). 번호는 시간이 흘러 다음 사건 · 다음 문서가 왔을 때의 것이다
+  - **긴 이야기는 칸 그대로 — `number ≥ 1` · `track`.** 화면이 번호를 보이는 것은 `number ≥ 2` 일 때뿐이다 (UX-7 오늘 화면의 규칙 — 실물): 그때만 "N화" · 시리즈 줄 · 지난 이야기 30초. `number` 가 1 이면 주제 이름 (선반)만. **이것은 화면의 규칙이고 검증기는 보지 않는다** — 계약은 칸만 싣는다
+  - 그래서 지금 "번호 없는 이야기"는 두 꼴로 보인다: 짧은 이야기 (칸이 없다) · 1화인 긴 이야기 (칸은 1 · 화면이 숨긴다 — 골든 첫째 · 셋째)
+- **미확인 (실물 없음 — 칸을 만들지 않았다 · _open E-20)**
+  1. **첫 이야기가 나중에 "1화"가 되는 일** — 같은 시리즈에 둘째가 생기면 첫 이야기의 **판이 오르나** (번호 · 시리즈 줄을 단 새 판) · **화면만 바뀌나** (카탈로그가 같은 시리즈의 둘째를 보고 "1화"를 단다). 첫 이야기가 짧은 이야기이고 다음 이야기가 이어지면 그 짧은 이야기가 "1화"가 되나도 같은 물음
+  2. 번호 칸이 없는 긴 이야기 — 새 시리즈의 첫 긴 이야기가 "1화" 글 · 시리즈 줄 · "다음 화"를 싣지 않는 꼴. 지금은 1 을 적고 화면이 숨긴다
+  3. 1화인 긴 이야기의 화면 안쪽 — 표지의 "1화" · 시리즈 줄 · 0화 장면의 머리 · 남음의 "다음 화" 예고 (UX7-b). 골든의 글이라 계약이 아니라 화면 (F-E2)이 정한다
+
+### 13.4 같은 사건의 곁 이야기 — `sibling`
+
+- `Sibling { episode: EpisodeRef, label, note }` — 같은 사건 (`event_ref`)을 다룬 **긴 이야기의 한 판**. 실물: 「내 정보는 누가 지키나」 1화 (`pipc` 1판 · 대교 쪽). `label` · `note` 는 남음 장면의 "곁 이야기로 가는 길" 위에 보이는 글이다 ("같은 발표의 긴 이야기" · "대교 쪽 이야기 · 긴 이야기 · 체험 있음"). 가는 곳의 제목은 그 이야기의 표지에서 읽는다
+- **`previous` (§3.4)와 뜻이 다르다** — `previous` 는 같은 시리즈의 앞 화 (시간이 흐른 다음 사건 · 같은 그림의 지난 값)다. 곁 이야기는 같은 사건 · 같은 때의 다른 쪽이다. 번호도 그림도 이어 받지 않는다
+- lab 은 회차의 `code` 로 가리켰다 — 계약은 EpisodeRef (UUID + 판 · `previous` 와 같은 방식 — D30). 가리킨 도구의 글 (§13.5)이 그 판의 글이어야 짧은 이야기가 통째로 불변이다 (E-23)
+- 검증 (불변식 29): 가리킨 판 ≥ 1 · 이 이야기 자신이 아니다. **가리킨 긴 이야기를 받으면** (`validateShortStory(s, { episodes })`) 같은 사건인가 — 아니면 `SIBLING_MISMATCH`. 안 받으면 알림 `SIBLING_NOT_CHECKED`
+- **긴 이야기 쪽에서 곁 이야기를 가리키는 칸은 없다.** 긴 이야기 골든의 "병원 쪽 이야기는 따로" (이어짐 장면 `coming[2]`)는 글일 뿐이다 (골든 0자). 거꾸로 찾기 (이 긴 이야기의 곁 이야기는?)는 카탈로그의 일이다 — 짧은 이야기의 `sibling` 을 읽는다
+- **필수 칸이다** — 실물은 곁 이야기가 있는 하나다. 곁 이야기가 없는 짧은 이야기 (홀로 선 짧은 이야기)는 미확인 (_open E-21 · §10). 짧은 이야기끼리의 곁 이야기도 미확인
+
+### 13.5 다른 이야기의 도구 — `tools_from`
+
+- `ToolsFrom { episode: EpisodeRef, keys: ToolKey[] }` — 다른 이야기의 Tool 카드를 **가리키기만** 한다. 글을 새로 쓰지 않는다 (같은 개념을 두 번 쓰지 않는다 · 비용 0 · D79 ② "이어짐은 개념이 맡는다"). `keys` 의 차례 = 화면의 차례 (접힌 카드 · 만난 도구)
+- 그래서 짧은 이야기에는 **`tools` · `pickup` · `map` 칸이 없다.** 화면이 하는 일 (시안): 문서가 말한 것 장면에서 가리킨 카드를 **접어서** 보인다 · 그 장면을 지나면 만난 것 (고정 — 지식 상태를 추정하지 않는다) · 지도는 가리킨 이야기의 `map` 에 이 이야기에서 만난 도구만 켠다 · 카드 글의 근거는 가리킨 이야기의 `quotes` 에서 찾는다 (카드의 글 · 구절은 그 이야기의 것이다)
+- 실물에서는 `tools_from.episode` = `sibling.episode` (같은 긴 이야기)다. **둘을 하나로 묶지 않은 까닭**: 도구는 다른 사건의 이야기에서도 올 수 있다 (D79 ② — 과징금은 배달앱 이야기에도 있다). 그런 실물은 없다 — 받기만 한다 (미확인)
+- 검증 (불변식 29): 하나 이상 · 겹침 없음 (`REF_TOOL`) · 가리킨 판 ≥ 1 · 자신이 아니다 (`ID_RANGE`). **가리킨 이야기를 받으면** 그 `tools` 에 key 가 있나 (`REF_TOOL`). 안 받으면 알림 `TOOLS_FROM_NOT_CHECKED`
+- 개념 라이브러리를 바로 가리키는 길 (ConceptRef)은 없다 — 실물은 이야기의 카드를 가리켰다. "같은 개념"을 어떻게 맞추나 (UX7-c — 시안은 이름으로)는 D64 · D65 와 함께 미확인
+
+### 13.6 풀이 — 체험이 없는 까닭 = 무게
+
+- **`ShortSolve { entry, plain: PlainFlip }`** — 입구 (§7.1 그대로 — 첫 생각 · 깨는 사실 · 뒤집기 · 그리지 않을 것 · 누구의 말 · 사망) + 기본 풀이 "뒤집기만" (§7.7). **체험 칸이 없다** — 넣으면 거부 (불변식 28).
+  실물: 첫 생각 "병원이 털렸다 → 진료 기록" → 깨는 사실 "문서가 가리킨 곳은 운영을 보조하는 홈페이지의 회원가입" → `“털리는 곳” ≠ “가장 중요한 시스템”`
+- **`NoLabWhy` 에 `"short"` (무게).** 짧은 이야기에 체험이 없는 까닭은 정치 · 사망 · 자료 없음 · 뒤집기 없음이 아니라 "짧은 이야기라서"다 (UX-7 ③ 모자람 6 — lab 은 `null` 로 두어 `PLAIN_WHY` 하나에 걸렸다). 짧은 이야기의 `plain.why` 는 `"short"` · 긴 이야기의 까닭은 `"short"` 일 수 없다 (불변식 27)
+- 짧은 이야기에도 뒤집기가 있어야 한다 — "뒤집기만"이 뒤집기를 요구한다 (불변식 14). 실물은 "작은 뒤집기 하나"다 (UX-7). 뒤집기 없는 짧은 이야기 (세 칸 · 조용히)는 미확인
+- 기본 풀이의 꼴은 "뒤집기만" 하나다. 그래서 **사람이 숨진 사건은 짧은 이야기로 낼 수 없다** — D61 ④ 는 "조용히"를 요구한다 (`DEATH_NOT_QUIET`). D86 "부고 · 재난 당분간 안 다룬다"와 맞는다 (미확인 — 그 실물이 생길 때)
+- 작은 체험 (UX-7 ⑤ 3 "눌러서 뒤집기 열기 정도")은 실물이 없다 — 칸이 없다
+
+### 13.7 실물이 없는 것 — 칸을 만들지 않았다
+
+| 무엇 | 어디서 나왔나 | 지금 |
+|---|---|---|
+| **덧붙임** — 후속 문서가 나오면 지난 이야기에 한 줄 | D83 ④ · D86 ("후속 → 새 회차 · 덧붙임 · 넘김") | 칸 없음 · 실물이 생길 때 (발행된 이야기는 통째로 불변이라 덧붙임이 새 판인지 따로 선 것인지부터 — §2.3) |
+| **개념 이야기** — 큰 뉴스인데 1차 문서가 없으면 사건이 아니라 개념으로 ("사이드카는 무엇을 멈추나" — 원문은 규정) | D86 | 칸 없음 · 실물이 생길 때 (사건 (`event_ref`)이 없는 이야기 · 원문이 규정인 이야기의 모양) |
+| 첫 이야기가 나중에 "1화"가 되는 판 처리 | D86 | §13.3 · _open E-20 |
+| 홀로 선 짧은 이야기 · 번호 칸 없는 긴 이야기 · 번호 있는 짧은 이야기 · 짧은 이야기의 작은 체험 · 다른 장면 수 | D79 ③ · D84 · UX-7 ⑤ | §10 |
+
+### 13.8 실물 → 이 계약 — 옮겼다 (B-E3 · 2026-11-14)
+
+독자가 읽는 글 · 구절 · 숫자는 한 글자도 바꾸지 않았다 — lab `data.ts` 의 값을 그대로 덤프해 칸의 이름과 자리만 옮겼다 (글 덩이 18 · 구절 18 · 숫자가 든 글 3 이 같다 · `logs/backend/B-E3.md` ③).
+
+| lab (`lab/today/short/types.ts` · `data.ts` @ `867c9da`) | 이 계약 | |
+|---|---|---|
+| `code` · `event_ref` · `docs` · `quotes` · `voice_labels` · `scenes.*` (아래 하나 빼고) | 같다 | + `episode_id` 발급 · `episode_version` 1 |
+| `weight: "short"` | 같다 | Episode 에 고를 수 있는 칸 `weight?: "long"` |
+| `shelf: {series_id, code, name}` | `series: Series` | `sub` 는 긴 이야기 골든의 그 값 (같은 시리즈) |
+| `sibling: {code, label, note}` | `sibling: {episode: EpisodeRef, label, note}` | code `pipc` → 그 판 (UUID + 1) |
+| `tools_from: {episode: code, keys}` | `tools_from: {episode: EpisodeRef, keys}` | |
+| `entry` · `plain` | `solve: {entry, plain}` | `plain.why`: `null` → `"short"` |
+| `scenes.cover.weight_label` ("짧은 이야기") | — | 무게의 이름 — 화면의 글 (E-23) |
+
+골든 넷째 `fixtures/episode-short-privacy-yeonghun.json` (구절 18 · 문서 2 · 글 18 · 숫자가 든 글 3 · 가리킨 도구 3 — 긴 이야기 `pipc` 1판의 `safety` · `fine` · `order`). 시안 `/lab/today/short` 가 이것을 읽어 그린다 (lab 의 꼴 `types.ts` 는 지웠다 — 한 타입은 한 곳에).

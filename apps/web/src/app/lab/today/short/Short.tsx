@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
+import { SHORT_SCENE_IDS, type ShortSceneId } from "@claro/contract";
 import { PIPC } from "../../../../episode/episodes/pipc/data";
 import { CHROME } from "../../../../episode/kit/chrome";
 import { ConceptMap, type NodeState } from "../../../../episode/kit/ConceptMap";
@@ -10,13 +11,13 @@ import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "../../../.
 import { toolOf, type EpisodeData, type T } from "../../../../episode/kit/types";
 import { PaletteDock } from "../palette/PaletteDock";
 import { SHORT as S, SHORT_CHROME as C } from "./data";
-import type { ShortSceneId } from "./types";
 
 // UX-7 — 짧은 이야기 한 편 (시안). 장면 넷: 표지 → 어디가 털렸나 (뒤집기) → 문서가 말한 것 → 남음. 체험이 없다 — 기본 풀이 "뒤집기만"의 부품을 쓴다.
 // 넘어가는 방법 · 글 부품 · 근거 시트 · 지도는 긴 이야기와 같은 것이다 (src/episode/kit — 겉모습도 같은 CSS). 다른 것은 장면의 수와 무게뿐이다.
 // 번호가 없다 ("N화" · 시리즈 줄 · 다음 화 예고 없음) — 주제 이름만. 도구는 긴 이야기의 카드를 글자 그대로 가리킨다. 아무것도 저장하지 않는다.
+// 이야기의 모양은 계약 (ShortStory — docs/contract/EPISODE.md §13 · B-E3)이고 글은 골든 넷째 (fixtures/episode-short-privacy-yeonghun.json)다 — ./data.ts 가 읽는다.
 
-const ORDER: readonly ShortSceneId[] = ["cover", "where", "why", "keep"];
+const ORDER: readonly ShortSceneId[] = SHORT_SCENE_IDS;
 /** 이 이야기의 지도 = 같은 주제 (긴 이야기)의 지도. "어디서 주웠나"의 말만 이 이야기의 것으로 */
 const MAP_EP: EpisodeData = { ...PIPC, map: { ...PIPC.map, where_today: { t: C.where } } };
 const TOOLS = S.tools_from.keys;
@@ -139,20 +140,20 @@ export function Short() {
   const src = useMemo(() => ({ on: srcOn, open: setSrcItem }), [srcOn]);
   const head = step > 0 ? asked[step - 1] : undefined;
   const c = S.scenes;
-  const flip = S.entry.flip!;
+  const flip = S.solve.entry.flip!;
 
   const body: Record<ShortSceneId, () => ReactNode> = {
     cover: () => (
       <>
         <motion.div className="ep-series" variants={rise}>
           <span>주제</span>
-          <strong>{S.shelf.name}</strong>
+          <strong>{S.series.name}</strong>
         </motion.div>
         <motion.div className="ep-cover-art st-art" variants={rise}>
           <ShortArt />
         </motion.div>
         <motion.p className="ep-episode-no" variants={rise}>
-          {c.cover.weight_label}
+          {C.weightLabel}
         </motion.p>
         <motion.h1 className="ep-title ep-title-cover" variants={rise}>
           <Rich text={c.cover.title} />
@@ -169,8 +170,8 @@ export function Short() {
     ),
     where: () => (
       <>
-        <Head asked={head} kicker={c.where.kicker} title={S.plain.title} />
-        <PlainFlipLead entry={S.entry} />
+        <Head asked={head} kicker={c.where.kicker} title={S.solve.plain.title} />
+        <PlainFlipLead entry={S.solve.entry} />
         {c.where.body.map((b) => (
           <P key={b.t} item={b} />
         ))}
@@ -218,7 +219,7 @@ export function Short() {
           ))}
         </div>
         <motion.p className="ep-caveat" variants={rise}>
-          <Txt item={S.entry.whose} />
+          <Txt item={S.solve.entry.whose} />
         </motion.p>
         <Ask text={c.why.ask} onAsk={() => onAsk(c.why.ask)} />
       </>
@@ -298,7 +299,7 @@ export function Short() {
             <p className="ep-bar-title">
               <span>{C.barKind}</span>
               <span aria-hidden="true"> · </span>
-              <span>{S.shelf.name}</span>
+              <span>{S.series.name}</span>
             </p>
             <button type="button" className="ep-bar-src" aria-pressed={srcOn} onClick={() => setSrcOn((v) => !v)} data-testid="src-toggle">
               {CHROME.chrome.src}

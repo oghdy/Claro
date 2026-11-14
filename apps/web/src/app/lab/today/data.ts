@@ -1,10 +1,11 @@
 // UX-7 — "오늘"에 놓이는 이야기 (시안 · lab 전용). 긴 이야기 셋은 실제 주소에 나가 있는 골든 그대로 (글은 한 글자도 여기 없다 — 회차 데이터에서 읽는다),
-// 짧은 이야기 하나는 ./short (lab 전용 견본), 마지막은 자리만 있는 칸이다 (글 없음 — 뉴스를 지어내지 않는다).
+// 짧은 이야기 하나는 ./short (골든 넷째 — 계약의 ShortStory · B-E3), 마지막은 자리만 있는 칸이다 (글 없음 — 뉴스를 지어내지 않는다).
 // 손으로 정한 것은 **차례 하나뿐**이다. 나머지는 데이터에서 나온다:
 //   이어지는 이야기인가   계약의 Episode.number ≥ 2 (둘째 이야기가 실제로 있다) — "N화" · 시리즈 줄 · 지난 이야기는 이때만 보인다 (D79 ①)
 //   체험이 있는가         계약의 solve.lab 이 있나
 //   읽는 시간은 내지 않는다 (D82 · UX-7b — 어림 함수도 뺐다)
 import type { ComponentType } from "react";
+import type { ShortStory } from "@claro/contract";
 import { CoverArt as DeliveryArt } from "../../../episode/episodes/delivery/Art";
 import { DELIVERY } from "../../../episode/episodes/delivery/data";
 import { CoverArt as FomcArt } from "../../../episode/episodes/fomc/Art";
@@ -13,7 +14,6 @@ import { CoverArt as PipcArt } from "../../../episode/episodes/pipc/Art";
 import { PIPC } from "../../../episode/episodes/pipc/data";
 import type { EpisodeData } from "../../../episode/kit/types";
 import { SHORT } from "./short/data";
-import type { ShortStory } from "./short/types";
 
 export type TodayItem = { kind: "long"; ep: EpisodeData; Art: ComponentType } | { kind: "short"; story: ShortStory; path: string } | { kind: "empty" };
 
