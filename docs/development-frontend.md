@@ -23,6 +23,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **UX-6** | **3화를 받을 자리 (D75)** — EPISODE.md 칸 셋 (지난 값 · 지난 회차 · 지난 회차 구절 키 — 실물 전 · 고를 수 있는 칸) · 지난 값 화면 · 체험을 마치기 전 답 감추기 (D74 f) · `/lab/episode/rate-3` 자리 · 서브에이전트 Opus | ☑ 2026-11-12 · 검수 대기(PM) — 계약 `Episode.previous?: EpisodeRef` (§3.4) · 구절 키 `<code>:<key>` (§4.5 · 앞머리 하나) · 고리 · 쪽의 `before?` (`ChainBefore` · `SeatBefore` — §7.9) · 불변식 25 · 26 (`PREV_MISSING` · `PREV_VALUE_SRC` · `PREV_KEY`) · 지난 회차를 받으면 대 보기 (`PREV_MISMATCH`) · 위반 3 · 골든 0자 · contract 121 · 고리 · 쪽에 "지난 화" 한 줄 (그림을 본 독자 = 처음부터 · 처음 보는 독자 = 밟은 · 앉은 뒤) · `not-yet → in-doc` 초록 줄 · 견본 `/lab/episode/carry` (실제 아님) · 체험 아래 전부를 마치기 전에는 접음 (`그냥 열어 보기`) · `/lab/episode/rate-3` (요청마다 읽음 · 없으면 "회의록을 기다리는 중이에요 · 11/18 무렵") · 로그 `logs/frontend/UX-6.md` (⑤ 회의록 날 세션이 맞출 것 다섯 · _open UX6-a ~ i) · 그림 23 `logs/frontend/UX-6/` |
 | **F-E1** | **실제 주소를 회차 형식으로 (D76)** — 첫 화면 (시리즈 셋 · 오늘의 회차) · 회차 셋 실제 주소 · kit 한 벌 · 종이 톤 토큰 · 옛 B5 는 다른 주소로 · 시안 띠 · lab 스위치 · 파이프라인 시험판 뺌 · push = 배포 (검사 뒤 한 번) · 서브에이전트 Fable | ☑ 2026-11-12 · 검수 대기(PM) — 첫 화면 `/` (종이 톤 · Claro 두 줄 · 오늘의 회차 = 배달앱 1화 · 시리즈 셋과 시리즈 줄 · "미리보기" 꼬리표) · 회차 `/s/price/1` · `/s/rate/2` · `/s/privacy/1` (계약의 `series.code` · `number` · 정적 · DB 안 읽음) · 부품 한 벌 `apps/web/src/episode/` (시안은 같은 부품 + 띠 · 스위치 — `real` 하나로 가른다) · 실제 화면 = 처음 온 독자 · 근거 단추는 위쪽 줄 · 다른 시리즈 길은 실제 주소 · 남음 장면의 "접어 둘게요" 대신 "아직 저장되지 않아요" · 토큰 `paper` → `--p-*` (`--ep-*` 는 그것을 가리킨다 · D26 다크는 옛 화면의 것으로 남김) · 옛 B5 = `/archive/fomc-2026-09` (0자 · `/?r=` 는 그리로 307) · OG 제목 · 설명 · robots 그대로 · 3화 = 게이트 뒤 `catalog.tsx` 한 줄 (안) · web e2e 62 (새 6) · contract 121 · 골든 0자 · `logs/frontend/F-E1.md` · _open F-E1-a ~ j |
 | **UX-7** | **오늘 3 ~ 5편 · 시리즈는 결과 · 색 시안 (D79)** — `/lab/today` 첫 화면 시안 (긴 이야기 · 짧은 이야기 · 이어지는 이야기가 섞인 "오늘") · 번호는 둘째 이야기가 생길 때만 · 짧은 이야기 견본 하나 (영훈의료재단 · E3-1 소스 팩) · 색 시안 셋 + 지금 베이지 (같은 화면에서 바꿔 보기) · 실제 주소 · 계약 그대로 · 서브에이전트 Fable | ☑ 2026-11-14 — `/lab/today` (긴 이야기 셋 · 짧은 이야기 하나 · 자리만 칸 · 번호는 `Episode.number ≥ 2` 인 금리에만 · 지난 이야기 30초 · 개념으로 이어짐) · 짧은 이야기 `/lab/today/short` (영훈의료재단 · 장면 넷 · 구절 18 전부 git 문서 · 계약에 모자란 칸 여섯 = D80 실물) · 색 넷 스위치 (종이 = 지금 · 신문 · 안개 · 밤 — 셋 다 AA · lab 전용 덮는 규칙 · 실제 주소 · 토큰 · `src/episode` 0줄) · web e2e 67 (새 5) · `logs/frontend/UX-7.md` · PM 검수 끝 (D81) · 도윤 고를 차례 |
+| **UX-7b** | **따뜻하고 부드러운 색 셋 다시 (D82 · D83)** — 미색 한지 + 청록 · 쑥 종이 + 남색 · 따뜻한 회색 + 남색 + 형광펜 · 같은 스위치 (종이와 나란히) · 눈 피로 기준 · 카드의 읽는 시간 뺌 (D82) · lab 만 · 서브에이전트 Fable | ☐ 도는 중 (2026-11-14) |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -747,5 +748,46 @@ PM 안 (D79 — 시안으로 도윤에게 보이고 도윤이 정한다):
 - 검사: `pnpm -s typecheck` · `pnpm -s test` (logs/frontend/F-2b 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `pnpm --filter @claro/contract test` · 시안 `check.ts` (짧은 이야기 구절 포함) · `next build` · **실제 주소 화면이 그대로인지** (F-E1 e2e). **결과를 로그에 붙인다**
 - docs/development-frontend.md 의 UX-7 줄 (☐ 도는 중 → ☑) · 커밋 접두사 `UX-7` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`) · push 뒤 배포를 기다려 `https://claro-lime-one.vercel.app/lab/today` 200 확인. stash · autostash · reset --hard · `git add -A` 금지 · `next dev` 가 만든 `apps/web/AGENTS.md` · `CLAUDE.md` 는 지운다 · **끝날 때 띄운 서버는 모두 끈다** (도윤은 실제 주소로 본다)
 - **나(PM)에게**: 20줄 안쪽 — 커밋 · 주소 · 오늘 설계 한 줄 · 짧은 이야기 한 줄 · 색 셋 이름 · 도윤에게 물을 것 · _open
+```
+
+## UX-7b · 따뜻하고 부드러운 색 셋 다시
+
+도윤 (D82 · D83): 종이 버전이 따뜻해서 눈이 안 피곤하다 · 부드러운 느낌이 좋다 · 글을 읽히는 서비스라 이 디테일이 엄청 중요 — 그런데 지금 종이는 너무 Claude 같다. "조금 따뜻하고 부드러운 질감으로 사람들이 받아들일 수 있는 다른 디자인". 읽는 시간은 카드에 내지 않는다.
+
+### 서브에이전트 지시 (Fable)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 프론트 레인. Step UX-7b (따뜻하고 부드러운 색 셋 다시)를 맡는다. PM(나)이 검수하고 도윤에게 보인다. 도윤은 폰으로 본다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **다른 세션 (S-1 · 파이프라인 레인 · `logs/pipeline/S-1*` · `docs/development-pipeline.md`)이 같은 때 돈다.** 그 파일들은 건드리지 마라.
+**main 에 push 하면 Vercel 이 바로 배포한다** — 검사가 다 통과한 뒤 한 번 push · 배포 뒤 실제 주소 확인. 실제 주소 (`/` · `/s/*`)는 바꾸지 않는다 — lab 만.
+
+## 왜
+UX-7 (D81) 의 색 셋 (신문 · 안개 · 밤)을 보고 도윤이 **종이를 골랐다** (D82): 따뜻해서 눈이 덜 피곤하다 · 부드럽다. 하지만 종이는 Claude 결이다 — **채도 있는 크림 바탕 + 테라코타 · 주황 강조** (지금 종이: 바탕 색상 39° 채도 44% · 강조 색상 14°). 원하는 것: **따뜻함 · 부드러움 · 읽기 편함은 그대로, Claude 로 보이지 않게.** 방향 (D83): 바탕의 따뜻함은 살리되 노란 기운을 빼고, 강조를 주황 밖으로.
+
+## 만들 것
+1. **색 셋 — UX-7 의 같은 스위치에 더한다** (`apps/web/src/app/lab/today/palette/`). 스위치에는 **종이 (지금) + 새 셋**이 보이게 (신문 · 안개 · 밤은 스위치에서 빼되 `?c=` 로는 열리게 두어도 된다 — 네 판단). 후보 (네가 더 좋게 · 까닭):
+   - **미색 (한지)** — 노란 기운을 뺀 미색 종이 · 먹색 글 · 차분한 청록 강조
+   - **쑥** — 아주 연한 세이지 · 올리브 기운 종이 (오래된 책) · 남색 강조
+   - **형광펜** — 따뜻한 회색 바탕 · 남색 · **"아!" 순간 (뒤집기 `≠` · 오늘의 한 줄 · ★ · 새로 주운 도구 같은 곳)을 형광펜 밑줄로**. 형광펜이 Claro 의 표시가 될 수 있는지 보이는 게 목적 — 어디에 칠하고 어디엔 안 칠하나 (남발하면 형광펜이 아니다)
+   - 셋 다: **따뜻하고 부드럽다** · Claude 결 아님 (채도 있는 크림 · 베이지 바탕 + 테라코타 · 코랄 · 주황 강조 금지) · **눈 피로** — 본문 대비를 최대로 하지 않는다 (새하얀 바탕 + 새까만 글 피함 · 본문 대비 범위를 네가 정하고 까닭) · 바탕 채도 낮게 · 모든 짝 AA 이상 (재서 적는다) · 종이 질감 (아주 옅은 결 · 그림자)을 써도 된다 — 글 읽기를 방해하지 않을 만큼만
+   - `check.ts` T7 은 "따뜻한 밝은 바탕"을 막는다 — 이번 셋은 따뜻해야 하니 **규칙을 Claude 결 기준 (바탕 채도 + 강조 색상)으로 고친다** (까닭 · 경계값을 로그에)
+2. **카드의 읽는 시간 빼기 (D82)** — `/lab/today` 카드 · 짧은 이야기에서 "약 N분" 을 뺀다. 무게 (긴 이야기 · 짧은 이야기) · 체험 있음은 그대로
+3. **같은 화면들에서 보이기** — 오늘 · 짧은 이야기 · 회차 화면 (개인정보 넘겨 보기 · 금리 자리 · 배달앱 켜고 끄기 — UX-7 에서 색별로 못 본 체험 셋도 이번에는 본다)
+
+## 하지 말 것
+- 실제 주소 · `apps/web/src/episode/` 의 실제 화면 동작 · `packages/tokens` 의 `paper` 값 (도윤이 고른 뒤 실제 화면 Step 에서)
+- 계약 · 골든 · fixtures · packages/pipeline · packages/db · 회차 · 짧은 이야기 글 · `docs/development-pipeline.md` · `logs/pipeline/*`
+- 모델 API 호출 · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D58 · D79 · D81 · **D82 · D83**
+- logs/frontend/UX-7.md (④ 색 · ⑥ _open e · m) · logs/frontend/UX-1.md ③ · `apps/web/src/app/lab/today/` 전부
+
+## 끝낼 때
+- 로그 `logs/frontend/UX-7b.md` — ① 폰에서 여는 법 ② 색 셋 (이름 · 값 · 대비 숫자 · 본문 대비 범위 · 까닭 · Claude 결과 어떻게 다른가) ③ 형광펜을 어디에 · 왜 ④ T7 규칙 고친 것 ⑤ 도윤에게 물을 것 (추천과 함께) ⑥ _open. "작업 세션 모델: Fable 5.2"
+- 스크린샷 390×844 — 나란히 (종이 + 새 셋) 오늘 · 짧은 이야기 · 체험 셋 · 지도 → `logs/frontend/UX-7b/` (`sheet-*.png`)
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (F-2b 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `pnpm --filter @claro/contract test` · 두 `check.ts` · `next build` · 실제 주소 화면이 그대로인지. **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 UX-7b 줄 (☑) · 커밋 접두사 `UX-7b` · 파일 지정 (`git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`) · 배포 뒤 `https://claro-lime-one.vercel.app/lab/today` 확인. stash · autostash · reset --hard · `git add -A` 금지 · `next dev` 가 만든 `apps/web/AGENTS.md` · `CLAUDE.md` 는 지운다 · 끝날 때 띄운 서버는 모두 끈다
+- **나(PM)에게**: 15줄 안쪽 — 커밋 · 색 셋 이름 한 줄씩 · 형광펜 · 도윤에게 물을 것 · _open
 ```
 
