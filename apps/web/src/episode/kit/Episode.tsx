@@ -39,6 +39,12 @@ export interface EpisodeParts {
   numbered?: boolean;
   /** 시안 전용 — 처음 열 장면 · 풀이 스위치 (견본 주소가 바로 그 화면을 열려고 — UX-6). 없으면 표지 · 체험 */
   start?: { scene?: SceneId; solve?: SolveMode };
+  /**
+   * 시안 전용 (UX-9 · /lab/play/*) — 풀이 장면의 **체험 자리만** 다른 부품으로 바꿔 끼운다 (앞뒤 장면 · 답 감추기 · 아래의 답은 그대로).
+   * 실제 화면 (/s/*) · 회차 시안 (/lab/episode/*)은 이것을 주지 않는다 — 안 주면 아무것도 달라지지 않는다 (틀 부품 LabCard 가 선다).
+   * Card 는 체험을 마쳤을 때 onDone 을 부른다. title · setup 은 머리 · 준비 글을 바꿀 때만 (없으면 회차의 것)
+   */
+  play?: { Card: ComponentType<{ onDone: () => void }>; title?: string; setup?: readonly T[] };
 }
 
 /**
@@ -324,7 +330,7 @@ function LabGate({ onOpen }: { onOpen: () => void }) {
 //   체험을 마치면 (틀 부품의 onDone) 또는 "그냥 열어 보기"를 누르면 열리고, 한 번 열리면 다시 접지 않는다 ("처음으로"를 눌러도).
 //   이 그림을 본 독자 · 체험 없이 보기에서는 처음부터 열려 있다 (그 독자에게는 감출 답이 없다 — 다시 쓰기 · 기본 풀이).
 function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
-  const { ep } = useEp();
+  const { ep, play } = useEp();
   const c = ep.scenes.aha;
   const { entry, lab, plain } = ep.solve;
   // 체험이 없는 회차는 늘 기본 풀이다. 체험이 있는 회차는 시안 스위치로만 기본 풀이를 본다
@@ -401,14 +407,14 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
     );
   }
   if (!lab) return null;
+  // 시안 전용 (UX-9) — 바꿔 끼운 체험. 그림을 본 독자에게는 끼우지 않는다 (다시 쓰기는 틀 부품의 것 그대로)
+  const swap = !seen && play ? play : null;
 
   return (
     <>
-      <Head asked={asked} kicker={c.kicker} title={seen && lab.seen_title ? lab.seen_title : lab.title} />
-      {seen ? null : lab.setup.map((s) => <P key={s.t} item={s} />)}
-      <motion.div variants={rise}>
-        <LabCard frames={lab.frames} seen={seen} onDone={onDone} />
-      </motion.div>
+      <Head asked={asked} kicker={c.kicker} title={seen && lab.seen_title ? lab.seen_title : (swap?.title ?? lab.title)} />
+      {seen ? null : (swap?.setup ?? lab.setup).map((s) => <P key={s.t} item={s} />)}
+      <motion.div variants={rise}>{swap ? <swap.Card onDone={onDone} /> : <LabCard frames={lab.frames} seen={seen} onDone={onDone} />}</motion.div>
       {open ? (
         <>
           {born ? (

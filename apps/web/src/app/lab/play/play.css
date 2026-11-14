@@ -1,0 +1,460 @@
+/* UX-9 — 진짜 체험 시안 (/lab/play/*)의 겉모습. lab 전용 — 실제 화면은 이 파일을 읽지 않는다.
+   색 · 틀은 episode.css 의 --ep-* · 틀 부품의 .ep-lab · .ep-app-* · .fr-seat · .fr-pg-* 을 그대로 쓰고, 새 체험이 더한 것만 여기 있다. */
+
+/* ── 들머리 */
+html:has(.pl-index),
+html:has(.pl-index) body {
+  background: var(--p-paper);
+}
+.pl-index {
+  max-width: var(--p-column);
+  margin: 0 auto;
+  padding: 56px var(--p-page-x) 60px;
+  color: var(--p-ink);
+  font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  word-break: keep-all;
+}
+.pl-index h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.pl-index > p {
+  margin: 0 0 22px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--p-ink2);
+}
+.pl-index ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.pl-index li {
+  padding: 16px 16px 12px;
+  border-radius: 20px;
+  background: var(--p-card);
+  box-shadow: inset 0 0 0 1px var(--p-rule);
+}
+.pl-index a {
+  color: inherit;
+}
+.pl-index-main {
+  display: grid;
+  gap: 4px;
+  text-decoration: none;
+}
+.pl-index-main span {
+  font-size: 12.5px;
+  font-weight: 750;
+  color: var(--p-accent-ink);
+}
+.pl-index-main strong {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+.pl-index-main em {
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--p-ink2);
+}
+.pl-index li div {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--p-rule);
+  font-size: 13.5px;
+  font-weight: 650;
+}
+.pl-index li div a {
+  color: var(--p-accent-ink);
+  text-underline-offset: 3px;
+}
+
+/* ── 같이 쓰는 것: 내 것과 견준 칸 · 채점하지 않는다는 줄 · 처음 고른 것 */
+.pl-mine {
+  margin: 14px 0 0;
+  padding: 13px 14px 14px;
+  border-radius: 16px;
+  background: var(--ep-accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--ep-accent);
+}
+.pl-mine h3 {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--ep-accent-ink);
+}
+.pl-mine p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.66;
+  color: var(--ep-ink);
+}
+.pl-mine p + p {
+  margin-top: 6px;
+}
+.pl-mine .pl-chip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-bottom: 8px;
+  font-size: 13.5px;
+  font-weight: 650;
+  line-height: 1.4;
+  color: var(--ep-ink2);
+}
+.pl-chip b {
+  padding: 4px 9px;
+  border-radius: 9px;
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+  font-size: 13px;
+  font-weight: 800;
+}
+.pl-nograde {
+  margin: 10px 2px 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ep-muted);
+}
+.pl-first {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 10px 2px 0;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.4;
+  color: var(--ep-ink2);
+}
+.pl-first b {
+  padding: 3px 8px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1.5px var(--ep-rule);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ep-muted);
+}
+
+/* ── 배달앱 — 값표를 내가 끈다 */
+.pl-price .pl-rail {
+  height: 102px;
+}
+.pl-price .pl-rail[data-drag] {
+  border-color: var(--ep-muted);
+}
+.ep-root .pl-tag {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pl-price[data-stage="sold"] .pl-tag {
+  cursor: default;
+}
+.pl-tag svg {
+  opacity: 0.7;
+}
+/* 눈금 — 수가 없다 */
+.pl-notch {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  height: 0;
+  border-top: 1.5px dotted var(--ep-rule);
+}
+.pl-notch[data-on] {
+  border-top-color: var(--ep-moss);
+}
+.pl-ghost {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 9px;
+  border-radius: 14px;
+  border: 1.5px dashed var(--ep-moss);
+  color: var(--ep-moss);
+  font-size: 11.5px;
+  font-weight: 750;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.pl-steps {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--ep-muted);
+}
+.ep-root .pl-steps button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 36px;
+  border-radius: 11px;
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.ep-root .pl-steps button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.pl-price .ep-lab-caption {
+  min-height: 6.6em;
+}
+.pl-after {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-top: 4px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ep-muted);
+}
+
+/* ── 금리 — 먼저 표를 던진다 */
+.ep-root .pl-goon {
+  margin: -14px 0 22px;
+  background: var(--ep-card);
+}
+.pl-rate {
+  scroll-margin: 12px;
+}
+.pl-tab {
+  margin: 0 2px 2px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+  color: var(--ep-accent-ink);
+}
+.pl-rate .pl-before {
+  min-height: 0;
+}
+/* 표 — 종이 한 장 */
+.pl-slip {
+  margin-top: 12px;
+  padding: 13px 13px 14px;
+  border-radius: 6px 6px 16px 16px;
+  background: var(--ep-paper);
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+  border-top: 5px solid var(--ep-ink);
+}
+.pl-slip h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+  color: var(--ep-ink2);
+}
+.pl-slip h3 b {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ep-ink);
+}
+.pl-votes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+.ep-root .pl-votes button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 74px;
+  padding: 8px 4px;
+  border-radius: 13px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1.5px var(--ep-rule);
+  font-size: 14.5px;
+  font-weight: 750;
+  line-height: 1.3;
+  text-align: center;
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+/* 도장 자리 */
+.pl-votes i {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px var(--ep-muted);
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.ep-root .pl-votes button[aria-checked="true"] {
+  box-shadow: inset 0 0 0 2px var(--ep-ink);
+}
+.pl-votes button[aria-checked="true"] i {
+  background: var(--ep-accent);
+  box-shadow: inset 0 0 0 4px var(--ep-card), 0 0 0 2px var(--ep-accent);
+  transform: scale(1.08);
+}
+.pl-why {
+  display: grid;
+  gap: 7px;
+  margin-top: 12px;
+}
+.pl-why p {
+  margin: 0 2px;
+  font-size: 13px;
+  font-weight: 750;
+  color: var(--ep-muted);
+}
+.ep-root .pl-why button {
+  min-height: 44px;
+  padding: 9px 13px;
+  border-radius: 12px;
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 1.5px var(--ep-rule);
+  font-size: 14.5px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.ep-root .pl-why button[aria-pressed="true"] {
+  background: var(--ep-ink);
+  color: var(--ep-paper);
+  box-shadow: none;
+}
+.pl-rate .ep-lab-act:disabled {
+  font-size: 14px !important;
+}
+.pl-alone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 10px;
+  padding: 9px 12px;
+  border-radius: 14px;
+  border: 1.5px dashed var(--ep-accent);
+  font-size: 12.5px;
+  font-weight: 750;
+  color: var(--ep-accent-ink);
+}
+.pl-rate .pl-said {
+  min-height: 0;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1.5px dashed var(--ep-rule);
+}
+.pl-said[data-hint] {
+  color: var(--ep-muted);
+  font-size: 14px;
+}
+.pl-rate .ep-lab-nextrule {
+  margin-top: 12px;
+}
+
+/* ── 개인정보 — 먼저 핀을 꽂는다 */
+.pl-ask {
+  margin: 0 4px 10px;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+.pl-privacy .fr-pg-list li[data-face] .fr-pg-card {
+  background: var(--ep-paper);
+  box-shadow: inset 0 0 0 1.5px var(--ep-rule);
+}
+.pl-privacy[data-phase="pin"] .fr-pg-list li[data-face] .fr-pg-card {
+  box-shadow: inset 0 0 0 1.5px var(--ep-ink);
+}
+.pl-privacy .fr-pg-list li[data-face][data-mine] .fr-pg-card {
+  background: var(--ep-card);
+  box-shadow: inset 0 0 0 2.5px var(--ep-moss);
+}
+.pl-privacy[data-phase="turn"] .fr-pg-list li[data-face]:not([data-mine]) {
+  opacity: 0.55;
+}
+.ep-root .pl-face {
+  min-height: 46px;
+}
+.ep-root .pl-face:disabled {
+  cursor: default;
+}
+.pl-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+  padding: 4px 8px 4px 6px;
+  border-radius: 9px;
+  background: var(--ep-moss);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+.pl-star {
+  padding: 4px 7px;
+  border-radius: 7px;
+  background: var(--ep-accent);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+.fr-pg-head em + .pl-pin,
+.fr-pg-head .pl-star + .pl-pin {
+  margin-left: 0;
+}
+.pl-privacy .fr-pg-list li[data-mine]:not([data-face]) .fr-pg-card {
+  outline: 2.5px solid var(--ep-moss);
+  outline-offset: -1px;
+}
+.ep-root .pl-privacy button.pl-back {
+  width: 100%;
+  margin: 4px 0 6px;
+  box-shadow: none;
+}
+.pl-back-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.pl-privacy .fr-pg-list li[data-next] .fr-pg-dot {
+  margin-top: 22px;
+}
+.pl-privacy .ep-lab-caption {
+  margin-left: 4px;
+}
+.pl-privacy[data-phase="done"] .ep-lab-caption {
+  margin: 12px 4px 0;
+}
+.pl-privacy .ep-lab-nextrule {
+  margin-top: 12px;
+}
+
+/* 색 시안이 켜졌을 때 — 흰 글자를 색 시안의 것으로 (lab/today/palette/overrides.css 와 같은 일) */
+html[data-palette] .pl-pin,
+html[data-palette] .pl-star {
+  color: var(--ep-on-accent);
+}
