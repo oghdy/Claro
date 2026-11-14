@@ -277,3 +277,21 @@ $ next build (CLARO_DIST=.next-ux7)
 | `lab/today/check.ts` · `shots.ts` | 검사 (T1 ~ T8) · 스크린샷 |
 | `apps/web/src/app/lab/episode/layout.tsx` | 회차 시안 화면에 색 시안을 거는 자리 (곧장 열면 예전 그대로) |
 | `apps/web/e2e/today.spec.ts` | e2e 5 |
+
+## 배포 확인 — push 뒤 실제 주소 (`a67bfb6` · 2026-11-14)
+
+```
+https://claro-lime-one.vercel.app — push 뒤 다섯 번째 물음 (50초쯤)에 200
+/lab/today 200 · /lab/today/short 200 · /lab/today/map 200 · /lab/today?c=mist 200 · /lab/episode/pipc 200
+/ 200 · /s/price/1 200 · /s/rate/2 200 · /s/privacy/1 200 · /archive/fomc-2026-09 200
+/lab/today 의 HTML 에 "오늘의 이야기" · "지난 이야기 30초" · "견본 자리 — 글 없음" · "병원이 털렸다는데, 어디가 털린 걸까" 있음
+실제 주소의 HTML 에 색 시안의 것 (data-palette · claro-lab · pd-host): / 0 · /s/privacy/1 0
+
+폰 크기 브라우저로 실제 주소를 열어 (Chrome 390×844)
+today bg rgb(244, 238, 227)                → 안개를 누르면 rgb(230, 236, 241)
+/lab/episode/pipc (같은 탭) bg rgb(230, 236, 241) · 색 스위치 1      ← 고른 색이 회차 시안으로 이어진다
+/ (같은 탭) bg rgb(244, 238, 227) · 색 스위치 0                      ← 실제 주소는 종이 톤 그대로
+/s/privacy/1 (같은 탭) bg rgb(244, 238, 227) · 색 스위치 0
+```
+그림 (실제 주소에서 찍음): `logs/frontend/UX-7/live-today-mist.png` · `live-short-mist-where.png`.
+띄운 서버 (로컬 3210 · 테스트 3101)는 모두 껐다. 로컬 빌드 폴더 (`.next-ux7` · `.data/ux7`)는 지웠다. `apps/web/AGENTS.md` · `CLAUDE.md` 는 생기지 않았다 (`next dev` 를 쓰지 않았다).
