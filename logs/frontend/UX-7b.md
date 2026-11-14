@@ -260,3 +260,27 @@ $ git diff --stat -- apps/web/src/episode packages docs/contract fixtures     �
 | `lab/today/shots-7b.ts` (새 파일) | 스크린샷 · 나란히 그림 20 |
 | `apps/web/e2e/today.spec.ts` | 색 스위치 (새 셋 · 형광펜이 Claro 글자에만) · 견본 색은 `?c=` 로만 (새 1) · 읽는 시간이 없다 |
 `overrides.css` (만든 파일)는 0줄 변경 — `src/episode` 의 CSS 가 그대로라서다 (T8).
+
+---
+
+## 배포 확인 — push 뒤 실제 주소 (`c8f967c` · 2026-11-14)
+
+```
+https://claro-lime-one.vercel.app — push 뒤 다섯 번째 물음 (50초쯤)에 새 스위치가 실림
+/lab/today 200 · /lab/today?c=hanji 200 · /lab/today/short 200 · /lab/today/map 200 · /lab/episode/pipc 200
+/ 200 · /s/price/1 200 · /s/rate/2 200 · /s/privacy/1 200
+/lab/today 의 HTML: "미색" · "쑥" · "형광펜" 있음 · palette-news 0 (스위치에서 빠짐) · "체험 있음" 있음 · "약 N분" 0
+실제 주소의 HTML 에 색 시안의 것 (data-palette · claro-lab · pd-host): / 0 · /s/privacy/1 0
+
+폰 크기 브라우저로 실제 주소를 열어 (Chrome 390×844)
+today bg rgb(244, 238, 227) · 스위치 칸 4
+→ hanji rgb(241, 238, 232)
+→ ssuk rgb(233, 236, 226)
+→ marker rgb(236, 234, 230)
+형광펜: Claro 글자 linear-gradient · 제목 none
+/lab/today/short (같은 탭) bg rgb(236, 234, 230) · 뒤집기의 뒤쪽 말 linear-gradient      ← 고른 색 · 형광펜이 이어진다
+/ (같은 탭) bg rgb(244, 238, 227) · 색 스위치 0                                          ← 실제 주소는 종이 톤 그대로
+/s/privacy/1 (같은 탭) bg rgb(244, 238, 227) · 색 스위치 0
+```
+그림 (실제 주소에서 찍음): `logs/frontend/UX-7b/live-today-hanji.png` · `live-today-marker.png` · `live-short-marker-flip.png`.
+띄운 서버 (로컬 3210 · 테스트 3101)는 모두 껐다. 로컬 빌드 폴더 (`.next-ux7b` · `.data/ux7b`)는 지웠다. `apps/web/AGENTS.md` · `CLAUDE.md` 는 생기지 않았다 (`next dev` 를 쓰지 않았다).
