@@ -23,7 +23,7 @@
 | **짧은 이야기** 「병원이 털렸다는데, 어디가 털린 걸까」 | **`/short/pipc-hospital`** | 새 주소 · 골든 넷째 |
 | 개념 지도 (주제마다 한 장) | **`/map`** | 새 주소 · 첫 화면의 "개념 지도 보기"가 간다 |
 | 옛 B5 · 옛 번호 링크 | `/archive/fomc-2026-09` · `/?r=<UUID>` → 307 | 그대로 |
-| 시안 | `/lab/today` · `/lab/today/short` · `/lab/today/map` · `/lab/episode/*` | 그대로 (색 스위치 · 견본 자리 · 독자 스위치) — **같은 부품** (⑤ 아래) |
+| 시안 | `/lab/today` · `/lab/today/short` · `/lab/today/map` · `/lab/episode/*` | 그대로 (색 스위치 · 견본 자리 · 독자 스위치) — **같은 부품** (④-2) |
 
 **짧은 이야기 주소 꼴 `/short/<code>` 의 까닭**
 - 짧은 이야기에는 번호가 없다 (계약 §13) — `/s/<시리즈>/<번호>` 에 넣을 것이 없다. 이름으로 쓸 수 있는 계약의 칸은 `code` 하나다 (유일 · 불변 — B-E3 ⑥)
@@ -112,7 +112,7 @@ long(episodeOf(rate3), { ...FOMC_LOOK, place: "해외", category: "돈", day: "2
 - 짧은 이야기가 가리키는 긴 이야기가 손으로 쓴 셋이 아니면: `short(x, {...}, [그 긴 이야기])` (검증에 넘길 것)
 - 파일의 자리: 긴 골든 · 짧은 골든은 `fixtures/` 다. 파이프라인이 낸 것을 어디서 읽을지 (fixtures 로 옮기나 · `packages/pipeline/data/…` 에서 바로 읽나)는 정하지 않았다 — 게이트를 지난 파일을 커밋해야 배포에 실린다는 것만 (D76)
 
-## ⑤ 부품 — 무엇이 어디에
+## ④-2 부품 — 무엇이 어디에
 
 | | 자리 | 비고 |
 |---|---|---|
@@ -124,6 +124,39 @@ long(episodeOf(rate3), { ...FOMC_LOOK, place: "해외", category: "돈", day: "2
 | 책장 | `src/episode/kit/shelf.ts` | 목록에서 나온다 (시리즈마다 가장 새 긴 이야기) |
 
 **시안은 같은 부품을 쓴다**: `/lab/today` 의 카드 = `today/cards.tsx` · 이야기 = 같은 목록 + 견본 자리 · `/lab/today/short` = `kit/Short` (`real` 없음 + 색 스위치) · `/lab/today/map` = `today/Map`. 그래서 **시안 카드에도 꼬리표 · 날이 생겼다** (짧은 이야기 카드에 날 한 줄 — UX-7b 그림과 그만큼 다르다). `/lab/episode/*` 은 번호 규칙을 따르지 않는다 (데이터 그대로 "1화" — 따라온 독자 · 풀이 스위치를 보는 자리).
+
+## ⑤ 배포 확인
+
+커밋 `fde9bd3` 을 push 했다 (검사가 다 지난 뒤 한 번). push 전에 **깨끗한 나무**에서 한 번 더 봤다 — 작업 폴더에는 P-S1 의 미커밋 계약 (`| null`)이 있어서, 내 커밋만 따로 꺼내 (`git worktree` · 임시 폴더 · 끝나고 지움) `pnpm -s typecheck` (다섯 다 Done) · `next build` · lab `check.ts` 둘 OK · e2e `episode` · `today` 13 / 13 을 돌렸다. Vercel 이 짓는 것이 그것이다 (HEAD 의 계약 = `sibling` · `tools_from` 필수 — 둘 다에서 선다).
+`/short/pipc-hospital` 이 200 이 될 때까지 10초마다 물었다. 그 뒤에 이 ⑤ 와 `live-*` 그림을 싣는 커밋을 한 번 더 push 했다 (로그 · 그림뿐 — 화면 0자 · 배포는 한 번 더 돈다 · F-E1 과 같은 일).
+
+`https://claro-lime-one.vercel.app` 에서 본 것 (`curl` · 2026-11-14)
+```
+200 /                      200 /s/price/1             200 /s/rate/2              200 /s/privacy/1
+200 /short/pipc-hospital   200 /map                   200 /archive/fomc-2026-09
+200 /lab/today             200 /lab/today/short       200 /lab/today/map
+200 /lab/episode           200 /lab/episode/fomc      200 /lab/episode/pipc
+200 /news                  200 /again                 200 /robots.txt
+404 /s/rate/3              404 /short/nope            404 /s/privacy/pipc-hospital
+307 /?r=<UUID> → https://claro-lime-one.vercel.app/archive/fomc-2026-09?r=<UUID>
+```
+```
+/                     <title>Claro — 뉴스 하나가 이야기 한 편이 돼요</title> · robots noindex, nofollow, nocache · 머리 (서버가 그린 글) "최근 이야기"
+/s/price/1            <title>싸게 팔라는데, 왜 잘못일까 — 누가 값을 정하나 · Claro</title>            (번호 없음)
+/s/rate/2             <title>물가가 높다면서, 왜 안 올렸을까 — 금리는 어디로 2화 · Claro</title>      (번호 보임)
+/short/pipc-hospital  <title>병원이 털렸다는데, 어디가 털린 걸까 — 내 정보는 누가 지키나 · 짧은 이야기 · Claro</title>
+```
+**눌러 본 것** (Chrome 390×844 · `scripts/shots-fe2.ts https://claro-lime-one.vercel.app live` — 로컬과 같은 스크립트): 첫 화면 위에서 아래까지 · 지난 이야기 30초 펼치기 → 긴 이야기 셋마다 표지 → 물음 버튼으로 남음 장면까지 (체험은 "그냥 열어 보기") → 지도 · 책장 → 짧은 이야기 장면 넷 → `/map`. 전부 200 이고 그림 33 장이 로컬 것과 같은 화면이다 (`live-home-1` · `live-short-1-cover` 를 눈으로 봤다).
+
+그림 (`logs/frontend/F-E2/` — `local-*` 배포 전 · `live-*` 배포 뒤 · 같은 이름끼리 짝)
+- `*-home-1 ~ 4` 첫 화면 · `*-home-recap` 지난 이야기 30초
+- `*-price-1-cover` · `*-privacy-1-cover` 번호 없는 표지 ("긴 이야기" · "주제" · 시리즈 줄 없음) / `*-rate-2-cover` 번호 있는 표지
+- `*-<이야기>-scene-2` · `-3` 장면 머리 (번호를 뗀 것 / 그대로) · `-keep` · `-keep-end` 남음 (다음 화 예고 있음 / 없음 · 곁의 짧은 이야기) · `-map` · `-map-shelf` 지도 · 책장
+- `*-short-1-cover` ~ `-4-keep-end` 짧은 이야기 넷 장면 · `*-map-1` · `-2` 개념 지도
+- `sample-day-head` **견본 (실제 아님)** — 낸 날을 잠깐 적어 본 날짜 머리 (②)
+
+실제 폰으로는 보지 않았다 (F-E2-j) — 도윤이 폰으로: **`https://claro-lime-one.vercel.app`**
+끝날 때 띄운 서버 없음 (로컬 3310 · 시험 3101 꺼짐 · `next dev` 안 씀 — `apps/web/AGENTS.md` · `CLAUDE.md` 안 생김).
 
 ## ⑥ 도윤에게 물을 것 (추천과 함께)
 
@@ -153,11 +186,11 @@ long(episodeOf(rate3), { ...FOMC_LOOK, place: "해외", category: "돈", day: "2
 - 짧은 이야기 주소 `/short/<code>` · 지도 주소 `/map` (①)
 - 금리는 번호 보임 — `number ≥ 2` 를 "첫째가 있었다"는 기록으로 읽음 (③)
 - 번호 없는 표지의 번호 자리에 "긴 이야기" · 머리에서 번호만 떼기 · 남음의 "다음 화" 예고 숨김 · 지도 글 둘 (③)
-- 번호 규칙은 실제 화면에서만 — 시안 `/lab/episode/*` 은 그대로 (⑤)
+- 번호 규칙은 실제 화면에서만 — 시안 `/lab/episode/*` 은 그대로 (④-2)
 - 카테고리 · 꼬리표를 S-1 의 표대로 · 해외만 색으로 (②)
 - F-E1 의 큰 소개를 맨 아래로 · "다음 화로 이어져요" 지움 (②)
 - 곁의 짧은 이야기로 가는 길 · 다음 화로 가는 길 (지시에 없던 것 · ③)
-- 시안 카드도 같은 부품 → 시안 카드에 꼬리표 · 날이 생김 (⑤)
+- 시안 카드도 같은 부품 → 시안 카드에 꼬리표 · 날이 생김 (④-2)
 - 실제 짧은 이야기 남음 장면에 "아직 저장되지 않아요" 한 줄 (긴 이야기와 같게 — 골든의 `map_note` "지도에 붙어요" 바로 아래)
 
 ---
