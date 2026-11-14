@@ -191,3 +191,16 @@ web e2e 는 돌리지 않았다 (지시 — lab 새 폴더뿐).
 ## 파일
 - `apps/web/src/app/lab/short-a/` — `page.tsx` · `layout.tsx` · `data.ts` (글 · 근거 · 그리지 않을 것) · `check.ts` · `shots.ts` · `short-a.css`
 - `logs/frontend/UX-8b-A.md` · `logs/frontend/UX-8b-A/*.png` (아홉)
+
+## 배포 확인 — push 뒤 실제 주소 (`e58b754` · 2026-11-14)
+```
+$ curl -s -o live.html -w "%{http_code}" https://claro-lime-one.vercel.app/lab/short-a      (20초 간격)
+1 404
+2 404
+3 200
+$ grep -o "누가 가장 많이 늘었을까" live.html | head -1
+누가 가장 많이 늘었을까
+$ grep -ci "fable\|sonnet\|소넷" live.html
+0
+```
+서버 모두 끔 (`next start -p 3217` — 남은 next 프로세스 0) · 따로 둔 빌드 폴더 `.next-ux8b-a` 지움.
