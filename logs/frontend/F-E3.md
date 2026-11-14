@@ -31,9 +31,28 @@
 - 무게는 그대로: 카드 아래 "긴 이야기" / "짧은 이야기" 한 낱말 (굵게).
 - 남긴 것: 회차 화면 안의 "체험" 말 (풀이 장면의 "체험을 마치면 여기가 열려요" · 시안 스위치 "체험 없이 보기")은 카드의 표시가 아니라 손대지 않았다. `lab/today/check.ts` · `lab/episode/check.ts` 가 콘솔에 찍는 "체험 있음 / 없음"은 데이터 (`solve.lab`) 보고라 그대로.
 
-## ② 실제 주소 확인
+## ② 실제 주소 확인 (배포 뒤)
 
-(배포 뒤 — 아래 "배포 확인"에 붙인다)
+커밋 `124ab9b` 를 push (검사가 다 지난 뒤 한 번) → `/short/pipc-hospital` 이 200 → 404 로 바뀔 때까지 10초마다 물었다 — **약 40초 뒤 배포**. 그 뒤 `https://claro-lime-one.vercel.app` 에서 (`curl` · 2026-11-14)
+```
+200 /                      200 /short/license-notice   404 /short/pipc-hospital    404 /s/privacy/pipc-hospital
+200 /s/privacy/1           200 /s/price/1              200 /s/rate/2               200 /map
+200 /lab/today             200 /lab/today/short        200 /lab/today/map          200 /lab/play   200 /lab/short
+```
+```
+/                      <title>Claro — 뉴스 하나가 이야기 한 편이 돼요</title> · HTML 에 "체험 있음" 0 · "체험 없음" 0 · 병원 제목 0 · card-pipc-hospital 0 · card-license-notice 있음
+/short/license-notice  <title>면허 정지가 취소됐다는데, 잘못이 없었다는 걸까 — 처분은 어떻게 뒤집히나 · 짧은 이야기 · Claro</title>
+/lab/today             card-pipc-hospital 있음 (견본 남음) · "체험 있음" 0
+```
+**눌러 본 것** (Chrome 390×844 · `scripts/shots-fe3.ts https://claro-lime-one.vercel.app live`): 첫 화면 위에서 아래까지 → `/s/privacy/1` 을 물음 버튼으로 남음까지 (체험은 "그냥 열어 보기") · 남음 끝 → `/short/license-notice` 장면 넷 · 남음 끝 → `/short/pipc-hospital` (404) → `/map` → `/lab/today` 위에서 아래까지 → `/lab/today/short` 표지 · 남음 끝. 콘솔 오류는 `/favicon.ico` 404 (원래 없음) · `/short/pipc-hospital` 404 (맞다) 둘뿐.
+
+그림 (`logs/frontend/F-E3/` · 전부 `live-*` — 배포 뒤 · 18장)
+- **`live-home-1` ~ `3` 첫 화면** — 머리 "지금까지 낸 네 편이에요. 긴 이야기 셋, 짧은 이야기 하나." · 카드 넷 (배달앱 · 금리 · 개인정보 · 면허 정지) · 카드 아래 무게 한 낱말뿐 (체험 표시 없음) · `-3` 에 비어 있는 "개념으로 이어져요" (F-E3-a)
+- **`live-privacy-1-keep` · `-keep-end` 개인정보 남음** — 끝이 "다른 시리즈" 둘 · 처음부터 다시 · 첫 화면으로 (곁의 짧은 이야기 길 없음)
+- `live-short-1-cover` ~ `-4-keep-end` 면허 정지 장면 넷 (남음에 지도 · 만난 개념 · 곁 길 없음) · `live-gone-pipc-hospital` (Next 의 기본 404 — F-E3-e) · `live-map-1`
+- `live-lab-today-1` ~ `4` 시안 오늘 (병원 견본 카드 "같은 발표의 병원 쪽"이 개인정보 아래 그대로 · 체험 표시 없음) · `live-lab-short-cover` · `-keep-end` 시안 짧은 이야기 (지도 · 개념 셋 · 곁의 긴 이야기 길 그대로 — 그 길의 "체험 있음"은 골든 글 · ④)
+
+실제 폰으로는 보지 않았다 (F-E2-j 그대로). 끝날 때 띄운 서버 없음 (로컬 3310 끔 · 시험 3101 은 playwright 가 끔 · `next dev` 안 씀 — `apps/web/AGENTS.md` · `CLAUDE.md` 안 생김).
 
 ## ③ e2e 를 어떻게 바꿨나
 
@@ -66,6 +85,7 @@
 - **F-E3-a 첫 화면 "개념으로 이어져요"가 비었다** — 실제 목록에서 함께 가진 개념 묶음은 개인정보 ↔ 병원 하나뿐이었다 (F-E2-f). 이제 머리 · 한 줄 ("같은 개념을 만나는 이야기끼리는 서로 이어져요.") · "개념 지도 보기" 단추만 남는다 (빈 `<ul>` — 눈에 보이는 빈 칸은 없다 · 그림 `local-home-3` 로 봤다). 지도로 가는 입구로는 선다. **고치지 않았다** — 고르는 것은 화면 글 (말을 바꿀지 · 묶음이 없으면 구역을 접고 단추만 둘지) 이라 PM · 도윤. 긴 이야기끼리 같은 개념이 생기면 (예: 금리 3화 · 퍼센트포인트) 저절로 찬다
 - **F-E3-b `/map` 의 글 "짧은 이야기에서 만난 개념은 같은 주제의 지도에 붙어요"** (`home-copy.ts` `mapNote`) — 규칙으로는 참이지만 지금 실제의 짧은 이야기 (면허 정지)는 만나는 개념이 없다 (`tools_from` null). 손대지 않음
 - **F-E3-c 홀로 선 짧은 이야기의 남음 장면** — 지도 · 만난 개념 · "아직 저장되지 않아요" 줄 없이 한 줄 · 위원장의 말 · "처음부터 다시" · "첫 화면으로"로 끝난다 (그림 `short-4-keep-end`). F-E2-d (화면으로 못 봤다)는 P-S1 이후 이미 실물로 서 있었고 이번 e2e 가 처음으로 끝까지 본다. 허전한지는 D91 ③ (면허 정지를 새 꼴로 다시 쓰거나 내리기)과 같이
+- **F-E3-e 내린 주소는 Next 의 기본 404 (영어 "This page could not be found.")** — 지시대로 404 로 두었다. 그 링크를 이미 받은 사람 (F-E2 때 도윤에게 간 주소 등)은 영어 빈 화면을 본다. 같은 사건의 긴 이야기 `/s/privacy/1` 로 넘기기 (redirect) · 또는 Claro 말투의 404 화면은 PM 판단 (지시 밖이라 안 함)
 - **F-E3-d `scripts/shots-fe2.ts`** 는 F-E2 의 기록이라 손대지 않았다 — 지금 돌리면 `/short/pipc-hospital` 에서 멈춘다. 이번 그림은 새 `scripts/shots-fe3.ts`
 - F-E2 의 _open (a 골든의 시리즈 · 회차 말 · b 손 값 꼬리표 · c 자정 · e 한 시리즈 둘 · j 실제 아이폰)은 그대로
 
