@@ -1,118 +1,29 @@
 import type { Metadata, Viewport } from "next";
 import { paper } from "@claro/tokens";
-import { Rich } from "../../../episode/kit/parts";
+import { Arrow, LongCard, ShortCard, continues } from "../../../episode/today/cards";
 import { COUNT_NOUN, COUNT_WORD, TODAY_COPY as C } from "./copy";
-import { TODAY, continues, sharedConcepts, type TodayItem } from "./data";
+import { SHORT, TODAY, labHref, sharedConcepts } from "./data";
 import { PaletteDock } from "./palette/PaletteDock";
 
 // UX-7 — "오늘" 첫 화면 **시안** (D79). 실제 첫 화면 (/)은 그대로다 — 여기는 lab.
 // 보이려는 것 셋: (1) 하루 3 ~ 5편이 한 줄로 놓인다 · 무게 둘 (긴 이야기 · 짧은 이야기) (2) **시리즈는 약속이 아니라 결과다** — "N화" · 시리즈 줄 · 지난 이야기는
 // 둘째 이야기가 실제로 있는 주제 (지금은 금리)에만 생기고, 나머지는 주제 이름만 (3) 번호가 없어도 이야기는 개념으로 이어진다.
+// F-E2: 실제 첫 화면 (/)이 이 꼴이 됐다 — **카드는 같은 부품이고 (episode/today/cards), 이야기는 같은 목록에서 온다** (episode/catalog.tsx). 여기 남은 것은 시안의 것: 색 스위치 · 견본 자리 · 번호 규칙을 설명하는 구역 둘.
 // 정적이다 · 아무것도 저장하지 않는다 · 긴 이야기의 글은 골든의 글자 그대로다. 카드는 시안 회차 화면 (/lab/episode/*)으로 간다 — 고른 색이 거기서도 이어지게 (실제 주소는 종이 톤 그대로다).
 export const dynamic = "force-static";
 export const metadata: Metadata = { title: C.metaTitle };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: paper.paper };
 
-const Arrow = () => (
-  <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-    <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-const oneLine = (s: string) => s.replace(/\n/g, " ");
-
-// 무게 (긴 이야기 · 짧은 이야기) · 체험이 있나 — 읽는 시간은 내지 않는다 (D82: 읽기 전부터 "N분이나?")
-function Weight({ long, lab }: { long: boolean; lab: boolean }) {
-  return (
-    <p className="td-weight" data-weight={long ? "long" : "short"}>
-      <b>{long ? C.long : C.short}</b>
-      <span data-lab={lab ? "" : undefined}>{lab ? C.lab : C.noLab}</span>
-    </p>
-  );
-}
-
-function Long({ item, lead }: { item: Extract<TodayItem, { kind: "long" }>; lead: boolean }) {
-  const { ep, Art } = item;
-  const c = ep.scenes.cover;
-  const cont = continues(ep);
-  return (
-    <article className="td-card" data-kind="long" data-lead={lead ? "" : undefined} data-cont={cont ? "" : undefined} data-testid={`card-${ep.code}`}>
-      <a className="td-main" href={ep.path}>
-        {/* 이어지는 이야기면 주제 이름 + 몇 화. 단편이면 주제 이름만 — 번호 없음 */}
-        <p className="td-topic">
-          <span>{cont ? C.contLabel : C.topic}</span>
-          <strong>{ep.series.name}</strong>
-          {cont ? <em>{c.episode.t}</em> : null}
-        </p>
-        {lead ? (
-          <div className="ep-cover-art td-art">
-            <Art />
-          </div>
-        ) : null}
-        <h3 className="td-title">
-          <Rich text={lead ? c.title : oneLine(c.title)} />
-        </h3>
-        <p className="td-dek">{c.dek.t}</p>
-        <p className="td-meta">{c.meta.t}</p>
-        <Weight long lab={ep.solve.lab !== null} />
-        {lead ? (
-          <span className="td-go">
-            {C.go}
-            <Arrow />
-          </span>
-        ) : (
-          <span className="td-arrow" aria-hidden="true">
-            <Arrow />
-          </span>
-        )}
-      </a>
-      {cont ? (
-        <details className="td-recap" data-testid={`recap-${ep.code}`}>
-          <summary>
-            {C.recap}
-            <svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true">
-              <path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </summary>
-          {/* 골든의 "지난 이야기" 글 그대로 (표지의 recap) */}
-          {c.recap.map((r) => (
-            <p key={r.t}>
-              <Rich text={r.t} />
-            </p>
-          ))}
-        </details>
-      ) : null}
-    </article>
-  );
-}
-
-function Short({ item }: { item: Extract<TodayItem, { kind: "short" }> }) {
-  const { story, path } = item;
-  const c = story.scenes.cover;
-  return (
-    <article className="td-card" data-kind="short" data-testid="card-short">
-      <a className="td-main" href={path}>
-        <p className="td-topic">
-          <span>{C.topic}</span>
-          <strong>{story.series.name}</strong>
-          <i>{C.sibling}</i>
-        </p>
-        <h3 className="td-title">{oneLine(c.title)}</h3>
-        <Weight long={false} lab={false} />
-        <span className="td-arrow" aria-hidden="true">
-          <Arrow />
-        </span>
-      </a>
-    </article>
-  );
-}
+/** 시안의 주소 — 긴 이야기는 회차 시안 화면 (/lab/episode/*)으로, 짧은 이야기는 /lab/today/short 로 (고른 색이 거기서도 이어지게) */
+const href = labHref;
 
 export default function Page() {
   const longs = TODAY.filter((x) => x.kind === "long");
   const shorts = TODAY.filter((x) => x.kind === "short");
   const stories = longs.length + shorts.length;
   const count = C.count.replace("{n}", COUNT_WORD[stories]!).replace("{long}", COUNT_NOUN[longs.length]!).replace("{short}", COUNT_NOUN[shorts.length]!);
-  const cont = longs.filter((x) => continues(x.ep));
-  const single = longs.filter((x) => !continues(x.ep));
+  const cont = longs.filter((x) => continues(x));
+  const single = longs.filter((x) => !continues(x));
   const concepts = sharedConcepts();
   return (
     <div className="ep-root td-root" data-testid="today">
@@ -132,9 +43,9 @@ export default function Page() {
           <section className="td-list" aria-label={C.title}>
             {TODAY.map((item, i) =>
               item.kind === "long" ? (
-                <Long key={item.ep.code} item={item} lead={i === 0} />
+                <LongCard key={item.ep.code} line={item} href={href(item)} lead={i === 0} C={C} />
               ) : item.kind === "short" ? (
-                <Short key={item.story.code} item={item} />
+                <ShortCard key={item.story.code} line={item} href={href(item)} C={C} aside={item.story.code === SHORT.code ? C.sibling : undefined} />
               ) : (
                 <div key="empty" className="td-card" data-kind="empty" data-testid="card-empty">
                   <strong>{C.emptyTitle}</strong>

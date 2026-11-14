@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { CHROME } from "./chrome";
-import { SHELF, hrefOf, shelfOf } from "./shelf";
+import { SHELF, hrefOf, labelOf, shelfOf } from "./shelf";
 import { toolOf, type EpisodeData, type ReaderId } from "./types";
 
 // 내 개념 지도 (공통). 자리는 회차 데이터에 손으로 놓여 있다 (시안) — 배치를 계산하지 않는다.
@@ -15,8 +15,10 @@ export type NodeState = "new" | "known" | "none";
 
 type Picked = { kind: "concept"; id: string } | { kind: "ghost"; name: string } | { kind: "else"; series: string; id: string } | null;
 
-export function ConceptMap({ ep, reader, states, grow = false, compact = false, real = false }: { ep: EpisodeData; reader: ReaderId; states: Record<string, NodeState>; grow?: boolean; compact?: boolean; real?: boolean }) {
+// F-E2 — numbered: 번호 화면 규칙 (kit/Episode 의 numbered 와 같은 것). 실제 화면의 번호 없는 이야기에서는 "N화에서 주움" · "다음 화에서"를 말하지 않는다
+export function ConceptMap({ ep, reader, states, grow = false, compact = false, real = false, numbered = true }: { ep: EpisodeData; reader: ReaderId; states: Record<string, NodeState>; grow?: boolean; compact?: boolean; real?: boolean; numbered?: boolean }) {
   const c = CHROME.map;
+  const bare = real && !numbered;
   const { at, edges, ghosts } = ep.map;
   const [picked, setPicked] = useState<Picked>(null);
   const shown = ep.tools.map((x) => x.key).filter((id) => states[id] !== "none");
@@ -104,7 +106,7 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false, 
       <ul className="ep-map-legend">
         <li data-state="new">{c.legendNew}</li>
         <li data-state="known">{c.legendKnown}</li>
-        <li data-state="ghost">{c.legendGhost}</li>
+        <li data-state="ghost">{bare ? c.legendGhostPlain : c.legendGhost}</li>
       </ul>
 
       {compact ? null : (
@@ -116,14 +118,14 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false, 
           ) : picked.kind === "concept" ? (
             <>
               <h2>{toolOf(ep, picked.id).name}</h2>
-              <p className="ep-map-where">{states[picked.id] === "new" ? ep.map.where_today.t : reader === "follower" ? c.whereBefore : c.whereSeed}</p>
+              <p className="ep-map-where">{states[picked.id] === "new" ? (bare && ep.map.where_today.ui ? c.whereHere : ep.map.where_today.t) : reader === "follower" ? c.whereBefore : c.whereSeed}</p>
               <p>{toolOf(ep, picked.id).short.t}</p>
               <p className="ep-map-use">{toolOf(ep, picked.id).use.t}</p>
             </>
           ) : picked.kind === "ghost" ? (
             <>
               <h2>{picked.name}</h2>
-              <p className="ep-map-where">{c.whereGhost}</p>
+              <p className="ep-map-where">{bare ? c.whereGhostPlain : c.whereGhost}</p>
             </>
           ) : (
             <>
@@ -145,18 +147,15 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false, 
               s.series === ep.series.code ? (
                 <li key={s.series} data-here>
                   <strong>{s.name}</strong>
-                  <span>
-                    {s.episode} · {s.title}
-                  </span>
+                  {/* 지금 읽는 이야기 — 책장의 것 (그 시리즈의 가장 새 이야기)이 아니라 열려 있는 이것의 이름 */}
+                  <span>{labelOf({ ...s, episode: ep.scenes.cover.episode.t, title: ep.scenes.cover.title.replace(/\n/g, " ") }, real)}</span>
                   <em>{c.shelfHere}</em>
                 </li>
               ) : (
                 <li key={s.series}>
                   <a href={hrefOf(s, real)} data-testid={`shelf-${s.series}`}>
                     <strong>{s.name}</strong>
-                    <span>
-                      {s.episode} · {s.title}
-                    </span>
+                    <span>{labelOf(s, real)}</span>
                     <em>
                       {c.shelfGo}
                       <svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true">

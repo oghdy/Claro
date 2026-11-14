@@ -10,28 +10,11 @@ import { PIPC } from "../../../../episode/episodes/pipc/data";
 /** 짧은 이야기 = 골든 넷째. 곁 이야기 · 도구는 개인정보 1화 (PIPC) 를 가리킨다 — 받아서 대 본다 (같은 사건 · 도구가 거기 있다) */
 export const SHORT: ShortStory = parseShortStory(golden, { episodes: [PIPC] });
 // 이 시안은 곁 이야기 · 도구의 이야기로 PIPC 하나만 그린다 (지도 · 접힌 카드 · 곁 이야기로 가는 길)
-for (const ref of [SHORT.sibling.episode, SHORT.tools_from.episode])
-  if (ref.episode_id !== PIPC.episode_id || ref.episode_version !== PIPC.episode_version) throw new Error("짧은 이야기 시안은 개인정보 1화 (PIPC) 곁의 이야기만 그린다");
+for (const ref of [SHORT.sibling?.episode, SHORT.tools_from?.episode])
+  if (!ref || ref.episode_id !== PIPC.episode_id || ref.episode_version !== PIPC.episode_version) throw new Error("짧은 이야기 시안은 개인정보 1화 (PIPC) 곁의 이야기만 그린다");
 
 /** 근거 문서가 저장된 파일 (저장소 뿌리에서) — check.ts 가 구절을 대조할 때 읽는다. git 에 있는 파일이다 */
 export const SHORT_STORES = ["packages/pipeline/data/events/PIPC-20261028-SAFETY-MEASURES/store.documents.json"] as const;
 
-/** 화면의 글 (이야기의 글이 아니다) */
-export const SHORT_CHROME = {
-  draft: "시안",
-  back: "오늘로",
-  backHref: "/lab/today",
-  barKind: "짧은 이야기",
-  /** 표지의 번호 자리 — 무게의 이름 (계약의 weight 에서. 이야기 칸이 아니다 — EPISODE §13.2) */
-  weightLabel: "짧은 이야기",
-  thought: "이렇게 생각하기 쉬워요",
-  breaker: "그런데 문서에는",
-  folded: "긴 이야기와 같은 도구",
-  open: "펼치기",
-  close: "접기",
-  lineLabel: "이 이야기의 한 줄",
-  mapButton: "내 개념 지도 보기",
-  where: "짧은 이야기에서 만남",
-  toToday: "오늘의 이야기로 돌아가기",
-  restart: "처음부터 다시",
-} as const;
+/** 화면의 글 (이야기의 글이 아니다) — F-E2 에서 kit/chrome.ts 로 갔다 (실제 주소와 같은 부품 · 같은 글). check.ts 가 여기서 읽는다 */
+export { SHORT_CHROME } from "../../../../episode/kit/chrome";

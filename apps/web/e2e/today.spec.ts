@@ -1,4 +1,5 @@
-// "오늘" 시안 (UX-7 · D79 · UX-7b) — /lab/today · 짧은 이야기 · 색 시안 (종이 + 미색 · 쑥 · 형광펜). lab 전용이다: 실제 주소 (/ · /s/*)는 색도 화면도 그대로여야 한다.
+// "오늘" 시안 (UX-7 · D79 · UX-7b) — /lab/today · 짧은 이야기 · 색 시안 (종이 + 미색 · 쑥 · 형광펜). lab 전용이다: 실제 주소 (/ · /s/*)는 색이 종이 그대로여야 한다.
+// F-E2 부터 실제 첫 화면 (/)도 이 꼴이다 (같은 카드 부품 · 같은 이야기 목록) — 실제 쪽은 episode.spec.ts 가 본다. 여기는 시안에만 있는 것 (색 스위치 · 견본 자리 · 시안 주소)을 본다.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
@@ -24,7 +25,7 @@ test("오늘 — 긴 이야기 셋 (골든의 글 그대로) · 짧은 이야기
     await expect(card.locator("a.td-main")).toHaveAttribute("href", href);
     const text = flat(await card.innerText());
     for (const s of [ep.series.name, ep.scenes.cover.title, ep.scenes.cover.dek.t, ep.scenes.cover.meta.t]) expect(text, s).toContain(flat(s));
-    // 번호 · 지난 이야기 — 둘째 이야기가 실제로 있을 때만 (Episode.number ≥ 2)
+    // 번호 · 지난 이야기 — 둘째 이야기가 실제로 있을 때만 (번호 화면 규칙 D88 E-20 — 지금 목록에서는 Episode.number ≥ 2 와 같은 답이다)
     const numbered = ep.number >= 2;
     expect(text.includes(flat(ep.scenes.cover.episode.t)), `${code} 의 번호`).toBe(numbered);
     await expect(page.getByTestId(`recap-${code}`)).toHaveCount(numbered ? 1 : 0);
@@ -33,8 +34,8 @@ test("오늘 — 긴 이야기 셋 (골든의 글 그대로) · 짧은 이야기
   await page.getByTestId("recap-fomc").locator("summary").click();
   for (const r of cards[1]!.ep.scenes.cover.recap) expect(flat(await page.getByTestId("recap-fomc").innerText())).toContain(flat(r.t));
   // 짧은 이야기 · 자리만 있는 칸
-  await expect(page.getByTestId("card-short").locator("a")).toHaveAttribute("href", "/lab/today/short");
-  expect(await page.getByTestId("card-short").innerText()).not.toMatch(/\d화/);
+  await expect(page.getByTestId("card-pipc-hospital").locator("a")).toHaveAttribute("href", "/lab/today/short");
+  expect(await page.getByTestId("card-pipc-hospital").innerText()).not.toMatch(/\d화/);
   await expect(page.getByTestId("card-empty")).toContainText("견본 자리 — 글 없음");
   // 읽는 시간을 내지 않는다 (D82) — 무게 · 체험만
   const list = await page.locator(".td-list").innerText();

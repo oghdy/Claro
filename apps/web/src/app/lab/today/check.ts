@@ -7,7 +7,7 @@
 //       UX-7 때 T5 는 "PLAIN_WHY 하나만 걸린다" — 계약에 무게가 없다는 D80 의 실물 — 를 봤다. B-E3 이 무게 (short)를 계약에 넣어 이제 지난다)
 //   T3  화면의 글 (SHORT_CHROME)에 숫자가 없다 — 이야기의 글은 계약 (9 · 10)이 본다
 //   T4  그리지 않을 것 (E3-1 ③ 9 · 10 · 11) — 공표명령 · "안 모았으면" · 진료 기록의 안전 / 유출 · 한 사람 몫이 글에 없다 (낱말로만 본다. 뜻은 사람이 읽는다)
-//   T6  "오늘"의 번호 규칙 — 번호 · 지난 이야기가 보이는 카드는 Episode.number ≥ 2 인 것뿐이다 · 화면 글의 숫자는 "지난 이야기 30초" 하나뿐이다
+//   T6  "오늘"의 번호 규칙 (F-E2 에서 D88 E-20 으로) — 번호 · 지난 이야기가 보이는 카드는 같은 시리즈에 긴 이야기가 둘 이상 실제로 있는 것뿐이다 (목록에 둘 이상 · 또는 number ≥ 2) · 화면 글의 숫자는 "지난 이야기 30초" 하나뿐이다
 //   T7  색 시안 — 재는 짝 전부 대비 4.5 이상 (WCAG AA) · **Claude 결이 아니다** (채도 있는 크림 · 베이지 바탕 / 주황 쪽 강조 — UX-7b 에서 고친 규칙: 따뜻한 바탕은 막지 않는다)
 //       · 따뜻하고 부드러운 셋 (미색 · 쑥 · 형광펜)은 **눈 피로 기준** (본문 대비 범위 · 새하얀 바탕 피함 · 바탕 채도 낮게 · 따뜻한 쪽)
 //   T8  덮는 규칙 (palette/overrides.css)이 src/episode 의 CSS 와 맞는다 (다시 만들어 견준다)
@@ -18,7 +18,9 @@ import path from "node:path";
 import { validateShortStory, type EpisodeText } from "@claro/contract";
 import { PIPC } from "../../../episode/episodes/pipc/data";
 import { TODAY_COPY } from "./copy";
-import { TODAY, continues, sharedConcepts } from "./data";
+import { LONGS } from "../../../episode/catalog";
+import { continues } from "../../../episode/today/cards";
+import { TODAY, labHref, sharedConcepts } from "./data";
 import { CONTRAST_PAIRS, HL_PAIRS, PALETTES, contrast } from "./palette/palettes";
 import { SHORT, SHORT_CHROME, SHORT_STORES } from "./short/data";
 
@@ -64,7 +66,7 @@ console.log(`■ 짧은 이야기 — ${SHORT.scenes.cover.title.replace(/\n/g, 
   walk(SHORT.scenes, "scenes");
   walk({ first_thought: entry.first_thought, breaker: entry.breaker, flip: entry.flip, whose: entry.whose }, "solve.entry");
   walk(plain.title, "solve.plain.title");
-  walk({ label: SHORT.sibling.label, note: SHORT.sibling.note }, "sibling");
+  walk({ label: SHORT.sibling?.label, note: SHORT.sibling?.note }, "sibling");
   const banned: [RegExp, string][] = [
     [/공표/, "공표명령 (영훈의료재단에는 없다 — ③ 9)"],
     [/안 모았|모으지 않았(다면|으면)|없었다면|없었을/, "반사실 (“안 모았으면 안 털렸다” — ③ 10)"],
@@ -76,7 +78,7 @@ console.log(`■ 짧은 이야기 — ${SHORT.scenes.cover.title.replace(/\n/g, 
   if (r.ok) {
     const st = r.stats;
     console.log(`  계약 검증 OK (경고 ${r.warnings.length}) — 구절 ${st.quotes} (문서 ${st.docs} — 전부 git 의 store.documents.json) · 글 ${st.texts} — 숫자가 든 글 ${st.texts_with_digits} · 맨 글자열 (그리지 않을 것 검사) ${bare.length}`);
-    console.log(`  무게 ${SHORT.weight} · 장면 ${Object.keys(SHORT.scenes).length} · 번호 없음 (선반: ${SHORT.series.name}) · 체험 없음 (까닭 ${plain.why}) · 뒤집기 A ${entry.flip?.op} B · 다시 만나는 도구 ${SHORT.tools_from.keys.join(" · ")} (긴 이야기 ${PIPC.code} ${PIPC.episode_version}판의 카드 그대로)`);
+    console.log(`  무게 ${SHORT.weight} · 장면 ${Object.keys(SHORT.scenes).length} · 번호 없음 (선반: ${SHORT.series.name}) · 체험 없음 (까닭 ${plain.why}) · 뒤집기 A ${entry.flip?.op} B · 다시 만나는 도구 ${(SHORT.tools_from?.keys ?? []).join(" · ")} (긴 이야기 ${PIPC.code} ${PIPC.episode_version}판의 카드 그대로)`);
   }
 }
 
@@ -86,10 +88,11 @@ console.log("\n■ 오늘 — 카드");
   for (const item of TODAY) {
     if (item.kind === "long") {
       const { ep } = item;
-      const cont = continues(ep);
-      if (cont !== ep.number >= 2) fail("T6", `${ep.code}: 번호 규칙이 Episode.number 와 다르다`);
-      console.log(`  긴 이야기  ${ep.series.name}${cont ? ` · ${ep.scenes.cover.episode.t} (이어지는 이야기 — 번호 · 시리즈 줄 · 지난 이야기)` : " (주제 이름만 — 번호 없음)"} · 체험 ${ep.solve.lab ? "있음" : "없음"} → ${ep.path}`);
-    } else if (item.kind === "short") console.log(`  짧은 이야기 ${item.story.series.name} (주제 이름만 — 번호 없음) · 체험 없음 → ${item.path}`);
+      const cont = continues(item);
+      const same = LONGS.filter((x) => x.ep.series.code === ep.series.code);
+      if (cont !== (same.length >= 2 || same.some((x) => x.ep.number >= 2))) fail("T6", `${ep.code}: 번호 규칙이 목록과 다르다 (같은 시리즈의 긴 이야기 ${same.length} · 번호 ${same.map((x) => x.ep.number).join(" ")})`);
+      console.log(`  긴 이야기  ${ep.series.name}${cont ? ` · ${ep.scenes.cover.episode.t} (이어지는 이야기 — 번호 · 시리즈 줄 · 지난 이야기)` : " (주제 이름만 — 번호 없음)"} · 체험 ${ep.solve.lab ? "있음" : "없음"} → ${labHref(item)}`);
+    } else if (item.kind === "short") console.log(`  짧은 이야기 ${item.story.series.name} (주제 이름만 — 번호 없음) · 체험 없음 → ${labHref(item)}`);
     else console.log("  자리만     견본 자리 — 글 없음");
   }
   for (const [k, v] of Object.entries(TODAY_COPY)) if (/\d/.test(v) && k !== "recap") fail("T6", `화면 글 ${k} 에 숫자가 있다 — "${v}"`);

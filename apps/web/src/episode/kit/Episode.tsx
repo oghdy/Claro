@@ -7,7 +7,8 @@ import { ConceptMap, type NodeState } from "./ConceptMap";
 import { LabCard } from "./frames/LabCard";
 import { PlainFlipLead, PlainQuietBody, PlainThreeCards } from "./frames/Plain";
 import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
-import { SHELF, hrefOf } from "./shelf";
+import { SHORTS, nextOf, oneLine, realPath, shortPath } from "../catalog";
+import { SHELF, hrefOf, labelOf } from "./shelf";
 import { toolOf, type EpisodeData, type ReaderId, type SceneId, type T } from "./types";
 
 // 한 회차 — 처음부터 끝까지 (공통 뼈대). 넘어가는 방법은 본 화면과 같다 (D26): 한 번에 한 장 · 물음 버튼 하나 · 누른 물음이 다음 장의 머리.
@@ -29,6 +30,13 @@ export interface EpisodeParts {
    * 누가 따라온 독자인지 추정하지 않는다). 근거 단추는 위쪽 줄로 온다. 다른 회차로 가는 길은 실제 주소다. 없으면 시안 (/lab/episode/*)
    */
   real?: boolean;
+  /**
+   * 번호를 보이나 — **번호 화면 규칙** (D79 ① · D88 E-20 · F-E2): 같은 시리즈에 긴 이야기가 둘 이상 실제로 있을 때만 "N화" · 시리즈 줄 · "다음 화"를 보인다.
+   * 이야기 목록 (catalog.numbered)이 정해서 준다. 데이터 (골든의 number · track · 번호 글)는 그대로다 — 화면이 안 보일 뿐이다.
+   * false 면 (실제 화면에서만 뜻이 있다): 표지의 "N화" 자리에 무게의 이름 · "시리즈" 대신 "주제" · 시리즈 줄 없음 · 장면 머리의 "N화 · " 를 떼고 · 남음 장면의 "다음 화" 예고 없음.
+   * 없으면 보인다 (시안 /lab/episode/* 은 데이터 그대로)
+   */
+  numbered?: boolean;
   /** 시안 전용 — 처음 열 장면 · 풀이 스위치 (견본 주소가 바로 그 화면을 열려고 — UX-6). 없으면 표지 · 체험 */
   start?: { scene?: SceneId; solve?: SolveMode };
 }
@@ -45,6 +53,14 @@ const useEp = () => {
   if (!v) throw new Error("EpCtx 밖");
   return v;
 };
+
+/** 번호 없이 보이나 — 실제 화면이고 목록이 "번호 없음"이라고 한 이야기 */
+const useBare = () => {
+  const { real = false, numbered = true } = useEp();
+  return real && !numbered;
+};
+/** 장면 머리의 번호를 뗀다 — "1화 · 오늘의 사건" → "오늘의 사건" · "0화와 1화 · 지금까지의 이야기" → "지금까지의 이야기". 번호 글 (계약의 ui: true)에만 쓴다. 남은 글자는 그대로다 */
+export const unnumber = (t: string): string => t.replace(/^\d+화(와 \d+화)* · /, "");
 
 /** 처음 온 독자가 "이거 알아요?" 에 답한 것 — seed: 알아요 · fresh: 처음 들어요 */
 type Answer = "seed" | "fresh";
@@ -148,17 +164,19 @@ function Cover({ reader, onAsk }: SceneProps) {
   const { ep, Art } = useEp();
   const c = ep.scenes.cover;
   const follower = reader === "follower";
+  const bare = useBare();
   return (
     <>
       <motion.div className="ep-series" variants={rise}>
-        <span>{CHROME.chrome.seriesTag}</span>
+        <span>{bare ? CHROME.chrome.topicTag : CHROME.chrome.seriesTag}</span>
         <strong>{ep.series.name}</strong>
       </motion.div>
       <motion.div className="ep-cover-art" variants={rise}>
         <Art />
       </motion.div>
-      <motion.p className="ep-episode-no" variants={rise}>
-        {c.episode.t}
+      {/* 번호 자리 — 번호가 없는 이야기는 무게의 이름 (짧은 이야기의 표지와 같은 자리 · 같은 꼴) */}
+      <motion.p className="ep-episode-no" variants={rise} data-testid="cover-no">
+        {bare ? CHROME.chrome.weightLong : c.episode.t}
       </motion.p>
       <motion.h1 className="ep-title ep-title-cover" variants={rise}>
         <Rich text={c.title} />
@@ -167,9 +185,11 @@ function Cover({ reader, onAsk }: SceneProps) {
       <motion.p className="ep-meta" variants={rise}>
         <Txt item={c.meta} />
       </motion.p>
-      <motion.div variants={rise}>
-        <SeriesTrack />
-      </motion.div>
+      {bare ? null : (
+        <motion.div variants={rise}>
+          <SeriesTrack />
+        </motion.div>
+      )}
       {follower ? (
         <motion.aside className="ep-recap" variants={rise}>
           <h2>{c.recap_label}</h2>
@@ -191,9 +211,10 @@ function Cover({ reader, onAsk }: SceneProps) {
 
 function Zero({ asked, onAsk }: SceneProps) {
   const c = useEp().ep.scenes.zero;
+  const bare = useBare();
   return (
     <>
-      <Head asked={asked} kicker={c.kicker.t} title={c.title.t} />
+      <Head asked={asked} kicker={bare ? unnumber(c.kicker.t) : c.kicker.t} title={c.title.t} />
       <ol className="ep-beats">
         {c.beats.map((b, i) => (
           <motion.li key={b.head} variants={rise} data-last={i === c.beats.length - 1 ? "" : undefined}>
@@ -214,9 +235,10 @@ function Zero({ asked, onAsk }: SceneProps) {
 
 function Event({ asked, onAsk }: SceneProps) {
   const c = useEp().ep.scenes.event;
+  const bare = useBare();
   return (
     <>
-      <Head asked={asked} kicker={c.kicker.t} title={c.title} />
+      <Head asked={asked} kicker={bare ? unnumber(c.kicker.t) : c.kicker.t} title={c.title} />
       <P item={c.lead} />
       <motion.div className="ep-fines" variants={rise}>
         {c.figures.map((f) => (
@@ -508,9 +530,14 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
 }
 
 function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
-  const { ep, real = false } = useEp();
+  const { ep, real = false, numbered = true } = useEp();
+  const bare = useBare();
   const c = ep.scenes.keep;
   const k = CHROME.keep;
+  // 같은 시리즈의 다음 긴 이야기가 목록에 실제로 있으면 (실제 화면) — 예고 글 대신 그 이야기로 가는 길
+  const next = real ? nextOf(ep) : undefined;
+  // 이 이야기 곁의 짧은 이야기 (실제 화면) — 계약에는 짧은 이야기 → 긴 이야기 쪽 칸만 있다 (ShortStory.sibling). 거꾸로 가는 길은 목록의 짧은 이야기들에서 찾는다 (판까지 맞는 것)
+  const beside = real ? SHORTS.filter((x) => x.story.sibling?.episode.episode_id === ep.episode_id && x.story.sibling.episode.episode_version === ep.episode_version) : [];
   const fresh = ep.tools.map((x) => x.key).filter((id) => states[id] === "new");
   const old = ep.tools.map((x) => x.key).filter((id) => states[id] === "known");
   const others = SHELF.filter((s) => s.series !== ep.series.code);
@@ -524,7 +551,7 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
         </p>
       </motion.figure>
       <motion.div className="ep-keep-map" variants={rise}>
-        <ConceptMap ep={ep} reader={reader} states={states} real={real} grow compact />
+        <ConceptMap ep={ep} reader={reader} states={states} real={real} numbered={numbered} grow compact />
       </motion.div>
       <motion.div className="ep-gain" variants={rise}>
         {fresh.length ? (
@@ -556,19 +583,39 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
           </svg>
         </button>
       </motion.div>
-      <motion.aside className="ep-nextup" variants={rise}>
-        <h2>{k.nextTitle}</h2>
-        <p>
-          <Txt item={c.next_body} />
-        </p>
-      </motion.aside>
+      {/* "다음 화" — 번호를 보이는 시리즈에서만 (D88 E-20). 번호가 없는 이야기는 다음 화를 약속하지 않는다 (남은 일은 앞의 "이어짐" 장면이 이미 말했다) */}
+      {bare ? null : next ? (
+        <motion.a className="ep-other" href={realPath(next.ep)} variants={rise} data-testid="next-episode">
+          <span>{k.nextTitle}</span>
+          <strong>{oneLine(next.ep.scenes.cover.title)}</strong>
+          <em>{next.ep.scenes.cover.episode.t}</em>
+          <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </motion.a>
+      ) : (
+        <motion.aside className="ep-nextup" variants={rise}>
+          <h2>{k.nextTitle}</h2>
+          <p>
+            <Txt item={c.next_body} />
+          </p>
+        </motion.aside>
+      )}
+      {beside.map(({ story }) => (
+        <motion.a key={story.code} className="ep-other" href={shortPath(story)} variants={rise} data-testid={`beside-${story.code}`}>
+          <span>{k.besideLabel}</span>
+          <strong>{oneLine(story.scenes.cover.title)}</strong>
+          <em>{k.besideNote}</em>
+          <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </motion.a>
+      ))}
       {others.map((s) => (
         <motion.a key={s.series} className="ep-other" href={hrefOf(s, real)} variants={rise} data-testid={`other-${s.series}`}>
           <span>{k.otherLabel}</span>
           <strong>{s.name}</strong>
-          <em>
-            {s.episode} · {s.title}
-          </em>
+          <em>{labelOf(s, real)}</em>
           <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
             <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -633,7 +680,8 @@ function SourceSheet({ item, onClose }: { item: T; onClose: () => void }) {
 // ─────────────────────────────────────────────────────────── 회차
 
 export function Episode(parts: EpisodeParts) {
-  const { ep, start, real = false } = parts;
+  const { ep, start, real = false, numbered = true } = parts;
+  const bare = real && !numbered;
   const [reader, setReader] = useState<ReaderId>("new");
   const [step, setStep] = useState(() => Math.max(0, start?.scene ? ep.assembly.new.indexOf(start.scene) : 0));
   const [asked, setAsked] = useState<readonly string[]>([]);
@@ -752,11 +800,20 @@ export function Episode(parts: EpisodeParts) {
                 </svg>
               </button>
             )}
-            <p className="ep-bar-title">
-              <span>{ep.series.name}</span>
-              <span aria-hidden="true"> · </span>
-              <span>{ep.scenes.cover.episode.t}</span>
-            </p>
+            {bare ? (
+              // 번호가 없는 이야기 — 짧은 이야기의 위쪽 줄과 같은 꼴 (무게 · 주제 이름)
+              <p className="ep-bar-title">
+                <span>{c.weightLong}</span>
+                <span aria-hidden="true"> · </span>
+                <span>{ep.series.name}</span>
+              </p>
+            ) : (
+              <p className="ep-bar-title">
+                <span>{ep.series.name}</span>
+                <span aria-hidden="true"> · </span>
+                <span>{ep.scenes.cover.episode.t}</span>
+              </p>
+            )}
             {real ? (
               // 근거 — 켜면 근거가 있는 문장에 밑줄이 생기고, 누르면 원문 구절이 뜬다. 시안에서는 맨 위 띠에 있던 단추다
               <button type="button" className="ep-bar-src" aria-pressed={srcOn} onClick={() => setSrcOn((v) => !v)} data-testid="src-toggle">
@@ -822,7 +879,7 @@ export function Episode(parts: EpisodeParts) {
                     {CHROME.map.close}
                   </button>
                 </header>
-                <ConceptMap ep={ep} reader={reader} states={states} real={real} />
+                <ConceptMap ep={ep} reader={reader} states={states} real={real} numbered={numbered} />
               </motion.div>
             ) : null}
           </AnimatePresence>

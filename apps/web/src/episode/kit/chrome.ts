@@ -25,6 +25,9 @@ export const CHROME = {
     notSaved: "지금은 미리보기라, 이 지도는 아직 저장되지 않아요. 화면을 닫으면 처음으로 돌아가요.",
     home: "첫 화면으로",
     otherLabel: "다른 시리즈",
+    // F-E2 — 이 긴 이야기 곁의 짧은 이야기로 가는 길 (실제 화면)
+    besideLabel: "이 이야기 곁의 짧은 이야기",
+    besideNote: "짧은 이야기 · 체험 없음",
   },
   map: {
     title: "내 개념 지도",
@@ -39,6 +42,10 @@ export const CHROME = {
     whereBefore: "전에 주운 것",
     whereElse: "다른 시리즈에서 주움",
     whereGhost: "아직 줍지 않았어요. 다음 화에서 만나요.",
+    // F-E2 — 번호가 없는 이야기 (실제 화면): "다음 화"를 약속하지 않는다 · "N화에서 주움" 대신
+    legendGhostPlain: "아직 안 주운 것",
+    whereGhostPlain: "아직 줍지 않았어요. 이야기가 이어지면 만나요.",
+    whereHere: "이 이야기에서 주움",
     edgeNote: "선은 이 이야기에서 개념이 이어진 길이에요.",
     shelfLabel: "시리즈",
     shelfHere: "지금 읽는 중",
@@ -54,6 +61,9 @@ export const CHROME = {
     srcTitle: "이 문장의 근거",
     srcNone: "따로 붙은 구절이 없는 문장이에요.",
     seriesTag: "시리즈",
+    // F-E2 — 번호가 없는 이야기 (실제 화면 · 번호 화면 규칙 D88 E-20): 시리즈가 아니라 주제 · 번호 자리에는 무게의 이름
+    topicTag: "주제",
+    weightLong: "긴 이야기",
     switchSuffix: "회차",
   },
   // ── UX-4: 풀이 시안의 스위치 둘 (제품의 일부가 아니다 — 풀이 장면에서만 보인다)
@@ -106,4 +116,24 @@ export const CHROME = {
     quietKnown: "지금 아는 것",
     quietComing: "다음에 나올 것",
   },
+} as const;
+
+/** 짧은 이야기 화면의 글 (이야기의 글이 아니다 — UX-7 의 lab SHORT_CHROME 을 F-E2 에서 여기로. 글자는 그대로). draft · back · backHref · toToday 는 시안 전용이다 (실제 화면은 첫 화면으로 간다) */
+export const SHORT_CHROME = {
+  draft: "시안",
+  back: "오늘로",
+  backHref: "/lab/today",
+  barKind: "짧은 이야기",
+  /** 표지의 번호 자리 — 무게의 이름 (계약의 weight 에서. 이야기 칸이 아니다 — EPISODE §13.2) */
+  weightLabel: "짧은 이야기",
+  thought: "이렇게 생각하기 쉬워요",
+  breaker: "그런데 문서에는",
+  folded: "긴 이야기와 같은 도구",
+  open: "펼치기",
+  close: "접기",
+  lineLabel: "이 이야기의 한 줄",
+  mapButton: "내 개념 지도 보기",
+  where: "짧은 이야기에서 만남",
+  toToday: "오늘의 이야기로 돌아가기",
+  restart: "처음부터 다시",
 } as const;

@@ -1,4 +1,4 @@
-/* UX-7 — "오늘" 시안 화면 · 짧은 이야기 · 지도 견본 (lab 전용). 회차 화면과 같은 뿌리 (.ep-root — 글꼴 · 폭 · 색 변수)를 쓴다.
+/* "오늘" 화면 · 짧은 이야기 · 지도 (UX-7 시안 → F-E2 에서 실제 주소 / · /short/* · /map 과 한 벌로 — lab/today 에서 옮겼다). 회차 화면과 같은 뿌리 (.ep-root — 글꼴 · 폭 · 색 변수)를 쓴다.
    색은 전부 --ep-* 다 (값을 적지 않는다) — 그래서 색 시안 넷이 같은 화면에 그대로 걸린다. 색 시안에만 있는 변수 셋은 지금의 값을 기본값으로 둔다. */
 .td-root,
 .st-root {
@@ -145,11 +145,32 @@
   font-size: 15.5px;
   color: var(--ep-ink);
 }
-.td-meta {
+/* 국내 / 해외 꼬리표 · 카테고리 · 날 (F-E2 — D83 ② ③). 해외만 이끼색으로 찬다 (지식 거리가 가장 큰 곳 — 눈에 띄게). 새 색 없음 */
+.td-when {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 6px;
   margin: 0 0 10px;
   font-size: 12.5px;
   line-height: 1.4;
   color: var(--ep-muted);
+}
+.td-when span {
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ep-ink2);
+  box-shadow: inset 0 0 0 1px var(--ep-rule);
+}
+.td-when span[data-place="abroad"] {
+  background: var(--ep-moss-soft);
+  color: var(--ep-moss);
+  box-shadow: none;
+}
+.td-when em {
+  font-style: normal;
 }
 .td-weight {
   display: flex;

@@ -22,7 +22,7 @@ import { CARRY, CARRY_BANNER, CARRY_EPISODE } from "./episodes/carry-sample/data
 import { isPages, isSteps, isToggle } from "../../../episode/kit/frames/LabCard";
 import { PICTURES } from "../../../episode/kit/frames/pictures";
 import { EPISODES, SHELF } from "../../../episode/kit/shelf";
-import { LIVE, realPath, today } from "../../../episode/catalog";
+import { LONGS, STORIES, bundle, hrefOfLine, latestPerSeries, numbered, realPath } from "../../../episode/catalog";
 import { HOME } from "../../../episode/home-copy";
 
 const REPO = path.join(import.meta.dirname, "../../../../../..");
@@ -76,9 +76,10 @@ for (const e of EPISODES) {
   }
   // S7 (F-E1) — 실제 주소가 계약의 칸에서 나온 꼴이다 · 발표된 날 (손으로 적은 값)이 날짜 꼴이고 표지의 meta 글에 그 달 · 날이 있다
   if (real !== realPath(e)) errors.push(`S7 real "${real}" 이 /s/<series.code>/<number> (${realPath(e)}) 가 아니다`);
+  // 발표된 날은 손으로 쓴 셋에만 있다 (F-E1 의 "오늘의 회차"가 쓰던 값 — F-E2 부터 첫 화면은 목록의 차례 · 낸 날 day 를 쓴다). 목록에 파일로 들어온 이야기 (episodeOf)는 이 칸이 없다
   const day = /^(\d{4})-(\d{2})-(\d{2})$/.exec(announced ?? "");
-  if (!day) errors.push(`S7 announced "${announced}" 가 YYYY-MM-DD 가 아니다`);
-  else if (!e.scenes.cover.meta.t.includes(`${Number(day[2])}월 ${Number(day[3])}일`)) errors.push(`S7 announced ${announced} 의 달 · 날이 표지 meta "${e.scenes.cover.meta.t}" 에 없다`);
+  if (announced !== undefined && !day) errors.push(`S7 announced "${announced}" 가 YYYY-MM-DD 가 아니다`);
+  else if (day && !e.scenes.cover.meta.t.includes(`${Number(day[2])}월 ${Number(day[3])}일`)) errors.push(`S7 announced ${announced} 의 달 · 날이 표지 meta "${e.scenes.cover.meta.t}" 에 없다`);
   digits("short", short, errors);
   digits("readers", Object.values(readers).map((rd) => rd.label), errors);
   if (report(errors)) console.log("OK — 계약 검증을 지났고 (구절은 전부 저장된 문서에 있고, 글의 숫자는 전부 근거 구절 · 계산 · 화면 번호 중 하나다. 풀이 칸의 규칙도 맞다), 화면 쪽 검사도 맞다");
@@ -113,9 +114,17 @@ for (const e of EPISODES) {
   console.log("\n■ 공통 화면 글 (kit/chrome.ts) · 첫 화면 글 (home-copy.ts)");
   const errors: string[] = [];
   digits("CHROME", CHROME, errors);
-  digits("HOME", HOME, errors);
-  if (LIVE.length !== EPISODES.length || LIVE.some((x, i) => x.ep !== EPISODES[i])) errors.push("S7 실제 화면의 회차 (catalog.tsx LIVE)가 책장 (kit/shelf.ts EPISODES)과 다르다");
-  console.log(`실제 주소: ${LIVE.map((x) => realPath(x.ep)).join(" · ")} — 오늘의 회차 ${realPath(today().ep)} (발표 ${today().ep.announced})`);
+  // 첫 화면 글 — 숫자는 "지난 이야기 30초" 하나뿐 (UX-7 의 그 말 · lab/today/check.ts T6 과 같은 예외)
+  digits("HOME", { ...HOME, recap: "" }, errors);
+  // S7 (F-E2) — 책장은 이야기 목록 (catalog.tsx STORIES)에서 나온다: 시리즈마다 가장 새 긴 이야기. 낸 날 (day — 손으로 적은 값)은 날짜 꼴이다
+  const latest = latestPerSeries();
+  if (latest.length !== EPISODES.length || latest.some((x, i) => x.ep !== EPISODES[i])) errors.push("S7 책장 (kit/shelf.ts EPISODES)이 이야기 목록 (catalog.tsx)의 시리즈마다 가장 새 긴 이야기와 다르다");
+  for (const x of STORIES) if (x.day !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(x.day)) errors.push(`S7 낸 날 "${x.day}" 가 YYYY-MM-DD 가 아니다 — ${hrefOfLine(x)}`);
+  const hrefs = STORIES.map(hrefOfLine);
+  if (new Set(hrefs).size !== hrefs.length) errors.push(`S7 실제 주소가 겹친다 — ${hrefs.join(" · ")}`);
+  const b = bundle();
+  console.log(`실제 주소: ${hrefs.join(" · ")} — 첫 화면 맨 위 묶음 ${b.day ?? "낸 날 없음 (최근 이야기)"} ${b.top.length} 편 · 지난 이야기 ${b.rest.length} 편`);
+  console.log(`번호 화면 규칙 (D88 E-20): ${[...new Set(LONGS.map((x) => x.ep.series.code))].map((c) => `${c} ${numbered(c) ? "번호 보임" : "번호 없음"} (긴 이야기 ${LONGS.filter((x) => x.ep.series.code === c).map((x) => `${x.ep.number}화`).join(" ")})`).join(" · ")}`);
   if (report(errors)) console.log("OK — 숫자가 든 글이 없다");
 }
 
