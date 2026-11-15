@@ -8,6 +8,7 @@
 | 2026-11-12 | **지난 회차 칸 셋 — 실물 전 · 3화에서 확인** (D75 · P-E2 ⑦ N-1 ~ N-3): 지난 회차를 가리키는 칸 `Episode.previous?: EpisodeRef` (§3.4) · 지난 회차에서 온 구절의 키 꼴 `<code>:<key>` (§4.5) · 같은 그림의 지난 값 `ReachedNode` · `StoppedNode` 의 `before?: ChainBefore` · `SeatSide.before?: SeatBefore` (§7.9). 불변식 25 · 26 (`PREV_MISSING` · `PREV_VALUE_SRC` · `PREV_KEY`) · 지난 회차를 받으면 대 보는 것 (`PREV_MISMATCH` · 알림 `PREVIOUS_NOT_CHECKED`) · 위반 픽스처 셋. 모양은 P-E2 가 지어 본 이어 쓰기 (`review.json` 의 `carry` · `packages/pipeline/src/episode.ts`)에 맞췄다. **고를 수 있는 칸 (`?`)이라 골든 셋은 0자 · 다른 칸은 바꾸지 않았다** | UX-6 |
 | 2026-11-14 | **짧은 이야기 · 번호 없는 이야기 (D80 · D86)** — 따로 선 타입 `ShortStory` (+ `Sibling` · `ToolsFrom` · 장면 넷 `ShortScenes` · `ShortSolve`) · 무게 (`StoryWeight` · Episode 에 고를 수 있는 칸 `weight?: "long"` — 없으면 긴 이야기) · `NoLabWhy` 에 `"short"` · `ShortSceneId` · §13 · 불변식 27 ~ 29 (`PLAIN_WHY` · `SCHEMA_KEY` · `REF_TOOL` · `ID_RANGE` · `SIBLING_MISMATCH` · 알림 `SIBLING_NOT_CHECKED` · `TOOLS_FROM_NOT_CHECKED`) · 검증 `validateShortStory` · `validateStory`. 실물 하나 (UX-7 짧은 이야기 — 영훈의료재단 · `lab/today/short`)에서 도출 · 골든 넷째 `fixtures/episode-short-privacy-yeonghun.json` · 위반 픽스처 4. 덧붙임 · 개념 이야기 · 첫 이야기가 나중에 "1화"가 되는 판 처리는 칸 없음 (미확인 · §13.7). **긴 이야기의 다른 칸 · 골든 셋은 바꾸지 않았다** | B-E3 |
 | 2026-11-14 | **홀로 선 짧은 이야기 (D88 E-21)** — `ShortStory.sibling` · `tools_from` 을 `\| null` 로 (곁 이야기 · 가리킬 도구가 없으면 `null`) · 그때 도구 · 지도의 글 셋 (`ShortWhyScene.tool_lead` · `ShortKeepScene.map_note` · `gain_label`)도 `\| null` · 불변식 30 (`SHORT_ALONE` — 도구가 없으면 그 글도 없다 · 있으면 있다) · 불변식 29 는 가리킨 것이 있을 때만 · §13.9 · 위반 픽스처 하나 (`episode-short-alone-tool-text`). 실물 하나 — 파이프라인이 낸 첫 짧은 이야기 `license-notice` (중앙행심위 운전면허 정지처분 취소 · `packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice/story.json` — 골든이 아니다 · 사람 게이트 전). 표지의 귀띔 (`cover.hint`)은 필수 그대로 (뜻을 넓혔다 — E-25) · 홀로 선 짧은 이야기의 제 도구 카드는 칸 없음 (E-24). **골든 넷 0자 · 긴 이야기의 칸은 바꾸지 않았다** | P-S1 |
+| 2026-11-15 | **짧은 이야기 새 꼴 — 표지 + 한 흐름 (D91 · D95 · D98 · D99 ①)** — 따로 선 타입 `FlowStory` (표지 `FlowCover` · 흐름 = 덩이의 차례 `FlowBlock` = `FlowPara` · `FlowCite` · `FlowFlip` · `FlowPick` (+ `FlowOption`) · 남음 `FlowKeep` (+ 낱말 `FlowWord`) · 그리지 않을 것) · 뼈의 표시 `FlowBeat` · 옛 꼴과 가르는 칸 `form: "flow"` (무게는 둘 다 `short`) · §14 · 불변식 31 ~ 36 (`FLOW_ORDER` · `FLOW_FLIP` · `FLOW_PICK` · `CITE_VERBATIM` · `FLOW_WORD` — 깨는 사실의 구절은 11 `BREAKER_SRC` 그대로) · 검증 `validateFlowStory` · `parseFlowStory` · `validateStory` 가 세 꼴을 가른다 · §4.3 `calc` 의 키도 숫자 토막으로 읽는다 ("27.9" → 27 · 9 — 정수 키뿐인 골든 넷은 결과 같음 · E-32). 실물 셋 (UX-8b-B 손 견본 — 골든 다섯째 `fixtures/episode-short-obesity-who.json` · 같은 꼴의 UX-8b-A · UX-8 — 셋 다 통과) · 위반 픽스처 7. 선반 · 번호 · 곁 이야기 · 다른 이야기의 도구 · 풀이 · 카테고리 (카탈로그의 값) · 사망 칸은 만들지 않았다 (§14.7). **옛 꼴 (ShortStory §13 · 골든 넷째 · `license-notice`)과 긴 이야기의 칸 · 골든 넷은 바꾸지 않았다** — 옛 꼴은 D99 ④ 에서 내린다 | B-E4 |
 
 > **상태: 게이트 전 (B-E1 · 2026-11-11).** _open 은 §11.
 > 회차 (Episode) = Claro 가 기사를 내는 새 모양 (D59). 시리즈 안의 한 화 · 장면 여덟 · 가운데에 독자가 직접 해 보는 풀이.
@@ -30,10 +31,14 @@
 >
 > - **홀로 선 짧은 이야기 (P-S1 · 2026-11-14)** — 파이프라인이 낸 첫 짧은 이야기 「면허 정지가 취소됐다는데, 잘못이 없었다는 걸까」 (`license-notice` — 국민권익위 중앙행정심판위원회 2026-10-28 보도자료 하나 · S-2 아침 한 장의 추천에서 고름). 같은 사건의 긴 이야기도 가리킬 도구도 없다. **`| null` 다섯 칸과 불변식 30 만** 이 실물에서 더했다 (§13.9) — 골든이 아니라 파이프라인 산출물이고 사람 게이트 전이다 (골든으로 올릴지는 PM)
 >
+> - **짧은 이야기 새 꼴 (B-E4 · 2026-11-15) — 표지 + 한 흐름.** 실물 셋: UX-8b-B 「어른 셋 중 하나가 비만이라는데, 그 한 명은 누구일까」 (손 · 도윤이 눈 가리고 고름 — D98 · **골든 다섯째** `fixtures/episode-short-obesity-who.json`) ·
+>   같은 꼴의 UX-8b-A · UX-8 (`apps/web/src/app/lab/short-a/data.ts` · `lab/short/data.ts` — lab 꼴 `lab/short/types.ts` · `logs/frontend/UX-8.md` ⑥ ⑦). **새 타입 `FlowStory` 와 그 칸은 §14 에만** — 옛 짧은 이야기 (ShortStory · §13)는 그대로 서고 D99 ④ (갈아 끼우기)에서 내린다.
+>   §14 의 표시는 **실물 셋** (견본 셋에 다 있다) · **실물 하나** (B 에만)
+>
 > **표시** — **실물** 두 회차에 있다 · **실물 하나** 한 회차에만 있다 · **실물 없음** 결정에서 왔지만 회차 실물이 없다 (첫 실물이 나오면 다시 본다) · **실물 전** 결정과 파이프라인의 시험에서 왔고 다음 회차 (3화)가 첫 실물이다 — 고를 수 있는 칸 · **미확인** 정하지 않았다 (§10)
 >
-> **검사** — `pnpm --filter @claro/contract test` (`test/episode.test.ts` — 골든 넷 (긴 셋 · 짧은 하나) 통과 · `fixtures/invalid/episode-*.json` 전부 거부 · `test/contract-docs.test.ts` — 이 문서의 타입 블록 ↔ 코드의 칸 목록).
-> 검증기는 `packages/contract/src/validate-episode.ts` 의 `validateEpisode(회차, { documents })` · 짧은 이야기는 `validateShortStory(이야기, { documents, episodes })` · 어느 쪽인지 모르면 `validateStory` (§13.1).
+> **검사** — `pnpm --filter @claro/contract test` (`test/episode.test.ts` — 골든 다섯 (긴 셋 · 짧은 옛 꼴 하나 · 짧은 새 꼴 하나) 통과 · `fixtures/invalid/episode-*.json` 전부 거부 · `test/contract-docs.test.ts` — 이 문서의 타입 블록 ↔ 코드의 칸 목록).
+> 검증기는 `packages/contract/src/validate-episode.ts` 의 `validateEpisode(회차, { documents })` · 짧은 이야기 옛 꼴은 `validateShortStory(이야기, { documents, episodes })` · 새 꼴은 `validateFlowStory(이야기, { documents })` · 어느 쪽인지 모르면 `validateStory` (§13.1 · §14.1).
 
 ---
 
@@ -41,7 +46,8 @@
 
 **이 계약이 주인인 것** — Episode · Series · TrackItem · EpisodeRef · EpisodeText · EpisodeDoc · EpisodeQuote · Tool · Pickup · Assembly · 장면 여덟의 글 (Scenes 와 그 아래) ·
 ToolMap · Solve · SolveEntry · Flip · Lab · PictureRef · 틀 넷 (ToggleFrame · ChainFrame · SeatsFrame · PagesFrame) · 같은 그림의 지난 값 (ChainBefore · SeatBefore) · 기본 풀이 셋 (PlainFlip · PlainThree · PlainQuiet) ·
-짧은 이야기 (ShortStory · Sibling · ToolsFrom · ShortScenes 와 장면 넷 · ShortSolve — §13 · B-E3 · 홀로 선 짧은 이야기의 `| null` 칸 — §13.9 · P-S1).
+짧은 이야기 (ShortStory · Sibling · ToolsFrom · ShortScenes 와 장면 넷 · ShortSolve — §13 · B-E3 · 홀로 선 짧은 이야기의 `| null` 칸 — §13.9 · P-S1) ·
+짧은 이야기 새 꼴 (FlowStory · FlowCover · FlowBlock 과 덩이 넷 FlowPara · FlowCite · FlowFlip · FlowPick · FlowOption · FlowKeep · FlowWord · FlowBeat — §14 · B-E4).
 
 **안 넣는 것**
 - **지식 상태.** 독자가 무엇을 아는지 · 누가 "처음 온 독자"인지 · 어느 도구를 접을지 판정하는 것은 이 계약에 없다. 회차는 **조립마다 어느 장면을 보이나**만 적는다 (§5).
@@ -512,6 +518,8 @@ ShortSolve {                        // 풀이 = 입구 + 기본 풀이 "뒤집�
   entry: SolveEntry
   plain: PlainFlip                  // why = "short" (불변식 27)
 }
+
+// ── 짧은 이야기 새 꼴 (FlowStory — 표지 + 한 흐름 · §14 · B-E4) — 타입은 §14 의 블록에 있다 (한 타입은 한 곳에)
 ```
 
 관계 한 장:
@@ -535,6 +543,11 @@ ShortStory (짧은 이야기 — §13) ──event_ref──▶ Event (곁 이�
      ├─ tools_from.episode ───▶ 그 이야기의 Tool 카드 (글자 그대로 · 지도도 그 이야기의 것)
      ├─ docs · quotes (§4 그대로) · scenes (장면 넷)
      └─ solve (입구 + 뒤집기만 · why = short)
+
+FlowStory (짧은 이야기 새 꼴 — §14 · form = "flow") ──event_ref──▶ Event
+     ├─ docs · quotes (§4 그대로)
+     ├─ cover (표지 — 물음 단추 하나) → flow (덩이의 차례: p · cite · flip · pick — 뼈는 흐름 속의 표시) → keep (한 줄 · 낱말 · 누구의 말)
+     └─ 선반 · 번호 · 곁 이야기 · 가리킨 도구 · 풀이 · 체험 · 장면 칸이 없다 (카테고리는 카탈로그 — §14.7)
 ```
 
 ---
@@ -639,6 +652,7 @@ DATA_MODEL 에 넣지 않은 까닭 — 그 계약은 저장되는 사실 쪽 (F
 
 글의 숫자마다: ① `src` 구절 안에 그 숫자가 있거나 ② `calc` 에 밝혔거나 ③ `ui` (화면 번호)다.
 - 숫자 토막으로 댄다 — 쉼표를 떼고 숫자가 아닌 것으로 끊는다 ("3,311억" → 3311 · "3.75" → 3 · 75). 앞의 0 은 뗀다. 연도는 글의 2026 ↔ 구절의 ’26 을 받는다
+- **`calc` 의 키도 같은 법으로 끊어 읽는다** (B-E4): `{ "27.9": "35.4 − 7.5 …" }` 는 글의 27 · 9 를 받는다. 전에는 키 글자 그대로 댔다 — 골든 넷의 키는 전부 정수 ("6" · "12" …)라 결과가 같다. 소수를 계산한 첫 실물 (§14 의 10년 전 값 27.9 — 그래프 그림에만 있는 수)이 키를 "27"로 적으면 근거 시트에 "27 = …"이 보인다 (_open E-32)
 - 영어 원문의 읽기 규칙 둘 (구절 쪽에만): 달 이름 → 수 (October = 10) · 분수 → 소수 (3-3/4 = 3.75 · 1/4 = 0.25). 영어로 쓴 수 (three · eight)는 읽지 않는다 — `calc` 로 밝힌다
 - **보지 않는 것**: 글의 뜻이 구절에서 나오는가 (의미 대조 — 사람 · W-2) · 한글로 쓴 수 ("여섯 가지")
 
@@ -850,6 +864,15 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | `ShortStory.sibling` | 같은 사건의 어느 긴 이야기 곁인가 — **곁 이야기가 없다 (`null`)는 것도 사람이 적는다** (같은 사건의 긴 이야기가 정말 없는가 — §13.9) | 가리킨 이야기를 받으면 같은 사건 (`event_ref`)인지만. `null` 이면 보지 않는다 — 같은 사건의 긴 이야기가 있는데 `null` 로 적어도 통과한다 |
 | `ShortStory.tools_from` | 어느 이야기의 어느 도구를 다시 만나나 — **가리킬 도구가 없다 (`null`)는 것도** | 가리킨 이야기를 받으면 그 도구가 거기 있는지 · `null` 이면 도구 · 지도의 글 셋이 `null` 인지만 (불변식 30) |
 | `ShortStory.series` (선반) | 이 이야기를 어느 선반에 놓나 — 이미 있는 선반인가 · 새 선반이면 그 이름 (홀로 선 짧은 이야기는 새 선반의 첫 이야기일 수 있다 — §13.9) | 모양만 |
+| **짧은 이야기 새 꼴 (FlowStory · §14)** | | |
+| 꼴 (`form` — 옛 꼴로 낼까 새 꼴로 낼까) | 지금은 새 짧은 이야기는 새 꼴로 (D99) — 옛 꼴은 D99 ④ 에서 내린다 | 모양만 — `form` 이 있으면 새 꼴의 모양으로 본다 (§14.1) |
+| `FlowPara.beat` (뼈의 표시) | 그 덩이가 정말 첫 생각 (독자가 하는 짐작) · 깨는 사실 (문서) · 이름 붙이기 · 내려앉기인가 | 차례 · 수만 (불변식 32) · 깨는 사실에 구절 (11). 표시가 그 글의 뜻과 맞는지는 못 본다 |
+| `FlowFlip` | 뒤집기가 진짜인가 · **뉴스에 대한 것인가** (D95 ③) | 하나인지 · 뒤쪽 말에 구절이 있는지만 (33) |
+| `FlowPick` 의 받는 말 | 어느 쪽을 골라도 맞다 · 틀렸다로 받지 않나 (채점하지 않는다 — UX-8 ⑥ 10 · UX-9 ⑤ ③) · 같은 곳으로 가나 | 둘인지 · 받는 말마다 구절이 있는지만 (34) |
+| `FlowStory.not_drawn` | 그림이 넘지 말아야 할 선 | 읽지 않는다 |
+| **줄기는 뉴스인가 (D95)** — 이야기 전체 | 이 이야기는 무엇에 대한 것인가 — 뉴스인가 개념인가 · "그래서 무슨 일이었는데?"에 한 문장으로 답이 되나 · 남는 한 줄이 뉴스에 대한 것인가 · 술술 읽히나 (D91) | **못 본다 — 사람 게이트의 일** (§14.6). 꼴은 개념 강의가 된 판 (UX-8)도 받는다 |
+| 사람이 숨진 사건 (새 꼴) | 새 꼴에는 칸이 없다 — 사람이 숨진 사건 · 부고는 새 꼴로 내지 않는다 (아침 고르기에서 거른다 · D86) | 없다 (§14.7 · E-29) |
+| 카테고리 (새 꼴도) | 다섯 가운데 어디인가 — 카탈로그에 적는다 (이야기에 칸이 없다) | 없다 (§14.7 · E-27) |
 
 파이프라인 단계마다 어느 칸을 채우는지 (p3 · p4 · p5 · 라이브러리 · 사람)는 `logs/backend/B-E1.md` ⑥.
 
@@ -869,7 +892,7 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | 6 | 조립은 장면 여덟의 차례대로 · `cover` 로 시작 · `keep` 으로 끝 · `aha` 포함 · 겹침 없음 | `ASSEMBLY_ORDER` | D59 | `episode-assembly-out-of-order` |
 | 7 | 시리즈 줄에 `now` 가 정확히 하나 · 그 `no` 가 표지의 번호와 같다 | `TRACK_NOW` | 실물 둘 | `episode-track-two-now` |
 | 8 | **구절은 저장된 문서의 글 그대로** (빈칸 · 줄바꿈만 무시). 문서가 저장돼 있다 | `QUOTE_VERBATIM` · `DOC_MISSING` | check A | `episode-quote-not-verbatim` |
-| 9 | **글의 숫자는 근거 셋 중 하나** — 구절 · 계산 (`calc`) · 화면 번호 (`ui`) (§4.3) | `NUMBER_UNGROUNDED` | check B | `episode-number-ungrounded` |
+| 9 | **글의 숫자는 근거 셋 중 하나** — 구절 · 계산 (`calc` — 키도 숫자 토막으로 읽는다 · B-E4) · 화면 번호 (`ui`) (§4.3) | `NUMBER_UNGROUNDED` | check B | `episode-number-ungrounded` · `episode-flow-flip-number-ungrounded` (새 꼴 — 뒤집기의 말에 지어낸 수) |
 | 10 | 맨 글자열 (`string` 칸)에는 숫자가 없다 | `BARE_DIGIT` | check C | `episode-bare-digit` |
 | 11 | 깨는 사실에 구절이 있다 (사망이 아니면) | `BREAKER_SRC` | check E1 | `episode-breaker-no-src` |
 | 12 | 체험도 기본 풀이도 없으면 안 된다 · 체험이 없으면 기본 풀이의 `why` 가 넷 중 하나 · 체험이 있으면 `why` 는 `null` | `SOLVE_EMPTY` · `PLAIN_WHY` | D61 ① · check E2 | `episode-no-lab-no-why` |
@@ -891,8 +914,15 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | 28 | **짧은 이야기에는 번호 · 시리즈 줄 · 체험 · 장면 넷 밖의 장면 칸이 없다** — 넣으면 모양이 거부한다 (불변식 1 — 칸이 없다). **실물 하나** | `SCHEMA_KEY` | D86 · UX-7 ③ 모자람 1 · 3 · 6 · UX-7 ⑤ 4 (B-E3) | `episode-short-numbered` · `episode-short-eight-scenes` · `episode-short-with-lab` |
 | 29 | **다른 이야기를 가리키기 (가리킨 것이 있을 때만 — `sibling` · `tools_from` 이 `null` 이 아닐 때)** — 가리킨 도구 (`tools_from.keys`) 하나 이상 · 겹침 없음 · 가리킨 이야기 (`sibling` · `tools_from`)의 판 ≥ 1 · 이 이야기 자신이 아니다. **가리킨 이야기를 받으면**: 곁 이야기가 같은 사건 · 도구가 그 이야기에 있다. **실물 하나** | `REF_TOOL` · `ID_RANGE` · `SIBLING_MISMATCH` | UX-7 ③ 모자람 4 · 5 (B-E3) | 픽스처 없이 (시험 — 받아야 보는 것이 반이다) |
 | 30 | **홀로 선 짧은 이야기 — 가리킨 도구가 없으면 (`tools_from: null`) 도구 · 지도를 말하는 글도 없다** (`scenes.why.tool_lead` · `scenes.keep.map_note` · `scenes.keep.gain_label` 이 셋 다 `null`). 거꾸로 도구를 가리키면 그 글 셋이 다 있다. 없는 것을 있는 것처럼 보이지 않는다. 칸을 빼지는 않는다 — `null` 을 적는다 (§12 · 빼면 `SCHEMA_MISSING`). 곁 이야기 (`sibling`)는 `null` 이어도 묶인 글이 없다 (표지의 귀띔 `hint` 는 그대로 필수다 — §13.9). **실물 하나** | `SHORT_ALONE` | D88 E-21 · P-S1 의 첫 짧은 이야기 (§13.9) | `episode-short-alone-tool-text` |
+| 31 | **짧은 이야기 새 꼴에는 장면 · 선반 · 번호 · 곁 이야기 · 가리킨 도구 · 풀이 · 체험 칸이 없다** — 표지 · 흐름 · 남음 · 그리지 않을 것뿐. 옛 꼴 (§13)의 칸이 섞이면 모양이 거부한다 (불변식 1). 카테고리 · 사망 칸도 없다 (§14.7). **실물 셋** | `SCHEMA_KEY` | §14.7 · UX-8 ⑦ 1 · 2 · 6 (B-E4) | `episode-flow-with-scenes` |
+| 32 | **뼈의 차례** — 첫 덩이는 첫 생각 (`p` · `first_thought`) · 끝 덩이는 내려앉기 (`p` · `land`) · 첫 생각 하나 · 깨는 사실 하나 · 이름 하나 이상 · **첫 생각 → 깨는 사실 → 이름 → 뒤집기 → 내려앉기** · 고르기는 첫 생각 뒤 · 첫 내려앉기 앞 어디든 (§14.3). **실물 셋** | `FLOW_ORDER` | UX-8 ⑥ 3 · lab check L7 (셋 다) · 실물 셋의 차례 (B-E4) | `episode-flow-flip-before-name` |
+| 33 | **뒤집기는 정확히 하나** · 뒤쪽 말 (`b` — 문서가 깨는 쪽)에 구절. 깨는 사실 (`beat: breaker`)의 구절은 11 이 본다. **실물 셋** | `FLOW_FLIP` · (`BREAKER_SRC`) | D91 · D61 ⑥ · UX-8 ⑦ 7 · lab check L7 (B-E4) | `episode-flow-no-flip` |
+| 34 | **고르기는 없거나 하나** · 고를 것 둘 · `key` 겹침 없음 · 받는 말마다 구절. **실물 셋** | `FLOW_PICK` | D91 ("체험은 없거나 아주 작게") · UX-8 ⑥ 10 · lab check L7 (B-E4) | `episode-flow-two-picks` |
+| 35 | **문서의 문장 (`cite`)은 근거 구절 안의 글 그대로** (빈칸 · 줄바꿈만 무시) · 구절이 있다. **실물 셋** | `CITE_VERBATIM` | lab `types.ts` ("글자 그대로 — 구절 안에 있어야 한다") · UX-8b-A check L2 (B-E4) | `episode-flow-cite-not-verbatim` |
+| 36 | **낱말 — `key` 겹침 없음 · 낱말마다 흐름의 문단에서 굵게 이름 붙었다** (`**이름**` — 이름 끝의 괄호는 떼고). 카드가 흐름보다 먼저 가르치지 않는다. **실물 셋** | `FLOW_WORD` | UX-8 ⑥ 9 · lab check L8 (B-E4) | `episode-flow-word-unnamed` |
 
 - **짧은 이야기 (`validateShortStory`)가 보는 것**: 1 · 2 (판만 — 번호가 없다) · 3 · 4 · 8 · 9 · 10 · 11 · 13 · 14 · 27 ~ 30. 그 칸이 없어 안 보는 것: 5 ~ 7 · 12 (긴 이야기 쪽) · 15 ~ 26 (체험 · 넘겨 보기 · 지난 회차)
+- **짧은 이야기 새 꼴 (`validateFlowStory`)이 보는 것**: 1 · 2 (판만) · 3 · 4 · 8 · 9 · 10 · 11 (깨는 사실 = `beat: breaker` 인 덩이) · 31 ~ 36. 그 칸이 없어 안 보는 것: 5 ~ 7 · 12 ~ 30 (긴 이야기 · 체험 · 사망 · 지난 회차 · 옛 꼴의 장면 · 무게의 까닭 · 곁 이야기). **크기 (문단 · 문장 · 글자 · 낱말의 수)는 보지 않는다** — 쓰는 법이다 (§14.8). **줄기가 뉴스인가는 못 본다** — 사람 (§14.6)
 - 알림 (거부가 아니다): `SEAT_WHY_NOT_YET` — 그 쪽은 반쪽이다 (금리 2화에 하나) · `QUOTES_NOT_CHECKED` — 저장된 문서를 받지 못해 8 을 보지 않았다 · `PREVIOUS_NOT_CHECKED` — `previous` 가 있는데 지난 회차를 받지 못해 아래를 보지 않았다 ·
   `SIBLING_NOT_CHECKED` · `TOOLS_FROM_NOT_CHECKED` — 짧은 이야기가 가리킨 긴 이야기를 받지 못해 같은 사건인지 · 도구가 거기 있는지 보지 않았다 (29). 가리킨 것이 없으면 (`null` — 홀로 선 짧은 이야기) 이 알림도 없다
 - **지난 회차를 받으면 (`validateEpisode(ep, { previous })` — 실물 전 · §7.9)**: 받은 회차가 `previous` 의 그 판인가 · 같은 시리즈의 앞 화인가 · `before` 가 붙은 틀이 같은 그림 (kind · `picture.id`)이고 그 고리 · 쪽 id 가 지난 회차에 있나 · 지난 값이 그 회차의 값 그대로인가 · 옮겨 온 구절이 그 회차의 구절 그대로인가 → 아니면 `PREV_MISMATCH`. 문서를 받아야 보는 8 처럼, 지난 회차를 받아야 본다 — 위반 픽스처는 문서만 받으므로 이 코드는 시험이 픽스처 없이 본다
@@ -924,6 +954,11 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | **홀로 선 짧은 이야기의 나머지 (§13.9)** — 곁 이야기는 없는데 다른 이야기의 도구는 가리키는 꼴 (칸은 받는다 — 실물 없음) · **제 도구 카드** (홀로 선 짧은 이야기가 새 개념 카드를 싣는 꼴 — 칸 없음) · 개념 라이브러리를 바로 가리키기 · 제 지도 · 짧은 이야기끼리의 곁 이야기 · 새 선반의 `sub` (화면에 안 보인다) · 선반이 나중에 긴 이야기를 얻을 때 | 실물은 곁 이야기도 가리킨 도구도 없는 하나다 (P-S1 `license-notice` — 개념을 글 안에서 풀었다) | 그 짧은 이야기 · _open E-24 |
 | 짧은 이야기의 다른 장면 수 · 조립이 갈리나 · 작은 체험 · 세 칸 / 조용히 (사람이 숨진 사건) · 다른 사건 이야기에서 가져온 도구 · 개념 라이브러리를 바로 가리키기 | 실물 하나 (§13.2 · §13.5 · §13.6) | 그 짧은 이야기 |
 | 덧붙임 (후속 문서 한 줄) · 개념 이야기 (1차 문서 없는 큰 뉴스 → 개념으로) | **실물 없음 — 칸을 만들지 않았다** (§13.7) | 실물 생길 때 |
+| **짧은 이야기 새 꼴 (§14)** — 사람 · 사건이 있는 뉴스에서도 이 꼴이 서나 (실물 셋이 다 같은 숫자 뉴스 · 문서 하나 — UX8-e) · 문서 둘 이상 | 실물 셋이 같은 사건이다 | P-S2 의 한 편 (D99 ③ — 후보 `license-notice` 다시 쓰기) |
+| 새 꼴의 선반 · 번호 — 같은 주제의 둘째 이야기가 생기면 (긴 이야기든 짧은 이야기든) 무엇을 더하나 | 칸 없음 (§14.7) — E-20 과 같은 물음 | 같은 주제의 둘째가 실제로 생길 때 |
+| **새 꼴의 낱말을 독자의 개념 지도에 잇는 길** (UX-8 ⑧ 4 — 퍼센트포인트 ↔ 금리의 %p) · 낱말의 바탕 (라이브러리 개념 · `basis`) · 다른 이야기의 카드를 다시 만나기 | 칸 없음 — 실물은 제 낱말 카드뿐 (§14.5) | D64 · D65 · 도윤 |
+| 새 꼴의 고를 것 셋 이상 · 고르기 둘 · 고르기 밖의 작은 체험 · 문서의 문장 (`cite`)에 뼈의 표시 · 뒤집기 없는 새 꼴 · 사람이 숨진 사건 | 실물 없음 (§14.4 · §14.7) | 그 이야기 |
+| 옛 꼴을 내린 뒤의 이름 (`FlowStory` → `ShortStory` 인가 · `form` 칸을 남기나) | D99 ④ 의 일 (§14.1 · E-26) | D99 ④ |
 | 체험이 있는 회차에 기본 풀이를 같이 내나 | 시안의 견주기 스위치 때문에 실물 둘이 그렇다 (§7.7) | 도윤 (D62 ④) |
 | 큰 글자 · 문서가 말한 것 · 다음 일의 개수 (둘 · 셋 · 셋) | 실물 둘이 같지만 규칙으로 걸 근거가 없다 | — |
 
@@ -956,6 +991,15 @@ D61 ② "같은 체험 그림은 다시 쓴다 — 오늘 값만 바꿔" · D62 
 | E-25 | **표지의 귀띔 (`cover.hint`)을 필수로 뒀다 (P-S1)** — 곁 이야기가 없어도 한 줄을 싣는다 (실물: 발표 하나를 놓고 짧게 본다는 말). 뜻이 "곁 이야기와 한 묶음이라는 말"에서 "표지의 귀띔 한 줄"로 넓어졌다 | 필수 (`EpisodeText`) | `\| null` — 곁 이야기가 없으면 귀띔도 없다 (화면 `<Txt>` 가 null 을 받게 바뀐다) |
 | E-22 | **짧은 이야기를 따로 선 타입으로 뒀다** (§13.1) — Episode 를 넓히지 않았다 | `ShortStory` (+ Episode 의 `weight?: "long"`) | Episode 하나에 무게로 가르는 고를 수 있는 칸 (장면 · 번호 · 도구 · 지도) — Episode 를 읽는 코드가 다 바뀐다 |
 | E-23 | **옮기며 고친 셋** (§13.8) — lab 의 `shelf` (Series 의 셋)을 `series` (Series 통째로 — `sub` 는 긴 이야기 골든의 값) · `scenes.cover.weight_label` ("짧은 이야기")을 빼 화면의 글로 · `sibling` · `tools_from` 을 code 가 아니라 EpisodeRef 로 | 그렇게 했다 | lab 그대로 (`shelf` · `weight_label` · code) — E-17 (code 로 가리키기)과 같은 물음 |
+| E-26 | **짧은 이야기 새 꼴을 따로 선 타입 `FlowStory` + 가르는 칸 `form: "flow"` 로 세웠다** (§14.1 · B-E4) — 옛 `ShortStory` 를 고치지 않았다. 옛 꼴을 읽는 코드 · 골든 넷째 · `license-notice` 0줄 · 0자 | `FlowStory` + `form` (새 꼴에만 · 필수) | 옛 `ShortStory` 를 새 꼴로 바꾼다 — 실제 주소 (`/short/license-notice`) · 화면 · 파이프라인 · 골든이 한 번에 바뀐다 (D99 가 막은 길). **이름 정리 (`FlowStory` → `ShortStory` · `form` 을 남기나)는 D99 ④** |
+| E-27 | **카테고리 (D86 다섯)를 이야기에 두지 않았다 — 카탈로그에** (§14.7) — 긴 이야기 · 옛 꼴과 한 곳 · 낸 뒤 다시 매기는 값 (D89 ④) · 다섯이 MVP 판 · 아침 고르기의 값 (D89 b) | 칸 없음 (카탈로그 `category`) | `category: Category` (닫힌 값 다섯) — lab 꼴 그대로. 그러면 긴 이야기 · 옛 꼴은 카탈로그 · 새 꼴은 이야기 — 두 곳이 된다 |
+| E-28 | **선반 · 곁 이야기 · 다른 이야기의 도구 칸이 없다** (§14.7) — 실물에 없다 (D24) · 곁 이야기는 D91 ① 이 쓰지 않기로 | 칸 없음 | `series: Series \| null` · `tools_from: ToolsFrom \| null` (옛 꼴처럼) — 지금은 모두가 `null` 을 적는다. 나중에 고를 수 있는 칸 (`?`)으로 더하면 골든을 깨지 않는다 |
+| E-29 | **사망 칸이 없다** (§14.7) — 옛 꼴은 `SolveEntry.death` (필수 · 참이면 짧은 이야기로 못 냄)로 사람이 빠뜨리지 못하게 했다. 새 꼴의 실물에는 없다 | 칸 없음 — 아침 고르기 (D86 부고 · 재난 안 다룸)가 거른다 | `death: boolean` 필수 + 참이면 거부 (`DEATH_NOT_QUIET` 처럼) — 늘 `false` 인 칸 |
+| E-30 | **표지의 물음 단추를 글 한 덩이 (`EpisodeText`)로** (§14.2) — lab 꼴은 맨 글자열이었고 A 의 단추에 숫자 (30 ~ 40)가 있어 A 가 꼴 밖 (`ASK_SRC`)에 근거를 적었다 · UX-8 ⑦ 5 | `cover.ask: EpisodeText` | `string` (lab 그대로) — A 는 숫자 때문에 못 들어온다 (`BARE_DIGIT`) |
+| E-31 | **뼈의 표시는 글 문단 (`p`)에만** — 뒤집기 · 고르기는 덩이 자체가 표시 (lab 의 `beat: "flip"` · `"try"` 는 늘 같은 값이라 뺐다) · 문서의 문장 (`cite`)에는 표시 칸이 없다 (실물 셋에 없다) | `FlowPara.beat: FlowBeat \| null` | lab 그대로 — 넷 다 `beat?` (cite 에 표시를 다는 길이 열린다 · flip · pick 은 값이 하나뿐) |
+| E-32 | **§4.3 — `calc` 의 키도 숫자 토막으로 읽는다** ("27.9" → 27 · 9). 긴 이야기 · 옛 꼴에도 같은 규칙 (규칙 하나) — 골든 넷은 정수 키뿐이라 결과 같다 | 키를 끊어 읽는다 | 새 꼴의 골든 키를 "27"로 — 근거 시트에 "27 = 35.4 − 7.5"가 보인다 (독자가 읽는 글이 바뀐다 — 안 된다) |
+| E-33 | **고를 것을 정확히 둘로** (불변식 34) — 실물 셋 다 둘 · 자리에 앉기의 쪽 둘 (불변식 16)과 같은 방식 | 둘 | 둘 이상 — 셋 이상의 실물이 생기면 |
+| E-34 | **남음의 이름표 둘 (`line_label` "이 이야기의 한 줄" · `words_label` "이 이야기에서 만난 낱말")을 이야기에 두었다** — 견본 셋이 같은 글이지만 옛 꼴의 이름표 (`advice_label` · `real_label`)와 같은 자리 | 이야기에 | 화면의 글로 (E-23 의 `weight_label` 처럼) — 골든에서 두 줄이 빠진다 |
 
 ---
 
@@ -1012,7 +1056,7 @@ lab 의 꼴 (`apps/web/src/app/lab/today/short/types.ts` 의 「모자람 1 ~ 6�
   - Episode 를 넓히면 (장면 · 번호 · 도구 · 지도를 고를 수 있게) 긴 이야기의 불변식 (장면 여덟 · 조립 · 시리즈 줄 · 줍는 자리 · 지도)마다 "짧은 이야기가 아니면"이 붙고, 긴 이야기에서 빠진 칸이 거부되지 않는다
   - 지금 Episode 를 읽는 코드가 `number` · `track` · `scenes.zero` 를 그대로 읽는다 — 실제 주소 (`/s/<시리즈 code>/<번호>` · `apps/web/src/episode/catalog.tsx`) · 파이프라인 (`episode.ts` 의 `prev.number + 1`) · 시안 · e2e. **Episode 의 칸은 고를 수 있는 칸 `weight?` 하나 말고 바꾸지 않았다** — 골든 셋 0자 · 그 코드 0줄
 - 같이 쓰는 타입 (EpisodeText · EpisodeDoc · EpisodeQuote · VoiceLabels · Series · EpisodeRef · SolveEntry · Flip · PlainFlip · RealItem)은 다시 정의하지 않는다 — 한 타입은 한 곳에
-- **`weight`** — ShortStory 는 `"short"` (필수). Episode 는 `weight?: "long"` — **칸이 없으면 긴 이야기**다 (골든 셋은 칸이 없다). 이야기 하나를 받으면 `weight` 가 `"short"` 면 짧은 이야기, 아니면 긴 이야기다 (`validateStory` · 코드의 `Story = Episode | ShortStory`)
+- **`weight`** — ShortStory 는 `"short"` (필수). Episode 는 `weight?: "long"` — **칸이 없으면 긴 이야기**다 (골든 셋은 칸이 없다). 이야기 하나를 받으면 `weight` 가 `"short"` 면 짧은 이야기, 아니면 긴 이야기다 (`validateStory` · 코드의 `Story`). 짧은 이야기는 다시 `form` 칸으로 옛 꼴 (이 절)과 새 꼴 (§14)로 갈린다 — §14.1 (B-E4)
 - `episode_id` · `episode_version` · `code` 는 Episode 와 같은 방식 · 같은 이름 공간 — EpisodeRef 가 어느 쪽이든 가리킬 수 있다 (독자 기록이 회차를 가리키는 모양은 여전히 미확인 — D64). 짧은 이야기도 발행 한 번 = 하나 · 통째로 불변 (§2.3). Event 를 가리키는 것 (`event_ref`)도 같다 — ArticlePackage · Episode 와 형제다 (§2.2)
 - 무게는 사람이 정한다 — 아침 고르기 (D86 · D3 — 스스로 적는 칸 §8). 화면이 무게로 가르는 것: 카드의 꼴 · 장면 수 · 체험. 읽는 시간은 내지 않는다 (D82)
 
@@ -1123,3 +1167,219 @@ lab 의 꼴 (`apps/web/src/app/lab/today/short/types.ts` 의 「모자람 1 ~ 6�
 - **사람이 적는 칸 (§8)**: 곁 이야기가 없다 · 가리킬 도구가 없다는 것도 사람이 적는다 — 검증기는 `null` 이 참인지 (같은 사건의 긴 이야기가 정말 없는지) 보지 않는다
 - 검증: `validateShortStory` 는 `null` 인 쪽의 불변식 29 를 건너뛰고 알림 (`SIBLING_NOT_CHECKED` · `TOOLS_FROM_NOT_CHECKED`)도 내지 않는다. 통계의 `tools_from` 은 0
 - **골든 넷째는 0자** — 곁 이야기 · 도구가 있는 꼴은 그대로 통과한다 (`null` 이 아닌 값). 위반 픽스처 하나: `episode-short-alone-tool-text` (골든 넷째에서 `tools_from` 만 `null` 로 — 도구의 글 셋이 남아 거부)
+
+---
+
+## 14. 짧은 이야기 새 꼴 — 표지 + 한 흐름 (B-E4 · D91 · D95 · D98 · D99 ① — 실물 셋)
+
+도윤 (D91 ③ · D95 · D98): 짧은 이야기는 **가벼운 주제 · 같은 탄탄한 흐름**이지 칸을 잘라 끊는 것이 아니다. 줄기는 뉴스 · 개념은 길 위에서 줍는 도구다.
+§13 의 짧은 이야기 (장면 넷 · 칸 마흔 · `why.real[]` 목록 · `keep.advice` 당부 필수)가 **보고서 꼴을 만든다** — 파이프라인이 그 칸을 그대로 채웠고 (`logs/frontend/UX-8.md` ⑥ ⑦), 도윤은 `/short/license-notice` 가 "이야기처럼 술술 읽히지 않고 점프된 느낌"이라고 했다 (D91 ③).
+손 견본 셋이 계약 밖 lab 꼴 (`LightStory` — 표지 + `flow` 덩이의 차례 + `keep`)로 섰고, 도윤이 어느 쪽인지 모른 채 **B** 를 골랐다 (D98). 이 절은 그 꼴을 계약으로 옮긴다 (D24 — 실물에서). 다음 Step (P-S2)의 파이프라인이 이 꼴을 내고, 그다음 화면이 갈아 끼운다 (D99).
+
+| 견본 | 무엇 | 이 계약에서 |
+|---|---|---|
+| **UX-8b-B** (기준) | 「어른 셋 중 하나가 비만이라는데, 그 한 명은 누구일까」 — 줄기: 어른 비만이 10년 새 셋 중 하나 · 남성 30 ~ 40대에 몰려 있다. 손 (모델 API 0) · 도윤이 고름 (D98) · `apps/web/src/app/lab/short-b/data.ts` · `logs/frontend/UX-8b-B.md` | **골든 다섯째** `fixtures/episode-short-obesity-who.json` (글 0자) · 시안 `/lab/short-b` 가 이것을 읽는다 |
+| UX-8b-A | 「어른 셋 중 하나가 비만이라는데, 누가 가장 많이 늘었을까」 — 같은 뉴스 · 다른 줄기 (손) · `lab/short-a/data.ts` | 같은 꼴 — 계약이 받는다 (골든 아님 · §14.10) |
+| UX-8 | 「비만율이 26.9% 늘었다는데, 왜 더하면 안 맞을까」 — 개념 강의가 돼서 버린 판 (D95) · **꼴은 같다** · `lab/short/data.ts` · `logs/frontend/UX-8.md` | 같은 꼴 — 계약이 받는다 (골든 아님) |
+
+셋 다 같은 사건 (질병관리청 2026-11-09 발표 · `KDCA-20261109-OBESITY` · 보도자료 PDF 하나 — 문서 안 공공누리 제1유형)이고 숫자 뉴스다. 사람 · 사건이 있는 뉴스의 새 꼴은 실물이 없다 (§10 · UX8-e).
+그래서 이 절의 칸은 **실물 셋** (견본 셋에 다 있다) 아니면 **실물 하나** (B 에만)다. 이 절의 칸은 전부 실물 셋이다 — 견본 셋이 같은 lab 꼴 (`lab/short/types.ts`)로 쓰였다.
+
+```ts
+FlowBeat  = "first_thought" | "breaker" | "name" | "land"   // 글 문단 (p)의 뼈 표시 — 뒤집기 · 고르기는 덩이 자체가 표시다 (§14.3)
+FlowBlock = FlowPara | FlowCite | FlowFlip | FlowPick        // kind 로 가른다
+
+FlowStory {                         // 짧은 이야기 새 꼴 하나 = 발행 한 번. 통째로 불변. 표지 + 한 흐름 + 남음 — 장면 · 선반 · 번호 · 풀이 칸이 없다 (§14.7)
+  episode_id:      UUID             // Episode · ShortStory 와 같은 방식 · 같은 이름 공간
+  episode_version: integer          // 1부터
+  code:            Id               // "obesity-who" (실물). 유일 · 불변
+  event_ref:       EventRef         // 이 이야기가 다루는 사건 (DATA_MODEL Event 의 UUID)
+  weight:          "short"          // 무게 — 옛 꼴과 같다 (§13.1)
+  form:            "flow"           // 꼴 — 옛 짧은 이야기 (ShortStory · 장면 넷)와 가르는 칸. 새 꼴에만 있다 (§14.1)
+  docs:            Record<DocLabel, EpisodeDoc>      // §4 그대로
+  quotes:          Record<QuoteKey, EpisodeQuote>    // §4 그대로 — 저장된 문서의 글 그대로 (불변식 8)
+  voice_labels:    VoiceLabels      // §4.4 그대로
+  cover:           FlowCover        // 표지 (§14.2)
+  flow:            FlowBlock[]      // 이야기 — 덩이의 차례 (§14.3). 수 · 종류 · 차례는 글이 정한다
+  keep:            FlowKeep         // 남음 — 흐름의 끝에 이어 붙는다 (§14.5)
+  not_drawn:       Note[]           // 그리지 않을 것 — 독자에게 보이지 않는다 (§14.6)
+}
+
+FlowCover { title: EpisodeText, dek: EpisodeText, meta: EpisodeText, ask: EpisodeText }   // 물음 제목 · 한 줄 · 날 · 물음 단추 하나 — 넷 다 글 한 덩이 (숫자에 근거)
+
+FlowPara { kind: "p", beat: FlowBeat | null, text: EpisodeText }      // 글 한 문단. 뼈의 표시가 없으면 null — 앞 문단을 받는 이음매
+FlowCite { kind: "cite", label: string, text: EpisodeText }           // 문서의 문장을 그대로 — 근거 구절 안의 글 그대로 (불변식 35)
+FlowFlip { kind: "flip", label: string, a: EpisodeText, op: "≠" | "=", b: EpisodeText, note: EpisodeText }   // 뒤집기 한 줄 + 한 문단 — 정확히 하나 (불변식 33)
+FlowPick { kind: "pick", ask: EpisodeText, options: FlowOption[] }    // 예상 한 번 고르기 — 없거나 하나 · 고를 것 둘 (불변식 34)
+FlowOption { key: Id, label: EpisodeText, reply: EpisodeText }        // 고를 것 · 그것을 고른 독자에게 주는 받는 말 (구절 필수)
+
+FlowKeep {                          // 남음 — 따로 선 장면이 아니다
+  line_label:  string               // "이 이야기의 한 줄"
+  line:        EpisodeText          // 남는 한 줄 — 뉴스에 대한 것 (D95 ③ · 사람이 본다)
+  words_label: string               // "이 이야기에서 만난 낱말"
+  words:       FlowWord[]           // 이 이야기가 흐름에서 이름 붙인 개념의 카드 (불변식 36)
+  whose:       EpisodeText          // 누구의 말 (D46) — 문서에 없는 것은 없다고도 여기서
+}
+
+FlowWord { key: Id, name: string, short: EpisodeText, body: EpisodeText[] }   // 낱말 카드 — 이름 · 한 줄 · 풀이. 지도의 자리 · 줍는 장면 · 라이브러리 바탕이 없다 (§14.5)
+```
+
+### 14.1 옛 꼴과 함께 선다 — 새 타입 + 가르는 칸 `form`
+
+- **판단: 옛 `ShortStory` (§13)를 고치지 않고 따로 선 타입 `FlowStory` 를 옆에 세운다** (D99 — 새 꼴을 옆에 세우고 → 그 꼴로 쓰고 → 갈아 끼운 뒤 옛 꼴을 내린다)
+  - 옛 꼴을 읽는 코드가 실제 주소에 떠 있다 — `apps/web/src/episode/*` (`catalog.tsx` · `kit/Short.tsx` · `today/cards.tsx`) · `app/short/[code]` · `lab/today/*` · pipeline `short*.ts` · 골든 넷째 · `license-notice`. 옛 꼴을 바꾸면 중간에 `/short/license-notice` 가 깨진다 (push = 배포). **이 Step 에서 그 코드는 0줄 · 그 파일은 0자다**
+  - 겹치는 것은 글과 근거 (§4 — `EpisodeText` · `EpisodeDoc` · `EpisodeQuote` · `VoiceLabels`)뿐이다 — 그대로 쓴다 (다시 정의 0). 뼈대 (장면 · 선반 · 풀이 · 도구)가 다 다르다 — UX-7 ③ 이 옛 꼴을 세울 때와 같은 결론, 이번엔 반대 방향 (UX-8 ⑦ "안 맞는 것은 또 뼈대다")
+- **무게는 둘 다 `short` · 꼴을 가르는 칸 `form: "flow"`** — 새 꼴에만 있다 (필수). 옛 꼴에는 칸이 없다 (긴 이야기의 `weight?` 와 같은 방식 — 옛 골든 · `license-notice` 0자). 이야기 하나를 받으면:
+
+| `weight` | `form` | 꼴 | 검증 |
+|---|---|---|---|
+| 없음 · `"long"` | — | 긴 이야기 (Episode · §1 ~ §12) | `validateEpisode` |
+| `"short"` | 없음 | 짧은 이야기 **옛 꼴** (ShortStory · 장면 넷 · §13) | `validateShortStory` |
+| `"short"` | 있음 (`"flow"`) | 짧은 이야기 **새 꼴** (FlowStory · §14) | `validateFlowStory` |
+
+  `validateStory` 가 이 표대로 가른다 (`form` 칸이 있으면 값이 틀려도 새 꼴로 보고 모양이 거부한다 — 더 알아듣기 쉬운 오류). TS 에서는 `Story = Episode | ShortStory | FlowStory` — `weight === "short"` 다음 `"form" in s` 로 좁힌다
+- `episode_id` · `episode_version` · `code` · `event_ref` 는 Episode · ShortStory 와 같은 방식 · 같은 이름 공간 (§13.1). 발행 한 번 = 하나 · 통째로 불변 (§2.3)
+- **이름 정리는 옛 꼴을 내릴 때 (D99 ④)** — 그때 `FlowStory` 를 `ShortStory` 로 바꿀지 · `form` 을 남길지 정한다 (§11 E-26)
+
+### 14.2 표지 — 제목 · 한 줄 · 날 · 물음 단추 하나
+
+- `FlowCover { title, dek, meta, ask }` — **넷 다 글 한 덩이 (`EpisodeText`)**. 옛 꼴은 제목 · 단추가 맨 글자열이라 숫자를 못 썼다 (불변식 10 — UX-8 ⑦ 5). 새 꼴은 숫자가 든 제목 · 단추에 근거를 단다 (불변식 9).
+  실물: B 제목 "어른 셋 중 하나가 비만이라는데,\n그 한 명은 누구일까" ← `pr.trend` · A 의 단추 "30~40대 남성이 늘어난 건가요?" — lab 꼴에서는 단추가 맨 글자열이라 A 가 꼴 밖 (`ASK_SRC = ["pr.men"]`)에 근거를 따로 적었다 → `ask.src` (E-30)
+- 물음 단추는 **표지에 하나뿐** — 흐름 안에는 단추 칸이 없다. 화면 (lab `Light.tsx`): 단추를 누르면 그 물음이 흐름 맨 위에 다시 보이고, 첫 문단 (첫 생각)이 그것을 받는다 ("그 한 명이 누구냐고요?" → "네, 먼저 떠올려 볼게요.")
+- 표지에 선반 이름 · 번호 · 곁 이야기의 귀띔 (`hint`)이 없다 — 화면이 무게의 이름 ("짧은 이야기")과 카테고리 (카탈로그 — §14.7)를 단다
+
+### 14.3 흐름 — 덩이의 차례
+
+- 이야기는 **덩이의 차례**다 (칸의 묶음이 아니다). 덩이 넷 — `kind` 로 가른다:
+
+| 덩이 | 칸 | 뜻 | 실물 (B) |
+|---|---|---|---|
+| `p` `FlowPara` | `beat` · `text` | 글 한 문단. 뼈의 표시가 붙을 수 있다 (없으면 `null`) | 6 (표시 넷 · 없음 둘) |
+| `cite` `FlowCite` | `label` · `text` | 문서의 문장을 그대로 보여 준다 — 근거 구절 안의 글 그대로 (불변식 35) | 1 — "질병관리청 발표문에서" |
+| `flip` `FlowFlip` | `label` · `a` · `op` · `b` · `note` | 뒤집기 한 줄 + 한 문단 — 정확히 하나 (불변식 33) | 1 |
+| `pick` `FlowPick` | `ask` · `options` (`key` · `label` · `reply`) | 예상 한 번 고르기 — 없거나 하나 (불변식 34) | 1 |
+
+- 덩이의 수 · 종류 · 차례는 **글이 정한다** (B 9 · A 11 · UX-8 12). 칸이 글을 자르지 않는다
+- **뼈 (beat) — 칸이 아니라 흐름 속의 표시.** 옛 꼴의 입구 (`SolveEntry` 의 첫 생각 · 깨는 사실 · 뒤집기)가 뜻 그대로 살아 있다 (UX-8 ⑦ 7):
+
+| 뼈 | 어디에 | 옛 꼴 (§7.1) | 실물의 수 (B · A · UX-8) |
+|---|---|---|---|
+| `first_thought` 첫 생각 | `p` 의 `beat` | `entry.first_thought` | 1 · 1 · 1 — 셋 다 흐름의 첫 덩이 |
+| `breaker` 깨는 사실 | `p` 의 `beat` | `entry.breaker` (구절 필수 — 불변식 11) | 1 · 1 · 1 — 셋 다 구절이 있다 |
+| `name` 이름 붙이기 | `p` 의 `beat` | — (옛 꼴은 도구를 가리키기만) | 1 · 1 · 2 |
+| 뒤집기 | `flip` 덩이 자체 | `entry.flip` (불변식 14) | 1 · 1 · 1 |
+| 고르기 (써 보기 · 걸어 보기) | `pick` 덩이 자체 | — (옛 꼴은 체험 칸이 없다) | 1 · 1 · 1 |
+| `land` 내려앉기 | `p` 의 `beat` | — | 1 · 1 · 2 — 셋 다 흐름의 끝 덩이 |
+
+  lab 꼴은 표시를 어느 덩이에나 달 수 있었다 (`flip` 덩이에 `beat: "flip"` · `pick` 에 `"try"` — 늘 같은 값). 계약은 뒤집기 · 고르기를 덩이 자체로 보고, 글 문단 (`p`)에만 표시 넷 (`FlowBeat`)을 둔다 — 같은 것을 두 번 적지 않는다 (E-9 과 같은 까닭). 문서의 문장 (`cite`)에 표시를 단 실물은 없다 — 칸이 없다 (E-31)
+- **뼈의 차례 (불변식 32) — 실물 셋의 차례에서:**
+
+```
+B     첫 생각 → 깨는 사실 → 이름 → 뒤집기 → 고르기 → 내려앉기
+A     첫 생각 → 고르기 → 깨는 사실 → 이름 → 뒤집기 → 내려앉기
+UX-8  첫 생각 → 깨는 사실 → 이름 → 이름 → 뒤집기 → 고르기 → 내려앉기 → 내려앉기
+```
+
+  셋이 같은 것: **첫 덩이는 첫 생각 · 끝 덩이는 내려앉기 · 첫 생각 하나 · 깨는 사실 하나 · 첫 생각 → 깨는 사실 → 이름 → 뒤집기 → 내려앉기** — 이것을 건다.
+  셋이 다른 것: **고르기의 자리** (B · UX-8 은 뒤집기 뒤의 "써 보기" · A 는 첫 생각 바로 뒤의 "걸어 보기") — 그래서 고르기는 첫 생각 뒤 · 첫 내려앉기 앞이면 어디든 받는다. 이름 · 내려앉기는 하나 이상 (UX-8 은 둘씩)
+- 표시가 없는 덩이 (B 의 "셋 중 하나가 아니라 둘 중 하나가 넘는 거예요…" · "그럼 이 비만율은 얼마나 올랐을까요?…")에는 차례를 걸지 않는다 — 앞 문단을 받는 이음매다
+- 문단의 첫 문장이 앞 문단의 끝을 받는가 (UX-8 ⑥ 6)는 기계가 못 본다 — 사람의 통독 (§14.6)
+
+### 14.4 뒤집기 · 고르기
+
+- **뒤집기 `FlowFlip`** — `a` · `b` 가 글 한 덩이다 (옛 `Flip` 은 맨 글자열 — 숫자 금지). 실물: B `“성인 3명 중 1명이 비만” ≠ “남성 30~40대 2명 중 1명이 비만”` — 숫자가 뒤집기의 주인공이라 근거를 단다 (UX-8 ⑦ 5).
+  **뒤쪽 말 (`b` — 문서가 깨는 쪽)에 구절** (불변식 33 · 셋 다 있다). 앞쪽 말 (`a` — 독자가 믿고 들어온 쪽)은 걸지 않았다 (lab 검사도 `b` 만 봤다). `op` 는 `≠` · `=` (실물 셋은 `≠` · 긴 이야기 배달앱 1화가 `=`).
+  옛 `Flip` 과 칸 이름이 같고 모양이 다르다 — 같은 타입을 다시 정의한 것이 아니라 다른 타입이다
+- 뒤집기는 **정확히 하나** — 짧은 이야기의 가운데다 (D91 "첫 생각 → 이야기 → 뒤집기 → 남는 한 줄"). 뒤집기 없는 짧은 이야기 (세 칸 · 조용히)는 새 꼴로 못 낸다 (미확인 — §10)
+- **고르기 `FlowPick`** — 독자가 먼저 예상하고 → 받는 말이 그것을 받는다 (D91 "먼저 정하거나 예상하고 → 결과가 그것을 깨는 꼴"). 옛 꼴의 "체험 칸 없음"과 다르다 — 긴 이야기의 틀 여섯 어느 것도 아닌 가장 작은 꼴이다 (UX-8 ⑦ 3)
+  - **없거나 하나** (불변식 34 · D91 "체험은 없거나 아주 작게") · 고를 것 **둘** (실물 셋 다 둘 — 셋 이상은 실물 없음. 자리에 앉기의 쪽 둘과 같은 방식 · E-33) · `key` 겹침 없음 · **받는 말마다 구절** (받는 말은 문서가 받는다 — 셋 다 있다)
+  - 어느 쪽을 골라도 이야기는 같은 곳으로 간다 — 가르는 것은 받는 말 한 덩이뿐이다 (화면: 고르기 전에는 뒤가 보이지 않고, 고르면 받는 말과 나머지 흐름이 이어진다 — lab `Light.tsx`)
+  - 받는 말이 채점하지 않는가 (맞다 · 틀렸다로 받지 않는다 — UX-8 ⑥ 10 · UX-9 ⑤ ③) · 가지마다 길이를 맞췄나는 사람 · 쓰는 법의 일이다 (§14.6 · §14.8)
+
+### 14.5 남음 — 한 줄 · 낱말 · 누구의 말
+
+- `FlowKeep { line_label, line, words_label, words, whose }` — 흐름의 끝에 이어 붙는다. 따로 선 장면이 아니다 (화면: 한 줄 → 낱말 카드 (접혀서) → 누구의 말)
+- **남는 한 줄 (`line`)** — 글 한 덩이 (옛 꼴 `keep.line` 은 맨 글자열). 실물: B "성인 비만율은 10년 새 올라\n셋 중 하나가 됐다.\n그 비만은 남성 30~40대에\n특히 몰려 있다." ← `pr.trend` · `pr.men`. 뉴스에 대한 것이어야 한다 (D95 ③) — 사람이 본다
+- **낱말 (`words: FlowWord[]`)** — 이 이야기가 흐름에서 이름 붙인 개념의 카드: 이름 · 한 줄 · 풀이 (긴 이야기 `Tool` 의 `name` · `short` · `body` 와 같은 뜻). 옛 꼴은 다른 이야기의 카드를 가리키기만 했다 (`tools_from` · 홀로 서면 `null` — E-24). **새 꼴은 제 낱말을 스스로 든다** (UX-8 ⑦ 4).
+  지도의 자리 · 줍는 장면 · 라이브러리 바탕 (`basis`)이 없다 — 이야기가 먼저 가르치고 카드는 되새김이다 (UX-8 ⑥ 9)
+  - **낱말마다 흐름의 문단에서 굵게 이름이 붙는다** (불변식 36 — `**비만율**` · `**퍼센트포인트**`. 이름 끝의 괄호 "(%p)"는 떼고 댄다). 실물 셋 다 그렇다. 카드가 흐름보다 먼저 가르치지 않게
+  - 낱말의 수 (D91 "개념 단어 1 ~ 2" · 실물 셋 다 둘)는 쓰는 법이다 — 불변식이 아니다 (§14.8)
+  - **낱말을 독자의 개념 지도에 잇는 길 (UX-8 ⑧ 4 — 퍼센트포인트 ↔ 금리 이야기의 %p)은 미확인** — 칸이 없다 (`basis` · ConceptRef · 지도 · D64 · D65 와 함께 — §10)
+- **누구의 말 (`whose`)** — 옛 꼴의 `solve.entry.whose` (D46). 문서에 없는 것을 없다고 말하는 것도 이 한 덩이 안에 있다 (B "…비만이 왜 느는지는 이 이야기에서 다루지 않았어요.") — 옛 꼴의 `where.unknown` 칸 (필수)이 없다 (UX-8 ⑦ 6). 그 말이 있는지는 사람이 본다
+- **기관의 당부 (`keep.advice`)는 칸이 없다** — 필수 칸이 관청의 말로 끝내게 했다 (UX-8 ⑥ 11 · ⑦ 6). 남음의 이름표 둘 (`line_label` · `words_label`)은 이야기에 둔다 — 견본 셋이 같은 글이지만 옛 꼴의 이름표 (`advice_label` · `real_label`)와 같은 자리 (E-34)
+
+### 14.6 그리지 않을 것 · 사람이 보는 것
+
+- `not_drawn: Note[]` — 그리지 않을 것 (문서가 말하지 않은 원인 · 앞날 · 탓하기 · 조언 · 섞어 셈하기). 독자에게 보이지 않고 검사도 읽지 않는다 (§7.1 의 `not_drawn` 과 같은 칸 — 자리만 이야기의 꼭대기로). 실물: B 여섯
+- **기계가 못 보는 것 — 사람 게이트의 일** (D91 "맞나 + 술술 읽히나" · D95 ④):
+  1. **줄기는 뉴스인가 (D95)** — 이 이야기는 무엇에 대한 것인가 · 뉴스인가 개념인가 · 다 읽고 "그래서 무슨 일이었는데?"에 한 문장으로 답이 되나 · 뒤집기 · 남는 한 줄이 뉴스에 대한 것인가.
+     **계약은 이것을 못 본다.** 꼴은 개념 강의가 된 판 (UX-8 — 도윤이 "모호하다"고 한 판 · D95)도 똑같이 받는다 (§14.10). 꼴을 통과했다는 것은 줄기가 뉴스라는 뜻이 아니다
+  2. 술술 읽히나 — 문단이 앞 문단을 받는가 · 점프가 없나 (소리 내어 읽듯 처음부터 끝까지 · D91)
+  3. 뼈의 표시가 그 글의 뜻과 맞나 — 첫 생각이 정말 독자가 하는 짐작인가 · 깨는 사실이 문서인가 · 뒤집기가 진짜인가 (UX-3 ⑦-1)
+  4. 받는 말이 채점하지 않나 · 어느 쪽을 골라도 같은 곳으로 가나
+  5. 글의 뜻이 구절에서 나오나 (함의 — §4.3 "보지 않는 것" 그대로)
+
+### 14.7 실물에 없는 칸 — 만들지 않았다
+
+| 칸 | 옛 꼴 (§13) | 새 꼴 | 까닭 |
+|---|---|---|---|
+| 선반 `series` | 필수 | **칸 없음** | 실물 셋에 없다 (D24) — 카테고리 꼬리표뿐 (UX-8 ⑦ 2). 옛 꼴은 홀로 선 가벼운 이야기마다 선반을 짓게 했다 (P-S1 「처분은 어떻게 뒤집히나」 — 칸이 글을 만든 예). 같은 주제의 둘째가 실제로 생기면 그때 고를 수 있는 칸 (`?`)으로 더한다 — 더하는 것은 골든을 깨지 않고, 지금 `\| null` 로 열면 모두가 지어낸 칸에 `null` 을 적는다 (E-28 · E-20 그대로 미확인) |
+| 번호 `number` · 시리즈 줄 `track` · `previous` | 없음 | 없음 | 옛 꼴과 같다 (§13.3) |
+| 곁 이야기 `sibling` | `\| null` | **칸 없음** | 실물에 없고, **D91 ① "한 사건 = 이야기 하나 · 곁 이야기는 쓰지 않는다"** |
+| 다른 이야기의 도구 `tools_from` | `\| null` | **칸 없음** | 실물에 없다 — 새 꼴은 제 낱말을 든다 (§14.5). 다른 이야기의 카드를 다시 만나는 길은 낱말 → 개념 지도와 함께 미확인 (UX-8 ⑧ 4) |
+| 풀이 `solve` (입구 · 기본 풀이 · `why: "short"`) | 필수 | **칸 없음** | 입구는 흐름 속의 표시로 (§14.3) · "뒤집기만"은 `flip` 덩이로 · 체험이 없는 까닭은 꼴이 말한다 (고르기 하나까지) |
+| 장면 넷 `scenes` (`where.unknown` · `why.real[]` · `keep.advice` …) | 필수 | **칸 없음** | 보고서 꼴의 뿌리 (UX-8 ⑦ 1 · 6) |
+| **카테고리** (D86 다섯) | 칸 없음 (카탈로그) | **칸 없음 — 카탈로그에 둔다** | ① 긴 이야기 · 옛 꼴과 한 곳 (`apps/web/src/episode/catalog.tsx` 의 `category` — "계약에 칸이 없다") ② 이야기는 통째로 불변인데 카테고리는 낸 뒤에 다시 매기는 값이다 (D89 ④ 배달앱 "기술 → 생활") — 이야기에 두면 고칠 때마다 새 판 ③ 다섯은 MVP 판이라 고칠 수 있다 (D86) — 닫힌 값을 계약에 박으면 바꿀 때마다 계약이 바뀐다 ④ 꼬리표 · 낸 날 (`day`)과 함께 아침 고르기에서 오는 값 (D89 b). lab 의 `category` 는 카탈로그가 없는 lab 이라 이야기에 있었다 (E-27) |
+| 사망 `death` | 필수 (`SolveEntry`) · 참이면 짧은 이야기로 못 냄 | **칸 없음** | 실물에 없다. 새 꼴은 "조용히"를 못 낸다 — 사람이 숨진 사건은 새 꼴로 내지 않는다 (D61 ④ · D86 "부고 · 재난 당분간 안 다룸") — 아침 고르기에서 사람이 거른다 (E-29) |
+| 고를 것 셋 이상 · 고르기 둘 · 고르기 밖의 작은 체험 | — | 없음 | 실물 없음 |
+| 덧붙임 · 개념 이야기 | 없음 | 없음 | §13.7 그대로 |
+
+### 14.8 크기는 계약이 아니다 — 쓰는 법
+
+문단 수 (아홉 안팎) · 문단의 문장 수 (다섯까지) · 문장 길이 (70자까지) · 읽는 길의 글자 수 (1,100자 안쪽) · 낱말 수 (1 ~ 2) · 받는 말의 길이를 가지마다 맞춤 · 해요체 · 보고서 말투 · 목록 꼴 — `logs/frontend/UX-8.md` ⑥ 쓰는 법 열둘 (12 "크기") · D91 "개념 단어 1 ~ 2" · UX-9 ⑤ ③.
+**불변식으로 박지 않았다** — 크기를 계약이 걸면 파이프라인이 다시 칸을 채우듯 숫자에 글을 맞춘다. lab 검사 (`lab/short*/check.ts` L6 · L8)와 P-S2 의 프롬프트 · 사람 게이트의 몫이다.
+물음 단추가 표지의 하나뿐인 것은 크기가 아니라 꼴이다 — 흐름에 단추 칸이 없다
+
+### 14.9 실물 → 이 계약 — 옮겼다 (B-E4 · 2026-11-15)
+
+독자가 읽는 글 · 구절 · 숫자는 한 글자도 바꾸지 않았다 — lab `data.ts` 의 값을 그대로 덤프해 칸의 이름과 자리만 옮겼다 (`logs/backend/B-E4.md` ③).
+
+| lab (`lab/short/types.ts` · `lab/short-b/data.ts` @ `f352901`) | 이 계약 | |
+|---|---|---|
+| `code` · `weight` · `docs` · `quotes` · `voice_labels` · `keep` · `not_drawn` | 같다 | + `episode_id` 발급 · `episode_version` 1 · `form: "flow"` |
+| `event_code` ("KDCA-20261109-OBESITY") | `event_ref` (그 Event 의 UUID) | Episode · ShortStory 와 같은 방식 |
+| `category` ("과학과 몸") | — | 카탈로그의 값 (§14.7 · E-27) |
+| `cover.title` · `dek` · `meta` | 같다 | |
+| `cover.ask` (맨 글자열) | `cover.ask` (글 한 덩이 `{ t }`) | 글자 같음 · A 의 `ASK_SRC` 가 들어갈 자리 (E-30) |
+| `flow[]` 의 `p` (`beat?`) | `FlowPara` (`beat: FlowBeat \| null`) | 없으면 뺀 칸 → `null` 을 적는다 (§12) |
+| `flow[]` 의 `cite` (`beat?`) | `FlowCite` | 표시 칸 없음 (실물 셋에 없다 · E-31) |
+| `flow[]` 의 `flip` (`beat: "flip"`) · `pick` (`beat: "try"`) | `FlowFlip` · `FlowPick` (+ `FlowOption`) | 늘 같은 표시를 뺐다 — 덩이 자체가 표시 |
+| `Word` | `FlowWord` | |
+
+골든 다섯째 `fixtures/episode-short-obesity-who.json` (구절 12 · 문서 1 · 글 25 · 숫자가 든 글 18 · 계산 2 · 덩이 9 · 고르기 1 · 낱말 2). 시안 `/lab/short-b` 가 이것을 읽어 lab 꼴로 되돌려 그린다 (그림 0 차이 — 로그 ③).
+
+**UX-8 ⑦ 안 맞음 일곱 → 이 계약**
+
+| # | 옛 꼴 (§13) | 새 꼴 (§14) |
+|---|---|---|
+| 1 | 장면 넷 고정 · 장면마다 칸 전부 필수 | 장면 없음 — 표지 + 흐름 (덩이의 차례) + 남음 (§14.3) |
+| 2 | 선반 (`series`) 필수 | 칸 없음 — 카테고리는 카탈로그 (§14.7) |
+| 3 | 체험 칸 없음 | 고르기 덩이 — 없거나 하나 (§14.4 · 불변식 34) |
+| 4 | 도구는 다른 이야기의 카드를 가리키기만 (`tools_from`) | 제 낱말 (`keep.words`) — 흐름에서 이름 붙어야 한다 (불변식 36) |
+| 5 | 제목 · 뒤집기 · 단추 · 남는 한 줄이 맨 글자열 (숫자 금지) | 넷 다 글 한 덩이 — 숫자에 근거 (불변식 9). 고르기의 물음 · 고를 것 · 받는 말도 |
+| 6 | `keep.advice` (당부) · `where.unknown` 필수 | 칸 없음 — 없다는 말은 누구의 말 안에 (사람이 본다) |
+| 7 | 입구의 칸 (`solve.entry`) | 흐름 속의 표시 (`beat`) + 뒤집기 · 고르기 덩이. 불변식 11 (깨는 사실의 구절) · 14 (뒤집기) → 11 · 32 · 33 |
+
+### 14.10 실물 셋을 받나 (B-E4 · 2026-11-15)
+
+B 는 골든 그대로 · A · UX-8 은 lab 의 값을 같은 법으로 옮겨 (커밋하지 않음 — `logs/backend/B-E4.md` ③) 문서 (`KDCA-20261109-OBESITY/store.documents.json`)를 받아 대 봤다:
+
+| 견본 | 결과 | 덩이 | 뼈 |
+|---|---|---|---|
+| B (골든) | 통과 · 경고 0 | 9 | 첫 생각 → 깨는 사실 → 이름 → 뒤집기 → 고르기 → 내려앉기 |
+| A | 통과 · 경고 0 — lab 꼴 밖의 `ASK_SRC` 를 `cover.ask.src` 로 옮겨서 | 11 | 첫 생각 → 고르기 → 깨는 사실 → 이름 → 뒤집기 → 내려앉기 |
+| UX-8 | 통과 · 경고 0 | 12 | 첫 생각 → 깨는 사실 → 이름 → 이름 → 뒤집기 → 고르기 → 내려앉기 → 내려앉기 |
+
+- A 는 표지 단추에 숫자 (30 ~ 40)가 있다 — 단추를 맨 글자열로 두면 `BARE_DIGIT`, 글 한 덩이로 두고 근거를 안 옮기면 `NUMBER_UNGROUNDED`. lab 꼴이 좁았던 것이지 A 가 어긋난 것이 아니다 (A 스스로 꼴 밖에 근거를 적었다)
+- 셋 다 `calc` 키 "27.9" (10년 전 값 = 35.4 − 7.5 — 그래프 그림에만 있는 수)를 쓴다 — §4.3 의 키 읽기를 숫자 토막으로 맞춰 받았다 (E-32)
+- **UX-8 이 통과하는 것이 이 꼴의 한계를 보여 준다** — 개념 강의가 된 판 (D95)도 꼴은 같다. 줄기가 뉴스인지는 사람이 본다 (§14.6 ①)

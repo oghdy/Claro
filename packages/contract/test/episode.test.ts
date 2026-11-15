@@ -1,10 +1,10 @@
-// 회차 계약 (docs/contract/EPISODE.md) — 골든 넷은 통과하고, fixtures/invalid/episode-*.json 은 전부 거부된다 (B-E1 · 셋째 골든과 넘겨 보기 틀은 UX-5 · 지난 회차 칸 셋은 UX-6 — 실물 전 · 짧은 이야기 (골든 넷째)는 B-E3).
+// 회차 계약 (docs/contract/EPISODE.md) — 골든 다섯은 통과하고, fixtures/invalid/episode-*.json 은 전부 거부된다 (B-E1 · 셋째 골든과 넘겨 보기 틀은 UX-5 · 지난 회차 칸 셋은 UX-6 — 실물 전 · 짧은 이야기 (골든 넷째)는 B-E3 · 짧은 이야기 새 꼴 (골든 다섯째)은 B-E4).
 // invalid 픽스처는 아래 표(VIOLATIONS)가 원본이다: 골든 + 위반 하나. 파일이 표와 어긋나면 실패한다.
 // 표를 고쳤으면 `WRITE_EPISODE_INVALID=1 pnpm --filter @claro/contract test` 로 파일을 다시 쓴다.
 import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { parseEpisode, parseShortStory, solveProblems, validateEpisode, validateShortStory, validateStory } from "../src";
+import { parseEpisode, parseFlowStory, parseShortStory, solveProblems, validateEpisode, validateFlowStory, validateShortStory, validateStory } from "../src";
 
 const root = (p: string) => fileURLToPath(new URL(`../../../${p}`, import.meta.url));
 const read = (p: string): any => JSON.parse(readFileSync(root(p), "utf-8"));
@@ -15,12 +15,15 @@ const RATE = "episode-rate-2.json";
 const PRIVACY = "episode-privacy-1.json";
 // 넷째 골든 — 짧은 이야기 「병원이 털렸다는데, 어디가 털린 걸까」 (영훈의료재단 · 같은 발표의 병원 쪽). 장면 넷 · 번호 없음 · 체험 없음 · 도구는 개인정보 1화의 것을 가리킨다 (B-E3 · §13)
 const SHORT = "episode-short-privacy-yeonghun.json";
-// 저장된 문서 — 골든 셋의 근거가 여기 있다 (전부 git 에 있다: 공공누리 제1유형 · 법령 · 미국 연방 저작물 · 문서 안 공공누리 표시 — D70)
+// 다섯째 골든 — 짧은 이야기 새 꼴 「어른 셋 중 하나가 비만이라는데, 그 한 명은 누구일까」 (질병청 비만율 · UX-8b-B 손 견본 · 도윤이 고름 D98). 표지 + 한 흐름 (덩이의 차례) + 남음 (B-E4 · §14)
+const FLOW = "episode-short-obesity-who.json";
+// 저장된 문서 — 골든 다섯의 근거가 여기 있다 (전부 git 에 있다: 공공누리 제1유형 · 법령 · 미국 연방 저작물 · 문서 안 공공누리 표시 — D70)
 const documents = [
   "fixtures/store.documents.json",
   "packages/pipeline/data/events/FOMC-20261028/store.documents.json",
   "packages/pipeline/data/events/KFTC-20261029-DELIVERY-APPS/store.documents.json",
   "packages/pipeline/data/events/PIPC-20261028-SAFETY-MEASURES/store.documents.json",
+  "packages/pipeline/data/events/KDCA-20261109-OBESITY/store.documents.json",
 ].flatMap((p) => read(p).source_documents as { source_id: string; text: string }[]);
 
 const golden = (name: string) => read(`fixtures/${name}`);
@@ -95,16 +98,44 @@ describe("골든", () => {
     expect(r.warnings.map((w) => w.code)).toEqual(["SIBLING_NOT_CHECKED", "TOOLS_FROM_NOT_CHECKED"]);
   });
 
-  it("이야기 하나 (validateStory) — weight 가 short 면 짧은 이야기, 칸이 없거나 long 이면 긴 이야기", () => {
+  it("짧은 이야기 새 꼴 (비만 B) — 통과 · 경고 없음 · 표지 + 흐름 (덩이 아홉) + 남음 · 장면 · 선반 · 번호 · 곁 이야기 · 풀이 · 카테고리 칸 없음 (B-E4 · §14)", () => {
+    const r = validateFlowStory(golden(FLOW), { documents });
+    if (!r.ok) throw new Error(r.errors.map((e) => `${e.code} ${e.path} ${e.message}`).join("\n"));
+    expect(r.warnings).toEqual([]);
+    expect(r.stats).toMatchObject({ quotes: 12, docs: 1, texts: 25, texts_with_digits: 18, blocks: 9, picks: 1, words: 2 });
+    expect(r.stats.exempt).toHaveLength(2); // 10년 전 값 27.9 (= 35.4 − 7.5 — 그래프 그림에만 있는 수) 를 계산으로 밝힌 글 둘
+    expect(r.stats.beats).toEqual(["first_thought", "breaker", "name", "flip", "try", "land"]);
+    const s = r.story;
+    expect([s.weight, s.form]).toEqual(["short", "flow"]);
+    expect(Object.keys(s)).toEqual(["episode_id", "episode_version", "code", "event_ref", "weight", "form", "docs", "quotes", "voice_labels", "cover", "flow", "keep", "not_drawn"]);
+    for (const k of ["scenes", "series", "number", "track", "previous", "sibling", "tools_from", "solve", "tools", "map", "category", "death"]) expect(k in s, k).toBe(false);
+    expect(s.flow.map((b) => b.kind)).toEqual(["p", "p", "cite", "p", "p", "flip", "pick", "p", "p"]);
+    expect(s.keep.words.map((w) => w.name)).toEqual(["비만율", "퍼센트포인트 (%p)"]);
+    // 표지의 물음 단추 · 제목 · 뒤집기의 두 말 · 남는 한 줄이 글 한 덩이 — 숫자에 근거를 단다 (옛 꼴은 맨 글자열 · UX-8 ⑦ 5)
+    expect(s.cover.ask).toEqual({ t: "그 한 명이 누구냐고요?" });
+    const flip = s.flow[5]!;
+    if (flip.kind !== "flip") throw new Error("뒤집기가 아니다");
+    expect([flip.a.t, flip.op, flip.b.t]).toEqual(["“성인 3명 중 1명이 비만”", "≠", "“남성 30~40대 2명 중 1명이 비만”"]);
+    expect(s.event_ref).toBe(read("packages/pipeline/data/events/KDCA-20261109-OBESITY/store.json").events[0].event_id);
+  });
+
+  it("이야기 하나 (validateStory) — 세 꼴을 가른다: weight 가 short 이고 form 이 있으면 새 꼴 · form 이 없으면 옛 꼴 · 칸이 없거나 long 이면 긴 이야기", () => {
     for (const name of [PRICE, RATE, PRIVACY]) {
       const r = validateStory(golden(name), { documents });
       expect(r.ok && "episode" in r, name).toBe(true);
     }
     const s = validateStory(golden(SHORT), { documents, episodes });
-    expect(s.ok && "story" in s).toBe(true);
+    expect(s.ok && "story" in s && !("form" in s.story)).toBe(true);
+    const f = validateStory(golden(FLOW), { documents });
+    expect(f.ok && "story" in f && "form" in f.story && f.story.form === "flow").toBe(true);
     const long = { ...golden(PRICE), weight: "long" };
     expect(codes(long)).toEqual([]);
     expect(codes({ ...golden(PRICE), weight: "short" }).sort()).toEqual(["SCHEMA_KEY", "SCHEMA_MISSING"]); // 긴 이야기의 모양에 무게만 짧게 — 짧은 이야기로 읽혀 모양이 거부한다
+    // 새 꼴에서 form 을 빼면 옛 꼴로 읽혀 모양이 거부한다 · 옛 꼴에 form 을 달면 새 꼴로 읽혀 모양이 거부한다 (꼴이 섞이지 않는다)
+    const { form: _f, ...noForm } = golden(FLOW);
+    expect(codes(noForm)).toEqual(["SCHEMA_KEY", "SCHEMA_MISSING"]);
+    expect(codes({ ...golden(SHORT), form: "flow" })).toEqual(["SCHEMA_KEY", "SCHEMA_MISSING"]);
+    expect(codes({ ...golden(FLOW), form: "scenes" })).toEqual(["SCHEMA_TYPE"]); // form 칸이 있으면 새 꼴로 보고 값을 거부한다
   });
 
   it("`_` 필드를 무시하고, 돌려주는 회차에는 남기지 않는다", () => {
@@ -114,6 +145,8 @@ describe("골든", () => {
     }
     expect(JSON.stringify(golden(SHORT))).toMatch(/"_source"/);
     expect(JSON.stringify(parseShortStory(golden(SHORT), { documents }))).not.toMatch(/"_/);
+    expect(JSON.stringify(golden(FLOW))).toMatch(/"_source"/);
+    expect(JSON.stringify(parseFlowStory(golden(FLOW), { documents }))).not.toMatch(/"_/);
   });
 
   it("문서를 주지 않으면 구절 대조(불변식 8)를 건너뛰고 그렇다고 알린다", () => {
@@ -441,6 +474,49 @@ const VIOLATIONS: Violation[] = [
     what: "가리킨 도구를 비웠는데 (tools_from null) '긴 이야기에서 줍는 것과 같은 도구예요' · 지도의 글 · 만난 개념의 이름표를 그대로 뒀다",
     mutate: (e) => (e.tools_from = null),
   },
+  // ── 짧은 이야기 새 꼴 (B-E4 · §14 · 불변식 31 ~ 36 · 9) — 다섯째 골든 + 위반 하나. 흐름 (B): 0 첫 생각 · 1 깨는 사실 · 2 문서의 문장 · 3 이음매 · 4 이름 · 5 뒤집기 · 6 고르기 · 7 이음매 · 8 내려앉기
+  {
+    file: "episode-flow-with-scenes.json", of: FLOW, code: "SCHEMA_KEY",
+    rule: "§9-31 · §14.7 — 짧은 이야기 새 꼴에는 장면 칸이 없다. 표지 + 흐름 + 남음이다 — 옛 꼴 (장면 넷)의 칸이 섞이면 거부한다 (UX-8 ⑦ 1)",
+    what: "새 꼴에 옛 꼴 (병원 짧은 이야기)의 장면 넷 (표지 · 어디가 · 문서가 말한 것 · 남음)을 더 실었다",
+    mutate: (e) => (e.scenes = golden(SHORT).scenes),
+  },
+  {
+    file: "episode-flow-flip-before-name.json", of: FLOW, code: "FLOW_ORDER",
+    rule: "§9-32 · §14.3 — 뼈의 차례: 첫 생각 → 깨는 사실 → 이름 → 뒤집기 → 내려앉기 (실물 셋의 차례 · UX-8 ⑥ 3)",
+    what: "뒤집기 덩이를 이름 붙이기 (비만율) 앞에 놓았다 — 독자가 아직 모르는 말로 뒤집기를 읽게 된다",
+    mutate: (e) => e.flow.splice(4, 2, e.flow[5], e.flow[4]),
+  },
+  {
+    file: "episode-flow-no-flip.json", of: FLOW, code: "FLOW_FLIP",
+    rule: "§9-33 · §14.4 · D91 — 짧은 이야기의 가운데는 뒤집기 하나다 (정확히 하나)",
+    what: "뒤집기 덩이 (“성인 3명 중 1명이 비만” ≠ “남성 30~40대 2명 중 1명이 비만”)를 뺐다",
+    mutate: (e) => e.flow.splice(5, 1),
+  },
+  {
+    file: "episode-flow-two-picks.json", of: FLOW, code: "FLOW_PICK",
+    rule: "§9-34 · §14.4 · D91 — 고르기는 없거나 하나 (체험은 없거나 아주 작게)",
+    what: "고르기 (여성은 어느 나이가 가장 높을까)를 하나 더 이어 놓았다",
+    mutate: (e) => e.flow.splice(7, 0, JSON.parse(JSON.stringify(e.flow[6]))),
+  },
+  {
+    file: "episode-flow-cite-not-verbatim.json", of: FLOW, code: "CITE_VERBATIM",
+    rule: "§9-35 · §14.3 — 문서의 문장 (cite)은 근거 구절 안의 글 그대로다 (lab types.ts — 글자 그대로)",
+    what: "\"질병관리청 발표문에서\" 의 문장을 다듬어 적었다 (\"약 2명 중 1명이 비만으로 나타났으며\" → \"2명 중 1명꼴로 비만이었다\") — 수는 구절에 다 있어 숫자 검사는 지난다",
+    mutate: (e) => (e.flow[2].text.t = "특히 남성은 30대(52.1%)와 40대(53.1%)에서 가장 높아 2명 중 1명꼴로 비만이었다"),
+  },
+  {
+    file: "episode-flow-word-unnamed.json", of: FLOW, code: "FLOW_WORD",
+    rule: "§9-36 · §14.5 — 낱말은 흐름의 문단에서 굵게 이름 붙는다. 이야기가 먼저 가르치고 카드는 되새긴다 (UX-8 ⑥ 9)",
+    what: "이름 붙이기 문단에서 **비만율** 의 굵게를 뗐다 — 카드 (비만율)만 남고 흐름은 그 이름을 붙이지 않는다",
+    mutate: (e) => (e.flow[4].text.t = e.flow[4].text.t.replace("**비만율**", "비만율")),
+  },
+  {
+    file: "episode-flow-flip-number-ungrounded.json", of: FLOW, code: "NUMBER_UNGROUNDED",
+    rule: "§9-9 · §14.4 — 새 꼴의 뒤집기의 말은 글 한 덩이라 숫자에 근거가 있어야 한다 (옛 꼴은 맨 글자열이라 숫자를 못 썼다 — UX-8 ⑦ 5)",
+    what: "뒤집기의 뒤쪽 말을 “남성 30~40대 3명 중 2명이 비만” 으로 — 구절 (남성 30~40대 2명 중 1명 비만)에 없는 수",
+    mutate: (e) => (e.flow[5].b.t = "“남성 30~40대 3명 중 2명이 비만”"),
+  },
   {
     file: "episode-pages-combo.json", of: PRIVACY, code: "FRAME_COMBO",
     rule: "§9-15 — 넘겨 보기는 혼자 선다. 다른 틀과 잇는 것은 실물이 없다",
@@ -454,7 +530,7 @@ const build = (v: Violation) => {
   const { _source, ...body } = golden(v.of);
   v.mutate(body);
   return {
-    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.code === "SHORT_ALONE" ? "P-S1" : v.of === SHORT ? "B-E3" : v.code.startsWith("PREV_") ? "UX-6" : v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
+    _violation: { code: v.code, ...(v.also ? { also: v.also } : {}), of: v.of, rule: v.rule, what: v.what, made_from: `fixtures/${v.of} + 위반 1개 (${v.of === FLOW ? "B-E4" : v.code === "SHORT_ALONE" ? "P-S1" : v.of === SHORT ? "B-E3" : v.code.startsWith("PREV_") ? "UX-6" : v.of === PRIVACY ? "UX-5" : "B-E1"} · packages/contract/test/episode.test.ts 의 표)` },
     ...body,
   };
 };
@@ -485,6 +561,7 @@ describe("위반은 거부한다 — fixtures/invalid/episode-*.json", () => {
       "CHAIN_NO_STOP", "CHAIN_ORDER", "CHAIN_VALUE_SRC", "FRAME_TAB", "DIFFER_ONE_SIDE", "DIFFER_SRC",
       "PAGES_CARDS", "PAGES_CARD_SRC", "PAGES_WHEN", "PAGES_STAR", "PAGES_FUTURE", "PAGES_ORDER",
       "PREV_MISSING", "PREV_VALUE_SRC", "PREV_KEY",
+      "FLOW_ORDER", "FLOW_FLIP", "FLOW_PICK", "CITE_VERBATIM", "FLOW_WORD",
     ])
       expect(covered.has(code), code).toBe(true);
   });
@@ -744,5 +821,114 @@ describe("픽스처 없이 보는 것", () => {
       null,
     );
     expect(r.errors).toEqual([]);
+  });
+
+  // ── 짧은 이야기 새 꼴 (B-E4 · §14 · 불변식 31 ~ 36) — 다섯째 골든을 고쳐 본다. 흐름 (B): 0 첫 생각 · 1 깨는 사실 · 2 문서의 문장 · 3 이음매 · 4 이름 · 5 뒤집기 · 6 고르기 · 7 이음매 · 8 내려앉기
+  const flowGolden = () => {
+    const { _source, ...body } = golden(FLOW);
+    return body;
+  };
+
+  it("새 꼴 — 뼈의 차례 (불변식 32): 첫 덩이가 첫 생각이 아님 · 끝 덩이가 내려앉기가 아님 · 깨는 사실 둘 · 이름 없음 · 내려앉기가 뒤집기 앞 · 고르기가 내려앉기 뒤 → FLOW_ORDER", () => {
+    const a = flowGolden();
+    a.flow[0].beat = null;
+    expect(codes(a)).toEqual(["FLOW_ORDER"]);
+    const b = flowGolden();
+    b.flow.push({ kind: "p", beat: null, text: { t: "끝이에요." } });
+    expect(codes(b)).toEqual(["FLOW_ORDER"]);
+    const c = flowGolden();
+    c.flow[3].beat = "breaker"; // 이음매 문단도 깨는 사실이라고 적음
+    expect(codes(c)).toEqual(["FLOW_ORDER"]);
+    const d = flowGolden();
+    d.flow[4].beat = null; // 이름 붙이기 표시를 뗌 (낱말은 여전히 굵게 이름 붙어 있다)
+    expect(codes(d)).toEqual(["FLOW_ORDER"]);
+    const e = flowGolden();
+    e.flow[3].beat = "land"; // 뒤집기 앞에 내려앉기
+    expect(codes(e)).toEqual(["FLOW_ORDER"]);
+    const f = flowGolden();
+    f.flow.splice(8, 0, ...f.flow.splice(6, 1)); // 고르기를 내려앉기 뒤로 — 끝 덩이도 내려앉기가 아니게 된다
+    expect(codes(f)).toEqual(["FLOW_ORDER"]);
+  });
+
+  it("새 꼴 — 고르기의 자리는 실물 A 처럼 첫 생각 바로 뒤도 받는다 · 고르기가 없어도 받는다 (없거나 하나)", () => {
+    const a = flowGolden();
+    a.flow.splice(1, 0, ...a.flow.splice(6, 1)); // A 의 차례: 첫 생각 → 고르기 → 깨는 사실 → …
+    expect(codes(a)).toEqual([]);
+    const b = flowGolden();
+    b.flow.splice(6, 1);
+    const r = validateFlowStory(b, { documents });
+    expect(r.ok && r.stats.picks).toBe(0);
+  });
+
+  it("새 꼴 — 깨는 사실에 구절 없음 → BREAKER_SRC (불변식 11) · 뒤집기의 뒤쪽 말에 구절 없음 → FLOW_FLIP · 뒤집기 둘 → FLOW_FLIP", () => {
+    const a = flowGolden();
+    delete a.flow[1].text.src;
+    expect(codes(a)).toEqual(["BREAKER_SRC"]);
+    const b = flowGolden();
+    b.flow[5].b = { t: "“남성 쪽은 둘 중 하나가 비만”" }; // 숫자 없는 말 — 구절만 없다
+    expect(codes(b)).toEqual(["FLOW_FLIP"]);
+    const c = flowGolden();
+    c.flow.splice(5, 0, JSON.parse(JSON.stringify(c.flow[5])));
+    expect(codes(c)).toEqual(["FLOW_FLIP"]);
+  });
+
+  it("새 꼴 — 고르기: 받는 말에 구절 없음 · 고를 것 셋 · key 겹침 → FLOW_PICK", () => {
+    const a = flowGolden();
+    delete a.flow[6].options[0].reply.src;
+    expect(codes(a)).toEqual(["FLOW_PICK", "NUMBER_UNGROUNDED"]); // 받는 말의 수 (16.4 · 27.4)도 근거를 잃는다
+    const b = flowGolden();
+    b.flow[6].options.push({ key: "young", label: { t: "여성은 젊은 쪽" }, reply: { t: "아니에요. 여성은 나이 든 쪽이 높아요.", src: ["pr.women"] } });
+    expect(codes(b)).toEqual(["FLOW_PICK"]);
+    const c = flowGolden();
+    c.flow[6].options[1].key = c.flow[6].options[0].key;
+    expect(codes(c)).toEqual(["FLOW_PICK"]);
+  });
+
+  it("새 꼴 — 문서의 문장에 구절 없음 → CITE_VERBATIM · 낱말 key 겹침 → FLOW_WORD · 낱말 이름의 괄호는 떼고 댄다", () => {
+    const a = flowGolden();
+    delete a.flow[2].text.src;
+    expect(codes(a)).toEqual(["CITE_VERBATIM", "NUMBER_UNGROUNDED"]); // 구절을 떼면 그 문장의 수도 근거를 잃는다
+    const b = flowGolden();
+    b.keep.words[1].key = b.keep.words[0].key;
+    expect(codes(b)).toEqual(["FLOW_WORD"]);
+    const c = flowGolden();
+    c.flow[7].text.t = c.flow[7].text.t.replace("**퍼센트포인트**", "퍼센트포인트 (%p)"); // 카드 이름 그대로 (괄호까지) 적고 굵게는 없다
+    expect(codes(c)).toEqual(["FLOW_WORD"]);
+  });
+
+  it("새 꼴 — 모양 (불변식 31 · 1 · 10): 옛 꼴 · 긴 이야기의 칸 (선반 · 곁 이야기 · 풀이 · 사망) · 카테고리 → SCHEMA_KEY · 문서의 문장에 표시 → SCHEMA_KEY · 글 문단에 뒤집기 표시 · 모르는 기호 · 모르는 덩이 → SCHEMA_TYPE · 맨 글자열의 숫자 → BARE_DIGIT", () => {
+    const add = (k: string, v: unknown) => ({ ...flowGolden(), [k]: v });
+    expect(codes(add("series", golden(SHORT).series))).toEqual(["SCHEMA_KEY"]);
+    expect(codes(add("sibling", null))).toEqual(["SCHEMA_KEY"]);
+    expect(codes(add("solve", golden(SHORT).solve))).toEqual(["SCHEMA_KEY"]);
+    expect(codes(add("category", "과학과 몸"))).toEqual(["SCHEMA_KEY"]); // 카테고리는 카탈로그의 값 (§14.7)
+    expect(codes(add("death", false))).toEqual(["SCHEMA_KEY"]);
+    const a = flowGolden();
+    a.flow[2].beat = null;
+    expect(codes(a)).toEqual(["SCHEMA_KEY"]);
+    const b = flowGolden();
+    b.flow[3].beat = "flip"; // 뒤집기는 덩이 자체가 표시다 — 글 문단에 달지 않는다
+    expect(codes(b)).toEqual(["SCHEMA_TYPE"]);
+    const c = flowGolden();
+    c.flow[5].op = "→";
+    expect(codes(c)).toEqual(["SCHEMA_TYPE"]);
+    const d = flowGolden();
+    d.flow[3].kind = "list"; // 목록 덩이 — 실물 없음
+    expect(codes(d)).toEqual(["SCHEMA_TYPE"]);
+    const e = flowGolden();
+    e.flow[2].label = "질병관리청 발표문 2쪽에서";
+    expect(codes(e)).toEqual(["BARE_DIGIT"]);
+    const f = flowGolden();
+    delete f.not_drawn;
+    expect(codes(f)).toEqual(["SCHEMA_MISSING"]);
+  });
+
+  it("calc 의 키도 숫자 토막으로 읽는다 (§4.3 · B-E4) — \"27.9\" 키가 글의 27 · 9 를 받는다 · 키를 빼면 NUMBER_UNGROUNDED · 정수 키뿐인 골든 넷은 그대로", () => {
+    const a = flowGolden();
+    expect(a.flow[7].text.calc).toEqual({ "27.9": expect.any(String) });
+    delete a.flow[7].text.calc;
+    expect(codes(a)).toEqual(["NUMBER_UNGROUNDED"]);
+    for (const name of [PRICE, RATE, PRIVACY]) expect(codes(golden(name)), name).toEqual([]);
+    expect(codes(golden(SHORT))).toEqual([]);
   });
 });

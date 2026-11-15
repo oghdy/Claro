@@ -1,4 +1,4 @@
-// docs/contract/EPISODE.md §1 을 코드로 옮긴 것 (B-E1 · 짧은 이야기 ShortStory 는 B-E3 — §13 · 홀로 선 짧은 이야기의 `| null` 다섯 칸은 P-S1 — §13.9). 원본은 그 문서다.
+// docs/contract/EPISODE.md §1 을 코드로 옮긴 것 (B-E1 · 짧은 이야기 ShortStory 는 B-E3 — §13 · 홀로 선 짧은 이야기의 `| null` 다섯 칸은 P-S1 — §13.9 · 짧은 이야기 새 꼴 FlowStory 는 B-E4 — §14). 원본은 그 문서다.
 // 계약에 없는 칸을 여기서 만들지 않는다. 문서와 어긋나면 test/contract-docs.test.ts 가 실패한다.
 // UUID · EventRef · ConceptRef 는 ARTICLE_PACKAGE(./types) 가 코드로 옮긴 것을 쓴다 — 여기서 다시 정의하지 않는다
 // (주인은 DATA_MODEL §2 · CONCEPT_IDENTITY §3.2).
@@ -610,8 +610,95 @@ export interface ShortStory {
   solve: ShortSolve;
 }
 
-/** 이야기 하나 — 긴 이야기 (Episode) 또는 짧은 이야기 (ShortStory). weight 로 가른다 (없으면 긴 이야기 · §13.1). 칸이 아니라 갈래라 아래 표에 없다 */
-export type Story = Episode | ShortStory;
+// ─────────────────────────────────────────────────────────── 짧은 이야기 새 꼴 — 표지 + 한 흐름 (§14 · B-E4 — 실물 셋: UX-8b-B (골든 다섯째) · UX-8b-A · UX-8)
+
+/** 흐름 속 글 덩이 (p)의 표시 — 이야기의 뼈. 뒤집기 (flip) · 고르기 (pick)는 덩이 자체가 표시다 (§14.3) */
+export const FLOW_BEATS = ["first_thought", "breaker", "name", "land"] as const;
+export type FlowBeat = (typeof FLOW_BEATS)[number];
+
+/** 표지 — 물음 제목 · 한 줄 · 날 · 물음 단추 하나. 넷 다 글 한 덩이 (숫자에 근거를 단다 — §14.2) */
+export interface FlowCover {
+  title: EpisodeText;
+  dek: EpisodeText;
+  meta: EpisodeText;
+  ask: EpisodeText;
+}
+
+/** 흐름의 글 한 문단 — 뼈의 표시가 붙을 수 있다 (없으면 null) */
+export interface FlowPara {
+  kind: "p";
+  beat: FlowBeat | null;
+  text: EpisodeText;
+}
+
+/** 문서의 문장을 그대로 보여 준다 — 근거 구절 안의 글 그대로 (불변식 35) */
+export interface FlowCite {
+  kind: "cite";
+  label: string;
+  text: EpisodeText;
+}
+
+/** 뒤집기 한 줄 (A ≠ B) + 한 문단 — 흐름에 정확히 하나 (불변식 33) */
+export interface FlowFlip {
+  kind: "flip";
+  label: string;
+  a: EpisodeText;
+  op: "≠" | "=";
+  b: EpisodeText;
+  note: EpisodeText;
+}
+
+/** 예상 한 번 고르기 — 없거나 하나 (불변식 34). 어느 쪽을 골라도 이야기는 같은 곳으로 간다 (가르는 것은 받는 말 한 덩이뿐) */
+export interface FlowPick {
+  kind: "pick";
+  ask: EpisodeText;
+  options: FlowOption[];
+}
+
+export interface FlowOption {
+  key: Id;
+  label: EpisodeText;
+  reply: EpisodeText;
+}
+
+export type FlowBlock = FlowPara | FlowCite | FlowFlip | FlowPick;
+
+/** 남음 — 흐름의 끝에 이어 붙는다 (따로 선 장면이 아니다): 남는 한 줄 · 이 이야기에서 만난 낱말 · 누구의 말 */
+export interface FlowKeep {
+  line_label: string;
+  line: EpisodeText;
+  words_label: string;
+  words: FlowWord[];
+  whose: EpisodeText;
+}
+
+/** 개념 낱말 — 이 이야기가 흐름에서 이름 붙인 개념의 카드 (되새김). 지도의 자리 · 줍는 장면 · 라이브러리 바탕이 없다 (§14.5) */
+export interface FlowWord {
+  key: Id;
+  name: string;
+  short: EpisodeText;
+  body: EpisodeText[];
+}
+
+/** 짧은 이야기 — 새 꼴 (표지 + 한 흐름 + 남음). 옛 꼴 (ShortStory · 장면 넷)과는 form 칸으로 가른다 — 무게는 둘 다 short (§14.1) */
+export interface FlowStory {
+  episode_id: UUID;
+  episode_version: number;
+  code: Id;
+  event_ref: EventRef;
+  weight: "short";
+  form: "flow";
+  docs: Record<DocLabel, EpisodeDoc>;
+  quotes: Record<QuoteKey, EpisodeQuote>;
+  voice_labels: VoiceLabels;
+  cover: FlowCover;
+  flow: FlowBlock[];
+  keep: FlowKeep;
+  not_drawn: Note[];
+}
+
+/** 이야기 하나 — 긴 이야기 (Episode) · 짧은 이야기 옛 꼴 (ShortStory) · 새 꼴 (FlowStory). weight 로 가르고 (없으면 긴 이야기 · §13.1), 짧은 이야기는 form 칸으로 가른다 (있으면 새 꼴 · §14.1). 칸이 아니라 갈래라 아래 표에 없다 */
+export type Story = Episode | ShortStory | FlowStory;
 
 // ─────────────────────────────────────────────────────────── 칸 목록 (값) — 문서의 타입 블록과 글자로 같다
 
@@ -881,6 +968,30 @@ export const EPISODE_SHAPES = {
     gain_label: "string | null",
   } satisfies Shape<ShortKeepScene>,
   ShortSolve: { entry: "SolveEntry", plain: "PlainFlip" } satisfies Shape<ShortSolve>,
+  // 짧은 이야기 새 꼴 (§14 · B-E4)
+  FlowStory: {
+    episode_id: "UUID",
+    episode_version: "integer",
+    code: "Id",
+    event_ref: "EventRef",
+    weight: '"short"',
+    form: '"flow"',
+    docs: "Record<DocLabel, EpisodeDoc>",
+    quotes: "Record<QuoteKey, EpisodeQuote>",
+    voice_labels: "VoiceLabels",
+    cover: "FlowCover",
+    flow: "FlowBlock[]",
+    keep: "FlowKeep",
+    not_drawn: "Note[]",
+  } satisfies Shape<FlowStory>,
+  FlowCover: { title: "EpisodeText", dek: "EpisodeText", meta: "EpisodeText", ask: "EpisodeText" } satisfies Shape<FlowCover>,
+  FlowPara: { kind: '"p"', beat: "FlowBeat | null", text: "EpisodeText" } satisfies Shape<FlowPara>,
+  FlowCite: { kind: '"cite"', label: "string", text: "EpisodeText" } satisfies Shape<FlowCite>,
+  FlowFlip: { kind: '"flip"', label: "string", a: "EpisodeText", op: '"≠" | "="', b: "EpisodeText", note: "EpisodeText" } satisfies Shape<FlowFlip>,
+  FlowPick: { kind: '"pick"', ask: "EpisodeText", options: "FlowOption[]" } satisfies Shape<FlowPick>,
+  FlowOption: { key: "Id", label: "EpisodeText", reply: "EpisodeText" } satisfies Shape<FlowOption>,
+  FlowKeep: { line_label: "string", line: "EpisodeText", words_label: "string", words: "FlowWord[]", whose: "EpisodeText" } satisfies Shape<FlowKeep>,
+  FlowWord: { key: "Id", name: "string", short: "EpisodeText", body: "EpisodeText[]" } satisfies Shape<FlowWord>,
 } as const;
 
 export type EpisodeShapeName = keyof typeof EPISODE_SHAPES;
@@ -906,6 +1017,8 @@ export const EPISODE_ALIASES = {
   Frame:"ToggleFrame | ChainFrame | SeatsFrame | PagesFrame",
   ChainNode: "ReachedNode | StoppedNode",
   PlainSolve: "PlainFlip | PlainThree | PlainQuiet",
+  FlowBeat: FLOW_BEATS.map((v) => `"${v}"`).join(" | "),
+  FlowBlock: "FlowPara | FlowCite | FlowFlip | FlowPick",
 } as const;
 
 /** 갈래가 있는 타입 — 어느 칸의 값으로 갈래를 고르나 */
@@ -913,4 +1026,5 @@ export const EPISODE_UNIONS: Record<string, { tag: string; of: Record<string, Ep
   Frame: { tag: "kind", of: { toggle: "ToggleFrame", chain: "ChainFrame", seats: "SeatsFrame", pages: "PagesFrame" } },
   ChainNode: { tag: "reach", of: { full: "ReachedNode", part: "ReachedNode", none: "StoppedNode" } },
   PlainSolve: { tag: "kind", of: { flip: "PlainFlip", three: "PlainThree", quiet: "PlainQuiet" } },
+  FlowBlock: { tag: "kind", of: { p: "FlowPara", cite: "FlowCite", flip: "FlowFlip", pick: "FlowPick" } },
 };

@@ -29,7 +29,17 @@
 //   29 다른 이야기를 가리키기 (가리킨 것이 있을 때만) — 도구 하나 이상 · 겹침 없음 (REF_TOOL) · 가리킨 이야기의 판 ≥ 1 · 자신이 아니다 (ID_RANGE)
 //      가리킨 이야기를 받으면 (ctx.episodes) 대 본다 — 곁 이야기가 같은 사건 (SIBLING_MISMATCH) · 도구가 그 이야기에 있다 (REF_TOOL)
 //   30 홀로 선 짧은 이야기 (P-S1 · §13.9) — sibling · tools_from 은 null 일 수 있다. 가리킨 도구가 없으면 그것을 말하는 글 (tool_lead · map_note · gain_label)도 null · 있으면 글도 있다 (SHORT_ALONE)
-//   validateStory — weight 가 "short" 면 짧은 이야기로, 아니면 (칸이 없으면) 긴 이야기로 본다
+//
+// 짧은 이야기 새 꼴 (FlowStory · §14 · B-E4) — validateFlowStory. 위의 1 · 2 (판) · 3 · 4 · 8 · 9 · 10 · 11 (깨는 사실 = beat breaker 인 덩이) 을 같이 보고, 더해서
+//   31 새 꼴에는 장면 · 선반 · 번호 · 곁 이야기 · 가리킨 도구 · 풀이 · 체험 칸이 없다 — 모양 (1) 이 거부한다 (SCHEMA_KEY)
+//   32 뼈의 차례 — 첫 덩이는 첫 생각 · 끝 덩이는 내려앉기 · 첫 생각 하나 · 깨는 사실 하나 · 이름 하나 이상 ·
+//      첫 생각 → 깨는 사실 → 이름 → 뒤집기 → 내려앉기 · 고르기는 첫 생각 뒤 · 첫 내려앉기 앞 (FLOW_ORDER)
+//   33 뒤집기는 정확히 하나 · 뒤쪽 말 (문서가 깨는 쪽)에 구절 (FLOW_FLIP)
+//   34 고르기는 없거나 하나 · 고를 것 둘 · key 겹침 없음 · 받는 말마다 구절 (FLOW_PICK)
+//   35 문서의 문장 (cite)은 근거 구절 안의 글 그대로 (CITE_VERBATIM)
+//   36 낱말 — key 겹침 없음 · 낱말마다 흐름의 문단에서 굵게 이름 붙었다 (FLOW_WORD)
+//   크기 (문단 · 문장 · 글자 수 · 낱말 수 · 받는 말의 길이)는 보지 않는다 — 계약이 아니라 쓰는 법이다 (§14.8)
+//   validateStory — weight 가 "short" 면 짧은 이야기 (form 칸이 있으면 새 꼴 · 없으면 옛 꼴)로, 아니면 (칸이 없으면) 긴 이야기로 본다
 //
 // 보지 않는 것
 //   글의 뜻이 구절에서 나오는가 (의미 대조 — 사람 · W-2) · 한글로 쓴 수 ("여섯 가지") · 그림 부품이 있는가 (코드 — 화면 쪽 검사)
@@ -51,6 +61,8 @@ import {
   type EpisodeRef,
   type EpisodeText,
   type EpisodeQuote,
+  type FlowBlock,
+  type FlowStory,
   type SeatBefore,
   type ShortStory,
   type Solve,
@@ -88,7 +100,24 @@ export type ShortStoryValidation =
   | { ok: true; story: ShortStory; warnings: Issue[]; stats: ShortStoryStats }
   | { ok: false; errors: Issue[]; warnings: Issue[] };
 
-export type StoryValidation = EpisodeValidation | ShortStoryValidation;
+/** 짧은 이야기 새 꼴 — 흐름의 덩이 수 · 뼈 (표시의 차례 — 뒤집기는 flip · 고르기는 try) · 고르기 · 낱말 */
+export interface FlowStoryStats {
+  quotes: number;
+  docs: number;
+  texts: number;
+  texts_with_digits: number;
+  exempt: string[];
+  blocks: number;
+  beats: string[];
+  picks: number;
+  words: number;
+}
+
+export type FlowStoryValidation =
+  | { ok: true; story: FlowStory; warnings: Issue[]; stats: FlowStoryStats }
+  | { ok: false; errors: Issue[]; warnings: Issue[] };
+
+export type StoryValidation = EpisodeValidation | ShortStoryValidation | FlowStoryValidation;
 
 export interface EpisodeContext {
   /** 저장된 문서 (DATA_MODEL SourceDocument 의 source_id · text). 주면 불변식 8 을 본다 */
@@ -352,9 +381,11 @@ function groundProblems(
     }
     const pool = (item.src ?? []).flatMap((k) => runs(english(ep.quotes[k]?.quote ?? "")));
     const calc = Object.keys(item.calc ?? {});
+    // calc 의 키도 글과 같이 숫자 토막으로 읽는다 — "27.9" → 27 · 9 (B-E4 · §4.3). 정수 키 ("6" · "12")는 전과 같다
+    const calcRuns = calc.flatMap(runs);
     for (const n of want) {
       // 연도: 글의 2026 ↔ 구절의 ’26
-      const ok = pool.includes(n) || (n.length === 4 && n.startsWith("20") && pool.includes(String(Number(n.slice(2))))) || calc.includes(n);
+      const ok = pool.includes(n) || (n.length === 4 && n.startsWith("20") && pool.includes(String(Number(n.slice(2))))) || calcRuns.includes(n);
       if (!ok) E("NUMBER_UNGROUNDED", path, `숫자 ${n} 이 근거 구절에 없다 — "${item.t.slice(0, 50)}…" (src: ${(item.src ?? []).join(", ") || "없음"})`);
     }
     if (calc.length) exempt.push(`${path}: "${item.t.replace(/\n/g, " ").slice(0, 60)}${item.t.length > 60 ? "…" : ""}" (계산 — ${Object.entries(item.calc!).map(([n, how]) => `${n} = ${how}`).join(" · ")})`);
@@ -602,7 +633,128 @@ export function parseShortStory(input: unknown, ctx?: EpisodeContext): ShortStor
   return r.story;
 }
 
-/** 이야기 하나 — weight 가 "short" 면 짧은 이야기, 아니면 (칸이 없거나 "long") 긴 이야기 (회차)로 본다 (§13.1) */
+// ─────────────────────────────────────────────────────────── 짧은 이야기 새 꼴 — 표지 + 한 흐름 (§14 · 불변식 31 ~ 36 · B-E4)
+
+/** 덩이의 뼈 표시 — 글 문단은 제 표시 (없으면 null) · 뒤집기 덩이는 flip · 고르기 덩이는 try · 문서의 문장은 표시가 없다 */
+const beatOf = (b: FlowBlock): string | null => (b.kind === "p" ? b.beat : b.kind === "flip" ? "flip" : b.kind === "pick" ? "try" : null);
+
+export function validateFlowStory(input: unknown, ctx: EpisodeContext = {}): FlowStoryValidation {
+  const errors: Issue[] = [];
+  const warnings: Issue[] = [];
+  const E = (code: string, path: string, message: string) => errors.push({ code, path, message });
+  const doc = stripAnnotations(input);
+
+  // 1 · 10 · 31 — 표지 + 흐름 + 남음. 장면 · 선반 · 번호 · 곁 이야기 · 가리킨 도구 · 풀이 · 체험 칸이 없다 (넣으면 SCHEMA_KEY)
+  const shape = shapeProblems("FlowStory", doc);
+  if (shape.errors.length) return { ok: false, errors: shape.errors, warnings };
+  const s = doc as FlowStory;
+
+  // 2 — 판 (번호는 없다)
+  if (s.episode_version < 1) E("ID_RANGE", "/episode_version", "판은 1부터다");
+  // 3 · 8 · 4 · 9
+  const { exempt, withDigits } = groundProblems(s, shape.texts, ctx.documents, E, warnings);
+  // 11 · 32 ~ 36
+  flowProblems(s, E);
+
+  if (errors.length) return { ok: false, errors, warnings };
+  const beats = s.flow.map(beatOf).filter((b): b is string => b !== null);
+  const stats: FlowStoryStats = {
+    quotes: Object.keys(s.quotes).length,
+    docs: new Set(Object.values(s.quotes).map((q) => q.doc)).size,
+    texts: shape.texts.length,
+    texts_with_digits: withDigits,
+    exempt,
+    blocks: s.flow.length,
+    beats,
+    picks: beats.filter((b) => b === "try").length,
+    words: s.keep.words.length,
+  };
+  return { ok: true, story: s, warnings, stats };
+}
+
+function flowProblems(s: FlowStory, E: (code: string, path: string, message: string) => void) {
+  const f = s.flow;
+  const at = (beat: string) => f.flatMap((b, i) => (beatOf(b) === beat ? [i] : []));
+  /** a 의 덩이가 전부 b 의 덩이보다 앞에 있다 (어느 쪽이 비면 참) */
+  const before = (a: number[], b: number[]) => a.every((x) => b.every((y) => x < y));
+  const [ft, br, nm, fl, tr, ld] = [at("first_thought"), at("breaker"), at("name"), at("flip"), at("try"), at("land")];
+
+  // 33 — 뒤집기는 정확히 하나 · 뒤쪽 말 (문서가 깨는 쪽)에 구절
+  if (fl.length !== 1) E("FLOW_FLIP", "/flow", `뒤집기 덩이가 ${fl.length}개다 — 정확히 하나 (짧은 이야기의 가운데는 뒤집기 하나다)`);
+  for (const i of fl) {
+    const b = f[i]!;
+    if (b.kind === "flip" && !hasSrc(b.b)) E("FLOW_FLIP", `/flow/${i}/b`, "뒤집기의 뒤쪽 말 (문서가 깨는 쪽)에 근거 구절이 없다");
+  }
+  // 11 — 깨는 사실에 구절
+  for (const i of br) {
+    const b = f[i]!;
+    if (b.kind === "p" && !hasSrc(b.text)) E("BREAKER_SRC", `/flow/${i}/text`, "깨는 사실 (beat breaker)에 근거 구절이 없다");
+  }
+
+  // 32 — 뼈의 차례 (실물 셋의 차례에서: 첫 생각 → 깨는 사실 → 이름 → 뒤집기 → 내려앉기 · 고르기는 그 사이 어디든)
+  const O = (path: string, message: string) => E("FLOW_ORDER", path, message);
+  const first = f[0];
+  const last = f.at(-1);
+  if (!(first?.kind === "p" && first.beat === "first_thought")) O("/flow/0", "흐름이 첫 생각 (p · first_thought)으로 시작하지 않는다 — 독자가 믿고 들어오는 짐작을 먼저 같이 해 본다");
+  if (!(last?.kind === "p" && last.beat === "land")) O(`/flow/${Math.max(f.length - 1, 0)}`, "흐름이 내려앉기 (p · land)로 끝나지 않는다 — 뉴스를 어떻게 읽으면 되는지로 내려앉는다");
+  if (ft.length !== 1) O("/flow", `첫 생각이 ${ft.length}개다 — 하나`);
+  if (br.length !== 1) O("/flow", `깨는 사실이 ${br.length}개다 — 하나`);
+  if (!nm.length) O("/flow", "이름 붙이기 (beat name)가 없다 — 개념 낱말은 흐름이 쉬운 말로 해 본 뒤 이름을 붙인다");
+  if (!ld.length) O("/flow", "내려앉기 (beat land)가 없다");
+  if (!before(ft, br)) O(`/flow/${br[0]}`, "깨는 사실이 첫 생각보다 앞에 있다");
+  if (!before(br, nm)) O(`/flow/${nm[0]}`, "이름 붙이기가 깨는 사실보다 앞에 있다 — 어긋남이 먼저 서야 이름이 쓸모 있다");
+  if (fl.length === 1) {
+    if (!before(br, fl)) O(`/flow/${fl[0]}`, "뒤집기가 깨는 사실보다 앞에 있다");
+    if (!before(nm, fl)) O(`/flow/${fl[0]}`, "뒤집기가 이름 붙이기보다 앞에 있다 — 독자가 아직 모르는 말로 뒤집기를 읽게 된다");
+    if (!before(fl, ld)) O(`/flow/${ld[0]}`, "내려앉기가 뒤집기보다 앞에 있다");
+  }
+  if (!before(ft, tr) || !before(tr, ld.slice(0, 1))) O(`/flow/${tr[0]}`, "고르기는 첫 생각 뒤 · 첫 내려앉기 앞에 온다");
+
+  // 34 — 고르기: 없거나 하나 · 고를 것 둘 · key 겹침 없음 · 받는 말마다 구절
+  if (tr.length > 1) E("FLOW_PICK", "/flow", `고르기가 ${tr.length}개다 — 없거나 하나 (체험은 없거나 아주 작게 · D91)`);
+  for (const i of tr) {
+    const b = f[i]!;
+    if (b.kind !== "pick") continue;
+    if (b.options.length !== 2) E("FLOW_PICK", `/flow/${i}/options`, `고를 것이 ${b.options.length}개다 — 둘 (셋 이상은 실물 없음)`);
+    if (new Set(b.options.map((o) => o.key)).size !== b.options.length) E("FLOW_PICK", `/flow/${i}/options`, "고를 것의 key 가 겹친다");
+    b.options.forEach((o, k) => hasSrc(o.reply) || E("FLOW_PICK", `/flow/${i}/options/${k}/reply`, `"${o.key}" 를 고른 독자에게 주는 받는 말에 근거 구절이 없다 — 받는 말은 문서가 받는다`));
+  }
+
+  // 35 — 문서의 문장 (cite)은 근거 구절 안의 글 그대로 (빈칸 · 줄바꿈만 무시)
+  f.forEach((b, i) => {
+    if (b.kind !== "cite") return;
+    const quotes = (b.text.src ?? []).map((k) => s.quotes[k]?.quote).filter((q): q is string => typeof q === "string");
+    if (!quotes.length) E("CITE_VERBATIM", `/flow/${i}/text/src`, "문서의 문장에 근거 구절이 없다");
+    else if (!quotes.some((q) => squash(q).includes(squash(b.text.t)))) E("CITE_VERBATIM", `/flow/${i}/text`, `문서의 문장이 근거 구절 안의 글 그대로가 아니다 — "${b.text.t.slice(0, 40)}…"`);
+  });
+
+  // 36 — 낱말: key 겹침 없음 · 흐름의 문단에서 굵게 이름 붙었다 (이름 끝의 괄호 — "퍼센트포인트 (%p)" — 는 떼고 댄다)
+  const words = s.keep.words;
+  if (new Set(words.map((w) => w.key)).size !== words.length) E("FLOW_WORD", "/keep/words", "낱말의 key 가 겹친다");
+  words.forEach((w, k) => {
+    const name = w.name.replace(/\s*\([^)]*\)$/, "");
+    if (!f.some((b) => b.kind === "p" && b.text.t.includes(`**${name}**`)))
+      E("FLOW_WORD", `/keep/words/${k}`, `낱말 "${w.name}" 이 흐름의 문단에서 이름 붙지 않았다 (**${name}**) — 이야기가 먼저 가르치고 카드는 되새긴다`);
+  });
+}
+
+/** 검증을 통과한 짧은 이야기 (새 꼴)를 돌려주고, 아니면 모든 위반을 담아 던진다 */
+export function parseFlowStory(input: unknown, ctx?: EpisodeContext): FlowStory {
+  const r = validateFlowStory(input, ctx);
+  if (!r.ok) {
+    const lines = r.errors.map((e) => `  ${e.code} ${e.path}: ${e.message}`).join("\n");
+    throw new Error(`FlowStory 계약 위반 ${r.errors.length}건\n${lines}`);
+  }
+  return r.story;
+}
+
+/**
+ * 이야기 하나 — 세 꼴을 가른다 (§13.1 · §14.1).
+ *   weight 가 "short" 이고 form 칸이 있으면 → 짧은 이야기 새 꼴 (FlowStory)
+ *   weight 가 "short" 이고 form 칸이 없으면 → 짧은 이야기 옛 꼴 (ShortStory · 장면 넷)
+ *   그 밖 (weight 칸이 없거나 "long") → 긴 이야기 (Episode)
+ */
 export function validateStory(input: unknown, ctx: EpisodeContext = {}): StoryValidation {
-  return isObj(input) && input.weight === "short" ? validateShortStory(input, ctx) : validateEpisode(input, ctx);
+  if (isObj(input) && input.weight === "short") return "form" in input ? validateFlowStory(input, ctx) : validateShortStory(input, ctx);
+  return validateEpisode(input, ctx);
 }
