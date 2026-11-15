@@ -3,6 +3,7 @@
 // 짧은 이야기는 실제 목록에 남은 하나 — 「면허 정지…」 (P-S1 이 낸 파일 · 골든이 아니다 · 홀로 선다: sibling · tools_from null). 병원 짧은 이야기 (골든 넷째)는
 // F-E3 에서 실제 화면에서 내렸다 (한 사건 = 이야기 하나 · D91 ①) → /short/pipc-hospital 404 · 곁 이야기 길 없음. 시안 (/lab/today/short)에만 남는다 (today.spec.ts).
 // 카드에 "체험 있음 · 없음"을 적지 않는다 (D91 ② · F-E3).
+// F-E4 (D105): 첫 화면의 카드는 실제 첫 화면의 것이다 (episode/home/cards.tsx — 카드마다 그림 · 조용한 꼬리표). 뜻 (카드 수 · 차례 · 링크 · 번호 규칙 · 거짓 "오늘" 없음)은 그대로 본다.
 // 실제 화면에는 시안의 것 (맨 위 띠 · 독자 스위치 · 풀이 스위치)이 없고, 독자는 처음 온 독자의 조립을 받는다.
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -74,6 +75,10 @@ test("첫 화면 = 오늘 — 종이 톤 · 이야기 넷 (긴 셋 + 짧은 하�
   await expect(page.locator(".hm-tally")).toHaveText("긴 이야기 셋, 짧은 이야기 하나.");
   await expect(page.locator(".td-card[data-lead]")).toHaveCount(1);
   await expect(page.getByTestId("card-delivery")).toHaveAttribute("data-lead", "");
+  // F-E4 — 카드마다 제 그림 (긴 이야기 = 표지 그림 · 짧은 이야기 = 작은 그림) · 첫 인상의 큰 한 줄 · 화면 글이 "매일"을 약속하지 않는다
+  for (const code of [...LIVE.map((x) => x.code), SHORT.code]) await expect(page.getByTestId(`card-${code}`).locator(".hm-face svg"), `${code} 의 그림`).toHaveCount(1);
+  await expect(page.locator(".hm-tagline")).toBeVisible();
+  expect(await page.getByTestId("home").innerText()).not.toMatch(/매일|날마다 (새 이야기가 )?(올라와요|내요|만나요)/);
   // 읽는 시간을 내지 않는다 (D82)
   expect(await page.getByTestId("home").innerText()).not.toMatch(/\d+\s*분/);
   // 이어지는 이야기 — 금리만. 시리즈 줄은 골든의 track (지나온 화 · 지금 — "다음 화" 칸은 줄에 없다) · 예고는 날짜가 있는 것
