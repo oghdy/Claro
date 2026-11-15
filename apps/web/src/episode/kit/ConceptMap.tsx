@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
+import { unpromised } from "../catalog";
 import { CHROME } from "./chrome";
 import { SHELF, hrefOf, labelOf, shelfOf } from "./shelf";
 import { toolOf, type EpisodeData, type ReaderId } from "./types";
@@ -19,7 +20,10 @@ type Picked = { kind: "concept"; id: string } | { kind: "ghost"; name: string } 
 export function ConceptMap({ ep, reader, states, grow = false, compact = false, real = false, numbered = true }: { ep: EpisodeData; reader: ReaderId; states: Record<string, NodeState>; grow?: boolean; compact?: boolean; real?: boolean; numbered?: boolean }) {
   const c = CHROME.map;
   const bare = real && !numbered;
-  const { at, edges, ghosts } = ep.map;
+  const { at, edges } = ep.map;
+  // F-E5 — 다음 화를 약속하지 않는 이야기 (실제 화면 · catalog.unpromised)는 "다음 화 개념"을 그리지 않는다 (약속이 아니다 · D83). 범례의 그 칸도 뺀다. 다른 이야기는 그대로
+  const hush = real && unpromised(ep);
+  const ghosts = hush ? [] : ep.map.ghosts;
   const [picked, setPicked] = useState<Picked>(null);
   const shown = ep.tools.map((x) => x.key).filter((id) => states[id] !== "none");
   const fresh = shown.filter((id) => states[id] === "new");
@@ -106,7 +110,7 @@ export function ConceptMap({ ep, reader, states, grow = false, compact = false, 
       <ul className="ep-map-legend">
         <li data-state="new">{c.legendNew}</li>
         <li data-state="known">{c.legendKnown}</li>
-        <li data-state="ghost">{bare ? c.legendGhostPlain : c.legendGhost}</li>
+        {hush ? null : <li data-state="ghost">{bare ? c.legendGhostPlain : c.legendGhost}</li>}
       </ul>
 
       {compact ? null : (

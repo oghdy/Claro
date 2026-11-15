@@ -7,7 +7,7 @@ import { ConceptMap, type NodeState } from "./ConceptMap";
 import { LabCard } from "./frames/LabCard";
 import { PlainFlipLead, PlainQuietBody, PlainThreeCards } from "./frames/Plain";
 import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
-import { SHORTS, nextOf, oneLine, realPath, shortPath } from "../catalog";
+import { SHORTS, nextOf, oneLine, realPath, shortPath, unpromised } from "../catalog";
 import { SHELF, hrefOf, labelOf } from "./shelf";
 import { toolOf, type EpisodeData, type ReaderId, type SceneId, type T } from "./types";
 
@@ -476,7 +476,7 @@ function Compare({ asked, onAsk }: SceneProps) {
 }
 
 function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
-  const { ep } = useEp();
+  const { ep, real = false } = useEp();
   const c = ep.scenes.next;
   const follower = reader === "follower";
   // "이어짐" 장면에서 하나 더 줍는 도구 (계약 pickup.next — 실물 둘 다 하나)
@@ -504,7 +504,8 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
         <ToolCard id={late} mode={ep.readers[reader].known.includes(late) ? { kind: "known" } : follower ? { kind: "fresh" } : { kind: "ask", answer: answers[late], onAnswer: (a) => onAnswer(late, a) }} />
       </div>
       <motion.h2 className="ep-sub" variants={rise}>
-        {c.coming_label}
+        {/* 다음 화가 정해지지 않은 이야기 (실제 화면 · catalog.unpromised)에서는 "다음 회차가 될 일들"이 약속으로 읽힌다 → "남은 일들" (F-E5) */}
+        {real && unpromised(ep) ? CHROME.next.leftLabel : c.coming_label}
       </motion.h2>
       <motion.ol className="ep-coming" variants={rise}>
         {c.coming.map((n, i) => (

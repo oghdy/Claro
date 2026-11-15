@@ -39,7 +39,7 @@ test("오늘 — 긴 이야기 셋 (골든의 글 그대로) · 짧은 이야기
   expect(await page.getByTestId("card-pipc-hospital").innerText()).not.toMatch(/\d화/);
   await expect(page.getByTestId("card-license-notice").locator("a")).toHaveAttribute("href", "/short/license-notice");
   await expect(page.getByTestId("card-empty")).toContainText("견본 자리 — 글 없음");
-  expect(await page.locator(".td-list .td-card").evaluateAll((els) => els.map((e) => e.getAttribute("data-testid")))).toEqual(["card-delivery", "card-fomc", "card-pipc", "card-pipc-hospital", "card-license-notice", "card-empty"]);
+  expect(await page.locator(".td-list .td-card").evaluateAll((els) => els.map((e) => e.getAttribute("data-testid")))).toEqual(["card-oil-1", "card-meta-gallery", "card-delivery", "card-fomc", "card-pipc", "card-pipc-hospital", "card-license-notice", "card-empty"]);
   // 읽는 시간을 내지 않는다 (D82) · 체험 표시도 없다 (D91 ②) — 무게만
   const list = await page.locator(".td-list").innerText();
   expect(list).not.toMatch(/약\s*\d+\s*분/);
@@ -141,9 +141,10 @@ test("짧은 이야기 — 장면 넷 · 번호 없음 · 근거를 누르면 �
   await expect(page.getByTestId("to-today")).toHaveAttribute("href", "/lab/today");
 });
 
-test("개념 지도 견본 — 주제 셋의 지도", async ({ page }) => {
+// F-E5: 시안은 실제 목록 (catalog STORIES)을 읽는다 — 11/15 의 두 편 (기름값 · 메타)이 목록 맨 위에 들어와 시안의 카드도 둘 늘고 지도도 한 장 는다 (시안의 것은 0줄 — 여기 수만 맞췄다)
+test("개념 지도 견본 — 주제마다 지도 한 장 (넷)", async ({ page }) => {
   await page.goto("/lab/today");
   await page.getByTestId("to-map").click();
   await expect(page).toHaveURL(/\/lab\/today\/map$/);
-  await expect(page.getByTestId("concept-map")).toHaveCount(3);
+  await expect(page.getByTestId("concept-map")).toHaveCount(4);
 });

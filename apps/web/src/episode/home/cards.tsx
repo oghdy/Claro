@@ -132,5 +132,23 @@ function LicenseFace() {
   );
 }
 
+/** 「사진 때문에 수억 유로라는데…」 — 폰 안의 사진첩 (칸 넷)과 물음. 허락을 받았는지를 묻는 이야기다 (F-E5) */
+function GalleryFace() {
+  return (
+    <svg viewBox="0 0 72 72" role="presentation" aria-hidden="true" className="hm-mini">
+      <g transform="rotate(-5 30 36)">
+        <rect x="11" y="7" width="40" height="58" rx="8" className="hm-mini-thing" />
+        <path d="M27 13.5h8" className="hm-mini-line" />
+        <rect x="18" y="21" width="11" height="11" rx="2.5" className="hm-mini-soft" />
+        <rect x="33" y="21" width="11" height="11" rx="2.5" className="hm-mini-soft" />
+        <rect x="18" y="36" width="11" height="11" rx="2.5" className="hm-mini-soft" />
+        <rect x="33" y="36" width="11" height="11" rx="2.5" className="hm-mini-soft" />
+      </g>
+      <circle cx="53" cy="52" r="12" className="hm-mini-dot" />
+      <path d="M49.5 48.5c0-5 7-5 7 0 0 2.8-3.5 2.8-3.5 5.6M53 58v.4" className="hm-mini-mark" />
+    </svg>
+  );
+}
+
 /** 이야기의 code → 작은 그림. 없으면 PlainFace 가 선다 (이야기를 더할 때 그림은 없어도 된다) */
-const SHORT_FACE: Record<string, ComponentType> = { "license-notice": LicenseFace };
+const SHORT_FACE: Record<string, ComponentType> = { "license-notice": LicenseFace, "meta-gallery": GalleryFace };

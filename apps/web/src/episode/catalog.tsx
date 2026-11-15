@@ -15,6 +15,8 @@
 // 이 파일은 화면 뼈대 (kit/Episode)를 읽지 않는다 — kit/shelf.ts 가 이 목록을 읽기 때문이다 (서로 물리지 않게). 화면은 ./Screen.tsx 가 세운다.
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
+import metaGallery from "../../../../packages/pipeline/data/events/GPDP-20261114-META-GALLERY/shorts/meta-gallery/story.json";
+import oil1 from "../../../../packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/episodes/oil-1/episode.json";
 import licenseNotice from "../../../../packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice/story.json";
 import { CoverArt as DeliveryArt } from "./episodes/delivery/Art";
 import { DELIVERY } from "./episodes/delivery/data";
@@ -22,6 +24,8 @@ import { Glyph as DeliveryGlyph } from "./episodes/delivery/Glyph";
 import { CoverArt as FomcArt } from "./episodes/fomc/Art";
 import { FOMC } from "./episodes/fomc/data";
 import { Glyph as FomcGlyph } from "./episodes/fomc/Glyph";
+import { CoverArt as OilArt } from "./episodes/oil/Art";
+import { Glyph as OilGlyph } from "./episodes/oil/Glyph";
 import { CoverArt as PipcArt } from "./episodes/pipc/Art";
 import { PIPC } from "./episodes/pipc/data";
 import { Glyph as PipcGlyph } from "./episodes/pipc/Glyph";
@@ -58,6 +62,12 @@ export interface Look {
 export interface LongLine extends Tags, Look {
   kind: "long";
   ep: EpisodeData;
+  /**
+   * 다음 화를 약속하지 않는 이야기 (F-E5 · D83 "다음 화를 쫓지 않는다" · D111 PM 게이트 2) — 실제 화면에서 지도의 "다음 화 개념" (map.ghosts)을 그리지 않고,
+   * 이어짐 장면의 공통 화면 말 "다음 회차가 될 일들" (coming_label)을 "남은 일들"로 보인다. 데이터는 그대로다 — 화면이 안 보일 뿐이다. **손으로 적는다** (계약에 칸이 없다).
+   * 없으면 지금까지 그대로다 (지난 셋의 화면은 달라지지 않는다)
+   */
+  unpromised?: boolean;
 }
 export interface ShortLine extends Tags {
   kind: "short";
@@ -80,12 +90,13 @@ const NEW_ONLY = (): Record<ReaderId, ReaderFixture> => ({
 });
 
 /** 회차 파일 (계약의 Episode — 검증을 지나야 한다)을 화면이 쓰는 꼴로. 시안 주소 · 두 독자의 고정값이 없는 이야기 (파이프라인이 낸 것)가 쓴다 */
-export function episodeOf(file: unknown): EpisodeData {
+export function episodeOf(file: unknown, stores: readonly string[] = []): EpisodeData {
   const ep = parseEpisode(file);
-  return { ...ep, path: realPath(ep), real: realPath(ep), short: ep.series.name, stores: [], readers: NEW_ONLY() };
+  // stores — 이 이야기의 구절이 기대는 저장된 문서 파일 (저장소 뿌리에서의 길). 화면은 읽지 않는다 — 검사 (lab/episode/check.ts)가 구절을 문서와 대 볼 때 쓴다
+  return { ...ep, path: realPath(ep), real: realPath(ep), short: ep.series.name, stores, readers: NEW_ONLY() };
 }
 
-export const long = (ep: EpisodeData, more: Tags & Partial<Look>): LongLine => ({ kind: "long", ep, Art: PlainArt, Glyph: PlainGlyph, ...more });
+export const long = (ep: EpisodeData, more: Tags & Partial<Look> & { unpromised?: boolean }): LongLine => ({ kind: "long", ep, Art: PlainArt, Glyph: PlainGlyph, ...more });
 /** 짧은 이야기 파일 (계약의 ShortStory)을 받아 검증한다 — 곁 이야기 · 도구가 가리키는 긴 이야기는 그때까지의 긴 이야기들에서 찾는다 */
 export const short = (file: unknown, more: Tags & { Art?: ComponentType }, longs: readonly EpisodeData[] = HAND): ShortLine => ({
   kind: "short",
@@ -98,6 +109,7 @@ export const short = (file: unknown, more: Tags & { Art?: ComponentType }, longs
 export const DELIVERY_LOOK: Look = { Art: DeliveryArt, Glyph: DeliveryGlyph };
 export const FOMC_LOOK: Look = { Art: FomcArt, Glyph: FomcGlyph };
 export const PIPC_LOOK: Look = { Art: PipcArt, Glyph: PipcGlyph };
+export const OIL_LOOK: Look = { Art: OilArt, Glyph: OilGlyph };
 /** 손으로 쓴 긴 이야기 셋 (골든) — 짧은 이야기의 곁 이야기 · 도구를 찾을 때 대 본다. 새 긴 이야기를 가리키는 짧은 이야기는 short(…, …, [그 이야기]) 로 */
 const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
 
@@ -110,6 +122,11 @@ const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
  * 그래서 병원 짧은 이야기 (골든 fixtures/episode-short-privacy-yeonghun.json — 개인정보 긴 이야기와 같은 발표)는 F-E3 에서 내렸다 → /short/pipc-hospital 은 404. 골든은 그대로고 시안 (/lab/today · /lab/today/short)에만 견본으로 남는다
  */
 export const STORIES: readonly Line[] = [
+  // 11/15 "오늘" (D107 ~ D111 · F-E5) — 세상이 크게 다룬 뉴스 둘 · 1차 문서로 쓴 것 · PM 게이트를 지난 것. 긴 이야기가 위 (큰 카드)
+  // 석유 최고가격 12차 동결 — 새 시리즈 「기름값은 어디서 묶이나」 의 첫 이야기. 다음 화가 정해지지 않았다 (series/oil.json next_document) → unpromised
+  long(episodeOf(oil1, ["packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/store.documents.json"]), { ...OIL_LOOK, place: "국내", category: "돈", day: "2026-11-15", unpromised: true }),
+  // 이탈리아 감독기구 → 메타 과징금 — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「내 정보는 누가 지키나」)
+  short(metaGallery, { place: "해외", category: "기술", day: "2026-11-15" }),
   long(DELIVERY, { ...DELIVERY_LOOK, place: "국내", category: "기술" }),
   long(FOMC, { ...FOMC_LOOK, place: "해외", category: "돈" }),
   long(PIPC, { ...PIPC_LOOK, place: "국내", category: "기술" }),
@@ -128,6 +145,9 @@ export const shortOf = (code: string): ShortLine | undefined => SHORTS.find((x) 
 /** 긴 이야기 하나 — 판까지 맞는 것 (짧은 이야기의 sibling · tools_from 이 가리키는 EpisodeRef) */
 export const longByRef = (ref: { episode_id: string; episode_version: number } | null | undefined): LongLine | undefined =>
   ref ? LONGS.find((x) => x.ep.episode_id === ref.episode_id && x.ep.episode_version === ref.episode_version) : undefined;
+
+/** 다음 화를 약속하지 않는 이야기인가 (LongLine.unpromised) — 화면 뼈대 (kit/Episode · kit/ConceptMap)가 실제 화면에서 묻는다 */
+export const unpromised = (ep: { episode_id: string }): boolean => LONGS.some((x) => x.unpromised === true && x.ep.episode_id === ep.episode_id);
 
 /**
  * **번호 화면 규칙** (D79 ① · D88 E-20) — "N화" · 시리즈 줄 · "다음 화"는 **같은 시리즈에 긴 이야기가 둘 이상 실제로 있을 때만** 보인다. 데이터 (number · track)는 그대로다 — 화면이 목록을 보고 정한다.
