@@ -171,4 +171,15 @@ verify-ledger: 장부 958 줄 (배치 355) · 합 $31.18 · 저장 출력 939
   P-S1   $  0.439 / 상한 3 · 부르기 18 (배치 12)
   P-S2   $  0.629 / 상한 1 · 부르기 20 (배치 16)
 OK (ERROR 0 · WARN 0)
+
+# 커밋 9076aa5 를 깨끗이 꺼낸 곳 (git worktree · PM 의 미커밋 human.json 없음)에서 — PS2f-d 의 두 실패가 이 Step 탓이 아님을 본다
+$ git worktree add --detach <scratch>/wt HEAD && pnpm install --offline --frozen-lockfile
+$ pnpm --filter @claro/pipeline test
+ Test Files  1 failed | 13 passed (14)
+      Tests  156 passed (156)
+ FAIL  test/p3.test.ts — Error: SP-HAM-1012: 원문이 이 기계에 없다 (cache) — p2 를 먼저 돌린다   ← git 밖 캐시가 없는 곳이라 (이 Step 과 무관)
+$ npx vitest run test/short-flow.test.ts
+ Test Files  1 passed (1)
+      Tests  19 passed (19)       ← P-S2 실물 둘 · P-S2f 넷 다 통과
+$ git worktree remove --force <scratch>/wt
 ```
