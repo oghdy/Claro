@@ -5,37 +5,18 @@
 //
 // **이야기의 글 · 근거는 골든 다섯째에 있다**: fixtures/episode-short-obesity-who.json (계약 docs/contract/EPISODE.md §14 의 짧은 이야기 새 꼴 FlowStory — B-E4).
 // B-E4 가 이 파일에 있던 글을 한 글자도 바꾸지 않고 계약 모양으로 옮겼다 (logs/backend/B-E4.md ③). 화면 (../short/Light.tsx)은 lab 꼴 (../short/types.ts 의 LightStory)을 그리므로
-// 여기서 계약 → lab 꼴로 되돌린다 — 칸의 이름 · 자리만 (뒤집기 · 고르기의 표시는 lab 꼴의 beat 칸으로 · 표시 없는 문단은 칸을 뺀다 · 표지의 물음 단추는 글자만).
+// 계약 → lab 꼴로 되돌린다 — 칸의 이름 · 자리만. 되돌리기는 ../short/flow.ts 한 곳에 있다 (UX-8c 가 이 파일에서 옮겼다 — /lab/flow/license-notice 도 같은 것을 쓴다).
 // 여기에는 시안 전용만 있다 — 카테고리 (계약에서는 카탈로그의 값 — EPISODE §14.7) · 사건 이름 · 문서 파일의 자리 · 화면의 글 · 견줘 읽기.
-import { parseFlowStory, type FlowBlock, type FlowStory } from "@claro/contract";
+import { parseFlowStory, type FlowStory } from "@claro/contract";
 import golden from "../../../../../../fixtures/episode-short-obesity-who.json";
-import type { Block, LightStory } from "../short/types";
+import type { LightStory } from "../short/types";
 import { LIGHT_CHROME as CHROME } from "../short/data";
+import { toLight } from "../short/flow";
 
 /** 짧은 이야기 새 꼴 = 골든 다섯째 — 계약 검증 (모양 · 숫자 · 뼈의 차례 · 뒤집기 · 고르기 · 문서의 문장 · 낱말)을 지난다. 구절을 저장된 문서와 대는 것은 ./check.ts (L2) */
 export const FLOW: FlowStory = parseFlowStory(golden);
 
-/** 계약의 덩이 → lab 꼴의 덩이 */
-const toBlock = (b: FlowBlock): Block => {
-  if (b.kind === "p") return b.beat ? { kind: "p", beat: b.beat, text: b.text } : { kind: "p", text: b.text };
-  if (b.kind === "cite") return { kind: "cite", label: b.label, text: b.text };
-  if (b.kind === "flip") return { kind: "flip", beat: "flip", label: b.label, a: b.a, op: b.op, b: b.b, note: b.note };
-  return { kind: "pick", beat: "try", ask: b.ask, options: b.options };
-};
-
-export const LIGHT: LightStory = {
-  code: FLOW.code,
-  weight: FLOW.weight,
-  event_code: "KDCA-20261109-OBESITY",
-  category: "과학과 몸",
-  docs: FLOW.docs,
-  quotes: FLOW.quotes,
-  voice_labels: FLOW.voice_labels,
-  cover: { title: FLOW.cover.title, dek: FLOW.cover.dek, meta: FLOW.cover.meta, ask: FLOW.cover.ask.t },
-  flow: FLOW.flow.map(toBlock),
-  keep: FLOW.keep,
-  not_drawn: FLOW.not_drawn,
-};
+export const LIGHT: LightStory = toLight(FLOW, { event_code: "KDCA-20261109-OBESITY", category: "과학과 몸" });
 
 /** 근거 문서가 저장된 파일 (저장소 뿌리에서) — check.ts 가 구절을 대조할 때 읽는다. git 에 있는 파일이다 */
 export const LIGHT_STORES = ["packages/pipeline/data/events/KDCA-20261109-OBESITY/store.documents.json"] as const;
