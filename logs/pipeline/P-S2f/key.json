@@ -1,0 +1,184 @@
+{
+  "_what": "P-S2f 눈 가린 통독의 짝 — X.md · Y.md 를 다 읽은 뒤에 연다. 짝 · 모델 · 비용 · 원장 줄은 이 파일에만 (logs/pipeline/P-S2f.md 는 짝을 밝힌다)",
+  "coin": {
+    "how": "python3 secrets.randbelow(2) — 0 이면 X = Sonnet 첫 출력, 1 이면 X = Fable 첫 출력",
+    "result": 1
+  },
+  "X": {
+    "model": "claude-fable-5-2",
+    "code": "license-notice-flow-fable"
+  },
+  "Y": {
+    "model": "claude-sonnet-5-5",
+    "code": "license-notice-flow"
+  },
+  "same_request": {
+    "system_sha256": "d5934cd88cf5282580e5d85b57c682db7ff3ca8f933b3a6e6a34f575f54755cf",
+    "user_sha256": "293de879cffd855682b5a13c71699a76e1a1478227479d1341dbed0d6f092c6b",
+    "user_sha256_fable": "293de879cffd855682b5a13c71699a76e1a1478227479d1341dbed0d6f092c6b",
+    "prompt_version": [
+      "short-flow-write/3",
+      "short-flow-write/3"
+    ],
+    "effort": [
+      "medium",
+      "medium"
+    ],
+    "request_sha256": {
+      "claude-sonnet-5-5": "02a40d56220e918071acee687b9ac53cb91a0e8054631aa73db45a07b5a81026",
+      "claude-fable-5-2": "4e15a38558a7492803118ae1d9b28c8ae8ada2b7d81add82f2ebfe61b8c9dfe9"
+    },
+    "differs_only_in": "model"
+  },
+  "measured": {
+    "claude-sonnet-5-5": {
+      "code": "license-notice-flow",
+      "output": "raw short-flow-write/3 첫 출력 (고치기 · 사람 손 전)",
+      "mode": "now",
+      "line_problems": 0,
+      "contract_ok": true,
+      "contract_errors": [],
+      "entail": {
+        "risky": 12,
+        "judged": 12,
+        "flagged": [
+          "flow[9].text UNDER_SOURCED",
+          "keep.line UNDER_SOURCED",
+          "keep.words[0].body[0] EXCEEDS"
+        ]
+      },
+      "notices": 5,
+      "path_chars": 1012,
+      "card_chars": 125,
+      "blocks": 10,
+      "paras": 8,
+      "usage_write": {
+        "input_tokens": 2143,
+        "output_tokens": 7856,
+        "cache_creation_input_tokens": 12888,
+        "cache_read_input_tokens": 0
+      },
+      "cost_write_usd": 0.115066,
+      "cost_entail_usd": 0.078977,
+      "cost_total_usd": 0.194043
+    },
+    "claude-fable-5-2": {
+      "code": "license-notice-flow-fable",
+      "output": "raw short-flow-write/3 첫 출력 (고치기 · 사람 손 전)",
+      "mode": "batch",
+      "line_problems": 31,
+      "contract_ok": false,
+      "contract_errors": [
+        "STRING_EMPTY /voice_labels/official",
+        "STRING_EMPTY /cover/title/t",
+        "STRING_EMPTY /cover/dek/t",
+        "STRING_EMPTY /cover/meta/t",
+        "STRING_EMPTY /cover/ask/t",
+        "STRING_EMPTY /keep/line/t",
+        "STRING_EMPTY /keep/whose/t"
+      ],
+      "entail": {
+        "risky": 0,
+        "judged": 0,
+        "flagged": []
+      },
+      "notices": 4,
+      "path_chars": 0,
+      "card_chars": 0,
+      "blocks": 0,
+      "paras": 0,
+      "usage_write": {
+        "input_tokens": 2143,
+        "output_tokens": 3804,
+        "cache_creation_input_tokens": 12888,
+        "cache_read_input_tokens": 0
+      },
+      "cost_write_usd": 0.149092,
+      "cost_entail_usd": 0,
+      "cost_total_usd": 0.149092
+    }
+  },
+  "ledger": {
+    "P-S2 write claude-sonnet-5-5 (/3 — P-S2 에서 부름)": [
+      {
+        "at": "2026-11-15T10:51:33.843Z",
+        "step": "P-S2",
+        "event": "ACRC-20261028-LICENSE-NOTICE",
+        "source_label": "license-notice-flow:FLOW-WRITE",
+        "model_requested": "claude-sonnet-5-5",
+        "model": "claude-sonnet-5-5",
+        "effort": "medium",
+        "prompt_version": "short-flow-write/3",
+        "request_sha256": "02a40d56220e918071acee687b9ac53cb91a0e8054631aa73db45a07b5a81026",
+        "text_sha256": "293de879cffd855682b5a13c71699a76e1a1478227479d1341dbed0d6f092c6b",
+        "stop_reason": "end_turn",
+        "usage": {
+          "input_tokens": 2143,
+          "output_tokens": 7856,
+          "cache_creation_input_tokens": 12888,
+          "cache_read_input_tokens": 0
+        },
+        "duration_ms": 55012,
+        "cost_usd": 0.115066,
+        "ok": true,
+        "error": null,
+        "request_id": "msg_011Ch4auEF6TQfnCNjRQAiNg",
+        "mode": "now"
+      }
+    ],
+    "P-S2 write claude-fable-5-2 (P-S2f)": [
+      {
+        "at": "2026-11-15T11:15:38.233Z",
+        "step": "P-S2",
+        "event": "ACRC-20261028-LICENSE-NOTICE",
+        "source_label": "license-notice-flow-fable:FLOW-WRITE",
+        "model_requested": "claude-fable-5-2",
+        "model": "claude-fable-5-2",
+        "effort": "medium",
+        "prompt_version": "short-flow-write/3",
+        "request_sha256": "4e15a38558a7492803118ae1d9b28c8ae8ada2b7d81add82f2ebfe61b8c9dfe9",
+        "text_sha256": "293de879cffd855682b5a13c71699a76e1a1478227479d1341dbed0d6f092c6b",
+        "stop_reason": "end_turn",
+        "usage": {
+          "input_tokens": 2143,
+          "output_tokens": 3804,
+          "cache_creation_input_tokens": 12888,
+          "cache_read_input_tokens": 0
+        },
+        "duration_ms": 78501,
+        "cost_usd": 0.149092,
+        "ok": true,
+        "error": null,
+        "request_id": "msg_011Ch4ciMbnQESReCjcWfSYt",
+        "mode": "batch",
+        "batch_id": "msgbatch_012sbiwH8Q7DBT6htcw1WPor"
+      }
+    ],
+    "P-S2 entail (Sonnet 첫 출력의 위험한 글 12 — P-S2 에서 부름 · Opus low 배치 msgbatch_016oUDBwoKxYu4iZzDYayvgq · 원장 줄을 request_sha256 로 찾음)": {
+      "lines": 12,
+      "cost_usd": 0.078977,
+      "request_ids": [
+        "msg_011Ch4b2D5M387bjZbJDGwKV",
+        "msg_011Ch4b2CRQSzuNb3QRUe8iJ",
+        "msg_011Ch4b2B9Wb2D59dwFMsXZ4",
+        "msg_011Ch4b2BAFNnaXwNuuKBxC9",
+        "msg_011Ch4b2C8non6fAU315oMfP",
+        "msg_011Ch4b2BNQ4vaG8RRdZAHrt",
+        "msg_011Ch4b2CSPVqKpSdJLirjoA",
+        "msg_011Ch4b2CAmqtiYKTtsGWkmN",
+        "msg_011Ch4b2C8XzmdC2tyFxoA7n",
+        "msg_011Ch4b2BLQxbcqyJcVokupu",
+        "msg_011Ch4b2CB1jZrYKqLChaDJ8",
+        "msg_011Ch4b2B15LBaxoTtDmrQzq"
+      ]
+    },
+    "P-S2 entail (Fable 첫 출력)": "없음 — 위험한 글 0 (읽는 길이 비었다) · --entail-call 이 볼 글이 없다고 멈춤 · 0 달러"
+  },
+  "step_P-S2_after": {
+    "spent_usd": 0.629,
+    "cap_usd": 1,
+    "calls": 20,
+    "this_step_added_usd": 0.149092,
+    "note": "verify-ledger --report 그대로 (P-S2f 는 --step P-S2 로 불렀다)"
+  }
+}

@@ -3,8 +3,9 @@ import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { ENTAIL_SYSTEM, type WT } from "../src/episode-prompt.ts";
 import { BONE_CELLS, FLOW_ENTAIL_SYSTEM, FLOW_WRITE_SCHEMA, FLOW_WRITE_SYSTEM, ROW_KINDS, parseFlow, pathOfId, textsOfFlow, type FlowWritten } from "../src/short-flow-prompt.ts";
-import { FLOW_MODELS, applyFlowRepairs, assembleFlow, beforeOf, build, entailReqFlow, exemplarFlow, flowNotices, loadFlow, repairReq, review, seams, sheet, sizeOf, validateFlow, writeReq } from "../src/short-flow.ts";
+import { FLOW_MODELS, applyFlowRepairs, assembleFlow, beforeOf, build, entailReqFlow, exemplarFlow, flowNotices, latestWrite, loadFlow, repairReq, review, seams, sheet, sizeOf, validateFlow, writeModelOf, writeReq } from "../src/short-flow.ts";
 import { SHORT_MODELS } from "../src/short.ts";
+import { requestSha } from "../src/llm.ts";
 
 const CODE = "license-notice-flow";
 const wt = (t: string, src: string[] = [], voice: WT["voice"] = "none", calc: WT["calc"] = []): WT => ({ t, src, calc, voice });
@@ -205,5 +206,57 @@ describe.runIf(existsSync(new URL("story.json", OUT)))("P-S2 — 실물 (license
     if (r.human?.ok !== true) expect(rv.publishable).toBe(false);
     expect(rv.entail.not_judged).toEqual([]);
     expect(repairReq(r)).toBeNull();   // 걸린 덩이가 없다
+  });
+});
+
+// P-S2f — 글 모델 칸 (data/shorts/<code>.json 의 write_model). 없으면 지금 그대로 · 있으면 글과 고치기가 그 모델로 (effort · 프롬프트 · 함의는 그대로)
+describe("P-S2f — 글 모델 칸 (write_model)", () => {
+  it("칸이 없으면 FLOW_MODELS 그대로 · 있으면 글과 고치기가 함께 · 가격을 모르는 모델은 부르기 전에 멈춘다", () => {
+    expect(writeModelOf({})).toEqual({ write: FLOW_MODELS.write.model, repair: FLOW_MODELS.repair.model });
+    expect(writeModelOf({ write_model: "claude-fable-5-2" })).toEqual({ write: "claude-fable-5-2", repair: "claude-fable-5-2" });
+    expect(() => writeModelOf({ write_model: "claude-nope-1" })).toThrow(/가격을 모르는 모델/);
+  });
+
+  it("license-notice-flow (칸 없음) — 글 요청이 P-S2 의 /3 출력을 낸 요청과 글자 단위로 같다 (request_sha256)", () => {
+    const x = loadFlow(CODE);
+    expect(x.input.write_model).toBeUndefined();
+    const q = writeReq(x);
+    expect(q.model).toBe("claude-sonnet-5-5");
+    const lw = latestWrite(x);
+    if (lw) expect(requestSha(q)).toBe(lw.raw.request_sha256);
+  });
+});
+
+describe.runIf(existsSync(new URL("story.json", OUT)))("P-S2f — 고치기도 글 모델을 따라간다", () => {
+  it("걸린 덩이가 있을 때 고치기 요청의 모델 — 칸이 없으면 FLOW_MODELS.repair · 있으면 그 모델 · 나머지 요청은 같다", () => {
+    const r = build(CODE);
+    const i = r.judged.findIndex((j) => j.judgement);
+    const bad = { ...r, judged: r.judged.map((j, k) => (k === i ? { ...j, judgement: { verdict: "EXCEEDS" as const, issues: [{ part: "x", kind: "EXCEEDS", where: "y", why: "z" }], note: "" } } : j)) };
+    const a = repairReq(bad)!.q;
+    expect(a.model).toBe(FLOW_MODELS.repair.model);
+    const b = repairReq({ ...bad, x: { ...bad.x, input: { ...bad.x.input, write_model: "claude-fable-5-2" } } })!.q;
+    expect(b.model).toBe("claude-fable-5-2");
+    expect({ ...b, model: a.model }).toEqual(a);
+  });
+});
+
+// 대조군 — 같은 입력 · 같은 프롬프트 판으로 글 모델만 Fable (D101 PS2-f). 고치기 · 사람 확인은 하지 않는다
+const FABLE = "license-notice-flow-fable";
+describe.runIf(existsSync(new URL(`../data/shorts/${FABLE}.json`, import.meta.url)))("P-S2f — 대조군 (license-notice-flow-fable)", () => {
+  it("입력은 code · write_model 말고 같다 · 글 요청은 model 하나만 다르다 (system · user · schema · effort · max_tokens · 판) · 함의 요청의 모델은 그대로", () => {
+    const strip = (o: Record<string, unknown>) => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith("_") && k !== "code" && k !== "write_model"));
+    const ia = JSON.parse(readFileSync(new URL(`../data/shorts/${CODE}.json`, import.meta.url), "utf8")), ib = JSON.parse(readFileSync(new URL(`../data/shorts/${FABLE}.json`, import.meta.url), "utf8"));
+    expect(strip(ib)).toEqual(strip(ia));
+    expect(ib.write_model).toBe("claude-fable-5-2");
+    const a = writeReq(loadFlow(CODE)), b = writeReq(loadFlow(FABLE));
+    expect(b.model).toBe("claude-fable-5-2");
+    expect({ ...b, model: a.model }).toEqual(a);
+    expect(requestSha({ ...b, model: a.model })).toBe(requestSha(a));
+    const lw = latestWrite(loadFlow(FABLE));
+    if (lw) {
+      expect(lw.raw.request_sha256).toBe(requestSha(b));   // 저장한 출력이 이 요청에서 나왔다
+      expect(lw.raw.input_sha256).toBe(latestWrite(loadFlow(CODE))!.raw.input_sha256);
+    }
+    expect(FLOW_MODELS.entail).toMatchObject({ model: "claude-opus-5-5", effort: "low" });
   });
 });

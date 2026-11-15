@@ -12,7 +12,7 @@
 //     pnpm --filter @claro/pipeline short-flow <code> --read                                  # 통독 — 독자가 읽는 차례대로 (가지는 둘 다)
 //       (모델을 부르는 것은 --step S --budget USD 가 있어야 한다. 기본은 배치 (값이 반) · --now 는 즉시)
 //
-// 사람 입력   data/shorts/<code>.json — 어느 사건 · 어느 문서 · 문서의 문장에 붙일 이름표 · 고르기에서 온 한마디. 선반 · 곁 이야기 · 가리킬 도구는 없다 (새 꼴에 칸이 없다 — EPISODE §14.7)
+// 사람 입력   data/shorts/<code>.json — 어느 사건 · 어느 문서 · 문서의 문장에 붙일 이름표 · 고르기에서 온 한마디 · (견줌용 · 없어도 된다) 글 모델 write_model (P-S2f). 선반 · 곁 이야기 · 가리킬 도구는 없다 (새 꼴에 칸이 없다 — EPISODE §14.7)
 // 출력        data/events/<사건>/shorts/<code>/ — raw/ (모델 출력) · story.json (FlowStory) · review.json · sheet.md · human.json (사람이 적는다 — 이 파일은 읽기만)
 // 무엇이 어디서 오나
 //   구절 (quotes)                         코드 — 저장된 문서를 끊은 토막 (short.ts passagesOf). 모델이 구절을 쓰지 않는다
@@ -61,14 +61,25 @@ export type FlowInput = {
   docs: Record<string, { name: string }>;                   // 근거로 쓸 문서 (사건 소스 팩의 label) → 독자에게 보일 이름. git 에 전문이 있는 문서만
   cite_label: string;                                       // 문서의 문장 (cite) 위에 붙는 이름표 — "○○ 발표문에서"
   human_note?: string;                                      // 글 단계에 전할 말 (없어도 된다)
+  write_model?: string;                                     // P-S2f — 글 모델을 이 이야기만 바꾼다 (견줌용 · 없으면 FLOW_MODELS 그대로). 고치기도 따라간다 — writeModelOf
 };
 export function loadFlow(code: string) {
   const x = load(code);   // 원문 · 구절 토막 · 사건 — 옛 길의 것 그대로 (short.ts). 입력의 code · event · docs 만 읽는다
   const input = x.input as unknown as FlowInput;
   if (!input.cite_label) throw new Error(`짧은 이야기 ${code} — 입력에 cite_label ("○○ 발표문에서")이 없다`);
+  writeModelOf(input);   // 모르는 모델이면 여기서 멈춘다 (부르기 전에)
   return { ...x, input };
 }
 export type L = ReturnType<typeof loadFlow>;
+/** P-S2f — 글 · 고치기 모델. 입력에 `write_model` 이 없으면 FLOW_MODELS 그대로 (기본 동작 · 요청 지문이 바뀌지 않는다).
+ *  있으면 글과 고치기가 함께 그 모델로 — 고친 글은 글 사이에 끼워지는 독자 글이라 한 편 안에서 결이 섞이지 않게 (P-S2 ③ 이 고치기를 글과 같은 Sonnet 으로 둔 까닭과 같다).
+ *  effort · max_tokens · 함의 (Opus low)는 그대로 — 바꾸는 것은 모델 하나다 (견줌이 흐려지지 않게) */
+export function writeModelOf(input: Pick<FlowInput, "write_model">): { write: string; repair: string } {
+  const m = input.write_model;
+  if (m === undefined) return { write: FLOW_MODELS.write.model, repair: FLOW_MODELS.repair.model };
+  if (!PRICE[m]) throw new Error(`write_model ${m} — 가격을 모르는 모델이다 (llm.ts PRICE: ${Object.keys(PRICE).join(" · ")})`);
+  return { write: m, repair: m };
+}
 
 /** 글 단계의 본보기 — 손으로 쓴 짧은 이야기 B (골든 다섯째 — 숫자 뉴스 · 다른 사건). 흐름 · 이음매 · 말결을 보인다. 근거 표시는 뺀다.
  *  고르기의 받는 말 앞머리 ("아니에요." · "맞아요.")는 뗀다 — 쓰는 법 10 과 어긋난 자리다 (D100 B-E4-a) */
@@ -117,7 +128,7 @@ export function writeReq(x: L): Req & { version: string } {
   const s = [...x.srcs.values()][0]!, label = [...x.srcs.keys()][0]!;
   const human = [x.input.pick.flip_hint ? `아침 고르기의 추천 줄이 본 뒤집기 후보 (제목만 보고 낸 신호다 — 문서가 받치지 않으면 따르지 않는다): ${x.input.pick.flip_hint}` : "", x.input.human_note ?? ""].filter(Boolean).join("\n");
   const user = flowWriteUser({ event_title: x.event.title, doc_name: x.input.docs[label]!.name, published_at: String(s.published_at), passages: [...x.passages.values()].map((p) => ({ key: p.key, quote: oneLine(p.quote), cont: p.cont })), human });
-  return { model: FLOW_MODELS.write.model, effort: FLOW_MODELS.write.effort, system: flowWriteSystem(exemplarFlow()), user, schema: FLOW_WRITE_SCHEMA, max_tokens: FLOW_MODELS.write.max_tokens, version: FLOW_WRITE_VERSION };
+  return { model: writeModelOf(x.input).write, effort: FLOW_MODELS.write.effort, system: flowWriteSystem(exemplarFlow()), user, schema: FLOW_WRITE_SCHEMA, max_tokens: FLOW_MODELS.write.max_tokens, version: FLOW_WRITE_VERSION };
 }
 
 // ── 사람 게이트 (human.json — 사람이 적는다. 기계는 읽기만) ──────────────────────────────────────────
@@ -577,7 +588,7 @@ export function repairReq(r: Built): { q: Req & { version: string }; ids: string
   });
   const avail = [...r.x.passages.values()].map((p) => `${p.key} | ${p.cont ? "(앞 구절에서 이어짐) " : ""}${oneLine(p.quote)}`);
   const user = `${blocks.join("\n\n")}\n\n## 쓸 수 있는 구절 (키 | 원문 글자 그대로)\n${avail.join("\n")}\n\n위 ${blocks.length} 덩이를 고쳐라.`;
-  return { q: { model: FLOW_MODELS.repair.model, effort: FLOW_MODELS.repair.effort, system: FLOW_REPAIR_SYSTEM, user, schema: FLOW_REPAIR_SCHEMA, max_tokens: FLOW_MODELS.repair.max_tokens, version: FLOW_REPAIR_VERSION }, ids: [...why.keys()], bare };
+  return { q: { model: writeModelOf(r.x.input).repair, effort: FLOW_MODELS.repair.effort, system: FLOW_REPAIR_SYSTEM, user, schema: FLOW_REPAIR_SCHEMA, max_tokens: FLOW_MODELS.repair.max_tokens, version: FLOW_REPAIR_VERSION }, ids: [...why.keys()], bare };
 }
 async function callRepair(code: string, mode: Mode, budget: Budget) {
   const r = build(code);
@@ -601,7 +612,7 @@ function storyFile(r: Built) {
   return outJson({
     _source: {
       what: `짧은 이야기 새 꼴 「${oneLine(r.written.cover.title.t)}」 — 파이프라인이 낸 것 (P-S2 · short-flow.ts). 골든이 아니다. 사람 게이트 (human.json) 전에는 내지 않는다`,
-      made_by: `글 ${r.lw.raw.prompt_version} · ${r.lw.raw.model} (${r.lw.raw.effort}) · 고치기 ${readRepairs(r.x).length ? `${FLOW_REPAIR_VERSION} · ${FLOW_MODELS.repair.model}` : "없음"} · 사람의 고침 ${(r.human?.edits ?? []).length}`,
+      made_by: `글 ${r.lw.raw.prompt_version} · ${r.lw.raw.model} (${r.lw.raw.effort}) · 고치기 ${readRepairs(r.x).length ? `${FLOW_REPAIR_VERSION} · ${writeModelOf(r.x.input).repair}` : "없음"} · 사람의 고침 ${(r.human?.edits ?? []).length}`,
       event_code: r.x.input.event, picked_from: `packages/pipeline/data/collect/days/${r.x.input.pick.date}/sheet.md ${r.x.input.pick.id}`,
       documents: `packages/pipeline/data/events/${r.x.input.event}/store.documents.json (${s.map((y) => y.label).join(" · ")})`,
       human_gate: r.human?.ok === true ? `넘김 — ${r.human.by ?? ""}` : "아직",

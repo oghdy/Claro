@@ -1,0 +1,50 @@
+{
+  "_source": {
+    "what": "짧은 이야기 새 꼴 「」 — 파이프라인이 낸 것 (P-S2 · short-flow.ts). 골든이 아니다. 사람 게이트 (human.json) 전에는 내지 않는다",
+    "made_by": "글 short-flow-write/3 · claude-fable-5-2 (medium) · 고치기 없음 · 사람의 고침 0",
+    "event_code": "ACRC-20261028-LICENSE-NOTICE",
+    "picked_from": "packages/pipeline/data/collect/days/2026-10-29/sheet.md c142",
+    "documents": "packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/store.documents.json (PR-1028-PDF)",
+    "human_gate": "아직"
+  },
+  "episode_id": "e0b065d3-afe5-5d9c-bb66-ec717609d8bc",
+  "episode_version": 1,
+  "code": "license-notice-flow-fable",
+  "event_ref": "90a14f16-7a2a-49fe-b91d-c86785bb4198",
+  "weight": "short",
+  "form": "flow",
+  "docs": {},
+  "quotes": {},
+  "voice_labels": {
+    "fact": "문서에 적힌 사실",
+    "official": "",
+    "explain": "Claro 가 풀어 쓴 설명"
+  },
+  "cover": {
+    "title": {
+      "t": ""
+    },
+    "dek": {
+      "t": ""
+    },
+    "meta": {
+      "t": ""
+    },
+    "ask": {
+      "t": ""
+    }
+  },
+  "flow": [],
+  "keep": {
+    "line_label": "이 이야기의 한 줄",
+    "line": {
+      "t": ""
+    },
+    "words_label": "이 이야기에서 만난 낱말",
+    "words": [],
+    "whose": {
+      "t": ""
+    }
+  },
+  "not_drawn": []
+}
