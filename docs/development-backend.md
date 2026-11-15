@@ -1289,6 +1289,7 @@ Claro 는 기사를 "회차"로 낸다 — 도윤이 확정했다 (D57 쌓인다
 |---|---|---|---|
 | **B-E2** | DATA_MODEL §4.4 문서 단위 권리 (문서 안 공공누리 제1유형 표시 · 근거 · 해시 필수 · 그 문서에 한해 발행처 행보다 앞선다) · 불변식 20 · P-1 문구 · 검증 · 파이프라인 산출물을 계약 모양으로 · 서브에이전트 Opus | DATA_MODEL · packages/contract · rights.ts · pack.ts · PIPC store.json · `logs/backend/B-E2.md` | ☑ 2026-11-12 · 검수 대기 (PM) — 따로 된 타입 DocumentRights (+ DocumentRightsBasis · Source 하나에 한 행 · 칸마다 발행처 행보다 앞선다 · can_ingest 없음) · 불변식 20 · P-1 · §10.1 "발행처 또는 문서 단위" · 불변식 35 ~ 37 · PIPC store.json document_rights 3 행 (발행처 행 null 그대로) · FOMC · KFTC 0자 · 사본 +12 +7 · 시험 +18 +3 · API 0 · _open B-E2-a ~ c |
 | **B-E3** | **짧은 이야기 · 번호 없는 이야기 계약 (D80 · D86)** — 무게 · 짧은 조립 (장면 넷) · 번호 · 시리즈 줄을 고를 수 있게 (선반) · 같은 사건의 곁 이야기 · 다른 이야기의 도구 가리키기 · 체험 없는 까닭 = 무게 · 실물 = UX-7 짧은 이야기 (영훈) · 골든 넷째 · 서브에이전트 Opus | EPISODE.md · packages/contract · fixtures · `logs/backend/B-E3.md` | ☑ 2026-11-14 · 검수 대기 (PM) — 따로 선 타입 `ShortStory` (장면 넷 · `series` 만 — 번호 · 시리즈 줄 칸 없음 · `sibling` · `tools_from` = EpisodeRef · `solve` = 입구 + 뒤집기만) · `weight` (Episode 에 `weight?: "long"` 하나 — 없으면 긴 이야기) · `NoLabWhy` + `short` · §13 · 불변식 27 ~ 29 · 골든 넷째 `episode-short-privacy-yeonghun.json` (lab 글 0자 · 구절 18 다시 대조) · 위반 4 · 긴 골든 셋 0자 · lab `/lab/today/short` 가 골든을 읽음 (그림 46 장 픽셀 0 차이) · 번호 = 긴 이야기 `number ≥ 2` 일 때만 보임 (화면 규칙) · 첫 이야기가 나중에 1화 · 덧붙임 · 개념 이야기는 미확인 · contract 시험 132 · API 0 · _open E-20 ~ E-23 |
+| **B-E4** | **짧은 이야기 새 꼴 (D95 · D98 · D99 ①)** — 표지 + 한 흐름 (덩이 차례) · 낱말 · 고르기 한 번 · 실물 = UX-8b-B (Sonnet 손 견본 · 도윤이 고름) · 골든 (B 글 0자) · 옛 장면 넷 꼴은 그대로 통과 (D99 ④ 에서 내림) · 서브에이전트 Opus | EPISODE.md §14 (네가 정함) · packages/contract · fixtures · `logs/backend/B-E4.md` | ☐ 도는 중 |
 
 ### 서브에이전트 지시 (Opus)
 ```
@@ -1362,3 +1363,50 @@ push = Vercel 배포 (실제 주소) — 검사가 다 통과한 뒤 한 번.
 - **나(PM)에게**: 15줄 안쪽 — 커밋 · 더한 칸 · 번호 규칙 · 골든 넷째 · 불변식 수 · F-E2 가 쓸 것 · _open
 ```
 
+## B-E4 · 짧은 이야기 새 꼴을 계약으로 (D95 · D98 · D99 ①)
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 백엔드 레인 (계약). Step B-E4 (짧은 이야기 새 꼴을 계약으로)를 맡는다. PM(나)이 검수한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (지금 다른 세션은 없다 · `.claude/` 는 건드리지 마라).
+push = Vercel 배포 (실제 주소) — 검사가 다 통과한 뒤 한 번.
+
+## 왜
+도윤 (D91 · D95 · D98): 짧은 이야기 = **가벼운 주제 · 같은 탄탄한 흐름**이지 칸을 잘라 끊는 것이 아니다. 줄기는 뉴스 · 개념은 길 위에서 줍는 도구. 지금 계약의 짧은 이야기 (`ShortStory` · EPISODE §13 — 장면 넷 · 칸 마흔 · `why.real[]` 목록 · `keep.advice` 당부 필수)가 **보고서 꼴을 만든다** (UX-8 ⑥ ⑦ — 파이프라인이 그 칸을 그대로 채워 `/short/license-notice` 가 "안 읽힌다").
+손 견본 셋이 계약 밖 lab 꼴 (`LightStory` — 표지 + `flow` 덩이 차례 + `keep`)로 섰고, 도윤이 눈 가리고 **B** 를 골랐다 (D98). 이제 그 꼴을 계약으로 (D24 — 실물에서 도출). 다음 Step (P-S2)의 파이프라인이 이 꼴을 내고, 그다음 화면이 갈아 끼운다 (D99).
+
+## 실물
+- **기준 = B** `apps/web/src/app/lab/short-b/data.ts` 「어른 셋 중 하나가 비만이라는데, 그 한 명은 누구일까」 (질병청 2026-11-09 · 소스 팩 `packages/pipeline/data/events/KDCA-20261109-OBESITY/`) · 로그 `logs/frontend/UX-8b-B.md`
+- lab 꼴 `apps/web/src/app/lab/short/types.ts` (Block · Beat · Word · LightStory) · 화면 `lab/short/Light.tsx` · 검사 `lab/short/check.ts` (L1 ~ L8 — 계약 검증을 못 써서 lab 이 같은 규칙을 봤다)
+- 같은 꼴의 견본 둘 더: `lab/short/data.ts` (UX-8 — 개념 강의가 돼서 버린 판이지만 **꼴은 같다**) · `lab/short-a/data.ts` (A)
+- `logs/frontend/UX-8.md` ⑥ 쓰는 법 열둘 · **⑦ 지금 계약과 안 맞는 것 일곱** (장면 넷 고정 · 선반 필수 · 체험 칸 없음 vs 고르기 한 번 · 도구는 가리키기만 vs 낱말을 스스로 · 맨 글자열 숫자 금지 vs 제목 · 뒤집기에 근거 단 숫자 · 당부 · unknown 필수 · entry 칸 vs 흐름 속 표시 beat)
+
+## 할 것
+1. **EPISODE.md 에 짧은 이야기 새 꼴** (새 절 — §14 든 네가 정함). 모양은 lab 꼴을 따르되 계약답게, 까닭과 실물 대응 표를 붙인다:
+   - 표지 (제목 · 한 줄 · 날 · 물음 단추 하나) · **흐름 = 덩이의 차례** (`p` · `cite` · `flip` · `pick` · 흐름 속 표시 `beat`) · 남음 (한 줄 · 낱말 · 누구의 말) · 그리지 않을 것 · 카테고리 (D86 다섯 — 이야기에 두나 카탈로그에 두나는 네 판단 + 까닭)
+   - 근거 규칙은 **그대로** — 글 한 덩이 `EpisodeText` · `docs` · `quotes` · `voice_labels` · 구절 글자 그대로 · 숫자는 구절 안 또는 `calc` (같은 타입을 다시 정의하지 마라 — 한 타입은 한 곳)
+   - 선반 (`series`) · 번호 · 곁 이야기 · 다른 이야기 도구 가리키기는 **실물에 없다** — 칸을 만들지 말거나 고를 수 있게 (네 판단 + 까닭). 낱말을 개념 지도에 잇는 길 (UX-8 ⑧ 4)은 미확인
+   - 불변식 (번호 이어서): 실물에서 나온 것만 — 뒤집기 하나 · 고르기는 없거나 한 번 · 고르기의 받는 말 · beat 의 차례 (첫 생각 → 깨는 사실 → … → 내려앉기 — 실물 셋의 차례에서) · 낱말이 흐름에서 이름 붙었나 (기계로 볼 수 있으면) · 숫자 근거. **문단 수 · 글자 수 같은 크기는 계약이 아니라 쓰는 법** (UX-8 ⑥ 12) — 불변식으로 박지 마라
+   - "줄기는 뉴스인가" (D95)는 기계가 못 본다 — 사람 게이트의 일이라고 계약에 적는다
+2. **옛 꼴은 그대로 통과** — `ShortStory` (장면 넷) · 골든 넷째 `fixtures/episode-short-privacy-yeonghun.json` · `packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice/story.json` (실제 주소에 떠 있다) · 그것을 읽는 코드 (web `src/episode/*` · `app/short/[code]` · `lab/today/*` · pipeline `short*.ts`). **옛 꼴을 읽는 코드는 0줄 바꾸는 쪽을 먼저** (예: 새 꼴에 새 이름 · 무게는 둘 다 `short` 라 가르는 칸 하나) — 이름 정리는 옛 꼴을 내릴 때 (D99 ④). 어쩔 수 없이 닿으면 기계적 바꾸기만 + 로그에
+3. **골든** — B 를 계약 모양으로 (`fixtures/episode-short-…json` · 이름은 네가). 글 · 구절 · 숫자는 B `data.ts` 와 **한 글자도 다르지 않게** — 덤프해서 칸 이름 · 자리만 옮긴다. 구절은 `KDCA-20261109-OBESITY/store.documents.json` 과 다시 대조. `episode_id` 발급 · 판 1
+   - A · UX-8 견본도 같은 꼴이다 — **계약이 셋을 다 받는지** 한 번 대 보고 로그에 (lab 코드는 고치지 않는다 · 골든은 B 하나). 안 받으면 왜인지 적는다 (계약이 좁은가 · 견본이 어긋났나)
+   - 위반 픽스처 (꼭 필요한 것만 — 뒤집기 없음 · 고르기 둘 · 장면 넷 칸이 섞임 · 근거 없는 숫자 등)
+4. **검증 · 시험** — `packages/contract` 의 검증기 · 시험. `validateStory` 가 세 꼴 (긴 · 옛 짧은 · 새 짧은)을 가른다. lab `/lab/short-b` 가 골든을 읽게 바꿀지는 네 판단 (바꾸면 그림이 같아야 — `shots.ts` 로 앞 · 뒤 픽셀 대조 · e2e)
+5. CHANGELOG 한 줄
+
+## 하지 말 것
+- 짧은 이야기 글 고치기 (B 의 글 0자 — 걸리는 데가 보이면 _open 에만) · 긴 이야기 골든 셋 · 골든 넷째 · `license-notice` 의 글 · 다른 계약 파일 · packages/pipeline 의 동작 · packages/db · 실제 주소 화면 (`/` · `/s/*` · `/short/*` · `src/episode` 의 동작) · `docs/development-pipeline.md` · `docs/development-frontend.md`
+- 실물 없는 칸 (덧붙임 · 개념 이야기 · 낱말 → 개념 지도) · 지식 상태 · 임계값 · 크기 숫자를 불변식으로 · 모델 API (비용 0) · docs/PM.md 읽기
+판단이 필요하면 _open 으로. 정할 수 없는 것은 DECISIONS 에 OPEN 으로 올리고 멈춘다.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/FINDINGS.md §1 · §15 · docs/DECISIONS.md D24 · D61 · D79 · D86 · D88 · **D91 · D92 · D95 · D97 · D98 · D99**
+- docs/contract/EPISODE.md (§0 ~ §4 · §7.1 · §7.7 · §9 · **§13 전부**) · logs/backend/B-E3.md · logs/frontend/UX-8.md (⑥ ⑦ ⑨) · logs/frontend/UX-8b-B.md · 위 실물 파일
+
+## 끝낼 때
+- 로그 `logs/backend/B-E4.md` — ① 새 꼴 한눈에 (모양 · 까닭 · lab 꼴 / 안 맞음 일곱과의 대응 표) ② 옛 꼴과 함께 서는 법 (가르는 칸 · 닿은 코드 0줄인지) ③ 골든 · 구절 대조 결과 · A · UX-8 견본을 받는지 ④ 불변식 · 위반 픽스처 짝 ⑤ P-S2 (파이프라인)가 낼 것 — 칸마다 누가 (모델 · 사람) ⑥ D99 ④ (갈아 끼우기)에서 지울 것 목록 ⑦ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `pnpm --filter @claro/contract test` · `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>` · 다른 세션 변경으로 깨지면 적기만) · lab `check.ts` 넷 (`lab/today` · `lab/short` · `lab/short-a` · `lab/short-b`) · 골든 넷 0자 · `license-notice` `--check`. **결과를 로그에 붙인다** ("통과"만 쓰지 마라)
+- docs/development-backend.md 의 B-E4 줄 (☐ 도는 중 → ☑ + 날짜) · 계약 CHANGELOG · 커밋 접두사 `B-E4` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 끝날 때 띄운 서버 · 기다리기 반복은 끈다
+- **나(PM)에게**: 15줄 안쪽 — 커밋 · 새 꼴 · 옛 꼴과 함께 서는 법 · 골든 · 견본 셋을 받나 · 불변식 수 · P-S2 가 낼 것 · _open
+```
