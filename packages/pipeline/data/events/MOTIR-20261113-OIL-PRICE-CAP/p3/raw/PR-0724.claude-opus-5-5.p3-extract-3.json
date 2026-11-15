@@ -1,0 +1,29 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/3 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "MOTIR-20261113-OIL-PRICE-CAP",
+  "source_label": "PR-0724",
+  "source_id": "71fc408b-72b4-4c88-9970-8686d6e85ae2",
+  "text_sha256": "606eb70a6c80b1ad553c25ba7b2ce90a7de4f7790267f3b24d3fbf6ab5de413e",
+  "input_sha256": "606eb70a6c80b1ad553c25ba7b2ce90a7de4f7790267f3b24d3fbf6ab5de413e",
+  "prompt_version": "p3-extract/3",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "dff5e513144f0dba3ead0e24e827f75e2c30c97ea72740e7db5e191051a650af",
+  "response_id": "msg_011Ch4nzJkkTTPsFFCVb5ZkX",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 1894,
+    "output_tokens": 5052,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 154006,
+  "cost_usd": 0.054808,
+  "called_at": "2026-11-15T13:31:24.292Z",
+  "output_sha256": "feb2b7b304dbde11ef0f651db5496f1ba0da6ff8bd9773d436dfbe4b1da69ff0",
+  "output": "{\"facts\":[{\"claim_text\":\"산업통상부는 7월 25일(토) 00시부터 향후 4주간 적용될 8차 석유 최고가격을 기존 7차 최고가격으로 동결한다고 발표함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-24\",\"passages\":[\"산업통상부(장관 김정관, 이하 산업부)는 7월 25일(토) 00시부터 향후 4주간\",\"적용될 8차 석유 최고가격을 기존 7차 최고가격으로 동결한다고 발표하였다.\"]},{\"claim_text\":\"8차 최고가격은 7차와 같이 리터당 휘발유 1,784원, 경유 1,773원, 등유 1,380원임\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-24\",\"passages\":[\"이번 8차 최고가격은 7차와 같이 리터당 휘발유 1,784원, 경유 1,773원,\",\"등유 1,380원이다.\"]},{\"claim_text\":\"산업부는 중동상황에 따른 최고가격 조정 가능성을 열어뒀다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-24\",\"passages\":[\"25일(토) 00시부터 4주간 적용, 중동상황에 따른 조정 가능성 열어둬 -\"]},{\"claim_text\":\"산업부는 미국과 이란 양측의 공방이 격화되고 유조선의 호르무즈 해협 통항 수가 다시 감소하는 등 중동 위기가 급격히 고조되고 있다고 평가함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-24\",\"passages\":[\"최근 미국과 이란 양측의 공방이 격화되고, 유조선의 호르무즈 해협 통항\",\"수가 다시 감소하는 등 중동 위기가 급격히 고조되고 있다.\"]},{\"claim_text\":\"산업부는 후티 반군의 홍해 봉쇄 선언으로 글로벌 원유 수급에 대한 우려가 가중되었다고 설명함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-24\",\"passages\":[\"후티 반군의 홍해\",\"봉쇄 선언으로 글로벌 원유 수급에 대한 우려가 가중되면서, 7.23일 국제\"]},{\"claim_text\":\"7.23일 국제유가는 브렌트유 기준 배럴당 100불대까지 상승함\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-23\",\"passages\":[\"봉쇄 선언으로 글로벌 원유 수급에 대한 우려가 가중되면서, 7.23일 국제\",\"유가는 브렌트유 기준 배럴당 100불대까지 상승하였고, 국제 석유제품\"]},{\"claim_text\":\"7월 평균 국제유가는 배럴당 브렌트 82불, WTI 77불, 두바이 75불로, 6월 평균(브렌트 84불, WTI 82불, 두바이 80불)보다 낮은 수준임\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"VOLATILE\",\"as_of\":\"2026-07-24\",\"event_at\":\"2026-07\",\"passages\":[\"가격도 다시 상승하고 있다. 다만, 7월 평균으로 볼 때 국제유가는 배럴당\",\"브렌트 82불, WTI 77불, 두바이 75불로, 아직까지 6월 평균(브렌트 84불,\",\"WTI 82불, 두바이 80불)보다 낮은 수준이다.\"]},{\"claim_text\":\"정부는 최근 3%대 물가 상승률과 한국은행 기준금리 인상(2.50% → 2.75%) 등으로 서민경제 부담이 커진 점을 고려하여 최고가격을 동결하기로 결정했다고 설명함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-24\",\"passages\":[\"정부는 이러한 상황을 면밀히 살피면서도, 최근 3%대 물가 상승률과 한국\",\"은행 기준금리 인상(2.50% → 2.75%) 등으로 서민경제 부담이 커진 점을\",\"고려하여 최고가격을 동결하기로 결정하였다.\"]},{\"claim_text\":\"산업부는 이번 결정이 국제유가의 높은 변동성으로부터 민생경제를 보호하고 화물차 운전자, 택배기사, 농·어업인 등 생계형 소비자의 부담을 최소화하는 데 중점을 두었다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-24\",\"passages\":[\"실성으로 인한 국제유가의 높은 변동성으로부터 민생경제를 보호하고,\",\"화물차 운전자, 택배기사, 농·어업인 등 생계형 소비자의 부담을 최소화하는데\"]},{\"claim_text\":\"7차 최고가격은 6월 27일 시행됨\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-06-27\",\"passages\":[\"중점을 두었다. 한편, 국내유가는 7차 최고가격 시행 (6월 27일) 이후 지속\"]},{\"claim_text\":\"국내유가는 7차 최고가격 시행 이후 지속 하락하여 7월 23일 기준 리터당 휘발유 1,871원, 경유 1,856원임\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-23\",\"passages\":[\"중점을 두었다. 한편, 국내유가는 7차 최고가격 시행 (6월 27일) 이후 지속\",\"하락하여 7월 23일 기준 리터당 휘발유 1,871원, 경유 1,856원이다.\"]},{\"claim_text\":\"정부는 국내외 상황을 실시간으로 살펴보면서 중동정세, 석유수급, 물가 및 민생부담, 수요관리 필요성 등을 종합적으로 고려하여 기민하고 유연하게 최고가격제를 운영해 나갈 예정이라고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-07-24\",\"passages\":[\"실시간으로 살펴보면서 중동정세, 석유수급, 물가 및 민생부담, 수요관리\",\"필요성 등을 종합적으로 고려하여 기민하고 유연하게 최고가격제를 운영해\"]}]}",
+  "output_in": "here",
+  "mode": "batch",
+  "batch_id": "msgbatch_01BSBcv8SXPjWhmTXTnoQMvh"
+}

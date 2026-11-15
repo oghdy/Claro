@@ -13,7 +13,11 @@
     "무엇을 발표했나",
     "값이 붙는 곳",
     "왜 동결했나",
-    "권리 표시"
+    "권리 표시",
+    "근거 법 · 규정",
+    "값이 어떻게 이어졌나",
+    "손실은 누가 메우나",
+    "주유소 값은"
   ],
   "count_terms": [
     "최고가격",
@@ -93,6 +97,361 @@
       "published_at": "2026-10-16",
       "published_evidence": "2026년 10월 16일",
       "published_note": "고시일 — 시행은 2026-10-17 00시"
+    },
+    {
+      "label": "LAW-PETRO",
+      "group": "스토리라인",
+      "title": "석유 및 석유대체연료 사업법 [시행 2026. 10. 2.] [법률 제22019호, 2026. 9. 29., 일부개정] (본문 전체 — 제23조 석유판매가격의 최고액 등)",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290131&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+      "slots": [
+        "근거 법 · 규정",
+        "손실은 누가 메우나"
+      ],
+      "why": "최고가격제의 근거 법 — 제23조 ① 산업통상부장관이 석유정제업자 · 석유수출입업자 또는 석유판매업자의 석유판매가격의 최고액 · 최저액을 정할 수 있다 ② 고시 ③ 손실 보전을 위한 재정 지원. 고시 (GOSI-2026-119)가 근거로 든 조항",
+      "url_basis": "law.go.kr/법령/석유및석유대체연료사업법/제23조 페이지 (lsiSeq 290131 · efYd 20261002) → 본문은 그 페이지가 부르는 lsInfoR.do (같은 lsiSeq · efYd — E2-1 J4 의 길). 2026-11-15 GET 200 text/html. robots.txt 'User-agent:* Allow: /'",
+      "language": "ko",
+      "published_at": "2026-09-29",
+      "published_evidence": "[시행 2026. 10. 2.] [법률 제22019호, 2026. 9. 29., 일부개정]",
+      "published_note": "공포일 — 이 판의 시행일은 2026-10-02. 법령은 판(lsiSeq)마다 다른 글이다"
+    },
+    {
+      "label": "RULE-CAP",
+      "group": "스토리라인",
+      "title": "석유판매가격의 최고액 지정 및 과잉수출제한에 관한 규정 [시행 2026. 4. 10.] [산업통상부고시 제2026-33호, 2026. 4. 10., 일부개정]",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000277260&chrClsCd=010202",
+      "slots": [
+        "근거 법 · 규정",
+        "값이 붙는 곳",
+        "손실은 누가 메우나",
+        "주유소 값은"
+      ],
+      "why": "최고가격제를 어떻게 돌리나를 정한 고시 — 제3조 ② 지정 대상 = 석유정제업자가 석유판매업자 및 실소비자에게 판매하는 공급가격 · 제4조 산정 방식 (계산식 · 달리 정할 수 있다) · 제5조 조정 주기 · 제7조 사후 정산 (최고액 정산위원회) · 제9조 모니터링 (석유판매업자의 판매가격을 조사 · 보고 — 주유소 값은 상한이 아니라 살핌의 대상)",
+      "url_basis": "law.go.kr/행정규칙/석유판매가격의최고액지정및과잉수출제한에관한규정 페이지 (admRulSeq 2100000277260 · 제2026-33호 · 현행) → 본문 admRulLsInfoR.do (GET — E3-1 의 길). 2026-11-15 GET 200 text/html",
+      "language": "ko",
+      "published_at": "2026-04-10",
+      "published_evidence": "[시행 2026. 4. 10.] [산업통상부고시 제2026-33호, 2026. 4. 10., 일부개정]",
+      "published_note": "발령일 = 시행일. 제정은 제2026-21호 (2026. 3. 13.) — 부칙 목록"
+    },
+    {
+      "label": "PR-0312",
+      "group": "스토리라인",
+      "title": "(참고자료)석유산업과, 정부, 석유제품 가격 안정에 총력.pdf (산업통상부 보도참고자료 — 석유제품 최고가격제 시행 · 1차 최고가격)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198385870&tblKey=GMN",
+      "slots": [
+        "값이 붙는 곳",
+        "값이 어떻게 이어졌나",
+        "손실은 누가 메우나"
+      ],
+      "why": "최고가격제의 시작 — 3월 13일 0시 시행 · 1차 최고가격 · 값이 무엇에 붙는지를 부처가 풀어 쓴 문서",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156748736 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-03-12T19:30+09:00",
+      "published_evidence": "보도시점 2026.3.12.(목) 19:30",
+      "published_note": "보도시점 (배포는 같은 날)",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "63d8bade7dca949c8a0235c7222cf74f6546a5f354a781bfefdae3339f9e8dee",
+        "page": 2,
+        "pages": 2,
+        "image": {
+          "name": "Im4",
+          "xref": 30,
+          "width": 808,
+          "height": 326,
+          "filter": "DCTDecode",
+          "stream_sha256": "b02fd0f37f1d447b33ee9330ce36079017d5bca43048d5de4b8fbc411c2cad78"
+        },
+        "where": "본문 끝 (2/2쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 451.9–541.5 · y 132.3–164.0 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 산업통상부의 글 (본문 · 정유사 평균 공급가격 숫자 줄 · 담당 부서 표). 담당 공무원의 이름 · 사무실 전화가 있다 (보도자료 연락처)",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
+    },
+    {
+      "label": "PR-0327-GAS",
+      "group": "스토리라인",
+      "title": "(참고자료)석유산업과, 정부, 최고가격제 틈타 부당하게 가격 인상한 주유소에 무관용 원칙 대응.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198403101&tblKey=GMN",
+      "slots": [
+        "주유소 값은"
+      ],
+      "why": "주유소 값은 상한 밖이라는 것의 뒷면 — 정부가 주유소 값에 한 일 (점검 · 대응)",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156751520 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-03-27",
+      "published_evidence": "배포 2026. 3. 27.(금)",
+      "published_note": "배포일 — 보도시점은 '배포즉시'",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "e738a8dd0bbbd6341bb162460c6734f416a42aaeeb16c4117b2bdb95b725ce1c",
+        "page": 2,
+        "pages": 2,
+        "image": {
+          "name": "Im4",
+          "xref": 34,
+          "width": 808,
+          "height": 326,
+          "filter": "DCTDecode",
+          "stream_sha256": "b02fd0f37f1d447b33ee9330ce36079017d5bca43048d5de4b8fbc411c2cad78"
+        },
+        "where": "본문 끝 (2/2쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 451.9–541.5 · y 626.3–658.0 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 산업통상부의 글. 주유소 평균 판매가격 표는 석유공사 유가정보시스템 (오피넷) 가격 동향과 에너지·석유시장감시단 분석을 부처가 옮긴 숫자 (표 한 칸 · 인용문 아님). 담당 공무원의 이름 · 사무실 전화가 있다",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
+    },
+    {
+      "label": "PR-0424",
+      "group": "스토리라인",
+      "title": "(참고자료, 23(목) 19시 엠바고)석유산업과, 4차 최고가격, 민생 안정에 방점을 두고 동결.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198437750&tblKey=GMN",
+      "slots": [
+        "값이 어떻게 이어졌나",
+        "손실은 누가 메우나"
+      ],
+      "why": "4차 동결 · 정유사 손실 보전 절차 (S-3 ⑤ 가 읽기 도구 요약으로만 본 문서 — 원문)",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156757654 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-04-23T19:00+09:00",
+      "published_evidence": "보도시점 2026.4.23.(목) 19:00",
+      "published_note": "보도시점 (배포는 같은 날) — 정책브리핑 게시물의 날짜는 2026.04.24",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "e399c7294eb9a299db4c52c3b9fa8da9d95d9d43c4065cf175dc6b4bde85a607",
+        "page": 2,
+        "pages": 2,
+        "image": {
+          "name": "Im4",
+          "xref": 32,
+          "width": 808,
+          "height": 326,
+          "filter": "DCTDecode",
+          "stream_sha256": "b02fd0f37f1d447b33ee9330ce36079017d5bca43048d5de4b8fbc411c2cad78"
+        },
+        "where": "본문 끝 (2/2쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 451.9–541.5 · y 386.6–418.2 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 산업통상부의 글. 담당 공무원의 이름 · 사무실 전화가 있다",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
+    },
+    {
+      "label": "PR-0618",
+      "group": "스토리라인",
+      "title": "(참고자료, 18(목) 17시엠바고)석유산업과, 최고가격제 손실보전을 위한 재정지원 고시 마련.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198492058&tblKey=GMN",
+      "slots": [
+        "손실은 누가 메우나"
+      ],
+      "why": "손실 보전의 기준 — 재정지원 고시 (S-3 ⑤ '정산 자료')",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156767203 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-06-18T17:00+09:00",
+      "published_evidence": "보도시점 2026.6.18.(목) 17:00",
+      "published_note": "보도시점 (배포는 같은 날)",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "b76141a605f2ac4409047ca3d3aa56980aa1aca0ac46ac81d35a9605fde00b11",
+        "page": 2,
+        "pages": 7,
+        "image": {
+          "name": "Im5",
+          "xref": 35,
+          "width": 335,
+          "height": 129,
+          "filter": "DCTDecode",
+          "stream_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58"
+        },
+        "where": "본문 끝 (2/7쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 454.8–527.8 · y 713.8–741.9 pt). 표시는 이 한 곳",
+        "third_party": "없음 — 본문 (1 ~ 2쪽)과 붙임 '재정지원 고시(안)' (3 ~ 7쪽 · 같은 부처의 행정예고안 — 법령 꼴의 글) 모두 산업통상부의 글. 파일 하나를 한 문서로 본다 (D70 E3-1b-b). 담당 공무원의 이름 · 사무실 전화가 있다",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
+    },
+    {
+      "label": "PR-0626",
+      "group": "스토리라인",
+      "title": "(참고자료, 26(금) 19시엠바고)석유산업과, 7차 석유 최고가격 150원 전격인하.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198497458&tblKey=GMN",
+      "slots": [
+        "값이 어떻게 이어졌나"
+      ],
+      "why": "지금 값 (1,784 · 1,773 · 1,380)이 정해진 때 — 12차 자료의 '현재 최고가격이 정해진 6월말'",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156768398 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-06-26T19:00+09:00",
+      "published_evidence": "보도시점 2026.6.26.(금) 19:00",
+      "published_note": "보도시점 (배포는 같은 날)",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "30a39cb9f691af298669c6c1d50d75059d8271a1b5954c8adf9c3f442fdc62d5",
+        "page": 2,
+        "pages": 2,
+        "image": {
+          "name": "Im4",
+          "xref": 28,
+          "width": 335,
+          "height": 129,
+          "filter": "DCTDecode",
+          "stream_sha256": "b66203a05b52b07459958e9066b57e5bc365109e55bc4362bb32665f48e24465"
+        },
+        "where": "본문 끝 (2/2쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 446.3–519.4 · y 397.5–425.6 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 산업통상부의 글 (본문 · 국제유가 · 국제제품가 숫자 줄). 담당 공무원의 이름 · 사무실 전화가 있다",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
+    },
+    {
+      "label": "PR-0724",
+      "group": "스토리라인",
+      "title": "(참고자료, 24(금) 19시엠바고)석유산업과, 8차 최고가격, 7차 최고가로 동결.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198514132&tblKey=GMN",
+      "slots": [
+        "값이 어떻게 이어졌나"
+      ],
+      "why": "8차 — 값이 어떻게 이어졌나",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156772121 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-07-24T19:00+09:00",
+      "published_evidence": "보도시점 2026.7.24.(금) 19:00",
+      "published_note": "보도시점 (배포는 같은 날)",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "026b6a3e3ecf8330a70c5a5c9fb9c9bca448b3e827af5563145a876c7d431f45",
+        "page": 2,
+        "pages": 2,
+        "image": {
+          "name": "Im5",
+          "xref": 35,
+          "width": 335,
+          "height": 129,
+          "filter": "DCTDecode",
+          "stream_sha256": "b66203a05b52b07459958e9066b57e5bc365109e55bc4362bb32665f48e24465"
+        },
+        "where": "본문 끝 (2/2쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 443.4–516.5 · y 116.7–144.8 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 산업통상부의 글 (본문 · 국제유가 숫자 줄). 담당 공무원의 이름 · 사무실 전화가 있다",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
+    },
+    {
+      "label": "PR-0821",
+      "group": "스토리라인",
+      "title": "(참고자료, 21(금) 19시엠바고)석유산업과, 9차 최고가격 동결, 민생부담과 국제유가 종합 고려.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198528545&tblKey=GMN",
+      "slots": [
+        "값이 어떻게 이어졌나"
+      ],
+      "why": "9차 — 값이 어떻게 이어졌나",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156775144 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-08-21T19:00+09:00",
+      "published_evidence": "보도시점 2026.8.21.(금) 19:00",
+      "published_note": "보도시점 (배포는 같은 날)",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "0b82a5eeecf2605c820e61a709c9ac710f82f7a75dad59dc1ced650f7d6c4fba",
+        "page": 2,
+        "pages": 2,
+        "image": {
+          "name": "Im5",
+          "xref": 35,
+          "width": 335,
+          "height": 129,
+          "filter": "DCTDecode",
+          "stream_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58"
+        },
+        "where": "본문 끝 (2/2쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 451.9–525.0 · y 125.1–153.2 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 산업통상부의 글 (본문 · 국제유가 숫자 줄). 담당 공무원의 이름 · 사무실 전화가 있다",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
+    },
+    {
+      "label": "PR-0918",
+      "group": "스토리라인",
+      "title": "(참고자료, 18(금) 18시엠바고)석유산업과, 10차 최고가격 동결, 중동정세 불안으로 민생경제 보호.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198556353&tblKey=GMN",
+      "slots": [
+        "값이 어떻게 이어졌나"
+      ],
+      "why": "10차 — 값이 어떻게 이어졌나",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156782479 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-09-18T18:00+09:00",
+      "published_evidence": "보도시점 2026.9.18.(금) 18:00",
+      "published_note": "보도시점 (배포는 같은 날)",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "528602a2a2b7397451d3df641e38c223d63f65f7c3d8dbd2c9648e9d129a81a4",
+        "page": 2,
+        "pages": 2,
+        "image": {
+          "name": "Im5",
+          "xref": 35,
+          "width": 335,
+          "height": 129,
+          "filter": "DCTDecode",
+          "stream_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58"
+        },
+        "where": "본문 끝 (2/2쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 451.9–525.0 · y 423.0–451.1 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 산업통상부의 글 (본문 · 국제유가 · 환율 숫자 줄). 담당 공무원의 이름 · 사무실 전화가 있다",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
+    },
+    {
+      "label": "PR-1016",
+      "group": "스토리라인",
+      "title": "(참고자료, 16(금) 18시엠바고)석유산업과, 11차 최고가격 10차 수준으로 동결.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198571443&tblKey=GMN",
+      "slots": [
+        "값이 어떻게 이어졌나"
+      ],
+      "why": "11차 — 고시 GOSI-2026-119 의 보도참고자료",
+      "url_basis": "정책브리핑 보도자료 찾기 (pressReleaseList.do · 낱말 '최고가격') 에서 나온 게시물 pressReleaseView.do?newsId=156785525 의 첨부 '내려받기' 링크 (pdf). 2026-11-15 확인. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-10-16T18:00+09:00",
+      "published_evidence": "보도시점 2026.10.16.(금) 18:00",
+      "published_note": "보도시점 (배포는 같은 날)",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "f781673660cb174395d19b2f255eee94681ff97eade9ea57d279c98338ceb229",
+        "page": 2,
+        "pages": 2,
+        "image": {
+          "name": "Im5",
+          "xref": 37,
+          "width": 335,
+          "height": 129,
+          "filter": "DCTDecode",
+          "stream_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58"
+        },
+        "where": "본문 끝 (2/2쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 ('대한민국 정책브리핑' 그림과 나란히 · 쪽 위치 x 451.9–525.0 · y 278.1–306.1 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 산업통상부의 글 (본문 · 국제유가 · 판매량 숫자 줄). 담당 공무원의 이름 · 사무실 전화가 있다",
+        "seen_by": "P-T1 작업 세션 — 캐시의 받은 바이트 (packages/pipeline/.cache/events/MOTIR-20261113-OIL-PRICE-CAP/raw/<label>.bin · p2 가 한 번 받은 것) 를 PyMuPDF 1.28.2 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 쪽의 그 줄을 130dpi 로 그려 눈으로 봤다 (아홉 문서를 한 장에 나란히 — 그림 스트림은 세 가지: b02fd0f3… 3 ~ 4월 · b66203a0… 6 ~ 7월 · fa58aa34… 6/18 · 8 ~ 10월 = S-3 가 본 11/13 문서의 것과 같은 스트림)",
+        "checked_at": "2026-11-15"
+      }
     }
-  ]
+  ],
+  "_p_t1": "P-T1 (2026-11-15) 이 더한 것 — 긴 이야기 (새 시리즈 1화)를 만들 때 받은 1차 문서 11 (logs/pipeline/S-3.md ⑤ · logs/pipeline/P-T1.md ②): 근거 법 · 규정 둘 (law.go.kr — 법령) · 지난 차수 보도참고자료 아홉 (정책브리핑 첨부 PDF — 문서 안 공공누리 제1유형 그림을 하나씩 열어 봤다 · doc_rights). group \"스토리라인\" = 3월부터 이어진 석유 최고가격제의 문서 (p3 의 범위 줄이 '처음부터 사건 날짜까지'가 된다 — p3.ts EVENTS 의 storyline.docs 와 같아야 한다)"
 }

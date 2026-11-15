@@ -44,6 +44,127 @@
       "language": "ko",
       "published_at": "2026-10-16",
       "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "34c0212d-7953-4f9c-93b5-4a224e8011e7",
+      "label": "LAW-PETRO",
+      "title": "석유 및 석유대체연료 사업법 [시행 2026. 10. 2.] [법률 제22019호, 2026. 9. 29., 일부개정] (본문 전체 — 제23조 석유판매가격의 최고액 등)",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290131&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-09-29",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "3c18e3e4-3a3c-41c4-9675-d6b1ae4836ad",
+      "label": "RULE-CAP",
+      "title": "석유판매가격의 최고액 지정 및 과잉수출제한에 관한 규정 [시행 2026. 4. 10.] [산업통상부고시 제2026-33호, 2026. 4. 10., 일부개정]",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000277260&chrClsCd=010202",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-04-10",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "5879685d-486d-4b25-b8f6-eb510069957b",
+      "label": "PR-0312",
+      "title": "(참고자료)석유산업과, 정부, 석유제품 가격 안정에 총력.pdf (산업통상부 보도참고자료 — 석유제품 최고가격제 시행 · 1차 최고가격)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198385870&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-03-12T19:30+09:00",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "e3b10667-1857-4868-8c2a-11ebb2c66039",
+      "label": "PR-0327-GAS",
+      "title": "(참고자료)석유산업과, 정부, 최고가격제 틈타 부당하게 가격 인상한 주유소에 무관용 원칙 대응.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198403101&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-03-27",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "c35954e8-d235-400a-b3da-05ed2966087e",
+      "label": "PR-0424",
+      "title": "(참고자료, 23(목) 19시 엠바고)석유산업과, 4차 최고가격, 민생 안정에 방점을 두고 동결.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198437750&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-04-23T19:00+09:00",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "8e5fdda4-9d83-4011-bd42-1930daee9e34",
+      "label": "PR-0618",
+      "title": "(참고자료, 18(목) 17시엠바고)석유산업과, 최고가격제 손실보전을 위한 재정지원 고시 마련.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198492058&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-06-18T17:00+09:00",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "d5791728-14bb-4296-b7a6-1203074fe50c",
+      "label": "PR-0626",
+      "title": "(참고자료, 26(금) 19시엠바고)석유산업과, 7차 석유 최고가격 150원 전격인하.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198497458&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-06-26T19:00+09:00",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "71fc408b-72b4-4c88-9970-8686d6e85ae2",
+      "label": "PR-0724",
+      "title": "(참고자료, 24(금) 19시엠바고)석유산업과, 8차 최고가격, 7차 최고가로 동결.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198514132&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-07-24T19:00+09:00",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "a29d30a4-f805-42ce-ba20-b2013b74e4b9",
+      "label": "PR-0821",
+      "title": "(참고자료, 21(금) 19시엠바고)석유산업과, 9차 최고가격 동결, 민생부담과 국제유가 종합 고려.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198528545&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-08-21T19:00+09:00",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "ffd3b3b5-e5de-4571-80fc-4ed06ac96b86",
+      "label": "PR-0918",
+      "title": "(참고자료, 18(금) 18시엠바고)석유산업과, 10차 최고가격 동결, 중동정세 불안으로 민생경제 보호.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198556353&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-09-18T18:00+09:00",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "52e66a44-eee3-42f7-b1ed-df7161fb85e0",
+      "label": "PR-1016",
+      "title": "(참고자료, 16(금) 18시엠바고)석유산업과, 11차 최고가격 10차 수준으로 동결.pdf (산업통상부 보도참고자료)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198571443&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-10-16T18:00+09:00",
+      "ingested_at": "2026-11-15"
     }
   ],
   "source_documents": [],
@@ -59,7 +180,7 @@
       "attribution_required": null,
       "terms_url": null,
       "last_reviewed_at": "2026-11-15",
-      "basis": "권리 미확인 (발행처 단위) — 발행처 단위의 근거를 찾지 못했다. 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1113-PDF. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
+      "basis": "권리 미확인 (발행처 단위) — 발행처 단위의 근거를 찾지 못했다. 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1113-PDF · PR-0312 · PR-0327-GAS · PR-0424 · PR-0618 · PR-0626 · PR-0724 · PR-0821 · PR-0918 · PR-1016. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
     },
     {
       "source": "law.go.kr",
@@ -91,6 +212,168 @@
         "image": "Im5 객체 37 · 335×129 · DCTDecode",
         "image_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58",
         "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 페이지 (PR-1113) 에도 글 줄 '이 자료는 텍스트에 한하여 공공누리 제1유형(출처표시)의 조건에 따라 이용할 수 있습니다.' 가 있다 (S1-a 의 길 — 기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "5879685d-486d-4b25-b8f6-eb510069957b",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "63d8bade7dca949c8a0235c7222cf74f6546a5f354a781bfefdae3339f9e8dee",
+        "page": 2,
+        "pages": 2,
+        "image": "Im4 객체 30 · 808×326 · DCTDecode",
+        "image_sha256": "b02fd0f37f1d447b33ee9330ce36079017d5bca43048d5de4b8fbc411c2cad78",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "e3b10667-1857-4868-8c2a-11ebb2c66039",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "e738a8dd0bbbd6341bb162460c6734f416a42aaeeb16c4117b2bdb95b725ce1c",
+        "page": 2,
+        "pages": 2,
+        "image": "Im4 객체 34 · 808×326 · DCTDecode",
+        "image_sha256": "b02fd0f37f1d447b33ee9330ce36079017d5bca43048d5de4b8fbc411c2cad78",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "c35954e8-d235-400a-b3da-05ed2966087e",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "e399c7294eb9a299db4c52c3b9fa8da9d95d9d43c4065cf175dc6b4bde85a607",
+        "page": 2,
+        "pages": 2,
+        "image": "Im4 객체 32 · 808×326 · DCTDecode",
+        "image_sha256": "b02fd0f37f1d447b33ee9330ce36079017d5bca43048d5de4b8fbc411c2cad78",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "8e5fdda4-9d83-4011-bd42-1930daee9e34",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "b76141a605f2ac4409047ca3d3aa56980aa1aca0ac46ac81d35a9605fde00b11",
+        "page": 2,
+        "pages": 7,
+        "image": "Im5 객체 35 · 335×129 · DCTDecode",
+        "image_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "d5791728-14bb-4296-b7a6-1203074fe50c",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "30a39cb9f691af298669c6c1d50d75059d8271a1b5954c8adf9c3f442fdc62d5",
+        "page": 2,
+        "pages": 2,
+        "image": "Im4 객체 28 · 335×129 · DCTDecode",
+        "image_sha256": "b66203a05b52b07459958e9066b57e5bc365109e55bc4362bb32665f48e24465",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "71fc408b-72b4-4c88-9970-8686d6e85ae2",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "026b6a3e3ecf8330a70c5a5c9fb9c9bca448b3e827af5563145a876c7d431f45",
+        "page": 2,
+        "pages": 2,
+        "image": "Im5 객체 35 · 335×129 · DCTDecode",
+        "image_sha256": "b66203a05b52b07459958e9066b57e5bc365109e55bc4362bb32665f48e24465",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "a29d30a4-f805-42ce-ba20-b2013b74e4b9",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "0b82a5eeecf2605c820e61a709c9ac710f82f7a75dad59dc1ced650f7d6c4fba",
+        "page": 2,
+        "pages": 2,
+        "image": "Im5 객체 35 · 335×129 · DCTDecode",
+        "image_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "ffd3b3b5-e5de-4571-80fc-4ed06ac96b86",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "528602a2a2b7397451d3df641e38c223d63f65f7c3d8dbd2c9648e9d129a81a4",
+        "page": 2,
+        "pages": 2,
+        "image": "Im5 객체 35 · 335×129 · DCTDecode",
+        "image_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    },
+    {
+      "source_id": "52e66a44-eee3-42f7-b1ed-df7161fb85e0",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "f781673660cb174395d19b2f255eee94681ff97eade9ea57d279c98338ceb229",
+        "page": 2,
+        "pages": 2,
+        "image": "Im5 객체 37 · 335×129 · DCTDecode",
+        "image_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 게시물 페이지에도 '공공누리 공공저작물 자유이용허락 1유형 출처표시' 그림 대체 글이 있다 (기록으로만 · 근거는 이 그림). 판정은 PM"
       },
       "last_reviewed_at": "2026-11-15"
     }

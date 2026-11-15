@@ -10,7 +10,7 @@
     {
       "host": "www.korea.kr",
       "url": "https://www.korea.kr/robots.txt",
-      "fetched_at": "2026-11-15T12:31:16.553Z",
+      "fetched_at": "2026-11-15T13:28:23.427Z",
       "http_status": 200,
       "sha256": "98d411637ae27a333b95d03c7b691eae06992f5d0d061ff6e3a77ffaace7ebf8",
       "error": null,
@@ -19,7 +19,7 @@
     {
       "host": "www.law.go.kr",
       "url": "https://www.law.go.kr/robots.txt",
-      "fetched_at": "2026-11-15T12:31:18.814Z",
+      "fetched_at": "2026-11-15T13:28:23.215Z",
       "http_status": 200,
       "sha256": "bdf6e8d2c4792183feb41f8b1440551715d4564d5156cc74e67c54648d013133",
       "error": null,
@@ -157,6 +157,500 @@
         "공급가격": 1,
         "배럴당": 0,
         "동결": 0
+      }
+    },
+    {
+      "label": "LAW-PETRO",
+      "source_id": "34c0212d-7953-4f9c-93b5-4a224e8011e7",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290131&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290131&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+        "fetched_at": "2026-11-15T13:27:08.874Z",
+        "final_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290131&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "ff0f6a49873dc4b3ef0dabfbdf3d396bc028eab18e2dbb5261860966a6cb290d",
+        "raw_bytes": 402613,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "f4dc2199cb5ccee8909f50efc415910c3437216dfd4f8db727c240c176d2b29e",
+      "text_length": 63962,
+      "pdf_page_starts": null,
+      "first_line": "석유 및 석유대체연료 사업법 ( 약칭: 석유사업법 )",
+      "rights": "KR_STATUTE",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 0,
+        "최고액": 6,
+        "리터당": 4,
+        "공급가격": 0,
+        "배럴당": 0,
+        "동결": 0
+      }
+    },
+    {
+      "label": "RULE-CAP",
+      "source_id": "3c18e3e4-3a3c-41c4-9675-d6b1ae4836ad",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000277260&chrClsCd=010202",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000277260&chrClsCd=010202",
+        "fetched_at": "2026-11-15T13:27:10.034Z",
+        "final_url": "https://www.law.go.kr/LSW/admRulLsInfoR.do?admRulSeq=2100000277260&chrClsCd=010202",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "824177da6c011962d6fb7478bb41564e37920fcb5a947fbe787a8c20b2bc8d6d",
+        "raw_bytes": 31859,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "56597d88287be96299f2891048c3571222a05a8a3fea7a9dbc8d215b4eb1083d",
+      "text_length": 4560,
+      "pdf_page_starts": null,
+      "first_line": "석유판매가격의 최고액 지정 및 과잉수출제한에 관한 규정",
+      "rights": "KR_STATUTE",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 0,
+        "최고액": 26,
+        "리터당": 0,
+        "공급가격": 2,
+        "배럴당": 0,
+        "동결": 0
+      }
+    },
+    {
+      "label": "PR-0312",
+      "source_id": "5879685d-486d-4b25-b8f6-eb510069957b",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198385870&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198385870&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:11.631Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198385870&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "63d8bade7dca949c8a0235c7222cf74f6546a5f354a781bfefdae3339f9e8dee",
+        "raw_bytes": 135564,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "68263f2c1caf649095d8c17c1105260973d5f10e6c5f78e307765e6d50d33250",
+      "text_length": 1058,
+      "pdf_page_starts": [
+        0,
+        962
+      ],
+      "first_line": "보도참고자료",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 8,
+        "최고액": 0,
+        "리터당": 2,
+        "공급가격": 3,
+        "배럴당": 0,
+        "동결": 0
+      }
+    },
+    {
+      "label": "PR-0327-GAS",
+      "source_id": "e3b10667-1857-4868-8c2a-11ebb2c66039",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198403101&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198403101&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:12.918Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198403101&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "e738a8dd0bbbd6341bb162460c6734f416a42aaeeb16c4117b2bdb95b725ce1c",
+        "raw_bytes": 163035,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "77fc384d65200e466975dbc5d4cc8773e3f79f5f99386e36a604f91512904a09",
+      "text_length": 1514,
+      "pdf_page_starts": [
+        0,
+        758
+      ],
+      "first_line": "보도참고자료",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 10,
+        "최고액": 0,
+        "리터당": 4,
+        "공급가격": 2,
+        "배럴당": 0,
+        "동결": 0
+      }
+    },
+    {
+      "label": "PR-0424",
+      "source_id": "c35954e8-d235-400a-b3da-05ed2966087e",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198437750&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198437750&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:14.506Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198437750&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "e399c7294eb9a299db4c52c3b9fa8da9d95d9d43c4065cf175dc6b4bde85a607",
+        "raw_bytes": 153413,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "912ff5138ae79c71216dd355d72f80ddffdfce4c3a43f8fcba98275434c9b8a5",
+      "text_length": 1357,
+      "pdf_page_starts": [
+        0,
+        904
+      ],
+      "first_line": "보도참고자료",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 12,
+        "최고액": 2,
+        "리터당": 1,
+        "공급가격": 0,
+        "배럴당": 0,
+        "동결": 2
+      }
+    },
+    {
+      "label": "PR-0618",
+      "source_id": "8e5fdda4-9d83-4011-bd42-1930daee9e34",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198492058&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198492058&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:16.055Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198492058&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "b76141a605f2ac4409047ca3d3aa56980aa1aca0ac46ac81d35a9605fde00b11",
+        "raw_bytes": 310966,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "29692ba2e0268b3c4d59d34448a2e68c2d35475943f1e8871966570512811d86",
+      "text_length": 6088,
+      "pdf_page_starts": [
+        0,
+        852,
+        1627,
+        2516,
+        3635,
+        4631,
+        5523
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 9,
+        "최고액": 25,
+        "리터당": 1,
+        "공급가격": 0,
+        "배럴당": 0,
+        "동결": 0
+      }
+    },
+    {
+      "label": "PR-0626",
+      "source_id": "d5791728-14bb-4296-b7a6-1203074fe50c",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198497458&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198497458&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:17.582Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198497458&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "30a39cb9f691af298669c6c1d50d75059d8271a1b5954c8adf9c3f442fdc62d5",
+        "raw_bytes": 156824,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "9962aee4cb2f8ec0a73cabb6ceaf572046a16f04eb453a8faa1eae033d662871",
+      "text_length": 1443,
+      "pdf_page_starts": [
+        0,
+        985
+      ],
+      "first_line": "보도참고자료",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 6,
+        "최고액": 0,
+        "리터당": 4,
+        "공급가격": 1,
+        "배럴당": 1,
+        "동결": 0
+      }
+    },
+    {
+      "label": "PR-0724",
+      "source_id": "71fc408b-72b4-4c88-9970-8686d6e85ae2",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198514132&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198514132&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:19.011Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198514132&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "026b6a3e3ecf8330a70c5a5c9fb9c9bca448b3e827af5563145a876c7d431f45",
+        "raw_bytes": 208689,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "606eb70a6c80b1ad553c25ba7b2ce90a7de4f7790267f3b24d3fbf6ab5de413e",
+      "text_length": 1526,
+      "pdf_page_starts": [
+        0,
+        1424
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 7,
+        "최고액": 0,
+        "리터당": 3,
+        "공급가격": 0,
+        "배럴당": 2,
+        "동결": 4
+      }
+    },
+    {
+      "label": "PR-0821",
+      "source_id": "a29d30a4-f805-42ce-ba20-b2013b74e4b9",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198528545&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198528545&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:20.449Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198528545&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "0b82a5eeecf2605c820e61a709c9ac710f82f7a75dad59dc1ced650f7d6c4fba",
+        "raw_bytes": 156844,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "407dddef05f0a6bda2be1feb06d9e364afec6a94fcb0203336f75e94bbfca47e",
+      "text_length": 1327,
+      "pdf_page_starts": [
+        0,
+        1225
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 8,
+        "최고액": 0,
+        "리터당": 3,
+        "공급가격": 0,
+        "배럴당": 2,
+        "동결": 3
+      }
+    },
+    {
+      "label": "PR-0918",
+      "source_id": "ffd3b3b5-e5de-4571-80fc-4ed06ac96b86",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198556353&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198556353&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:21.904Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198556353&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "528602a2a2b7397451d3df641e38c223d63f65f7c3d8dbd2c9648e9d129a81a4",
+        "raw_bytes": 173406,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "a6c39e839d74b7d546c4dd9428e43302e6806d0e826923def5deca2b23955621",
+      "text_length": 1956,
+      "pdf_page_starts": [
+        0,
+        1311
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 14,
+        "최고액": 0,
+        "리터당": 2,
+        "공급가격": 0,
+        "배럴당": 3,
+        "동결": 3
+      }
+    },
+    {
+      "label": "PR-1016",
+      "source_id": "52e66a44-eee3-42f7-b1ed-df7161fb85e0",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198571443&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198571443&tblKey=GMN",
+        "fetched_at": "2026-11-15T13:27:23.476Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198571443&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "f781673660cb174395d19b2f255eee94681ff97eade9ea57d279c98338ceb229",
+        "raw_bytes": 182482,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "ed6bd9d019395f4ed8ef16584eb5d2b3d4d5726f74ed0d5ddd7433494bf165c8",
+      "text_length": 1784,
+      "pdf_page_starts": [
+        0,
+        1435
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "최고가격": 9,
+        "최고액": 0,
+        "리터당": 2,
+        "공급가격": 0,
+        "배럴당": 1,
+        "동결": 3
       }
     }
   ],

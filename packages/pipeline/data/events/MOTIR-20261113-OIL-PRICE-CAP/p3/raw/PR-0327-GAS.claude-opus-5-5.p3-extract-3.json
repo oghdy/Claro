@@ -1,0 +1,29 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/3 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "MOTIR-20261113-OIL-PRICE-CAP",
+  "source_label": "PR-0327-GAS",
+  "source_id": "e3b10667-1857-4868-8c2a-11ebb2c66039",
+  "text_sha256": "77fc384d65200e466975dbc5d4cc8773e3f79f5f99386e36a604f91512904a09",
+  "input_sha256": "77fc384d65200e466975dbc5d4cc8773e3f79f5f99386e36a604f91512904a09",
+  "prompt_version": "p3-extract/3",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "5e1aa6f37877db0d8820b7e31abfa13989f7291934d81b453d6810578a62c790",
+  "response_id": "msg_011Ch4nzJh24KyiZadVwBpab",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 1974,
+    "output_tokens": 4165,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 154006,
+  "cost_usd": 0.046098,
+  "called_at": "2026-11-15T13:31:24.290Z",
+  "output_sha256": "7cef0f79883c3a0fc06665f387eccd21cc824b0e6aac41398c3e08620c2768f3",
+  "output": "{\"facts\":[{\"claim_text\":\"정부는 3월 27일(금) 00시부터 정유사 출고물량에 대해 2차 석유 최고가격을 시행했다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"정부는 3월 27일(금) 00시부터 정유사 출고물량에 대해 2차 석유 최고\"]},{\"claim_text\":\"2차 석유 최고가격은 정유사 공급가격(도매가격) 대상으로 휘발유 1,934원/ℓ, 경유 1,923원/ℓ, 등유 1,530원/ℓ이다.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"* 정유사 공급가격(도매가격) 대상 : 휘발유 1,934원/ℓ, 경유 1,923원/ℓ, 등유 1,530원/ℓ\",\"정부는 3월 27일(금) 00시부터 정유사 출고물량에 대해 2차 석유 최고\"]},{\"claim_text\":\"3월 27일 16시 기준 오피넷 가격 동향과 에너지·석유시장감시단 분석 결과, 2차 최고가격 시행 전일인 3.26일 대비 가격을 인상한 주유소는 전체 10,646개의 약 35%인 3,674개로 조사되었다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"3월 27일(금) 16시 기준 석유공사 유가정보시스템(오피넷) 가격 동향과\",\"에너지·석유시장감시단 분석 결과에 따르면, 2차 최고가격 시행 전일인\",\"3.26일 대비 가격 인상을 한 주유소는 전체 10,646개의 약 35%인 3,674개로\"]},{\"claim_text\":\"약 13%인 1,366개 주유소는 리터당 60원 이상 가격을 급격하게 인상한 것으로 나타났다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"조사되었으며, 약 13%인 1,366개 주유소는 리터당 60원 이상 가격을\"]},{\"claim_text\":\"전체 주유소 평균가격 기준으로 전일 대비 휘발유, 경유 모두 리터당 약 19원 정도 주유소 가격이 인상되었다.\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"대비 휘발유, 경유 모두 리터당 약 19원 정도 주유소 가격이 인상되었다.\",\"급격하게 인상한 것으로 나타났다. 전체 주유소 평균가격 기준으로는 전일\"]},{\"claim_text\":\"산업통상부는 2차 최고가격이 1차에 비해 리터당 약 210원 인상되었다고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"2차 최고가격이 1차에 비해 리터당 약 210원이 인상되기는 했으나,\"]},{\"claim_text\":\"산업통상부는 2차 최고가격이 적용된 기름을 매입하지 않은 주유소의 보유 재고는 1차 최고가격을 적용받은 저렴한 기름일 가능성이 높다고 말함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"주유소별로 2차 최고가격이 적용된 기름을 매입하지 않았다면 현재 보유\",\"중인 재고물량은 1차 최고가격을 적용받은 저렴한 기름일 가능성이 높다.\"]},{\"claim_text\":\"산업통상부는 2차 최고가격 시행 직후 주유소 판매가격을 올리는 행위가 최고가격제도의 취지와 어긋나게 과도한 이익을 추구하는 것으로 분석된다고 말함.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"통상 주유소들이 가지고 있는 재고물량을 감안할 때, 2차 최고가격이 시행\",\"나게 과도한 이익을 추구하고 있는 것으로 분석된다.\"]},{\"claim_text\":\"정부는 석유 최고가격제 시행기간 동안 정유사 공급가격이 고정되어 있으므로 주유소 판매가격이 급격히 인상된다면 비대칭성의 책임이 주유소에 있다고 판단한다고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"석유 최고가격제 시행기간 동안에는 정유사 공급가격이 고정이 되어있기\",\"때문에 주유소 판매가격이 급격히 인상된다면 비대칭성의 책임이 주유소에\"]},{\"claim_text\":\"정부는 전국 1만여개 주유소 가격상황을 면밀히 모니터링하고 있다고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"정부는 전국 1만여개 주유소 가격상황을 면밀히 모니터링하고 있다.\"]},{\"claim_text\":\"정부는 2차 최고가격 시행 직후 가격을 곧바로 인상하는 주유소에 대해 '무관용'의 원칙으로 엄정하게 대응할 계획이라고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"최고가격 시행 직후 가격을 곧바로 인상하는 주유소에 대해서는, 국민부담\",\"‘무관용’의 원칙으로 엄정하게 대응할 계획이다.\"]},{\"claim_text\":\"정부는 석유공사 알뜰주유소가 과도하게 높은 가격으로 유류를 판매할 경우 즉각 계약해지를 하는 '원 스트라이크 아웃제'를 도입할 계획이라고 밝힘.\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-03-27\",\"passages\":[\"또한, 정부는 가격안정에 모범을 보여야할 석유공사 알뜰주유소가 과도하게\",\"높은 가격으로 유류 판매시 즉각 계약해지를 하는 ‘원 스트라이크 아웃\"]}]}",
+  "output_in": "here",
+  "mode": "batch",
+  "batch_id": "msgbatch_01BSBcv8SXPjWhmTXTnoQMvh"
+}

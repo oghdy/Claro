@@ -1,0 +1,29 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/3 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "MOTIR-20261113-OIL-PRICE-CAP",
+  "source_label": "GOSI-2026-119",
+  "source_id": "6e44682e-65ba-427a-b79e-f08b8d2f9ac0",
+  "text_sha256": "fd143c8fcffbd0a10c1b1fa72f24fad007497f25ee6bcebc5999fe2c1ebef0e8",
+  "input_sha256": "fd143c8fcffbd0a10c1b1fa72f24fad007497f25ee6bcebc5999fe2c1ebef0e8",
+  "prompt_version": "p3-extract/3",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "42856dcb207b5abb81e2e2af9e1f70336810fe3066a4fe96a6f513f6471bebd1",
+  "response_id": "msg_011Ch4nzJfYGwGnuUxt1mLrs",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 1110,
+    "output_tokens": 2088,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 154005,
+  "cost_usd": 0.0236,
+  "called_at": "2026-11-15T13:31:24.288Z",
+  "output_sha256": "06f29c7b71c11dc1ffc796c5564303ce5375591e82e0b7e25635b711554607e7",
+  "output": "{\"facts\":[{\"claim_text\":\"산업통상부장관은 「석유 및 석유대체연료 사업법」제23조 등에 따라 「석유판매가격의 최고액」을 산업통상부 고시 제2026-119호로 2026년 10월 16일 고시함.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-16\",\"passages\":[\"산업통상부 고시 제2026-119호\",\"「석유 및 석유대체연료 사업법」제23조 및 「석유판매가격의 최고액 지정 및\",\"2026년 10월 16일\"]},{\"claim_text\":\"이 고시의 시행일자는 2026년 10월 17일 00시임.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-16\",\"passages\":[\"ㅇ 2026년 10월 17일 00시\",\"이 고시는 2026년 10월 17일부터 시행한다.\"]},{\"claim_text\":\"최고액 지정 대상은 석유정제업자가 석유판매업자 및 실소비자에게 판매하는 석유제품의 공급가격임.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-16\",\"passages\":[\"ㅇ 석유정제업자가 석유판매업자 및 실소비자에게 판매하는 석유제품의\"]},{\"claim_text\":\"일반 석유제품의 최고액은 보통휘발유 리터당 1,784원, 자동차용 및 선박용 경유 리터당 1,773원, 실내 등유 리터당 1,380원으로 지정됨.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-16\",\"passages\":[\"ㅇ 일반 석유제품의 최고액\",\"리터당 1,784원 리터당 1,773원 리터당 1,380원\"]},{\"claim_text\":\"해상운송이 필수적인 도서지역에 공급되는 석유제품의 최고액은 보통휘발유 리터당 1,803원, 자동차용 및 선박용 경유 리터당 1,792원, 실내 등유 리터당 1,399원으로 지정됨.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-16\",\"passages\":[\"ㅇ 해상운송이 필수적인 도서지역에 공급되는 석유제품의 최고액\",\"리터당 1,803원 리터당 1,792원 리터당 1,399원\"]},{\"claim_text\":\"석유정제업자가 「조세특례제한법」에 따라 면세 또는 부가가치세 영세율이 적용되는 석유제품을 공급하는 경우에는 해당 면세 또는 영세율 적용 이후의 금액을 최고액으로 함.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-16\",\"passages\":[\"석유정제업자가 「조세특례제한법」에 따라 면세 또는 부가가치세 영세율이 적용\",\"금액을 최고액으로 한다.\"]},{\"claim_text\":\"이 고시 시행과 동시에 종전 「석유판매가격의 최고액(산업통상부고시 제2026-112호)」은 폐지됨.\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-10-16\",\"passages\":[\"ㅇ 이 고시 시행과 동시에 종전 「석유판매가격의 최고액(산업통상부고시\",\"제2026-112호)」은 폐지한다.\"]}]}",
+  "output_in": "here",
+  "mode": "batch",
+  "batch_id": "msgbatch_01BSBcv8SXPjWhmTXTnoQMvh"
+}

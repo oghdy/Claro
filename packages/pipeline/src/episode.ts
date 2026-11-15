@@ -127,8 +127,11 @@ export function load(epCode: string, opts: { like?: string } = {}) {
   const d = evDir(code);
   const graphText = readFileSync(join(d, "p3/graph.json"), "utf8");
   const graph = JSON.parse(graphText) as { event_id: string; facts: Fact[]; fact_sources: FactSource[] };
-  const cov = readJson<Cov>(join(d, "p4/coverage.json"));
-  const p5 = readJson<{ claims: Claim[]; claims_d5: Claim[]; empty_counter_slots: { claim: string; question: string; element: string; missing: string }[] }>(join(d, "p5/claims.json"));
+  // P-T1 (D109) — P-4 · P-5 를 돌리지 않은 사건 (Coverage Schema 가 그 유형에 없다 — FINDINGS §6.2)도 회차 단계가 선다: 두 파일이 **둘 다** 없을 때만 빈 값으로 읽고, 사실은 전부 보낸다 (selectFacts) · 프롬프트에 그렇다고 적는다 (ctx).
+  // 파일이 있는 사건 (FOMC)은 한 글자도 달라지지 않는다. 하나만 있으면 전처럼 멈춘다
+  const noP45 = !existsSync(join(d, "p4/coverage.json")) && !existsSync(join(d, "p5/claims.json"));
+  const cov = noP45 ? { slots: [], statement_diff: { only_09: [], only_10: [], same: [] } } as Cov : readJson<Cov>(join(d, "p4/coverage.json"));
+  const p5 = noP45 ? { claims: [], claims_d5: [], empty_counter_slots: [] } : readJson<{ claims: Claim[]; claims_d5: Claim[]; empty_counter_slots: { claim: string; question: string; element: string; missing: string }[] }>(join(d, "p5/claims.json"));
   const store = readJson<{ sources: Src[]; events: { event_id: string; code: string }[] }>(join(d, "store.json"));
   const srcs = new Map(store.sources.map((s) => [s.source_id, s]));
   const texts = new Map<string, string>();
@@ -179,7 +182,7 @@ export function load(epCode: string, opts: { like?: string } = {}) {
   const previous_gist = prev ? [] : entry.previous_gist ?? [];
   const prior_tools = prev ? prev.tools.map((t) => ({ name: t.name, concepts: t.basis.map((b) => idToCode.get(b.concept_id) ?? "?") })) : entry.prior_tools ?? [];
   const ep = { ...entry, code: epCode, past, previous_gist, prior_tools };
-  return { politicsOnly, code, conf, graph, graph_sha256: sha256(graphText), cov, p5, srcs, texts, documents, lib, series, ep, prev, versions, v1: versions.write === "episode-write/1", fixes, isNew, byLabel, passages, docsOfFact, event_id: store.events.find((e) => e.code === code)?.event_id ?? graph.event_id };
+  return { noP45, politicsOnly, code, conf, graph, graph_sha256: sha256(graphText), cov, p5, srcs, texts, documents, lib, series, ep, prev, versions, v1: versions.write === "episode-write/1", fixes, isNew, byLabel, passages, docsOfFact, event_id: store.events.find((e) => e.code === code)?.event_id ?? graph.event_id };
 }
 export type L = ReturnType<typeof load>;
 
@@ -212,6 +215,7 @@ export function selectFacts(x: L): string[] {
     for (const l of ranked.slice(0, x.v1 ? PER_ELEMENT : KNOBS.per_element)) pick.add(l);
   }
   if (!x.v1) for (const f of x.graph.facts) if (x.isNew(f.label)) pick.add(f.label);   // 새 문서의 사실은 전부
+  if (x.noP45) for (const f of x.graph.facts) pick.add(f.label);   // P-T1 — 슬롯 표 · 해석이 없는 사건은 고를 잣대가 없다: 사실 전부 (작은 사건)
   return x.graph.facts.map((f) => f.label).filter((l) => pick.has(l));
 }
 /** 글 단계에 보내는 사실 — 바탕 (반증 물음의 답에만 쓰인 사실은 뺀다) ∪ 설계가 가리킨 것 (설계가 장면마다 재료를 골라 뒀다) */
@@ -247,8 +251,9 @@ export function ctx(x: L, labels: string[] = selectFacts(x)): Ctx {
     "두 문서에 글자 그대로 같은 문장:", ...sd.same.map((s) => `  - “${s}”`),
   ].join("\n");
   const claimLine = (c: Claim) => `${c.label} [${c.kind}] ${c.statement}\n   근거 ${basisLabels(c).join(" ")}\n${c.checks.map((k) => `   - (${k.outcome}) ${k.question} → ${k.answer}`).join("\n")}`;
-  const claims = x.p5.claims.map(claimLine).join("\n");
-  const empty = x.p5.empty_counter_slots.map((e) => `- ${e.claim} · ${e.question} — 없는 것: ${e.missing}`).join("\n");
+  const NO_P45 = "(이 사건은 슬롯 표 · 해석 · 반증 단계를 돌리지 않았다 — 이 칸은 비어 있다. 아래 사실 목록과 구절에서 직접 찾는다: 독자의 오해를 막는 문장 · 아직 문서에 없는 것도 사실 목록에서 스스로 가려낸다)";
+  const claims = x.noP45 ? NO_P45 : x.p5.claims.map(claimLine).join("\n");
+  const empty = x.noP45 ? NO_P45 : x.p5.empty_counter_slots.map((e) => `- ${e.claim} · ${e.question} — 없는 것: ${e.missing}`).join("\n");
   const politics = x.p5.claims_d5.map((c) => `${c.label} ${c.statement}`).join("\n") || "(없음)";
   const ver = new Map(x.lib.versions.map((v) => [`${v.concept_id}@${v.version}`, v]));
   const library = x.lib.concepts.filter((c) => c.status === "CANONICAL").map((c) => {
@@ -369,9 +374,10 @@ export type Human = {
   };
   after_write?: {
     ok?: boolean; by: string; minutes?: number; note?: string;
-    edits?: { id: string; t: string; src?: string[]; calc?: { n: string; how: string }[]; why: string }[];
+    edits?: { id: string; t: string; src?: string[]; calc?: { n: string; how: string }[]; why: string; no_src?: boolean }[];   // no_src (P-T1) — 근거를 비운다 (독자의 짐작처럼 구절이 받칠 수 없는 글). 없으면 전과 같다: src 를 안 적으면 지금 근거 그대로
     drops?: string[];
     picture_ok?: boolean; blocked_seen?: boolean; read_ok?: boolean;
+    reach?: Record<string, "full" | "part" | "none">;   // P-T1 — 사슬 고리의 닿음을 사람이 바꾼다 (고리 id → reach). 짓기에만 얹힌다 (applyReach). 칸이 없으면 아무것도 바뀌지 않는다
   };
 };
 export function readHuman(epCode: string): Human | null {
@@ -414,6 +420,14 @@ export function approvedDesign(x: L): { raw: Raw; design: Design; proposed: Desi
   const human = readHuman(x.ep.code);
   const { design: d, changed } = applyGate1(design, human?.after_design);
   return { raw, design: d, proposed: design.frames, human, changed };
+}
+/** 게이트 2 의 고리 닿음 고침 (after_write.reach)을 설계에 얹는다 — 순수 함수. 칸이 없으면 설계를 그대로 돌려준다 (P-T1: 계약은 part 를 멈춘 고리로 세지 않는다 — CHAIN_NO_STOP) */
+export function applyReach(design: Design, reach: NonNullable<Human["after_write"]>["reach"]): { design: Design; changed: string[] } {
+  if (!reach || !Object.keys(reach).length) return { design, changed: [] };
+  for (const id of Object.keys(reach)) if (!design.chain.nodes.some((nd) => nd.id === id)) throw new Error(`human.json: after_write.reach 의 고리 ${id} 는 설계에 없다`);
+  const changed: string[] = [];
+  const nodes = design.chain.nodes.map((nd) => (reach[nd.id] && reach[nd.id] !== nd.reach ? (changed.push(`고리 ${nd.id} 의 닿음 ${nd.reach} → ${reach[nd.id]} (게이트 2)`), { ...nd, reach: reach[nd.id]! }) : nd));
+  return { design: { ...design, chain: { ...design.chain, nodes } }, changed };
 }
 /** 글을 쓰기 전에 — 게이트 1 을 지났나 (/2 부터) */
 export function gate1Problem(x: L, human: Human | null): string | null {
@@ -496,7 +510,7 @@ function readRepairs(x: L): RepairLine[] {
 export function humanRepairs(h: Human | null): RepairLine[] {
   const g = h?.after_write;
   return [
-    ...(g?.edits ?? []).map((e) => ({ id: e.id, action: "fix" as const, t: e.t, src: e.src ?? [], calc: e.calc ?? [], why: `사람 (게이트 2): ${e.why}`, round: 0 })),
+    ...(g?.edits ?? []).map((e) => ({ id: e.id, action: "fix" as const, t: e.t, src: e.no_src ? [] : e.src ?? [], calc: e.calc ?? [], why: `사람 (게이트 2): ${e.why}`, round: 0, ...(e.no_src ? { no_src: true } : {}) })),
     ...(g?.drops ?? []).map((id) => ({ id, action: "drop" as const, t: "", src: [], calc: [], why: "사람 (게이트 2): 뺀다", round: 0 })),
   ];
 }
@@ -825,14 +839,17 @@ export function writerOf(argv: string[]): string {
 }
 export function build(epCode: string, writer: string) {
   const x = load(epCode);
-  const { raw: draw, design, proposed, human, changed } = approvedDesign(x);
+  const ad = approvedDesign(x);
+  const { raw: draw, proposed, human } = ad;
+  const rc = applyReach(ad.design, human?.after_write?.reach);
+  const design = rc.design, changed = [...ad.changed, ...rc.changed];
   const lw = latestWrite(x, writer);
   if (!lw) throw new Error(`--write-call 을 먼저 (${writer})`);
   const repairs = writer === MODELS.write.model ? readRepairs(x) : [];
   const first = applyRepairs(lw.written, repairs);
   // 사람의 고침 (게이트 2)은 고치기 단계 뒤에 얹는다. 근거를 적지 않은 고침은 지금 근거를 그대로 둔다
   const now = new Map(textsOf(first.written).map((t) => [t.id, t.wt]));
-  const hr = (x.v1 ? [] : humanRepairs(human)).map((r) => (r.action === "fix" && !r.src.length && now.has(r.id) ? { ...r, src: now.get(r.id)!.src, calc: r.calc.length ? r.calc : now.get(r.id)!.calc } : r));
+  const hr = (x.v1 ? [] : humanRepairs(human)).map((r) => (r.action === "fix" && !r.src.length && !(r as { no_src?: boolean }).no_src && now.has(r.id) ? { ...r, src: now.get(r.id)!.src, calc: r.calc.length ? r.calc : now.get(r.id)!.calc } : r));
   const second = applyRepairs(first.written, hr);
   const written = second.written, applied = [...first.applied, ...second.applied], cantDrop = [...first.cantDrop, ...second.cantDrop];
   const b = assemble(x, design, written);

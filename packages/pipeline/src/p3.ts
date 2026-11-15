@@ -54,6 +54,13 @@ export const EVENTS: Record<string, EventConf> = {
     storyline: { code: "SL-iran-war", title: "이란 전쟁", docs: ["TSY-IR-1008", "TSY-IR-1021", "CC-1005", "CC-1010", "WH-0619", "WH-1025"], basis: "P-2 소스 팩 pack.json 의 group \"스토리라인\" (why: SL-iran-war 9/16 뒤) · P-4 가 더한 WH-0619 · WH-1025" },
     after_docs: ["SP-HAM-1105"],
   },
+  // P-T1 (D109) — 국내 정책 사건 (보도참고자료 + 고시 + 법). 더하기만 했다: FOMC 두 사건의 줄 · 프롬프트는 그대로다.
+  // prev_meeting 칸은 프롬프트에 "직전 회의"로 나간다 — 여기서는 직전 차수 (11차)의 고시일. storyline = 3월부터 이어진 최고가격제의 문서 (범위 줄이 "처음부터 사건 날짜까지"가 된다)
+  "MOTIR-20261113-OIL-PRICE-CAP": {
+    code: "MOTIR-20261113-OIL-PRICE-CAP", what: "산업통상부의 12차 석유 최고가격 동결 발표 (2026-11-13 발표 · 11월 14일 00시부터 4주 적용) — 2026년 3월 13일 시행된 석유 최고가격제의 열두 번째 차수", date: "2026-11-13", prev_meeting: "2026-10-16",
+    out: R("packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/p3"), cacheOut: R("packages/pipeline/.cache/p3/MOTIR-20261113-OIL-PRICE-CAP"), kind: "pack",
+    storyline: { code: "SL-oil-price-cap", title: "석유 최고가격제 (2026년 3월 ~)", docs: ["LAW-PETRO", "RULE-CAP", "PR-0312", "PR-0327-GAS", "PR-0424", "PR-0618", "PR-0626", "PR-0724", "PR-0821", "PR-0918", "PR-1016"], basis: "P-T1 소스 팩 pack.json 의 group \"스토리라인\" — 근거 법 · 규정 둘 + 지난 차수 보도참고자료 아홉 (logs/pipeline/P-T1.md ②)" },
+  },
   // 9월 — 정답(골든 사실 60)이 있는 데서 추출 품질을 잰다. 골든(fixtures/)에는 쓰지 않는다
   "FOMC-20260916": {
     code: "FOMC-20260916", what: "미국 연준 FOMC 의 9월 통화정책 회의 (2026-09-15 ~ 16)", date: "2026-09-16", prev_meeting: "2026-07-29",

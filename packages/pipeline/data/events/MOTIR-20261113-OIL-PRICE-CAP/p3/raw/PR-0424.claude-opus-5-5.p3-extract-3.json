@@ -1,0 +1,29 @@
+{
+  "_what": "P-3 모델 출력 (p3.ts 가 쓴다 — 손으로 고치지 않는다). 요청 머리 · 키는 기록하지 않는다. 요청 본문은 지문(request_sha256)만 — 프롬프트는 src/p3-prompt.ts p3-extract/3 · 원문은 text_sha256 · 모델이 받은 글(표를 가린 것)은 input_sha256",
+  "event": "MOTIR-20261113-OIL-PRICE-CAP",
+  "source_label": "PR-0424",
+  "source_id": "c35954e8-d235-400a-b3da-05ed2966087e",
+  "text_sha256": "912ff5138ae79c71216dd355d72f80ddffdfce4c3a43f8fcba98275434c9b8a5",
+  "input_sha256": "912ff5138ae79c71216dd355d72f80ddffdfce4c3a43f8fcba98275434c9b8a5",
+  "prompt_version": "p3-extract/3",
+  "model_requested": "claude-opus-5-5",
+  "model": "claude-opus-5-5",
+  "effort": "medium",
+  "request_sha256": "5aec86fe3b7121bf7d8f49964792f9d840a92c7d6d63208877ea4d0b5504bf93",
+  "response_id": "msg_011Ch4nzJkFVSq8YwNsc2XPw",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 1828,
+    "output_tokens": 3757,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 4999
+  },
+  "duration_ms": 154006,
+  "cost_usd": 0.041726,
+  "called_at": "2026-11-15T13:31:24.291Z",
+  "output_sha256": "ff06a1392e44e46f204f0b236f0fcbc067c4d6ef99dadbb7031b979824831537",
+  "output": "{\"facts\":[{\"claim_text\":\"산업통상부는 4월 24일 0시부터 향후 2주간 적용할 4차 석유 최고가격을 발표함\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-23\",\"passages\":[\"- 4월 24일 0시부터 향후 2주간 적용할 4차 석유 최고가격 발표 -\"]},{\"claim_text\":\"4차 석유 최고가격은 리터당 휘발유 1,934원, 경유 1,923원, 등유 1,530원으로 지난 2차, 3차 최고가격에서 동결됨\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-23\",\"passages\":[\"리터당 휘발유 1,934원, 경유 1,923원, 등유 1,530원으로 지난 2차, 3차\",\"최고가격에서 동결하였다.\"]},{\"claim_text\":\"산업부는 4차 최고가격 결정에서 국제제품가격이 하락 추세이긴 하나 국제유가 불안이 여전히 남아있는 점과 석유수급 위기 상황에서의 수요관리 측면을 고려했다고 설명함\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-23\",\"passages\":[\"하락 추세*이긴 하나 국제유가 불안이 여전히 남아있는 점과 석유수급\",\"위기 상황에서 수요관리 측면을 고려하였다. 또한, 고유가로 서민경제가\"]},{\"claim_text\":\"산업부는 고유가로 서민경제가 어려운 상황에서 국민 부담 경감을 위해 정부가 일정 부분 책임을 분담하는 것이 바람직하다고 판단했다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-23\",\"passages\":[\"위기 상황에서 수요관리 측면을 고려하였다. 또한, 고유가로 서민경제가\",\"어려운 상황에서 국민 부담 경감을 위해 정부가 일정 부분 책임을 분담하\",\"는 것이 바람직하다고 판단하였고, 석유제품이 소비자물가에서 차지하는\"]},{\"claim_text\":\"산업부는 고유가로 인해 3월 생산자 물가가 4년여 만에 최대폭으로 상승하는 등 석유가격 인상에 따른 물가상승 부담을 사전에 차단할 필요성도 고려했다고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-23\",\"passages\":[\"비중**과 고유가로 인해 3월 생산자 물가가 4년여 만에 최대폭으로 상승\",\"하는 등 석유가격 인상에 따른 물가상승 부담을 사전에 차단할 필요성도\"]},{\"claim_text\":\"2주 단위 평균 국제제품가격 변동률은 휘발유 △8%, 경유 △14%, 등유 △2%였음\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04\",\"passages\":[\"* 2주 단위 평균 국제제품가격 변동률: 휘발유 △8%, 경유 △14%, 등유 △2%\"]},{\"claim_text\":\"석유제품이 소비자물가에서 차지하는 비중은 4.66%('22년 기준)임\",\"fact_type\":\"MEASUREMENT\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2022\",\"passages\":[\"** 석유제품이 소비자물가에서 차지하는 비중 4.66% ('22년 기준)\"]},{\"claim_text\":\"산업부는 최고가격제 시행으로 국내 정유사가 입은 손실을 석유사업법 제23조 제3항에 따라 정부 재정에서 보전해 주기로 이미 발표한 바 있음\",\"fact_type\":\"OFFICIAL_ACTION\",\"actor\":null,\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":null,\"passages\":[\"입은 손실은 석유사업법 제23조 제3항에 따라 정부 재정에서 보전해 주기로\"]},{\"claim_text\":\"산업부는 손실보전 정산을 분기(3개월)별로 하며, 각 정유사가 3.13일 최고가격제 시행일 이후 6월 말까지의 손실액을 자체 계산해 회계법인 검수를 거쳐 제출하면 '최고액 정산위원회'를 통해 검증한 후 보전할 계획이라고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-23\",\"passages\":[\"손실보전 정산은 분기(3개월)별로 이루어\",\"지게 되며, 각 정유사가 3.13일 최고가격제 시행일 이후 6월 말까지의 손\",\"회계, 법률, 석유시장 전문가로 구성된 '최고액 정산위원회'를 통해 세밀히\"]},{\"claim_text\":\"정부는 국내외 상황을 실시간으로 살펴보면서 기민하면서도 유연하게 최고가격제를 운영해나갈 예정이라고 밝힘\",\"fact_type\":\"OFFICIAL_CLAIM\",\"actor\":\"산업통상부 (보도참고자료)\",\"volatility\":\"STABLE\",\"as_of\":null,\"event_at\":\"2026-04-23\",\"passages\":[\"살펴보면서 기민하면서도 유연하게 최고가격제를 운영해나갈 예정이다.\"]}]}",
+  "output_in": "here",
+  "mode": "batch",
+  "batch_id": "msgbatch_01BSBcv8SXPjWhmTXTnoQMvh"
+}
