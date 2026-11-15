@@ -1,0 +1,27 @@
+{
+  "_what": "짧은 이야기 단계의 모델 출력 (repair — short.ts 가 쓴다 · 손으로 고치지 않는다). 프롬프트 src/episode-prompt.ts episode-repair/2",
+  "event": "GPDP-20261114-META-GALLERY",
+  "short": "meta-gallery",
+  "kind": "repair",
+  "prompt_version": "episode-repair/2",
+  "model": "claude-opus-5-5",
+  "model_requested": "claude-opus-5-5",
+  "effort": "medium",
+  "input_sha256": "2a2c130c4b43e179d7d26b4e76d80975f5b5c728e28298bf5bd38cceee45c920",
+  "request_sha256": "2273673c9e3ceb2d32a79cccba3280cdaca39209678e644d32b18e4df187b615",
+  "response_id": "msg_011Ch4o5NHxzxRy55hpuxqAY",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 3747,
+    "output_tokens": 804,
+    "cache_creation_input_tokens": 1751,
+    "cache_read_input_tokens": 0
+  },
+  "duration_ms": 123610,
+  "cost_usd": 0.019911,
+  "called_at": "2026-11-15T13:31:49.173Z",
+  "output_sha256": "c78872bd4d95b0f715ae5054837dacc24241595e54e0aa3e0a1141b53327bc3a",
+  "output": "{\"items\":[{\"id\":\"cover.dek\",\"action\":\"fix\",\"t\":\"이탈리아 개인정보 감독기구가 메타 플랫폼스 아일랜드에 8억 500만 유로의 과징금을 매겼어요. 안드로이드용 페이스북 앱이 따로 동의를 받지도, 제대로 알리지도 않고 이탈리아 사용자의 폰 안 사진과 영상에 닿았기 때문이에요.\",\"src\":[\"p01\",\"p02\",\"p03\"],\"calc\":[{\"n\":\"8\",\"how\":\"805 million euros = 8억 500만 유로\"},{\"n\":\"500\",\"how\":\"805 million euros = 8억 500만 유로\"}],\"why\":\"원문의 단서인 '구체적 동의 없이, 제대로 알리지 않고'를 되살려 접근 자체만으로 과징금이 매겨진 것처럼 읽히지 않게 했어요.\"},{\"id\":\"where.body[0]\",\"action\":\"fix\",\"t\":\"안드로이드용 페이스북 앱에는 2023년부터 ‘갤러리에서 추천 받기’라는 기능이 있었어요. 페이스북을 보는 동안, 내 폰 갤러리에 있는 사진과 영상을 “이거 올려 볼래요?” 하듯 추천으로 보여 주는 기능이에요.\",\"src\":[\"p03\",\"p04\"],\"calc\":[],\"why\":\"원문이 안드로이드용 페이스북 앱에 한정하므로 '안드로이드용'을 더하고, 그 한정을 받치는 p03을 근거에 붙였어요.\"}]}",
+  "mode": "batch",
+  "batch_id": "msgbatch_01KVVmfbbxJoKj4C1FvDjdBo"
+}

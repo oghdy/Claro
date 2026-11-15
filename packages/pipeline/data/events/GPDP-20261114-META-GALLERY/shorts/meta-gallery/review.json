@@ -1,0 +1,219 @@
+{
+  "_what": "짧은 이야기의 검사 결과 · 사람이 확인할 것 (short.ts 가 쓴다 — 손으로 고치지 않는다). 사람의 확인은 같은 폴더 human.json 에",
+  "short": "meta-gallery",
+  "event": "GPDP-20261114-META-GALLERY",
+  "write": {
+    "prompt_version": "short-write/1",
+    "model": "claude-fable-5-2",
+    "effort": "medium",
+    "request_sha256": "3bd2cf258be0d50c76e32e253a7015a9da71fdb006c5c4df2b3224a645c418ac"
+  },
+  "contract": {
+    "ok": true,
+    "errors": [],
+    "warnings": [],
+    "stats": {
+      "quotes": 20,
+      "docs": 1,
+      "texts": 19,
+      "texts_with_digits": 6,
+      "exempt": [
+        "/scenes/cover/dek: \"이탈리아 개인정보 감독기구가 메타 플랫폼스 아일랜드에 8억 500만 유로의 과징금을 매겼어요. 감독기구는 안…\" (계산 — 8 = 805 million euros = 8억 500만 유로 · 500 = 805 million euros = 8억 500만 유로)",
+        "/scenes/cover/meta: \"2026년 11월 14일 발표 · 로마\" (계산 — 11 = November = 11월)",
+        "/scenes/where/body/1: \"조사는 2025년 7월에 시작됐어요. 볼차노 소비자보호센터가 민원을 냈고, 기구가 직접 기술 분석을 했어요.\" (계산 — 7 = July = 7월)",
+        "/scenes/why/verdict: \"기구는 메타가 구체적인 동의를 받지 않았고 제대로 알리지도 않았다고 보고, 8억 500만 유로의 과징금을 매…\" (계산 — 8 = 805 million = 8억 500만 · 500 = 805 million = 8억 500만 · 2,000 = 20 million = 2,000만)"
+      ],
+      "tools_from": 0
+    }
+  },
+  "entail": {
+    "prompt_version": "episode-entail/2",
+    "model": "claude-opus-5-5",
+    "effort": "low",
+    "texts": 19,
+    "with_src": 12,
+    "risky": 12,
+    "judged": [
+      {
+        "id": "cover.dek",
+        "risk": [
+          "숫자",
+          "고친 글"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "cover.meta",
+        "risk": [
+          "숫자"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "entry.breaker",
+        "risk": [
+          "기관의 판단"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "where.body[0]",
+        "risk": [
+          "숫자",
+          "인과",
+          "고친 글"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "where.body[1]",
+        "risk": [
+          "숫자"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "entry.flip_note",
+        "risk": [
+          "한글 수",
+          "기관의 판단",
+          "인과"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.lead",
+        "risk": [
+          "한글 수"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.real[0].body",
+        "risk": [
+          "기관의 판단"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.real[1].body",
+        "risk": [
+          "기관의 판단"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.real[2].body",
+        "risk": [
+          "한글 수",
+          "기관의 판단"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "why.verdict",
+        "risk": [
+          "숫자",
+          "기관의 판단",
+          "인과"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      },
+      {
+        "id": "keep.advice",
+        "risk": [
+          "숫자",
+          "기관의 판단",
+          "인과"
+        ],
+        "verdict": "ENTAILED",
+        "issues": []
+      }
+    ],
+    "not_judged": [],
+    "low_risk_skipped": []
+  },
+  "repairs": [
+    {
+      "id": "cover.dek",
+      "round": 1,
+      "action": "fix",
+      "before": "이탈리아 개인정보 감독기구가 메타 플랫폼스 아일랜드에 8억 500만 유로의 과징금을 매겼어요. 안드로이드용 페이스북 앱이 이탈리아 사용자의 폰 안 사진과 영상에 닿은 일 때문이에요.",
+      "after": "이탈리아 개인정보 감독기구가 메타 플랫폼스 아일랜드에 8억 500만 유로의 과징금을 매겼어요. 안드로이드용 페이스북 앱이 따로 동의를 받지도, 제대로 알리지도 않고 이탈리아 사용자의 폰 안 사진과 영상에 닿았기 때문이에요.",
+      "why": "원문의 단서인 '구체적 동의 없이, 제대로 알리지 않고'를 되살려 접근 자체만으로 과징금이 매겨진 것처럼 읽히지 않게 했어요."
+    },
+    {
+      "id": "where.body[0]",
+      "round": 1,
+      "action": "fix",
+      "before": "페이스북 앱에는 2023년부터 ‘갤러리에서 추천 받기’라는 기능이 있었어요. 페이스북을 보는 동안, 내 폰 갤러리에 있는 사진과 영상을 “이거 올려 볼래요?” 하듯 추천으로 보여 주는 기능이에요.",
+      "after": "안드로이드용 페이스북 앱에는 2023년부터 ‘갤러리에서 추천 받기’라는 기능이 있었어요. 페이스북을 보는 동안, 내 폰 갤러리에 있는 사진과 영상을 “이거 올려 볼래요?” 하듯 추천으로 보여 주는 기능이에요.",
+      "why": "원문이 안드로이드용 페이스북 앱에 한정하므로 '안드로이드용'을 더하고, 그 한정을 받치는 p03을 근거에 붙였어요."
+    },
+    {
+      "id": "cover.dek",
+      "round": 2,
+      "action": "fix",
+      "before": "이탈리아 개인정보 감독기구가 메타 플랫폼스 아일랜드에 8억 500만 유로의 과징금을 매겼어요. 안드로이드용 페이스북 앱이 따로 동의를 받지도, 제대로 알리지도 않고 이탈리아 사용자의 폰 안 사진과 영상에 닿았기 때문이에요.",
+      "after": "이탈리아 개인정보 감독기구가 메타 플랫폼스 아일랜드에 8억 500만 유로의 과징금을 매겼어요. 감독기구는 안드로이드용 페이스북 앱이 따로 동의를 받지도, 제대로 알리지도 않고 이탈리아 사용자의 폰 안 사진과 영상에 닿았다고 밝혔어요.",
+      "why": "구절은 과징금과 접근 사실을 나란히 적을 뿐 인과로 잇지 않으므로, '때문이에요'를 빼고 감독기구가 밝힌 사실로 나란히 적었다."
+    }
+  ],
+  "human_cells": {
+    "flip": {
+      "proposal": "“큰 과징금을 받은 까닭” ≠ “사진을 가져다 썼다”",
+      "strength": "strong",
+      "basis": "문서는 이번 절차가 AI 학습 이용 문제를 다루지 않았다고 적었고(p14), 폰 안 정보에 닿는 것은 전송이나 피해 여부와 상관없이 동의가 필요하다고 적었다(p11 p12). 위반으로 적힌 것은 구체적 동의와 제대로 된 안내 없이 접근했다는 것이다(p03).",
+      "basis_src": [
+        "p03",
+        "p11",
+        "p12",
+        "p14"
+      ],
+      "ok": null
+    },
+    "not_drawn": {
+      "proposal": [
+        "사진이 메타 서버로 올라갔다 / 안 올라갔다, AI 학습에 쓰였다 / 안 쓰였다 — 문서는 이번 절차가 AI 학습을 다루지 않았고 메타가 부인한다고만 적었다. 어느 쪽으로도 쓰지 않는다",
+        "메타의 속마음 · 의도 (일부러 숨겼다, 몰래 했다) — 문서에 없다. 기구가 확인한 사실(권한 하나 · 일반적 안내 · 기본 켜짐)만 쓴다",
+        "한국 사용자 · 한국 법에 어떤지, 다른 나라 앱도 그런지 — 이탈리아의 일이고 문서에 없다. '앱들은 흔히'처럼 넓히지 않는다",
+        "과징금을 원 · 달러로 바꾼 값, 사람 수로 나눈 값, 메타의 전 세계 매출액 역산 — 문서에 없는 수. 유로와 문서의 비율만 쓴다",
+        "2019년의 앞선 결정이 무엇이었는지, 2026년에 나온 클라우드 처리 기능이 위법인지 — 문서는 있었다 · 따로 살필 수 있다고만 적었다"
+      ],
+      "ok": null
+    },
+    "death": {
+      "proposal": false,
+      "checked": null
+    },
+    "weight": {
+      "proposal": "short",
+      "why": "뒤집기가 하나 (가져다 썼느냐가 아니라 닿기 전의 허락)이고 문서가 글자로 받치며, 눌러 볼 차례가 없다.",
+      "ok": null
+    },
+    "series": {
+      "proposal": {
+        "series_id": "0e2938c1-995f-43df-9c0b-fc60c0f78025",
+        "code": "privacy",
+        "name": "내 정보는 누가 지키나",
+        "sub": "털린 곳과 벌, 그리고 지킬 의무"
+      },
+      "ok": null
+    },
+    "sibling": null,
+    "tools_from": null
+  },
+  "blocked": [],
+  "publishable": false
+}

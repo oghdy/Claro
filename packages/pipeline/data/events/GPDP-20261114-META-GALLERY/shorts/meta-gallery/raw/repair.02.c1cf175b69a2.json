@@ -1,0 +1,27 @@
+{
+  "_what": "짧은 이야기 단계의 모델 출력 (repair — short.ts 가 쓴다 · 손으로 고치지 않는다). 프롬프트 src/episode-prompt.ts episode-repair/2",
+  "event": "GPDP-20261114-META-GALLERY",
+  "short": "meta-gallery",
+  "kind": "repair",
+  "prompt_version": "episode-repair/2",
+  "model": "claude-opus-5-5",
+  "model_requested": "claude-opus-5-5",
+  "effort": "medium",
+  "input_sha256": "c1cf175b69a2394182196f53bbc81ea5d8c0039012e32d34a08ca36d2d02fa7d",
+  "request_sha256": "f8b53d9d95a3fd4c6848fab98c60f91ff46d13b23766b351f8e2eec261de59ed",
+  "response_id": "msg_011Ch4oPbRkDKw55qYiy5Kmg",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 2980,
+    "output_tokens": 535,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 1751
+  },
+  "duration_ms": 123793,
+  "cost_usd": 0.011485,
+  "called_at": "2026-11-15T13:36:12.473Z",
+  "output_sha256": "8d78db953f2c7da0808a1b8514c217dc1ea31ea6c3da9ba84e7f30f32fed93ed",
+  "output": "{\"items\":[{\"id\":\"cover.dek\",\"action\":\"fix\",\"t\":\"이탈리아 개인정보 감독기구가 메타 플랫폼스 아일랜드에 8억 500만 유로의 과징금을 매겼어요. 감독기구는 안드로이드용 페이스북 앱이 따로 동의를 받지도, 제대로 알리지도 않고 이탈리아 사용자의 폰 안 사진과 영상에 닿았다고 밝혔어요.\",\"src\":[\"p01\",\"p02\",\"p03\"],\"calc\":[{\"n\":\"8\",\"how\":\"805 million euros = 8억 500만 유로\"},{\"n\":\"500\",\"how\":\"805 million euros = 8억 500만 유로\"}],\"why\":\"구절은 과징금과 접근 사실을 나란히 적을 뿐 인과로 잇지 않으므로, '때문이에요'를 빼고 감독기구가 밝힌 사실로 나란히 적었다.\"}]}",
+  "mode": "batch",
+  "batch_id": "msgbatch_016JAPcNDdqwR8G6CTH2ELCX"
+}

@@ -1,0 +1,48 @@
+{
+  "_what": "P-T2 소스 팩 목록 — 11/15 오늘의 해외 짧은 이야기 (D107 ~ D109). 사건 하나 = 목록 하나. 사람(작업 세션)이 쓴다. packages/pipeline/src/pack.ts 가 이 목록에서 같은 폴더의 store.json · store.documents.json · fetch.json 을 쓴다. 사실 · 해석 · 요점은 없다. **이 Step 은 기관 누리집에 한 번도 요청하지 않았다** — 문서의 바이트는 S-3 가 2026-11-15 에 받아 둔 캐시 (packages/pipeline/.cache/s3/garante-10321080.html · sha256 96d88c8f…5270)를 그대로 pack.ts 의 캐시 자리에 옮긴 것이고, robots.txt 도 S-3 가 같은 때 받아 둔 바이트 (.cache/s3/garante-robots.txt)로 읽었다 (네트워크를 막고 돌렸다 — logs/pipeline/P-T2.md ②). 그래서 fetch.json 의 문서 fetched_at 은 S-3 캐시 파일의 시각 (2026-11-15 21:29:39 KST)을 옮겨 적은 것 · content_type 은 응답 머리를 S-3 가 남기지 않아 'text/html' 로 적은 것 · robots 의 fetched_at 은 pack.ts 가 캐시 바이트를 읽은 때다 (실제로 받은 때는 21:29:35 KST). 고른 곳: packages/pipeline/data/collect/days/2026-11-15-news/sheet.md W1",
+  "event": {
+    "code": "GPDP-20261114-META-GALLERY",
+    "title": "이탈리아 개인정보 감독기구 (Garante per la protezione dei dati personali) — 안드로이드 페이스북 앱의 '갤러리에서 추천 받기' 기능이 폰 안 사진 · 영상에 닿는 동의를 따로 받지 않았다며 Meta Platforms Ireland Limited 에 8억 500만 유로 (2026-11-14 발표)",
+    "occurred_at": "2026-11-14",
+    "storyline_code": null,
+    "_gate1": "S-3 가 고르고 (logs/pipeline/S-3.md W1) 도윤이 go (D108 · D109)",
+    "_dates": "보도자료 끝의 날짜 'Roma, 14 novembre 2026' / 'Rome, 14 November 2026'. 결정 (provvedimento)을 한 날 · 결정문 번호는 이 문서에 없다 — Event.occurred_at 은 발표일을 적었다"
+  },
+  "slots_basis": "P-T2 — 짧은 이야기용. 슬롯 표 (P-4)를 돌리지 않는다. 문서를 거는 이름일 뿐이다",
+  "slots": [
+    "무엇을 결정했나",
+    "왜 그렇게 봤나",
+    "법적 근거",
+    "무엇을 하라고 했나"
+  ],
+  "count_terms": [
+    "consent",
+    "consenso",
+    "gallery",
+    "galleria",
+    "artificial intelligence",
+    "805"
+  ],
+  "items": [
+    {
+      "label": "GPDP-10321080",
+      "group": "사건",
+      "title": "Garante per la protezione dei dati personali — Comunicato stampa 「Facebook: il Garante Privacy sanziona Meta per 805 milioni di euro」 / English version 「The Garante has fined Meta Platforms Ireland Limited 805 million euros」 (Doc-Web 10321080 · 2026-11-14)",
+      "publisher": "garanteprivacy.it",
+      "url": "https://www.garanteprivacy.it/web/guest/home/docweb/-/docweb-display/docweb/10321080",
+      "slots": [
+        "무엇을 결정했나",
+        "왜 그렇게 봤나",
+        "법적 근거",
+        "무엇을 하라고 했나"
+      ],
+      "why": "이 사건의 1차 — 기관이 낸 보도자료 (이탈리아 말 본문 + 같은 쪽 아래 영어판 'ENGLISH VERSION'). 누구에게 얼마 (Meta Platforms Ireland Limited · 805 million euros) · 무슨 기능 ('Get tips from your gallery while browsing Facebook' · 2023년부터) · 조사가 본 것 셋 (허락 하나가 앱 전체 · 뭉뚱그린 안내 · 기본값 켜짐) · 어긴 조항 (Privacy Code 제122조 — ePrivacy 지침) · '보냈는지 · 피해가 있는지와 상관없이' 접근 자체에 동의가 필요 · 아일랜드 관할 주장을 물리침 · AI 학습은 이번 절차가 다루지 않음 (메타는 부인) · 60일 안에 할 것 · 30일 · 90일 보고 · 금액을 정할 때 본 것 · 그룹 세계 매출의 약 0.47%. 없는 것: 결정문 본문 · 결정한 날 · 사진이 서버로 갔는지 · 메타의 입장 (AI 부인 한 마디뿐) · 불복 여부. 자연인의 이름 없음 (회사 · 소비자 단체 · 기관뿐) — 기관의 재사용 조건 'Dati personali' 에 걸리지 않는다. 뽑은 글은 쪽 전체다 (메뉴 · 꼬리말이 섞여 있다 — 글을 바꾸지 않는다). 짧은 이야기는 영어판 토막만 구절로 쓴다 (data/shorts/meta-gallery.json 의 part)",
+      "url_basis": "S-3 가 2026-11-15 21:29 KST 에 우리 신원 표시 (ClaroPipeline/0.1 …)로 받아 둔 바이트 (117,152 바이트 · sha256 96d88c8f57cc26c49dafe12ed18af67180801e96e4e287309b43a35bf5c35270). 이 Step 은 다시 받지 않았다 (기관의 자동 받기 조건이 연락처 든 신원 표시를 요구한다 — S3-b · D109). robots.txt (S-3 캐시 바이트) 에 이 경로를 막는 규칙 없음",
+      "language": "it",
+      "live": true,
+      "published_at": "2026-11-14",
+      "published_evidence": "Roma, 14 novembre 2026",
+      "published_note": "보도자료 끝의 곳 · 날짜 줄 (영어판에도 'Rome, 14 November 2026'). 살아 있는 쪽이다 (메뉴 · 꼬리말이 요청마다 바뀔 수 있다) — 다시 받아 견주지 않는다"
+    }
+  ]
+}

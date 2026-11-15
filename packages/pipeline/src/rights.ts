@@ -3,6 +3,8 @@
 //   2. 공공누리 제1유형 표시가 있는 한국 공공기관 저작물 (D53) — 출처 표시하면 상업 이용 · 변경 가능. git 에 둔다 (출처 표시)
 //   3. 한국 법령 (국가법령정보센터) — 저작권법 제7조 (보호받지 못하는 저작물 — 헌법 · 법률 · 명령 …). git 에 둔다 (D53)
 //   4. 그 밖 — 권리 **미확인**. 전문은 git 밖 캐시에만. git 에는 서지 · 해시 · span 만
+//   (더함 · P-T2 · D109) 5. 기관이 스스로 밝힌 **재사용 허락 — 출처를 밝히고 글을 바꾸지 않는 조건** (REUSE_CITED_UNALTERED). 발행처에 묶는다 (사이트의 조건 글이 근거).
+//      바꾸지 않은 전문을 출처와 함께 git 에 둔다. 변경은 안 된다 (can_transform false) — 발췌 · 요약은 그렇다고 밝힌다. 판정은 PM (D109). 1 ~ 4 의 판정은 그대로다
 // 이 넷으로 못 가르면 미확인이다. 2 · 3 은 발행처(도메인)에 묶는다 — 그 기관 사이트 전체의 표시가 근거다. 공공누리 2 ~ 4 유형 · 표시 없음 = 미확인 (D53).
 // 문서 단위 (D69 · E3-1b): 발행처는 미확인이어도 **문서 안에** 공공누리 제1유형 표시가 있으면 그 문서만 git — pack.json 항목의 doc_rights (hold_text 의 반대).
 //   근거는 무엇을 봤나 — 받은 바이트의 해시 · 쪽 · 그림 · 그림 스트림의 해시. 발행처 행의 can_* 은 그대로 (발행처 단위로 넓히지 않는다).
@@ -11,9 +13,9 @@
 // 계약의 타입만 가져온다 (import type — 노드 타입 지우기로 돌 때 지워진다). 칸 이름 · 모양은 DATA_MODEL 이 원본
 import type { DocumentRights, SourceRegistry } from "../../contract/src/data-model.ts";
 
-export type Rights = "US_FEDERAL_17USC105" | "KOGL_TYPE1" | "KR_STATUTE" | "UNCONFIRMED";
+export type Rights = "US_FEDERAL_17USC105" | "KOGL_TYPE1" | "KR_STATUTE" | "REUSE_CITED_UNALTERED" | "UNCONFIRMED";
 /** 전문을 공개 저장소(git)에 둘 수 있는 권리 — verify-source-pack.py 의 STORABLE_RIGHTS 와 같다 */
-export const STORABLE: readonly Rights[] = ["US_FEDERAL_17USC105", "KOGL_TYPE1", "KR_STATUTE"];
+export const STORABLE: readonly Rights[] = ["US_FEDERAL_17USC105", "KOGL_TYPE1", "KR_STATUTE", "REUSE_CITED_UNALTERED"];
 
 // 발행처(Source.publisher) → 연방 기관. 값은 그 기관 이름 (근거 글에 쓴다)
 export const US_FEDERAL: Record<string, string> = {
@@ -33,6 +35,19 @@ export const KOGL_TYPE1: Record<string, string> = {
 // 한국 법령 — 발행처 → 무엇. 저작권법 제7조 제1호 (법령) · 제2호 (국가의 고시 · 공고 · 훈령 …) — 고시(행정규칙)와 별표도 같다 (E3-1)
 export const KR_STATUTE: Record<string, string> = {
   "law.go.kr": "국가법령정보센터 (법제처) — 법률 · 대통령령 본문과 별표 · 행정규칙(고시) 본문",
+};
+// 재사용 허락 (출처 표시 + 글을 바꾸지 않음) — 발행처 → 기관 · 근거 문장 (그 사이트가 스스로 밝힌 글 그대로) · 조건 주소 · 본 날 (P-T2 · D109 — PM 판정).
+// 공공누리 제1유형보다 좁다: 변경 불가 · 발췌와 요약은 그렇다고 밝힘 · 원문 링크와 본 날짜를 함께. 상업 이용은 조건이 말하지 않는다 (null)
+export const REUSE_CITED_UNALTERED: Record<string, { who: string; basis: string; terms_url: string; seen_at: string; also: string }> = {
+  "garanteprivacy.it": {
+    who: "Garante per la protezione dei dati personali (이탈리아 개인정보 감독기구)",
+    basis: 'I contenuti possono essere riutilizzati citando la fonte ("Garante per la protezione dei dati personali"), con il link al documento originale e la data di consultazione. Il testo non va alterato, ed estratti o sintesi vanno segnalati come tali.',
+    terms_url: "https://www.garanteprivacy.it/home/footer/regole-del-sito",
+    seen_at: "2026-11-15",
+    also: "같은 조건 글의 나머지 (우리 말로): 기관이 승인 · 지지하는 것처럼 보이면 안 된다 · 도구가 만든 답은 원문과 따로 두고 기관의 말로 돌리지 않는다 · " +
+      "글은 낸 그대로 쓰고 자연인의 이름 (당사자 · 신고인 · 제재받은 사람)이 든 문서는 빼야 한다 → 그런 문서는 pack.json hold_text 로 캐시에만 · " +
+      "허락은 출처를 밝힌 열람이고 AI 모델 학습은 밖이다 · 자동 받기는 연락처를 밝힌 신원 표시를 요구한다 — 우리는 연락처를 넣지 않으므로 다시 받지 않는다 (can_ingest null · S3-b)",
+  },
 };
 // 공공누리를 찾아봤으나 git 의 근거가 되지 못한 발행처 — 무엇을 봤나 (권리는 미확인 그대로. 판정은 PM — E3-1)
 export const CHECKED_NOT_STORABLE: Record<string, string> = {
@@ -89,7 +104,7 @@ export function documentRightsRow(sourceId: string, d: DocRights): DocumentRight
 }
 
 export const rightsOf = (publisher: string): Rights =>
-  publisher in US_FEDERAL ? "US_FEDERAL_17USC105" : publisher in KOGL_TYPE1 ? "KOGL_TYPE1" : publisher in KR_STATUTE ? "KR_STATUTE" : "UNCONFIRMED";
+  publisher in US_FEDERAL ? "US_FEDERAL_17USC105" : publisher in KOGL_TYPE1 ? "KOGL_TYPE1" : publisher in KR_STATUTE ? "KR_STATUTE" : publisher in REUSE_CITED_UNALTERED ? "REUSE_CITED_UNALTERED" : "UNCONFIRMED";
 export const canStore = (r: Rights) => STORABLE.includes(r);
 
 /** 계약 SourceRegistry 그대로 — 파이프라인은 근거(basis) 를 늘 쓴다 (W-4 J5. 전에는 `_basis` 주석) */
@@ -123,6 +138,16 @@ export function registryRow(publisher: string, reviewedAt: string, accessNote: s
       commercial_use: null, attribution_required: null, terms_url: null, last_reviewed_at: reviewedAt,
       basis: `저작권법 제7조 (보호받지 못하는 저작물 — 헌법 · 법률 · 조약 · 명령 …) — ${law} → 전문 보관(can_store) · 인용(can_quote) (D53). ` +
         "나머지 칸은 null — 사이트(국가법령정보센터) 이용약관은 검토하지 않았다 (E2-1)",
+    };
+  }
+  const reuse = REUSE_CITED_UNALTERED[publisher];
+  if (reuse) {
+    return {
+      source: publisher, access_method: accessNote, can_ingest: null, can_store: true, can_quote: true, can_transform: false,
+      commercial_use: null, attribution_required: true, terms_url: reuse.terms_url, last_reviewed_at: reuse.seen_at,
+      basis: `재사용 허락 — 출처 표시 · 글을 바꾸지 않음 (${reuse.who} · 조건 글을 ${reuse.seen_at} 에 봄 · PM 판정 D109): "${reuse.basis}" → ` +
+        "바꾸지 않은 전문 보관(can_store) · 인용(can_quote) · 출처 표시 필요(attribution_required — 기관 이름 · 원문 링크 · 본 날짜) · 변경 불가(can_transform false — 발췌 · 요약은 그렇다고 밝힌다). " +
+        `상업 이용은 조건이 말하지 않아 null. ${reuse.also}`,
     };
   }
   if (docs.length) {

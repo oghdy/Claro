@@ -52,11 +52,15 @@ export type ShortInput = {
   code: string; event: string;
   pick: { date: string; id: string; flip_hint: string };                                   // S-2 아침 한 장의 어느 줄에서 왔나 · 그 줄의 뒤집기 후보 (신호일 뿐)
   series: { series_id: string; code: string; name: string; sub: string };                  // 선반 — 사람이 정한다 (제안)
-  docs: Record<string, { name: string }>;                                                   // 근거로 쓸 문서 (사건 소스 팩의 label) → 독자에게 보일 이름. git 에 전문이 있는 문서만
+  docs: Record<string, { name: string; part?: DocPart }>;                                                   // 근거로 쓸 문서 (사건 소스 팩의 label) → 독자에게 보일 이름. git 에 전문이 있는 문서만
   sibling: { episode: Ref; label: string; note: string } | null;                            // 같은 사건의 곁 이야기 — 없으면 null (홀로 선다)
   tools_from: { episode: Ref; keys: string[]; tool_lead: string; map_note: string; gain_label: string } | null;   // 가리킬 도구와 그 글 — 없으면 null
   human_note?: string;                                                                      // 글 단계에 전할 말 (없어도 된다)
 };
+/** 문서의 어느 토막만 구절로 내나 (P-T2 — 살아 있는 웹 쪽 하나를 통째로 보관한 문서: 메뉴 · 다른 말 판 · 꼬리말이 한 글에 섞여 있다).
+ *  줄이 글자 그대로 after 인 곳의 다음 줄부터 · 글자 그대로 before 인 줄 앞까지. 이 꼴에서는 줄 하나가 토막 하나이고 (HTML 에서 뽑은 글 — 문단마다 한 줄)
+ *  라틴 글자 문장의 끝 (". " 뒤 대문자)에서도 끊는다. 없으면 전과 같다 (문서 전부 · 한국어 보도자료의 규칙) */
+export type DocPart = { after: string; before: string };
 export type Passage = { key: string; doc: string; source_id: string; quote: string; span_start: number; span_end: number; cont: boolean };
 type SourceRow = { source_id: string; label: string; title: string; publisher: string; published_at: string };
 
@@ -65,18 +69,21 @@ const PAGE_MARK = /^\s*-\s*\d+\s*-\s*$/u;
 const STARTS = /^\s*(□|ㅇ|○|◦|▶|▷|※|\*|#\d+\.|-\s|\d+\.\s|붙임|보도시점|보도 시점|배포)/u;     // 줄머리 — 새 토막이 시작된다
 const ALONE = /^\s*(.{0,12}보도자료|보도시점.*|보도 시점.*)\s*$/u;                             // 머리 줄 — 혼자 한 토막
 const TAIL = /^\s*(담당\s*부서|담당자|책임자|#[^\d\s])/u;                                      // 여기부터는 연락처 · 해시태그 — 구절로 내지 않는다
+const SENT_CUT_LATIN = /(?<=[가-힣a-z0-9)%]\.[”"’'」)\]]*)\s+(?=[A-Z“"‘'(])/gu;                 // DocPart 꼴에서만 — "…harm occurs. The Authority …"
 const SENT_END = /[가-힣]\.[”"’'」)\]]*\s*$/u;
 /** 문서의 글을 구절 토막으로 끊는다 — 글자 그대로 (토막 안의 글자를 지우거나 잇지 않는다 · 자리는 코드 포인트).
  *  끊는 곳: 빈 줄 · 쪽 번호 줄 ("- 2 -") · 줄머리 (□ · # · * · - …) · 문장의 끝 ("다." 뒤). 쪽이 넘어가 끊긴 문장은 두 토막이 되고 뒤 토막에 cont 를 단다.
  *  연락처 (담당 부서 …) 뒤는 내지 않는다. 뜻을 보지 않는다 — 무엇이 사실인지는 글 단계 · 함의 · 사람이 본다 */
-export function passagesOf(text: string, doc = "", source_id = ""): Passage[] {
+export function passagesOf(text: string, doc = "", source_id = "", part?: DocPart): Passage[] {
   const chunks: { start: number; end: number; cont: boolean }[] = [];
   let cur: { start: number; end: number; cont: boolean } | null = null;
-  let afterPage = false, prevEnded = true, pos = 0;
+  let afterPage = false, prevEnded = true, pos = 0, inPart = !part;
   const close = () => { if (cur) chunks.push(cur); cur = null; };
   for (const line of text.split("\n")) {
     const start = pos, end = pos + line.length;
     pos = end + 1;
+    if (part && !inPart) { inPart = line.trim() === part.after; continue; }
+    if (part && line.trim() === part.before) { close(); break; }
     if (TAIL.test(line)) { close(); break; }
     if (PAGE_MARK.test(line)) { close(); afterPage = true; continue; }
     if (!line.trim()) { close(); prevEnded = true; continue; }
@@ -84,7 +91,7 @@ export function passagesOf(text: string, doc = "", source_id = ""): Passage[] {
     if (!cur) cur = { start, end, cont: afterPage && !prevEnded && !STARTS.test(line) };
     else cur.end = end;
     afterPage = false;
-    prevEnded = SENT_END.test(line) || ALONE.test(line);
+    prevEnded = !!part || SENT_END.test(line) || ALONE.test(line);
     if (ALONE.test(line)) close();
   }
   close();
@@ -92,7 +99,7 @@ export function passagesOf(text: string, doc = "", source_id = ""): Passage[] {
   for (const c of chunks) {
     // 토막 안의 문장 끝 ("다." 뒤에 빈칸) 에서 한 번 더 끊는다
     const body = text.slice(c.start, c.end);
-    const cuts = [0, ...[...body.matchAll(/(?<=[가-힣]\.[”"’'」)\]]*)\s+(?=\S)/gu)].map((m) => m.index! + m[0].length), body.length];
+    const cuts = [0, ...[...body.matchAll(part ? SENT_CUT_LATIN : /(?<=[가-힣]\.[”"’'」)\]]*)\s+(?=\S)/gu)].map((m) => m.index! + m[0].length), body.length];
     for (let i = 0; i + 1 < cuts.length; i++) {
       const raw = body.slice(cuts[i]!, cuts[i + 1]!);
       const lead = raw.length - raw.trimStart().length, quote = raw.trim();
@@ -125,9 +132,10 @@ export function load(code: string) {
     if (!d) throw new Error(`문서 ${label} 의 전문이 store.documents.json 에 없다 — 권리가 git 을 허락한 문서만 근거로 쓴다 (캐시의 글은 쓰지 않는다)`);
     srcs.set(label, s);
     texts.set(label, d.text);
-    passages.push(...passagesOf(d.text, label, s.source_id));
+    passages.push(...passagesOf(d.text, label, s.source_id, input.docs[label]!.part));
   }
   // 지금 실물은 문서 하나다. 둘 이상이면 구절 키가 겹친다 (문서마다 p01 부터) — 그 실물이 생길 때 키의 꼴부터 정한다
+  if (!passages.length) throw new Error(`문서에서 구절이 하나도 나오지 않았다 — 입력의 docs.*.part (after · before 줄)를 본다`);
   if (Object.keys(input.docs).length !== 1) throw new Error("짧은 이야기의 근거 문서는 지금 하나만 받는다 — 둘 이상인 실물이 없다 (구절 키의 꼴부터 정한다)");
   const out = join(dir, "shorts", code);
   return { code, input, event, dir, out, srcs, texts, passages: new Map(passages.map((p) => [p.key, p])), documents: documents.filter((d) => [...srcs.values()].some((s) => s.source_id === d.source_id)) };

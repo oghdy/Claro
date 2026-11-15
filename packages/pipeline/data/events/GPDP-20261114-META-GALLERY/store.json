@@ -1,0 +1,49 @@
+{
+  "_what": "GPDP-20261114-META-GALLERY 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json",
+  "events": [
+    {
+      "event_id": "da5a09a6-7cdc-490c-93f7-7a17512d2dba",
+      "code": "GPDP-20261114-META-GALLERY",
+      "title": "이탈리아 개인정보 감독기구 (Garante per la protezione dei dati personali) — 안드로이드 페이스북 앱의 '갤러리에서 추천 받기' 기능이 폰 안 사진 · 영상에 닿는 동의를 따로 받지 않았다며 Meta Platforms Ireland Limited 에 8억 500만 유로 (2026-11-14 발표)",
+      "occurred_at": "2026-11-14",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "b0f34a77-cf02-4a96-a3cc-74d6d2d75b09",
+      "label": "GPDP-10321080",
+      "title": "Garante per la protezione dei dati personali — Comunicato stampa 「Facebook: il Garante Privacy sanziona Meta per 805 milioni di euro」 / English version 「The Garante has fined Meta Platforms Ireland Limited 805 million euros」 (Doc-Web 10321080 · 2026-11-14)",
+      "publisher": "garanteprivacy.it",
+      "url": "https://www.garanteprivacy.it/web/guest/home/docweb/-/docweb-display/docweb/10321080",
+      "kind": "PRIMARY",
+      "language": "it",
+      "published_at": "2026-11-14",
+      "ingested_at": "2026-11-15"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "garanteprivacy.it",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": false,
+      "commercial_use": null,
+      "attribution_required": true,
+      "terms_url": "https://www.garanteprivacy.it/home/footer/regole-del-sito",
+      "last_reviewed_at": "2026-11-15",
+      "basis": "재사용 허락 — 출처 표시 · 글을 바꾸지 않음 (Garante per la protezione dei dati personali (이탈리아 개인정보 감독기구) · 조건 글을 2026-11-15 에 봄 · PM 판정 D109): \"I contenuti possono essere riutilizzati citando la fonte (\"Garante per la protezione dei dati personali\"), con il link al documento originale e la data di consultazione. Il testo non va alterato, ed estratti o sintesi vanno segnalati come tali.\" → 바꾸지 않은 전문 보관(can_store) · 인용(can_quote) · 출처 표시 필요(attribution_required — 기관 이름 · 원문 링크 · 본 날짜) · 변경 불가(can_transform false — 발췌 · 요약은 그렇다고 밝힌다). 상업 이용은 조건이 말하지 않아 null. 같은 조건 글의 나머지 (우리 말로): 기관이 승인 · 지지하는 것처럼 보이면 안 된다 · 도구가 만든 답은 원문과 따로 두고 기관의 말로 돌리지 않는다 · 글은 낸 그대로 쓰고 자연인의 이름 (당사자 · 신고인 · 제재받은 사람)이 든 문서는 빼야 한다 → 그런 문서는 pack.json hold_text 로 캐시에만 · 허락은 출처를 밝힌 열람이고 AI 모델 학습은 밖이다 · 자동 받기는 연락처를 밝힌 신원 표시를 요구한다 — 우리는 연락처를 넣지 않으므로 다시 받지 않는다 (can_ingest null · S3-b)"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

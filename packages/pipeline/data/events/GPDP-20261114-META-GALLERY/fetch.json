@@ -1,0 +1,65 @@
+{
+  "_what": "GPDP-20261114-META-GALLERY 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "GPDP-20261114-META-GALLERY",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.garanteprivacy.it",
+      "url": "https://www.garanteprivacy.it/robots.txt",
+      "fetched_at": "2026-11-15T13:24:19.499Z",
+      "http_status": 200,
+      "sha256": "75697242fc54704351094b960fb0fb6a835db299e2f2f0cf3148ee11ef2ed0e1",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "GPDP-10321080",
+      "source_id": "b0f34a77-cf02-4a96-a3cc-74d6d2d75b09",
+      "publisher": "garanteprivacy.it",
+      "url": "https://www.garanteprivacy.it/web/guest/home/docweb/-/docweb-display/docweb/10321080",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 에 맞는 규칙 없음 — 된다"
+      },
+      "fetch": {
+        "requested_url": "https://www.garanteprivacy.it/web/guest/home/docweb/-/docweb-display/docweb/10321080",
+        "fetched_at": "2026-11-15T12:29:39.000Z",
+        "final_url": "https://www.garanteprivacy.it/web/guest/home/docweb/-/docweb-display/docweb/10321080",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html",
+        "last_modified": null,
+        "raw_sha256": "96d88c8f57cc26c49dafe12ed18af67180801e96e4e287309b43a35bf5c35270",
+        "raw_bytes": 117152,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "111a8508e16caa743f8322b897f80d812d24471ef1a194f9298b78289273a938",
+      "text_length": 9816,
+      "pdf_page_starts": null,
+      "first_line": "Salta direttamente al contenuto",
+      "rights": "REUSE_CITED_UNALTERED",
+      "text_in": "store.documents.json",
+      "live": true,
+      "same_as_p1": null,
+      "policy_terms": {
+        "805": 7,
+        "consent": 7,
+        "consenso": 7,
+        "gallery": 6,
+        "galleria": 7,
+        "artificial intelligence": 1
+      }
+    }
+  ],
+  "spans": []
+}
