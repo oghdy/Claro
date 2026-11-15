@@ -1,0 +1,104 @@
+{
+  "_what": "MOTIR-20261113-OIL-PRICE-CAP 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json. 문서 단위 권리 (발행처는 미확인 · 문서 안에 공공누리 제1유형 표시 — 그 문서에 한해 발행처 행보다 앞선다) 는 document_rights (DATA_MODEL DocumentRights · B-E2 · pack.json doc_rights 에서)",
+  "events": [
+    {
+      "event_id": "2e890342-a1c3-400f-b185-f0d04545233f",
+      "code": "MOTIR-20261113-OIL-PRICE-CAP",
+      "title": "산업통상부 — 12차 석유 최고가격, 11차 수준으로 동결 (리터당 휘발유 1,784원 · 경유 1,773원 · 등유 1,380원 · 2026-11-14 00시부터 4주 · 2026-11-13 발표)",
+      "occurred_at": "2026-11-13",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "0af7782e-d721-4f98-a7c3-ee152cabdea5",
+      "label": "PR-1113-PDF",
+      "title": "(참고자료, 13(금) 18시엠바고)석유산업과, 12차 최고가격, 11차 수준으로 동결.pdf (산업통상부 보도참고자료 · 2쪽)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198590116&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-13T18:00+09:00",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "6763d0b8-3650-4003-be39-a31cb3cc7838",
+      "label": "PR-1113",
+      "title": "(참고자료)12차 최고가격, 11차 수준으로 동결 (정책브리핑 보도자료 게시물 페이지 — 산업통상부 보도자료 전재)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789230",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-13",
+      "ingested_at": "2026-11-15"
+    },
+    {
+      "source_id": "6e44682e-65ba-427a-b79e-f08b8d2f9ac0",
+      "label": "GOSI-2026-119",
+      "title": "석유판매가격의 최고액 [산업통상부고시 제2026-119호, 2026. 10. 16., 폐지제정 · 시행 2026. 10. 17.] (고시문 PDF · 2쪽 — 11차 최고가격의 고시)",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/flDownload.do?flSeq=170686101",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-10-16",
+      "ingested_at": "2026-11-15"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "korea.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": null,
+      "can_quote": null,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-15",
+      "basis": "권리 미확인 (발행처 단위) — 발행처 단위의 근거를 찾지 못했다. 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1113-PDF. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
+    },
+    {
+      "source": "law.go.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-15",
+      "basis": "저작권법 제7조 (보호받지 못하는 저작물 — 헌법 · 법률 · 조약 · 명령 …) — 국가법령정보센터 (법제처) — 법률 · 대통령령 본문과 별표 · 행정규칙(고시) 본문 → 전문 보관(can_store) · 인용(can_quote) (D53). 나머지 칸은 null — 사이트(국가법령정보센터) 이용약관은 검토하지 않았다 (E2-1)"
+    }
+  ],
+  "document_rights": [
+    {
+      "source_id": "0af7782e-d721-4f98-a7c3-ee152cabdea5",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "7222266d318307c7c579e83c06d5a5e6b87cc055f394142efbe6ea2eee4c0ed9",
+        "page": 2,
+        "pages": 2,
+        "image": "Im5 객체 37 · 335×129 · DCTDecode",
+        "image_sha256": "fa58aa34a9758ecc4f6a2f9bdb5a6b4a9ebaffb510a98166788f3d6118ebab58",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 페이지 (PR-1113) 에도 글 줄 '이 자료는 텍스트에 한하여 공공누리 제1유형(출처표시)의 조건에 따라 이용할 수 있습니다.' 가 있다 (S1-a 의 길 — 기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-15"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

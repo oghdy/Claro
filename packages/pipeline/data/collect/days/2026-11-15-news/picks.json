@@ -1,0 +1,106 @@
+{
+  "_what": "S-3 · 2026-11-15 '오늘의 큰 뉴스 → 1차 문서' 길에서 고른 둘 (D107). S-2 의 picks.json (사람이 sheet.md 의 번호를 적는 빈 틀) 과 꼴이 다르다 — 이 날은 collect 가 돈 것이 아니라 작업 세션이 손으로 걸은 기록이다. 고른 것은 제안이다 — 사람 게이트 (PM · 도윤) 전. 뉴스 기사의 글은 없다 (제목 · 주소 · 요지만 — sheet.md). 구절은 1차 문서의 것만.",
+  "date": "2026-11-15",
+  "window": "2026-11-13 (금) 저녁 ~ 2026-11-15 (일) 밤 · 한국 시각",
+  "picked_by": "S-3 작업 세션 (Fable 5.2) — 제안. PM · 도윤이 정한다",
+  "picked_at": "2026-11-15",
+  "candidates": { "domestic": 5, "overseas": 6, "sheet": "sheet.md" },
+  "picked": [
+    {
+      "id": "K1",
+      "where": "국내",
+      "category": "돈",
+      "title": "석유 최고가격 12차도 동결 — 그 값은 어디에 붙나",
+      "what": "산업통상부가 2026-11-13 18시에 12차 석유 최고가격을 11차 그대로 묶었다 (리터당 휘발유 1,784원 · 경유 1,773원 · 등유 1,380원 · 11-14 00시부터 4주). 11-15 장관의 '연장은 불가피' 발언으로 일요일 경제 머리기사",
+      "seen_at": "https://news.google.com/rss/search?q=%EC%84%9D%EC%9C%A0+%EC%B5%9C%EA%B3%A0%EA%B0%80%EA%B2%A9%EC%A0%9C+when:3d&hl=ko&gl=KR&ceid=KR:ko",
+      "weight": "긴",
+      "weight_why": "9개월 이어진 큰 정책 · 1차 문서가 넉넉 (보도자료 · 고시 · 규정 · 법 · 정산) · 체험이 선다 (값이 붙는 곳 → 유가와 묶인 값의 틈 → 틈은 누가 메우나). 뒤집기 하나만 쓰는 짧은 이야기로 줄일 수도 있다",
+      "event_code": "MOTIR-20261113-OIL-PRICE-CAP",
+      "primary": [
+        {
+          "label": "PR-1113-PDF",
+          "title": "산업통상부 보도참고자료 「12차 최고가격, 11차 수준으로 동결」",
+          "publisher": "산업통상부 (정책브리핑 전재)",
+          "date": "2026-11-13",
+          "url": "https://www.korea.kr/common/download.do?fileId=198590116&tblKey=GMN",
+          "page_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789230",
+          "supports": "값 · 기간 · 동결의 까닭 · 국제유가 숫자",
+          "rights": "KOGL_TYPE1",
+          "rights_basis": "PDF 2쪽 끝의 공공누리 제1유형 그림 (눈으로 봄 — pack.json doc_rights) · 페이지의 글 줄 '텍스트에 한하여 공공누리 제1유형(출처표시)'",
+          "in_git": true
+        },
+        {
+          "label": "GOSI-2026-119",
+          "title": "산업통상부고시 제2026-119호 「석유판매가격의 최고액」",
+          "publisher": "산업통상부 (국가법령정보센터)",
+          "date": "2026-10-16",
+          "url": "https://www.law.go.kr/LSW/flDownload.do?flSeq=170686101",
+          "supports": "값이 어디에 붙나 (정유사의 공급가격) · 근거 법 · 도서지역 값",
+          "rights": "KR_STATUTE",
+          "rights_basis": "저작권법 제7조 (법령 · 고시) — rights.ts 의 law.go.kr",
+          "in_git": true,
+          "note": "11차 (10-17 시행) 의 고시다. 12차 고시가 따로 났는지는 확인하지 못했다 (2026-11-15 밤 law.go.kr 의 현행 판은 이 고시)"
+        }
+      ],
+      "flips": [
+        {
+          "guess": "휘발유 최고가격 1,784원 = 주유소에서 그 값 넘게 못 판다",
+          "document_says": "정유사가 주유소 · 큰 소비자에게 넘기는 값의 상한이다",
+          "quote": "석유정제업자가 석유판매업자 및 실소비자에게 판매하는 석유제품의 공급가격",
+          "quote_from": "GOSI-2026-119 · 2. 최고액 지정 대상",
+          "checked": true
+        },
+        {
+          "guess": "국제유가가 내렸는데 안 내렸다 = 비싸게 묶어 뒀다",
+          "document_says": "지금 값은 6월 말 유가에 맞춘 값이고 유가는 그때보다 높다",
+          "quote": "현재 최고가격이 정해진 6월말보다는 배럴당 약 20불 이상 높은 수준이다.",
+          "quote_from": "PR-1113-PDF · 1쪽",
+          "checked": true
+        }
+      ]
+    },
+    {
+      "id": "W1",
+      "where": "해외",
+      "category": "기술",
+      "title": "이탈리아, 메타에 8억 500만 유로 — 사진을 가져가서가 아니다",
+      "what": "이탈리아 개인정보 감독기구 (Garante) 가 2026-11-14 메타 (Meta Platforms Ireland) 에 8억 500만 유로를 물렸다 — 안드로이드 페이스북 앱의 갤러리 추천 기능이 폰 안 사진 · 영상에 닿는 동의를 따로 받지 않았다. 60일 안에 기본값 끔 · 따로 묻기",
+      "seen_at": "https://news.google.com/rss/search?q=Meta+Italy+fine+Android+photos+when:4d&hl=en-US&gl=US&ceid=US:en",
+      "weight": "짧은",
+      "weight_why": "문서 하나 (기관 보도자료 — 결정문 본문은 아직 안 걸림) · 뒤집기 하나로 선다",
+      "event_code": null,
+      "primary": [
+        {
+          "label": "GPDP-10321080",
+          "title": "Garante per la protezione dei dati personali 보도자료 「Facebook: il Garante Privacy sanziona Meta per 805 milioni di euro」 (Doc-Web 10321080 · 이탈리아 말 + 영어판)",
+          "publisher": "Garante per la protezione dei dati personali (이탈리아)",
+          "date": "2026-11-14",
+          "url": "https://www.garanteprivacy.it/web/guest/home/docweb/-/docweb-display/docweb/10321080",
+          "supports": "무엇을 어겼나 (이탈리아 개인정보 법 제122조 — 기기 안 정보 접근의 동의) · 금액 · 명령 · 기한 · 다루지 않은 것 (AI 학습)",
+          "rights": "UNCONFIRMED",
+          "rights_basis": "그 밖 — 기관의 다시 쓰기 조건 (https://www.garanteprivacy.it/home/footer/regole-del-sito): 'I contenuti possono essere riutilizzati citando la fonte (\"Garante per la protezione dei dati personali\"), con il link al documento originale e la data di consultazione. Il testo non va alterato, ed estratti o sintesi vanno segnalati come tali.' — 출처 · 링크 · 본 날짜를 적으면 다시 쓸 수 있으나 글을 바꾸지 말라는 조건이 있다. rights.ts 의 넷에 없다 → 전문은 캐시. 판정은 PM (S3-a)",
+          "in_git": false,
+          "cache": "packages/pipeline/.cache/s3/garante-10321080.html (sha256 96d88c8f57cc26c49dafe12ed18af67180801e96e4e287309b43a35bf5c35270 · 2026-11-15 받음)",
+          "consulted_at": "2026-11-15"
+        }
+      ],
+      "flips": [
+        {
+          "guess": "8억 유로 벌금 = 메타가 내 사진을 가져갔다 · AI 에 먹였다",
+          "document_says": "가져갔는지 · 피해가 있는지와 상관없이, 폰 안 정보에 닿는 것부터 따로 허락을 받아야 한다는 규칙을 어겼다. AI 학습은 이번 절차가 다루지 않았다",
+          "quote": "Qualsiasi accesso alle informazioni che contiene richiede quindi un consenso libero e informato, a prescindere dalla trasmissione dei dati o dall'esistenza di un danno.",
+          "quote_2": "Il procedimento non ha riguardato l'eventuale uso dei contenuti per addestrare l'intelligenza artificiale, che Meta nega.",
+          "quote_from": "GPDP-10321080 (발췌 · 이탈리아 말 원문 그대로)",
+          "checked": true
+        }
+      ]
+    }
+  ],
+  "tomorrow": [
+    { "id": "K2", "title": "세무사 시험 AI 부정행위 → 올해 국가자격시험 전수조사", "why": "오늘 터진 일 · 조사 시작 단계. 1차 (고용노동부 보도참고 2026-11-15 · newsId 156789271) 는 열어 봤고 PDF 에 공공누리 제1유형 그림이 있다" }
+  ],
+  "waiting": [
+    { "id": "W2", "title": "미국 홍역 퇴치국 지위 상실", "why": "PAHO 의 발표문이 2026-11-15 밤까지 없다 (언론 보도뿐). 발표가 나오면 과학과 몸 · 긴 이야기감. 받칠 문서: CDC (미 연방) · PAHO (권리 미확인)" }
+  ],
+  "memo": "무게는 제안이다 (D107: 무게는 PM). 두 편 다 사람 게이트 전."
+}
