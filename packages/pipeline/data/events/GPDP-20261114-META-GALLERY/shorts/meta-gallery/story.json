@@ -1,11 +1,11 @@
 {
   "_source": {
     "what": "짧은 이야기 「사진 때문에 수억 유로라는데, 사진을 가져간 걸까」 — 파이프라인이 낸 것 (P-S1 · short.ts). 골든이 아니다. 사람 게이트 (human.json) 전에는 내지 않는다",
-    "made_by": "글 short-write/1 · claude-fable-5-2 (medium) · 고치기 episode-repair/2 · claude-opus-5-5 · 사람의 고침 0",
+    "made_by": "글 short-write/1 · claude-fable-5-2 (medium) · 고치기 episode-repair/2 · claude-opus-5-5 · 사람의 고침 3",
     "event_code": "GPDP-20261114-META-GALLERY",
     "picked_from": "packages/pipeline/data/collect/days/2026-11-15-news/sheet.md W1",
     "documents": "packages/pipeline/data/events/GPDP-20261114-META-GALLERY/store.documents.json (GPDP-10321080)",
-    "human_gate": "아직"
+    "human_gate": "넘김 — PM (Claude Opus 5.5 · 편집자 자리 · D63 · D109)"
   },
   "episode_id": "1368217a-60af-5977-a063-38c63c10cb0b",
   "episode_version": 1,
@@ -247,7 +247,7 @@
     },
     "keep": {
       "kicker": "남음",
-      "title": "작은 뒤집기 하나가\n남았어요",
+      "title": "폰 안은\n사적인 영역이에요",
       "line": "이 과징금의 까닭은\n가져다 썼느냐가 아니었다.\n기구가 물은 것은\n폰 안에 닿기 전의 허락이었다.",
       "advice_label": "감독기구의 말",
       "advice": {
@@ -279,9 +279,9 @@
       },
       "flip": {
         "label": "뒤집어 보면",
-        "a": "“큰 과징금을 받은 까닭”",
+        "a": "“사진을 가져다 써서 받은 과징금”",
         "op": "≠",
-        "b": "“사진을 가져다 썼다”",
+        "b": "“허락 없이 폰 안에 닿아서 받은 과징금”",
         "note": {
           "t": "기구는 메타가 어긴 조항이 스마트폰을 한 사람의 사적인 영역의 일부로 보호한다고 짚었어요. 그래서 폰 안의 정보에 닿는 것은 어떤 경우든, 자료가 전송됐는지나 피해가 생겼는지와 상관없이 **자유롭게, 충분히 알고 한 동의**가 있어야 한다고 했어요.",
           "src": [

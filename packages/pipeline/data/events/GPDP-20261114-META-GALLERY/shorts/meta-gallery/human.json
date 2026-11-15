@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "by": "PM (Claude Opus 5.5 · 편집자 자리 · D63 · D109)",
+  "minutes": 12,
+  "flip_ok": true,
+  "not_drawn_ok": true,
+  "weight_ok": true,
+  "series_ok": true,
+  "death_checked": true,
+  "edits": [
+    {
+      "id": "entry.flip_a",
+      "t": "“사진을 가져다 써서 받은 과징금”",
+      "why": "앞쪽 말이 \"까닭\"이라는 빈 낱말이라 독자의 짐작이 서지 않음 — 짐작 그대로를 한 마디로"
+    },
+    {
+      "id": "entry.flip_b",
+      "t": "“허락 없이 폰 안에 닿아서 받은 과징금”",
+      "why": "뒤쪽도 같은 꼴로 맞춰 두 말이 바로 맞서게 (문서 p03 · p12)"
+    },
+    {
+      "id": "keep.title",
+      "t": "폰 안은\n사적인 영역이에요",
+      "why": "\"작은 뒤집기 하나가 남았어요\"는 손 견본 (영훈) 글자 그대로 — 이 사건의 말로 (문서 p11 \"protects the smartphone as part of a person's private sphere\")"
+    }
+  ],
+  "drops": [],
+  "note": "PM 게이트 — 뒤집기 (p12 · p14 글자) · 그리지 않을 것 (전송 · AI 학습 어느 쪽으로도 안 씀) · 무게 짧은 · 선반 「내 정보는 누가 지키나」 (개인정보 — 홀로 선다 · 곁 이야기 · 도구 null) · 사망 없음. 옛 꼴 그대로 (D104 — 도윤이 고른 결) · 글은 덜 손댐. 언론 기사 글 · 숫자 0"
+}
