@@ -60,6 +60,7 @@
 | S-2 | **후보 모으기 (D86 · MVP)** — 정해 둔 출처 목록에서 "오늘" 후보를 모델 없이 모으고 (날짜 · 제목 · 주소 · 기관 · 권리 어림) · 모델이 추천 10 (카테고리 · 국내 / 해외 · 기준 넷 · 뒤집기 한 줄 · 이어질 거리) · 기다림 목록 · S-1 사람 고르기와 견줌 · API 상한 1 달러 · 서브에이전트 Fable | ☑ 2026-11-14 — **S-1 이 5일에 고른 21편 중 목록에 있던 15편을 모델이 15편 다 추천 · 우리 셋 다 뜸** (FOMC 는 꼬리표로 · 개인정보위 · 배달앱은 꼬리표 없이 기준만으로 — 다만 FOMC · 개인정보위를 "짧은"으로 봄: 제목만 봐서) · 놓친 6 은 전부 목록 밖 (미 FTC 2 · 미 상무부 · 호주 · 기업 · 제도 이야기) · 명령 `pnpm --filter @claro/pipeline collect --date <아침> [--recommend --step … --budget …]` → `data/collect/days/<날짜>/sheet.md` (아침 한 장) · `picks.json` (사람이 적음) · 출처 넣은 곳 8 (정책브리핑 보도자료 · 브리핑 · 공정위 · 금감원 · 연준 · ECB · 영국은행 · NASA) + 기다림 확인 2 / **넣지 않은 곳: 미 FTC · BLS · SEC (403) · 공정위 의결서 · 국회 (robots) · 거래소 · 한은** · 하루 후보 95 ~ 178 · 기다림 목록 = 골든 남음 장면 9 + 달력 4 (연준 달력은 스스로 읽음) · 꼬리표 = 기관 + 하나 더 (글자 맞추기) · 추천 = Opus medium 배치 · 5일 0.562 달러 / 상한 1 → **하루 0.08 ~ 0.14 · 한 달 2.5 달러쯤** · 모델의 뒤집기는 흔한 쪽 ("과징금 ≠ 배상") — 신호로만 · 사람 시간은 안 잼 · 파이프라인 시험 144 (새 19) · 도윤에게 물을 것 4 · _open S2-a ~ m · `logs/pipeline/S-2.md` |
 | P-S1 | **파이프라인이 짧은 이야기를 쓴다 (D86 · D88 · MVP)** — S-2 아침 한 장에서 홀로 선 짧은 이야기 하나 고름 → 원문 · 권리 → 사실 → 글 (장면 넷) → 함의 → 고치기 → 사람 확인지 → `ShortStory` 계약 통과 · E-21 (홀로 선 짧은 이야기 칸) 을 그 실물로 · 한 편 비용을 잰다 · 상한 3 달러 · 서브에이전트 Fable | ☑ 2026-11-14 — **파이프라인이 쓴 첫 짧은 이야기 「면허 정지가 취소됐다는데, 잘못이 없었다는 걸까」** (`license-notice` · S-2 10/29 아침 c142 — 권익위 중앙행심위 운전면허 정지처분 취소 · 홀로 선다) · 뒤집기 “정지처분 취소” ≠ “운전자는 잘못이 없다는 판단” · `validateShortStory` 통과 (구절 16 · 글 19 · 알림 0) · **한 편 0.362 달러** (글 Fable 0.225 + 함의 Opus low 0.071 + 고치기 0.036 + 다시 보기 0.029 · 사실 뽑기는 모델 없이 구절 토막 · 목표 0.5 안쪽 · 상한 3) · 사람 확인지 한 장 (10분 어림 — 재지 않음) · **E-21: `sibling` · `tools_from` · `tool_lead` · `map_note` · `gain_label` 을 `\| null` 로 + 불변식 30 `SHORT_ALONE`** (EPISODE §13.9 · 골든 넷 0자 · contract 135) · 명령 `pnpm --filter @claro/pipeline short <code> [--write-call · --entail-call · --repair-call · --sheet · --check]` · 사람 게이트 전 (`human.json` 없음 — 낼 수 있나 false) · 손 견본보다 반 단계 아래 (군살 · 되풀이 · "행정심판"을 안 풂) · 기존 파이프라인 파일 0줄 · apps/web 0줄 (계약 타입은 닿는다 — PS1-j) · 로그 `logs/pipeline/P-S1.md` |
 | P-S2 | **파이프라인이 짧은 이야기를 새 꼴로 쓴다 (D95 · D98 · D99 ② · D100)** — 프롬프트를 UX-8 쓰는 법 열둘 + D95 로 다시 · 뼈 → 글 (덩이 차례) · `FlowStory` 를 낸다 · 함의에 앞 덩이를 같이 · **글 · 고치기 = Sonnet 5.5** · 첫 시험 = `license-notice` 같은 원문으로 다시 (새 code · 옛 것 그대로) · 확인지에 "무엇에 대한 이야기인가" · 상한 1 달러 · 서브에이전트 Fable | ☑ 2026-11-15 — **파이프라인이 새 꼴로 쓴 첫 짧은 이야기 「면허 정지가 취소된 건 운전자가 억울해서였을까」** (`license-notice-flow` · 옛 `license-notice` 와 같은 원문 · 같은 구절 토막 · 옛 것 0자) · `FlowStory` · `validateFlowStory` 통과 (덩이 10 · 구절 10 · 글 20 · 알림 0) · 줄기 "경찰서장이 의견 낼 기한이 오기도 전에 면허 정지를 먼저 정해 버려서, 중앙행심위가 그 정지를 취소했대" · 뒤집기 “정지가 취소됐으니 운전자 쪽에 억울한 사정이 있었다” ≠ “결정하는 순서를 어겨서 취소됐다” · 고르기 없음 · 낱말 하나 (사전 통지서) · 1,013자 · **새 길을 옆에** (`short-flow.ts` · `short-flow-prompt.ts` · `short-flow-validate.ts` — 옛 `short*.ts` 0줄 · `license-notice --check` 같음) · 프롬프트 = 뼈 (줄기 후보 → 고른 하나 → "그래서 무슨 일이었는데?" → news / concept) → 글 (덩이의 차례 · 칸 0) · UX-8 쓰는 법 열둘 + D95 · 본보기 = 골든 B (받는 말의 채점 앞머리 뗌) · **글 · 고치기 Sonnet 5.5 medium** · 함의 Opus low + **앞 덩이 둘을 읽기용으로** (PS1-d — 앞을 받는 말이 깎이지 않았다) · 기계 알림 (말투 · 머리 · 단추 · 뼈 · 맺음 · 고르기 · 줄기 · 크기 — 막지 않는다) · 확인지에 뼈 · **"무엇에 대한 이야기인가"** · 통독 + 이음매 표 · `death_checked` · **한 편 0.241 달러** (글 0.115 즉시 + 함의 0.079 + 고치기 0.023 + 다시 보기 0.024 · 전부 배치면 ≈ 0.17 · P-S1 0.362) · **Step 0.480 / 1** (프롬프트를 두 번 고쳐 글을 세 번 — 첫 생각이 맞는 절차였다 → 뒤집기가 낱말의 뜻풀이였다 → 셋째) · 옛 것의 점프 다섯 곳: 넷 풀림 · 하나 반쯤 (끝의 겹침) · 남은 걸림: 단추가 되묻는 말 · 내려앉기 첫 문장이 본보기 그대로 · "재결" · "당사자" · 고치기가 "세 건"을 흐림 · 사람 게이트 전 (`human.json` 없음 — 낼 수 있나 false) · 명령 `pnpm --filter @claro/pipeline short-flow <code> [--count · --write-call · --entail-call · --repair-call · --sheet · --read · --check]` · pipeline 시험 171 · apps/web · 계약 · 골든 0줄 · 로그 `logs/pipeline/P-S2.md` · **PM 검수 닫힘 (D101 · 2026-11-15)** |
+| P-S2f | **Fable 대조군 (D99 ③ · D101 PS2-f · 도윤 go 11/15)** — 같은 새 프롬프트 (P-S2 가 채택한 판) · 같은 입력으로 글 모델만 Fable 5.2 로 한 판 → 고치기 전 첫 출력 둘 (Sonnet · Fable)을 눈 가리고 X · Y 통독으로 · 짝은 key 파일에 · PM 이 견준다 · P-S2 상한 1 달러 안 · 서브에이전트 Opus | ☐ 도는 중 |
 | W-5 | 사실 추출 잔일 (P3b-b (a) · c · d · f) + **판 올려 10월 사실 다시 뽑기 (W-6 의 배치 길로 ≈ 1.8 달러 · D50 · D51)** + W2-b (`w2-entail/2` · Opus medium 다시 잼) + F046 · F449 확인 + 끝에 `rerun --pretend-new` | Opus | ⏸ 멈춤 (2026-11-11 · 도윤과 다시 정리) |
 
 **도윤이 준비할 것 (P-3 전)**: Claude API 키 — 비밀 값이다. 채팅에 붙이지 않고 `apps/web/.env.deploy` 처럼 git 밖 파일에. 사용 한도를 걸어 둔다.
@@ -1051,4 +1052,35 @@ MVP (D86) 는 하루에 짧은 이야기 2 ~ 3편이 필요하다. 계약은 생
 - 검사: `pnpm --filter @claro/pipeline test` · `pnpm --filter @claro/contract test` · `pnpm -s typecheck` · 새 이야기 `validateFlowStory` 통과 · 새 길의 `--check` (다시 지은 것이 파일과 같다) · 옛 `license-notice --check` 같음 · `python3 scripts/verify-ledger.py` · `verify-source-pack`. **결과를 로그에 붙인다** ("통과"만 쓰지 마라)
 - docs/development-pipeline.md 의 P-S2 줄 (☐ 도는 중 → ☑ + 날짜) · 커밋 접두사 `P-S2` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 끝날 때 띄운 서버 · 기다리기 반복은 끈다 (백그라운드 `while pgrep …` 반복 금지)
 - **나(PM)에게**: 15줄 안쪽 — 커밋 · 새 제목 · 줄기 한 문장 · 뒤집기 · 비용 (한 편 · Step) · 프롬프트에서 바꾼 큰 것 셋 · 옛 것과 견줘 나아진 곳 · 남은 걸림 · _open
+```
+
+## P-S2f · Fable 대조군 — 같은 새 프롬프트, 글 모델만 바꿔서 (D101 PS2-f)
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 파이프라인 레인. Step P-S2f (Fable 대조군)를 맡는다. PM(나)이 견주고 도윤에게 보고한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **같은 때 다른 일이 돈다**: PM 이 `packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice-flow/` (human.json · story.json · review.json · sheet.md)와 `logs/correction-log.jsonl` 을 고친다 · 프론트 세션 UX-8c 가 `apps/web/src/app/lab/flow/` · `apps/web/e2e/lab-flow.spec.ts` · `logs/frontend/UX-8c*` · `docs/development-frontend.md` 를 쓴다. **그 파일들은 건드리지 마라.**
+비밀 값 (`packages/pipeline/.env.pipeline`) 출력 · 로그 · 커밋 금지. push = Vercel 배포 — 검사가 다 통과한 뒤 한 번.
+
+## 왜
+P-S2 (D101)에서 파이프라인의 짧은 이야기가 확 나아졌다. 그런데 **프롬프트 (틀)와 글 모델 (Fable → Sonnet)을 같이 바꿔서** 어느 쪽 덕인지 못 가른다 (P-S2 _open PS2-f). 도윤은 손 견본에서 눈 가리고 Sonnet 을 골랐다 (D98) — 파이프라인의 글 모델 결정 (D73)을 고치기 전에 **같은 새 프롬프트를 Fable 로 한 판** 돌려 대조군을 둔다 (도윤 go).
+
+## 할 것
+1. **글 모델을 입력에서 바꿀 수 있게** — `packages/pipeline/src/short-flow.ts` 에 고를 수 있는 칸 하나 (예: `data/shorts/<code>.json` 의 `write_model?` — 없으면 지금 값 그대로 · 고치기 모델도 따라갈지는 네 판단 + 까닭). 기본 동작 · 원장 꼴은 그대로. `license-notice-flow` 의 다시 짓기 결과는 이 칸 때문에 바뀌면 안 된다 (PM 이 그 폴더에 human.json 을 넣는 중이라 `--check` 결과가 PM 손질 때문에 달라질 수는 있다 — 그건 네 탓이 아니다. 네 바꿈이 그 출력에 0 영향인지는 human.json 없는 상태의 입력으로 시험에서 본다)
+2. **대조 한 판** — 새 code (예 `license-notice-flow-fable`) · 입력은 `license-notice-flow.json` 과 같고 글 모델만 `claude-fable-5-2` (effort 도 같게). **P-S2 가 채택한 프롬프트 판 (/3) 그대로** — 두 요청의 system · user 해시가 같고 모델만 다른지 확인해 로그에 붙인다. 글 부르기 **한 번** + 함의 (Opus low · 지금 그대로) 한 번. 고치기는 하지 않는다 (견줄 것은 첫 출력). `validateFlowStory` 결과 · 함의 걸림 수 · 기계 알림 수 · 글자 수 · 비용을 잰다
+3. **눈 가린 통독 둘** — Sonnet 의 채택 판 첫 출력 (`license-notice-flow/raw/` 의 /3 글 출력 — 고치기 전)과 Fable 의 첫 출력을 같은 꼴의 통독 (`--read` 와 같은 꼴 · 근거 키는 빼도 된다)으로 `logs/pipeline/P-S2f/X.md` · `Y.md` 에. 어느 쪽이 X 인지는 동전 던지기 (무작위)로 정하고 **짝 · 비용 · 모델 이름 · 원장 줄은 `logs/pipeline/P-S2f/key.json` 에만**. X.md · Y.md 안에 모델 이름 · 비용 · 파일 경로 (모델 이름이 든) · 말투로 짐작할 단서 (예: "Sonnet 판")가 없어야 한다
+4. 비용: **P-S2 상한 1 달러 안** (`--step P-S2` · 지금 0.480 쓰임). 글 Fable 한 번 + 함의 한 번 — 넘을 것 같으면 멈추고 적는다
+
+## 하지 말 것
+- 위 "같은 때 다른 일"의 파일 · 옛 `short*.ts` · 옛 `shorts/license-notice/` · apps/web · 계약 · 골든 · D73 고치기 · 프롬프트 고치기 (같은 판으로 견준다) · 대조 판의 사람 확인 · 고치기 · docs/PM.md 읽기 · 다른 파이프라인 파일 (episode*.ts · p3 ~ p5 · llm.ts · collect* 등 — 11/18 P-E3)
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D73 · D96 · D98 · **D99 ~ D101** · `logs/pipeline/P-S2.md` · `packages/pipeline/src/short-flow.ts` · `short-flow-prompt.ts` · `data/shorts/license-notice-flow.json`
+
+## 끝낼 때
+- 로그 `logs/pipeline/P-S2f.md` — ① 바꾼 코드 (칸 하나 · 기본 그대로인 증거) ② 같은 요청인지 (system · user 해시 · 모델만 다름) ③ 잰 값 (계약 · 함의 걸림 · 알림 · 글자 · 비용) — **이 로그에는 짝을 밝혀도 된다** (PM 은 X · Y 를 먼저 읽고 로그는 나중에 본다) ④ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `pnpm --filter @claro/pipeline test` · `pnpm -s typecheck` · 새 code `validateFlowStory` · `python3 scripts/verify-ledger.py`. **결과를 로그에 붙인다**
+- docs/development-pipeline.md 의 P-S2f 줄 (☐ 도는 중 → ☑ + 날짜) · 커밋 접두사 `P-S2f` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 백그라운드 기다리기 반복 금지
+- **나(PM)에게**: 10줄 안쪽 — 커밋 · 같은 요청 확인 · X · Y 파일 경로 · 잰 값은 key/로그에 있다는 말만 (**보고에 짝을 쓰지 마라**) · _open
 ```

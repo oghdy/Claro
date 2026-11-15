@@ -29,6 +29,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **UX-9** | **진짜 체험 시안 (D91 · 작업 2)** — 독자가 먼저 정하거나 예상하고 → 결과가 깨는 꼴 · 긴 이야기 셋의 체험을 lab 에서 다시 (배달앱 사장 · 금리 위원 표 · 개인정보 보안 담당) · 그리지 않을 것 · D61 지킴 · 회차 글 · 골든 0자 · 체험 잘 만드는 법 초안 · 서브에이전트 Fable | ☑ 2026-11-14 · 검수 대기(PM) — **`/lab/play`** (들머리) · `/lab/play/price` · `/rate` · `/privacy` (`?at=play` = 체험으로 바로) · 원래 회차 화면에 **체험 자리만** 끼움 (뼈대 `kit/Episode.tsx` 에 시안 전용 칸 `play` 하나 — 안 주면 그대로 · UX9-a) · **배달앱**: 새 앱 값표를 손으로 끌어 값을 정한다 → 판다 → 요구가 내 값표를 제자리로 끌어 올린다 (내 값은 점선으로 남음) → 다시 끌면 두 값표가 같이 끌려오다 튕긴다 (PM 안의 값표 셋 → 둘 — 매장값은 이번 문서의 요구가 아니다) · **금리**: 브레이크 (틀 부품 그대로) → 표 셋 + 까닭 둘 → 던진다 → 실제 10 대 2 · 내 까닭과 문서의 말 ("그대로 + 이제 잡힐 것 같아서" → 표는 같은데 까닭이 달랐다 · "내린다" = 아무도 앉지 않은 쪽 · 올린다 = 까닭이 아직 문서에 없다) · **개인정보**: "보안 담당이라면 가장 단단히 챙길 칸"에 핀 ("어디서 막겠나"는 반사실의 틀이라 바꿈) → 한 장씩 넘김 → 위원회의 ★ 과 견줌 · 더한 글은 `copy.ts` 56 덩이뿐 (사실 · 수 · 구절은 골든) · `lab/play/check.ts` (새 사실 0 · 채점 · 반사실 · 한국 대출 이자 · D61 ③ ④ · 받는 말 길이 · 실제 화면과 떨어짐 — 망가뜨린 넷 FAIL) · 터치 끌기 · 동작 줄이기 확인 · **체험 잘 만드는 법 초안 열셋** (뼈: 본다 → 건다 → 문서가 연다 → 내 것 옆에 놓인다) · 계약과 안 맞는 것 열 (가장 큼: "먼저 정하기"는 새 틀이 아니라 틀 위의 한 겹 — 고를 것 · 받는 말 칸이 없다 · 계약 0줄) · web e2e 74 (새 4) · 실제 주소 · 틀 부품 · `catalog.tsx` · 회차 글 · 골든 · 계약 · pipeline · db 0줄 · 로그 `logs/frontend/UX-9.md` · 그림 51 |
 | **F-E3** | **작은 손질 (D91 · 작업 3)** — 실제 화면에서 병원 짧은 이야기 내림 (한 사건 = 이야기 하나 · lab 견본은 남김) · 카드의 "체험 있음 · 없음" 뺌 · 실제 짧은 이야기 e2e 를 면허 정지 (홀로 선) 로 · 골든 0자 · push = 배포 · 서브에이전트 Opus | ☑ 2026-11-14 · 검수 대기(PM) — 실제 `STORIES` 에서 병원 줄 뺌 → 첫 화면 카드 넷 (긴 셋 + 짧은 하나 = 면허 정지) · `/short/pipc-hospital` 404 · 개인정보 남음의 곁 이야기 길 없음 · `/map` 그대로 (지도 셋) · **시안 `/lab/today` · `/lab/today/short` 는 견본 그대로** (`lab/today/short/data.ts` 의 시안 전용 줄 `HOSPITAL` — 곁의 긴 이야기 아래 · `Screen.tsx` 를 `ShortScreen` / `ShortLineScreen` 으로 나눔 · 다리 `LabShort.tsx`) · 카드의 "체험 있음 · 없음" 뺌 (실제 + 시안 · `cards.tsx` · `home-copy.ts` · `copy.ts` · `besideNote` · 그 span 의 CSS 두 규칙) · 무게 그대로 · 실제 짧은 이야기 e2e = 면허 정지 (장면 넷 파일 그대로 · 근거 구절 · 곁 길 · 도구 · 지도 없음 · 병원 404) · web e2e 74 (고친 것 4) · 골든 · 계약 · pipeline · db · 회차 글 · `/lab/play` · `/lab/short` 0줄 · 배포 확인 (`124ab9b` · `/` · `/short/license-notice` 200 · `/short/pipc-hospital` 404 · 그림 18) · `logs/frontend/F-E3.md` · _open F-E3-a "개념으로 이어져요"가 비었다 ~ e (내린 주소가 기본 404) |
 | **UX-8b** | **짧은 이야기 다시 쓰기 — 줄기는 뉴스 (D95) · 글 모델 눈 가리고 견주기 (D96)** — 같은 뉴스 · 같은 지시로 두 서브에이전트 (A · B)가 따로 · `/lab/short-a` · `/lab/short-b` · 도윤이 모른 채 고른다 · 짝은 PM.md | ☑ 2026-11-14 · PM 검수 끝 (D97) · A `e58b754` · B `f352901` · 도윤 고를 차례 |
+| **UX-8c** | **파이프라인이 새 꼴로 쓴 짧은 이야기를 폰으로 읽을 lab 화면 (D99 ③ · D101 PS2-o)** — `/lab/flow/license-notice` 가 `license-notice-flow/story.json` (FlowStory)을 읽어 `lab/short/Light.tsx` 로 그린다 · 견줘 읽기 = 옛 `/short/license-notice` · 서브에이전트 Opus | ☐ 도는 중 |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -1002,3 +1003,35 @@ Claro 는 하루 보통 3 ~ 5편 (긴 0 ~ 2 + 짧은 나머지 · D86). 짧은 �
 - **나(PM)에게**: 10줄 안쪽 — 커밋 · 주소 · 줄기 한 문장 · 뒤집기 · 남는 한 줄 · 개념 단어 · _open
 ```
 
+## UX-8c · 새 꼴 짧은 이야기를 폰으로 읽을 lab 화면 (D99 ③ · D101 PS2-o)
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 프론트 레인 (화면 시안). Step UX-8c (새 꼴 짧은 이야기를 폰으로 읽을 lab 화면)를 맡는다. PM(나)이 검수하고 도윤에게 보인다. 도윤은 폰으로 읽는다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **같은 때 다른 일이 돈다**: PM 이 `packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice-flow/` (human.json · story.json · review.json · sheet.md)와 `logs/correction-log.jsonl` 을 고친다 · 파이프라인 세션 P-S2f 가 `packages/pipeline/*` · `logs/pipeline/P-S2f*` · `docs/development-pipeline.md` · `scripts/verify-ledger.py` 를 쓴다. **그 파일들은 건드리지 마라** (story.json 은 읽기만).
+push = Vercel 배포 — 검사가 다 통과한 뒤 한 번. 모델 API 0.
+
+## 왜
+파이프라인이 새 꼴 (`FlowStory` · EPISODE §14)로 쓴 첫 짧은 이야기 「면허 정지가 취소된 건 / 운전자가 억울해서였을까」 (`license-notice-flow` · P-S2 · D101)가 나왔는데 **화면이 없다** (P-S2 _open PS2-o). 도윤이 폰으로 읽고 옛 것 (`/short/license-notice` — "안 읽힌다" D91)과 견줘야 다음 (실제 주소 갈아 끼우기 · 글 모델 결정)으로 간다.
+지금 PM 이 그 이야기를 편집자로 손보는 중이다 (human.json → 파이프라인이 story.json 을 다시 쓴다). **화면은 story.json 을 읽기만** 하면 PM 의 손질이 다음 빌드에 그대로 실린다.
+
+## 할 것
+1. **`/lab/flow/license-notice`** (주소 꼴은 네가 다듬어도 된다 — 까닭) — `packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice-flow/story.json` 을 불러 계약의 `parseFlowStory` (또는 `validateFlowStory`)를 지나게 하고, `lab/short/Light.tsx` 로 그린다. 길은 `/lab/short-b` 가 이미 냈다 (`lab/short-b/data.ts` — 골든 → lab 꼴 되돌리기 `toBlock`). 그 되돌리기를 같이 쓸 수 있으면 같이 쓰고 (복제 금지 — 한 곳으로 옮길 때 short-b 그림이 같아야 한다), 아니면 까닭을 적는다. **`Light.tsx` · `lab/short/types.ts` 는 고치지 않는 쪽을 먼저**
+2. 시안 전용 값: 카테고리 "나라와 법" · 견줘 읽기 = 옛 이야기 `/short/license-notice` ("같은 원문 · 앞서 낸 글") · 문서 파일 경로 (근거 시트가 쓰면). **페이지에 모델 이름 · "파이프라인" · 비용 같은 말이 없게** (도윤은 글만 본다)
+3. story.json 이 바뀌어도 (PM 손질) 화면 코드는 그대로 그려야 한다 — 글을 코드에 옮겨 적지 마라
+4. e2e 하나 (`apps/web/e2e/lab-flow.spec.ts` — 제목 · 뒤집기 · 견줘 읽기 링크 · 콘솔 오류 0) · 그림 390×844 (2배) 몇 장 `logs/frontend/UX-8c/`
+5. push 뒤 실제 주소 `https://claro-lime-one.vercel.app/lab/flow/license-notice` 가 200 인지 · 제목이 보이는지 curl 로 확인해 로그에
+
+## 하지 말 것
+- 위 "같은 때 다른 일"의 파일 · 실제 주소 화면 (`/` · `/s/*` · `/short/*` · `src/episode/*` · `catalog.tsx`) · 계약 · 골든 · packages/* · `lab/short-b` 의 보이는 것 (그림이 바뀌면 안 된다) · `lab/short/Light.tsx` 의 동작 · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D91 · D95 · **D99 ~ D101** · `logs/backend/B-E4.md` (`/lab/short-b` 가 골든을 읽게 바꾼 법) · `apps/web/src/app/lab/short-b/` · `apps/web/src/app/lab/short/` (Light.tsx · types.ts) · `apps/web/e2e/lab-short.spec.ts` · docs/contract/EPISODE.md §14
+
+## 끝낼 때
+- 로그 `logs/frontend/UX-8c.md` — ① 폰에서 여는 법 (주소) ② 어떻게 읽나 (story.json → 계약 → lab 꼴 — 되돌리기를 어디에 뒀나) ③ short-b 그림이 그대로인지 (앞 · 뒤 대조) ④ 검사 결과 ⑤ 배포 확인 ⑥ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` 의 web 부분 (e2e — logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `lab/short-b/check.ts`. **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 UX-8c 줄 (☐ 도는 중 → ☑ + 날짜) · 커밋 접두사 `UX-8c` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버는 끈다 · 백그라운드 기다리기 반복 금지
+- **나(PM)에게**: 10줄 안쪽 — 커밋 · 주소 · 읽는 길 · short-b 그대로 · 배포 확인 · _open
+```
