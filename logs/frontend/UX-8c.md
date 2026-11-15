@@ -114,7 +114,18 @@ OK — 구절 대조 · 숫자 · 그리지 않을 것 · 술술 읽히는 꼴 �
 
 ## ⑤ 배포 확인
 
-(push 뒤 — 다음 커밋 "UX-8c 배포 확인"에서 적는다)
+커밋 `c9c4c74` 를 push (검사가 다 지난 뒤 한 번 · `21bc5d9..c9c4c74` — 앞의 PM `b161300` · P-S2f 둘이 같이 나갔다). 새 주소가 404 → 200 이 될 때까지 `curl -sf --retry 30 --retry-delay 10 --retry-all-errors` 한 번 (반복 스크립트 없음) — 20:26:51 에 시작해 **약 40초 뒤 200**. 그 뒤 `https://claro-lime-one.vercel.app` 에서 (2026-11-15):
+```
+curl /lab/flow/license-notice 200
+<title>Claro 시안 — 짧은 이야기 · 면허 정지가 취소된 건 운전자가 억울해서였을까</title>
+  <h1>: 면허 정지가 취소된 건 운전자가 억울해서였을까
+  보이는 글에 '나라와 법': True · 단추: True
+  HTML (RSC 포함) 에 모델 · 만든 길 말: 없음 · 비용 말: 없음
+  견줘 읽기 링크 (RSC 안): True
+/short/license-notice    200 · 보이는 글 273자      ← 로컬 앞 · 뒤 빌드와 같은 글자 수
+/lab/short-b             200 · 보이는 글 241자
+/                        200 · 보이는 글 1154자
+```
 
 ## ⑥ _open
 
