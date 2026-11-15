@@ -59,6 +59,8 @@
 | S-1 | **고르기 종이 시험 (D83)** — 지난 3주 (10/26 ~ 11/13 평일) 실제 국내 · 해외 뉴스에 카테고리 다섯 · 하루 규칙 · 기준 넷 · 기다림 목록을 대 본다 · "매일 이 3 ~ 5편" 표 · 모델 API 0 · 코드 없음 · 서브에이전트 Fable | ☑ 2026-11-14 — **뼈대는 버틴다 · 날마다 조건 둘은 못 버틴다**: 15일 · 후보 261 · 고른 57 (긴 13 · 짧은 44 · 해외 20) · 무난 6일 / 억지 5일 (해외 최소 1 이 약함 6일 · 긴 이야기 없음 4일) / 상한에 막힘 2일 / 반쯤 2일 · 우리 셋 다 그날 맨 위 (개인정보위는 머리기사 0 — 기관 목록으로만) · 그날 가장 큰 뉴스는 원문 기준에서 자주 떨어진다 (시세 · 정당 · 안보 · 속보) · 기다림 목록: 날짜 있는 것은 날짜대로 왔고 날짜 없는 것 (의결서)은 3주에 0 · 게시판: 연준 · 개인정보위 결정문 · 공정위 보도자료 · 정책브리핑은 모델 없이 된다 / **공정위 의결서 · 국회 의안은 robots 가 막는다** · 진짜 다음 7번 (열쇠 = 달력 · 기관 + 조항 · 사건 낱말) · 고칠 것 7 · 도윤에게 물을 것 6 · _open S1-a ~ m · `logs/pipeline/S-1.md` · 후보 전부 `logs/pipeline/S-1/days.md` |
 | S-2 | **후보 모으기 (D86 · MVP)** — 정해 둔 출처 목록에서 "오늘" 후보를 모델 없이 모으고 (날짜 · 제목 · 주소 · 기관 · 권리 어림) · 모델이 추천 10 (카테고리 · 국내 / 해외 · 기준 넷 · 뒤집기 한 줄 · 이어질 거리) · 기다림 목록 · S-1 사람 고르기와 견줌 · API 상한 1 달러 · 서브에이전트 Fable | ☑ 2026-11-14 — **S-1 이 5일에 고른 21편 중 목록에 있던 15편을 모델이 15편 다 추천 · 우리 셋 다 뜸** (FOMC 는 꼬리표로 · 개인정보위 · 배달앱은 꼬리표 없이 기준만으로 — 다만 FOMC · 개인정보위를 "짧은"으로 봄: 제목만 봐서) · 놓친 6 은 전부 목록 밖 (미 FTC 2 · 미 상무부 · 호주 · 기업 · 제도 이야기) · 명령 `pnpm --filter @claro/pipeline collect --date <아침> [--recommend --step … --budget …]` → `data/collect/days/<날짜>/sheet.md` (아침 한 장) · `picks.json` (사람이 적음) · 출처 넣은 곳 8 (정책브리핑 보도자료 · 브리핑 · 공정위 · 금감원 · 연준 · ECB · 영국은행 · NASA) + 기다림 확인 2 / **넣지 않은 곳: 미 FTC · BLS · SEC (403) · 공정위 의결서 · 국회 (robots) · 거래소 · 한은** · 하루 후보 95 ~ 178 · 기다림 목록 = 골든 남음 장면 9 + 달력 4 (연준 달력은 스스로 읽음) · 꼬리표 = 기관 + 하나 더 (글자 맞추기) · 추천 = Opus medium 배치 · 5일 0.562 달러 / 상한 1 → **하루 0.08 ~ 0.14 · 한 달 2.5 달러쯤** · 모델의 뒤집기는 흔한 쪽 ("과징금 ≠ 배상") — 신호로만 · 사람 시간은 안 잼 · 파이프라인 시험 144 (새 19) · 도윤에게 물을 것 4 · _open S2-a ~ m · `logs/pipeline/S-2.md` |
 | S-3 | **오늘 주요뉴스 고르기 — 뉴스에서 1차 문서로 (D107)** — 2026-11-15 (한국 날짜) 국내 · 해외에서 크게 다뤄진 뉴스 → 그 뒤의 1차 문서 (정부 · 중앙은행 · 법원 · 국제기구 · 기업 공시 · 통계) · 권리 → 국내 1 · 해외 1 + 무게 (긴 / 짧은) + 뒤집기 후보 · 모델 API 0 · 서브에이전트 Fable | ☑ 2026-11-15 — 검수 대기 (`logs/pipeline/S-3.md` · 후보 국내 5 · 해외 6 → **국내 = 석유 최고가격 12차 동결** (돈 · 긴 제안 · 산업부 보도참고 + 고시 제2026-119호 — 둘 다 git · 뒤집기 "최고가격 = 주유소 값의 상한" ≠ 정유사 공급가격) · **해외 = 이탈리아 Garante, 메타에 8억 500만 유로** (기술 · 짧은 제안 · 기관 보도자료 — 조건부 재사용이라 캐시 · 뒤집기 "사진을 가져가서" ≠ 보냈는지와 상관없이 접근 자체의 동의) · 홍역 (미국 퇴치국 지위)은 PAHO 발표가 없어 기다림 · 소스 팩 `MOTIR-20261113-OIL-PRICE-CAP` · verify-source-pack OK · 파이프라인 시험 175 · 모델 API 0 · _open S3-a ~ h) |
+| P-T1 | **11/15 오늘 — 국내 긴 이야기 (D109)** — 석유 최고가격 12차 동결 · 새 시리즈 · 회차 단계 (P-E1 · P-E2 의 길 — 사실 → 설계 → 게이트 1 확인지 → 글 → 함의 → 고치기 → 게이트 2 확인지) · 상한 9 달러 · 서브에이전트 Fable | ☐ 도는 중 |
+| P-T2 | **11/15 오늘 — 해외 짧은 이야기 (D109)** — 이탈리아 Garante → 메타 8억 500만 유로 · 옛 꼴 (장면 넷 · `short.ts` · 글 Fable — D104) · 소스 팩 · 권리 (Garante 재사용 조건 — D109 PM 판정) · 상한 2 달러 · 서브에이전트 Fable | ☐ 도는 중 |
 | P-S1 | **파이프라인이 짧은 이야기를 쓴다 (D86 · D88 · MVP)** — S-2 아침 한 장에서 홀로 선 짧은 이야기 하나 고름 → 원문 · 권리 → 사실 → 글 (장면 넷) → 함의 → 고치기 → 사람 확인지 → `ShortStory` 계약 통과 · E-21 (홀로 선 짧은 이야기 칸) 을 그 실물로 · 한 편 비용을 잰다 · 상한 3 달러 · 서브에이전트 Fable | ☑ 2026-11-14 — **파이프라인이 쓴 첫 짧은 이야기 「면허 정지가 취소됐다는데, 잘못이 없었다는 걸까」** (`license-notice` · S-2 10/29 아침 c142 — 권익위 중앙행심위 운전면허 정지처분 취소 · 홀로 선다) · 뒤집기 “정지처분 취소” ≠ “운전자는 잘못이 없다는 판단” · `validateShortStory` 통과 (구절 16 · 글 19 · 알림 0) · **한 편 0.362 달러** (글 Fable 0.225 + 함의 Opus low 0.071 + 고치기 0.036 + 다시 보기 0.029 · 사실 뽑기는 모델 없이 구절 토막 · 목표 0.5 안쪽 · 상한 3) · 사람 확인지 한 장 (10분 어림 — 재지 않음) · **E-21: `sibling` · `tools_from` · `tool_lead` · `map_note` · `gain_label` 을 `\| null` 로 + 불변식 30 `SHORT_ALONE`** (EPISODE §13.9 · 골든 넷 0자 · contract 135) · 명령 `pnpm --filter @claro/pipeline short <code> [--write-call · --entail-call · --repair-call · --sheet · --check]` · 사람 게이트 전 (`human.json` 없음 — 낼 수 있나 false) · 손 견본보다 반 단계 아래 (군살 · 되풀이 · "행정심판"을 안 풂) · 기존 파이프라인 파일 0줄 · apps/web 0줄 (계약 타입은 닿는다 — PS1-j) · 로그 `logs/pipeline/P-S1.md` |
 | P-S2 | **파이프라인이 짧은 이야기를 새 꼴로 쓴다 (D95 · D98 · D99 ② · D100)** — 프롬프트를 UX-8 쓰는 법 열둘 + D95 로 다시 · 뼈 → 글 (덩이 차례) · `FlowStory` 를 낸다 · 함의에 앞 덩이를 같이 · **글 · 고치기 = Sonnet 5.5** · 첫 시험 = `license-notice` 같은 원문으로 다시 (새 code · 옛 것 그대로) · 확인지에 "무엇에 대한 이야기인가" · 상한 1 달러 · 서브에이전트 Fable | ☑ 2026-11-15 — **파이프라인이 새 꼴로 쓴 첫 짧은 이야기 「면허 정지가 취소된 건 운전자가 억울해서였을까」** (`license-notice-flow` · 옛 `license-notice` 와 같은 원문 · 같은 구절 토막 · 옛 것 0자) · `FlowStory` · `validateFlowStory` 통과 (덩이 10 · 구절 10 · 글 20 · 알림 0) · 줄기 "경찰서장이 의견 낼 기한이 오기도 전에 면허 정지를 먼저 정해 버려서, 중앙행심위가 그 정지를 취소했대" · 뒤집기 “정지가 취소됐으니 운전자 쪽에 억울한 사정이 있었다” ≠ “결정하는 순서를 어겨서 취소됐다” · 고르기 없음 · 낱말 하나 (사전 통지서) · 1,013자 · **새 길을 옆에** (`short-flow.ts` · `short-flow-prompt.ts` · `short-flow-validate.ts` — 옛 `short*.ts` 0줄 · `license-notice --check` 같음) · 프롬프트 = 뼈 (줄기 후보 → 고른 하나 → "그래서 무슨 일이었는데?" → news / concept) → 글 (덩이의 차례 · 칸 0) · UX-8 쓰는 법 열둘 + D95 · 본보기 = 골든 B (받는 말의 채점 앞머리 뗌) · **글 · 고치기 Sonnet 5.5 medium** · 함의 Opus low + **앞 덩이 둘을 읽기용으로** (PS1-d — 앞을 받는 말이 깎이지 않았다) · 기계 알림 (말투 · 머리 · 단추 · 뼈 · 맺음 · 고르기 · 줄기 · 크기 — 막지 않는다) · 확인지에 뼈 · **"무엇에 대한 이야기인가"** · 통독 + 이음매 표 · `death_checked` · **한 편 0.241 달러** (글 0.115 즉시 + 함의 0.079 + 고치기 0.023 + 다시 보기 0.024 · 전부 배치면 ≈ 0.17 · P-S1 0.362) · **Step 0.480 / 1** (프롬프트를 두 번 고쳐 글을 세 번 — 첫 생각이 맞는 절차였다 → 뒤집기가 낱말의 뜻풀이였다 → 셋째) · 옛 것의 점프 다섯 곳: 넷 풀림 · 하나 반쯤 (끝의 겹침) · 남은 걸림: 단추가 되묻는 말 · 내려앉기 첫 문장이 본보기 그대로 · "재결" · "당사자" · 고치기가 "세 건"을 흐림 · 사람 게이트 전 (`human.json` 없음 — 낼 수 있나 false) · 명령 `pnpm --filter @claro/pipeline short-flow <code> [--count · --write-call · --entail-call · --repair-call · --sheet · --read · --check]` · pipeline 시험 171 · apps/web · 계약 · 골든 0줄 · 로그 `logs/pipeline/P-S2.md` · **PM 검수 닫힘 (D101 · 2026-11-15)** |
 | P-S2f | **Fable 대조군 (D99 ③ · D101 PS2-f · 도윤 go 11/15)** — 같은 새 프롬프트 (P-S2 가 채택한 판) · 같은 입력으로 글 모델만 Fable 5.2 로 한 판 → 고치기 전 첫 출력 둘 (Sonnet · Fable)을 눈 가리고 X · Y 통독으로 · 짝은 key 파일에 · PM 이 견준다 · P-S2 상한 1 달러 안 · 서브에이전트 Opus | ☑ 2026-11-15 — 글 모델 칸 `write_model` (없으면 그대로 · 고치기도 따라감) · 같은 요청 (system · user 해시 같음 · model 만 다름) 확인 · **한쪽 첫 출력이 비었다** (짝은 key · 로그에만) → 눈 가린 통독은 서지 않음 · 다시 부를지 PM (PS2f-a) · Step 0.629 / 1 · `logs/pipeline/P-S2f.md` · **PM 검수 닫힘 (D103 — 두 번 다 뼈만 쓰고 멈춤 · 견줌 못 섬) · 2026-11-15** |
@@ -1121,4 +1123,69 @@ Claro 의 길은 그대로다: **뉴스 기사를 옮기지 않는다. 뉴스를
 - 검사: 받은 문서가 있으면 `verify-source-pack` · `pnpm --filter @claro/pipeline test` (데이터만 늘었으면 그대로인지). **결과를 로그에 붙인다**
 - docs/development-pipeline.md 의 S-3 줄 (☐ 도는 중 → ☑ + 날짜) · 커밋 접두사 `S-3` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 백그라운드 기다리기 반복 금지
 - **나(PM)에게**: 12줄 안쪽 — 커밋 · 고른 둘 (국내 · 해외 — 무슨 일 · 1차 문서 · 권리 · 무게 · 뒤집기) · 후보 수 · 매일 하려면 한 줄 · _open
+```
+
+## P-T1 · 11/15 오늘 — 국내 긴 이야기: 석유 최고가격 12차 동결 (D107 ~ D109)
+
+### 서브에이전트 지시 (Fable)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 파이프라인 레인. Step P-T1 (11/15 오늘 — 국내 긴 이야기)을 맡는다. PM(나)이 편집자로 게이트를 보고 (게이트 1 · 2) 도윤에게 보인다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소** — 권리 미확인 원문을 git 에 넣지 마라). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **같은 때 다른 세션이 하나 더 돈다** (`P-T2 — 해외 짧은 이야기 · `packages/pipeline/data/events/` 의 Garante 사건 폴더 · `shorts/` · `logs/pipeline/P-T2*` · rights 쪽 한 칸`). 장부 `packages/pipeline/data/p3-calls.jsonl` 은 둘이 같이 덧붙인다 — 커밋할 때 그 파일은 지금 모습 그대로 싣는다 (남의 줄이 섞여도 지우지 마라). `scripts/verify-ledger.py` 의 BUDGET 은 PM 이 이미 적었다 (`P-T1: 9` · `P-T2: 2`) — 고치지 마라.
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. 커밋 · push 는 해도 된다 (파일 지정 · 접두사). push = Vercel 배포 — 검사가 다 통과한 뒤.
+
+## 왜
+도윤 (D107 · D108): 실제 서비스처럼 **오늘 (11/15) 세상이 크게 다룬 뉴스**로 "오늘"을 만들어 본다. S-3 가 고른 국내 하나 = **석유 최고가격 12차도 동결** (산업통상부 11/13 · 11/15 장관 "연장 불가피" — 일요일 경제 머리기사). 무게 = **긴 이야기** (PM 확정 — 9개월 이어진 정책 · 1차 문서가 넉넉 · 체험이 선다). 도윤이 go ("그 2개로 진행해 줘").
+
+## 할 것
+1. **읽기** — `logs/pipeline/S-3.md` (① ④ ⑤ — 고른 까닭 · 1차 문서 · 뒤집기 둘 · 만들 때 받을 것) · 소스 팩 `packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/` · 회차 단계의 길 (`logs/pipeline/P-E1.md` ② · `logs/pipeline/P-E2.md` ① 「회의록 날 한 장」 — 명령 · 값 · 사람 멈춤) · `docs/contract/EPISODE.md` (회차 · 틀 · 불변식)
+2. **새 시리즈 · 1화** — `data/series/<code>.json` (이름 · code 는 네 제안 — 예 기름값 · 주제 이름은 물음 꼴 "누가 값을 정하나"처럼). 번호 규칙 (D88 · D89): 1화는 화면이 번호를 숨긴다 · "다음 화" 약속을 하지 않는다 (D83 — 다음 화를 쫓지 않는다 · 13차 발표 날짜는 달력에만)
+3. **필요한 1차 문서를 더 받는다** (S-3 ⑤) — 12차가 새 고시로 났는지 (S3-c · 났으면 그 고시) · 최고가격제 근거 법 조항 · 규정 · 지난 차수 보도자료 몇 (값이 어떻게 이어졌나) · 정산 자료. 권리: 공공누리 1 (문서 안 표시 — D70 · D92) · 법령 → git / 미확인 → 캐시. robots 막힘 (403 포함)은 받지 않는다. **언론 기사의 글 · 숫자는 쓰지 않는다** (S-3 ⑫ — "5.6조" · "26주 연속" · 주유소 실제 값은 1차에서 못 봤다)
+4. **회차 단계를 돌린다** — 사실 → 설계 (Fable) → **게이트 1 확인지에서 멈춘다** (사람 = PM). 확인지 경로를 PM 에게 알리고 기다린다 — PM 이 `human.json` 의 `after_design` 을 채우면 이어서 → 글 (Fable medium — D73 그대로) → 함의 → 고치기 → **게이트 2 확인지에서 멈춘다**. 뒤집기는 S-3 의 둘 가운데 문서가 가장 세게 받치는 것 (정유사 공급가 ≠ 주유소 값 — 고시 글자) · 체험 틀은 틀 여섯 가운데 이야기에 맞는 것 (D61 · 계약)
+   - 길이 FOMC 에 묶여 새 사건 (국내 정책 · 보도자료 + 고시)에서 서지 않는 곳이 있으면: **기존 파일 (episode*.ts · p3 ~ p5 · rerun · llm · robots · fetch · rights · pack)은 11/18 무렵 P-E3 가 쓴다** — 고치는 것은 **더하기만 · 최소로** 하고, P-E3 의 확인 (`episode fomc-auto --check` · `episode rate-3 --count --like MIN-09` · pipeline 시험)이 그대로인지 보인다. 크게 고쳐야 하면 **멈추고 PM 에게** (짧은 이야기로 낮출지 PM 이 정한다)
+5. **비용** — Step `P-T1` 상한 **9 달러** (`--step P-T1 --budget 9`) · 기본 배치 · 넘을 것 같으면 멈추고 적는다. 목표 4 ~ 6
+
+## 하지 말 것
+- apps/web (화면은 다음 Step — 프론트) · 계약 (모자라면 _open) · 골든 · 다른 사건 · Garante 사건 폴더 (P-T2) · `scripts/verify-ledger.py` · 사람 칸 채우기 (`human.json` 은 PM) · D73 고치기 · 언론 기사 글 · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/FINDINGS.md §1 · §15 · docs/DECISIONS.md D61 · D70 · D73 · D83 · D86 · D88 · D89 · D92 · D104 · **D107 ~ D109** · 위 1 의 파일
+
+## 끝낼 때 (게이트에서 멈출 때마다 PM 에게 짧게 · 끝은 아래)
+- 로그 `logs/pipeline/P-T1.md` — ① 한 장 요약 (제목 · 뒤집기 · 틀 · 비용 · 사람 시간) ② 받은 1차 문서 · 권리 ③ 단계별 (모델 · effort · 비용) ④ 게이트 1 · 2 에서 PM 이 고친 것 ⑤ 길이 새 사건에서 막힌 곳 · 고친 것 (P-E3 확인 그대로인지) ⑥ 화면 (다음 Step)이 쓸 것 — 회차 파일 · 시리즈 · 표지 그림에 들어갈 것 ⑦ _open. "작업 세션 모델: Fable 5.2"
+- 검사: `pnpm --filter @claro/pipeline test` · `pnpm -s typecheck` · 회차 계약 검증 · `episode <code> --check` · `episode fomc-auto --check` · `verify-source-pack` · `python3 scripts/verify-ledger.py`. **결과를 로그에 붙인다**
+- docs/development-pipeline.md 의 P-T1 줄 (☑ + 날짜) · 커밋 접두사 `P-T1` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 백그라운드 기다리기 반복 금지
+- **나(PM)에게**: 게이트 1 · 2 에서 각각 5줄 (확인지 경로 · 뒤집기 · 틀 · 걸린 것) · 끝에 12줄 (커밋 · 제목 · 비용 · 막힌 곳 · 화면이 쓸 것 · _open)
+```
+
+## P-T2 · 11/15 오늘 — 해외 짧은 이야기: 이탈리아 Garante → 메타 (D107 ~ D109)
+
+### 서브에이전트 지시 (Fable)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 파이프라인 레인 (+ 권리 한 칸 — 아래 3). Step P-T2 (11/15 오늘 — 해외 짧은 이야기)를 맡는다. PM(나)이 편집자로 사람 게이트를 보고 도윤에게 보인다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소** — 권리 미확인 원문을 git 에 넣지 마라). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 — **같은 때 다른 세션이 하나 더 돈다** (`P-T1 — 국내 긴 이야기 · `packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/` · `data/series/` · `episodes/` · `logs/pipeline/P-T1*``). 장부 `packages/pipeline/data/p3-calls.jsonl` 은 둘이 같이 덧붙인다 — 커밋할 때 그 파일은 지금 모습 그대로 싣는다 (남의 줄이 섞여도 지우지 마라). `scripts/verify-ledger.py` 의 BUDGET 은 PM 이 이미 적었다 (`P-T1: 9` · `P-T2: 2`) — 고치지 마라.
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. 커밋 · push 는 해도 된다 (파일 지정 · 접두사). push = Vercel 배포 — 검사가 다 통과한 뒤.
+
+## 왜
+도윤 (D107 · D108): 오늘 (11/15) 세상이 크게 다룬 해외 뉴스 하나 = **이탈리아 개인정보 감독기구 (Garante)가 메타에 8억 500만 유로** (11/14 · 안드로이드 페이스북 앱 "갤러리에서 추천 받기"가 폰 안 사진에 닿는 동의를 따로 안 받음). 무게 = **짧은 이야기**. 꼴은 **옛 꼴 (장면 넷 · `ShortStory` · `short.ts` · 글 Fable)** — 도윤이 새 꼴보다 옛 것을 골랐다 (D104). 도윤 go.
+
+## 할 것
+1. **읽기** — `logs/pipeline/S-3.md` (W1 · 뒤집기 · 1차 문서 · 권리 · robots) · `logs/pipeline/P-S1.md` (짧은 이야기 길 — 명령 · 확인지 · human.json) · 옛 실물 `data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice/` · `docs/contract/EPISODE.md` §13
+2. **소스 팩** — Garante 보도자료 (Doc-Web 10321080 · S-3 가 받아 둔 캐시 — **다시 받지 마라**: 기관의 자동 받기 조건이 연락처 든 신원 표시를 요구한다 · 우리는 연락처를 넣지 않는다 S3-b). 사건 code 는 네가 (예 `GPDP-20261114-META-GALLERY`). 영어판이 같은 쪽에 있으면 **영어판 구절**을 쓴다 (독자에게 옮겨 풀기 쉬움 · 구절은 글자 그대로)
+3. **권리 — PM 판정 (D109)**: Garante 의 재사용 조건 ("I contenuti possono essere riutilizzati citando la fonte … Il testo non va alterato" — 출처를 밝히고 글을 바꾸지 않으면 다시 써도 된다)은 **명시적 재사용 허락**이다 → 글을 바꾸지 않은 문서 글을 출처와 함께 git 에 둘 수 있다. 지금 권리 갈래 (`rights.ts` · 문서 단위 권리 D70 · 계약의 권리 값)에 이 꼴이 없으면 **더하기만 · 최소로** (예: 출처 표시 + 바꾸지 않음 조건의 갈래 하나 · 근거 문장 · 조건 주소 · 본 날짜) · 시험 하나 · 기존 문서 · 골든의 판정 0 변화. 계약 파일을 건드려야 하면 그 칸만 + CHANGELOG 한 줄 (백엔드 몫을 이 Step 이 함께 — 로그에). 이야기 화면에 출처 (기관 이름 · 문서 주소)가 보이는지 확인 (근거 시트)
+4. **짧은 이야기를 만든다 (옛 길 그대로 — 프롬프트 · 모델 고치지 않는다)** — `short <code> --write-call` → 짓기 → `--entail-call` → `--repair-call` → 다시 함의 → `--sheet` (사람 확인지) → **멈춘다** (`human.json` 은 PM). 뒤집기는 S-3 의 것 ("8억 유로 = 사진을 가져가 AI 에 먹였다" ≠ 보냈는지 · 피해와 상관없이 접근 자체에 동의가 필요 — 문서 글자) 이 서는지 모델의 설계를 본다. 독자 글은 한국어 · 구절은 영어 원문 그대로
+5. **비용** — Step `P-T2` 상한 **2 달러** (`--step P-T2 --budget 2`) · 목표 0.5 안쪽
+
+## 하지 말 것
+- apps/web (화면 · catalog 는 다음 Step) · 골든 · 옛 `shorts/license-notice*` · 석유 사건 폴더 · `data/series/` · `episodes/` (P-T1) · `scripts/verify-ledger.py` · `short-prompt.ts` · 모델 바꾸기 · Garante 다시 받기 · `human.json` 채우기 · 언론 기사 글 · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/FINDINGS.md §1 · §15 · docs/DECISIONS.md D70 · D86 · D88 · D90 · D92 · D104 · **D107 ~ D109** · 위 1 의 파일
+
+## 끝낼 때
+- 로그 `logs/pipeline/P-T2.md` — ① 한 장 요약 (제목 · 뒤집기 · 비용) ② 소스 팩 · 권리 (더한 갈래 · 근거) ③ 단계별 (모델 · 비용) ④ 확인지 · 걸린 것 ⑤ 화면 (다음 Step)이 쓸 것 — story.json 경로 · catalog 한 줄 (place "해외" · category "기술") ⑥ _open. "작업 세션 모델: Fable 5.2"
+- 검사: `pnpm --filter @claro/pipeline test` · `pnpm --filter @claro/contract test` · `pnpm -s typecheck` · `short <code> --check` · `short license-notice --check` (옛 것 그대로) · `verify-source-pack` · `python3 scripts/verify-ledger.py`. **결과를 로그에 붙인다**
+- docs/development-pipeline.md 의 P-T2 줄 (☑ + 날짜) · 커밋 접두사 `P-T2` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 백그라운드 기다리기 반복 금지
+- **나(PM)에게**: 10줄 안쪽 — 커밋 · 제목 · 뒤집기 · 확인지 경로 · 비용 · 권리 갈래 · _open
 ```
