@@ -29,6 +29,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **UX-9** | **진짜 체험 시안 (D91 · 작업 2)** — 독자가 먼저 정하거나 예상하고 → 결과가 깨는 꼴 · 긴 이야기 셋의 체험을 lab 에서 다시 (배달앱 사장 · 금리 위원 표 · 개인정보 보안 담당) · 그리지 않을 것 · D61 지킴 · 회차 글 · 골든 0자 · 체험 잘 만드는 법 초안 · 서브에이전트 Fable | ☑ 2026-11-14 · 검수 대기(PM) — **`/lab/play`** (들머리) · `/lab/play/price` · `/rate` · `/privacy` (`?at=play` = 체험으로 바로) · 원래 회차 화면에 **체험 자리만** 끼움 (뼈대 `kit/Episode.tsx` 에 시안 전용 칸 `play` 하나 — 안 주면 그대로 · UX9-a) · **배달앱**: 새 앱 값표를 손으로 끌어 값을 정한다 → 판다 → 요구가 내 값표를 제자리로 끌어 올린다 (내 값은 점선으로 남음) → 다시 끌면 두 값표가 같이 끌려오다 튕긴다 (PM 안의 값표 셋 → 둘 — 매장값은 이번 문서의 요구가 아니다) · **금리**: 브레이크 (틀 부품 그대로) → 표 셋 + 까닭 둘 → 던진다 → 실제 10 대 2 · 내 까닭과 문서의 말 ("그대로 + 이제 잡힐 것 같아서" → 표는 같은데 까닭이 달랐다 · "내린다" = 아무도 앉지 않은 쪽 · 올린다 = 까닭이 아직 문서에 없다) · **개인정보**: "보안 담당이라면 가장 단단히 챙길 칸"에 핀 ("어디서 막겠나"는 반사실의 틀이라 바꿈) → 한 장씩 넘김 → 위원회의 ★ 과 견줌 · 더한 글은 `copy.ts` 56 덩이뿐 (사실 · 수 · 구절은 골든) · `lab/play/check.ts` (새 사실 0 · 채점 · 반사실 · 한국 대출 이자 · D61 ③ ④ · 받는 말 길이 · 실제 화면과 떨어짐 — 망가뜨린 넷 FAIL) · 터치 끌기 · 동작 줄이기 확인 · **체험 잘 만드는 법 초안 열셋** (뼈: 본다 → 건다 → 문서가 연다 → 내 것 옆에 놓인다) · 계약과 안 맞는 것 열 (가장 큼: "먼저 정하기"는 새 틀이 아니라 틀 위의 한 겹 — 고를 것 · 받는 말 칸이 없다 · 계약 0줄) · web e2e 74 (새 4) · 실제 주소 · 틀 부품 · `catalog.tsx` · 회차 글 · 골든 · 계약 · pipeline · db 0줄 · 로그 `logs/frontend/UX-9.md` · 그림 51 |
 | **F-E3** | **작은 손질 (D91 · 작업 3)** — 실제 화면에서 병원 짧은 이야기 내림 (한 사건 = 이야기 하나 · lab 견본은 남김) · 카드의 "체험 있음 · 없음" 뺌 · 실제 짧은 이야기 e2e 를 면허 정지 (홀로 선) 로 · 골든 0자 · push = 배포 · 서브에이전트 Opus | ☑ 2026-11-14 · 검수 대기(PM) — 실제 `STORIES` 에서 병원 줄 뺌 → 첫 화면 카드 넷 (긴 셋 + 짧은 하나 = 면허 정지) · `/short/pipc-hospital` 404 · 개인정보 남음의 곁 이야기 길 없음 · `/map` 그대로 (지도 셋) · **시안 `/lab/today` · `/lab/today/short` 는 견본 그대로** (`lab/today/short/data.ts` 의 시안 전용 줄 `HOSPITAL` — 곁의 긴 이야기 아래 · `Screen.tsx` 를 `ShortScreen` / `ShortLineScreen` 으로 나눔 · 다리 `LabShort.tsx`) · 카드의 "체험 있음 · 없음" 뺌 (실제 + 시안 · `cards.tsx` · `home-copy.ts` · `copy.ts` · `besideNote` · 그 span 의 CSS 두 규칙) · 무게 그대로 · 실제 짧은 이야기 e2e = 면허 정지 (장면 넷 파일 그대로 · 근거 구절 · 곁 길 · 도구 · 지도 없음 · 병원 404) · web e2e 74 (고친 것 4) · 골든 · 계약 · pipeline · db · 회차 글 · `/lab/play` · `/lab/short` 0줄 · 배포 확인 (`124ab9b` · `/` · `/short/license-notice` 200 · `/short/pipc-hospital` 404 · 그림 18) · `logs/frontend/F-E3.md` · _open F-E3-a "개념으로 이어져요"가 비었다 ~ e (내린 주소가 기본 404) |
 | **F-E4** | **메인 화면 예쁘게 — 임시 판 (D105)** — 실제 `/` 의 첫 인상 · 카드마다 제 그림 · 위계 · 화면 글 다듬기 · 종이 그대로 · 이야기 글 0자 · 폰에서 앞 · 뒤 · 서브에이전트 Fable | ☑ 2026-11-15 · 검수 대기(PM) · **작업 세션은 권한 장치에 막혀 커밋 못 함 (PM 덧붙임 "비밀 출력 · 커밋 금지"가 커밋 금지로 읽힘) → 도윤 승인 뒤 PM 커밋 `bcb5d65` · push · 실제 `/` 50초 뒤 새 화면 · 200 (PM 확인) · **PM 검수 닫힘 (D106)**** — 방향 "이야기 책장": 큰 한 줄 첫 인상 · 카드 넷마다 제 그림 (긴 = 표지 그림 판 · 짧은 = 작은 그림) · 꼬리표는 상자 없는 한 줄 · 개념 지도 = 먹색 판 (주제마다 줍는 개념 이름) · 소개 = 세 걸음 · 화면 글 다듬음 ("날마다 안 낸다"는 맨 아래로) · 움직임 0.5 → 0.26초 · 실제 첫 화면 카드 `episode/home/cards.tsx` (시안 카드 · lab · catalog · tokens · 이야기 글 0줄) · web e2e 75 · 앞 · 뒤 그림 `logs/frontend/F-E4/` · `logs/frontend/F-E4.md` · _open a ~ i |
+| **F-E5** | **11/15 오늘 두 편을 실제 주소에 (D109 · D110)** — catalog 두 줄 (`day` 2026-11-15) · 새 시리즈 `oil` 1화 `/s/oil/1` (표지 그림 · 글리프) · 짧은 이야기 `/short/meta-gallery` (첫 화면 카드 그림) · 지도의 다음 화 개념 감춤 (D83) · 폰에서 확인 · 서브에이전트 Fable | ☐ 도는 중 |
 | **UX-8b** | **짧은 이야기 다시 쓰기 — 줄기는 뉴스 (D95) · 글 모델 눈 가리고 견주기 (D96)** — 같은 뉴스 · 같은 지시로 두 서브에이전트 (A · B)가 따로 · `/lab/short-a` · `/lab/short-b` · 도윤이 모른 채 고른다 · 짝은 PM.md | ☑ 2026-11-14 · PM 검수 끝 (D97) · A `e58b754` · B `f352901` · 도윤 고를 차례 |
 | **UX-8c** | **파이프라인이 새 꼴로 쓴 짧은 이야기를 폰으로 읽을 lab 화면 (D99 ③ · D101 PS2-o)** — `/lab/flow/license-notice` 가 `license-notice-flow/story.json` (FlowStory)을 읽어 `lab/short/Light.tsx` 로 그린다 · 견줘 읽기 = 옛 `/short/license-notice` · 서브에이전트 Opus | ☑ 2026-11-15 · 검수 대기(PM) — **`/lab/flow/license-notice`** · story.json → `parseFlowStory` (저장된 문서까지 대조 · 어기면 빌드가 멈춤) → `lab/short/flow.ts` 의 `toLight` (되돌리기를 short-b 에서 **한 곳으로 옮김** — short-b 의 lab 꼴 객체 바이트 같음 · 그림 10/10 픽셀 같음 · 실제 주소 보이는 글 같음) → `Light.tsx` 그대로 · 글 0자를 코드에 (PM 손질이 다음 빌드에 실린다 · e2e 도 story.json 을 읽어 댄다) · 시안 전용 = 나라와 법 · 견줘 읽기 (옛 꼴 · "같은 원문 · 앞서 낸 글" · 제목은 옛 story.json 에서) · 페이지에 모델 · 파이프라인 · 비용 말 0 (보이는 글 · HTML · JS) · `Light.tsx` · `types.ts` · 실제 주소 · 계약 · 골든 · packages 0줄 · web e2e 75 (새 1) · 그림 9 `logs/frontend/UX-8c/` · `logs/frontend/UX-8c.md` · _open UX8c-a (favicon 404) ~ f · **PM 검수 닫힘 (D103) · 2026-11-15** |
 | — | 앱 (Expo) | 웹 이후 |
@@ -1079,4 +1080,41 @@ push = Vercel 배포 — 검사가 다 통과한 뒤 한 번. 모델 API 0.
 - 검사: `pnpm -s typecheck` · `pnpm -s test` (web e2e — logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · lab `check.ts` (`lab/today`). **결과를 로그에 붙인다**
 - docs/development-frontend.md 의 F-E4 줄 (☐ 도는 중 → ☑ + 날짜) · 커밋 접두사 `F-E4` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버는 끈다 · 백그라운드 기다리기 반복 금지
 - **나(PM)에게**: 10줄 안쪽 — 커밋 · 방향 한 줄 · 바꾼 큰 것 셋 · 앞 · 뒤 그림 경로 · 배포 확인 · _open
+```
+
+## F-E5 · 11/15 오늘 두 편을 실제 주소에 (D109 · D110)
+
+### 서브에이전트 지시 (Fable)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 프론트 레인 (실제 화면). Step F-E5 (11/15 오늘 두 편을 실제 주소에)를 맡는다. PM(나)이 폰 크기로 읽고 검수한 뒤 도윤에게 보고한다. 도윤은 폰으로 본다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (`.claude/` 는 건드리지 마라).
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. **커밋 · push 는 해도 된다 — 도윤이 "올리고 보고해 줘"라고 했다** (파일 지정 · 접두사 F-E5). push = Vercel 배포 = 실제 주소가 바뀐다 — 검사가 다 통과하고 폰 크기 그림을 네가 직접 본 뒤 한 번. 모델 API 0.
+
+## 왜
+도윤 (D107 ~ D110): 실제 서비스처럼 11/15 의 큰 뉴스 둘로 "오늘"을 만들어 올리고 보고. 두 편은 파이프라인에서 PM 게이트를 지났다 (낼 수 있나 true):
+- **국내 긴 이야기** 「기름값 최고가격, 누구의 값을 묶은 걸까」 — 새 시리즈 「기름값은 어디서 묶이나」 (`packages/pipeline/data/series/oil.json`) 1화 · 회차 파일 `packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/episodes/oil-1/episode.json` · 체험 = 사슬 (chain) · 국내 · 돈
+- **해외 짧은 이야기** 「사진 때문에 수억 유로라는데, 사진을 가져간 걸까」 — `packages/pipeline/data/events/GPDP-20261114-META-GALLERY/shorts/meta-gallery/story.json` (옛 꼴 `ShortStory` · 장면 넷) · 선반 「내 정보는 누가 지키나」 · 해외 · 기술
+
+## 할 것
+1. **catalog 두 줄** (`apps/web/src/episode/catalog.tsx` — 머리 주석의 "이야기를 더하는 법" 그대로): 새 이야기는 맨 위 · `day: "2026-11-15"` · place · category. 긴 이야기는 `long(episodeOf(…), { ...OIL_LOOK, place: "국내", category: "돈", day: "2026-11-15" })` · 짧은 이야기는 `short(metaGallery, { place: "해외", category: "기술", day: "2026-11-15" })`. 차례: 긴 이야기 → 짧은 이야기 → 지난 넷
+2. **새 시리즈의 그림** — `src/episode/episodes/oil/` 에 표지 그림 (`Art`) · 글리프 (`Glyph`) — 지난 셋 (delivery · fomc · pipc)과 같은 결 (선 굵기 · 종이 톤 · 한 가지 ≠ / = 표시). 이야기의 뒤집기가 보이게: 천장 (1,784원)이 정유사 → 주유소 사슬의 어디에 걸리나 (예: 정유소 탱크 · 주유기 · 그 위를 지나는 천장 선). 숫자는 그림에 넣지 않는다. 새 색 없이 종이 토큰 안에서
+3. **첫 화면 카드** (F-E4 의 `src/episode/home/cards.tsx`): 긴 이야기 카드에 그 표지 그림 · 짧은 이야기 카드에 작은 그림 (예: 폰 갤러리와 동의 표시) — F-E4 가 짧은 이야기에 쓴 표 (code → 그림)에 한 줄. 카드가 여섯이 된다 — 맨 위 두 장이 "오늘" (11/15)로 묶이는지 (page.tsx 의 날짜 규칙 그대로 — 읽는 날이 한국 날짜 11/15 이면 "오늘의 이야기", 아니면 "11월 15일의 이야기")
+4. **1화 규칙 확인** (D88 · D89 · D83): `/s/oil/1` 에서 "1화" 표시 · 시리즈 줄 · "다음 화" 예고가 숨는지 (number 1 → 화면이 숨긴다는 규칙). **지도의 다음 화 개념 (ghosts — "수출 물량 제한 · 제세금")은 보이지 않게** — 약속이 아니다 (D83 · PM 게이트 2). 기존 이야기의 지도 그림은 그대로여야 한다 (최소로 · 까닭)
+5. **짧은 이야기 화면** `/short/meta-gallery` — 근거 시트에 기관 이름 · 문서 이름이 보이는지 (Garante 재사용 조건: 출처 표시 — D109). 구절은 영어 원문 그대로 · 독자 글은 한국어
+6. **폰에서 읽기** — 390×844 (2배)로 `/` 첫 화면 · `/s/oil/1` 표지 → 체험 (사슬 누르기 전 · 뒤) → 남음 · `/short/meta-gallery` 표지 → 끝을 찍어 `logs/frontend/F-E5/` 에. 네 눈으로 읽고 깨진 곳 · 겹침 · 넘침이 없는지 적는다
+7. e2e — 첫 화면 카드 수 · 차례 · 새 두 주소 200 · 1화 숨김 · ghosts 없음 · 콘솔 오류 0 (favicon 404 는 지난 결정대로 뺀다)
+8. push 뒤 실제 주소 `/` · `/s/oil/1` · `/short/meta-gallery` 200 과 제목이 보이는지 curl 로 확인해 로그에
+
+## 하지 말 것
+- 이야기의 글 · 근거 (pipeline 파일 — 읽기만) · 계약 · 골든 · packages/* · 지난 이야기의 화면 동작 · 색을 종이 밖으로 · lab · docs/PM.md 읽기
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D83 · D86 · D88 · D89 · D104 · D106 · **D107 ~ D110** · `apps/web/src/episode/catalog.tsx` · `src/episode/home/cards.tsx` · `src/episode/episodes/delivery/` (그림의 결) · `logs/frontend/F-E4.md` · `logs/pipeline/P-T1.md` (⑥ 화면이 쓸 것) · `logs/pipeline/P-T2.md` (⑤)
+
+## 끝낼 때
+- 로그 `logs/frontend/F-E5.md` — ① 주소 ② 바꾼 것 ③ 그림 (무엇을 그렸나 · 까닭) ④ 1화 · ghosts 확인 ⑤ 폰 그림 · 네 눈으로 본 것 ⑥ 검사 결과 ⑦ 배포 확인 ⑧ _open. "작업 세션 모델: Fable 5.2"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (web e2e — logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · lab `check.ts` (`lab/today`). **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 F-E5 줄 (☑ + 날짜) · 커밋 접두사 `F-E5` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버는 끈다 · 백그라운드 기다리기 반복 금지
+- **나(PM)에게**: 10줄 안쪽 — 커밋 · 주소 셋 · 그림 · 1화 · ghosts · 배포 확인 · _open
 ```
