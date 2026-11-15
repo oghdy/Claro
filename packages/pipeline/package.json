@@ -17,6 +17,7 @@
     "episode": "node src/episode.ts",
     "collect": "node src/collect.ts",
     "short": "node src/short.ts",
+    "short-flow": "node src/short-flow.ts",
     "test": "vitest run",
     "typecheck": "tsc -p ."
   },

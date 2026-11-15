@@ -1,0 +1,25 @@
+{
+  "_what": "짧은 이야기 (새 꼴) 단계의 모델 출력 (repair — short-flow.ts 가 쓴다 · 손으로 고치지 않는다). 프롬프트 src/short-flow-prompt.ts short-flow-repair/1",
+  "event": "ACRC-20261028-LICENSE-NOTICE",
+  "short": "license-notice-flow",
+  "kind": "repair",
+  "prompt_version": "short-flow-repair/1",
+  "model": "claude-sonnet-5-5",
+  "model_requested": "claude-sonnet-5-5",
+  "effort": "medium",
+  "input_sha256": "bf42f860c94f6abcb0be4b077f36d72334e93a3bc122e07c9aba53eaa46f73f7",
+  "request_sha256": "d321668f41aba073e581085cfde484ca738f308bb98d3348d36fb1d8e81f72c6",
+  "response_id": "msg_011Ch4bAioVbzdm5QtBShQPU",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 5605,
+    "output_tokens": 665,
+    "cache_creation_input_tokens": 1908,
+    "cache_read_input_tokens": 0
+  },
+  "duration_ms": 6433,
+  "cost_usd": 0.02263,
+  "called_at": "2026-11-15T10:54:15.392Z",
+  "output_sha256": "44282862686e94579ca8903d2ad781c1b0d01ded56aed49ae40379e3ed5e505d",
+  "output": "{\"items\":[{\"id\":\"flow[9].text\",\"action\":\"fix\",\"t\":\"그래서 이 뉴스는 이렇게 읽으면 돼요. 면허 정지 처분들이 취소됐는데, 이유는 처분의 내용이 아니라 순서였어요. 의견을 낼 기회가 오기 전에 결정이 먼저 나 있었던 거예요.\",\"src\":[\"p13\",\"p04\",\"p05\",\"p06\"],\"calc\":[],\"why\":\"구절이 말하지 않는 건수 '세 건'을 '처분들'로 바꿔 사례로 제시된 사건들까지로 줄였고, 나머지 문장은 그대로 뒀어요.\"},{\"id\":\"keep.line\",\"action\":\"fix\",\"t\":\"경찰서장이 의견 낼 기한 전에\\n면허 정지를 결정한 사건들이\\n순서를 어겼다는 이유로 취소됐다.\",\"src\":[\"p13\",\"p04\",\"p05\",\"p06\"],\"calc\":[],\"why\":\"구절에 없는 건수 '셋'을 '사건들'로 바꿔 구절이 말한 범위에 맞췄어요.\"},{\"id\":\"keep.words[0].body[0]\",\"action\":\"fix\",\"t\":\"도로교통법에 따르면 관할 경찰서장이 시·도경찰청장의 위임을 받아 면허 정지처분을 하려는 때에는 그 전에 당사자에게 처분 내용과 의견제출 기한 등을 알려야 해요. 도로교통법 시행규칙에 따르면 통지를 받은 사람은 말이나 진술서로 이의를 낼 수 있고, 지정된 기일까지 내지 않으면 이의가 없는 것으로 봐요.\",\"src\":[\"p10\",\"p11\"],\"calc\":[],\"why\":\"첫 문장에 위임 조건을 되살리고 둘째 문장의 출처를 도로교통법 시행규칙으로 분리해 구절과 맞췄어요.\"}]}"
+}
