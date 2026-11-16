@@ -36,6 +36,8 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **UX-10b** | **기름값 다시 짜기 — Sonnet 으로 한 번 더 (D117)** — UX-10 과 같은 법 · 같은 소스 팩 · 같은 kit (UX-10 의 시안 칸 `replot` 을 써도 된다) · **UX-10 의 글 · 로그는 안 본다** (따로 쓴다) · `/lab/episode/oil-replot-b` · 손으로 (모델 API 0) · 세 판을 폰에서 나란히 · 서브에이전트 Sonnet 5.5 | ☑ 2026-11-16 · **PM 검수 닫힘 (D118)** — `/lab/episode/oil-replot-b` 「최고가격이 그대로면, 주유소 가격표도 그대로일까요」 · 6장 · 0화 없음 · 6월 실마리 → 누른 뒤 3월 문장 · 상자 없음 · 도구 둘 · kit `replot` 그대로 씀 (kit · 계약 · 실제 0줄) · e2e 83 · 약 19분 · `logs/frontend/UX-10b.md` |
 | **UX-11a** | **편집자 시험 — Opus 가 Sonnet 판의 빈 곳만 짚는다 (D120 ②)** — `oil-replot-b` 를 다섯 물음으로 · 고쳐 쓰지 않는다 · 다섯 개 안쪽 (어디 · 왜 · 무엇을 · 근거) · 정답지 (D118)를 안 본다 · 로그 하나 · 코드 0줄 · 서브에이전트 Opus | ☑ 2026-11-16 · 검수 대기(PM) — 빈 곳 넷 (꼭 셋 · 있으면 좋음 하나): ① 제목 "그대로일까" ≠ 이야기가 푸는 "넘을 수 있나" ② `event.riddle[0]` 이 6월 전망을 일어난 일처럼 ③ 답 뒤 "그럼 내 기름값과 상관없나?"를 받는 줄 없음 — 실소비자 문장 덜고 F068 · F094 · F105 로 닿는 길 ④ verdict ≈ 남음 한 줄 (덜어 냄) · 글 · 코드 0줄 · 모델 API 0 · 약 8분 · `logs/frontend/UX-11a.md` · _open a · b |
 | **UX-11b** | **Sonnet 이 빈 곳을 제 말로 메운다 (D120 ② · D122 · D123)** — `oil-replot-b` 는 그대로 · 메운 판 `/lab/episode/oil-replot-b2` · 편집자 목록 넷 + PM 셋 + 아라비아 숫자 · 받을지는 쓰는 사람이 정하고 까닭을 적는다 · 손으로 (모델 API 0) · 폰 앞 · 뒤 · 서브에이전트 Sonnet 5.5 | ☑ 2026-11-16 · `/lab/episode/oil-replot-b2` · 편집자 넷 받음 3 + 조금 1 · PM 셋 받음 · 숫자 24칸 · 글자 +0.7% · 모델 API 0 · `logs/frontend/UX-11b.md` | · **PM 검수 닫힘 (D124)**
+| **F-E6a** | **기름값 1화 마지막 글 — 실제로 낼 판 (D125 ③ 앞)** — 메운 판 (b2)의 작은 손질 셋 (`real[2]` 두 문장 · `tools[0].short` 단정 빼기 · 비대칭 구절 키) · 한글 수 마지막 확인 · 파이프라인 산출물은 그대로 두고 **로컬 세션 판의 자리** `…/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/` (`episode.json` + `screen.json`) · 손으로 (모델 API 0) · 서브에이전트 Sonnet 5.5 | ☐ 도는 중 (2026-11-16) |
+| **F-E6** | **실제 `/s/oil/1` 을 메운 판으로 (D125 ③)** — catalog 가 `local/oil-1` 을 읽음 · 화면 칸 셋 (뉴스 한 줄 · 멈춘 고리 가림 · 문서 문장 터짐)을 catalog 손 칸으로 실제 화면에 (안 주면 그대로 — 다른 실제 이야기 0 변화) · 새 표지 그림 (답이 아니라 물음의 그림) · 검사 · e2e · 폰 앞 · 뒤 · push = 배포 · 서브에이전트 Fable | ☐ F-E6a 뒤 |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -1316,4 +1318,77 @@ PM 이 이걸 모아 "이야기 짜는 법" 한 장을 썼다 (`docs/content/sto
 - 검사: `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · 이 폴더 `check.ts` · `oil-replot-b/check.ts` (그대로 OK) · `lab/episode/check.ts` · `python3 scripts/verify-ledger.py` (합 $34.85 그대로). **결과를 로그에 붙인다**
 - docs/development-frontend.md 의 UX-11b 줄 (☑ + 날짜) · 커밋 접두사 `UX-11b` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버는 끈다 · 백그라운드 기다리기 반복 (`while pgrep …`) 금지
 - **나(PM)에게**: 12줄 안쪽 — 커밋 · 주소 · 항목마다 받음 / 안 받음 한 줄씩 · 길이 앞 · 뒤 · 숫자 바꾼 칸 수 · 시간 · _open
+```
+
+## F-E6a · 기름값 1화 마지막 글 — 실제로 낼 판 (D125 ③ 앞)
+
+### 서브에이전트 지시 (Sonnet 5.5)
+```
+너는 Claro 프로젝트의 **쓰는 사람** 세션이다. Step F-E6a 를 맡는다. 도윤이 고른 기름값 1화 메운 판 (`/lab/episode/oil-replot-b2`)을 실제 주소 `/s/oil/1` 에 올리기 전에, PM 이 짚은 작은 손질을 하고 **실제로 낼 파일**을 만든다. 다음 Step (F-E6 · 프론트)이 그 파일을 실제 화면에 붙인다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (`.claude/` 는 건드리지 마라).
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. 커밋 · push 는 해도 된다 (파일 지정 · 접두사 F-E6a). **모델 API 0** — 글은 네가 손으로 쓴다. 끝에 장부 합 그대로 (시작 때 $34.85 — `python3 scripts/verify-ledger.py`).
+
+## 왜
+도윤 (D119 · D124 뒤 "굳굳 메운 판 좋다 다음 작업 진행"): 메운 판을 실제 화면에. 도윤의 잣대는 **쉽다 · 구체적이다 · 오버하지 않는다** — 손질하다 글이 길어지거나 무거워지면 안 된다.
+
+## 할 것
+1. 시작 글 = `apps/web/src/app/lab/episode/oil-replot-b2/episode.json` + 같은 폴더 `data.ts` 의 `REPLOT` (뉴스 한 줄 · 멈춘 고리 가림 · 문서 문장 터짐). **lab 파일은 고치지 마라** (견줄 판으로 남는다)
+2. PM 이 짚은 손질 셋 (D124):
+   - **a** `scenes.aha.real[2].body` 가 한 문장에 남의 말 둘 ("…판단한다고 했어요")이라 무겁다 → **두 문장으로** (뜻 · 출처 그대로 · 길이 늘리지 말 것)
+   - **b** `tools[0].short` "이 값보다 비싸게는 못 팔게 정한 상한이에요"가 표지에서 고친 오해 (누구의 값인지 말하지 않고 '못 판다'고 단정)를 도구 카드에서 다시 말한다 → 단정하지 않게 (답을 먼저 말하지도 않게 — 이 카드는 풀이 전에 줍는다)
+   - **c** `real[2]` 의 "값이 오를 땐 빨리, 내릴 땐 천천히 가는 오랜 문제"는 PR-0327 의 문장 "그간 국내 석유가격이 “오를 때는 빨리 올리고, 내릴 때는 천천히 내린다”는 소위 석유가격의 비대칭성 문제가 …"에 기댄다 → 그 구절을 `quotes` 에 더하고 (문서 글 그대로 · `store.documents.json` 에서 떼어) 근거 (`src`)에 단다
+3. 한글 수가 남았는지 마지막으로 본다 (D119 — "6월 · 12번째") · 독자가 읽는 모든 글 (`episode.json` + 화면 칸)
+4. **실제로 낼 파일 두 개** — 파이프라인 산출물 (`…/episodes/oil-1/`)은 그대로 둔다 (파이프라인 `--check` 가 그 파일을 다시 만들어 대 본다). 새 자리 = **로컬 세션 판의 자리** (D110):
+   - `packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/episode.json` — 계약의 Episode · `episode_id` 그대로 · `episode_version: 2` · `_source` 에 "로컬 세션 (Sonnet) 손글 · 편집자 (Opus) · UX-10b → UX-11a → UX-11b → F-E6a"
+   - 같은 폴더 `screen.json` — `REPLOT` 와 같은 모양 (`news` · `veil` · `burst`)의 JSON (화면이 실제로 쓸 칸 — 다음 Step 이 읽는다)
+   - 같은 폴더 `README.md` 몇 줄 — 이 폴더가 무엇인지 (파이프라인이 아니라 로컬 세션이 쓴 판 · 어디서 왔나 · 검사하는 법)
+5. **검증** — `@claro/contract` 의 `validateEpisode` 를 저장된 문서 (`store.documents.json`)와 함께 돌려 **오류 0** 을 로그에 붙인다 (돌리는 법은 `apps/web/src/app/lab/episode/oil-replot-b2/check.ts` 를 본다 · 임시 스크립트는 커밋하지 않는다). `screen.json` 의 `news` 구절 키 · `burst` 의 인용이 문서 글 그대로인지도
+6. 로그 `logs/frontend/F-E6a.md` — ① 바꾼 글 앞 · 뒤 (a · b · c · 숫자) ② 길이 앞 · 뒤 ③ 검증 결과 ④ 걸린 시간 (`date` — 실제 시각만) ⑤ _open. "작업 세션 모델: Sonnet 5.5 · 모델 API 0"
+
+## 하지 말 것
+- lab 파일 · 실제 화면 코드 · `catalog.tsx` · kit · 계약 · 골든 · 파이프라인 산출물 (`episodes/oil-1/`) · 소스 팩의 다른 파일 · 모델 API · 다른 판 (`oil-replot/` · `logs/frontend/UX-10.md`) 읽기 · docs/PM.md 읽기
+- 장면 차례 · 체험 · 화면 칸의 뜻 바꾸기 — 이번은 글 손질과 파일 옮기기뿐이다
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D119 · D120 · D124 · D125 · `logs/frontend/UX-11b.md` · `logs/frontend/UX-11a.md` · `apps/web/src/app/lab/episode/oil-replot-b2/` · 소스 팩 `store.documents.json` (PR-0327 문서) · `docs/content/story-guide.md`
+
+## 끝낼 때
+- docs/development-frontend.md 의 F-E6a 줄 (☑ + 날짜) · 커밋 접두사 `F-E6a` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 백그라운드 일 · 서버를 남기지 마라 (끝날 때 다 끈다 · `while pgrep …` 금지)
+- **나(PM)에게**: 8줄 안쪽 — 커밋 · 파일 셋 · a · b · c 앞 → 뒤 한 줄씩 · 길이 · 검증 · 시간 · _open
+```
+
+## F-E6 · 실제 `/s/oil/1` 을 메운 판으로 (D125 ③)
+
+### 서브에이전트 지시 (Fable)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 프론트 레인 (실제 화면). Step F-E6 (실제 `/s/oil/1` 을 메운 판으로)을 맡는다. PM(나)이 폰 크기로 읽고 검수한 뒤 도윤에게 보고한다. 도윤은 폰으로 본다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (`.claude/` 는 건드리지 마라).
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. **커밋 · push 는 해도 된다 — 도윤이 "다음 작업 진행하고 끝나면 보고"라고 했다** (파일 지정 · 접두사 F-E6). push = Vercel 배포 = 실제 주소가 바뀐다 — 검사가 다 통과하고 폰 크기 그림을 네가 직접 본 뒤 한 번. 모델 API 0.
+
+## 왜
+도윤이 기름값 1화를 다시 짠 판 가운데 **메운 판** (`/lab/episode/oil-replot-b2` — Sonnet 이 쓰고 Opus 편집자가 빈 곳을 짚고 Sonnet 이 메움)을 골랐다 ("굳굳 메운 판 좋다"). 앞 Step (F-E6a)이 그 글을 다듬어 **실제로 낼 파일**을 만들었다: `packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/episode.json` (계약 Episode · 판 2) + `screen.json` (화면 칸 셋). 네 일은 그것을 실제 `/s/oil/1` 에 붙이는 것.
+
+## 할 것
+1. **이야기 목록** (`apps/web/src/episode/catalog.tsx`) — 기름값 줄이 `local/oil-1/episode.json` 을 읽게 (파이프라인 산출물 `episodes/oil-1/episode.json` 은 그대로 둔다 — 파이프라인 `--check` 가 그 파일을 쓴다). `day` · `place` · `category` · `unpromised` 그대로. 첫 화면 카드 제목이 새 제목으로
+2. **화면 칸 셋을 실제 화면에** — kit 의 `replot` (`kit/Episode.tsx` — `news` 제목 위 뉴스 한 줄 · `veil` 사슬의 멈춘 고리를 누르기 전 가림 · `burst` 체험 뒤 문서 문장을 크게 + "뒤집어 보면" 상자 안 그림)는 지금 "시안 전용"이다. 이것을 **이야기마다 고르는 화면 칸**으로 — catalog 의 손 칸 (`unpromised` 처럼 — 계약에 없는 칸이라는 것을 주석에)으로 `screen.json` 을 넘기고, `Screen.tsx` 가 실제 화면 `Episode` 에 준다. **안 주면 그대로** — 다른 실제 이야기 (배달 · 금리 2화 · 개인정보 · 면허 · 메타)는 0 변화 (e2e 글자 + DOM 으로 앞 · 뒤 견줌). 이름 · 주석에서 "시안 전용"을 바로잡는다 (lab 화면들도 같은 칸을 쓴다). catalog 는 kit 를 읽지 않는다는 규칙 (catalog 머리 주석)을 지킨다
+3. **화면 칸 검사** — `lab/episode/check.ts` (실제 화면의 회차를 보는 곳 · S7 근처)에: `screen.json` 의 `news` 구절 키가 그 회차의 구절에 있고 숫자가 받쳐지는가 · `burst` 의 인용이 저장된 문서 글 그대로인가 · `veil` 의 키가 그 회차 사슬의 멈춘 고리인가
+4. **새 표지 그림** (`src/episode/episodes/oil/Art.tsx` — 첫 화면 카드도 같은 그림) — 지금 그림 (정유소 탱크 위의 천장이 주유기 앞에서 끝나고 ≠)은 **답을 그린다** (이야기 짜는 법 5 "답을 먼저 보이지 않는다" · D112 · UX-10 i). 새 그림은 **물음의 그림** — 1,784원의 천장 선과 주유기 (가격표)가 같이 있되, 천장이 어디까지 닿는지는 보이지 않게 (예: 천장 선이 화면 밖으로 이어지거나 주유기 위에 물음표 하나 — 너의 판단). 숫자 없음 · ≠ / = 없음 · 지난 그림들과 같은 결 (선 굵기 · 종이 톤 · 새 색 0). 글리프 (`Glyph`)는 이 회차의 도구 넷 (`cap` · `supply` · `scope` · `settle` — 판 2 의 도구를 확인)에 맞는지만 본다
+5. **lab 견줌 화면** (`/lab/episode/oil-replot` · `-b` · `-b2`)은 그대로 둔다 — 같은 `OIL_LOOK` 을 쓰면 표지가 새 그림으로 바뀌는데, 그건 괜찮다 (로그에 적기만)
+6. **폰에서 읽기** — 390×844 로 실제 `/s/oil/1` 을 **앞 (지금 실제 · 판 1) · 뒤 (판 2)** 처음부터 끝까지 눌러 가며 장면마다 찍는다 → `logs/frontend/F-E6/` (`v1-NN-…` · `v2-NN-…` — 번호는 장면 자리: 01 표지 · 02 지금까지 · 03 오늘의 사건 · 04 도구 · 05 풀이 누르기 전 · 06 풀이 누른 뒤 · 07 이어짐 · 08 남음) + 첫 화면 `/` 카드 앞 · 뒤. 네 눈으로 읽고 깨진 곳 · 겹침 · 넘침을 적는다
+7. **e2e** — `/s/oil/1`: 새 제목 · 뉴스 한 줄 · "지금까지의 이야기" 없음 (처음 온 독자) · 체험 누르기 전 멈춘 고리 가림 → 누른 뒤 꼬리표 · 문서 문장 · "뒤집어 보면" 상자 없음 · 근거 시트 · 콘솔 오류 0 / 다른 실제 주소 그대로 / 첫 화면 카드 제목
+8. push 뒤 실제 주소 `/` · `/s/oil/1` 200 과 새 제목이 보이는지 curl 로 확인해 로그에
+
+## 하지 말 것
+- 이야기 글 (`local/oil-1/*` — 읽기만 · 걸리는 데는 _open) · 파이프라인 산출물 · 계약 · 골든 · `packages/*` 코드 · 다른 실제 이야기의 화면 동작 · 금리 2화 사슬 가림 (D112 · UX-10 d — 도윤에게 따로 묻는다 · 이번엔 0) · 새 색 · docs/PM.md 읽기 · 모델 API
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D104 · D110 · D112 · D114 · D119 · D124 · D125 · `docs/content/story-guide.md` · `logs/frontend/F-E5.md` (지금 판을 올린 법 · 그림) · `logs/frontend/UX-10.md` ⑥ (`replot` 칸을 만든 까닭) · `logs/frontend/F-E6a.md` · `apps/web/src/episode/catalog.tsx` · `Screen.tsx` · `kit/Episode.tsx` · `kit/frames/Steps.tsx` · `episodes/oil/` · `apps/web/src/app/lab/episode/oil-replot-b2/` (lab 에서 칸을 넘긴 법)
+
+## 끝낼 때
+- 로그 `logs/frontend/F-E6.md` — ① 주소 ② 바꾼 것 (catalog · 화면 칸 · 검사) ③ 그림 (무엇을 · 까닭) ④ 다른 실제 이야기 0 변화의 증거 ⑤ 폰 그림 · 네 눈으로 본 것 ⑥ 검사 결과 ⑦ 배포 확인 ⑧ _open. "작업 세션 모델: Fable 5.2"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (web e2e — logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `lab/episode/check.ts` · lab `oil-replot*` check 셋 · 파이프라인 `episode oil-1 --check` (그대로 같다) · `python3 scripts/verify-ledger.py`. **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 F-E6 줄 (☑ + 날짜) · 커밋 접두사 `F-E6` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버 · 백그라운드 일은 끝날 때 다 끈다 (`while pgrep …` 금지)
+- **나(PM)에게**: 10줄 안쪽 — 커밋 · 주소 · 바꾼 것 · 그림 · 다른 이야기 0 변화 · 배포 확인 · _open
 ```
