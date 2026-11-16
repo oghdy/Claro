@@ -255,8 +255,8 @@ const VIOLATIONS: Violation[] = [
   },
   {
     file: "episode-bare-digit.json", of: PRICE, code: "BARE_DIGIT",
-    rule: "§9-10 — 맨 글자열에는 숫자가 없다. 숫자가 든 글은 근거를 달 수 있는 EpisodeText 여야 한다",
-    what: "사건 장의 큰 글자 꼬리표(맨 글자열)에 수를 넣었다",
+    rule: "§9-10 · §4.3 — 맨 글자열의 숫자는 같은 이야기의 근거 있는 글 (구절 · 계산으로 받친 EpisodeText — 화면 번호 ui 는 빼고)에 같은 수가 있을 때만 쓸 수 있다 (B-E5 · D119). 근거 없는 수가 근거 검사 (9)를 비켜 가지 못하게",
+    what: "사건 장의 큰 글자 꼬리표(맨 글자열)에 수 (역대 2위)를 넣었다 — 배달앱 1화의 근거 있는 글 어디에도 2 가 없다 (2020 · 2023 … 은 다른 토막). B-E5 에서 다시 대 봤다 — 받쳐지지 않은 수 그대로라 글은 고치지 않았다",
     mutate: (e) => (e.scenes.event.figures[0].tag = "잠정 · 역대 2위"),
   },
   {
@@ -916,7 +916,7 @@ describe("픽스처 없이 보는 것", () => {
     d.flow[3].kind = "list"; // 목록 덩이 — 실물 없음
     expect(codes(d)).toEqual(["SCHEMA_TYPE"]);
     const e = flowGolden();
-    e.flow[2].label = "질병관리청 발표문 2쪽에서";
+    e.flow[2].label = "질병관리청 발표문 8쪽에서"; // 8 은 이 이야기의 근거 있는 글 어디에도 없다 (B-E5 전에는 2쪽이었다 — 2 는 "2명 중 1명"이 받친다)
     expect(codes(e)).toEqual(["BARE_DIGIT"]);
     const f = flowGolden();
     delete f.not_drawn;
@@ -930,5 +930,92 @@ describe("픽스처 없이 보는 것", () => {
     expect(codes(a)).toEqual(["NUMBER_UNGROUNDED"]);
     for (const name of [PRICE, RATE, PRIVACY]) expect(codes(golden(name)), name).toEqual([]);
     expect(codes(golden(SHORT))).toEqual([]);
+  });
+});
+
+// ─────────────────────────────────────────────────────────── 맨 글자열의 숫자 (불변식 10 · B-E5 · D119)
+// 맨 글자열 (머리 · 꼬리표 · 단추 …)의 숫자는 같은 이야기의 근거 있는 글 (구절 · 계산으로 받친 EpisodeText — 화면 번호 ui 는 빼고)에 같은 수가 있을 때만.
+// 세 꼴 (긴 · 옛 짧은 · 새 짧은)이 같은 검사기 (groundProblems)를 지난다 — 꼴마다 하나씩 본다
+describe("맨 글자열의 숫자 — 근거 있는 글에 같은 수가 있을 때만 (불변식 10 · B-E5)", () => {
+  const body = (name: string) => {
+    const { _source, ...b } = golden(name);
+    return b;
+  };
+  const errorsOf = (doc: unknown) => {
+    const r = validateStory(doc, { documents, episodes });
+    return r.ok ? [] : r.errors.map((e) => `${e.code} ${e.path}`);
+  };
+
+  it("① 받쳐진 수는 맨 글자열에 와도 지난다 — 긴 이야기 (배달앱 1화 · 쉼표 · 앞 0 · 연도까지 §4.3 그대로)", () => {
+    const e = body(PRICE);
+    e.scenes.event.figures[0].tag = "2026년 10월 29일 · 잠정"; // 표지 meta "2026년 10월 29일 결정 · 11월 9일 발표" (구절)이 받친다
+    e.scenes.event.figures[1].tag = "11월 09일 발표"; // 앞 0 은 뗀다 (09 = 9)
+    e.scenes.cover.ask_new = "3,311억 원은 어디서 나왔죠?"; // 쉼표를 뗀다 — 큰 글자 "3,311억 원" (구절)이 받친다
+    expect(errorsOf(e)).toEqual([]);
+    expect("episode" in validateStory(e, { documents })).toBe(true);
+  });
+
+  it("① 받쳐진 수는 맨 글자열에 와도 지난다 — 짧은 이야기 옛 꼴 (영훈)", () => {
+    const s = body(SHORT);
+    s.scenes.cover.ask = "10월 28일에 진료 기록이 털린 건가요?"; // meta "2026년 10월 28일 의결" (구절)
+    s.scenes.keep.line = "188,481명이 털린 곳은\n가장 중요한 시스템이 아니었다."; // dek "회원 188,481명" (구절)
+    expect(errorsOf(s)).toEqual([]);
+    const r = validateStory(s, { documents, episodes });
+    expect(r.ok && "story" in r && !("form" in r.story)).toBe(true);
+  });
+
+  it("① 받쳐진 수는 맨 글자열에 와도 지난다 — 짧은 이야기 새 꼴 (비만 B) · 계산 (calc)으로 받친 글도 받침이다", () => {
+    const f = body(FLOW);
+    f.flow[2].label = "질병관리청 11월 9일 발표문에서"; // meta "2026년 11월 9일 발표" (구절)
+    expect(errorsOf(f)).toEqual([]);
+    // 계산으로 받친 글 — 남녀 차이 19.6%p (= 42.5 − 22.9)는 구절에 없고 calc 로 밝혔다. 그 글이 맨 글자열의 19.6 을 받친다
+    const g = body(FLOW);
+    g.flow[3].text.t += " 차이는 19.6%p예요.";
+    g.flow[3].text.calc = { "19.6": "42.5 − 22.9 (남성 전체 − 여성 전체)" };
+    g.flow[5].label = "19.6%p 차이를 뒤집어 보면";
+    expect(errorsOf(g)).toEqual([]);
+    const r = validateStory(g, { documents });
+    expect(r.ok && "story" in r && "form" in r.story).toBe(true);
+    // calc 를 떼면 글이 근거를 잃고 (9) — 근거 없는 글은 받침이 아니라 맨 글자열도 걸린다 (10). 둘이 같이 난다 (10 은 모양이 아니라 근거와 함께 본다)
+    delete g.flow[3].text.calc;
+    expect(errorsOf(g)).toEqual(["NUMBER_UNGROUNDED /flow/3/text", "NUMBER_UNGROUNDED /flow/3/text", "BARE_DIGIT /flow/5/label", "BARE_DIGIT /flow/5/label"]); // 19 · 6 — 토막마다 하나
+  });
+
+  it("② 받쳐지지 않은 수는 막힌다 — 세 꼴 다 (같은 검사기)", () => {
+    // 긴 이야기 — 배달앱 1화에 2 를 받친 글이 없다 (2020 · 2023 … 은 다른 토막). 위반 픽스처 episode-bare-digit 과 같은 고침
+    const e = body(PRICE);
+    e.scenes.event.figures[0].tag = "잠정 · 역대 2위";
+    expect(errorsOf(e)).toEqual(["BARE_DIGIT /scenes/event/figures/0/tag"]);
+    // 옛 짧은 꼴 — 7 은 영훈 이야기의 근거 있는 글에 없다
+    const s = body(SHORT);
+    s.scenes.keep.title = "작은 뒤집기 7개가\n남았어요";
+    expect(errorsOf(s)).toEqual(["BARE_DIGIT /scenes/keep/title"]);
+    // 같은 수라도 끊어 읽은 토막이 달라야 막힌다 — 본문은 "188,481명" (188481) · 맨 글자열 "18만 8,481명" (18 · 8481)
+    const t = body(SHORT);
+    t.scenes.keep.line = "18만 8,481명이 털렸다.";
+    expect(errorsOf(t)).toEqual(["BARE_DIGIT /scenes/keep/line", "BARE_DIGIT /scenes/keep/line"]);
+    // 새 짧은 꼴
+    const f = body(FLOW);
+    f.keep.words_label = "이 이야기에서 만난 낱말 8개";
+    expect(errorsOf(f)).toEqual(["BARE_DIGIT /keep/words_label"]);
+  });
+
+  it("③ 화면 번호 (ui)에만 있는 수는 받침이 안 된다 — 금리 2화의 1 은 \"1화\" (ui)에만 있다 · 같은 말이 1 을 받친 이야기 (배달앱)에서는 지난다", () => {
+    const r = body(RATE);
+    expect(JSON.stringify(r.track)).toContain('"t":"1화","ui":true');
+    r.scenes.cover.ask_follower = "1화 다음은 어떻게 됐죠?";
+    expect(errorsOf(r)).toEqual(["BARE_DIGIT /scenes/cover/ask_follower"]);
+    // 개인정보 1화 — 0 · 1 이 다 화면 번호에만 있다
+    const p = body(PRIVACY);
+    p.scenes.keep.title = "0화부터 1화까지";
+    expect(errorsOf(p)).toEqual(["BARE_DIGIT /scenes/keep/title", "BARE_DIGIT /scenes/keep/title"]);
+    // 같은 이야기 안에서만 받친다 — 배달앱 1화는 1 을 구절로 받친 글이 있다
+    const e = body(PRICE);
+    e.scenes.cover.ask_follower = "1화 다음은 어떻게 됐죠?";
+    expect(errorsOf(e)).toEqual([]);
+  });
+
+  it("골든 다섯 · 맨 글자열에 숫자가 없는 지금 그대로 지난다 (규칙은 넓어지기만 했다)", () => {
+    for (const name of [PRICE, RATE, PRIVACY, SHORT, FLOW]) expect(codes(golden(name)), name).toEqual([]);
   });
 });

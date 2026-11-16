@@ -9,7 +9,8 @@
 //   7  시리즈 줄에 now 가 정확히 하나 · 그 번호가 표지의 번호와 같다
 //   8  구절은 저장된 문서의 글 그대로 (빈칸 · 줄바꿈만 무시) — **documents 를 줄 때만** (안 주면 경고 QUOTES_NOT_CHECKED)
 //   9  글의 숫자는 근거 셋 중 하나 — 구절 · 계산(calc) · 화면 번호(ui)
-//   10 맨 글자열(독자가 읽는 string)에는 숫자가 없다
+//   10 맨 글자열(독자가 읽는 string)의 숫자는 같은 이야기의 근거 있는 글 (9 가 구절 · 계산으로 받친 글 — 화면 번호 ui 는 빼고)에 같은 수가 있을 때만 (B-E5 · D119).
+//      숫자를 읽는 법은 9 와 같은 함수 (digitsOf · inPool — 쉼표 · 숫자 토막 · 앞 0 · 연도 ’26). 근거를 봐야 알므로 모양 (1) 이 아니라 근거 (3 · 8 · 4 · 9) 와 함께 본다
 //   11 깨는 사실에 구절 (사망이 아니면)                 12 체험이 없으면 기본 풀이 + 까닭 · 체험이 있으면 까닭 없음
 //   13 D61 ④ 사망이면 체험 없음 · 조용히 · 까닭 death   14 D61 ⑥ 뒤집기가 없으면 틀도 "뒤집기만"도 없다
 //   15 틀의 조합이 서는 것이다                          16 D61 ③ 자리에 앉기는 한 기관 안의 공식 이견에만 · 쪽마다 한 말에 구절 · 수가 표결 기록에
@@ -43,6 +44,7 @@
 //
 // 보지 않는 것
 //   글의 뜻이 구절에서 나오는가 (의미 대조 — 사람 · W-2) · 한글로 쓴 수 ("여섯 가지") · 그림 부품이 있는가 (코드 — 화면 쪽 검사)
+//   맨 글자열의 수가 받친 글의 수와 같은 것의 수인가 (머리의 "6월" 이 본문의 "6명" 에 받쳐져도 지난다 — 수만 댄다 · 뜻은 사람)
 //   split · death · not_yet_note 가 **참인가** — 스스로 적는 칸이다. 검사는 빠뜨리지 못하게 할 뿐이다 (사람이 채운다 — §8)
 //   ConceptRef 가 가리킨 개념 · 버전이 있는가 · event_ref 의 사건이 있는가 — 백엔드 발행 검사 (저장소가 있어야 한다)
 //   `_` 필드 — 픽스처 주석이다. 무시하고, 돌려주는 회차에서는 뺀다
@@ -142,6 +144,10 @@ const english = (s: string) =>
     .replace(/(?<![\d.])(\d)\/(\d)(?![\d.])/g, (_, a: string, b: string) => String(Number(a) / Number(b)));
 /** 숫자 토막 — 쉼표를 떼고, 숫자가 아닌 것으로 끊는다. 앞의 0 은 뗀다 ("09" = "9") */
 const runs = (s: string) => (s.replace(/(\d),(?=\d)/g, "$1").match(/\d+/g) ?? []).map((n) => String(Number(n)));
+/** 독자가 읽는 글자의 숫자 토막 — 굵게 (**)를 떼고 읽는다. 글 한 덩이 (불변식 9) · 맨 글자열 (10) 이 같이 쓴다 */
+const digitsOf = (t: string) => runs(t.replace(/\*\*/g, ""));
+/** 숫자 n 이 근거의 수 (pool) 에 있나 — 같은 수이거나, 연도: 읽는 쪽의 2026 ↔ 근거 쪽의 26 (’26). 불변식 9 (글 ↔ 구절) · 10 (맨 글자열 ↔ 근거 있는 글) 이 같이 쓴다 (§4.3) */
+const inPool = (n: string, pool: ReadonlySet<string>) => pool.has(n) || (n.length === 4 && n.startsWith("20") && pool.has(String(Number(n.slice(2)))));
 
 const hasSrc = (t: EpisodeText) => (t.src?.length ?? 0) > 0;
 
@@ -251,15 +257,18 @@ export function solveProblems(solve: Solve, ep: { quotes: Record<string, Episode
   return { errors, warnings };
 }
 
-// ─────────────────────────────────────────────────────────── 모양 (불변식 1 · 10) — 긴 이야기 · 짧은 이야기가 같이 쓴다
+// ─────────────────────────────────────────────────────────── 모양 (불변식 1) — 긴 이야기 · 짧은 이야기 (옛 꼴 · 새 꼴)가 같이 쓴다
 
 type Texts = { path: string; item: EpisodeText }[];
+/** 숫자가 든 맨 글자열 (독자가 읽는 string 칸) — 근거 (불변식 10)에서 본다 */
+type Bare = { path: string; value: string }[];
 
-/** 1 · 10 — 타입 식을 읽어 값을 본다. 지나간 글 한 덩이 (EpisodeText)를 모아 돌려준다 */
-function shapeProblems(root: string, doc: unknown): { errors: Issue[]; texts: Texts } {
+/** 1 — 타입 식을 읽어 값을 본다. 지나간 글 한 덩이 (EpisodeText)와 숫자가 든 맨 글자열을 모아 돌려준다 (10 은 근거를 봐야 알아 groundProblems 가 본다) */
+function shapeProblems(root: string, doc: unknown): { errors: Issue[]; texts: Texts; bare: Bare } {
   const errors: Issue[] = [];
   const E = (code: string, path: string, message: string) => errors.push({ code, path, message });
   const texts: Texts = [];
+  const bare: Bare = [];
 
   function fits(type: string, v: unknown, path: string): void {
     if (type.endsWith(" | null")) {
@@ -284,8 +293,8 @@ function shapeProblems(root: string, doc: unknown): { errors: Issue[]; texts: Te
     switch (type) {
       case "string":
         if (typeof v !== "string" || !v.trim()) return void E("STRING_EMPTY", path, "비었거나 글자열이 아니다");
-        // 10
-        if (/\d/.test(v)) E("BARE_DIGIT", path, `맨 글자열에 숫자가 있다 — ${JSON.stringify(v)}. 숫자가 든 글은 EpisodeText 여야 한다 (근거를 달 수 있게)`);
+        // 10 — 모아 두었다가 근거 있는 글의 수와 댄다 (groundProblems)
+        if (/\d/.test(v)) bare.push({ path, value: v });
         return;
       case "integer":
         if (!Number.isInteger(v)) E("SCHEMA_TYPE", path, "정수가 아니다");
@@ -340,14 +349,15 @@ function shapeProblems(root: string, doc: unknown): { errors: Issue[]; texts: Te
     if (type === "EpisodeText") texts.push({ path, item: v as unknown as EpisodeText });
   }
   fits(root, doc, "");
-  return { errors, texts };
+  return { errors, texts, bare };
 }
 
-// ─────────────────────────────────────────────────────────── 근거 (불변식 3 · 8 · 4 · 9) — 긴 이야기 · 짧은 이야기가 같이 쓴다
+// ─────────────────────────────────────────────────────────── 근거 (불변식 3 · 8 · 4 · 9 · 10) — 긴 이야기 · 짧은 이야기 (옛 꼴 · 새 꼴)가 같이 쓴다
 
 function groundProblems(
   ep: { docs: Record<string, EpisodeDoc>; quotes: Record<string, EpisodeQuote> },
   texts: Texts,
+  bare: Bare,
   documents: EpisodeContext["documents"],
   E: (code: string, path: string, message: string) => void,
   warnings: Issue[],
@@ -370,26 +380,33 @@ function groundProblems(
   // 4 · 9
   const exempt: string[] = [];
   let withDigits = 0;
+  /** 근거 있는 글의 수 — 9 가 구절 · 계산으로 받친 수 (화면 번호 ui 의 수는 넣지 않는다). 10 이 맨 글자열의 수를 이것과 댄다 */
+  const backed = new Set<string>();
   for (const { path, item } of texts) {
     for (const k of item.src ?? []) if (!ep.quotes[k]) E("REF_QUOTE", `${path}/src`, `src "${k}" 가 이 회차의 구절이 아니다`);
-    const want = runs(item.t.replace(/\*\*/g, ""));
+    const want = digitsOf(item.t);
     if (want.length === 0) continue;
     withDigits++;
     if (item.ui) {
       exempt.push(`${path}: "${item.t}" (ui)`);
       continue;
     }
-    const pool = (item.src ?? []).flatMap((k) => runs(english(ep.quotes[k]?.quote ?? "")));
+    const pool = new Set((item.src ?? []).flatMap((k) => runs(english(ep.quotes[k]?.quote ?? ""))));
     const calc = Object.keys(item.calc ?? {});
     // calc 의 키도 글과 같이 숫자 토막으로 읽는다 — "27.9" → 27 · 9 (B-E4 · §4.3). 정수 키 ("6" · "12")는 전과 같다
     const calcRuns = calc.flatMap(runs);
     for (const n of want) {
-      // 연도: 글의 2026 ↔ 구절의 ’26
-      const ok = pool.includes(n) || (n.length === 4 && n.startsWith("20") && pool.includes(String(Number(n.slice(2))))) || calcRuns.includes(n);
-      if (!ok) E("NUMBER_UNGROUNDED", path, `숫자 ${n} 이 근거 구절에 없다 — "${item.t.slice(0, 50)}…" (src: ${(item.src ?? []).join(", ") || "없음"})`);
+      if (inPool(n, pool) || calcRuns.includes(n)) backed.add(n);
+      else E("NUMBER_UNGROUNDED", path, `숫자 ${n} 이 근거 구절에 없다 — "${item.t.slice(0, 50)}…" (src: ${(item.src ?? []).join(", ") || "없음"})`);
     }
     if (calc.length) exempt.push(`${path}: "${item.t.replace(/\n/g, " ").slice(0, 60)}${item.t.length > 60 ? "…" : ""}" (계산 — ${Object.entries(item.calc!).map(([n, how]) => `${n} = ${how}`).join(" · ")})`);
   }
+
+  // 10 — 맨 글자열의 숫자는 같은 이야기의 근거 있는 글에 같은 수가 있을 때만 (B-E5 · D119). 읽는 법은 9 와 같다 (digitsOf · inPool)
+  for (const { path, value } of bare)
+    for (const n of new Set(digitsOf(value)))
+      if (!inPool(n, backed))
+        E("BARE_DIGIT", path, `맨 글자열의 숫자 ${n} 이 근거 있는 글에 없다 — ${JSON.stringify(value)}. 맨 글자열의 수는 같은 이야기의 글 (구절 · 계산으로 받친 EpisodeText — 화면 번호 ui 는 빼고)에 같은 수가 있을 때만 쓸 수 있다`);
   return { exempt, withDigits };
 }
 
@@ -412,8 +429,8 @@ export function validateEpisode(input: unknown, ctx: EpisodeContext = {}): Episo
   if (ep.episode_version < 1) E("ID_RANGE", "/episode_version", "판은 1부터다");
   if (ep.number < 1) E("ID_RANGE", "/number", "회차 번호는 1부터다 — 0화는 회차가 아니라 따라잡기 장면이다 (§3)");
 
-  // 3 · 8 · 4 · 9
-  const { exempt, withDigits } = groundProblems(ep, texts, ctx.documents, E, warnings);
+  // 3 · 8 · 4 · 9 · 10
+  const { exempt, withDigits } = groundProblems(ep, texts, shape.bare, ctx.documents, E, warnings);
 
   // 5
   const keys = ep.tools.map((t) => t.key);
@@ -558,15 +575,15 @@ export function validateShortStory(input: unknown, ctx: EpisodeContext = {}): Sh
   const E = (code: string, path: string, message: string) => errors.push({ code, path, message });
   const doc = stripAnnotations(input);
 
-  // 1 · 10 · 28 — 장면 넷 · 번호 · 시리즈 줄 · 체험 칸이 없다 (넣으면 SCHEMA_KEY)
+  // 1 · 28 — 장면 넷 · 번호 · 시리즈 줄 · 체험 칸이 없다 (넣으면 SCHEMA_KEY)
   const shape = shapeProblems("ShortStory", doc);
   if (shape.errors.length) return { ok: false, errors: shape.errors, warnings };
   const s = doc as ShortStory;
 
   // 2 — 판 (번호는 없다)
   if (s.episode_version < 1) E("ID_RANGE", "/episode_version", "판은 1부터다");
-  // 3 · 8 · 4 · 9
-  const { exempt, withDigits } = groundProblems(s, shape.texts, ctx.documents, E, warnings);
+  // 3 · 8 · 4 · 9 · 10
+  const { exempt, withDigits } = groundProblems(s, shape.texts, shape.bare, ctx.documents, E, warnings);
   // 29 · 30 — 다른 이야기를 가리키기 · 홀로 선 짧은 이야기
   shortRefProblems(s, ctx.episodes, E, warnings);
   // 11 · 13 · 14 · 27 — 풀이 = 입구 + 뒤집기만 (체험 칸이 없다)
@@ -644,15 +661,15 @@ export function validateFlowStory(input: unknown, ctx: EpisodeContext = {}): Flo
   const E = (code: string, path: string, message: string) => errors.push({ code, path, message });
   const doc = stripAnnotations(input);
 
-  // 1 · 10 · 31 — 표지 + 흐름 + 남음. 장면 · 선반 · 번호 · 곁 이야기 · 가리킨 도구 · 풀이 · 체험 칸이 없다 (넣으면 SCHEMA_KEY)
+  // 1 · 31 — 표지 + 흐름 + 남음. 장면 · 선반 · 번호 · 곁 이야기 · 가리킨 도구 · 풀이 · 체험 칸이 없다 (넣으면 SCHEMA_KEY)
   const shape = shapeProblems("FlowStory", doc);
   if (shape.errors.length) return { ok: false, errors: shape.errors, warnings };
   const s = doc as FlowStory;
 
   // 2 — 판 (번호는 없다)
   if (s.episode_version < 1) E("ID_RANGE", "/episode_version", "판은 1부터다");
-  // 3 · 8 · 4 · 9
-  const { exempt, withDigits } = groundProblems(s, shape.texts, ctx.documents, E, warnings);
+  // 3 · 8 · 4 · 9 · 10
+  const { exempt, withDigits } = groundProblems(s, shape.texts, shape.bare, ctx.documents, E, warnings);
   // 11 · 32 ~ 36
   flowProblems(s, E);
 

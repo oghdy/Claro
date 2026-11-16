@@ -119,7 +119,7 @@ describe("P-S1 — 짓기 → 계약 검증 (홀로 선 짧은 이야기 · EPIS
     w.keep.line = "2일 먼저였다.";
     w.where.body[0]!.src = ["p77"];
     const v = validateShort(assembleShort(x, w).story, x);
-    expect(v.errors.map((e) => e.code).sort()).toEqual(["BARE_DIGIT"]);   // 모양에서 먼저 멈춘다
+    expect(v.errors.map((e) => e.code).sort()).toEqual(["BARE_DIGIT", "NUMBER_UNGROUNDED", "REF_QUOTE"]);   // 맨 글자열의 수는 근거와 함께 본다 — 받칠 글 (깨는 사실의 2)이 근거가 없어 맨 글자열의 2 도 걸린다 (계약 B-E5 · 전에는 모양에서 먼저 멈췄다)
     w.keep.line = "이틀 먼저였다.";
     const v2 = validateShort(assembleShort(x, w).story, x);
     expect(v2.errors.map((e) => `${e.code} ${e.path}`).sort()).toEqual(["NUMBER_UNGROUNDED /solve/entry/breaker", "REF_QUOTE /scenes/where/body/0/src"]);

@@ -2,8 +2,8 @@
   "_violation": {
     "code": "BARE_DIGIT",
     "of": "episode-price-1.json",
-    "rule": "§9-10 — 맨 글자열에는 숫자가 없다. 숫자가 든 글은 근거를 달 수 있는 EpisodeText 여야 한다",
-    "what": "사건 장의 큰 글자 꼬리표(맨 글자열)에 수를 넣었다",
+    "rule": "§9-10 · §4.3 — 맨 글자열의 숫자는 같은 이야기의 근거 있는 글 (구절 · 계산으로 받친 EpisodeText — 화면 번호 ui 는 빼고)에 같은 수가 있을 때만 쓸 수 있다 (B-E5 · D119). 근거 없는 수가 근거 검사 (9)를 비켜 가지 못하게",
+    "what": "사건 장의 큰 글자 꼬리표(맨 글자열)에 수 (역대 2위)를 넣었다 — 배달앱 1화의 근거 있는 글 어디에도 2 가 없다 (2020 · 2023 … 은 다른 토막). B-E5 에서 다시 대 봤다 — 받쳐지지 않은 수 그대로라 글은 고치지 않았다",
     "made_from": "fixtures/episode-price-1.json + 위반 1개 (B-E1 · packages/contract/test/episode.test.ts 의 표)"
   },
   "episode_id": "f9eef552-5239-46d4-bbe5-60ee0e796f17",
