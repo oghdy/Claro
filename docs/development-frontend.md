@@ -33,6 +33,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **UX-8b** | **짧은 이야기 다시 쓰기 — 줄기는 뉴스 (D95) · 글 모델 눈 가리고 견주기 (D96)** — 같은 뉴스 · 같은 지시로 두 서브에이전트 (A · B)가 따로 · `/lab/short-a` · `/lab/short-b` · 도윤이 모른 채 고른다 · 짝은 PM.md | ☑ 2026-11-14 · PM 검수 끝 (D97) · A `e58b754` · B `f352901` · 도윤 고를 차례 |
 | **UX-8c** | **파이프라인이 새 꼴로 쓴 짧은 이야기를 폰으로 읽을 lab 화면 (D99 ③ · D101 PS2-o)** — `/lab/flow/license-notice` 가 `license-notice-flow/story.json` (FlowStory)을 읽어 `lab/short/Light.tsx` 로 그린다 · 견줘 읽기 = 옛 `/short/license-notice` · 서브에이전트 Opus | ☑ 2026-11-15 · 검수 대기(PM) — **`/lab/flow/license-notice`** · story.json → `parseFlowStory` (저장된 문서까지 대조 · 어기면 빌드가 멈춤) → `lab/short/flow.ts` 의 `toLight` (되돌리기를 short-b 에서 **한 곳으로 옮김** — short-b 의 lab 꼴 객체 바이트 같음 · 그림 10/10 픽셀 같음 · 실제 주소 보이는 글 같음) → `Light.tsx` 그대로 · 글 0자를 코드에 (PM 손질이 다음 빌드에 실린다 · e2e 도 story.json 을 읽어 댄다) · 시안 전용 = 나라와 법 · 견줘 읽기 (옛 꼴 · "같은 원문 · 앞서 낸 글" · 제목은 옛 story.json 에서) · 페이지에 모델 · 파이프라인 · 비용 말 0 (보이는 글 · HTML · JS) · `Light.tsx` · `types.ts` · 실제 주소 · 계약 · 골든 · packages 0줄 · web e2e 75 (새 1) · 그림 9 `logs/frontend/UX-8c/` · `logs/frontend/UX-8c.md` · _open UX8c-a (favicon 404) ~ f · **PM 검수 닫힘 (D103) · 2026-11-15** |
 | **UX-10** | **기름값 다시 짜기 — "이야기 짜는 법" 시험 (D113 ② · D115)** — 같은 소스 팩 (`MOTIR-20261113-OIL-PRICE-CAP`) · 같은 사실로 1화를 `docs/content/story-guide.md` 에 따라 다시 짠다 · 손으로 (모델 API 0 · 로컬 세션 — D110) · `/lab/episode/oil-replot` (같은 kit · 같은 그림 — 실제 `/s/oil/1` 과 폰에서 나란히) · 쓰기 전 세 줄 · 물음 차례 · 장면마다 "독자가 아는 것" · 점검 여덟 · 법에 대한 되먹임 · 걸린 시간 · 서브에이전트 Fable | ☑ 2026-11-16 · **PM 검수 닫힘 (D116)** — **`/lab/episode/oil-replot`** 「기름값에 상한이 있다는데, 주유소는 더 받아도 될까」 (위에 뉴스 한 줄 "석유 최고가격, 열두 번째도 그대로") · 같은 kit · `OIL_LOOK` · `real` · 번호 숨김 · `unpromised` · 맨 위 "견줘 읽기 → 지금 판" · **차례**: 표지 (오늘의 일 + 물음) → 오늘의 사건 (어긋남 = 6월의 전망 문장) → 도구 셋 (답 없이) → 풀이 (두 고리 다 "여기일까요?" → 누르면 주유소 앞에서 멈춤 → 3월 문장이 크게 → 6월 수수께끼 되받기 → 도구 → 오늘 문서가 말한 것) → 이어짐 ("그럼 주유소는 마음대로?") → 남음 · 장면 7 → 6 (0화는 조립에서 뺌 — 계약이 받는다) · "뒤집어 보면" 상자 없음 · kit 시안 전용 칸 `replot` 셋 (`news` · `veil` · `burst` — 안 주면 그대로: 실제 · 다른 시안 화면의 뼈 64 장면 글자 같음) · 손으로 씀 (모델 API 0 · 장부 합 $34.85 그대로) · 구절 74 (지금 판 그대로 68 · 문서에서 새로 뗀 것 6) · `oil-replot/check.ts` (계약 + R1 ~ R7 — 답 먼저 금지를 글 47 덩이 · 근거 시트까지) · 지금 판에서 답이 먼저 나오는 곳 일곱 (D112 의 둘 + 0화 · 도구 본문 둘 · 준비 글 · 표지 그림) · 점검 여덟: 예 7 · 3번은 글 · 칸은 예 / **표지 그림 (≠)은 못 바꿈** · 법 되먹임 열하나 (끌 물음이 문서 밖 사실을 깐다 · "어디에도"에 근거 시트 · 도구 카드 · 뒤집힌 뒤의 물음 …) · web e2e 81 (새 3) · 폰 그림 36 `logs/frontend/UX-10/` (`now-NN` ↔ `new-NN`) · `logs/frontend/UX-10.md` · _open a ~ g |
+| **UX-10b** | **기름값 다시 짜기 — Sonnet 으로 한 번 더 (D117)** — UX-10 과 같은 법 · 같은 소스 팩 · 같은 kit (UX-10 의 시안 칸 `replot` 을 써도 된다) · **UX-10 의 글 · 로그는 안 본다** (따로 쓴다) · `/lab/episode/oil-replot-b` · 손으로 (모델 API 0) · 세 판을 폰에서 나란히 · 서브에이전트 Sonnet 5.5 | ☐ 도는 중 (2026-11-16) |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -1168,4 +1169,59 @@ PM 이 이걸 모아 "이야기 짜는 법" 한 장을 썼다 (`docs/content/sto
 - 검사: `pnpm -s typecheck` · `pnpm -s test` (web e2e — 새 spec 하나: `/lab/episode/oil-replot` 200 · 차례 · 실제 `/s/oil/1` 그대로. logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · 이 폴더 `check.ts` · `lab/episode/check.ts` · `python3 scripts/verify-ledger.py` (합이 시작 때와 같다 — 모델 API 0 의 증거). **결과를 로그에 붙인다**
 - docs/development-frontend.md 의 UX-10 줄 (☑ + 날짜) · 커밋 접두사 `UX-10` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버는 끈다 · 백그라운드 기다리기 반복 (`while pgrep …`) 금지
 - **나(PM)에게**: 12줄 안쪽 — 커밋 · 주소 · 세 줄 · 바뀐 차례 한 줄 · 뒤집기를 어떻게 했나 · 더한 시안 칸 · 점검 여덟 결과 · 법 되먹임 셋 · 시간 · _open
+```
+
+## UX-10b · 기름값 다시 짜기 — Sonnet 으로 한 번 더 (D117)
+
+### 서브에이전트 지시 (Sonnet 5.5)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 프론트 레인 (lab 시안) + 글. Step UX-10b (기름값 다시 짜기 · 둘째 판)를 맡는다. PM(나)이 폰 크기로 다른 판들과 나란히 읽고 검수한 뒤 도윤에게 보인다. 도윤은 폰으로 본다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (`.claude/` 는 건드리지 마라).
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. 커밋 · push 는 해도 된다 (파일 지정 · 접두사 UX-10b · push = Vercel 배포 — lab 주소만 새로 생긴다 · 검사가 다 통과하고 폰 크기 그림을 네가 직접 본 뒤 한 번).
+**모델 API 0** — 글은 네가 손으로 쓴다 (D110 "로컬 세션이 쓴다"). 파이프라인의 모델을 부르는 명령 (`episode.ts` · `p3.ts` · `short*.ts` 를 `--check` 없이)을 돌리지 마라. 끝에 장부 합이 그대로인지 본다 (시작 때 합 $34.85).
+
+## 왜
+도윤 (D113): ① 모든 이야기의 "뒤집어 보면 A ≠ B" 칸이 끼워 맞춘 느낌 ② 제목이 그날 뉴스보다 개념 정리 같다 ③ 기름값 1화가 "지금까지의 이야기" (3월부터의 역사)로 시작해서 처음부터 어렵고 재미없다 — "이 스토리라인 짜는 게 진짜 중요". 그리고 PM 이 폰에서 읽어 보니 기름값은 **답을 먼저 보인다** (D112).
+PM 이 이걸 모아 "이야기 짜는 법" 한 장을 썼다 (`docs/content/story-guide.md` · D114). 다른 작업 세션이 이미 그 법으로 같은 뉴스를 한 번 다시 짰다. **도윤이 같은 일을 Sonnet 으로도 해 보자고 했다 — 네가 그 둘째 판이다.** 네 일은 그 장만 들고 같은 뉴스를 **따로** 다시 짜는 것이다. 법이 모자라거나 틀린 곳을 찾는 것도 같은 무게의 결과다.
+
+## 따로 쓴다 — 읽지 말 것
+- **첫째 판을 보지 마라**: `apps/web/src/app/lab/episode/oil-replot/` (글 · 화면 · 검사 전부) · `logs/frontend/UX-10.md` · `logs/frontend/UX-10/` 그림 · `e2e/lab-oil-replot.spec.ts` · DECISIONS 의 D115 · D116 · 실제 배포의 `/lab/episode/oil-replot`. 견줌이 공정하려면 네 판은 그 판을 모른 채 서야 한다
+- 다만 **화면 장치는 같이 쓴다**: 첫째 판이 kit 에 더한 시안 전용 칸 `replot` (`apps/web/src/episode/kit/Episode.tsx` 의 `EpisodeParts.replot` — `news` 표지의 제목 위 뉴스 한 줄 · `veil` 사슬의 멈춘 고리를 누르기 전에 가림 · `burst` 체험 뒤 문서의 문장을 크게 + "뒤집어 보면" 상자 빼기 · `box: true` 면 상자를 남김)는 써도 되고 안 써도 된다 — 법을 따르는 데 필요한 것만. 1화에서 "지금까지의 이야기"를 건너뛰는 것은 칸이 아니라 회차의 조립 (`assembly.new` 에서 `zero` 를 뺀다 — 계약 불변식 6 이 받는다). 다른 장치가 꼭 필요하면 kit 에 **시안 전용 칸을 더한다 — 안 주면 아무것도 달라지지 않게** (주석 · 기본값 끔)
+- 폰 그림 찍는 도구 `apps/web/scripts/shots-ux10.ts` 는 카메라로만 써도 된다 (복사해 `shots-ux10b.ts` 로 — 주소 · 나갈 폴더 · 이름 앞머리만 바꿔서)
+
+## 재료 (바꾸지 않는다 — 읽기만)
+- 소스 팩 `packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/` — `store.json` (사실) · `store.documents.json` (1차 문서 글 — 산업부 보도참고 · 고시 · 규정 · 3/12 첫 발표 …) · `pack.json`
+- 지금 판 (실제 `/s/oil/1`) `…/episodes/oil-1/episode.json` · `gate1.md` · `gate2.md` · `human.json` (PM 이 게이트에서 고친 것 — 날짜 · "12차 고시문은 확인한 문서에 없다" · 그리지 않을 것 · 1,800원대는 6월의 전망이다 등. **사실의 경계는 이것을 따른다**)
+- 시리즈 `packages/pipeline/data/series/oil.json`
+- 사실 · 숫자 · 인용은 **이 소스 팩에 있는 것만**. 언론 기사의 숫자 ("5.6조" · "26주 연속" · 주유소 실제 값)는 쓰지 않는다 (D108). 인용은 문서 글 그대로 (계약 불변식 8)
+
+## 할 것
+1. **쓰기 전에** (로그 ② 에 먼저 적는다 — 글보다 앞):
+   - 법 1 의 세 줄 (오늘 뉴스 한 줄 · 끌고 갈 물음 · 다 읽고 한 문장)
+   - 법 2 의 **독자의 물음 차례** 셋 ~ 다섯 → 그것이 어떤 장면이 되나
+   - 법 5 의 **장면마다 "독자가 여기까지 아는 것"** 표 — 깨는 사실이 어디서 처음 나오나 (본문 · 인용 칸 · 꼬리표 · 단추 · 도구 카드 · 근거 시트까지)
+   - 법 6 의 뒤집기 판정 (① 보통 사람이 실제로 그렇게 생각하나 ② 문서 글자가 깨나) — 쓸지 · 어떻게 터지게 할지 · "뒤집어 보면" 상자를 둘지
+   - 지금 판에서 무엇을 버리고 무엇을 남기나 (까닭과 함께)
+2. **다시 쓴 1화** — 회차 파일 하나 (`apps/web/src/app/lab/episode/oil-replot-b/episode.json` — 계약의 Episode 꼴 · `episode_id` 는 지금 판과 같게 두고 `episode_version` 만 올린다 — 화면이 `unpromised` 를 id 로 찾는다). 지금 판의 좋은 문장 · 구절 · 도구는 다시 써도 된다. 처음 온 독자 (`real` 화면의 독자)가 읽는 차례가 법을 따라야 한다. 남는 한 줄 · 이어짐 · 모르는 것도 법 7 대로
+3. **화면** `/lab/episode/oil-replot-b` — **같은 kit · 같은 그림 (`OIL_LOOK`) · 실제 화면처럼 (`real` · 번호 규칙 · `unpromised` 와 같게)** 그려서, 실제 `/s/oil/1` 과 **이야기의 차례만** 다르게 보이게 한다. 맨 위에 작은 "견줘 읽기 → /s/oil/1" 길 하나 (`apps/web/src/app/lab/flow/` 처럼). 페이지 · HTML 에 모델 이름 · 파이프라인 · 비용 말을 넣지 않는다. **실제 주소 · 다른 lab 화면 (첫째 판 `/lab/episode/oil-replot` 포함)은 달라지면 안 된다**
+4. **검사** — 이 폴더의 `check.ts` (`lab/episode/rate-3/check.ts` 의 꼴): 계약 검증 (`validateEpisode` — 저장된 문서 `store.documents.json` 로 구절 대조까지) · 숫자 근거 · **풀이 전 글 (도구 카드 · 근거 구절 포함)에 깨는 사실의 구절이 없는지** · 시안 전용 칸이 실제 화면에서 꺼져 있는지. **계약과 안 맞는 것이 생기면 계약을 고치지 말고** 그 칸만 시안 전용으로 두고 로그 ⑥ 에
+5. **점검 여덟** (법의 점검) — 하나씩 예 / 아니오 + 근거 (어느 장면 · 어느 글)를 로그 ④ 에. 7번 (폰에서 단추를 누르며 끝까지)은 네가 390×844 로 지금 판과 네 판을 처음부터 끝까지 눌러 가며 읽고 장면마다 찍는다 → `logs/frontend/UX-10b/` (`now-NN-…png` · `b-NN-…png` — 번호는 장면의 자리: 01 표지 · 02 지금까지 · 03 오늘의 사건 · 04 도구 · 05 풀이 누르기 전 · 06 풀이 누른 뒤 · 07 이어짐 · 08 남음)
+6. **법에 대한 되먹임** (로그 ⑤) — 법이 도운 곳 · 모자란 곳 · 틀린 곳 · 서로 부딪힌 곳 · 법만으로는 못 정해서 네가 정한 것. 고쳐 쓸 문장이 있으면 안으로 (법 파일은 고치지 마라 — PM 이 고친다)
+7. **걸린 시간** — 시작 · 끝 시각 (`date` 로). 쓰기 · 화면 · 검사를 나눠서 대강
+
+## 하지 말 것
+- 첫째 판 (위 "읽지 말 것") · 실제 화면의 동작 · `catalog.tsx` · 실제 주소 · 소스 팩 · `oil-1` 파일 (읽기만) · 계약 · 골든 · `packages/*` 코드 · `docs/content/story-guide.md` (고칠 안은 로그에) · docs/PM.md 읽기 · 모델 API
+- 새 색 · 새 그림 (그림은 지금 OIL 의 것 그대로 — 차례만 견준다)
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · **`docs/content/story-guide.md` (이 일의 법)** · docs/DECISIONS.md D57 · D91 · D95 · D104 · D108 · D111 · D112 · D113 · D114 (D115 · D116 은 읽지 마라)
+- `logs/frontend/UX-8.md` ⑥ (문장 · 이음매) · `logs/frontend/UX-9.md` ⑤ (체험) · `logs/frontend/F-E5.md` (지금 판이 화면에 어떻게 올라갔나) · `logs/pipeline/P-T1.md` (지금 판이 어떻게 만들어졌나)
+- `apps/web/src/episode/kit/Episode.tsx` · `kit/frames/` · `apps/web/src/app/lab/episode/rate-3/` (lab 회차의 꼴 · check.ts) · `apps/web/src/app/lab/flow/` (견줘 읽기 길) · `docs/contract/EPISODE.md` (회차의 칸 · 불변식)
+
+## 끝낼 때
+- 로그 `logs/frontend/UX-10b.md` — ① 주소 ② 쓰기 전 (세 줄 · 물음 차례 · 장면마다 아는 것 · 뒤집기 판정 · 버린 것 / 남긴 것) ③ 다시 쓴 이야기 (장면 차례 한 줄씩 — 지금 판과 나란히 표) ④ 점검 여덟 ⑤ 법에 대한 되먹임 ⑥ 계약 · 틀과 부딪힌 것 (쓴 · 더한 시안 칸 · 까닭) ⑦ 폰 그림 · 네 눈으로 본 것 ⑧ 검사 결과 ⑨ 걸린 시간 ⑩ _open. "작업 세션 모델: Sonnet 5.5 · 모델 API 0"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (web e2e — 새 spec 하나 `e2e/lab-oil-replot-b.spec.ts`: `/lab/episode/oil-replot-b` 200 · 차례 · 실제 `/s/oil/1` 그대로. logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · 이 폴더 `check.ts` · `lab/episode/check.ts` · `python3 scripts/verify-ledger.py` (합 $34.85 그대로 — 모델 API 0 의 증거). **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 UX-10b 줄 (☑ + 날짜) · 커밋 접두사 `UX-10b` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버는 끈다 · 백그라운드 기다리기 반복 (`while pgrep …`) 금지
+- **나(PM)에게**: 12줄 안쪽 — 커밋 · 주소 · 세 줄 · 바뀐 차례 한 줄 · 뒤집기를 어떻게 했나 · 쓴 · 더한 시안 칸 · 점검 여덟 결과 · 법 되먹임 셋 · 시간 · _open
 ```
