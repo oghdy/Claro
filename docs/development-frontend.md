@@ -39,6 +39,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **F-E6a** | **기름값 1화 마지막 글 — 실제로 낼 판 (D125 ③ 앞)** — 메운 판 (b2)의 작은 손질 셋 (`real[2]` 두 문장 · `tools[0].short` 단정 빼기 · 비대칭 구절 키) · 한글 수 마지막 확인 · 파이프라인 산출물은 그대로 두고 **로컬 세션 판의 자리** `…/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/` (`episode.json` + `screen.json`) · 손으로 (모델 API 0) · 서브에이전트 Sonnet 5.5 | ☑ 2026-11-16 |
 | **F-E6** | **실제 `/s/oil/1` 을 메운 판으로 (D125 ③)** — catalog 가 `local/oil-1` 을 읽음 · 화면 칸 셋 (뉴스 한 줄 · 멈춘 고리 가림 · 문서 문장 터짐)을 catalog 손 칸으로 실제 화면에 (안 주면 그대로 — 다른 실제 이야기 0 변화) · 새 표지 그림 (답이 아니라 물음의 그림) · 검사 · e2e · 폰 앞 · 뒤 · push = 배포 · 서브에이전트 Fable | ☑ 2026-11-16 |
 | **F-E7** | **뉴스 한 줄을 눈에 띄게 (D127)** — 표지의 제목 위 뉴스 한 줄 (`screen.news`)을 kit 의 꼴로 (굵게 · 강조 표시 · 종이 토큰 안) · 첫 화면 카드에도 제목 위에 · 뉴스 한 줄이 있는 이야기 (지금 기름값)만 바뀜 · 다른 이야기 0 변화 · 폰 앞 · 뒤 · push = 배포 · 서브에이전트 Opus | ☑ 2026-11-16 | · **PM 검수 닫힘 (D130)**
+| **F-E8** | **e2e 를 이야기 목록에서 읽게 (D131 L1-a · D132)** — 첫 화면 · 실제 이야기 e2e 가 11/15 묶음 (카드 목록 · 머리 날짜 · 수 · 맨 위 카드)을 손으로 박지 않고 `catalog.tsx` 의 `STORIES` 에서 기대값을 끌어낸다 · 새 이야기를 목록에 한 줄 더해도 e2e 를 고치지 않아도 되게 (시험으로 확인) · 지키던 뜻은 그대로 · 실제 화면 0 변화 · 서브에이전트 Opus | ☐ 도는 중 (2026-11-16) |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -1424,4 +1425,35 @@ PM 이 이걸 모아 "이야기 짜는 법" 한 장을 썼다 (`docs/content/sto
 - 검사: `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `lab/episode/check.ts`. **결과를 로그에 붙인다**
 - docs/development-frontend.md 의 F-E7 줄 (☑ + 날짜) · 커밋 접두사 `F-E7` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버 · 백그라운드 일은 끝날 때 다 끈다 (`while pgrep …` 금지)
 - **나(PM)에게**: 6줄 안쪽 — 커밋 · 꼴 · 카드 · 다른 이야기 0 변화 · 배포 · _open
+```
+
+## F-E8 · e2e 를 이야기 목록에서 읽게 (D131 L1-a · D132)
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 프론트 레인 (시험). Step F-E8 (e2e 를 이야기 목록에서 읽게)을 맡는다. PM(나)이 검수한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (`.claude/launch.json` 은 건드리지 마라).
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. 커밋 · push 는 해도 된다 (파일 지정 · 접두사 F-E8 · push = Vercel 배포 — 실제 화면 0 변화 · 검사가 다 통과한 뒤 한 번). 모델 API 0.
+
+## 왜
+"오늘 이야기 만들기" 스킬 (`.claude/skills/today-story/` · D131)로 도윤이 내일 아침부터 새 이야기를 올린다. 올리는 법은 `apps/web/src/episode/catalog.tsx` 의 `STORIES` 맨 위에 한 줄. 그런데 e2e 가 **11/15 묶음을 손으로 박아 두었다** — `e2e/episode.spec.ts` (카드 목록 `["card-oil-1", "card-meta-gallery", …]` · 그날의 묶음 · 머리 날짜 `2026-11-15` · "11월 15일의 이야기" · 맨 위 카드 `data-lead` · `DAY` 시각 …) · `e2e/today.spec.ts` (카드 차례 …). 그래서 새 이야기를 올리는 날마다 e2e 가 깨진다. 지금 스킬은 "그날 묶음에 묶인 값만 고친다"로 비켜 가지만, 매일 시험을 손으로 고치는 것은 틀렸다 (L-1 ⑥ L1-a).
+
+## 할 것
+1. **손으로 박은 그날 값을 찾는다** — `e2e/*.spec.ts` 전부에서 "지금 목록의 차례 · 날짜 · 수 · 맨 위 이야기"에 묶인 곳 (위에 든 것 + 네가 찾는 것). 이야기 하나의 **글 · 동작**을 보는 시험 (예: `/s/oil/1` 메운 판의 글 · 화면 칸 · 금리 2화 그대로)은 그대로 둔다 — 그건 그 이야기를 지키는 것이다
+2. **기대값을 목록에서 끌어낸다** — 카드의 차례 · 묶음 (가장 새 `day` 의 이야기들 = 맨 위 묶음 · 나머지 = 지난 이야기) · 머리 날짜 (가장 새 `day` — "오늘의 이야기" / "N월 N일의 이야기" 규칙은 지금 화면의 규칙 그대로) · 카드 수 · 맨 위 카드 (`data-lead`) 를 `STORIES` (또는 지금 화면이 쓰는 같은 함수 — 화면과 시험이 같은 규칙을 두 번 짜지 않게)에서 계산. 읽는 날을 고정하는 시각 (`DAY`)도 가장 새 `day` 에서. 지키던 뜻 ("새 이야기는 맨 위" · "같은 날이면 위의 것이 먼저" · "그날이면 '오늘의 이야기'" · 지난 이야기 차례)은 **그대로 시험한다** — 값만 목록에서 온다
+3. **시험으로 확인한다** — 목록에 **임시로 한 줄을 더해** (예: 지금 있는 이야기를 다른 `day` 로 한 번 더 — 또는 네가 고른 가장 작은 꼴) e2e 를 돌려 **고치지 않고 통과**하는지 · 줄을 빼고 다시 통과하는지. 임시 줄은 커밋하지 않는다 (그 파일 하나만 되돌린다 — 폴더 단위 `checkout` 금지). 결과를 로그에
+4. 스킬 문서의 그 줄 (`.claude/skills/today-story/SKILL.md` ⑧ 2 의 "e2e 가 그날 묶음에 묶인 줄 … 그 값만 고친다"와 끝의 "아직 정하지 않은 것 — e2e 가 그날 묶음에 묶여 있다")을 맞춰 고친다 (이제 고칠 일이 없다 · 그래도 서면 멈춘다)
+
+## 하지 말 것
+- 실제 화면 · catalog 의 지금 줄 · 이야기 글 · 계약 · 골든 · packages · 시험의 뜻 줄이기 (값만 목록에서 · 지키던 것은 그대로) · docs/PM.md 읽기 · 모델 API
+판단이 필요하면 _open 으로.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D89 · D126 · D131 · `logs/pipeline/L-1.md` ⑥ · `apps/web/src/episode/catalog.tsx` · `apps/web/src/app/page.tsx` (첫 화면 · 머리 날짜 규칙) · `src/episode/home/cards.tsx` · `e2e/*.spec.ts`
+
+## 끝낼 때
+- 로그 `logs/frontend/F-E8.md` — ① 손으로 박은 곳 목록 (앞 · 뒤) ② 목록에서 끌어내는 법 ③ 임시 줄 시험 결과 (붙인다) ④ 검사 ⑤ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `lab/episode/check.ts`. **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 F-E8 줄 (☑ + 날짜) · 커밋 접두사 `F-E8` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버 · 백그라운드 일은 끝날 때 다 끈다 (`while pgrep …` 금지)
+- **나(PM)에게**: 6줄 안쪽 — 커밋 · 고친 곳 수 · 끌어내는 법 · 임시 줄 시험 · 스킬 줄 · _open
 ```
