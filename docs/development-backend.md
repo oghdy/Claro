@@ -1290,6 +1290,7 @@ Claro 는 기사를 "회차"로 낸다 — 도윤이 확정했다 (D57 쌓인다
 | **B-E2** | DATA_MODEL §4.4 문서 단위 권리 (문서 안 공공누리 제1유형 표시 · 근거 · 해시 필수 · 그 문서에 한해 발행처 행보다 앞선다) · 불변식 20 · P-1 문구 · 검증 · 파이프라인 산출물을 계약 모양으로 · 서브에이전트 Opus | DATA_MODEL · packages/contract · rights.ts · pack.ts · PIPC store.json · `logs/backend/B-E2.md` | ☑ 2026-11-12 · 검수 대기 (PM) — 따로 된 타입 DocumentRights (+ DocumentRightsBasis · Source 하나에 한 행 · 칸마다 발행처 행보다 앞선다 · can_ingest 없음) · 불변식 20 · P-1 · §10.1 "발행처 또는 문서 단위" · 불변식 35 ~ 37 · PIPC store.json document_rights 3 행 (발행처 행 null 그대로) · FOMC · KFTC 0자 · 사본 +12 +7 · 시험 +18 +3 · API 0 · _open B-E2-a ~ c |
 | **B-E3** | **짧은 이야기 · 번호 없는 이야기 계약 (D80 · D86)** — 무게 · 짧은 조립 (장면 넷) · 번호 · 시리즈 줄을 고를 수 있게 (선반) · 같은 사건의 곁 이야기 · 다른 이야기의 도구 가리키기 · 체험 없는 까닭 = 무게 · 실물 = UX-7 짧은 이야기 (영훈) · 골든 넷째 · 서브에이전트 Opus | EPISODE.md · packages/contract · fixtures · `logs/backend/B-E3.md` | ☑ 2026-11-14 · 검수 대기 (PM) — 따로 선 타입 `ShortStory` (장면 넷 · `series` 만 — 번호 · 시리즈 줄 칸 없음 · `sibling` · `tools_from` = EpisodeRef · `solve` = 입구 + 뒤집기만) · `weight` (Episode 에 `weight?: "long"` 하나 — 없으면 긴 이야기) · `NoLabWhy` + `short` · §13 · 불변식 27 ~ 29 · 골든 넷째 `episode-short-privacy-yeonghun.json` (lab 글 0자 · 구절 18 다시 대조) · 위반 4 · 긴 골든 셋 0자 · lab `/lab/today/short` 가 골든을 읽음 (그림 46 장 픽셀 0 차이) · 번호 = 긴 이야기 `number ≥ 2` 일 때만 보임 (화면 규칙) · 첫 이야기가 나중에 1화 · 덧붙임 · 개념 이야기는 미확인 · contract 시험 132 · API 0 · _open E-20 ~ E-23 |
 | **B-E4** | **짧은 이야기 새 꼴 (D95 · D98 · D99 ①)** — 표지 + 한 흐름 (덩이 차례) · 낱말 · 고르기 한 번 · 실물 = UX-8b-B (Sonnet 손 견본 · 도윤이 고름) · 골든 (B 글 0자) · 옛 장면 넷 꼴은 그대로 통과 (D99 ④ 에서 내림) · 서브에이전트 Opus | EPISODE.md §14 (네가 정함) · packages/contract · fixtures · `logs/backend/B-E4.md` | ☑ 2026-11-15 · 검수 대기 (PM) — 따로 선 타입 `FlowStory` (표지 넷 = 글 한 덩이 · 흐름 = 덩이의 차례 `p` · `cite` · `flip` · `pick` · 뼈 = `p` 의 `beat` · 남음 = 한 줄 · 제 낱말 · 누구의 말 · 그리지 않을 것) · 옛 꼴과 `form: "flow"` 로 가름 (`validateStory` 세 갈래 · 옛 꼴 읽는 코드 0줄 · 골든 넷 · `license-notice` 0자) · §14 · 불변식 31 ~ 36 · 골든 다섯째 `episode-short-obesity-who.json` (B 글 0자 · 구절 12 다시 대조) · 견본 셋 (B · A · UX-8) 다 받음 · 위반 7 · §4.3 `calc` 키를 숫자 토막으로 · 선반 · 곁 이야기 · 다른 이야기 도구 · 카테고리 (카탈로그) · 사망 칸 없음 · lab `/lab/short-b` 가 골든을 읽음 (그림 10 장 픽셀 0 차이) · contract 시험 150 · API 0 · _open E-26 ~ E-34 · B-E4-a ~ d · **PM 검수 닫힘 (D100 · 2026-11-15)** |
+| **B-E5** | **숫자는 아라비아 숫자로 — 맨 글자열의 숫자를 근거로 받기 (D119 · D120)** — 불변식 10 (`BARE_DIGIT`)을 "맨 글자열의 숫자는 같은 이야기의 근거 있는 글 (구절 · calc 로 받친 글)에 같은 수가 있을 때만"으로 · 긴 · 옛 짧은 · 새 짧은 꼴 모두 · 골든 0자 · 지금 이야기 다 통과 · 서브에이전트 Opus | EPISODE.md §4.3 · §9 · packages/contract · fixtures · `logs/backend/B-E5.md` | ☐ 도는 중 (2026-11-16) |
 
 ### 서브에이전트 지시 (Opus)
 ```
@@ -1409,4 +1410,37 @@ push = Vercel 배포 (실제 주소) — 검사가 다 통과한 뒤 한 번.
 - 검사: `pnpm --filter @claro/contract test` · `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>` · 다른 세션 변경으로 깨지면 적기만) · lab `check.ts` 넷 (`lab/today` · `lab/short` · `lab/short-a` · `lab/short-b`) · 골든 넷 0자 · `license-notice` `--check`. **결과를 로그에 붙인다** ("통과"만 쓰지 마라)
 - docs/development-backend.md 의 B-E4 줄 (☐ 도는 중 → ☑ + 날짜) · 계약 CHANGELOG · 커밋 접두사 `B-E4` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 끝날 때 띄운 서버 · 기다리기 반복은 끈다
 - **나(PM)에게**: 15줄 안쪽 — 커밋 · 새 꼴 · 옛 꼴과 함께 서는 법 · 골든 · 견본 셋을 받나 · 불변식 수 · P-S2 가 낼 것 · _open
+```
+
+## B-E5 · 숫자는 아라비아 숫자로 — 맨 글자열의 숫자를 근거로 받기 (D119 · D120)
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 백엔드 레인 (계약). Step B-E5 (맨 글자열의 숫자를 근거로 받기)를 맡는다. PM(나)이 검수한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (`.claude/` 는 건드리지 마라).
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. 커밋 · push 는 해도 된다 (파일 지정 · 접두사 B-E5 · push = Vercel 배포 — 검사가 다 통과한 뒤 한 번). 모델 API 0.
+
+## 왜
+도윤 (D119): "유월 열두 번째 이렇게 쓰지 말고 6월 12번째 이런 식으로 쓰는 게 좋을 듯". 지금 이야기들이 "유월 · 열두 번째 · 십일월 십삼일"처럼 한글 수로 쓰는 까닭은 계약 불변식 10 (`BARE_DIGIT` — 맨 글자열 `string` 칸 · 제목 · 머리 · 꼬리표 · 단추 · 문서 이름 등에는 숫자가 없다)이다. 그 불변식의 뜻은 **숫자가 근거 검사 (불변식 9)를 비켜 가지 못하게** 하는 것이다 — 이 뜻은 지킨다.
+PM 이 정한 새 규칙: **맨 글자열의 숫자는, 같은 이야기 안의 근거 있는 글에 같은 수가 있을 때만 쓸 수 있다.** "근거 있는 글" = 불변식 9 가 구절 (`src`) 또는 `calc` 로 받친 `EpisodeText` 의 숫자 (화면 번호 `ui` 는 빼라 — 근거가 아니다). 숫자를 끊어 읽는 법은 §4.3 그대로 (쉼표 떼기 · 숫자 토막 · 앞 0 · 연도 '26). 그러면 "6월 · 12번째 · 1,784원"이 머리 · 꼬리표에 와도, 같은 수가 본문 어딘가에서 문서로 받쳐져 있어야 한다 — 근거 없는 숫자는 여전히 막힌다.
+
+## 할 것
+1. **계약 문서** `docs/contract/EPISODE.md` — 불변식 10 의 글 · §4.3 에 한 단락 (맨 글자열의 숫자는 어떻게 받치나 · 까닭 D119) · 맨 글자열에 숫자를 쓰지 말라는 다른 곳의 말 (§2 · §4 · §13 · §14 · E-30 의 설명 등)을 찾아 맞춘다 · CHANGELOG 한 줄. **긴 이야기 · 옛 짧은 (`ShortStory`) · 새 짧은 (`FlowStory`) 셋 다 같은 규칙** (셋이 같은 검사기를 지나는지 확인하고, 아니면 셋에 같게)
+2. **검증기** `packages/contract/src/validate-episode.ts` (지금 `fits` 의 `case "string"` 에서 바로 `BARE_DIGIT`) — 맨 글자열의 숫자를 모았다가, 이야기 전체의 근거 있는 숫자와 대 본다. 없으면 `BARE_DIGIT` (코드 이름은 그대로 · 말을 "근거 있는 글에 같은 수가 없다"로). 불변식 9 가 숫자를 대는 함수를 다시 쓴다 (같은 규칙을 두 번 짜지 마라)
+3. **시험 · 픽스처** — 위반 픽스처 `fixtures/invalid/episode-bare-digit.json` 은 **여전히 거부**되어야 한다 (그 숫자가 우연히 본문에 받쳐져 있으면 받쳐지지 않은 수로 바꿔 위반을 지킨다 · 까닭을 `_violation` 에). 새 시험: ① 받쳐진 수는 맨 글자열에 와도 지난다 (긴 · 옛 짧은 · 새 짧은 꼴 각각) ② 받쳐지지 않은 수는 막힌다 ③ `ui` 숫자만 있는 수는 받침이 안 된다
+4. **안 깨지는지** — 골든 다섯 (`fixtures/episode-*.json`) 0자 · 지금 이야기 전부 계약 통과: 실제 `oil-1` · `meta-gallery` · `license-notice` · `license-notice-flow` · lab `oil-replot` · `oil-replot-b` (`check.ts` 들) · 파이프라인 `--check` 들 (모델 API 없이 도는 것만)
+5. **지금 이야기의 한글 수를 바꾸지는 마라** — 그건 쓰는 일이다 (다음 Step). 대신 로그 ⑤ 에 **이제 숫자로 바꿀 수 있는 곳 목록** (oil-replot-b 와 실제 `oil-1` · `meta-gallery` 의 맨 글자열 가운데 한글 수가 든 칸 — 받쳐질 수 있는지까지)을 적는다
+
+## 하지 말 것
+- 이야기 글 (골든 · pipeline 데이터 · lab 회차) · 다른 불변식 · 화면 코드 · 파이프라인 프롬프트 (`*-prompt.ts` 의 "숫자 쓰지 마라" 말은 _open 에만 — 지금 파이프라인은 안 돌린다 D110) · 한글 수 ("열두")를 계약이 막게 하기 (뜻이 갈리는 말이 많다 — 쓰는 법에 둔다) · 모델 API · docs/PM.md 읽기
+판단이 필요하면 _open 으로. 정할 수 없는 것은 DECISIONS 에 OPEN 으로 올리고 멈춘다.
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D24 · D119 · D120 · docs/contract/EPISODE.md (§2 · §4 전부 · §9 · §13 · §14) · `packages/contract/src/validate-episode.ts` · `packages/contract/test/` · `logs/backend/B-E4.md` (E-30 · 숫자 이야기)
+
+## 끝낼 때
+- 로그 `logs/backend/B-E5.md` — ① 새 규칙 한눈에 (글 · 까닭) ② 바꾼 코드 · 셋 꼴에 같게 됐나 ③ 시험 · 픽스처 짝 ④ 안 깨진 것 (골든 0자 · 이야기마다 결과) ⑤ 이제 숫자로 바꿀 수 있는 곳 목록 ⑥ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `pnpm --filter @claro/contract test` · `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · lab `check.ts` 들 (`lab/episode` · `oil-replot` · `oil-replot-b` · `lab/today` · `lab/short*`) · 골든 0자 (`git diff --stat fixtures/episode-*.json`). **결과를 로그에 붙인다**
+- docs/development-backend.md 의 B-E5 줄 (☑ + 날짜) · 계약 CHANGELOG · 커밋 접두사 `B-E5` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버는 끈다 · 백그라운드 기다리기 반복 (`while pgrep …`) 금지
+- **나(PM)에게**: 10줄 안쪽 — 커밋 · 새 규칙 · 셋 꼴 · 시험 수 · 안 깨진 것 · 숫자로 바꿀 수 있는 곳 수 · _open
 ```
