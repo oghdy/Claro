@@ -5,6 +5,7 @@ import { Arrow } from "../today/cards";
 
 // 실제 첫 화면 (/)의 카드 — F-E4 (D105 "메인 화면 좀 예쁘게"). 시안 /lab/today 의 카드 (today/cards.tsx)에서 갈라졌다: 시안은 그대로 두고, 실제 첫 화면만 이 카드를 쓴다.
 // 다른 것: **카드마다 제 그림** (긴 이야기 = 그 이야기의 표지 그림 · 짧은 이야기 = 작은 그림) · 꼬리표 (국내 / 해외 · 카테고리 · 무게 · 날)가 상자 없이 조용한 한 줄 · 눈이 먼저 가는 것은 제목과 한 줄.
+// F-E7 (D127): 그날의 뉴스 한 줄 (이야기 목록의 손 칸 screen.news)이 있는 이야기는 제목 바로 위에 그 한 줄 (표지와 같은 꼴 — 작게). 없는 카드는 그대로.
 // 같은 것: 놓이는 글 (주제 이름 · 물음 제목 · 한 줄 · 날 · 국내 / 해외 · 카테고리 · 무게) · 읽는 시간 없음 (D82) · 체험 표시 없음 (D91 ②) · 번호와 지난 이야기는 번호 화면 규칙을 지난 것에만 (catalog.numbered — D88 E-20).
 // 이야기의 글은 전부 파일의 글자 그대로다 (제목의 줄바꿈만 한 줄 제목에서 빈칸으로).
 
@@ -45,6 +46,12 @@ export function HomeLongCard({ line, href, lead, C }: { line: LongLine; href: st
             <strong>{ep.series.name}</strong>
             {cont ? <em>{c.episode.t}</em> : null}
           </p>
+          {/* 그날의 뉴스 한 줄 (F-E7 · D127) — 이야기 목록의 손 칸 screen.news 가 있는 이야기만 (표지와 같은 글 · 같은 꼴을 작게). 없으면 카드는 그대로 */}
+          {line.screen?.news ? (
+            <p className="ep-news hm-news" data-testid="card-news">
+              <Rich text={line.screen.news.t} />
+            </p>
+          ) : null}
           <h3 className="td-title">
             <Rich text={lead ? c.title : oneLine(c.title)} />
           </h3>

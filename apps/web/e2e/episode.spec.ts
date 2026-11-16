@@ -8,10 +8,11 @@
 // 카드는 여섯이다 (그날의 둘 + 지난 넷). 머리는 읽는 날이 한국 날짜로 그날이면 "오늘의 이야기", 아니면 "11월 15일의 이야기" — 시계를 고정해 둘 다 본다.
 // F-E6 (D125): /s/oil/1 의 회차 파일이 메운 판 (판 2 — events/…/local/oil-1/episode.json · 로컬 세션이 쓰고 편집자가 짚은 것)으로 바뀌었다. 파이프라인이 낸 판 1 (episodes/oil-1/)은 그 자리에 그대로다.
 // 이 이야기만 화면 칸 셋 (그 곁의 screen.json — 계약에 없는 손 칸: 제목 위 뉴스 한 줄 · 멈춘 고리 가림 · 풀이 뒤 문서 문장)을 받는다. 다른 실제 이야기는 그대로다 — 둘 다 아래에서 본다.
+// F-E7 (D127): 그 뉴스 한 줄이 눈에 띈다 (굵게 · 옅은 강조 바탕 띠 · 강조색 점 — 뼈대 episode.css .ep-news) · 첫 화면 카드에도 제목 바로 위에 (같은 꼴 · 작게). 다른 카드 · 화면에는 없다.
 // 실제 화면에는 시안의 것 (맨 위 띠 · 독자 스위치 · 풀이 스위치)이 없고, 독자는 처음 온 독자의 조립을 받는다.
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import { READERS } from "./readers";
 import { OLD } from "./reader";
 
@@ -153,6 +154,23 @@ test("11/15 의 두 편 — 새 두 주소가 열린다 (200) · 콘솔 오류�
 const OIL = LIVE[0]!;
 const OIL_V1 = repo("packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/episodes/oil-1/episode.json");
 const OIL_SCREEN = repo("packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/screen.json");
+/** 종이 토큰의 옅은 강조색 (paper.accentSoft #f7dfd2) — 뉴스 한 줄의 바탕 띠 (F-E7 · D127) */
+const ACCENT_SOFT = "rgb(247, 223, 210)";
+/** 뉴스 한 줄의 꼴 — 굵기 · 크기 · 바탕 · 글자 줄의 수 · 오른쪽 끝 */
+const newsLook = (el: Locator) =>
+  el.evaluate((n) => {
+    const cs = getComputedStyle(n);
+    // 글자 줄 = 글 조각 (text node)의 줄 상자의 수 — 감싼 요소의 상자는 세지 않는다
+    const tops = new Set<number>();
+    const walk = document.createTreeWalker(n, NodeFilter.SHOW_TEXT);
+    for (let t = walk.nextNode(); t; t = walk.nextNode()) {
+      const r = document.createRange();
+      r.selectNodeContents(t);
+      for (const x of r.getClientRects()) if (x.width > 1) tops.add(Math.round(x.top));
+    }
+    const lines = tops.size;
+    return { weight: Number(cs.fontWeight), size: parseFloat(cs.fontSize), bg: cs.backgroundColor, lines, right: n.getBoundingClientRect().right };
+  });
 const errorsOf = (page: Page) => {
   const errors: string[] = [];
   page.on("console", (m) => (m.type() === "error" && !/favicon/.test(`${m.text()} ${m.location().url}`) ? errors.push(`${page.url()} ${m.text()}`) : undefined));
@@ -172,7 +190,7 @@ const toAha = async (page: Page) => {
   await expect(root).toHaveAttribute("data-scene", "aha");
 };
 
-test("/s/oil/1 = 메운 판 (판 2 · F-E6) — 새 제목 · 제목 위 뉴스 한 줄 · 지금까지의 이야기 없음 · 멈춘 고리는 누르기 전에 가려져 있다 → 누른 뒤 꼬리표 · 문서 문장 · \"뒤집어 보면\" 상자 없음 · 근거 시트 · 콘솔 오류 0 · 첫 화면 카드 제목", async ({ page, request }) => {
+test("/s/oil/1 = 메운 판 (판 2 · F-E6) — 새 제목 · 제목 위 뉴스 한 줄 (눈에 띄게 — 표지 · 첫 화면 카드 · F-E7) · 지금까지의 이야기 없음 · 멈춘 고리는 누르기 전에 가려져 있다 → 누른 뒤 꼬리표 · 문서 문장 · \"뒤집어 보면\" 상자 없음 · 근거 시트 · 콘솔 오류 0 · 첫 화면 카드 제목", async ({ page, request }) => {
   test.setTimeout(90_000);
   const errors = errorsOf(page);
   const { ep } = OIL;
@@ -191,6 +209,22 @@ test("/s/oil/1 = 메운 판 (판 2 · F-E6) — 새 제목 · 제목 위 뉴스 
   const card = flat(await page.getByTestId("card-oil-1").innerText());
   expect(card).toContain(flat(title));
   expect(card).not.toContain(flat(old));
+  // 첫 화면 카드의 뉴스 한 줄 (F-E7 · D127) — 주제 이름 아래 · 제목 바로 위 · 글은 screen.json 그대로 · 표지와 같은 꼴 (굵게 · 바탕 띠) · 폰에서 한 줄 · 카드 안
+  const oilCard = page.getByTestId("card-oil-1");
+  const cardNews = oilCard.getByTestId("card-news");
+  await expect(cardNews).toBeVisible();
+  await expect(cardNews).toHaveText(OIL_SCREEN.news.t);
+  const [brow, cn, ct, body] = await Promise.all([oilCard.locator(".hm-eyebrow").boundingBox(), cardNews.boundingBox(), oilCard.locator(".td-title").boundingBox(), oilCard.locator(".hm-body").boundingBox()]);
+  expect(brow!.y + brow!.height, "카드: 뉴스 한 줄이 주제 이름 아래").toBeLessThanOrEqual(cn!.y);
+  expect(cn!.y + cn!.height, "카드: 뉴스 한 줄이 제목 바로 위").toBeLessThanOrEqual(ct!.y);
+  const cardLook = await newsLook(cardNews);
+  expect(cardLook.weight, "카드: 굵게").toBeGreaterThanOrEqual(700);
+  expect(cardLook.bg, "카드: 옅은 강조 바탕 띠").toBe(ACCENT_SOFT);
+  expect(cardLook.lines, "카드: 폰에서 한 줄").toBe(1);
+  expect(cardLook.right, "카드: 카드 칸 안").toBeLessThanOrEqual(body!.x + body!.width);
+  // 다른 카드 (뉴스 한 줄 없는 이야기)에는 없다
+  await expect(page.getByTestId("card-news"), "뉴스 한 줄은 기름값 카드 하나에만").toHaveCount(1);
+  await expect(page.locator('.td-card:not([data-testid="card-oil-1"]) .ep-news'), "다른 카드에는 뉴스 한 줄의 꼴이 없다").toHaveCount(0);
 
   // 표지 — 뉴스 한 줄이 제목 위에 · 제목은 회차 파일 그대로
   await page.getByTestId("card-oil-1").locator("a.td-main").click();
@@ -200,6 +234,15 @@ test("/s/oil/1 = 메운 판 (판 2 · F-E6) — 새 제목 · 제목 위 뉴스 
   await expect(page.getByTestId("cover-news")).toHaveText(OIL_SCREEN.news.t);
   const [news, head] = await Promise.all([page.getByTestId("cover-news").boundingBox(), page.locator(".ep-title-cover").boundingBox()]);
   expect(news!.y + news!.height, "뉴스 한 줄이 제목 위에 있다 (겹치지 않는다)").toBeLessThanOrEqual(head!.y);
+  // F-E7 (D127) — 눈에 띄게: 굵게 · 옅은 강조 바탕 띠 (종이 토큰) · 제목보다 작게 · 폰에서 한 줄 · 화면 안 · 카드의 것보다 크다
+  const coverLook = await newsLook(page.getByTestId("cover-news"));
+  const titleSize = await page.locator(".ep-title-cover").evaluate((n) => parseFloat(getComputedStyle(n).fontSize));
+  expect(coverLook.weight, "표지: 굵게").toBeGreaterThanOrEqual(700);
+  expect(coverLook.bg, "표지: 옅은 강조 바탕 띠").toBe(ACCENT_SOFT);
+  expect(coverLook.size, "표지: 제목보다 작게").toBeLessThan(titleSize);
+  expect(coverLook.size, "표지: 카드의 뉴스 한 줄보다 크게").toBeGreaterThan(cardLook.size);
+  expect(coverLook.lines, "표지: 폰에서 한 줄").toBe(1);
+  expect(coverLook.right, "표지: 화면 안").toBeLessThanOrEqual(390);
   expect(flat(await page.locator(".ep-title-cover").innerText())).toBe(flat(ep.scenes.cover.title));
   // 처음 온 독자의 길 — "지금까지의 이야기" (zero) 없이 표지 다음이 오늘의 사건이다. 장면 여섯
   expect(ep.assembly.new).toEqual(["cover", "event", "tools", "aha", "next", "keep"]);

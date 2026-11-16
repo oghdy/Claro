@@ -147,7 +147,7 @@ for (const f of files(SRC)) {
   const text = readFileSync(f, "utf8");
   // 넘기는 곳 = JSX 의 screen= · veil= (뼈대 안에서 아래로 내려보내는 것은 뺀다)
   if (/\bscreen=\{/.test(text) || (/\bveil=\{/.test(text) && !KIT.includes(rel))) givers.push(rel);
-  if (rel === "episode/episode.css" && /\.ep-news\b/.test(text)) errors.push("R7 뉴스 한 줄의 CSS (.ep-news)가 뼈대 (episode.css)에 있다 — 시안 폴더에만 있어야 한다");
+  // F-E7 (D127): 뉴스 한 줄의 꼴 (.ep-news)은 이제 뼈대 (episode.css)의 것이다 — 실제 화면이 쓴다. 이 시안의 oil-replot.css 는 그 위에 제 꼴 (점 + 굵게)을 덧입힌다
 }
 const REAL_GIVER = "episode/Screen.tsx";
 for (const g of givers) if (!g.startsWith(HERE) && g !== REAL_GIVER) errors.push(`R7 화면 칸 (screen)을 넘기는 곳이 기름값 시안 폴더 · 실제 화면 (${REAL_GIVER}) 밖에 있다 — ${g}`);

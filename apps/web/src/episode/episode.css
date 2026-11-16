@@ -386,6 +386,35 @@ a.ep-back {
   font-weight: 800;
   color: var(--ep-accent-ink);
 }
+/* 그날의 뉴스 한 줄 — 화면 칸 news (kit/types 의 ScreenSlots.news · 이야기 목록의 손 칸 screen). 법 3 "제목 두 층": 위 = 오늘 무슨 일 · 아래 = 큰 물음.
+   F-E7 (D127 "뉴스 한 줄 눈에 띄게"): 굵게 · 옅은 강조 바탕 띠 · 그 안에 강조색 점 하나 (강조 = 새것 · 지금). 제목보다 작게, 제목 바로 위에 붙어 한 덩이로.
+   색은 종이 토큰뿐 (새 색 없음). 칸을 안 주는 이야기에는 이 클래스가 화면에 없다. 첫 화면 카드도 같은 꼴을 쓴다 (작게 — app/home.css .hm-news) */
+.ep-news {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  margin: 6px 0 14px;
+  padding: 7px 14px 7px 12px;
+  border-radius: 12px;
+  background: var(--ep-accent-soft);
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  color: var(--ep-ink);
+}
+.ep-news::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ep-accent);
+  transform: translateY(-2px);
+}
 .ep-title-cover {
   font-size: 35px;
   line-height: 1.22;

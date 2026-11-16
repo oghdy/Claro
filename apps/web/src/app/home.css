@@ -139,6 +139,20 @@
   font-weight: 800;
   color: var(--td-on-accent);
 }
+/* 그날의 뉴스 한 줄 (F-E7 · D127) — 표지의 꼴 (episode.css .ep-news: 굵게 · 옅은 강조 바탕 띠 · 강조색 점) 그대로, 작게. 제목 바로 위.
+   화면 칸 news 가 있는 이야기의 카드에만 선다 (이야기 목록의 손 칸 screen) — 다른 카드는 그대로 */
+.hm-card .hm-news {
+  gap: 8px;
+  margin: 2px 0 8px;
+  padding: 4px 10px 4px 9px;
+  border-radius: 9px;
+  font-size: 14px;
+}
+.hm-card .hm-news::before {
+  width: 6px;
+  height: 6px;
+  transform: translateY(-1.5px);
+}
 .hm-card .td-dek {
   margin-bottom: 10px;
 }
