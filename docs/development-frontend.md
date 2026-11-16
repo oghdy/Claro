@@ -38,6 +38,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **UX-11b** | **Sonnet 이 빈 곳을 제 말로 메운다 (D120 ② · D122 · D123)** — `oil-replot-b` 는 그대로 · 메운 판 `/lab/episode/oil-replot-b2` · 편집자 목록 넷 + PM 셋 + 아라비아 숫자 · 받을지는 쓰는 사람이 정하고 까닭을 적는다 · 손으로 (모델 API 0) · 폰 앞 · 뒤 · 서브에이전트 Sonnet 5.5 | ☑ 2026-11-16 · `/lab/episode/oil-replot-b2` · 편집자 넷 받음 3 + 조금 1 · PM 셋 받음 · 숫자 24칸 · 글자 +0.7% · 모델 API 0 · `logs/frontend/UX-11b.md` | · **PM 검수 닫힘 (D124)**
 | **F-E6a** | **기름값 1화 마지막 글 — 실제로 낼 판 (D125 ③ 앞)** — 메운 판 (b2)의 작은 손질 셋 (`real[2]` 두 문장 · `tools[0].short` 단정 빼기 · 비대칭 구절 키) · 한글 수 마지막 확인 · 파이프라인 산출물은 그대로 두고 **로컬 세션 판의 자리** `…/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/` (`episode.json` + `screen.json`) · 손으로 (모델 API 0) · 서브에이전트 Sonnet 5.5 | ☑ 2026-11-16 |
 | **F-E6** | **실제 `/s/oil/1` 을 메운 판으로 (D125 ③)** — catalog 가 `local/oil-1` 을 읽음 · 화면 칸 셋 (뉴스 한 줄 · 멈춘 고리 가림 · 문서 문장 터짐)을 catalog 손 칸으로 실제 화면에 (안 주면 그대로 — 다른 실제 이야기 0 변화) · 새 표지 그림 (답이 아니라 물음의 그림) · 검사 · e2e · 폰 앞 · 뒤 · push = 배포 · 서브에이전트 Fable | ☑ 2026-11-16 |
+| **F-E7** | **뉴스 한 줄을 눈에 띄게 (D127)** — 표지의 제목 위 뉴스 한 줄 (`screen.news`)을 kit 의 꼴로 (굵게 · 강조 표시 · 종이 토큰 안) · 첫 화면 카드에도 제목 위에 · 뉴스 한 줄이 있는 이야기 (지금 기름값)만 바뀜 · 다른 이야기 0 변화 · 폰 앞 · 뒤 · push = 배포 · 서브에이전트 Opus | ☐ 도는 중 (2026-11-16) |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -1391,4 +1392,36 @@ PM 이 이걸 모아 "이야기 짜는 법" 한 장을 썼다 (`docs/content/sto
 - 검사: `pnpm -s typecheck` · `pnpm -s test` (web e2e — logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `lab/episode/check.ts` · lab `oil-replot*` check 셋 · 파이프라인 `episode oil-1 --check` (그대로 같다) · `python3 scripts/verify-ledger.py`. **결과를 로그에 붙인다**
 - docs/development-frontend.md 의 F-E6 줄 (☑ + 날짜) · 커밋 접두사 `F-E6` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버 · 백그라운드 일은 끝날 때 다 끈다 (`while pgrep …` 금지)
 - **나(PM)에게**: 10줄 안쪽 — 커밋 · 주소 · 바꾼 것 · 그림 · 다른 이야기 0 변화 · 배포 확인 · _open
+```
+
+## F-E7 · 뉴스 한 줄을 눈에 띄게 (D127)
+
+### 서브에이전트 지시 (Opus)
+```
+너는 Claro 프로젝트의 작업 세션이다 — 프론트 레인 (실제 화면). Step F-E7 (뉴스 한 줄을 눈에 띄게)을 맡는다. PM(나)이 폰 크기로 보고 검수한 뒤 도윤에게 보고한다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (`.claude/` 는 건드리지 마라). 다른 세션이 `docs/content/story-guide.md` 를 고치고 있을 수 있다 — 그 파일은 건드리지 마라.
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. **커밋 · push 는 해도 된다 — 도윤이 "뉴스 한 줄 눈에 띄게 바람"이라고 했다** (파일 지정 · 접두사 F-E7). push = Vercel 배포 — 검사가 다 통과하고 폰 그림을 네가 직접 본 뒤 한 번. 모델 API 0.
+
+## 왜
+실제 `/s/oil/1` 의 표지에 "그날 뉴스 한 줄" (이야기 짜는 법 3 — 제목 두 층: 위 = 오늘 무슨 일 · 아래 = 큰 물음)이 붙었다 (F-E6 · 화면 칸 `screen.news` — `local/oil-1/screen.json`). 지금은 옅고 얇은 한 줄이라 도윤이 "눈에 띄게"를 원했다. 매일 보는 뉴스 서비스라 "오늘 무슨 일"이 먼저 보여야 한다 (D113 ②).
+
+## 할 것
+1. **표지의 뉴스 한 줄 꼴** — `apps/web/src/episode/kit/Episode.tsx` 의 `.ep-news` 를 kit 의 CSS (`src/episode/episode.css`)에서 눈에 띄게: 굵은 글씨 · 강조 표시 (예: 강조색 점이나 옅은 강조 바탕 띠 — 너의 판단) · 큰 제목과 한 덩이로 읽히되 제목보다는 작게. **새 색 없이 종이 토큰 (`--ep-accent` · `--ep-accent-soft` · `--ep-ink` …) 안에서.** 참고: 첫째 시안의 꼴 `apps/web/src/app/lab/episode/oil-replot/oil-replot.css` 의 `.ep-news` (점 + 굵게) — 그대로 가져와도 되고 더 세게 해도 된다
+2. **첫 화면 카드** (`src/episode/home/cards.tsx`) — 뉴스 한 줄이 있는 이야기는 카드에서도 제목 바로 위에 같은 꼴 (작게)로. catalog 의 손 칸 `screen` 에서 읽는다 (catalog 는 kit/Episode 를 안 읽는다는 규칙 그대로). 뉴스 한 줄 없는 카드는 0 변화
+3. **다른 이야기 0 변화** — 배달 · 금리 2화 · 개인정보 · 면허 · 메타 (뉴스 한 줄 없음)는 화면 · 카드 그대로 (e2e · DOM 견줌). 금리 2화는 손대지 마라 (도윤 "금리 쪽은 일단 냅둬")
+4. **폰 그림** 390×844 — 앞 · 뒤: `/s/oil/1` 표지 · 첫 화면 `/` 의 카드 → `logs/frontend/F-E7/` (`before-…` · `after-…`). 네 눈으로 보고 넘침 · 겹침 · 두 줄로 꺾임을 적는다 (뉴스 한 줄이 폰에서 한 줄에 들어가는지)
+5. e2e — 표지 · 카드의 뉴스 한 줄이 보이고 글이 `screen.json` 과 같다 · 다른 카드엔 없다
+6. push 뒤 실제 `/` · `/s/oil/1` 200 확인 (curl)
+
+## 하지 말 것
+- 이야기 글 · `local/oil-1/*` · catalog 의 다른 줄 · 계약 · packages · lab 화면 동작 (lab 셋은 kit 꼴이 바뀌면 같이 바뀌어도 된다 — 로그에) · 새 색 · `docs/content/story-guide.md` · docs/PM.md 읽기 · 모델 API
+
+## 먼저 읽을 것
+- CLAUDE.md · docs/DECISIONS.md D113 · D114 · D126 · D127 · `logs/frontend/F-E6.md` · `apps/web/src/episode/kit/Episode.tsx` (Cover) · `src/episode/episode.css` · `src/episode/home/cards.tsx` · `src/episode/catalog.tsx` (손 칸 `screen`)
+
+## 끝낼 때
+- 로그 `logs/frontend/F-E7.md` — ① 무엇을 바꿨나 (꼴 · 까닭) ② 다른 이야기 0 변화 증거 ③ 폰 그림 · 본 것 ④ 검사 ⑤ 배포 확인 ⑥ _open. "작업 세션 모델: Opus 5.5"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · `lab/episode/check.ts`. **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 F-E7 줄 (☑ + 날짜) · 커밋 접두사 `F-E7` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버 · 백그라운드 일은 끝날 때 다 끈다 (`while pgrep …` 금지)
+- **나(PM)에게**: 6줄 안쪽 — 커밋 · 꼴 · 카드 · 다른 이야기 0 변화 · 배포 · _open
 ```
