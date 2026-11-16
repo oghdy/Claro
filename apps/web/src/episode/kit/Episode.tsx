@@ -45,6 +45,16 @@ export interface EpisodeParts {
    * Card 는 체험을 마쳤을 때 onDone 을 부른다. title · setup 은 머리 · 준비 글을 바꿀 때만 (없으면 회차의 것)
    */
   play?: { Card: ComponentType<{ onDone: () => void }>; title?: string; setup?: readonly T[] };
+  /**
+   * 시안 전용 (UX-10 · /lab/episode/oil-replot) — 「이야기 짜는 법」 (docs/content/story-guide.md)이 요구하는데 이 뼈대가 못 하던 것 셋. **계약에 없는 칸이다.**
+   * 실제 화면 (/s/*) · 다른 시안은 이것을 주지 않는다 — 안 주면 아무것도 달라지지 않는다. 셋은 따로따로다 (하나만 줘도 된다).
+   *   news   표지 — 제목 위에 그날의 뉴스 한 줄 (법 3 "제목 두 층")
+   *   veil   풀이 — 사슬의 멈춘 고리 (reach: none)를 누르기 전에는 다른 고리와 같게 보인다. 고리 id → 누르기 전의 말. 꼬리표 (still) · 그 앞의 점선은 누른 뒤에만 (법 5 "답을 먼저 보이지 않는다")
+   *   burst  풀이 — 체험을 마치면 맨 먼저 **문서의 문장**을 크게 보이고 (오늘의 사건 장면의 인용 칸과 같은 꼴) 바로 아래에 뒤집기의 풀이 (flip.note).
+   *          "뒤집어 보면 A ≠ B" 상자는 그리지 않는다 (법 6 "뒤집기는 도구지 칸이 아니다"). box: true 면 상자를 정리로 남긴다 (도구 카드 아래 — 폰에서 견줘 보려고)
+   * 1화에서 "지금까지의 이야기"를 건너뛰는 것은 칸이 아니다 — 회차의 조립 (assembly.new)에서 zero 를 빼면 된다 (계약 불변식 6 이 받는다)
+   */
+  replot?: { news?: T; veil?: Readonly<Record<string, string>>; burst?: { label: string; quote: T; note: string; box?: boolean } };
 }
 
 /**
@@ -167,7 +177,7 @@ interface SceneProps {
 }
 
 function Cover({ reader, onAsk }: SceneProps) {
-  const { ep, Art } = useEp();
+  const { ep, Art, replot } = useEp();
   const c = ep.scenes.cover;
   const follower = reader === "follower";
   const bare = useBare();
@@ -184,6 +194,12 @@ function Cover({ reader, onAsk }: SceneProps) {
       <motion.p className="ep-episode-no" variants={rise} data-testid="cover-no">
         {bare ? CHROME.chrome.weightLong : c.episode.t}
       </motion.p>
+      {/* 시안 전용 (UX-10) — 그날의 뉴스 한 줄. 안 주면 없다 */}
+      {replot?.news ? (
+        <motion.p className="ep-news" variants={rise} data-testid="cover-news">
+          <Txt item={replot.news} />
+        </motion.p>
+      ) : null}
       <motion.h1 className="ep-title ep-title-cover" variants={rise}>
         <Rich text={c.title} />
       </motion.h1>
@@ -330,7 +346,7 @@ function LabGate({ onOpen }: { onOpen: () => void }) {
 //   체험을 마치면 (틀 부품의 onDone) 또는 "그냥 열어 보기"를 누르면 열리고, 한 번 열리면 다시 접지 않는다 ("처음으로"를 눌러도).
 //   이 그림을 본 독자 · 체험 없이 보기에서는 처음부터 열려 있다 (그 독자에게는 감출 답이 없다 — 다시 쓰기 · 기본 풀이).
 function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
-  const { ep, play } = useEp();
+  const { ep, play, replot } = useEp();
   const c = ep.scenes.aha;
   const { entry, lab, plain } = ep.solve;
   // 체험이 없는 회차는 늘 기본 풀이다. 체험이 있는 회차는 시안 스위치로만 기본 풀이를 본다
@@ -344,19 +360,24 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
   const open = seen || opened;
   const onDone = useCallback(() => setOpened(true), []);
 
+  const flipBox = flip ? (
+    <motion.figure className="ep-flip" variants={rise} data-big={usePlain?.kind === "flip" ? "" : undefined}>
+      <figcaption>{flip.label}</figcaption>
+      <p className="ep-flip-a">{flip.a}</p>
+      <span className="ep-flip-eq" aria-hidden="true">
+        {flip.op}
+      </span>
+      <p className="ep-flip-b">{flip.b}</p>
+    </motion.figure>
+  ) : null;
   const flipFigure = flip ? (
     <>
-      <motion.figure className="ep-flip" variants={rise} data-big={usePlain?.kind === "flip" ? "" : undefined}>
-        <figcaption>{flip.label}</figcaption>
-        <p className="ep-flip-a">{flip.a}</p>
-        <span className="ep-flip-eq" aria-hidden="true">
-          {flip.op}
-        </span>
-        <p className="ep-flip-b">{flip.b}</p>
-      </motion.figure>
+      {flipBox}
       <P item={flip.note} />
     </>
   ) : null;
+  // 시안 전용 (UX-10) — 체험 뒤에 문서의 문장이 먼저 터진다. 체험이 있는 풀이에서만 (기본 풀이 · 그림을 본 독자는 그대로)
+  const burst = flip && replot?.burst ? replot.burst : null;
   const real = (
     <>
       <motion.h2 className="ep-sub" variants={rise}>
@@ -414,9 +435,21 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
     <>
       <Head asked={asked} kicker={c.kicker} title={seen && lab.seen_title ? lab.seen_title : (swap?.title ?? lab.title)} />
       {seen ? null : (swap?.setup ?? lab.setup).map((s) => <P key={s.t} item={s} />)}
-      <motion.div variants={rise}>{swap ? <swap.Card onDone={onDone} /> : <LabCard frames={lab.frames} seen={seen} onDone={onDone} />}</motion.div>
+      <motion.div variants={rise}>{swap ? <swap.Card onDone={onDone} /> : <LabCard frames={lab.frames} seen={seen} onDone={onDone} veil={replot?.veil} />}</motion.div>
       {open ? (
         <>
+          {burst && flip ? (
+            <>
+              <motion.figure className="ep-demand" variants={rise} data-testid="burst">
+                <figcaption>{burst.label}</figcaption>
+                <blockquote>
+                  <Txt item={burst.quote} />
+                </blockquote>
+                <p>{burst.note}</p>
+              </motion.figure>
+              <P item={flip.note} />
+            </>
+          ) : null}
           {born ? (
             <>
               <motion.p className="ep-tool-lead" variants={rise}>
@@ -428,7 +461,7 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
               </div>
             </>
           ) : null}
-          {flipFigure}
+          {burst ? (burst.box ? flipBox : null) : flipFigure}
           {real}
           {whose}
           <Ask text={ask} onAsk={() => onAsk(ask)} />

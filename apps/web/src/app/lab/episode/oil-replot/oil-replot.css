@@ -1,0 +1,63 @@
+/* UX-10 — 다시 짠 기름값 시안의 겉. 뼈대 (episode.css)는 고치지 않는다. 새 색 없음 — 띠는 fomc-auto · rate-3 의 시안 띠와 같은 색, 뉴스 한 줄은 뼈대의 색 변수만. */
+.rp-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  height: calc(30px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 12px 0;
+  background: #2e6657;
+  color: #fff;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.rp-banner strong {
+  font-weight: 800;
+}
+.rp-banner span {
+  opacity: 0.8;
+  flex: 1;
+}
+.rp-banner a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.rp-wrap .ep-root {
+  top: calc(30px + env(safe-area-inset-top));
+}
+.rp-wrap .ep-root[data-real] .ep-bar {
+  height: 48px;
+  padding-top: 0;
+}
+
+/* 시안 전용 칸 news (kit/Episode 의 replot.news) — 표지 제목 위의 그날 뉴스 한 줄. 이 클래스는 그 칸을 줄 때만 화면에 생긴다 */
+.ep-news {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 2px 0 10px;
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--ep-ink);
+}
+.ep-news::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ep-accent);
+  transform: translateY(-2px);
+}

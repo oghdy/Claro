@@ -48,24 +48,29 @@ function NodeBefore({ node: n, delay }: { node: ChainNode; delay: number }) {
   );
 }
 
-/** after: 밀었다 · carried: 앞 틀에서 이미 일어난 일 (움직임 없이) */
-function ChainPicture({ frame: f, after, carried }: { frame: ChainFrame; after: boolean; carried: boolean }) {
+/**
+ * after: 밀었다 · carried: 앞 틀에서 이미 일어난 일 (움직임 없이)
+ * veil: 시안 전용 (UX-10) — 멈춘 고리 (reach: none)의 id → 밀기 전의 말. 준 고리는 밀기 전에 다른 고리와 같게 보인다 (꼬리표 still · 그 앞의 점선은 민 뒤에만 — 밀기 전에 답이 보이지 않게).
+ *   안 주면 지금까지 그대로다 (멈춘 고리는 처음부터 제 꼬리표와 점선으로 선다)
+ */
+function ChainPicture({ frame: f, after, carried, veil }: { frame: ChainFrame; after: boolean; carried: boolean; veil?: Readonly<Record<string, string>> }) {
   const firstOpen = f.nodes.findIndex((n) => n.reach === "none") - 1;
+  const veiled = (n: ChainNode) => !after && n.reach === "none" && veil?.[n.id] !== undefined;
   return (
     <ol className="fr-chain" aria-label={f.nodes.map((n) => n.name).join(" → ")} data-after={after ? "" : undefined} data-carried={carried ? "" : undefined} data-picture={f.picture.id}>
       {f.nodes.flatMap((n, i) => {
         const next = f.nodes[i + 1];
         const node = (
-          <li key={n.id} data-node={n.id} data-state={n.reach === "none" ? "still" : !after ? "idle" : n.reach === "full" ? "on" : "part"} data-before={after && n.before ? "" : undefined}>
+          <li key={n.id} data-node={n.id} data-state={veiled(n) ? "idle" : n.reach === "none" ? "still" : !after ? "idle" : n.reach === "full" ? "on" : "part"} data-before={after && n.before ? "" : undefined}>
             <span className="fr-dot" aria-hidden="true" />
             <strong>{n.name}</strong>
-            <em>{n.reach === "none" ? n.still.t : after ? n.after.t : n.idle}</em>
+            <em>{veiled(n) ? veil![n.id] : n.reach === "none" ? n.still.t : after ? n.after.t : n.idle}</em>
             {/* 지난 값 — 민 뒤에만 (그림을 본 독자는 처음부터 민 뒤다). 힘이 그 고리에 닿을 즈음 나온다 */}
             {after && n.before ? <NodeBefore node={n} delay={carried ? 0 : i * 0.8 + 0.5} /> : null}
           </li>
         );
         if (!next) return [node];
-        const open = next.reach === "none";
+        const open = next.reach === "none" && !veiled(next);
         return [
           node,
           <li key={`${n.id}-link`} className="fr-link" data-kind={open ? "open" : "solid"} aria-hidden="true">
@@ -177,7 +182,7 @@ const hasBefore = (frames: readonly StepFrame[]) => frames.some((f) => (f.kind =
 
 // ─────────────────────────────────────────────────────────── 잇기
 
-export function StepsCard({ frames, seen = false, onDone }: { frames: readonly StepFrame[]; seen?: boolean; onDone?: () => void }) {
+export function StepsCard({ frames, seen = false, onDone, veil }: { frames: readonly StepFrame[]; seen?: boolean; onDone?: () => void; veil?: Readonly<Record<string, string>> }) {
   const [redo, setRedo] = useState(false);
   const [phase, setPhase] = useState(0);
   /** 민 고리 틀 (틀의 차례 번호) */
@@ -247,7 +252,7 @@ export function StepsCard({ frames, seen = false, onDone }: { frames: readonly S
         {frames.map((f, i) =>
           i > phase ? null : f.kind === "chain" ? (
             // 뒤 틀로 넘어가면 앞 틀의 일은 이미 일어난 일이다 — 고리의 상태는 "민 뒤"
-            <ChainPicture key={i} frame={f} after={i < phase || pressed.includes(i)} carried={i < phase} />
+            <ChainPicture key={i} frame={f} after={i < phase || pressed.includes(i)} carried={i < phase} veil={veil} />
           ) : i === phase ? (
             <Fragment key={i}>
               <SeatsPicture frame={f} choice={choice[i] ?? null} />
