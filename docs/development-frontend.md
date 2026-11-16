@@ -35,6 +35,7 @@ pnpm 모노레포. `apps/web` Next.js + Motion / `apps/app` Expo + Reanimated (�
 | **UX-10** | **기름값 다시 짜기 — "이야기 짜는 법" 시험 (D113 ② · D115)** — 같은 소스 팩 (`MOTIR-20261113-OIL-PRICE-CAP`) · 같은 사실로 1화를 `docs/content/story-guide.md` 에 따라 다시 짠다 · 손으로 (모델 API 0 · 로컬 세션 — D110) · `/lab/episode/oil-replot` (같은 kit · 같은 그림 — 실제 `/s/oil/1` 과 폰에서 나란히) · 쓰기 전 세 줄 · 물음 차례 · 장면마다 "독자가 아는 것" · 점검 여덟 · 법에 대한 되먹임 · 걸린 시간 · 서브에이전트 Fable | ☑ 2026-11-16 · **PM 검수 닫힘 (D116)** — **`/lab/episode/oil-replot`** 「기름값에 상한이 있다는데, 주유소는 더 받아도 될까」 (위에 뉴스 한 줄 "석유 최고가격, 열두 번째도 그대로") · 같은 kit · `OIL_LOOK` · `real` · 번호 숨김 · `unpromised` · 맨 위 "견줘 읽기 → 지금 판" · **차례**: 표지 (오늘의 일 + 물음) → 오늘의 사건 (어긋남 = 6월의 전망 문장) → 도구 셋 (답 없이) → 풀이 (두 고리 다 "여기일까요?" → 누르면 주유소 앞에서 멈춤 → 3월 문장이 크게 → 6월 수수께끼 되받기 → 도구 → 오늘 문서가 말한 것) → 이어짐 ("그럼 주유소는 마음대로?") → 남음 · 장면 7 → 6 (0화는 조립에서 뺌 — 계약이 받는다) · "뒤집어 보면" 상자 없음 · kit 시안 전용 칸 `replot` 셋 (`news` · `veil` · `burst` — 안 주면 그대로: 실제 · 다른 시안 화면의 뼈 64 장면 글자 같음) · 손으로 씀 (모델 API 0 · 장부 합 $34.85 그대로) · 구절 74 (지금 판 그대로 68 · 문서에서 새로 뗀 것 6) · `oil-replot/check.ts` (계약 + R1 ~ R7 — 답 먼저 금지를 글 47 덩이 · 근거 시트까지) · 지금 판에서 답이 먼저 나오는 곳 일곱 (D112 의 둘 + 0화 · 도구 본문 둘 · 준비 글 · 표지 그림) · 점검 여덟: 예 7 · 3번은 글 · 칸은 예 / **표지 그림 (≠)은 못 바꿈** · 법 되먹임 열하나 (끌 물음이 문서 밖 사실을 깐다 · "어디에도"에 근거 시트 · 도구 카드 · 뒤집힌 뒤의 물음 …) · web e2e 81 (새 3) · 폰 그림 36 `logs/frontend/UX-10/` (`now-NN` ↔ `new-NN`) · `logs/frontend/UX-10.md` · _open a ~ g |
 | **UX-10b** | **기름값 다시 짜기 — Sonnet 으로 한 번 더 (D117)** — UX-10 과 같은 법 · 같은 소스 팩 · 같은 kit (UX-10 의 시안 칸 `replot` 을 써도 된다) · **UX-10 의 글 · 로그는 안 본다** (따로 쓴다) · `/lab/episode/oil-replot-b` · 손으로 (모델 API 0) · 세 판을 폰에서 나란히 · 서브에이전트 Sonnet 5.5 | ☑ 2026-11-16 · **PM 검수 닫힘 (D118)** — `/lab/episode/oil-replot-b` 「최고가격이 그대로면, 주유소 가격표도 그대로일까요」 · 6장 · 0화 없음 · 6월 실마리 → 누른 뒤 3월 문장 · 상자 없음 · 도구 둘 · kit `replot` 그대로 씀 (kit · 계약 · 실제 0줄) · e2e 83 · 약 19분 · `logs/frontend/UX-10b.md` |
 | **UX-11a** | **편집자 시험 — Opus 가 Sonnet 판의 빈 곳만 짚는다 (D120 ②)** — `oil-replot-b` 를 다섯 물음으로 · 고쳐 쓰지 않는다 · 다섯 개 안쪽 (어디 · 왜 · 무엇을 · 근거) · 정답지 (D118)를 안 본다 · 로그 하나 · 코드 0줄 · 서브에이전트 Opus | ☑ 2026-11-16 · 검수 대기(PM) — 빈 곳 넷 (꼭 셋 · 있으면 좋음 하나): ① 제목 "그대로일까" ≠ 이야기가 푸는 "넘을 수 있나" ② `event.riddle[0]` 이 6월 전망을 일어난 일처럼 ③ 답 뒤 "그럼 내 기름값과 상관없나?"를 받는 줄 없음 — 실소비자 문장 덜고 F068 · F094 · F105 로 닿는 길 ④ verdict ≈ 남음 한 줄 (덜어 냄) · 글 · 코드 0줄 · 모델 API 0 · 약 8분 · `logs/frontend/UX-11a.md` · _open a · b |
+| **UX-11b** | **Sonnet 이 빈 곳을 제 말로 메운다 (D120 ② · D122 · D123)** — `oil-replot-b` 는 그대로 · 메운 판 `/lab/episode/oil-replot-b2` · 편집자 목록 넷 + PM 셋 + 아라비아 숫자 · 받을지는 쓰는 사람이 정하고 까닭을 적는다 · 손으로 (모델 API 0) · 폰 앞 · 뒤 · 서브에이전트 Sonnet 5.5 | ☐ 도는 중 (2026-11-16) |
 | — | 앱 (Expo) | 웹 이후 |
 
 ## F-1 PM 검수 (2026-09-30) — 통과
@@ -1269,4 +1270,50 @@ PM 이 이걸 모아 "이야기 짜는 법" 한 장을 썼다 (`docs/content/sto
 - 로그 `logs/frontend/UX-11a.md` — ① 읽은 것 (그림 몇 장 · 차례) ② **빈 곳 목록** (위 꼴 · 다섯 개 안쪽 · 꼭 / 있으면 좋음) ③ 물음 밖에서 본 것 (세 줄 안쪽) ④ 걸린 시간 (`date` 로 시작 · 끝) ⑤ _open. "작업 세션 모델: Opus 5.5 · 모델 API 0"
 - docs/development-frontend.md 의 UX-11a 줄 (☑ + 날짜) · 커밋 접두사 `UX-11a` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 백그라운드 기다리기 반복 금지
 - **나(PM)에게**: 목록 그대로 (다섯 개 안쪽) + 시간 + _open
+```
+
+## UX-11b · Sonnet 이 빈 곳을 제 말로 메운다 (D120 ② · D122 · D123)
+
+### 서브에이전트 지시 (Sonnet 5.5)
+```
+너는 Claro 프로젝트의 **쓰는 사람** 세션이다 — 프론트 레인 (lab 시안) + 글. Step UX-11b 를 맡는다. 앞서 다른 Sonnet 세션 (UX-10b)이 쓴 기름값 1화 (`/lab/episode/oil-replot-b`)를 편집자 (Opus · UX-11a)가 읽고 빈 곳 목록을 냈다. 네가 그 목록을 받아 **제 말로** 메운 판을 만든다. PM(나)이 폰 크기로 앞 · 뒤를 나란히 읽고 도윤에게 보인다.
+작업 폴더: /Users/hadohadopapi/Desktop/claro (git 저장소, main, **공개 저장소**). 시작 전에 `pnpm install`. 커밋 전 `git status` 로 남의 미커밋을 보고 건드리지 마라 (`.claude/` 는 건드리지 마라).
+비밀 (키 · .env)을 출력 · 로그 · 커밋하지 마라. 커밋 · push 는 해도 된다 (파일 지정 · 접두사 UX-11b · push = Vercel 배포 — lab 주소만 새로 생긴다 · 검사가 다 통과하고 폰 크기 그림을 네가 직접 본 뒤 한 번).
+**모델 API 0** — 글은 네가 손으로 쓴다. 파이프라인의 모델을 부르는 명령 (`episode.ts` · `p3.ts` · `short*.ts` 를 `--check` 없이)을 돌리지 마라. 끝에 장부 합이 그대로인지 본다 (시작 때 합 $34.85).
+
+## 왜
+도윤 (D119): Sonnet 판이 "더 쉽게 잘 쓰는 듯. 추상적인 느낌도 없고 크게 오버를 안 함" — 그래서 글은 Sonnet 이 쓴다. 다만 (D120) "Sonnet 에서 부족한 부분 (논리적으로나, 그래도 이 정도는 더 추가했으면 하는)을 채워 줄 장치"를 원했다 → 편집자가 빈 곳만 짚고, **쓰는 사람이 받을지 정하고 제 말로 메운다.** 이번이 그 첫 시험이다. **지켜야 할 것은 도윤이 좋아한 그 맛이다 — 쉽다 · 구체적이다 · 오버하지 않는다.** 메우다가 글이 길어지거나 무거워지면 실패다. 길이는 지금과 비슷하거나 짧게.
+
+## 받을 것
+1. **편집자 목록 넷** — `logs/frontend/UX-11a.md` ② (제목 물음 ≠ 이야기가 푸는 물음 · 수수께끼가 6월 전망을 일어난 일처럼 · 답 뒤 독자의 물음 "그럼 이 상한은 내 기름값과 상관없나요?" · 같은 답의 되풀이) + ③ 물음 밖 · ⑤ _open (UX11a-b: F068 을 옮길 때 "주유소 탓"처럼 우리 말로 단정하지 않는다 — 산업부의 판단으로만)
+2. **PM 이 더하는 셋** (D123):
+   - **a** 오늘의 사건의 6월 인용이 "…주유소 가격은 … 1,800원대로 낮아질…"로 **잘려** 있다 — 인용은 자르지 않는다 (문장 하나를 그대로 · 구절 F094 의 문장 전체)
+   - **b** 표지 글 (`cover.dek`)이 "이 값보다 비싸게는 못 팔게 정해 둔 상한이에요"를 **이야기꾼의 말로 단정**한다 — 독자가 품을 오해를 우리가 사실처럼 말하면 안 된다 (오해는 독자의 짐작으로 · 물음으로)
+   - **c** 풀이의 `solve.entry.whose` 가 "12차의 대상은 보도자료의 '11차와 같이'라는 말과 규정에 기대요"라고 쓴다 — 원문의 '11차와 같이'는 **값**에 붙은 말이다 (UX11a-a). 대상의 근거는 상시 규정 (F037)과 3월 첫 발표 (F054)뿐이라고 고친다 (12차 고시문은 우리가 확인한 문서에 없다는 말은 그대로)
+3. **아라비아 숫자** (D119 · 도윤 "유월 열두 번째 말고 6월 12번째") — 한글 수를 전부 아라비아 숫자로: 머리 · 꼬리표 · 단추 · 문서 이름 · 뉴스 한 줄까지 (`logs/backend/B-E5.md` ⑤ 의 oil-replot-b 12칸 + 그 밖에 보이는 것). 맨 글자열의 숫자는 이제 같은 이야기의 근거 있는 글에 같은 수가 있으면 계약이 받는다 (B-E5 · 불변식 10). 이 폴더의 검사 (`oil-replot-b/check.ts` 를 옮긴 것)의 R4 처럼 "숫자 없음"을 따로 보는 줄은 고친다
+
+## 받을지는 네가 정한다
+- 항목마다 **받음 / 조금 받음 / 안 받음 + 까닭 한 줄**을 로그 ② 에. 편집자의 "무엇을 하면"은 내용이지 문장이 아니다 — 네 말로 쓴다. 편집자 말투를 옮기지 마라
+- PM 의 셋 (a · b · c)과 숫자는 사실 · 원문의 문제라 받는다 (어떻게 쓸지는 너)
+- 장면 차례 · 체험 · 그림 · kit 장치 (`replot` 의 news · veil · burst)는 그대로 둔다 — 이번은 글을 메우는 일이다
+
+## 만들 것
+- **`oil-replot-b` 는 그대로 둔다** (견줄 앞 판). 폴더를 `apps/web/src/app/lab/episode/oil-replot-b2/` 로 복사해 그 안에서 고친다 · 주소 `/lab/episode/oil-replot-b2` · 맨 위 띠 "견줘 읽기"는 → `/lab/episode/oil-replot-b` (메우기 전) · 페이지에 모델 · 파이프라인 · 비용 말 없음
+- 검사 · e2e (`e2e/lab-oil-replot-b2.spec.ts` — 200 · 차례 · 실제 `/s/oil/1` · `oil-replot-b` 그대로)
+- 폰 그림 390×844 — **메우기 전 (`b-NN`)과 뒤 (`b2-NN`)를 같은 장면 번호로** → `logs/frontend/UX-11b/` (`apps/web/scripts/shots-ux10b.ts` 를 카메라로 복사해 써도 된다)
+
+## 읽을 것 · 읽지 말 것
+- 읽을 것: CLAUDE.md · `docs/content/story-guide.md` · docs/DECISIONS.md D119 · D120 · D122 · D123 · `logs/frontend/UX-10b.md` (앞 판을 왜 그렇게 썼나) · `logs/frontend/UX-11a.md` · `logs/backend/B-E5.md` ⑤ · `apps/web/src/app/lab/episode/oil-replot-b/` · 소스 팩 `packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/` (`store.json` · `store.documents.json`) · `…/episodes/oil-1/human.json` · `gate1.md` · `gate2.md` (사실의 경계)
+- **읽지 마라**: 다른 판 (`apps/web/src/app/lab/episode/oil-replot/` · `logs/frontend/UX-10.md` · `logs/frontend/UX-10/`) — 네 말투가 다른 판에 끌려가면 이 시험의 뜻이 없다 · docs/PM.md
+- 사실 · 숫자 · 인용은 소스 팩에 있는 것만. 언론 기사의 숫자는 쓰지 않는다 (D108)
+
+## 하지 말 것
+- `oil-replot-b` · 실제 화면 · `catalog.tsx` · kit · 계약 · 골든 · 소스 팩 · `packages/*` · `docs/content/story-guide.md` · 모델 API · 새 색 · 새 그림
+판단이 필요하면 _open 으로.
+
+## 끝낼 때
+- 로그 `logs/frontend/UX-11b.md` — ① 주소 ② **항목마다 받음 / 조금 / 안 받음 + 까닭** (편집자 넷 · 물음 밖 · PM 셋) ③ 바뀐 글 앞 · 뒤 표 (칸 경로 · 앞 · 뒤 — 숫자 바꿈은 한데 묶어) ④ 길이 (풀이 전 · 뒤 글자 수 앞 · 뒤) ⑤ 폰 그림 · 네 눈으로 본 것 (메운 판이 여전히 쉽고 오버하지 않나) ⑥ 검사 결과 ⑦ 걸린 시간 (`date` 로 시작 · 끝 — 실제 시각만) ⑧ _open. "작업 세션 모델: Sonnet 5.5 · 모델 API 0"
+- 검사: `pnpm -s typecheck` · `pnpm -s test` (logs/frontend 의 다른 그림이 다시 찍히면 그 파일만 하나씩 `git checkout -- <파일>`) · 이 폴더 `check.ts` · `oil-replot-b/check.ts` (그대로 OK) · `lab/episode/check.ts` · `python3 scripts/verify-ledger.py` (합 $34.85 그대로). **결과를 로그에 붙인다**
+- docs/development-frontend.md 의 UX-11b 줄 (☑ + 날짜) · 커밋 접두사 `UX-11b` · 파일 지정 (`git add <파일>` 하나씩 · `git commit -m … -- <파일들>`) · push (거절되면 `git pull --no-rebase`). stash · autostash · reset --hard · `git add -A` · `checkout -- <폴더>` 금지 · 띄운 서버는 끈다 · 백그라운드 기다리기 반복 (`while pgrep …`) 금지
+- **나(PM)에게**: 12줄 안쪽 — 커밋 · 주소 · 항목마다 받음 / 안 받음 한 줄씩 · 길이 앞 · 뒤 · 숫자 바꾼 칸 수 · 시간 · _open
 ```
