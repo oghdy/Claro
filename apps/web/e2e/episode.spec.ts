@@ -5,16 +5,22 @@
 // 카드에 "체험 있음 · 없음"을 적지 않는다 (D91 ② · F-E3).
 // F-E4 (D105): 첫 화면의 카드는 실제 첫 화면의 것이다 (episode/home/cards.tsx — 카드마다 그림 · 조용한 꼬리표). 뜻 (카드 수 · 차례 · 링크 · 번호 규칙 · 거짓 "오늘" 없음)은 그대로 본다.
 // F-E5 (D107 ~ D111): 11/15 "오늘" 두 편이 맨 위에 선다 — 긴 이야기 /s/oil/1 (새 시리즈의 첫 이야기 · 파이프라인이 낸 회차 파일 · 다음 화를 약속하지 않는다) · 짧은 이야기 /short/meta-gallery (홀로 선다).
-// 카드는 여섯이다 (그날의 둘 + 지난 넷). 머리는 읽는 날이 한국 날짜로 그날이면 "오늘의 이야기", 아니면 "11월 15일의 이야기" — 시계를 고정해 둘 다 본다.
+// 머리는 읽는 날이 한국 날짜로 그날이면 "오늘의 이야기", 아니면 "{m}월 {d}일의 이야기" — 시계를 고정해 둘 다 본다 (그때는 카드 여섯 · 11/15 를 손으로 박았다 → F-E8 부터 목록에서).
 // F-E6 (D125): /s/oil/1 의 회차 파일이 메운 판 (판 2 — events/…/local/oil-1/episode.json · 로컬 세션이 쓰고 편집자가 짚은 것)으로 바뀌었다. 파이프라인이 낸 판 1 (episodes/oil-1/)은 그 자리에 그대로다.
 // 이 이야기만 화면 칸 셋 (그 곁의 screen.json — 계약에 없는 손 칸: 제목 위 뉴스 한 줄 · 멈춘 고리 가림 · 풀이 뒤 문서 문장)을 받는다. 다른 실제 이야기는 그대로다 — 둘 다 아래에서 본다.
 // F-E7 (D127): 그 뉴스 한 줄이 눈에 띈다 (굵게 · 옅은 강조 바탕 띠 · 강조색 점 — 뼈대 episode.css .ep-news) · 첫 화면 카드에도 제목 바로 위에 (같은 꼴 · 작게). 다른 카드 · 화면에는 없다.
 // 실제 화면에는 시안의 것 (맨 위 띠 · 독자 스위치 · 풀이 스위치)이 없고, 독자는 처음 온 독자의 조립을 받는다.
+// F-E8 (D132): **그날의 값은 손으로 박지 않는다** — 머리 날짜 · 읽는 날의 시각 · 카드의 차례 · 맨 위 묶음 · 지난 이야기 · 맨 위 카드 · 편 수 · 지도 장 수 · 뉴스 한 줄 카드 ·
+// 이어지는 이야기 수는 이야기 목록 (catalog.tsx STORIES · bundle — ./stories.ts)에서 읽는다. 새 이야기를 목록 맨 위에 한 줄 더해도 이 파일을 고치지 않는다.
+// 지키던 뜻 (가장 새 날의 이야기가 맨 위 · 같은 날이면 목록의 위가 먼저 · 목록의 차례 = 화면의 차례 · 그날이면 "오늘의 이야기" · 다음 날은 날짜 그대로)은 그대로 본다.
+// 이야기 하나의 글 · 동작을 보는 시험 (LIVE · SHORTS · 기름값 · 화면 칸 · 금리 2화)은 그대로다 — 그 이야기를 지키는 것이다.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { HOME, countNoun } from "../src/episode/home-copy";
 import { READERS } from "./readers";
 import { OLD } from "./reader";
+import { LIST, dayTitle, noonKst } from "./stories";
 
 const PHONE = { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true };
 const repo = (file: string) => JSON.parse(readFileSync(path.join(import.meta.dirname, "../../..", file), "utf8"));
@@ -36,8 +42,15 @@ const SHORTS = [
   { story: SHORT, tags: ["국내", "나라와 법"] },
 ];
 const SHORT_PATH = `/short/${SHORT.code}`;
-/** 11/15 "오늘"의 묶음 (catalog 의 day) — 그날 · 다음 날의 한낮 (한국 시각) */
-const DAY = { on: "2026-11-15T12:00:00+09:00", after: "2026-11-16T12:00:00+09:00" };
+/**
+ * 첫 화면의 맨 위 묶음 (catalog.bundle — 목록에 적힌 day 가운데 가장 늦은 날의 이야기들) · 그 아래 "지난 이야기". 그날 · 다음 날의 한낮 (한국 시각)에 읽는다.
+ * 손으로 박지 않는다 (F-E8) — 새 이야기를 목록에 더하면 여기가 따라 바뀐다
+ */
+const { top: TOP, rest: REST } = LIST;
+const DAY = LIST.day ?? "";
+const READ = { on: noonKst(DAY), after: noonKst(DAY, 1) };
+/** 맨 위 카드 — 맨 위 묶음의 첫 이야기가 긴 이야기면 큰 카드 (data-lead) */
+const LEAD = TOP[0]?.kind === "long" ? TOP[0].id : null;
 const DELIVERY = LIVE.find((x) => x.code === "delivery")!;
 const FOMC = LIVE.find((x) => x.code === "fomc")!;
 /** 실제 화면에서 내린 짧은 이야기 (병원 — 골든 넷째는 그대로) */
@@ -54,18 +67,27 @@ const sceneText = async (page: Page) => flat(await page.locator(".ep-scene").inn
 
 test.use(PHONE);
 
-test("첫 화면 = 오늘 — 종이 톤 · 이야기 여섯 (11/15 의 둘 + 지난 넷 · 글은 파일 그대로) · 병원 짧은 이야기 없음 · 체험 표시 없음 · 번호는 금리에만 · 시안의 것이 없다 · 머리가 날짜를 속이지 않는다", async ({ page, request }) => {
-  // 읽는 날이 그날 (한국 날짜 11/15)이다
-  await page.clock.setFixedTime(new Date(DAY.on));
+test("첫 화면 = 오늘 — 종이 톤 · 카드는 목록 그대로 (가장 새 날의 묶음 + 지난 이야기 · 글은 파일 그대로) · 병원 짧은 이야기 없음 · 체험 표시 없음 · 번호는 금리에만 · 시안의 것이 없다 · 머리가 날짜를 속이지 않는다", async ({ page, request }) => {
+  // 목록의 뜻 (F-E8 — 값은 목록에서 오지만 규칙은 그대로 본다): 머리의 날 = 목록에 적힌 날 가운데 가장 늦은 날 · 맨 위 묶음은 다 그날 · 지난 이야기는 새 날이 위 (날이 없는 것은 맨 아래)
+  const days = LIST.all.flatMap((x) => (x.day ? [x.day] : []));
+  expect(DAY, "목록에 낸 날 (day)이 적힌 이야기가 있다").not.toBe("");
+  expect(DAY, "머리의 날 = 가장 새 날").toBe([...days].sort().at(-1));
+  expect(TOP.length, "맨 위 묶음이 있다").toBeGreaterThan(0);
+  for (const x of TOP) expect(x.day, `${x.id}: 맨 위 묶음은 그날의 이야기`).toBe(DAY);
+  for (const x of REST) expect((x.day ?? "") < DAY, `${x.id}: 지난 이야기는 그날보다 앞 (날이 없는 것 포함)`).toBe(true);
+  for (const [i, x] of REST.entries()) if (i) expect((REST[i - 1]!.day ?? "") >= (x.day ?? ""), `지난 이야기의 차례 — ${REST[i - 1]!.id} 가 ${x.id} 보다 새 날 (같은 날이면 목록의 차례)`).toBe(true);
+  for (const part of [TOP, REST]) for (const [i, x] of part.entries()) if (i && part[i - 1]!.day === x.day) expect(part[i - 1]!.at, `같은 날이면 목록의 위가 먼저 — ${part[i - 1]!.id} · ${x.id}`).toBeLessThan(x.at);
+  // 읽는 날이 그날 (한국 날짜)이다
+  await page.clock.setFixedTime(READ.on);
   const res = await page.goto("/");
   expect(res!.status()).toBe(200);
   await expect(page.locator(".r-deck"), "옛 화면 (B5)이 아니다").toHaveCount(0);
   await expect(page.locator(".ep-demo, [data-testid=palette-dock], [data-testid=card-empty]"), "시안 띠 · 색 스위치 · 견본 자리가 없다").toHaveCount(0);
   await expect(page.locator("html")).not.toHaveAttribute("data-palette", /.*/);
   expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe("rgb(244, 238, 227)");
-  // 머리 — 가장 새 묶음은 11/15 에 낸 둘이다. 서버가 그린 글은 날짜 그대로 ("11월 15일의 이야기")이고, 읽는 날이 그날일 때만 "오늘의 이야기"가 된다
-  expect(await (await request.get("/")).text(), "서버가 그린 머리는 날짜다").toMatch(/<h1[^>]*data-day="2026-11-15"[^>]*>11월 15일의 이야기<\/h1>/);
-  await expect(page.getByTestId("head")).toHaveAttribute("data-day", "2026-11-15");
+  // 머리 — 가장 새 묶음의 날. 서버가 그린 글은 날짜 그대로 ("{m}월 {d}일의 이야기")이고, 읽는 날이 그날일 때만 "오늘의 이야기"가 된다
+  expect(await (await request.get("/")).text(), "서버가 그린 머리는 날짜다").toMatch(new RegExp(`<h1[^>]*data-day="${DAY}"[^>]*>${dayTitle(DAY)}</h1>`));
+  await expect(page.getByTestId("head")).toHaveAttribute("data-day", DAY);
   await expect(page.getByTestId("head")).toHaveText("오늘의 이야기");
 
   // 긴 이야기 넷 — 카드의 글은 골든 그대로 · 주소는 실제 주소 · 번호 · 지난 이야기는 번호 화면 규칙을 지난 것 (금리)에만
@@ -91,23 +113,26 @@ test("첫 화면 = 오늘 — 종이 톤 · 이야기 여섯 (11/15 의 둘 + �
   // 병원 짧은 이야기는 내렸다 (D91 ① — 개인정보 긴 이야기와 같은 사건) — 카드도 제목도 없다
   await expect(page.getByTestId(`card-${GONE.code}`)).toHaveCount(0);
   expect(flat(await page.getByTestId("home").innerText())).not.toContain(flat(GONE.scenes.cover.title));
-  // 차례 — 목록의 차례 그대로 · 맨 위가 큰 카드. 맨 위 묶음 = 11/15 의 둘 (긴 이야기 → 짧은 이야기) · 그 아래 "지난 이야기" 넷
+  // 차례 — 목록의 차례 그대로 (카드 = 목록의 줄 전부) · 맨 위가 큰 카드. 맨 위 묶음 = 가장 새 날의 이야기들 · 그 아래 "지난 이야기" (값은 목록에서 — F-E8)
   const ids = (sel: string) => page.locator(sel).evaluateAll((els) => els.map((e) => e.getAttribute("data-testid")));
-  expect(await ids(".td-list .td-card")).toEqual(["card-oil-1", "card-meta-gallery", "card-delivery", "card-fomc", "card-pipc", `card-${SHORT.code}`]);
-  expect(await ids("main > .td-list .td-card"), "그날의 묶음").toEqual(["card-oil-1", "card-meta-gallery"]);
-  expect(await ids(".td-sec .td-list .td-card"), "지난 이야기").toEqual(["card-delivery", "card-fomc", "card-pipc", `card-${SHORT.code}`]);
-  await expect(page.locator("#td-rest")).toHaveText("지난 이야기");
-  await expect(page.locator(".hm-tally")).toHaveText("긴 이야기 하나, 짧은 이야기 하나.");
-  await expect(page.locator(".td-card[data-lead]")).toHaveCount(1);
-  await expect(page.getByTestId("card-oil-1")).toHaveAttribute("data-lead", "");
+  expect(await ids(".td-list .td-card")).toEqual([...TOP, ...REST].map((x) => x.id));
+  expect([...TOP, ...REST].map((x) => x.id), "목록의 차례 = 화면의 차례 (새 이야기는 목록 맨 위에 적는다)").toEqual(LIST.all.map((x) => x.id));
+  expect(await ids("main > .td-list .td-card"), "그날의 묶음").toEqual(TOP.map((x) => x.id));
+  expect(await ids(".td-sec .td-list .td-card"), "지난 이야기").toEqual(REST.map((x) => x.id));
+  if (REST.length) await expect(page.locator("#td-rest")).toHaveText("지난 이야기");
+  else await expect(page.locator("#td-rest")).toHaveCount(0);
+  const topLongs = TOP.filter((x) => x.kind === "long").length;
+  await expect(page.locator(".hm-tally")).toHaveText(HOME.tally.replace("{long}", countNoun(topLongs)).replace("{short}", countNoun(TOP.length - topLongs)));
+  await expect(page.locator(".td-card[data-lead]")).toHaveCount(LEAD ? 1 : 0);
+  if (LEAD) await expect(page.getByTestId(LEAD)).toHaveAttribute("data-lead", "");
   // F-E4 — 카드마다 제 그림 (긴 이야기 = 표지 그림 · 짧은 이야기 = 작은 그림) · 첫 인상의 큰 한 줄 · 화면 글이 "매일"을 약속하지 않는다
-  for (const code of [...LIVE.map((x) => x.code), ...SHORTS.map((x) => x.story.code)]) await expect(page.getByTestId(`card-${code}`).locator(".hm-face svg"), `${code} 의 그림`).toHaveCount(1);
+  for (const { id } of LIST.all) await expect(page.getByTestId(id).locator(".hm-face svg"), `${id} 의 그림`).toHaveCount(1);
   await expect(page.locator(".hm-tagline")).toBeVisible();
   expect(await page.getByTestId("home").innerText()).not.toMatch(/매일|날마다 (새 이야기가 )?(올라와요|내요|만나요)/);
   // 읽는 시간을 내지 않는다 (D82)
   expect(await page.getByTestId("home").innerText()).not.toMatch(/\d+\s*분/);
-  // 이어지는 이야기 — 금리만. 시리즈 줄은 골든의 track (지나온 화 · 지금 — "다음 화" 칸은 줄에 없다) · 예고는 날짜가 있는 것
-  await expect(page.locator("[data-testid^=cont-]")).toHaveCount(1);
+  // 이어지는 이야기 — 번호를 보이는 주제만 (목록에서 — 지금은 금리). 시리즈 줄은 골든의 track (지나온 화 · 지금 — "다음 화" 칸은 줄에 없다) · 예고는 날짜가 있는 것
+  expect(await ids("[data-testid^=cont-]")).toEqual(LIST.cont.map((s) => `cont-${s}`));
   const cont = page.getByTestId("cont-rate");
   await expect(cont).toHaveAttribute("href", "/s/rate/2");
   const track = FOMC.ep.track.filter((e: any) => e.state !== "next");
@@ -120,9 +145,10 @@ test("첫 화면 = 오늘 — 종이 톤 · 이야기 여섯 (11/15 의 둘 + �
   // 개념 지도로 가는 길 — 주제마다 한 장 · 첫 화면으로 돌아온다
   await page.getByTestId("to-map").click();
   await expect(page).toHaveURL(/\/map$/);
-  await expect(page.getByTestId("concept-map")).toHaveCount(LIVE.length);
-  // 다음 화를 약속하지 않는 이야기 (기름값)의 지도에는 "다음 화 개념"이 없다 — 다른 지도는 그대로 (둘씩)
-  await expect(page.locator(".ep-node[data-state=ghost]")).toHaveCount(LIVE.filter((x) => !x.unpromised).reduce((n, x) => n + x.ep.map.ghosts.length, 0));
+  await expect(page.getByTestId("concept-map")).toHaveCount(LIST.maps.length);
+  // 다음 화를 약속하지 않는 이야기 (기름값)의 지도에는 "다음 화 개념"이 없다 — 다른 지도는 그대로 (둘씩). 지도마다의 수는 목록에서 (F-E8 — 주제가 늘면 따라 는다)
+  await expect(page.locator(".ep-node[data-state=ghost]")).toHaveCount(LIST.maps.reduce((n, x) => n + x.ghosts, 0));
+  for (const x of LIVE) expect(LIST.maps.find((m) => m.series === x.ep.series.code)?.ghosts, `${x.path} 의 지도의 다음 화 개념`).toBe(x.unpromised ? 0 : x.ep.map.ghosts.length);
   for (const g of LIVE[0]!.ep.map.ghosts) expect(await page.getByTestId("today-map").innerText(), `지도의 ghost "${g.name}"`).not.toContain(g.name);
   await expect(page.getByTestId("palette-dock")).toHaveCount(0);
   await page.locator("a.ep-back").click();
@@ -130,18 +156,18 @@ test("첫 화면 = 오늘 — 종이 톤 · 이야기 여섯 (11/15 의 둘 + �
   await page.getByTestId("card-delivery").locator("a.td-main").click();
   await expect(page).toHaveURL(DELIVERY.path);
   // 읽는 날이 그날이 아니면 (다음 날) 머리는 날짜 그대로다 — "오늘"이라고 하지 않는다
-  await page.clock.setFixedTime(new Date(DAY.after));
+  await page.clock.setFixedTime(READ.after);
   await page.goto("/");
-  await expect(page.getByTestId("head")).toHaveText("11월 15일의 이야기");
+  await expect(page.getByTestId("head")).toHaveText(dayTitle(DAY));
   expect(await page.getByTestId("home").innerText()).not.toContain("오늘의 이야기");
 });
 
-test("11/15 의 두 편 — 새 두 주소가 열린다 (200) · 콘솔 오류가 없다 (첫 화면 · 긴 이야기 · 짧은 이야기 · 지도)", async ({ page }) => {
+test("가장 새 묶음 (목록에서) — 그날의 새 주소가 열린다 (200) · 콘솔 오류가 없다 (첫 화면 · 그날의 이야기 · 지도)", async ({ page }) => {
   const errors: string[] = [];
   // favicon 404 는 뺀다 (지난 결정대로)
   page.on("console", (m) => (m.type() === "error" && !/favicon/.test(`${m.text()} ${m.location().url}`) ? errors.push(`${page.url()} ${m.text()}`) : undefined));
   page.on("pageerror", (e) => errors.push(`${page.url()} ${e.message}`));
-  for (const p of ["/", "/s/oil/1", `/short/${META.code}`, "/map"]) {
+  for (const p of ["/", ...TOP.map((x) => x.href), "/map"]) {
     const res = await page.goto(p, { waitUntil: "networkidle" });
     expect(res!.status(), p).toBe(200);
   }
@@ -222,9 +248,12 @@ test("/s/oil/1 = 메운 판 (판 2 · F-E6) — 새 제목 · 제목 위 뉴스 
   expect(cardLook.bg, "카드: 옅은 강조 바탕 띠").toBe(ACCENT_SOFT);
   expect(cardLook.lines, "카드: 폰에서 한 줄").toBe(1);
   expect(cardLook.right, "카드: 카드 칸 안").toBeLessThanOrEqual(body!.x + body!.width);
-  // 다른 카드 (뉴스 한 줄 없는 이야기)에는 없다
-  await expect(page.getByTestId("card-news"), "뉴스 한 줄은 기름값 카드 하나에만").toHaveCount(1);
-  await expect(page.locator('.td-card:not([data-testid="card-oil-1"]) .ep-news'), "다른 카드에는 뉴스 한 줄의 꼴이 없다").toHaveCount(0);
+  // 다른 카드 (뉴스 한 줄 없는 이야기)에는 없다 — 뉴스 한 줄이 있는 이야기는 목록에서 (F-E8 — 지금은 기름값 하나 · 새 이야기가 screen.news 를 가져오면 그 카드에도)
+  const withNews = LIST.all.filter((x) => x.news);
+  expect(withNews.map((x) => x.id), "기름값은 뉴스 한 줄이 있는 이야기").toContain("card-oil-1");
+  await expect(page.getByTestId("card-news"), "뉴스 한 줄은 그것이 있는 카드에만").toHaveCount(withNews.length);
+  for (const x of withNews) expect(flat(await page.getByTestId(x.id).getByTestId("card-news").innerText()), `${x.id} 의 뉴스 한 줄`).toBe(flat(x.news!));
+  await expect(page.locator(`.td-card${withNews.map((x) => `:not([data-testid="${x.id}"])`).join("")} .ep-news`), "다른 카드에는 뉴스 한 줄의 꼴이 없다").toHaveCount(0);
 
   // 표지 — 뉴스 한 줄이 제목 위에 · 제목은 회차 파일 그대로
   await page.getByTestId("card-oil-1").locator("a.td-main").click();
