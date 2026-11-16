@@ -150,7 +150,9 @@ for (const f of files(SRC)) {
   // F-E7 (D127): 뉴스 한 줄의 꼴 (.ep-news)은 이제 뼈대 (episode.css)의 것이다 — 실제 화면이 쓴다. 이 시안의 oil-replot.css 는 그 위에 제 꼴 (점 + 굵게)을 덧입힌다
 }
 const REAL_GIVER = "episode/Screen.tsx";
-for (const g of givers) if (!g.startsWith(HERE) && g !== REAL_GIVER) errors.push(`R7 화면 칸 (screen)을 넘기는 곳이 기름값 시안 폴더 · 실제 화면 (${REAL_GIVER}) 밖에 있다 — ${g}`);
+// L-1: 미리 보기 (/lab/local — 로컬 세션 판의 screen.json 을 실제와 같은 screenOf 로 읽어 준다 · 그 칸의 검사는 scripts/check-local.ts 가 ../check.ts S8 과 같은 함수로)도 넘기는 곳이다
+const PREVIEW = "app/lab/local/";
+for (const g of givers) if (!g.startsWith(HERE) && g !== REAL_GIVER && !g.startsWith(PREVIEW)) errors.push(`R7 화면 칸 (screen)을 넘기는 곳이 기름값 시안 폴더 · 실제 화면 (${REAL_GIVER}) 밖에 있다 — ${g}`);
 if (!givers.some((g) => g.startsWith(HERE))) errors.push("R7 이 폴더가 화면 칸을 넘기지 않는다 — 검사가 낡았다");
 // 실제 /s/oil/1 은 F-E6 부터 판 2 (메운 판 — events/…/local/oil-1)다. 이 시안 (첫째로 다시 짠 판)과 id · 판 번호가 같아도 다른 글이다 — 목록이 이 폴더의 파일을 읽지 않는지를 본다
 if (LONGS.some((x) => x.ep.path === PATH)) errors.push("R7 이야기 목록 (catalog)에 이 판이 올라 있다");

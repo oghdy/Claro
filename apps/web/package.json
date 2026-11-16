@@ -22,6 +22,8 @@
     "deploy:role": "tsx --env-file=.env.deploy scripts/api-role.ts",
     "probes": "tsx scripts/probes.ts",
     "deploy:probes": "tsx --env-file=.env.deploy scripts/probes.ts",
+    "story:check": "tsx scripts/check-local.ts",
+    "story:shots": "tsx scripts/shots-story.ts",
     "answers": "tsx scripts/answers.ts",
     "deploy:answers": "tsx --env-file=.env.deploy scripts/answers.ts"
   },

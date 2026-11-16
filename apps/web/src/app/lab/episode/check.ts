@@ -29,6 +29,7 @@ import { PICTURES } from "../../../episode/kit/frames/pictures";
 import { EPISODES, SHELF } from "../../../episode/kit/shelf";
 import { LONGS, STORIES, bundle, hrefOfLine, latestPerSeries, numbered, realPath } from "../../../episode/catalog";
 import { HOME } from "../../../episode/home-copy";
+import { screenProblems } from "../../../episode/screen-check";
 
 const REPO = path.join(import.meta.dirname, "../../../../../..");
 let failed = 0;
@@ -94,8 +95,6 @@ for (const e of EPISODES) {
   // S8 (F-E6) — 실제 화면의 화면 칸. 계약이 못 보는 칸이라 여기서 본다 (lab 시안의 같은 칸은 제 폴더의 check.ts 가 본다)
   console.log("\n■ 화면 칸 (이야기 목록의 손 칸 screen — 계약에 없다)");
   const errors: string[] = [];
-  const norm = (x: string) => x.replace(/[“”"]/g, "").replace(/\s+/g, "");
-  const nums = (x: string) => (x.replace(/,/g, "").match(/\d+/g) ?? []).map((n) => String(Number(n)));
   let seen = 0;
   for (const line of LONGS) {
     const { screen: slots, ep } = line;
@@ -103,45 +102,9 @@ for (const e of EPISODES) {
     if (!slots) continue;
     seen++;
     const documents = ep.stores.flatMap((f) => (JSON.parse(readFileSync(path.join(REPO, f), "utf8")) as { source_documents: { source_id: string; text: string }[] }).source_documents);
-    const quoteOf = (k: string) => ep.quotes[k]?.quote ?? "";
-    const keys = (where: string, src: readonly string[] | undefined) => {
-      if (!src?.length) errors.push(`S8 ${at} ${where}: 근거 구절이 없다`);
-      for (const k of src ?? []) if (!(k in ep.quotes)) errors.push(`S8 ${at} ${where}: 구절 ${k} 가 이 회차에 없다`);
-    };
-    const grounded = (where: string, text: string, src: readonly string[] | undefined) => {
-      const have = new Set((src ?? []).flatMap((k) => nums(quoteOf(k))));
-      for (const n of nums(text)) if (!have.has(n)) errors.push(`S8 ${at} ${where}: 숫자 ${n} 을 받치는 구절이 없다 — "${text}"`);
-    };
-    const said: string[] = [];
-    if (slots.news) {
-      keys("news", slots.news.src);
-      grounded("news", slots.news.t, slots.news.src);
-      said.push(`news "${slots.news.t}" (${slots.news.src?.join(" + ")})`);
-    }
-    if (slots.burst) {
-      const { quote, label, note } = slots.burst;
-      keys("burst.quote", quote.src);
-      const joined = norm((quote.src ?? []).map(quoteOf).join(""));
-      if (norm(quote.t) !== joined) errors.push(`S8 ${at} burst.quote: 구절 (${quote.src?.join(" + ")})을 이은 글자 그대로가 아니다 — "${quote.t}"`);
-      const docIds = new Set((quote.src ?? []).map((k) => ep.docs[ep.quotes[k]?.doc ?? ""]?.source_id));
-      const doc = docIds.size === 1 ? documents.find((d) => d.source_id === [...docIds][0]) : undefined;
-      if (!doc) errors.push(`S8 ${at} burst.quote: 구절들이 저장된 문서 한 편을 가리키지 않는다`);
-      else if (!norm(doc.text).includes(norm(quote.t))) errors.push(`S8 ${at} burst.quote: 저장된 문서 (${doc.source_id})의 글 그대로가 아니다 — 이은 자리가 문서에서 이어져 있지 않다`);
-      for (const [where, x] of [["burst.label", label], ["burst.note", note]] as const) grounded(where, x, quote.src);
-      if (quote.voice && !(quote.voice in ep.voice_labels)) errors.push(`S8 ${at} burst.quote: 말한 이 "${quote.voice}" 가 이 회차에 없다`);
-      if (!ep.solve.entry.flip || !ep.solve.lab) errors.push(`S8 ${at} burst: 체험 · 뒤집기가 없는 회차다 — 화면이 이 칸을 그리지 않는다`);
-      said.push(`burst = 구절 ${quote.src?.join(" + ")} 을 이은 글자 그대로${doc ? ` · 문서 ${doc.source_id} 에 그대로 있다` : ""} · 상자 ${slots.burst.box ? "남김" : "없음"}`);
-    }
-    if (slots.veil) {
-      const frames = ep.solve.lab?.frames ?? [];
-      const still = frames.flatMap((f) => (f.kind === "chain" ? f.nodes.filter((n) => n.reach === "none").map((n) => n.id) : []));
-      if (!isSteps(frames)) errors.push(`S8 ${at} veil: 체험이 사슬 틀이 아니다 — 가릴 고리가 없다`);
-      for (const [id, word] of Object.entries(slots.veil)) {
-        if (!still.includes(id)) errors.push(`S8 ${at} veil.${id}: 이 회차 사슬의 멈춘 고리 (reach: none — ${still.join(" · ") || "없음"})가 아니다`);
-        if (/\d/.test(word)) errors.push(`S8 ${at} veil.${id}: 가린 말에 숫자가 있다 — "${word}"`);
-      }
-      said.push(`veil ${Object.keys(slots.veil).join(" · ")} (멈춘 고리 ${still.join(" · ")})`);
-    }
+    // 규칙은 한 곳 (episode/screen-check.ts) — 로컬 판의 검사 (scripts/check-local.ts)가 같은 것을 부른다
+    const { errors: found, said } = screenProblems(ep, slots, documents, at);
+    errors.push(...found);
     console.log(`${at} (${ep.code} · 판 ${ep.episode_version}): ${said.join(" / ")}`);
   }
   console.log(`화면 칸을 주는 이야기 ${seen} · 안 주는 긴 이야기 ${LONGS.length - seen} (${LONGS.filter((x) => !x.screen).map(hrefOfLine).join(" · ")})`);

@@ -1,0 +1,42 @@
+/* L-1 — 미리 보기 (/lab/local) 맨 위 띠 하나. 색 · 글꼴은 다른 시안 띠 (oil-replot-b2 의 .orb-bar)에서 옮겨 적었다 — 새 색 없음. 뼈대 (episode.css)는 고치지 않는다. */
+.lp-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  box-sizing: border-box;
+  height: calc(30px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 12px 0;
+  background: #2e6657;
+  color: #fff;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.lp-bar strong {
+  font-weight: 800;
+}
+.lp-bar a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.lp-wrap .ep-root {
+  top: calc(30px + env(safe-area-inset-top));
+}
+/* 검사를 못 지난 판 — 까닭을 글로 (화면을 세우지 않는다) */
+.lp-broken {
+  margin: calc(46px + env(safe-area-inset-top)) 16px 24px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

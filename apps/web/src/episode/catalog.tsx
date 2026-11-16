@@ -185,8 +185,15 @@ export const shortOf = (code: string): ShortLine | undefined => SHORTS.find((x) 
 export const longByRef = (ref: { episode_id: string; episode_version: number } | null | undefined): LongLine | undefined =>
   ref ? LONGS.find((x) => x.ep.episode_id === ref.episode_id && x.ep.episode_version === ref.episode_version) : undefined;
 
+/**
+ * 미리 보기 (/lab/local — L-1)가 **아직 목록에 없는** 이야기를 올린 뒤의 화면 그대로 그리려고 적어 두는 자리 — 그 이야기의 meta.json 이 unpromised 라고 적었을 때만.
+ * 실제 화면 · 목록의 줄은 이것을 부르지 않는다 (비어 있다 → 아래 unpromised 는 지금까지 그대로다)
+ */
+const PREVIEW_UNPROMISED = new Set<string>();
+export const previewUnpromised = (episode_id: string): void => void PREVIEW_UNPROMISED.add(episode_id);
+
 /** 다음 화를 약속하지 않는 이야기인가 (LongLine.unpromised) — 화면 뼈대 (kit/Episode · kit/ConceptMap)가 실제 화면에서 묻는다 */
-export const unpromised = (ep: { episode_id: string }): boolean => LONGS.some((x) => x.unpromised === true && x.ep.episode_id === ep.episode_id);
+export const unpromised = (ep: { episode_id: string }): boolean => PREVIEW_UNPROMISED.has(ep.episode_id) || LONGS.some((x) => x.unpromised === true && x.ep.episode_id === ep.episode_id);
 
 /**
  * **번호 화면 규칙** (D79 ① · D88 E-20) — "N화" · 시리즈 줄 · "다음 화"는 **같은 시리즈에 긴 이야기가 둘 이상 실제로 있을 때만** 보인다. 데이터 (number · track)는 그대로다 — 화면이 목록을 보고 정한다.
