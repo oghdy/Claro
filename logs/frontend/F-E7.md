@@ -141,7 +141,39 @@ exit 0
 
 ## ⑤ 배포 확인
 
-(push 뒤 붙임)
+커밋 `2c9eb03` (16 파일 — 코드 5 · 스크립트 1 · 문서 1 · 로그 1 · 그림 8 · 파일 하나씩 지정) → push (`de94b2a..2c9eb03 main` · 21:40:54) → 1분 안쪽 (21:41:38)에 실제 첫 화면에 뉴스 한 줄이 섰다.
+
+```
+$ curl -s -o /dev/null -w "%{http_code}" https://claro-lime-one.vercel.app<주소>      (2026-11-16 21:41:44)
+200 /
+200 /s/oil/1
+200 /s/price/1
+200 /s/rate/2
+200 /s/privacy/1
+200 /short/meta-gallery
+200 /short/license-notice
+200 /map
+/ : card-news 1 · ep-news hm-news 1 · '12번째도 그대로' 2
+/s/oil/1 : cover-news 1 · '12번째도 그대로' 1
+/s/price/1 : ep-news 0
+/s/rate/2 : ep-news 0
+/s/privacy/1 : ep-news 0
+
+배포된 CSS (/_next/static/immutable/chunks/…css):
+.ep-news{box-sizing:border-box;background:var(--ep-accent-soft);letter-spacing:-.025em;width:fit-content;max-width:100%;color:var(--ep-ink);border-radius:12px;align-items:baseline;gap:10px;margin:6px 0 14px;padding:7px 14px 7px 12px;font-size:17px;font-weight:750;line-height:1.4;display:flex}
+.ep-news:before{content:"";background:var(--ep-accent);border-radius:50%;flex:none;width:7px;height:7px;transform:translateY(-2px)}
+
+$ … tsx scripts/shots-fe7.ts https://claro-lime-one.vercel.app <스크래치> read live      (실제 주소를 폰 크기로 — 그림은 커밋 안 함)
+첫 화면 카드 뉴스 한 줄: 줄 1 · 14px · 굵기 750 · 폭 200px · 오른쪽 끝 240 / 칸 368 · 바탕 rgb(247, 223, 210) · 가로 넘침 false
+표지 뉴스 한 줄: 줄 1 · 17px · 굵기 750 · 폭 246px · 오른쪽 끝 268 / 칸 390 · 바탕 rgb(247, 223, 210) · 가로 넘침 false
+표지: 뉴스 한 줄 아래 끝 391 · 제목 위 끝 405 (사이 14px)
+표지: 물음 단추 아래 끝 826 / 화면 844 (한 화면에 든다)
+콘솔 · 페이지 오류 0
+```
+
+- 실제 주소의 표지 확대 그림을 내 눈으로 봤다 — `after-cover-zoom.png` 와 같다.
+- 이 줄을 싣는 둘째 push (로그만)가 배포를 한 번 더 돌린다 — 화면은 같다.
+- 띄운 서버 · 백그라운드 일은 다 껐다 (3411 · 3412 포트 빔 · 임시 빌드 폴더 `.next-fe7a` · `.next-fe7b` · `.data/fe7` 지움 · 시안 견줌 스크립트 `scripts/_proto-fe7.ts` 지움 — 커밋 안 함).
 
 ## ⑥ _open
 
