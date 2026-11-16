@@ -154,7 +154,26 @@ apps/web test:   87 passed (3.5m)
 
 ## ⑦ 배포 확인
 
-(push 뒤에 채운다 — 로그만 싣는 둘째 커밋)
+커밋 `8cb3e85` (68 파일 — 코드 · 검사 · e2e 24 · 문서 1 · 로그 1 · 그림 42 · 파일 하나씩 지정) → push (`9330f34..8cb3e85 main` · 20:44:22) → 1분 안쪽 (20:45:15)에 실제 주소가 바뀌었다.
+
+```
+$ curl -s -o … -w "%{http_code}" https://claro-lime-one.vercel.app<주소>   +   <title>      (2026-11-16 20:45:25)
+200 /                      — <title>Claro — 뉴스 하나가 이야기 한 편이 돼요</title>
+200 /s/oil/1               — <title>최고가격이 그대로면, 주유소 값도 못 넘을까요 — 기름값은 어디서 묶이나 · Claro</title>
+200 /s/price/1             — <title>싸게 팔라는데, 왜 잘못일까 — 누가 값을 정하나 · Claro</title>
+200 /s/rate/2              — <title>물가가 높다면서, 왜 안 올렸을까 — 금리는 어디로 2화 · Claro</title>
+200 /s/privacy/1           — <title>해킹은 당한 건데, 왜 회사가 벌을 받을까 — 내 정보는 누가 지키나 · Claro</title>
+200 /short/meta-gallery    — <title>사진 때문에 수억 유로라는데, 사진을 가져간 걸까 — 내 정보는 누가 지키나 · 짧은 이야기 · Claro</title>
+200 /short/license-notice  — <title>면허 정지가 취소됐다는데, 잘못이 없었다는 걸까 — 처분은 어떻게 뒤집히나 · 짧은 이야기 · Claro</title>
+200 /map                   — <title>개념 지도 · Claro</title>
+200 /lab/episode/oil-replot-b2 — <title>Claro 시안 — 기름값 · 빈 곳을 메운 1화</title>
+
+/ 의 HTML: 새 제목 "최고가격이 그대로면" 2 번 · 옛 제목 "누구의 값을 묶은 걸까" 0 번
+/s/oil/1 의 HTML: og:title "최고가격이 그대로면, 주유소 값도 못 넘을까요" · 뉴스 한 줄 (data-testid="cover-news") 1 · "12번째도 그대로" 1 · 옛 제목 0
+```
+
+- 실제 주소의 폰 그림은 찍지 않았다 (같은 커밋의 빌드를 이 Mac 에서 찍은 것이 ⑤ — PM 이 폰 크기로 본다). 이 줄을 싣는 둘째 push (로그만)가 배포를 한 번 더 돌린다 — 화면은 같다.
+- 띄운 서버 · 백그라운드 일은 다 껐다 (3101 · 3311 · 3312 포트 빔 · 임시 빌드 폴더 `.next-fe6*` 지움).
 
 ## ⑧ _open
 
