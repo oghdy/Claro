@@ -18,7 +18,7 @@ export function OilReplotB2() {
           {COPY.compare} → {COPY.to}
         </a>
       </p>
-      <Episode ep={EP} Art={OIL_LOOK.Art} Glyph={OIL_LOOK.Glyph} real numbered={false} replot={REPLOT} />
+      <Episode ep={EP} Art={OIL_LOOK.Art} Glyph={OIL_LOOK.Glyph} real numbered={false} screen={REPLOT} />
     </div>
   );
 }

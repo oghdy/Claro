@@ -50,7 +50,7 @@ function NodeBefore({ node: n, delay }: { node: ChainNode; delay: number }) {
 
 /**
  * after: 밀었다 · carried: 앞 틀에서 이미 일어난 일 (움직임 없이)
- * veil: 시안 전용 (UX-10) — 멈춘 고리 (reach: none)의 id → 밀기 전의 말. 준 고리는 밀기 전에 다른 고리와 같게 보인다 (꼬리표 still · 그 앞의 점선은 민 뒤에만 — 밀기 전에 답이 보이지 않게).
+ * veil: 이야기마다 고르는 화면 칸 (kit/types ScreenSlots.veil) — 멈춘 고리 (reach: none)의 id → 밀기 전의 말. 준 고리는 밀기 전에 다른 고리와 같게 보인다 (꼬리표 still · 그 앞의 점선은 민 뒤에만 — 밀기 전에 답이 보이지 않게).
  *   안 주면 지금까지 그대로다 (멈춘 고리는 처음부터 제 꼬리표와 점선으로 선다)
  */
 function ChainPicture({ frame: f, after, carried, veil }: { frame: ChainFrame; after: boolean; carried: boolean; veil?: Readonly<Record<string, string>> }) {

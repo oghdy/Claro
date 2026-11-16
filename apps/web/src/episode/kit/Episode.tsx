@@ -9,7 +9,7 @@ import { PlainFlipLead, PlainQuietBody, PlainThreeCards } from "./frames/Plain";
 import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
 import { SHORTS, nextOf, oneLine, realPath, shortPath, unpromised } from "../catalog";
 import { SHELF, hrefOf, labelOf } from "./shelf";
-import { toolOf, type EpisodeData, type ReaderId, type SceneId, type T } from "./types";
+import { toolOf, type EpisodeData, type ReaderId, type SceneId, type ScreenSlots, type T } from "./types";
 
 // 한 회차 — 처음부터 끝까지 (공통 뼈대). 넘어가는 방법은 본 화면과 같다 (D26): 한 번에 한 장 · 물음 버튼 하나 · 누른 물음이 다음 장의 머리.
 // 달라진 것은 (1) 회차가 시리즈 안에 있다 (2) 독자가 아는 개념은 접힌다 (3) 끝에 내 개념 지도가 자란다 (D57).
@@ -46,15 +46,10 @@ export interface EpisodeParts {
    */
   play?: { Card: ComponentType<{ onDone: () => void }>; title?: string; setup?: readonly T[] };
   /**
-   * 시안 전용 (UX-10 · /lab/episode/oil-replot) — 「이야기 짜는 법」 (docs/content/story-guide.md)이 요구하는데 이 뼈대가 못 하던 것 셋. **계약에 없는 칸이다.**
-   * 실제 화면 (/s/*) · 다른 시안은 이것을 주지 않는다 — 안 주면 아무것도 달라지지 않는다. 셋은 따로따로다 (하나만 줘도 된다).
-   *   news   표지 — 제목 위에 그날의 뉴스 한 줄 (법 3 "제목 두 층")
-   *   veil   풀이 — 사슬의 멈춘 고리 (reach: none)를 누르기 전에는 다른 고리와 같게 보인다. 고리 id → 누르기 전의 말. 꼬리표 (still) · 그 앞의 점선은 누른 뒤에만 (법 5 "답을 먼저 보이지 않는다")
-   *   burst  풀이 — 체험을 마치면 맨 먼저 **문서의 문장**을 크게 보이고 (오늘의 사건 장면의 인용 칸과 같은 꼴) 바로 아래에 뒤집기의 풀이 (flip.note).
-   *          "뒤집어 보면 A ≠ B" 상자는 그리지 않는다 (법 6 "뒤집기는 도구지 칸이 아니다"). box: true 면 상자를 정리로 남긴다 (도구 카드 아래 — 폰에서 견줘 보려고)
-   * 1화에서 "지금까지의 이야기"를 건너뛰는 것은 칸이 아니다 — 회차의 조립 (assembly.new)에서 zero 를 빼면 된다 (계약 불변식 6 이 받는다)
+   * 이야기마다 고르는 화면 칸 (kit/types 의 ScreenSlots — news · veil · burst). **계약에 없는 칸이다.** 실제 화면은 이야기 목록의 손 칸 (catalog 의 LongLine.screen → Screen.tsx)에서,
+   * lab 시안은 제 data.ts 에서 준다. 안 주면 아무것도 달라지지 않는다 (지금은 기름값 1화 · 기름값 시안 셋만 준다)
    */
-  replot?: { news?: T; veil?: Readonly<Record<string, string>>; burst?: { label: string; quote: T; note: string; box?: boolean } };
+  screen?: ScreenSlots;
 }
 
 /**
@@ -177,7 +172,7 @@ interface SceneProps {
 }
 
 function Cover({ reader, onAsk }: SceneProps) {
-  const { ep, Art, replot } = useEp();
+  const { ep, Art, screen } = useEp();
   const c = ep.scenes.cover;
   const follower = reader === "follower";
   const bare = useBare();
@@ -194,10 +189,10 @@ function Cover({ reader, onAsk }: SceneProps) {
       <motion.p className="ep-episode-no" variants={rise} data-testid="cover-no">
         {bare ? CHROME.chrome.weightLong : c.episode.t}
       </motion.p>
-      {/* 시안 전용 (UX-10) — 그날의 뉴스 한 줄. 안 주면 없다 */}
-      {replot?.news ? (
+      {/* 화면 칸 news — 그날의 뉴스 한 줄. 안 주면 없다 */}
+      {screen?.news ? (
         <motion.p className="ep-news" variants={rise} data-testid="cover-news">
-          <Txt item={replot.news} />
+          <Txt item={screen.news} />
         </motion.p>
       ) : null}
       <motion.h1 className="ep-title ep-title-cover" variants={rise}>
@@ -346,7 +341,7 @@ function LabGate({ onOpen }: { onOpen: () => void }) {
 //   체험을 마치면 (틀 부품의 onDone) 또는 "그냥 열어 보기"를 누르면 열리고, 한 번 열리면 다시 접지 않는다 ("처음으로"를 눌러도).
 //   이 그림을 본 독자 · 체험 없이 보기에서는 처음부터 열려 있다 (그 독자에게는 감출 답이 없다 — 다시 쓰기 · 기본 풀이).
 function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
-  const { ep, play, replot } = useEp();
+  const { ep, play, screen } = useEp();
   const c = ep.scenes.aha;
   const { entry, lab, plain } = ep.solve;
   // 체험이 없는 회차는 늘 기본 풀이다. 체험이 있는 회차는 시안 스위치로만 기본 풀이를 본다
@@ -376,8 +371,8 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
       <P item={flip.note} />
     </>
   ) : null;
-  // 시안 전용 (UX-10) — 체험 뒤에 문서의 문장이 먼저 터진다. 체험이 있는 풀이에서만 (기본 풀이 · 그림을 본 독자는 그대로)
-  const burst = flip && replot?.burst ? replot.burst : null;
+  // 화면 칸 burst — 체험 뒤에 문서의 문장이 먼저 터진다. 체험이 있는 풀이에서만 (기본 풀이 · 그림을 본 독자는 그대로)
+  const burst = flip && screen?.burst ? screen.burst : null;
   const real = (
     <>
       <motion.h2 className="ep-sub" variants={rise}>
@@ -435,7 +430,7 @@ function Aha({ reader, solveMode, asked, onAsk }: SceneProps) {
     <>
       <Head asked={asked} kicker={c.kicker} title={seen && lab.seen_title ? lab.seen_title : (swap?.title ?? lab.title)} />
       {seen ? null : (swap?.setup ?? lab.setup).map((s) => <P key={s.t} item={s} />)}
-      <motion.div variants={rise}>{swap ? <swap.Card onDone={onDone} /> : <LabCard frames={lab.frames} seen={seen} onDone={onDone} veil={replot?.veil} />}</motion.div>
+      <motion.div variants={rise}>{swap ? <swap.Card onDone={onDone} /> : <LabCard frames={lab.frames} seen={seen} onDone={onDone} veil={screen?.veil} />}</motion.div>
       {open ? (
         <>
           {burst && flip ? (

@@ -5,7 +5,7 @@
 //   R1     풀이 전의 글에 깨는 사실이 없다 (법 5 · D112) — 처음 온 독자가 풀이 장면의 체험을 누르기 전에 볼 수 있는 글 전부 (표지 · 사건 · 도구 카드 · 개념 지도의 도구 · 체험 앞 · 단추 · 제목 위 한 줄)
 //          와 그 글이 기대는 구절 (근거 시트가 구절을 보인다)에 깨는 사실의 구절 · 말이 없다
 //   R2     1화의 처음 온 독자 조립에 "지금까지의 이야기" (zero)가 없다 (법 4)
-//   R3     시안 전용 칸 (replot)이 실제 화면 (Screen · catalog)에서 꺼져 있다 — 실제 주소는 이 판을 모른다
+//   R3     실제 화면 (Screen · catalog)이 이 시안 폴더를 읽지 않는다 — F-E6 부터 실제 /s/oil/1 은 메운 판을 제 자리 (events/…/local/oil-1/ — 회차 파일 + 화면 칸 screen.json)에서 읽는다. 화면 칸 (옛 이름 replot)은 실제 화면도 쓴다 (../check.ts S8 이 본다)
 //   R4     시안 전용 글 (맨 위 띠 · 풀이 뒤 문장)이 구절에서 온다 · 띠에는 숫자 없음 · 구절이 붙은 글 (제목 위 한 줄 · burst)의 숫자는 그 구절에 있는 수만 (B-E5 불변식 10 과 같은 뜻) · 모델 · 파이프라인 · 비용 말 없음
 //   R5     화면 쪽 — 틀의 조합을 세울 부품이 있다 · 가림 (veil)이 멈춘 고리를 가리킨다 · 개념 지도의 자리가 도구와 맞다
 // 보지 않는 것: 글의 뜻이 구절에서 나오는가 (의미 대조 — 사람) · 술술 읽히나 (폰에서 사람)
@@ -123,7 +123,7 @@ if (e.assembly.new.includes("zero")) errors.push('R2 처음 온 독자의 조립
 if (e.assembly.new[0] !== "cover" || e.assembly.new[1] !== "event") errors.push("R2 표지 다음이 오늘의 사건이 아니다");
 console.log(`R2 처음 온 독자 조립 = ${e.assembly.new.join(" → ")}`);
 
-// ── R3 시안 전용 칸이 실제 화면에서 꺼져 있다
+// ── R3 실제 화면이 이 시안 폴더를 읽지 않는다
 const realFiles = ["apps/web/src/episode/Screen.tsx", "apps/web/src/episode/catalog.tsx", "apps/web/src/app/s/[series]/[n]/page.tsx"];
 for (const f of realFiles) {
   let text = "";
@@ -132,11 +132,11 @@ for (const f of realFiles) {
   } catch {
     continue;
   }
-  if (/replot|oil-replot/.test(text)) errors.push(`R3 ${f}: 실제 화면이 시안 전용 칸을 안다`);
+  if (/oil-replot/.test(text)) errors.push(`R3 ${f}: 실제 화면이 기름값 시안 폴더를 읽는다`);
 }
 const catalog = read("apps/web/src/episode/catalog.tsx");
 if (catalog.includes("oil-replot-b")) errors.push("R3 catalog.tsx 가 이 판을 안다 — 실제 주소에 나가면 안 된다");
-console.log(`R3 시안 전용 칸 (replot) — 실제 화면 파일 (${realFiles.join(" · ")})에 없음 · 이 판은 lab 주소 하나에만 선다`);
+console.log(`R3 실제 화면 파일 (${realFiles.join(" · ")})이 기름값 시안 폴더를 읽지 않는다 · 이 판은 lab 주소 하나에만 선다`);
 
 // ── R4 시안 전용 글
 const flat = (v: unknown): string[] => (typeof v === "string" ? [v] : Array.isArray(v) ? v.flatMap(flat) : v && typeof v === "object" ? Object.values(v).flatMap(flat) : []);
@@ -174,4 +174,4 @@ if (errors.length) {
   for (const x of errors) console.log(`  ${x}`);
   process.exit(1);
 }
-console.log("OK — 계약 검증 (구절 · 숫자) · 풀이 전의 글에 깨는 사실 없음 · 1화는 지금까지의 이야기 없이 시작 · 시안 칸은 실제 화면에서 꺼져 있음");
+console.log("OK — 계약 검증 (구절 · 숫자) · 풀이 전의 글에 깨는 사실 없음 · 1화는 지금까지의 이야기 없이 시작 · 실제 화면은 이 시안 폴더를 읽지 않음");

@@ -1,4 +1,5 @@
-// 도구 카드의 작은 그림 — 「기름값은 어디서 묶이나」 의 도구 다섯 (cap · supply · notice · scope · settle). 지난 셋 (delivery · fomc · pipc)과 같은 결: 24 칸 · 선 굵기 1.8 · 글자 · 숫자 없음.
+// 도구 카드의 작은 그림 — 「기름값은 어디서 묶이나」 의 도구. 실제 1화 (판 2 · F-E6)의 도구는 넷이다 (cap · supply · scope · settle) — 넷 다 여기 있다.
+// notice (고시)는 판 1 (파이프라인 산출물) · 첫째 시안 (/lab/episode/oil-replot)의 도구라 남겨 둔다. 지난 셋 (delivery · fomc · pipc)과 같은 결: 24 칸 · 선 굵기 1.8 · 글자 · 숫자 없음.
 export function Glyph({ id }: { id: string }) {
   const s = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" } as const;
   // 최고가격 — 천장 선과 그 아래에서 멈추는 화살

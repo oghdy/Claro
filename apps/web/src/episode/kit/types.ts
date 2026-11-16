@@ -52,6 +52,22 @@ export interface LabOnly {
   readers: Record<ReaderId, ReaderFixture>;
 }
 
+/**
+ * **이야기마다 고르는 화면 칸** (UX-10 이 시안 칸 `replot` 으로 만들었고, F-E6 · D125 에서 실제 화면도 쓴다) — 「이야기 짜는 법」 (docs/content/story-guide.md)이 요구하는데 뼈대가 못 하던 것 셋.
+ * **계약에 없는 칸이다** (화면의 것 — 이야기 목록 catalog.tsx 의 손 칸 `screen` · lab 시안은 제 data.ts 에서 준다). 화면 뼈대 (kit/Episode)가 받는다. **안 주면 아무것도 달라지지 않는다.** 셋은 따로따로다 (하나만 줘도 된다).
+ *   news   표지 — 제목 위에 그날의 뉴스 한 줄 (법 3 "제목 두 층")
+ *   veil   풀이 — 사슬의 멈춘 고리 (reach: none)를 누르기 전에는 다른 고리와 같게 보인다. 고리 id → 누르기 전의 말. 꼬리표 (still) · 그 앞의 점선은 누른 뒤에만 (법 5 "답을 먼저 보이지 않는다")
+ *   burst  풀이 — 체험을 마치면 맨 먼저 **문서의 문장**을 크게 보이고 (오늘의 사건 장면의 인용 칸과 같은 꼴) 바로 아래에 뒤집기의 풀이 (flip.note).
+ *          "뒤집어 보면 A ≠ B" 상자는 그리지 않는다 (법 6 "뒤집기는 도구지 칸이 아니다"). box: true 면 상자를 정리로 남긴다 (도구 카드 아래)
+ * 1화에서 "지금까지의 이야기"를 건너뛰는 것은 칸이 아니다 — 회차의 조립 (assembly.new)에서 zero 를 빼면 된다 (계약 불변식 6 이 받는다).
+ * 실제 화면에 나가는 칸은 검사가 본다 (lab/episode/check.ts S8 — 구절 · 숫자 · 문서 글 그대로 · 멈춘 고리)
+ */
+export interface ScreenSlots {
+  news?: T;
+  veil?: Readonly<Record<string, string>>;
+  burst?: { label: string; quote: T; note: string; box?: boolean };
+}
+
 /** 시안이 그리는 한 회차 = 계약의 회차 (골든 픽스처) + 시안 전용 */
 export type EpisodeData = Episode & LabOnly;
 

@@ -8,11 +8,11 @@ import { Short } from "./kit/Short";
 // 실제 주소의 이야기 화면 (F-E2) — 이야기 목록 (catalog.tsx)의 한 줄을 화면 뼈대에 올린다. 주소가 주는 것은 이름뿐이다 (시리즈 · 번호 / code).
 // 긴 이야기 = kit/Episode · 짧은 이야기 = kit/Short. 둘 다 시안 (/lab/*)과 같은 부품 한 벌이다 — real 로 가른다.
 
-/** 긴 이야기 — /s/<시리즈>/<번호>. 번호를 보일지는 목록이 정한다 (번호 화면 규칙 · D88 E-20) */
+/** 긴 이야기 — /s/<시리즈>/<번호>. 번호를 보일지 (번호 화면 규칙 · D88 E-20) · 화면 칸 (line.screen — F-E6 · 없으면 주지 않는다)은 목록이 정한다 */
 export function LongScreen({ series, n }: { series: string; n: string }) {
   const line = longOf(series, n);
   if (!line) return null;
-  return <Episode ep={line.ep} Art={line.Art} Glyph={line.Glyph} real numbered={numbered(series)} />;
+  return <Episode ep={line.ep} Art={line.Art} Glyph={line.Glyph} real numbered={numbered(series)} screen={line.screen} />;
 }
 
 /** 짧은 이야기 — /short/<code> (real). 목록 (catalog STORIES)에 있는 것만 */

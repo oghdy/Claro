@@ -11,6 +11,11 @@
 //   S5     조용히 견본(회차가 아니다)의 풀이 칸이 계약의 풀이 규칙(§9 11 ~ 20)에 맞다
 //   S6     지난 값 견본 (UX-6 — 금리 2화 + 시안 전용 지난 값 · 실제 아님)이 계약 검증을 지난다 (구절 대조 · 지난 회차 칸 불변식 25 · 26). 지난 값이 9월 구절에 기댄다
 //   S7     (F-E1) 실제 주소가 /s/<series.code>/<number> 다 · 발표된 날 (손으로 적은 값)이 표지 meta 의 날이다 · 실제 화면의 회차 = 책장의 회차 · 첫 화면 글에 숫자가 없다
+//   S8     (F-E6) 실제 화면의 **화면 칸** (이야기 목록의 손 칸 LongLine.screen — 계약에 없다 · kit/types ScreenSlots)이 그 회차에 맞다:
+//          news  구절 키가 그 회차의 구절에 있다 · 글의 숫자가 그 구절에 있다
+//          burst 인용의 구절 키가 있다 · 인용 글이 그 구절을 이은 글자 그대로다 (빈칸 · 따옴표만 무시) · 그 글이 저장된 문서 한 편의 글 안에 그대로 있다 · 머리 · 덧말의 숫자는 그 구절의 수만 · 말한 이 (voice)가 회차에 있다 · 뒤집기가 있는 회차다
+//          veil  키가 그 회차 사슬의 **멈춘 고리** (reach: none)다 · 가린 말에 숫자가 없다
+//          화면 칸이 없는 이야기는 볼 것이 없다 (지금은 기름값 1화만 준다)
 //   3화 (rate-3) · 파이프라인 2화 (fomc-auto)는 제 폴더의 check.ts 가 본다
 // 보지 않는 것: 글의 뜻이 구절에서 나오는가 (의미 대조 — 사람이 읽는다) · 한글로 쓴 수("여섯 가지") · 그림이 "그리지 않을 것"을 넘었나 (사람)
 import { readFileSync } from "node:fs";
@@ -85,6 +90,63 @@ for (const e of EPISODES) {
   if (report(errors)) console.log("OK — 계약 검증을 지났고 (구절은 전부 저장된 문서에 있고, 글의 숫자는 전부 근거 구절 · 계산 · 화면 번호 중 하나다. 풀이 칸의 규칙도 맞다), 화면 쪽 검사도 맞다");
 }
 
+{
+  // S8 (F-E6) — 실제 화면의 화면 칸. 계약이 못 보는 칸이라 여기서 본다 (lab 시안의 같은 칸은 제 폴더의 check.ts 가 본다)
+  console.log("\n■ 화면 칸 (이야기 목록의 손 칸 screen — 계약에 없다)");
+  const errors: string[] = [];
+  const norm = (x: string) => x.replace(/[“”"]/g, "").replace(/\s+/g, "");
+  const nums = (x: string) => (x.replace(/,/g, "").match(/\d+/g) ?? []).map((n) => String(Number(n)));
+  let seen = 0;
+  for (const line of LONGS) {
+    const { screen: slots, ep } = line;
+    const at = hrefOfLine(line);
+    if (!slots) continue;
+    seen++;
+    const documents = ep.stores.flatMap((f) => (JSON.parse(readFileSync(path.join(REPO, f), "utf8")) as { source_documents: { source_id: string; text: string }[] }).source_documents);
+    const quoteOf = (k: string) => ep.quotes[k]?.quote ?? "";
+    const keys = (where: string, src: readonly string[] | undefined) => {
+      if (!src?.length) errors.push(`S8 ${at} ${where}: 근거 구절이 없다`);
+      for (const k of src ?? []) if (!(k in ep.quotes)) errors.push(`S8 ${at} ${where}: 구절 ${k} 가 이 회차에 없다`);
+    };
+    const grounded = (where: string, text: string, src: readonly string[] | undefined) => {
+      const have = new Set((src ?? []).flatMap((k) => nums(quoteOf(k))));
+      for (const n of nums(text)) if (!have.has(n)) errors.push(`S8 ${at} ${where}: 숫자 ${n} 을 받치는 구절이 없다 — "${text}"`);
+    };
+    const said: string[] = [];
+    if (slots.news) {
+      keys("news", slots.news.src);
+      grounded("news", slots.news.t, slots.news.src);
+      said.push(`news "${slots.news.t}" (${slots.news.src?.join(" + ")})`);
+    }
+    if (slots.burst) {
+      const { quote, label, note } = slots.burst;
+      keys("burst.quote", quote.src);
+      const joined = norm((quote.src ?? []).map(quoteOf).join(""));
+      if (norm(quote.t) !== joined) errors.push(`S8 ${at} burst.quote: 구절 (${quote.src?.join(" + ")})을 이은 글자 그대로가 아니다 — "${quote.t}"`);
+      const docIds = new Set((quote.src ?? []).map((k) => ep.docs[ep.quotes[k]?.doc ?? ""]?.source_id));
+      const doc = docIds.size === 1 ? documents.find((d) => d.source_id === [...docIds][0]) : undefined;
+      if (!doc) errors.push(`S8 ${at} burst.quote: 구절들이 저장된 문서 한 편을 가리키지 않는다`);
+      else if (!norm(doc.text).includes(norm(quote.t))) errors.push(`S8 ${at} burst.quote: 저장된 문서 (${doc.source_id})의 글 그대로가 아니다 — 이은 자리가 문서에서 이어져 있지 않다`);
+      for (const [where, x] of [["burst.label", label], ["burst.note", note]] as const) grounded(where, x, quote.src);
+      if (quote.voice && !(quote.voice in ep.voice_labels)) errors.push(`S8 ${at} burst.quote: 말한 이 "${quote.voice}" 가 이 회차에 없다`);
+      if (!ep.solve.entry.flip || !ep.solve.lab) errors.push(`S8 ${at} burst: 체험 · 뒤집기가 없는 회차다 — 화면이 이 칸을 그리지 않는다`);
+      said.push(`burst = 구절 ${quote.src?.join(" + ")} 을 이은 글자 그대로${doc ? ` · 문서 ${doc.source_id} 에 그대로 있다` : ""} · 상자 ${slots.burst.box ? "남김" : "없음"}`);
+    }
+    if (slots.veil) {
+      const frames = ep.solve.lab?.frames ?? [];
+      const still = frames.flatMap((f) => (f.kind === "chain" ? f.nodes.filter((n) => n.reach === "none").map((n) => n.id) : []));
+      if (!isSteps(frames)) errors.push(`S8 ${at} veil: 체험이 사슬 틀이 아니다 — 가릴 고리가 없다`);
+      for (const [id, word] of Object.entries(slots.veil)) {
+        if (!still.includes(id)) errors.push(`S8 ${at} veil.${id}: 이 회차 사슬의 멈춘 고리 (reach: none — ${still.join(" · ") || "없음"})가 아니다`);
+        if (/\d/.test(word)) errors.push(`S8 ${at} veil.${id}: 가린 말에 숫자가 있다 — "${word}"`);
+      }
+      said.push(`veil ${Object.keys(slots.veil).join(" · ")} (멈춘 고리 ${still.join(" · ")})`);
+    }
+    console.log(`${at} (${ep.code} · 판 ${ep.episode_version}): ${said.join(" / ")}`);
+  }
+  console.log(`화면 칸을 주는 이야기 ${seen} · 안 주는 긴 이야기 ${LONGS.length - seen} (${LONGS.filter((x) => !x.screen).map(hrefOfLine).join(" · ")})`);
+  if (report(errors)) console.log("OK — 화면 칸의 구절 · 숫자 · 문서 글 · 멈춘 고리가 맞다");
+}
 {
   console.log("\n■ 조용히 견본 — 실제 사건 아님 (episodes/quiet-sample)");
   const errors: string[] = [];

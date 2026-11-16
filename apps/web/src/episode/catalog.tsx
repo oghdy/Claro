@@ -10,13 +10,15 @@
 //   - day = Claro 가 그 이야기를 낸 날 (YYYY-MM-DD · 한국 날짜). **손으로 적는다** — 계약에 발행 시각 칸이 없다 (EPISODE §10 미확인). 없으면 "오늘"로 묶이지 않는다 (지금의 넷)
 //   - place · category = 국내 / 해외 꼬리표 · 카테고리 다섯 (D83 · D86). **손으로 적는다** — 계약에 칸이 없다 (_open F-E2-b)
 //   - 그림 (Art · Glyph)은 없어도 된다 — 기본 그림 (kit/PlainLook)이 선다. 같은 시리즈의 그림을 다시 쓰려면 그 묶음 (FOMC_LOOK 등)을 펼쳐 넣는다
+//   - 화면 칸 (screen — 제목 위 뉴스 한 줄 · 멈춘 고리 가림 · 풀이 뒤 문서 문장)은 없어도 된다 — 안 주면 화면은 지금까지 그대로다. 주려면 회차 파일 곁의 screen.json 을 screenOf(…) 로 (기름값 줄을 본다)
 //   - 짧은 이야기의 곁 이야기 · 도구 (sibling · tools_from)는 목록의 긴 이야기에서 찾는다. 둘 다 없어도 (null) 된다 — 홀로 선 짧은 이야기 (D88 E-21)
 //
 // 이 파일은 화면 뼈대 (kit/Episode)를 읽지 않는다 — kit/shelf.ts 가 이 목록을 읽기 때문이다 (서로 물리지 않게). 화면은 ./Screen.tsx 가 세운다.
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
 import metaGallery from "../../../../packages/pipeline/data/events/GPDP-20261114-META-GALLERY/shorts/meta-gallery/story.json";
-import oil1 from "../../../../packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/episodes/oil-1/episode.json";
+import oil1 from "../../../../packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/episode.json";
+import oil1Screen from "../../../../packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/screen.json";
 import licenseNotice from "../../../../packages/pipeline/data/events/ACRC-20261028-LICENSE-NOTICE/shorts/license-notice/story.json";
 import { CoverArt as DeliveryArt } from "./episodes/delivery/Art";
 import { DELIVERY } from "./episodes/delivery/data";
@@ -30,7 +32,7 @@ import { CoverArt as PipcArt } from "./episodes/pipc/Art";
 import { PIPC } from "./episodes/pipc/data";
 import { Glyph as PipcGlyph } from "./episodes/pipc/Glyph";
 import { PlainArt, PlainGlyph } from "./kit/PlainLook";
-import type { EpisodeData, ReaderFixture, ReaderId } from "./kit/types";
+import type { EpisodeData, ReaderFixture, ReaderId, ScreenSlots } from "./kit/types";
 
 // ─────────────────────────────────────────────────────────── 줄의 모양
 
@@ -68,6 +70,12 @@ export interface LongLine extends Tags, Look {
    * 없으면 지금까지 그대로다 (지난 셋의 화면은 달라지지 않는다)
    */
   unpromised?: boolean;
+  /**
+   * 이야기마다 고르는 화면 칸 (F-E6 · D125 — kit/types 의 ScreenSlots: news 제목 위 뉴스 한 줄 · veil 사슬의 멈춘 고리를 누르기 전 가림 · burst 체험 뒤 문서 문장).
+   * **계약에 없는 칸이다** (unpromised 처럼 화면의 손 칸) — 회차 파일 곁의 screen.json 에 손으로 적고 screenOf 로 읽는다. Screen.tsx 가 실제 화면 뼈대에 준다.
+   * 글의 근거는 그 회차의 구절을 가리킨다 — 검사 (lab/episode/check.ts S8)가 본다. 없으면 지금까지 그대로다 (다른 이야기의 화면은 달라지지 않는다)
+   */
+  screen?: ScreenSlots;
 }
 export interface ShortLine extends Tags {
   kind: "short";
@@ -96,7 +104,36 @@ export function episodeOf(file: unknown, stores: readonly string[] = []): Episod
   return { ...ep, path: realPath(ep), real: realPath(ep), short: ep.series.name, stores, readers: NEW_ONLY() };
 }
 
-export const long = (ep: EpisodeData, more: Tags & Partial<Look> & { unpromised?: boolean }): LongLine => ({ kind: "long", ep, Art: PlainArt, Glyph: PlainGlyph, ...more });
+/**
+ * 화면 칸 파일 (회차 파일 곁의 screen.json — 계약에 없다)을 화면이 쓰는 꼴로. 꼴이 틀리면 빌드가 선다 (칸 이름 · 글 · 구절 키 목록).
+ * 구절이 그 회차에 있는지 · 인용이 문서 글 그대로인지 · 가린 고리가 멈춘 고리인지는 검사가 본다 (lab/episode/check.ts S8)
+ */
+export function screenOf(file: unknown): ScreenSlots {
+  const bad = (why: string): never => {
+    throw new Error(`화면 칸 파일 (screen.json): ${why}`);
+  };
+  const obj = (v: unknown, at: string): Record<string, unknown> => (typeof v === "object" && v !== null && !Array.isArray(v) ? (v as Record<string, unknown>) : bad(`${at} 가 칸이 아니다`));
+  const str = (v: unknown, at: string): string => (typeof v === "string" && v.trim() ? v : bad(`${at} 가 빈 글이다`));
+  const txt = (v: unknown, at: string) => {
+    const o = obj(v, at);
+    str(o.t, `${at}.t`);
+    if (!Array.isArray(o.src) || !o.src.length || o.src.some((k) => typeof k !== "string")) bad(`${at}.src 가 구절 키 목록이 아니다`);
+    return o as unknown as NonNullable<ScreenSlots["news"]>;
+  };
+  const f = obj(file, "파일");
+  for (const k of Object.keys(f)) if (!["news", "veil", "burst"].includes(k)) bad(`모르는 칸 "${k}"`);
+  const out: { -readonly [K in keyof ScreenSlots]: ScreenSlots[K] } = {};
+  if (f.news !== undefined) out.news = txt(f.news, "news");
+  if (f.veil !== undefined) out.veil = Object.fromEntries(Object.entries(obj(f.veil, "veil")).map(([id, v]) => [id, str(v, `veil.${id}`)]));
+  if (f.burst !== undefined) {
+    const b = obj(f.burst, "burst");
+    if (b.box !== undefined && typeof b.box !== "boolean") bad("burst.box 가 참 · 거짓이 아니다");
+    out.burst = { label: str(b.label, "burst.label"), quote: txt(b.quote, "burst.quote"), note: str(b.note, "burst.note"), ...(b.box === undefined ? {} : { box: b.box as boolean }) };
+  }
+  return out;
+}
+
+export const long = (ep: EpisodeData, more: Tags & Partial<Look> & { unpromised?: boolean; screen?: ScreenSlots }): LongLine => ({ kind: "long", ep, Art: PlainArt, Glyph: PlainGlyph, ...more });
 /** 짧은 이야기 파일 (계약의 ShortStory)을 받아 검증한다 — 곁 이야기 · 도구가 가리키는 긴 이야기는 그때까지의 긴 이야기들에서 찾는다 */
 export const short = (file: unknown, more: Tags & { Art?: ComponentType }, longs: readonly EpisodeData[] = HAND): ShortLine => ({
   kind: "short",
@@ -124,7 +161,9 @@ const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
 export const STORIES: readonly Line[] = [
   // 11/15 "오늘" (D107 ~ D111 · F-E5) — 세상이 크게 다룬 뉴스 둘 · 1차 문서로 쓴 것 · PM 게이트를 지난 것. 긴 이야기가 위 (큰 카드)
   // 석유 최고가격 12차 동결 — 새 시리즈 「기름값은 어디서 묶이나」 의 첫 이야기. 다음 화가 정해지지 않았다 (series/oil.json next_document) → unpromised
-  long(episodeOf(oil1, ["packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/store.documents.json"]), { ...OIL_LOOK, place: "국내", category: "돈", day: "2026-11-15", unpromised: true }),
+  // F-E6 (D125): 회차 파일 = 로컬 세션이 쓰고 편집자가 짚어 메운 판 (판 2 — events/…/local/oil-1/ · 같은 사건 · 같은 소스 팩 · 같은 구절). 파이프라인이 낸 판 1 (episodes/oil-1/)은 그 자리에 그대로 있다 (파이프라인 --check 가 본다).
+  // 화면 칸 셋 (screen — 계약에 없는 손 칸)은 그 곁의 screen.json
+  long(episodeOf(oil1, ["packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/store.documents.json"]), { ...OIL_LOOK, place: "국내", category: "돈", day: "2026-11-15", unpromised: true, screen: screenOf(oil1Screen) }),
   // 이탈리아 감독기구 → 메타 과징금 — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「내 정보는 누가 지키나」)
   short(metaGallery, { place: "해외", category: "기술", day: "2026-11-15" }),
   long(DELIVERY, { ...DELIVERY_LOOK, place: "국내", category: "기술" }),

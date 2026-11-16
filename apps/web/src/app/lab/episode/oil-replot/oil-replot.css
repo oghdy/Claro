@@ -40,7 +40,7 @@
   padding-top: 0;
 }
 
-/* 시안 전용 칸 news (kit/Episode 의 replot.news) — 표지 제목 위의 그날 뉴스 한 줄. 이 클래스는 그 칸을 줄 때만 화면에 생긴다 */
+/* 화면 칸 news (kit/types 의 ScreenSlots.news) — 표지 제목 위의 그날 뉴스 한 줄. 이 클래스는 그 칸을 줄 때만 화면에 생긴다 */
 .ep-news {
   display: flex;
   align-items: baseline;

@@ -6,6 +6,8 @@
 // F-E4 (D105): 첫 화면의 카드는 실제 첫 화면의 것이다 (episode/home/cards.tsx — 카드마다 그림 · 조용한 꼬리표). 뜻 (카드 수 · 차례 · 링크 · 번호 규칙 · 거짓 "오늘" 없음)은 그대로 본다.
 // F-E5 (D107 ~ D111): 11/15 "오늘" 두 편이 맨 위에 선다 — 긴 이야기 /s/oil/1 (새 시리즈의 첫 이야기 · 파이프라인이 낸 회차 파일 · 다음 화를 약속하지 않는다) · 짧은 이야기 /short/meta-gallery (홀로 선다).
 // 카드는 여섯이다 (그날의 둘 + 지난 넷). 머리는 읽는 날이 한국 날짜로 그날이면 "오늘의 이야기", 아니면 "11월 15일의 이야기" — 시계를 고정해 둘 다 본다.
+// F-E6 (D125): /s/oil/1 의 회차 파일이 메운 판 (판 2 — events/…/local/oil-1/episode.json · 로컬 세션이 쓰고 편집자가 짚은 것)으로 바뀌었다. 파이프라인이 낸 판 1 (episodes/oil-1/)은 그 자리에 그대로다.
+// 이 이야기만 화면 칸 셋 (그 곁의 screen.json — 계약에 없는 손 칸: 제목 위 뉴스 한 줄 · 멈춘 고리 가림 · 풀이 뒤 문서 문장)을 받는다. 다른 실제 이야기는 그대로다 — 둘 다 아래에서 본다.
 // 실제 화면에는 시안의 것 (맨 위 띠 · 독자 스위치 · 풀이 스위치)이 없고, 독자는 처음 온 독자의 조립을 받는다.
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -20,7 +22,7 @@ const golden = (name: string) => JSON.parse(readFileSync(path.join(import.meta.d
 // tags — 국내 / 해외 · 카테고리 (목록에 손으로 적은 값 — episode/catalog.tsx)
 // unpromised — 다음 화를 약속하지 않는 이야기 (F-E5 · catalog 의 unpromised): 지도에 "다음 화 개념" (ghosts)이 없고 이어짐의 "다음 회차가 될 일들"이 "남은 일들"이다
 const LIVE = [
-  { path: "/s/oil/1", ep: repo("packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/episodes/oil-1/episode.json"), code: "oil-1", numbered: false, tags: ["국내", "돈"], unpromised: true },
+  { path: "/s/oil/1", ep: repo("packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/episode.json"), code: "oil-1", numbered: false, tags: ["국내", "돈"], unpromised: true },
   { path: "/s/price/1", ep: golden("price-1"), code: "delivery", numbered: false, tags: ["국내", "기술"], unpromised: false },
   { path: "/s/rate/2", ep: golden("rate-2"), code: "fomc", numbered: true, tags: ["해외", "돈"], unpromised: false },
   { path: "/s/privacy/1", ep: golden("privacy-1"), code: "pipc", numbered: false, tags: ["국내", "기술"], unpromised: false },
@@ -144,6 +146,145 @@ test("11/15 의 두 편 — 새 두 주소가 열린다 (200) · 콘솔 오류�
   }
   // 가로로 넘치지 않는다 (긴 주제 이름 · 긴 문서 이름)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+/** 기름값 1화 — 판 1 (파이프라인 산출물 · 실제 화면에서 내려왔다) · 화면 칸 (판 2 곁의 손 칸) */
+const OIL = LIVE[0]!;
+const OIL_V1 = repo("packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/episodes/oil-1/episode.json");
+const OIL_SCREEN = repo("packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/screen.json");
+const errorsOf = (page: Page) => {
+  const errors: string[] = [];
+  page.on("console", (m) => (m.type() === "error" && !/favicon/.test(`${m.text()} ${m.location().url}`) ? errors.push(`${page.url()} ${m.text()}`) : undefined));
+  page.on("pageerror", (e) => errors.push(`${page.url()} ${e.message}`));
+  return errors;
+};
+/** 표지에서 풀이 장면까지 — 도구는 전부 "처음 들어요" */
+const toAha = async (page: Page) => {
+  const root = page.locator(".ep-root");
+  for (let i = 0; i < 6 && (await root.getAttribute("data-scene")) !== "aha"; i++) {
+    const before = await root.getAttribute("data-scene");
+    const fresh = page.locator(".ep-tool-ask button[data-primary]");
+    while (await fresh.count()) await fresh.first().click();
+    await page.getByTestId("ask").click();
+    await expect(root).not.toHaveAttribute("data-scene", before!);
+  }
+  await expect(root).toHaveAttribute("data-scene", "aha");
+};
+
+test("/s/oil/1 = 메운 판 (판 2 · F-E6) — 새 제목 · 제목 위 뉴스 한 줄 · 지금까지의 이야기 없음 · 멈춘 고리는 누르기 전에 가려져 있다 → 누른 뒤 꼬리표 · 문서 문장 · \"뒤집어 보면\" 상자 없음 · 근거 시트 · 콘솔 오류 0 · 첫 화면 카드 제목", async ({ page, request }) => {
+  test.setTimeout(90_000);
+  const errors = errorsOf(page);
+  const { ep } = OIL;
+  const title = ep.scenes.cover.title.replace(/\n/g, " ");
+  const old = OIL_V1.scenes.cover.title.replace(/\n/g, " ");
+  expect(ep.episode_version, "판 2").toBe(2);
+  expect(ep.episode_id, "같은 이야기 — id 그대로").toBe(OIL_V1.episode_id);
+  expect(title).not.toBe(old);
+  // 서버가 그린 글 — 새 제목 · 뉴스 한 줄. 판 1 의 제목은 없다
+  const html = await (await request.get(OIL.path)).text();
+  expect(html).toContain(`<meta property="og:title" content="${title}"`);
+  expect(flat(html)).toContain(flat(OIL_SCREEN.news.t));
+  expect(flat(html)).not.toContain(flat(old));
+  // 첫 화면 카드 — 새 제목
+  await page.goto("/");
+  const card = flat(await page.getByTestId("card-oil-1").innerText());
+  expect(card).toContain(flat(title));
+  expect(card).not.toContain(flat(old));
+
+  // 표지 — 뉴스 한 줄이 제목 위에 · 제목은 회차 파일 그대로
+  await page.getByTestId("card-oil-1").locator("a.td-main").click();
+  await expect(page).toHaveURL(OIL.path);
+  const root = page.locator(".ep-root");
+  await expect(root).toHaveAttribute("data-scene", "cover");
+  await expect(page.getByTestId("cover-news")).toHaveText(OIL_SCREEN.news.t);
+  const [news, head] = await Promise.all([page.getByTestId("cover-news").boundingBox(), page.locator(".ep-title-cover").boundingBox()]);
+  expect(news!.y + news!.height, "뉴스 한 줄이 제목 위에 있다 (겹치지 않는다)").toBeLessThanOrEqual(head!.y);
+  expect(flat(await page.locator(".ep-title-cover").innerText())).toBe(flat(ep.scenes.cover.title));
+  // 처음 온 독자의 길 — "지금까지의 이야기" (zero) 없이 표지 다음이 오늘의 사건이다. 장면 여섯
+  expect(ep.assembly.new).toEqual(["cover", "event", "tools", "aha", "next", "keep"]);
+  await expect(page.locator(".ep-count")).toHaveText("1/6");
+  expect(await sceneText(page), "표지에 지금까지의 이야기 말이 없다").not.toContain(flat("지금까지의 이야기"));
+  await page.getByTestId("ask").click();
+  await expect(root).toHaveAttribute("data-scene", "event");
+  await expect(page.locator(".ep-count")).toHaveText("2/6");
+  await toAha(page);
+
+  // 풀이 — 누르기 전: 멈춘 고리 (주유소)가 다른 고리와 같은 꼴이다. 꼬리표 · 그 앞의 점선 · 문서 문장이 없다 (답을 먼저 보이지 않는다 · D112)
+  const chain = ep.solve.lab.frames.find((f: any) => f.kind === "chain");
+  const stopped = chain.nodes.filter((n: any) => n.reach === "none");
+  expect(stopped.map((n: any) => n.id)).toEqual(Object.keys(OIL_SCREEN.veil));
+  const burstText = flat(OIL_SCREEN.burst.quote.t);
+  for (const n of stopped) {
+    const li = page.locator(`.fr-chain li[data-node="${n.id}"]`);
+    await expect(li).toHaveAttribute("data-state", "idle");
+    await expect(li.locator("em")).toHaveText(OIL_SCREEN.veil[n.id]);
+    expect(await sceneText(page), `누르기 전에 꼬리표 "${n.still.t}" 가 없다`).not.toContain(flat(n.still.t));
+  }
+  await expect(page.locator('.fr-link[data-kind="open"]')).toHaveCount(0);
+  await expect(page.getByTestId("burst")).toHaveCount(0);
+  await expect(page.getByTestId("lab-gate")).toBeVisible();
+  expect(await sceneText(page)).not.toContain(burstText);
+
+  // 누른 뒤 — 꼬리표가 서고, 문서의 문장이 먼저 터진다. "뒤집어 보면" 상자는 없다
+  await page.getByTestId("lab-act").click();
+  await expect(page.getByTestId("burst")).toBeVisible({ timeout: 8000 });
+  for (const n of stopped) {
+    const li = page.locator(`.fr-chain li[data-node="${n.id}"]`);
+    await expect(li).toHaveAttribute("data-state", "still");
+    await expect(li.locator("em")).toHaveText(n.still.t);
+  }
+  await expect(page.getByTestId("burst").locator("figcaption")).toHaveText(OIL_SCREEN.burst.label);
+  expect(flat(await page.getByTestId("burst").locator("blockquote").innerText())).toBe(burstText);
+  expect(flat(await page.getByTestId("burst").innerText())).toContain(flat(OIL_SCREEN.burst.note));
+  await expect(page.locator(".ep-flip")).toHaveCount(0);
+  expect(await sceneText(page), "상자의 머리가 없다").not.toContain(flat(ep.solve.entry.flip.label));
+  expect(await sceneText(page), "뒤집기의 풀이는 문장으로 남는다").toContain(flat(text(ep.solve.entry.flip.note)));
+
+  // 근거 시트 — 터진 문장을 누르면 그 구절 (문서 글 그대로)과 문서 이름이 뜬다
+  await page.getByTestId("src-toggle").click();
+  await page.getByTestId("burst").locator(".ep-src-hit").click();
+  const sheet = page.locator(".ep-sheet");
+  const shown = (await sheet.locator("blockquote p").allInnerTexts()).map(flat);
+  expect(shown).toEqual(OIL_SCREEN.burst.quote.src.map((k: string) => flat(ep.quotes[k].quote)));
+  await expect(sheet.locator("cite").first()).toContainText(ep.docs[ep.quotes[OIL_SCREEN.burst.quote.src[0]].doc].name);
+  await page.locator(".ep-sheet header button").click();
+  await page.getByTestId("src-toggle").click();
+
+  // 끝까지 — 이어짐 → 남음
+  await page.getByTestId("ask").click();
+  await expect(root).toHaveAttribute("data-scene", "next");
+  await page.getByTestId("ask").click();
+  await expect(root).toHaveAttribute("data-scene", "keep");
+  await expect(page.locator(".ep-count")).toHaveText("6/6");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "가로로 넘치지 않는다").toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test("화면 칸 (뉴스 한 줄 · 고리 가림 · 문서 문장)은 기름값에만 선다 — 다른 실제 긴 이야기는 그대로: 뉴스 한 줄 없음 · 사슬의 멈춘 고리는 처음부터 제 꼬리표로 · 누른 뒤 \"뒤집어 보면\" 상자 그대로", async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = errorsOf(page);
+  for (const { path: href, ep } of LIVE.slice(1)) {
+    await page.goto(href);
+    await expect(page.locator(".ep-root")).toHaveAttribute("data-scene", "cover");
+    await expect(page.getByTestId("cover-news"), href).toHaveCount(0);
+    await expect(page.locator(".ep-news"), href).toHaveCount(0);
+    await toAha(page);
+    await expect(page.getByTestId("burst"), href).toHaveCount(0);
+    // 사슬이 있는 이야기 (금리 2화) — 멈춘 고리가 누르기 전부터 제 꼬리표 (still)와 점선으로 선다 (가림 0 · D112 · UX-10 d 는 따로 묻는다)
+    const chain = ep.solve.lab.frames.find((f: any) => f.kind === "chain");
+    for (const n of chain?.nodes.filter((x: any) => x.reach === "none") ?? []) {
+      const li = page.locator(`.fr-chain li[data-node="${n.id}"]`).first();
+      await expect(li, `${href} ${n.id}`).toHaveAttribute("data-state", "still");
+      await expect(li.locator("em")).toHaveText(n.still.t);
+    }
+    if (chain?.nodes.some((x: any) => x.reach === "none")) await expect(page.locator('.fr-link[data-kind="open"]').first(), href).toBeVisible();
+    // 답을 열면 — "뒤집어 보면" 상자가 그대로 있고 문서 문장 칸은 없다
+    await page.getByTestId("lab-gate-open").click();
+    await expect(page.locator(".ep-flip"), href).toHaveCount(ep.solve.entry.flip ? 1 : 0);
+    if (ep.solve.entry.flip) await expect(page.locator(".ep-flip figcaption")).toHaveText(ep.solve.entry.flip.label);
+    await expect(page.getByTestId("burst"), href).toHaveCount(0);
+  }
   expect(errors).toEqual([]);
 });
 

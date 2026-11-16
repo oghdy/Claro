@@ -3,7 +3,7 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 
 // UX-10b — 기름값 1화를 이야기 짜는 법으로 손으로 다시 짠 둘째 판 (/lab/episode/oil-replot-b). 화면은 실제 /s/oil/1 과 같은 부품 · 같은 그림 — 이야기의 차례만 다르다.
-// **글은 episode.json 에서 읽어 댄다** — 글을 손질해도 이 시험은 선다. 실제 주소 (/s/oil/1)는 이 Step 이 건드리지 않았다 — 그대로인지 여기서 한 번 더 본다.
+// **글은 episode.json 에서 읽어 댄다** — 글을 손질해도 이 시험은 선다. 실제 주소 (/s/oil/1)는 F-E6 부터 메운 판이다 (events/…/local/oil-1 — episode.spec.ts 가 본다). 여기서는 시안의 것이 실제 주소에 새지 않는지만 본다.
 const FILE = path.join(import.meta.dirname, "../src/app/lab/episode/oil-replot-b/episode.json");
 type Text = { t: string };
 const ep = JSON.parse(readFileSync(FILE, "utf8")) as { assembly: { new: string[] }; scenes: { cover: { title: string; ask_new: string }; event: { ask: string; title: string }; tools: { ask: string }; aha: { ask_new: string }; keep: { line: string } }; solve: { lab: { frames: { nodes: { id: string; still?: Text }[] }[] }; entry: { flip: { a: string } } } };
@@ -72,21 +72,10 @@ test("둘째 판 — 표지 → 오늘의 사건 → 도구 → 풀이 (답은 �
   expect(errors).toEqual([]);
 });
 
-test("실제 /s/oil/1 은 그대로 — 지금까지의 이야기 장면 · 뉴스 한 줄 없음 · 멈춘 고리 꼬리표가 처음부터 보인다 · 다시 짠 판으로 가는 길 없음", async ({ page }) => {
+test("실제 /s/oil/1 에 이 시안의 것 (맨 위 띠 · 시안으로 가는 길)이 새지 않는다 — 실제 주소는 F-E6 부터 메운 판이다 (제 자리의 파일을 읽는다 · episode.spec.ts 가 본다)", async ({ page }) => {
   const res = await page.goto("/s/oil/1");
   expect(res?.status()).toBe(200);
-  const root = page.locator(".ep-root");
-  await expect(page.getByTestId("cover-news")).toHaveCount(0);
+  await expect(page.locator(".ep-root")).toHaveAttribute("data-scene", "cover");
   await expect(page.getByTestId("orb-bar")).toHaveCount(0);
   await expect(page.locator("a[href*='oil-replot']")).toHaveCount(0);
-  await page.getByTestId("ask").click();
-  await expect(root).toHaveAttribute("data-scene", "zero");
-  await page.getByTestId("ask").click(); // event
-  await page.getByTestId("ask").click(); // tools
-  const fresh = page.locator(".ep-tool-ask button[data-primary]");
-  while (await fresh.count()) await fresh.first().click();
-  await page.getByTestId("ask").click();
-  await expect(root).toHaveAttribute("data-scene", "aha");
-  await expect(page.locator('.fr-chain li[data-node="station"]')).toHaveAttribute("data-state", "still");
-  await expect(page.getByTestId("burst")).toHaveCount(0);
 });

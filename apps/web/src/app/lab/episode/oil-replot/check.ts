@@ -9,7 +9,8 @@
 //   R4     시안 전용 칸 (data.ts REPLOT — 계약 밖)의 글: 뉴스 한 줄의 숫자는 근거 구절에 · 터지는 문장은 근거 구절을 이은 글자 그대로 · 맨 글자열에 숫자 없음 · 가린 고리는 사슬의 멈춘 고리다
 //   R5     "오늘 문서에는 누구의 값인지가 없다" (도구 '고시'의 글)가 참이다 — 11/13 보도참고의 글에 주유소 · 정유사 · 공급가격이 0 번
 //   R6     실제 화면처럼 — 다음 화를 약속하지 않는 이야기로 잡힌다 (catalog.unpromised) · 번호를 숨긴다 (catalog.numbered) · 그림은 OIL_LOOK
-//   R7     **시안 전용 칸이 실제 화면에서 꺼져 있다** — replot 을 넘기는 곳이 이 폴더뿐이다 (src/ 를 다 읽어 센다) · 뉴스 한 줄의 CSS 가 뼈대 (episode.css)에 없다 · 이야기 목록 (catalog)에 이 판이 없다
+//   R7     **화면 칸 (kit/types ScreenSlots · 옛 이름 replot)을 넘기는 곳이 정해져 있다** (F-E6 부터 실제 화면도 쓴다 — 이야기 목록의 손 칸) — 기름값 시안 폴더들 + 실제 화면 (episode/Screen.tsx 가 목록의 line.screen 을) 뿐이다 (src/ 를 다 읽어 센다)
+//          · 뉴스 한 줄의 CSS 가 뼈대 (episode.css)에 없다 · 이야기 목록 (catalog) · 실제 화면이 이 시안 폴더를 읽지 않는다
 // 보지 않는 것: 글의 뜻이 구절에서 나오는가 (이번에는 함의 검사를 돌리지 않았다 — 모델 API 0 · 사람이 읽는다) · 차례가 술술 읽히는가 (폰에서 사람)
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
@@ -137,27 +138,29 @@ if (!real || real.Art !== OIL_LOOK.Art || real.Glyph !== OIL_LOOK.Glyph) errors.
 if (real && `/s/${real.ep.series.code}/${real.ep.number}` !== NOW) errors.push(`R6 견줘 읽기의 주소 (${NOW})가 실제 기름값 이야기의 주소가 아니다`);
 console.log(`R6 실제 화면처럼: unpromised ${unpromised(e)} · 번호 ${numbered(e.series.code) ? "보임" : "숨김"} · 그림 OIL_LOOK · 견줘 읽기 → ${NOW}`);
 
-// R7 — 시안 전용 칸이 실제 화면에서 꺼져 있다
+// R7 — 화면 칸을 넘기는 곳 (F-E6: 실제 화면은 이야기 목록의 손 칸 line.screen 을 준다 — 그 칸의 검사는 ../check.ts S8)
 const files = (dir: string): string[] => readdirSync(dir).flatMap((f) => (statSync(path.join(dir, f)).isDirectory() ? files(path.join(dir, f)) : /\.(tsx?|css)$/.test(f) ? [path.join(dir, f)] : []));
 const KIT = ["episode/kit/Episode.tsx", "episode/kit/frames/LabCard.tsx", "episode/kit/frames/Steps.tsx"];
 const givers: string[] = [];
 for (const f of files(SRC)) {
   const rel = path.relative(SRC, f);
   const text = readFileSync(f, "utf8");
-  // 넘기는 곳 = JSX 의 replot= · veil= (뼈대 안에서 아래로 내려보내는 것은 뺀다)
-  if (/\breplot=\{/.test(text) || (/\bveil=\{/.test(text) && !KIT.includes(rel))) givers.push(rel);
+  // 넘기는 곳 = JSX 의 screen= · veil= (뼈대 안에서 아래로 내려보내는 것은 뺀다)
+  if (/\bscreen=\{/.test(text) || (/\bveil=\{/.test(text) && !KIT.includes(rel))) givers.push(rel);
   if (rel === "episode/episode.css" && /\.ep-news\b/.test(text)) errors.push("R7 뉴스 한 줄의 CSS (.ep-news)가 뼈대 (episode.css)에 있다 — 시안 폴더에만 있어야 한다");
 }
-for (const g of givers) if (!g.startsWith(HERE)) errors.push(`R7 시안 전용 칸 (replot)을 넘기는 곳이 이 폴더 밖에 있다 — ${g}`);
-if (!givers.some((g) => g.startsWith(HERE))) errors.push("R7 이 폴더가 replot 을 넘기지 않는다 — 검사가 낡았다");
-if (LONGS.some((x) => x.ep.path === PATH || x.ep.episode_version === e.episode_version && x.ep.episode_id === e.episode_id)) errors.push("R7 이야기 목록 (catalog)에 이 판이 올라 있다");
-const screen = readFileSync(path.join(SRC, "episode/Screen.tsx"), "utf8");
-if (/replot/.test(screen)) errors.push("R7 실제 화면 (episode/Screen.tsx)이 replot 을 안다");
-console.log(`R7 시안 전용 칸을 넘기는 곳: ${givers.join(" · ")} — 실제 화면 (episode/Screen.tsx) · 이야기 목록에는 없다`);
+const REAL_GIVER = "episode/Screen.tsx";
+for (const g of givers) if (!g.startsWith(HERE) && g !== REAL_GIVER) errors.push(`R7 화면 칸 (screen)을 넘기는 곳이 기름값 시안 폴더 · 실제 화면 (${REAL_GIVER}) 밖에 있다 — ${g}`);
+if (!givers.some((g) => g.startsWith(HERE))) errors.push("R7 이 폴더가 화면 칸을 넘기지 않는다 — 검사가 낡았다");
+// 실제 /s/oil/1 은 F-E6 부터 판 2 (메운 판 — events/…/local/oil-1)다. 이 시안 (첫째로 다시 짠 판)과 id · 판 번호가 같아도 다른 글이다 — 목록이 이 폴더의 파일을 읽지 않는지를 본다
+if (LONGS.some((x) => x.ep.path === PATH)) errors.push("R7 이야기 목록 (catalog)에 이 판이 올라 있다");
+for (const f of ["episode/Screen.tsx", "episode/catalog.tsx"]) if (/oil-replot/.test(readFileSync(path.join(SRC, f), "utf8"))) errors.push(`R7 실제 화면 (${f})이 이 시안 폴더를 읽는다`);
+if (!/screen=\{line\.screen\}/.test(readFileSync(path.join(SRC, REAL_GIVER), "utf8"))) errors.push(`R7 실제 화면 (${REAL_GIVER})이 이야기 목록의 손 칸 (line.screen)이 아닌 것을 넘긴다`);
+console.log(`R7 화면 칸을 넘기는 곳: ${givers.join(" · ")} — 실제 화면은 이야기 목록의 손 칸 (line.screen)만 · 목록은 이 시안 폴더를 읽지 않는다`);
 
 if (errors.length) {
   console.log(`FAIL ${errors.length}`);
   for (const x of errors) console.log(`  ${x}`);
   process.exit(1);
 }
-console.log("OK — 계약 검증 (구절 · 숫자 · 풀이 칸)을 지났고, 차례 · 답 먼저 금지 · 시안 전용 칸의 검사도 맞다");
+console.log("OK — 계약 검증 (구절 · 숫자 · 풀이 칸)을 지났고, 차례 · 답 먼저 금지 · 화면 칸의 검사도 맞다");

@@ -1,7 +1,7 @@
 // UX-11b (UX-10b 의 oil-replot-b 를 복사해 글만 메운 판) — 「기름값은 어디서 묶이나」 1화를 「이야기 짜는 법」 (docs/content/story-guide.md)으로 손으로 다시 짠 판의 자리.
 // 회차 파일은 이 폴더의 episode.json (계약의 Episode — 같은 사건 · 같은 소스 팩 · 같은 구절). 이 주소는 lab 시안이라 실제 화면 (/s/oil/1)에 나가지 않는다.
-// 이 파일은 시안 전용 칸 (kit/Episode 의 `replot` — UX-10 이 더한 것을 그대로 쓴다)과 맨 위 띠의 글만 둔다. 계약에 없는 칸이다.
-import type { EpisodeParts } from "../../../../episode/kit/Episode";
+// 이 파일은 화면 칸 (kit/types 의 ScreenSlots — UX-10 이 `replot` 으로 더한 것 · F-E6 부터 실제 화면도 쓰는 칸이라 이름이 `screen` 이다)과 맨 위 띠의 글만 둔다. 계약에 없는 칸이다.
+import type { ScreenSlots } from "../../../../episode/kit/types";
 
 export const STORE = "packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/store.documents.json";
 export const EPISODE_FILE = "apps/web/src/app/lab/episode/oil-replot-b2/episode.json";
@@ -12,7 +12,7 @@ export const BOX = false;
 /** 깨는 사실 — 뒤집기를 받치는 문서 문장 (구절 키). 풀이 전의 글 · 그 글이 기대는 구절에 없어야 한다 (법 5) */
 export const BREAKER_KEYS = ["F054.1", "F054.2", "F019", "F037", "F042", "F061.1", "F093.1", "F068"] as const;
 
-export const REPLOT: NonNullable<EpisodeParts["replot"]> = {
+export const REPLOT: ScreenSlots = {
   // 제목 위 — 그날의 뉴스 한 줄 (법 3)
   news: { t: "석유 최고가격, 12번째도 그대로", src: ["F001.1", "F001.2"] },
   // 사슬의 멈춘 고리 — 누르기 전에는 다른 고리와 같게 (법 5)
