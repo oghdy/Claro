@@ -1,0 +1,60 @@
+{
+  "_what": "BIS-20261116-REMOTE-ACCESS-CHIPS 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json",
+  "events": [
+    {
+      "event_id": "30b181c4-945b-4372-a8a0-5de3834582d7",
+      "code": "BIS-20261116-REMOTE-ACCESS-CHIPS",
+      "title": "미 상무부 산업안보국 (BIS) — 첨단 반도체의 원격 접근을 다루는 임시 최종 규정 (IFR · 'Addressing Remote Access to Advanced Semiconductors' · RIN 0694-AK50 · 2026-11-16 발표)",
+      "occurred_at": "2026-11-16",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "fbc5e77c-075c-4f15-93fe-1f00a3a7f79a",
+      "label": "BIS-PR-1116",
+      "title": "Bureau of Industry and Security — Press release 「BIS Issues Rule Addressing Remote Access to American Super Intelligence Technology」 (2026-11-16)",
+      "publisher": "bis.gov",
+      "url": "https://www.bis.gov/press-release/bis-issues-rule-addressing-remote-access-american-super-intelligence-technology",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-11-16",
+      "ingested_at": "2026-11-17"
+    },
+    {
+      "source_id": "01ccaea2-5cb8-402c-95ed-06894dfcc24c",
+      "label": "BIS-IFR",
+      "title": "Department of Commerce — Interim final rule 「Addressing Remote Access to Advanced Semiconductors」 (15 CFR Parts 732, 740, 742, 743, 744, 748, 762, 772, 774 · RIN 0694-AK50 · 공람본 PDF 132쪽)",
+      "publisher": "bis.gov",
+      "url": "https://www.bis.gov/media/documents/rin-0694-ak50.pdf",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-11-16",
+      "ingested_at": "2026-11-17"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "bis.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-17",
+      "basis": "17 U.S.C. §105 — Bureau of Industry and Security (Department of Commerce) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

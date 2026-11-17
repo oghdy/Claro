@@ -1,0 +1,45 @@
+{
+  "_what": "today 2026-11-17 소스 팩 목록 — 오늘의 해외 짧은 이야기 (D107). 사건 하나 = 목록 하나. 작업 세션 (Opus 5.5)이 손으로 쓴다. packages/pipeline/src/pack.ts (p2) 가 이 목록에서 같은 폴더의 store.json · store.documents.json · fetch.json 을 쓴다. 사실 · 해석 · 요점은 없다. 주소는 전부 2026-11-17 에 실제로 열어 확인한 것만. 고른 곳: packages/pipeline/data/collect/days/2026-11-17-news/sheet.md W1",
+  "event": {
+    "code": "BIS-20261116-REMOTE-ACCESS-CHIPS",
+    "title": "미 상무부 산업안보국 (BIS) — 첨단 반도체의 원격 접근을 다루는 임시 최종 규정 (IFR · 'Addressing Remote Access to Advanced Semiconductors' · RIN 0694-AK50 · 2026-11-16 발표)",
+    "occurred_at": "2026-11-16",
+    "storyline_code": null,
+    "_gate1": "today-story ① 이 2026-11-17 의 큰 뉴스에서 고르고 도윤이 go (짧은)",
+    "_dates": "BIS 보도자료의 날짜 November 16, 2026. 규정은 연방 관보 공람 (public inspection 2026-23529) 단계 — 효력은 '관보에 실리는 날' ([INSERT DATE OF PUBLICATION]) · 의견은 그 뒤 60일. Event.occurred_at 은 발표일"
+  },
+  "slots_basis": "today — 짧은 이야기용. 슬롯 표 (P-4)를 돌리지 않는다. 문서를 거는 이름일 뿐이다",
+  "slots": ["무엇을 발표했나", "무엇에 허가를 붙였나", "빠지는 것", "다섯 나라", "언제부터"],
+  "count_terms": ["remote", "data center", "license", "D:5", "recommender", "Super Intelligence"],
+  "items": [
+    {
+      "label": "BIS-PR-1116",
+      "group": "사건",
+      "title": "Bureau of Industry and Security — Press release 「BIS Issues Rule Addressing Remote Access to American Super Intelligence Technology」 (2026-11-16)",
+      "publisher": "bis.gov",
+      "url": "https://www.bis.gov/press-release/bis-issues-rule-addressing-remote-access-american-super-intelligence-technology",
+      "slots": ["무엇을 발표했나"],
+      "why": "이 사건의 1차 — 기관의 발표 (짧다). 재무부 · 국가안보회의가 쓰고 지시한 IFR · 원격 컴퓨팅으로 제3국 데이터센터를 거쳐 기존 제한을 비켜 가지 못하게 · 물리적 선적 통제와 원격 접근 보호를 맞춘다. 숫자 · 나라 목록은 없다 (규정 본문에)",
+      "url_basis": "bis.gov 'News & Updates' 목록 (https://www.bis.gov/news-updates · 2026-11-17 맨 위 줄 'November 16, 2026') 에서 나온 주소. 2026-11-17 GET 200 · 열어서 제목 · 날짜를 봤다. robots.txt (www.bis.gov) 'User-agent: * Allow: /'",
+      "language": "en",
+      "live": true,
+      "published_at": "2026-11-16",
+      "published_evidence": "November 16, 2026",
+      "published_note": "목록 쪽의 날짜 줄 (게시물 쪽 본문은 'Today, …'). 살아 있는 쪽 (메뉴 · 꼬리말)"
+    },
+    {
+      "label": "BIS-IFR",
+      "group": "법",
+      "title": "Department of Commerce — Interim final rule 「Addressing Remote Access to Advanced Semiconductors」 (15 CFR Parts 732, 740, 742, 743, 744, 748, 762, 772, 774 · RIN 0694-AK50 · 공람본 PDF 132쪽)",
+      "publisher": "bis.gov",
+      "url": "https://www.bis.gov/media/documents/rin-0694-ak50.pdf",
+      "slots": ["무엇에 허가를 붙였나", "빠지는 것", "다섯 나라", "언제부터"],
+      "why": "규정 본문. SUMMARY · Background 에 이야기의 뼈가 다 있다 — 해외 데이터센터가 D:5 · 마카오에 본사를 둔 회사에 '상당한 양'의 컴퓨팅을 대면 그 데이터센터로 가는 첨단 SI 칩의 수출 · 재수출 · 이전에 허가 (§744.24(a)(1)) · 나중에 그런 손님을 받기 시작해도 허가 · 이미 대고 있으면 90일 안에 허가 · '상업용 추천 시스템' (온라인 쇼핑 · SNS) 은 빠짐 · 인도네시아 · 말레이시아 · 싱가포르 · 태국 · 브라질로 가는 첨단 칩에 허가 (미국 본사 회사는 보고하면 예외) · 바이든 때 AI 확산 규정 폐기 · 'Super Intelligence (SI)' = 행정명령 14434 가 'AI' 대신 쓰게 한 말 · 효력은 관보 게재일 · 의견 60일. 미 연방 정부 저작물 (17 U.S.C. §105) → git",
+      "url_basis": "BIS 보도자료 (BIS-PR-1116) 의 'The IFR is on display HERE' 링크 (/media/documents/rin-0694-ak50.pdf). 2026-11-17 GET 200 · %PDF · 710,350 바이트 · 132쪽. 연방 관보 공람 목록 (federalregister.gov public-inspection current · 2026-23529 'Addressing Remote Access to Advanced Semiconductors') 과 제목이 같다. robots.txt 'Allow: /'",
+      "language": "en",
+      "published_at": "2026-11-16",
+      "published_evidence": "RIN 0694-AK50",
+      "published_note": "공람본에는 날짜가 비어 있다 ('[INSERT DATE OF PUBLICATION IN THE FEDERAL REGISTER]'). 날은 같은 쪽에서 링크한 보도자료의 날 (November 16, 2026) — 증거 글은 이 문서를 그 보도자료와 잇는 RIN 번호"
+    }
+  ]
+}

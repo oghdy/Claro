@@ -1,0 +1,282 @@
+{
+  "_source": {
+    "what": "짧은 이야기 「칩 원격 사용을 막았다는데, 접속을 막은 걸까」 — 로컬 세션이 손으로 쓴 판 (모델 API 0). 골든이 아니다. 사람 게이트 전에는 내지 않는다",
+    "made_by": "글 로컬 세션 · Sonnet 5.5 (손 · 2026-11-17) · 법 docs/content/story-guide.md · UX-8 ⑥ · 모델 API 0",
+    "event_code": "BIS-20261116-REMOTE-ACCESS-CHIPS",
+    "picked_from": "packages/pipeline/data/collect/days/2026-11-17-news/sheet.md W1",
+    "documents": "packages/pipeline/data/events/BIS-20261116-REMOTE-ACCESS-CHIPS/store.documents.json (BIS-PR-1116 · BIS-IFR)"
+  },
+  "episode_id": "d2ddfa41-d30c-5da5-8947-02c2c3a0d842",
+  "episode_version": 1,
+  "code": "chip-remote",
+  "event_ref": "30b181c4-945b-4372-a8a0-5de3834582d7",
+  "weight": "short",
+  "series": {
+    "series_id": "e0e764e9-0e23-5c67-a9de-ff04ebed2190",
+    "code": "tech-export",
+    "name": "기술은 어디까지 나갈 수 있나",
+    "sub": "미국 수출 통제 문서를 읽는다"
+  },
+  "sibling": null,
+  "docs": {
+    "BIS-PR-1116": {
+      "source_id": "fbc5e77c-075c-4f15-93fe-1f00a3a7f79a",
+      "name": "미 상무부 산업안보국 (BIS) 보도자료 「BIS Issues Rule Addressing Remote Access to American Super Intelligence Technology」 (bis.gov · 2026년 11월 16일)"
+    },
+    "BIS-IFR": {
+      "source_id": "01ccaea2-5cb8-402c-95ed-06894dfcc24c",
+      "name": "미 상무부 임시 최종 규정 「Addressing Remote Access to Advanced Semiconductors」 (RIN 0694-AK50 · 공람본 132쪽 · bis.gov)"
+    }
+  },
+  "quotes": {
+    "pr01": {
+      "doc": "BIS-PR-1116",
+      "quote": "FOR IMMEDIATE RELEASE | November 16, 2026"
+    },
+    "pr02": {
+      "doc": "BIS-PR-1116",
+      "quote": "WASHINGTON, D.C. – Today, the U.S. Commerce Department’s Bureau of Industry and Security (BIS) released an interim final rule (IFR)—written by and at the direction of the Department of Treasury and the National Security Council—to address remote access to advanced super intelligence (SI) chips and servers."
+    },
+    "pr03": {
+      "doc": "BIS-PR-1116",
+      "quote": "The rule is designed to ensure that existing restrictions on access to sensitive American technology cannot be circumvented through remote computing arrangements involving data centers in third countries."
+    },
+    "pr04": {
+      "doc": "BIS-PR-1116",
+      "quote": "This IFR addresses this evolving technological landscape by further aligning protections governing remote access to advanced computing capabilities with existing controls on the physical shipment of sensitive American technology."
+    },
+    "ifr01": {
+      "doc": "BIS-IFR",
+      "quote": "Addressing Remote Access to Advanced Semiconductors"
+    },
+    "ifr02": {
+      "doc": "BIS-IFR",
+      "quote": "First, this rule establishes new restrictions which will apply for exports, reexports, or transfers (in-country) to overseas data centers that remotely supply significant volumes of compute to companies headquartered in Country Group D:5 or Macau."
+    },
+    "ifr03": {
+      "doc": "BIS-IFR",
+      "quote": "Adding an end-use control requiring a license for exports, reexports, or transfers (in-country) of advanced SI1 items when there is “knowledge” the items are destined for use in data centers, wherever located, that will provide direct or indirect access to a significant volume of computing power to or for an entity headquartered in, or whose ultimate parent company is headquartered in, Macau or destination specified in Country Group D:5."
+    },
+    "ifr04": {
+      "doc": "BIS-IFR",
+      "quote": "License applications will be reviewed on a case-by-case basis."
+    },
+    "ifr05": {
+      "doc": "BIS-IFR",
+      "quote": "As stated in BIS’s October 2023 Advanced Computing/Supercomputing (“AC/S”) IFR (88 FR 73458) this control was intended to ensure that the national security and foreign policy objectives of the October 7, 2022 IFR and the AC/S IFR are not undermined by Macau, the People’s Republic of China (PRC), or other Country Group D:5 headquartered entities setting up cloud servers or data centers in other countries to allow these entities of concern to continue to train their SI models in ways that would be contrary to U.S. national security and foreign policy interests."
+    },
+    "ifr06": {
+      "doc": "BIS-IFR",
+      "quote": "Through this rule, BIS is imposing restrictions that will undermine those entities’ ability to access significant volumes of advanced SI semiconductors remotely, including through connected cloud computing."
+    },
+    "ifr07": {
+      "doc": "BIS-IFR",
+      "quote": "Data centers, foreign foundries, and chip exporters are required to perform robust due diligence on their customers, including any direct or indirect ownership or control by persons in Country Group D:5 or Macau, as part of complying with this new control."
+    },
+    "ifr08": {
+      "doc": "BIS-IFR",
+      "quote": "Adding a destination-based license requirement for advanced SI items for destinations for which there is an unacceptable risk of diversion--which for the purposes of this IFR are Indonesia, Malaysia, Singapore, Brazil, and Thailand."
+    },
+    "ifr09": {
+      "doc": "BIS-IFR",
+      "quote": "The license requirement for these five countries will not apply to semiconductors destined to companies headquartered in, or whose ultimate parent company is headquartered in, the United States, provided certain reporting requirements are met."
+    },
+    "ifr10": {
+      "doc": "BIS-IFR",
+      "quote": "The license requirement will not apply to commercial recommender systems, such as those used by online retailers or social media companies, as these functions do not pose the same national security threat."
+    },
+    "ifr11": {
+      "doc": "BIS-IFR",
+      "quote": "This term does not include any SI system designed or used to generate novel text, image, audio, video, software, or other content in response to user inputs, or any system that incorporates such model, regardless of whether the system also performs recommendation functions."
+    },
+    "ifr12": {
+      "doc": "BIS-IFR",
+      "quote": "This rule is effective [INSERT DATE OF PUBLICATION IN THE FEDERAL REGISTER]."
+    },
+    "ifr13": {
+      "doc": "BIS-IFR",
+      "quote": "Comments on the revisions and additions in this rule must be received by BIS no later than [INSERT DATE 60 DAYS AFTER DATE OF PUBLICATION IN THE FEDERAL REGISTER]."
+    },
+    "ifr14": {
+      "doc": "BIS-IFR",
+      "quote": "Any data center providing significant volume of compute power to companies headquartered, or with an ultimate parent headquartered, in Macau or Country Group D:5 prior to the publication date of this rule that wishes to continue providing these services must obtain a license with 90 days of the effective date of this IFR or face future export restrictions."
+    },
+    "ifr16": {
+      "doc": "BIS-IFR",
+      "quote": "For purposes of § 744.24, ‘commercial recommender system’ means a Super Intelligence (SI) tool exclusively designed and exclusively used to rank, filter, or suggest commercial products, services, or content to users based on user behavior, transaction history, or item attributes."
+    },
+    "ifr17": {
+      "doc": "BIS-IFR",
+      "quote": "At present, a license is required to export, reexport, or transfer (in-country) advanced SI semiconductors for entities headquartered in, or whose ultimate parent company is headquartered in, Country Group D:5 or Macau."
+    },
+    "ifr15": {
+      "doc": "BIS-IFR",
+      "quote": "Pursuant to Executive Order 14434, Inaugurating the Era of Super Intelligence, the terms “Super Intelligence” and “SI” is used in place of “Artificial Intelligence” or “AI”."
+    }
+  },
+  "voice_labels": {
+    "fact": "문서에 적힌 사실",
+    "official": "미 상무부 산업안보국 (BIS)의 말",
+    "explain": "Claro 가 풀어 쓴 설명"
+  },
+  "tools_from": null,
+  "scenes": {
+    "cover": {
+      "title": "원격 사용을 막았다는데,\n접속을 막은 걸까",
+      "dek": {
+        "t": "미국 상무부 산업안보국 (BIS)이 11월 16일 새 규정을 냈어요. 이름은 ‘첨단 반도체의 원격 접근을 다루는 규정’이에요.",
+        "src": [
+          "pr01",
+          "pr02",
+          "ifr01"
+        ],
+        "voice": "fact"
+      },
+      "meta": {
+        "t": "2026년 11월 16일 발표 · 워싱턴 D.C.",
+        "src": [
+          "pr01",
+          "pr02"
+        ]
+      },
+      "hint": {
+        "t": "규정 하나를 놓고 짧게 볼게요."
+      },
+      "ask": "접속 자체를 막은 건가요?"
+    },
+    "where": {
+      "kicker": "무슨 일인가",
+      "body": [
+        {
+          "t": "‘D:5’는 나라 묶음 이름이에요. 문서는 앞선 통제를 설명하면서 마카오 · 중국 · 그 밖의 D:5 나라에 본사를 둔 회사를 한데 불러요.",
+          "src": [
+            "ifr05"
+          ],
+          "voice": "fact"
+        },
+        {
+          "t": "그 회사들에는 첨단 칩을 보내는 일부터 원래 허가가 필요했어요. 보도자료는 이번 규정이 다른 나라 데이터센터를 낀 원격 컴퓨팅으로 그 제한을 비켜 가지 못하게 하려는 것이라고 해요.",
+          "src": [
+            "ifr17",
+            "pr03"
+          ],
+          "voice": "official"
+        }
+      ],
+      "unknown": {
+        "t": "한국이나 한국 기업에 어떻게 닿는지는 문서가 말하지 않아요. 문서에 ‘한국’이라는 말은 나오지 않아요."
+      },
+      "ask": "그럼 구체적으로 뭐가 달라지나요?"
+    },
+    "why": {
+      "kicker": "문서가 말한 것",
+      "title": "허가가 붙은 길은\n둘이에요",
+      "lead": {
+        "t": "하나는 방금 본 데이터센터 길이고, 하나는 나라를 정해 둔 길이에요.",
+        "voice": "explain"
+      },
+      "real_label": "허가가 붙은 길",
+      "real": [
+        {
+          "head": {
+            "t": "데이터센터 길"
+          },
+          "body": {
+            "t": "이 길에서는 확인할 일이 따라와요. 데이터센터 · 칩 위탁 생산 업체 (파운드리) · 칩 수출업체는 고객이 D:5 나라나 마카오 사람의 소유 · 지배 아래 있는지 꼼꼼히 살펴야 한다고 문서는 적어요. 상품이나 콘텐츠를 골라 보여 주는 ‘추천 시스템’에만 쓰는 경우는 이 허가에서 빠져요.",
+            "src": [
+              "ifr07",
+              "ifr10"
+            ],
+            "voice": "official"
+          }
+        },
+        {
+          "head": {
+            "t": "나라를 정한 길"
+          },
+          "body": {
+            "t": "인도네시아 · 말레이시아 · 싱가포르 · 브라질 · 태국으로 가는 첨단 칩에도 허가가 필요해요. 문서는 이 나라들을 칩이 엉뚱한 곳으로 빠질 위험을 받아들일 수 없는 곳이라고 불러요. 다만 미국에 본사가 있는 회사가 받는 칩은 보고 조건을 지키면 이 허가에서 빠져요.",
+            "src": [
+              "ifr08",
+              "ifr09"
+            ],
+            "voice": "official"
+          }
+        }
+      ],
+      "verdict": {
+        "t": "추천 시스템이 빠지는 건 위의 두 길 가운데 데이터센터 허가예요. 온라인 쇼핑몰이나 SNS 회사가 쓰는 것이 그 예이고, 글 · 그림 · 소리를 새로 만들어 내는 시스템은 추천 기능이 같이 있어도 추천 시스템으로 치지 않는다고 문서는 정의해요.",
+        "src": [
+          "ifr10",
+          "ifr16",
+          "ifr11"
+        ],
+        "voice": "official"
+      },
+      "tool_lead": null,
+      "ask": "그럼 언제부터 적용되나요?"
+    },
+    "keep": {
+      "kicker": "남음",
+      "title": "날짜는 문서에\n아직 비어 있어요",
+      "line": "‘원격 접근’을 겨냥했어도\n규정이 건 것은 접속 금지가 아니라\n칩에 붙은 허가다.",
+      "advice_label": "문서에 적힌 날과 기한",
+      "advice": {
+        "t": "효력은 연방 관보에 실리는 날부터인데, 문서에는 그 날짜 자리가 비어 있어요. 그래서 효력이 시작됐는지는 이 문서로는 알 수 없어요. 의견은 관보에 실린 날부터 60일 안에 받아요. 이미 D:5 나라나 마카오 회사에 큰 규모의 연산을 대 주던 데이터센터가 계속 대 주려면, 효력이 생긴 날부터 90일 안에 허가를 받아야 해요. 그러지 않으면 앞으로 수출 제한을 받을 수 있다고 해요.",
+        "src": [
+          "ifr12",
+          "ifr13",
+          "ifr14"
+        ],
+        "voice": "official"
+      },
+      "map_note": null,
+      "gain_label": null
+    }
+  },
+  "solve": {
+    "entry": {
+      "first_thought": {
+        "t": "‘원격 접근을 다룬다’고 하니, 해외 데이터센터에 접속해 칩을 쓰는 것 자체를 금지한 규정이라고 생각하기 쉬워요."
+      },
+      "breaker": {
+        "t": "그런데 규정이 겨누는 곳은 데이터센터예요. 마카오나 ‘D:5’ 나라에 본사가 있는 회사에 큰 규모의 연산력을 대 주는 곳이에요. 그런 곳에서 쓰일 줄 알면서 첨단 칩을 내보내거나 넘기려면 허가를 받으라고 규정은 적어요. 보도자료는 원격 접근 보호를, 물건을 실제로 실어 보내는 일에 이미 걸린 통제와 맞추는 것이라고 해요.",
+        "src": [
+          "ifr02",
+          "ifr03",
+          "pr04"
+        ],
+        "voice": "official"
+      },
+      "flip": {
+        "label": "뒤집어 보면",
+        "a": "“원격 접속을 막은 규정”",
+        "op": "≠",
+        "b": "“그런 데이터센터에 쓰이는 칩에 허가를 붙인 규정”",
+        "note": {
+          "t": "문서는 이 허가 신청을 하나하나 따져 본다고 적었어요.",
+          "src": [
+            "ifr04"
+          ],
+          "voice": "explain"
+        }
+      },
+      "not_drawn": [
+        "한국 · 한국 기업에 이 규정이 어떻게 닿는지, 한국이 앞으로 지정 대상이 되는지 — 문서에 '한국'이라는 말이 없다. 다섯 나라의 이름만 보여 주고, 없다고도 있다고도 단정하지 않는다",
+        "규정이 실제로 중국 회사의 클라우드 이용을 얼마나 막을지 · 업계와 다른 나라의 반응 — 문서에 없다. 언론 기사의 글 · 숫자는 쓰지 않는다",
+        "'Country Group D:5' 가 어느 나라들인지 — 이 문서는 풀지 않았다. 문서 밖 목록을 가져오지 않는다",
+        "데이터센터의 연산량 기준 (aggregate TPP) 이 칩 몇 개에 해당하는지 — 문서의 정의 밖이다. 그 수를 풀지 않았다",
+        "엔비디아 등 회사 이름 · 주가 · 정치 배경 — 1차 문서에 없다"
+      ],
+      "whose": {
+        "t": "여기까지는 미 상무부 산업안보국이 낸 규정과 보도자료의 말이에요. 이 규정을 업계나 다른 나라가 어떻게 받아들였는지는 이 문서에 없어서 싣지 않았어요."
+      },
+      "death": false
+    },
+    "plain": {
+      "kind": "flip",
+      "why": "short",
+      "title": "그럼 문서에는\n뭐라고 적혀 있을까요?"
+    }
+  }
+}
