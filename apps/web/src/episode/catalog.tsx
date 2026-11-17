@@ -16,6 +16,8 @@
 // 이 파일은 화면 뼈대 (kit/Episode)를 읽지 않는다 — kit/shelf.ts 가 이 목록을 읽기 때문이다 (서로 물리지 않게). 화면은 ./Screen.tsx 가 세운다.
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
+import suneungCheating from "../../../../packages/pipeline/data/events/OPC-20261116-EXAM-AI-CHEATING/local/suneung-cheating/story.json";
+import chipRemote from "../../../../packages/pipeline/data/events/BIS-20261116-REMOTE-ACCESS-CHIPS/local/chip-remote/story.json";
 import metaGallery from "../../../../packages/pipeline/data/events/GPDP-20261114-META-GALLERY/shorts/meta-gallery/story.json";
 import oil1 from "../../../../packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/episode.json";
 import oil1Screen from "../../../../packages/pipeline/data/events/MOTIR-20261113-OIL-PRICE-CAP/local/oil-1/screen.json";
@@ -159,6 +161,11 @@ const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
  * 그래서 병원 짧은 이야기 (골든 fixtures/episode-short-privacy-yeonghun.json — 개인정보 긴 이야기와 같은 발표)는 F-E3 에서 내렸다 → /short/pipc-hospital 은 404. 골든은 그대로고 시안 (/lab/today · /lab/today/short)에만 견본으로 남는다
  */
 export const STORIES: readonly Line[] = [
+  // 11/17 "오늘" (today-story · 도윤 go) — 짧은 이야기 둘 · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트). 국내가 위
+  // 수능 AI 부정행위 대책 (국무조정실 11/16) — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「시험은 어떻게 지켜지나」)
+  short(suneungCheating, { place: "국내", category: "나라와 법", day: "2026-11-17" }),
+  // 미 BIS 첨단 반도체 원격 접근 규정 (11/16) — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「기술은 어디까지 나갈 수 있나」)
+  short(chipRemote, { place: "해외", category: "기술", day: "2026-11-17" }),
   // 11/15 "오늘" (D107 ~ D111 · F-E5) — 세상이 크게 다룬 뉴스 둘 · 1차 문서로 쓴 것 · PM 게이트를 지난 것. 긴 이야기가 위 (큰 카드)
   // 석유 최고가격 12차 동결 — 새 시리즈 「기름값은 어디서 묶이나」 의 첫 이야기. 다음 화가 정해지지 않았다 (series/oil.json next_document) → unpromised
   // F-E6 (D125): 회차 파일 = 로컬 세션이 쓰고 편집자가 짚어 메운 판 (판 2 — events/…/local/oil-1/ · 같은 사건 · 같은 소스 팩 · 같은 구절). 파이프라인이 낸 판 1 (episodes/oil-1/)은 그 자리에 그대로 있다 (파이프라인 --check 가 본다).
