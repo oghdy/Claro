@@ -1,0 +1,31 @@
+{
+  "_what": "today 2026-11-17 '오늘의 큰 뉴스 → 1차 문서' 길에서 고른 둘 (D107 · today-story ①). 작업 세션이 손으로 걸은 기록. 뉴스 기사의 글 · 숫자는 없다 (제목 · 주소 · 요지만 — sheet.md). 구절은 1차 문서의 것만.",
+  "date": "2026-11-17",
+  "window": "2026-11-16 (월) 저녁 ~ 2026-11-17 (화) 저녁 · 한국 시각",
+  "picked_by": "today-story 작업 세션 (Opus 5.5) — 제안 → 도윤 go ('둘 다 짧은으로')",
+  "picked_at": "2026-11-17",
+  "candidates": { "domestic": 5, "overseas": 6, "sheet": "sheet.md" },
+  "picked": [
+    {
+      "id": "K1", "where": "국내", "category": "나라와 법", "weight": "짧은", "story_code": "suneung-cheating",
+      "title": "수능 이틀 앞, 정부 AI 부정행위 대책 — 시험장에서 안 걸리면 끝일까",
+      "seen_at": "https://news.google.com/rss/search?q=%EC%88%98%EB%8A%A5+%EB%B6%80%EC%A0%95%ED%96%89%EC%9C%84+%EC%8A%A4%EB%A7%88%ED%8A%B8%EC%95%88%EA%B2%BD+when:2d&hl=ko&gl=KR&ceid=KR:ko",
+      "event_code": "OPC-20261116-EXAM-AI-CHEATING",
+      "primary": [
+        { "label": "PR-1116-PDF", "url": "https://www.korea.kr/common/download.do?fileId=198590984&tblKey=GMN", "page_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789436", "rights": "KOGL_TYPE1 (문서 단위 · 3쪽 그림)", "in_git": true },
+        { "label": "TALK-1117-PDF", "url": "https://www.korea.kr/common/download.do?fileId=198591814&tblKey=GMN", "page_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789621", "rights": "UNCONFIRMED (PDF 안 그림 없음 · 글 줄만 — PS1-a)", "in_git": false }
+      ]
+    },
+    {
+      "id": "W1", "where": "해외", "category": "기술", "weight": "짧은", "story_code": "chip-remote",
+      "title": "미국, AI 칩 '원격 사용' 막는 규정 — 막은 건 접속일까",
+      "seen_at": "https://news.google.com/rss/search?q=Bessent+AI+chips+rule+when:2d&hl=en-US&gl=US&ceid=US:en",
+      "event_code": "BIS-20261116-REMOTE-ACCESS-CHIPS",
+      "primary": [
+        { "label": "BIS-PR-1116", "url": "https://www.bis.gov/press-release/bis-issues-rule-addressing-remote-access-american-super-intelligence-technology", "rights": "US_FEDERAL_17USC105", "in_git": true },
+        { "label": "BIS-IFR", "url": "https://www.bis.gov/media/documents/rin-0694-ak50.pdf", "rights": "US_FEDERAL_17USC105", "in_git": true }
+      ]
+    }
+  ],
+  "tomorrow": [ { "id": "K2", "title": "IMF 연례협의 — 올해 한국 성장률 3.9% 전망 · 긴축 권고", "why": "1차 = 재정경제부 보도참고 (newsId 156789601) · 안 열어 봄" } ]
+}

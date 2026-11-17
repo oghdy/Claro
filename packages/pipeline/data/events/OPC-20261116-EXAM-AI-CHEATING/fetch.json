@@ -1,0 +1,164 @@
+{
+  "_what": "OPC-20261116-EXAM-AI-CHEATING 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "OPC-20261116-EXAM-AI-CHEATING",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.korea.kr",
+      "url": "https://www.korea.kr/robots.txt",
+      "fetched_at": "2026-11-17T10:47:22.396Z",
+      "http_status": 200,
+      "sha256": "98d411637ae27a333b95d03c7b691eae06992f5d0d061ff6e3a77ffaace7ebf8",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "PR-1116-PDF",
+      "source_id": "fc64c976-ea4f-487d-a42a-ad3b3446cedc",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198590984&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198590984&tblKey=GMN",
+        "fetched_at": "2026-11-17T10:47:23.901Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198590984&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "8006c98563d5238599d8d9b4c8047109456d7a72fc8a06cee24e5dcb97fb5554",
+        "raw_bytes": 245705,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "d801ea74bcd9a304302f25ca208ed59da5bb518170f873e64f990d4cd8522bbf",
+      "text_length": 2490,
+      "pdf_page_starts": [
+        0,
+        896,
+        1736
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "부정행위": 19,
+        "스마트기기": 6,
+        "수능": 6,
+        "Wi-Fi": 3,
+        "사후": 2,
+        "응시자격": 2
+      }
+    },
+    {
+      "label": "PR-1116",
+      "source_id": "b6dd7a84-3d1d-4cc0-ae93-ea3acd20f8c0",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789436",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789436",
+        "fetched_at": "2026-11-17T10:47:25.555Z",
+        "final_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789436",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "4cb36e992747f83520fc841548f4271cd449e88af575337c5f69da721672482e",
+        "raw_bytes": 151279,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "5887050cd85af2784058d64a15dee6eacc7a53c44bfd99b8df0c9e8696b054bd",
+      "text_length": 3290,
+      "pdf_page_starts": null,
+      "first_line": "본문 바로가기 메인메뉴 바로가기",
+      "rights": "UNCONFIRMED",
+      "text_in": "cache",
+      "live": true,
+      "same_as_p1": null,
+      "policy_terms": {
+        "부정행위": 3,
+        "스마트기기": 5,
+        "수능": 4,
+        "Wi-Fi": 0,
+        "사후": 0,
+        "응시자격": 0
+      }
+    },
+    {
+      "label": "TALK-1117-PDF",
+      "source_id": "0862a360-1eb8-4df3-94af-f27c1751e35d",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198591814&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198591814&tblKey=GMN",
+        "fetched_at": "2026-11-17T10:47:26.782Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198591814&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "76427db627775152bad32bef1c0dc515903b9106874d580406f3173f3a1480df",
+        "raw_bytes": 153884,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "95b87ad55f5ebdfba5b0c47c98df30276275562aabdb9c5c13fb2c567fddf331",
+      "text_length": 4613,
+      "pdf_page_starts": [
+        0,
+        525,
+        987,
+        1409,
+        1901,
+        2416,
+        2893,
+        3384,
+        3914,
+        4427
+      ],
+      "first_line": "- 1 -",
+      "rights": "UNCONFIRMED",
+      "text_in": "cache",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "부정행위": 26,
+        "스마트기기": 5,
+        "수능": 20,
+        "Wi-Fi": 0,
+        "사후": 5,
+        "응시자격": 2
+      }
+    }
+  ],
+  "spans": []
+}

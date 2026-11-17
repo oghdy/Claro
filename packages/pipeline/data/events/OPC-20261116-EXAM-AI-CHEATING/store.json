@@ -1,0 +1,91 @@
+{
+  "_what": "OPC-20261116-EXAM-AI-CHEATING 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json. 문서 단위 권리 (발행처는 미확인 · 문서 안에 공공누리 제1유형 표시 — 그 문서에 한해 발행처 행보다 앞선다) 는 document_rights (DATA_MODEL DocumentRights · B-E2 · pack.json doc_rights 에서)",
+  "events": [
+    {
+      "event_id": "ab99744b-dbd7-4787-a29d-717cfc07c47f",
+      "code": "OPC-20261116-EXAM-AI-CHEATING",
+      "title": "국무조정실 — 한성숙 총리 주재 스마트기기 활용 시험 부정행위 방지 관계부처 회의 (수능 시험장 모든 스마트기기 반납 · 공공 Wi-Fi 차단 검토 · 시험 뒤에도 끝까지 추적 · 범정부 TF · 2026-11-16 발표) — 11-17 총리 대국민 담화로 이어짐",
+      "occurred_at": "2026-11-16",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "fc64c976-ea4f-487d-a42a-ad3b3446cedc",
+      "label": "PR-1116-PDF",
+      "title": "[보도자료] 한성숙 국무총리 주재 스마트기기 활용 시험 부정행위 방지 관련 관계부처 회의 (국무조정실 보도자료 PDF · 3쪽)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198590984&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-16",
+      "ingested_at": "2026-11-17"
+    },
+    {
+      "source_id": "b6dd7a84-3d1d-4cc0-ae93-ea3acd20f8c0",
+      "label": "PR-1116",
+      "title": "[보도자료] 한성숙 국무총리 주재 스마트기기 활용 시험 부정행위 방지 관련 관계부처 회의 (정책브리핑 보도자료 게시물 페이지 — 국무조정실 보도자료 전재)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789436",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-16",
+      "ingested_at": "2026-11-17"
+    },
+    {
+      "source_id": "0862a360-1eb8-4df3-94af-f27c1751e35d",
+      "label": "TALK-1117-PDF",
+      "title": "[담화문] 수능 부정행위 대응 관련 대국민 담화문 (국무총리 한성숙 · 국무조정실 · PDF 10쪽)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198591814&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-17",
+      "ingested_at": "2026-11-17"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "korea.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": null,
+      "can_quote": null,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-17",
+      "basis": "권리 미확인 (발행처 단위) — 발행처 단위의 근거를 찾지 못했다. 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1116-PDF. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
+    }
+  ],
+  "document_rights": [
+    {
+      "source_id": "fc64c976-ea4f-487d-a42a-ad3b3446cedc",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "8006c98563d5238599d8d9b4c8047109456d7a72fc8a06cee24e5dcb97fb5554",
+        "page": 3,
+        "pages": 3,
+        "image": "Im68 객체 124 · 335×129 · DCTDecode",
+        "image_sha256": "1191de2d4fb9f2da0054377ddac7c84f77f44d0c089285c5aabb78b72e530b6f",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 페이지 (PR-1116) 에도 글 줄 '이 자료는 텍스트에 한하여 공공누리 제1유형(출처표시)의 조건에 따라 이용할 수 있습니다.' (S1-a 의 길 — 기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-17"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

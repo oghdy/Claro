@@ -1,0 +1,71 @@
+{
+  "_what": "today 2026-11-17 소스 팩 목록 — 오늘의 국내 짧은 이야기 (D107). 사건 하나 = 목록 하나. 작업 세션 (Opus 5.5)이 손으로 쓴다. packages/pipeline/src/pack.ts (p2) 가 이 목록에서 같은 폴더의 store.json · store.documents.json · fetch.json 을 쓴다. 사실 · 해석 · 요점은 없다. 주소는 전부 2026-11-17 에 실제로 열어 확인한 것만. 고른 곳: packages/pipeline/data/collect/days/2026-11-17-news/sheet.md K1",
+  "event": {
+    "code": "OPC-20261116-EXAM-AI-CHEATING",
+    "title": "국무조정실 — 한성숙 총리 주재 스마트기기 활용 시험 부정행위 방지 관계부처 회의 (수능 시험장 모든 스마트기기 반납 · 공공 Wi-Fi 차단 검토 · 시험 뒤에도 끝까지 추적 · 범정부 TF · 2026-11-16 발표) — 11-17 총리 대국민 담화로 이어짐",
+    "occurred_at": "2026-11-16",
+    "storyline_code": null,
+    "_gate1": "today-story ① 이 2026-11-17 의 큰 뉴스에서 고르고 도윤이 go (짧은)",
+    "_dates": "보도자료의 배포 2026.11.16.(월) · 보도시점 '배포 후 즉시 사용'. 회의도 11-16. 담화문은 2026-11-17 (캐시 · 배경). Event.occurred_at 은 발표일"
+  },
+  "slots_basis": "today — 짧은 이야기용. 슬롯 표 (P-4)를 돌리지 않는다. 문서를 거는 이름일 뿐이다",
+  "slots": ["무엇을 지시했나", "수능 시험장에서", "시험 뒤에는", "다른 시험은", "권리 표시"],
+  "count_terms": ["부정행위", "스마트기기", "수능", "Wi-Fi", "사후", "응시자격"],
+  "items": [
+    {
+      "label": "PR-1116-PDF",
+      "group": "사건",
+      "title": "[보도자료] 한성숙 국무총리 주재 스마트기기 활용 시험 부정행위 방지 관련 관계부처 회의 (국무조정실 보도자료 PDF · 3쪽)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198590984&tblKey=GMN",
+      "slots": ["무엇을 지시했나", "수능 시험장에서", "시험 뒤에는", "다른 시험은"],
+      "why": "이 사건의 1차 — 국무조정실 보도자료 전문. 회의 (11-16 · 교육부 · 노동부 · 재경부 · 과기부 · 법무부 · 행안부 · 인사처 · 경찰청) · 수능 (11-19) 범정부 긴급 대응팀 · 모든 스마트기기 반납 · 시험장 공공 Wi-Fi 차단 '적극 검토' · 시험이 끝나도 사후에 확인되면 합격 취소 · 응시자격 제한 · 수사의뢰 · 신고센터 · 범정부 스마트기기 부정행위 방지 TF (가칭) · 세무사 수석합격자 시험 무효 및 5년간 응시자격 정지 처분 절차 · 법령 · 제도 개정 검토. 없는 것: 안경 전수검사 · 단추 스티커 · 응시 제한 10년 (그건 11-17 담화문 — 아래 TALK-1117-PDF · 캐시). PDF 3쪽 끝에 공공누리 제1유형 그림 → 이 문서만 git (doc_rights · D69 · D70)",
+      "url_basis": "정책브리핑 보도자료 페이지 (PR-1116 — pressReleaseView.do?newsId=156789436) 의 첨부 PDF 내려받기. 2026-11-17 GET · %PDF-1.4 · 245,705 바이트 · 3쪽. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-11-16",
+      "published_evidence": "2026.11.16.(월)",
+      "published_note": "보도자료 머리의 배포 날짜 · 보도시점 '배포 후 즉시 사용'",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 전재한 정책브리핑 페이지 (PR-1116) 에도 글 줄 '이 자료는 텍스트에 한하여 공공누리 제1유형(출처표시)의 조건에 따라 이용할 수 있습니다.' (S1-a 의 길 — 기록으로만 · 근거는 이 그림). 판정은 PM",
+        "raw_sha256": "8006c98563d5238599d8d9b4c8047109456d7a72fc8a06cee24e5dcb97fb5554",
+        "page": 3,
+        "pages": 3,
+        "image": { "name": "Im68", "xref": 124, "width": 335, "height": 129, "filter": "DCTDecode", "stream_sha256": "1191de2d4fb9f2da0054377ddac7c84f77f44d0c089285c5aabb78b72e530b6f" },
+        "where": "본문 끝 (3/3쪽) — 담당 부서 표 아래 한 줄의 오른쪽 끝 (왼쪽 '대한민국 정책브리핑' · 가운데 '대체불가 대한민국' 그림과 나란히 · 쪽 위치 x 436.7–509.7 · y 719.3–747.4 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 국무조정실의 글 (본문 · 총리의 말 인용 · 담당 부서 표). 담당 공무원의 이름 · 사무실 전화가 있다 (보도자료 연락처 — 이미 git 에 있는 다른 보도자료와 같은 꼴)",
+        "seen_by": "today 2026-11-17 작업 세션 (Opus 5.5) — 받은 바이트를 PyMuPDF (MuPDF 1.28.2) 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 그림 (Im68) 과 3쪽 전체 (110dpi) 를 눈으로 봤다 (E3-1b · P-S1 · S-3 과 같은 방법)",
+        "checked_at": "2026-11-17"
+      }
+    },
+    {
+      "label": "PR-1116",
+      "group": "사건",
+      "title": "[보도자료] 한성숙 국무총리 주재 스마트기기 활용 시험 부정행위 방지 관련 관계부처 회의 (정책브리핑 보도자료 게시물 페이지 — 국무조정실 보도자료 전재)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789436",
+      "slots": ["권리 표시"],
+      "why": "첨부 목록 (hwpx · pdf) 의 근거 · 권리 글 줄을 본 기록. 사이트 메뉴 · 인기 뉴스가 섞인 살아 있는 페이지라 캐시에만",
+      "url_basis": "정책브리핑 보도자료 목록 (pressReleaseList.do · 2026-11-17 의 9쪽 무렵) 에서 나온 줄. 2026-11-17 에 열어 봄. robots.txt 'Allow: /'",
+      "language": "ko",
+      "live": true,
+      "published_at": "2026-11-16",
+      "published_evidence": "2026.11.16",
+      "published_note": "게시물의 날짜. 살아 있는 페이지"
+    },
+    {
+      "label": "TALK-1117-PDF",
+      "group": "사건",
+      "title": "[담화문] 수능 부정행위 대응 관련 대국민 담화문 (국무총리 한성숙 · 국무조정실 · PDF 10쪽)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198591814&tblKey=GMN",
+      "slots": ["수능 시험장에서", "시험 뒤에는"],
+      "why": "11-17 담화 — 안경 전수검사 · 단추 스티커 · 1교시 전 수거 · 가방 복도 보관 · 감독관 8,400여명 추가 · '제출하지 않고 소지하다 적발되면 실제 사용 여부와 관계없이 부정행위로 처리' · 응시자격 제한 1년 → 10년 '국회와 협의' · 통신사실확인자료 · 입학 취소. **PDF 안에 공공누리 그림이 없다** (10쪽 모두 그림 0 — 2026-11-17 PyMuPDF 로 셈). 정책브리핑 페이지의 글 줄만 있다 → 지금 법 (PS1-a · S1-a 미결) 으로는 권리 미확인 = 캐시. 이야기의 구절로 쓰지 않는다 — 배경으로만",
+      "url_basis": "정책브리핑 담화문 페이지 (pressReleaseView.do?newsId=156789621) 의 첨부 PDF 내려받기. 2026-11-17 GET · %PDF-1.6 · 10쪽. robots.txt 'Allow: /'",
+      "language": "ko",
+      "published_at": "2026-11-17",
+      "published_evidence": "2026년 11월 17일",
+      "published_note": "담화문 끝의 날짜 줄"
+    }
+  ]
+}
