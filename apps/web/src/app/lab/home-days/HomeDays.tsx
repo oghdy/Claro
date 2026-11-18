@@ -1,0 +1,315 @@
+import { bundle, hrefOfLine, latestPerSeries, nextOf, numbered, oneLine, realPath, type Line } from "../../../episode/catalog";
+import { HOME, countNoun, countWord } from "../../../episode/home-copy";
+import { HomeLongCard, HomeShortCard } from "../../../episode/home/cards";
+import { Rich } from "../../../episode/kit/parts";
+import { Arrow } from "../../../episode/today/cards";
+import { sharedConcepts } from "../../../episode/today/concepts";
+import { byDay, dayLabel, keyOf, sampleWeek, type DayGroup } from "./days";
+import "../../../episode/episode.css";
+import "../../../episode/episodes/fomc/fomc.css";
+import "../../../episode/episodes/pipc/pipc.css";
+import "../../../episode/today/today.css";
+import "../../home.css";
+import "./home-days.css";
+
+// UX-12 (D136) — 첫 화면의 "지난 이야기"를 날짜별로 묶은 **시안 둘**의 한 몸. lab 전용이다 — 실제 첫 화면 (app/page.tsx)은 그대로다.
+// **"지난 이야기" 칸 말고는 실제 첫 화면 (app/page.tsx)을 그대로 옮겨 적었다** (같은 목록 · 같은 카드 부품 · 같은 글 · 같은 css) — 둘을 견줄 때 다른 것이 섞이지 않게.
+// 다른 것: ① 맨 위의 시안 띠 (가 ↔ 나 · 견본) ② 지난 이야기 = 날짜 머리 + 작은 줄 카드 (가 = 다 펼침 · 나 = 날마다 접힘 — <details> · 자바스크립트 없음).
+// 화면 글 (C)은 시안의 것이다 — 편 수는 숫자로 적는다 (화면이 목록에서 센 수).
+
+export type Variant = "a" | "b";
+
+const C = {
+  before: "그 전",
+  n: "{n}편",
+  long: "긴",
+  short: "짧은",
+  strip: { a: "시안 가 · 날짜마다 펼침", b: "시안 나 · 날짜마다 접힘" },
+  other: { a: "나 보기", b: "가 보기" },
+  many: "일주일 쌓인 모습",
+  now: "지금 목록으로",
+  sample: "견본 — 날이 쌓인 모습",
+  sampleNote: "지금 이야기를 지난 7일에 되풀이해 깔았어요. 실제 주소에는 없어요.",
+} as const;
+
+const dayTitle = (day: string): string => {
+  const [, m, d] = /^\d{4}-(\d{2})-(\d{2})$/.exec(day) ?? [];
+  return HOME.titleDay.replace("{m}", String(Number(m))).replace("{d}", String(Number(d)));
+};
+const TODAY_SCRIPT = `(function(){try{var h=document.currentScript.previousElementSibling;var d=new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Seoul"}).format(new Date());if(h&&h.getAttribute("data-day")===d)h.textContent=${JSON.stringify(HOME.titleToday)}}catch(e){}})()`;
+
+function Cards({ lines, lead }: { lines: readonly Line[]; lead: boolean }) {
+  return (
+    <>
+      {lines.map((line, i) =>
+        line.kind === "long" ? (
+          <HomeLongCard key={line.ep.code} line={line} href={hrefOfLine(line)} lead={lead && i === 0} C={HOME} />
+        ) : (
+          <HomeShortCard key={line.story.code} line={line} href={hrefOfLine(line)} C={HOME} />
+        ),
+      )}
+    </>
+  );
+}
+
+// ─────────────────────────────────────────────────────────── 지난 이야기 — 날짜 묶음 · 작은 줄 카드 (시안의 것)
+
+const titleOf = (line: Line): string => oneLine(line.kind === "long" ? line.ep.scenes.cover.title : line.story.scenes.cover.title);
+const plain = (s: string): string => s.replace(/\*\*/g, "");
+
+/** 가: "2편" · 나 (접힌 줄 — 안이 안 보인다): "긴 1편 · 짧은 1편" */
+const tally = (lines: readonly Line[], split: boolean): string => {
+  const n = (k: number) => C.n.replace("{n}", String(k));
+  if (!split) return n(lines.length);
+  const longs = lines.filter((x) => x.kind === "long").length;
+  return [longs ? `${C.long} ${n(longs)}` : "", lines.length - longs ? `${C.short} ${n(lines.length - longs)}` : ""].filter(Boolean).join(" · ");
+};
+
+/**
+ * 작은 줄 카드 — 주제 이름 (+ 이어지는 이야기면 몇 화) · 제목 · 국내 / 해외 · 긴 / 짧은. 그림 · 소개 글 · 뉴스 한 줄 · 지난 이야기 30초 · 카테고리 · 날 글은 뺐다 (까닭: logs/frontend/UX-12.md ②).
+ * 글은 실제 카드와 같은 곳에서 읽는다 (이야기 파일의 글자 그대로 · 제목의 줄바꿈만 빈칸으로)
+ */
+function Row({ line }: { line: Line }) {
+  const long = line.kind === "long";
+  const series = long ? line.ep.series : line.story.series;
+  return (
+    <li>
+      <a className="hd-row" href={hrefOfLine(line)} data-kind={line.kind} data-testid={`row-${long ? line.ep.code : line.story.code}`}>
+        <span className="hd-row-body">
+          <span className="hd-row-topic">
+            <strong>{series.name}</strong>
+            {long && numbered(series.code) ? <em>{line.ep.scenes.cover.episode.t}</em> : null}
+          </span>
+          <span className="hd-row-title">{long ? <Rich text={titleOf(line)} /> : titleOf(line)}</span>
+          <span className="hd-row-meta">
+            <span data-place={line.place === "해외" ? "abroad" : "home"}>{line.place}</span>
+            <span data-weight={line.kind}>{long ? HOME.long : HOME.short}</span>
+          </span>
+        </span>
+        <svg className="hd-row-go" width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M8 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </a>
+    </li>
+  );
+}
+
+function Rows({ lines }: { lines: readonly Line[] }) {
+  return (
+    <ul className="hd-rows">
+      {lines.map((line) => (
+        <Row key={keyOf(line)} line={line} />
+      ))}
+    </ul>
+  );
+}
+
+/** 가 — 날짜 머리 + 작은 줄이 다 보인다 */
+function DaysOpen({ groups }: { groups: readonly DayGroup[] }) {
+  return (
+    <div className="hd-days" data-variant="a">
+      {groups.map((g) => (
+        <section key={g.day ?? "before"} className="hd-day" data-day={g.day ?? "before"} data-testid="day">
+          <div className="hd-day-head">
+            <h3>{g.day ? dayLabel(g.day) : C.before}</h3>
+            <span>{tally(g.lines, false)}</span>
+          </div>
+          <Rows lines={g.lines} />
+        </section>
+      ))}
+    </div>
+  );
+}
+
+/** 나 — 날짜 한 줄 (날 · 편 수 · 제목이 살짝)을 누르면 그날 작은 줄이 펼쳐진다. 바로 위 지난 날 하나만 펼쳐 둔다 (까닭: 로그 ②) */
+function DaysFold({ groups }: { groups: readonly DayGroup[] }) {
+  return (
+    <div className="hd-days" data-variant="b">
+      {groups.map((g, i) => (
+        <details key={g.day ?? "before"} className="hd-fold" data-day={g.day ?? "before"} data-testid="day" open={i === 0 && g.day !== null}>
+          <summary>
+            <span className="hd-fold-text">
+              <span className="hd-fold-head">
+                <h3>{g.day ? dayLabel(g.day) : C.before}</h3>
+                <span>{tally(g.lines, true)}</span>
+              </span>
+              <span className="hd-fold-peek">{g.lines.map((x) => plain(titleOf(x))).join(" · ")}</span>
+            </span>
+            <svg className="hd-fold-mark" width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </summary>
+          <Rows lines={g.lines} />
+        </details>
+      ))}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────── 화면
+
+export function HomeDays({ variant, many }: { variant: Variant; many: boolean }) {
+  const real = bundle();
+  const { day, top } = real;
+  // 견본이면 지난 이야기만 바꾼다 (맨 위 묶음 · 아래 칸은 지금 목록 그대로)
+  const rest = many && day ? sampleWeek(day, top, real.rest) : real.rest;
+  const groups = byDay(rest);
+  const longs = top.filter((x) => x.kind === "long").length;
+  const count = (day ? HOME.count : HOME.countRecent).replace("{n}", countWord(top.length));
+  const tallyTop = HOME.tally.replace("{long}", countNoun(longs)).replace("{short}", countNoun(top.length - longs));
+  const cont = latestPerSeries().filter((x) => numbered(x.ep.series.code));
+  const concepts = sharedConcepts([...top, ...real.rest], hrefOfLine);
+  const topics = latestPerSeries().map(({ ep }) => ({ code: ep.series.code, name: ep.series.name, tools: ep.tools.map((x) => x.name) }));
+  const here = `/lab/home-days/${variant}`;
+  const there = `/lab/home-days/${variant === "a" ? "b" : "a"}`;
+  return (
+    <div className="ep-root td-root hm-root" data-testid="home-days" data-variant={variant}>
+      <div className="ep-scroll">
+        <main className="ep-scene td hm">
+          {/* 시안 띠 — 실제 첫 화면에는 없다 */}
+          <nav className="hd-strip" data-many={many ? "" : undefined} data-testid="strip">
+            <strong>{many ? C.sample : C.strip[variant]}</strong>
+            <span>
+              <a href={`${there}${many ? "?many=1" : ""}`}>{C.other[variant]}</a>
+              <a href={many ? here : `${here}?many=1`}>{many ? C.now : C.many}</a>
+            </span>
+            {many ? <p>{C.sampleNote}</p> : null}
+          </nav>
+          <header className="td-top hm-top">
+            <span className="td-mark hm-mark">
+              <span>{HOME.mark}</span>
+            </span>
+            <span className="hm-preview">{HOME.previewTag}</span>
+          </header>
+          <section className="hm-hero">
+            <p className="hm-tagline">
+              <Rich text={HOME.tagline} />
+            </p>
+            <p className="hm-sub">{HOME.sub}</p>
+          </section>
+          <section className="hm-intro">
+            <h1 data-day={day ?? undefined} data-testid="head" suppressHydrationWarning>
+              {day ? dayTitle(day) : HOME.titleRecent}
+            </h1>
+            {day ? <script dangerouslySetInnerHTML={{ __html: TODAY_SCRIPT }} /> : null}
+            <p>
+              {count} <span className="hm-tally">{tallyTop}</span>
+            </p>
+          </section>
+
+          <section className="td-list" aria-label={day ? dayTitle(day) : HOME.titleRecent}>
+            <Cards lines={top} lead={top[0]?.kind === "long"} />
+          </section>
+
+          {/* ── 여기만 시안이다: 지난 이야기를 날짜별로 */}
+          {groups.length ? (
+            <section className="td-sec hd-rest" aria-labelledby="td-rest">
+              <h2 id="td-rest" className="td-label hm-restlabel">
+                {HOME.restLabel}
+              </h2>
+              {variant === "a" ? <DaysOpen groups={groups} /> : <DaysFold groups={groups} />}
+            </section>
+          ) : null}
+
+          {cont.length ? (
+            <section className="td-sec hm-cont" aria-labelledby="td-cont">
+              <h2 id="td-cont" className="td-label hm-h2">
+                {HOME.contLabel}
+              </h2>
+              <p className="td-secnote">{HOME.contNote}</p>
+              {cont.map(({ ep }) => {
+                const coming = nextOf(ep) ? undefined : ep.scenes.next.coming[0];
+                return (
+                  <a key={ep.series.code} className="td-series" href={realPath(ep)} data-testid={`cont-${ep.series.code}`}>
+                    <strong>{ep.series.name}</strong>
+                    <span className="td-series-sub">{ep.series.sub}</span>
+                    <ol className="ep-track">
+                      {ep.track
+                        .filter((e) => e.state !== "next")
+                        .map((e) => (
+                          <li key={e.no.t} data-state={e.state}>
+                            <span className="ep-track-dot" aria-hidden="true" />
+                            <span className="ep-track-no">{e.no.t}</span>
+                            <span className="ep-track-title">{e.title.t}</span>
+                          </li>
+                        ))}
+                    </ol>
+                    {coming && /\d+월 \d+일/.test(coming.body.t) ? (
+                      <p className="td-next">
+                        <em>{HOME.contNext}</em>
+                        {coming.body.t}
+                      </p>
+                    ) : null}
+                    <span className="td-series-go">
+                      {ep.scenes.cover.episode.t} {HOME.contGo}
+                      <Arrow />
+                    </span>
+                  </a>
+                );
+              })}
+            </section>
+          ) : null}
+
+          <section className="td-sec hm-map" aria-labelledby="td-concept">
+            <h2 id="td-concept" className="hm-map-label">
+              {HOME.conceptLabel}
+            </h2>
+            <p className="hm-map-title">
+              <Rich text={HOME.conceptTitle} />
+            </p>
+            <ul className="hm-map-topics">
+              {topics.map((t) => (
+                <li key={t.code}>
+                  <span>{t.name}</span>
+                  <p>
+                    {t.tools.map((n) => (
+                      <b key={n}>{n}</b>
+                    ))}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <p className="hm-map-note">{HOME.conceptNote}</p>
+            {concepts.length ? (
+              <ul className="td-concepts">
+                {concepts.map((g) => (
+                  <li key={g.names.join()}>
+                    {g.stories.map((x, i) => (
+                      <a key={x.path} href={x.path} data-end={i > 0 ? "" : undefined}>
+                        {x.title}
+                      </a>
+                    ))}
+                    <p>
+                      <span>{HOME.conceptBoth}</span>
+                      {g.names.map((n) => (
+                        <b key={n}>{n}</b>
+                      ))}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <a className="ep-map-button td-mapgo" href="/map" data-testid="to-map">
+              {HOME.mapGo}
+              <Arrow />
+            </a>
+          </section>
+
+          <section className="td-sec hm-about" aria-labelledby="hm-about">
+            <h2 id="hm-about" className="td-label">
+              {HOME.aboutLabel}
+            </h2>
+            <p className="hm-about-lead">{HOME.aboutLead}</p>
+            <ol className="hm-steps">
+              {HOME.aboutSteps.map((x) => (
+                <li key={x}>{x}</li>
+              ))}
+            </ol>
+          </section>
+
+          <p className="td-foot">{HOME.preview}</p>
+        </main>
+      </div>
+    </div>
+  );
+}
