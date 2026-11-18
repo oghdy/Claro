@@ -163,6 +163,22 @@ apps/web test:   90 passed (3.5m)
 - 폰 그림은 개발 서버 (`next dev -p 3214` · 따로 둔 빌드 폴더 `.next-ux13b`)에서. 서버는 껐고 빌드 폴더는 지웠다
 - 배포 확인은 아래 "push 뒤"
 
+### push 뒤 (커밋 `ce78516` · https://claro-lime-one.vercel.app · curl)
+```
+200 /lab/start
+200 /lab/start?n=3
+200 /lab/start/days
+200 /lab/start/days?d=2026-11-18
+200 /lab/start/end
+200 /lab/start/end?k=long
+200 /
+200 /map
+200 /short/suneung-alert
+200 /s/oil/1
+```
+- 배포된 `/lab/start/end` 의 단추 주소: `href="/lab/start/days?d=2026-11-18"` · 배포된 `/lab/start` 첫 HTML 에 들어가기 단추 (`sp-story-go`)가 이야기 둘 다에 있다
+- 배포 화면을 폰으로 눌러 보지는 않았다 (curl 까지) — 눌러 본 것은 개발 서버에서 (⑤ 의 재기)
+
 ## ⑧ _open
 
 - **a** 끝 단추의 말 "다른 이야기 보기" — 지시문의 보기를 그대로 썼다. 새 글자다 (도윤이 정할 일). 견본의 띠 글 · 견본 이름 (`?n=` 띠)도 lab 전용 새 글자
