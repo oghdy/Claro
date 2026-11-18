@@ -17,15 +17,16 @@ import "./home-days.css";
 // 다른 것: ① 맨 위의 시안 띠 (가 ↔ 나 · 견본) ② 지난 이야기 = 날짜 머리 + 작은 줄 카드 (가 = 다 펼침 · 나 = 날마다 접힘 — <details> · 자바스크립트 없음).
 // 화면 글 (C)은 시안의 것이다 — 편 수는 숫자로 적는다 (화면이 목록에서 센 수).
 
-export type Variant = "a" | "b";
+export type Variant = "a" | "b" | "c";
 
 const C = {
   before: "그 전",
   n: "{n}편",
   long: "긴",
   short: "짧은",
-  strip: { a: "시안 가 · 날짜마다 펼침", b: "시안 나 · 날짜마다 접힘" },
-  other: { a: "나 보기", b: "가 보기" },
+  strip: { a: "시안 가 · 날짜마다 펼침", b: "시안 나 · 날짜마다 접힘", c: "시안 나 · 담백 판" },
+  /** 띠의 길 — 가 ↔ 나 (UX-12) · 나 ↔ 담백 판 (UX-12b) */
+  links: { a: [["b", "나 보기"]], b: [["a", "가 보기"], ["c", "담백 판"]], c: [["b", "나 보기"]] },
   many: "일주일 쌓인 모습",
   now: "지금 목록으로",
   sample: "견본 — 날이 쌓인 모습",
@@ -146,6 +147,47 @@ function DaysFold({ groups }: { groups: readonly DayGroup[] }) {
   );
 }
 
+/**
+ * 나 담백 판 (UX-12b · D138 — 도윤 "접히는 형식이 좋다 · 더 담백하게 · 한 화면에 뭐가 너무 많다"). 나에서 **덜어 낸 것**이다:
+ * 접힌 줄 = 날짜 · 편 수 · 꺾쇠 한 줄 (살짝 보이는 제목 · 긴 / 짧은 셈 없음) · 날마다 상자 없이 가는 선 · 펼친 줄 = 제목 + 작은 회색 한 줄 (주제 이름 · 이어지는 이야기면 몇 화 · 긴 이야기면 그 말).
+ * 색은 먹 + 회색뿐. 펼쳐 두는 날은 나와 같다 (바로 위 지난 날 하나)
+ */
+function DaysPlain({ groups }: { groups: readonly DayGroup[] }) {
+  return (
+    <div className="hc-days" data-variant="c">
+      {groups.map((g, i) => (
+        <details key={g.day ?? "before"} className="hc-fold" data-day={g.day ?? "before"} data-testid="day" open={i === 0 && g.day !== null}>
+          <summary>
+            <h3>{g.day ? dayLabel(g.day) : C.before}</h3>
+            <span>{tally(g.lines, false)}</span>
+            <svg className="hc-mark" width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </summary>
+          <ul className="hc-rows">
+            {g.lines.map((line) => {
+              const long = line.kind === "long";
+              const series = long ? line.ep.series : line.story.series;
+              return (
+                <li key={keyOf(line)}>
+                  <a className="hc-row" href={hrefOfLine(line)} data-kind={line.kind} data-testid={`row-${long ? line.ep.code : line.story.code}`}>
+                    <span className="hc-row-title">{long ? <Rich text={titleOf(line)} /> : titleOf(line)}</span>
+                    <span className="hc-row-sub">
+                      <span>{series.name}</span>
+                      {long && numbered(series.code) ? <span>{line.ep.scenes.cover.episode.t}</span> : null}
+                      {long ? <span>{HOME.long}</span> : null}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </details>
+      ))}
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────────────────── 화면
 
 export function HomeDays({ variant, many }: { variant: Variant; many: boolean }) {
@@ -161,7 +203,6 @@ export function HomeDays({ variant, many }: { variant: Variant; many: boolean })
   const concepts = sharedConcepts([...top, ...real.rest], hrefOfLine);
   const topics = latestPerSeries().map(({ ep }) => ({ code: ep.series.code, name: ep.series.name, tools: ep.tools.map((x) => x.name) }));
   const here = `/lab/home-days/${variant}`;
-  const there = `/lab/home-days/${variant === "a" ? "b" : "a"}`;
   return (
     <div className="ep-root td-root hm-root" data-testid="home-days" data-variant={variant}>
       <div className="ep-scroll">
@@ -170,7 +211,11 @@ export function HomeDays({ variant, many }: { variant: Variant; many: boolean })
           <nav className="hd-strip" data-many={many ? "" : undefined} data-testid="strip">
             <strong>{many ? C.sample : C.strip[variant]}</strong>
             <span>
-              <a href={`${there}${many ? "?many=1" : ""}`}>{C.other[variant]}</a>
+              {C.links[variant].map(([to, label]) => (
+                <a key={to} href={`/lab/home-days/${to}${many ? "?many=1" : ""}`}>
+                  {label}
+                </a>
+              ))}
               <a href={many ? here : `${here}?many=1`}>{many ? C.now : C.many}</a>
             </span>
             {many ? <p>{C.sampleNote}</p> : null}
@@ -207,7 +252,7 @@ export function HomeDays({ variant, many }: { variant: Variant; many: boolean })
               <h2 id="td-rest" className="td-label hm-restlabel">
                 {HOME.restLabel}
               </h2>
-              {variant === "a" ? <DaysOpen groups={groups} /> : <DaysFold groups={groups} />}
+              {variant === "a" ? <DaysOpen groups={groups} /> : variant === "b" ? <DaysFold groups={groups} /> : <DaysPlain groups={groups} />}
             </section>
           ) : null}
 
