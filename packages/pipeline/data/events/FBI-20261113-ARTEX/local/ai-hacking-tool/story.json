@@ -1,0 +1,251 @@
+{
+  "_source": {
+    "what": "짧은 이야기 「FBI, AI 해킹 경고 — 도구는 해커가 만들었나?」 — 로컬 세션이 손으로 쓴 판 (모델 API 0 · 옛 꼴 ShortStory). 골든이 아니다. 사람 게이트 전에는 내지 않는다",
+    "made_by": "글 로컬 세션 · Sonnet 5.5 (손 · 2026-11-18) · 법 docs/content/story-guide.md · UX-8 ⑥ · 모델 API 0",
+    "event_code": "FBI-20261113-ARTEX",
+    "picked_from": "packages/pipeline/data/collect/days/2026-11-18-news/sheet.md W1",
+    "documents": "packages/pipeline/data/events/FBI-20261113-ARTEX/store.documents.json (FBI-FLASH-1113)"
+  },
+  "episode_id": "6b52feaf-f8a7-4402-8381-dbccff98630b",
+  "episode_version": 1,
+  "code": "ai-hacking-tool",
+  "event_ref": "3d479b75-f635-4f11-a190-3784671cb699",
+  "weight": "short",
+  "series": {
+    "series_id": "3a5e3486-c621-4609-a8c2-6ea002ad6a9a",
+    "code": "ai-attack",
+    "name": "AI 해킹은 어떻게 막나",
+    "sub": "해킹 경고 문서를 읽는다"
+  },
+  "sibling": null,
+  "docs": {
+    "FBI-FLASH-1113": {
+      "source_id": "4f9fb730-711d-4d87-8aac-418c8101469a",
+      "name": "미 연방수사국 (FBI) 경고문 「Threat Overview of ARTEX Autonomous Penetration Testing Framework」 (FLASH-20261113-001 · ic3.gov · 2026년 11월 13일 · 13쪽)"
+    }
+  },
+  "quotes": {
+    "fl01": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "13 NOVEMBER 2026"
+    },
+    "fl02": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "ARTEX is an open-source, large language model (LLM)-driven agentic platform that threat actors have weaponized to automate multiple phases of cyber intrusions at machine speed, from reconnaissance through data exfiltration."
+    },
+    "fl03": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "The framework translates high-level tactical goals described in natural language into actionable machine commands executed by specialized super intelligence (SI) agents, requiring minimal human interaction beyond initial objective setting."
+    },
+    "fl04": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "ARTEX significantly reduces the time required to chain attack techniques, with some intrusions progressing from initial targeting to privileged access in under three hours."
+    },
+    "fl05": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "The framework enables threat actors with minimal technical expertise to conduct complex, multi-target operations simultaneously, fundamentally accelerating attack velocity and expanding operational scale."
+    },
+    "fl06": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "The developer stated the tool was intended for authorized security testing within defined scopes and made the repository unavailable on October 8, 2026, following reports of threat actor abuse."
+    },
+    "fl07": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "Despite this action, ARTEX remains widely accessible through independent routes and mirrors on code-sharing platforms."
+    },
+    "fl08": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "However, the framework continues to proliferate through community forks, localized variations, archived copies, and a commercial version (ARTEX PRO), ensuring continued availability to threat actors."
+    },
+    "fl09": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "Following public disclosure of malicious usage, the original ARTEX developer removed the GitHub repository in October 2026."
+    },
+    "fl10": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "Notable campaigns include financially motivated attacks against South Korean financial institutions resulting in exfiltration of personal information from approximately 67,000 individuals,6,7,8 and a supply chain compromise affecting ConnectWise Cloud Backup customers that resulted in attempted sign-ins to more than 2,250 downstream tenants."
+    },
+    "fl12": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "Originally released on GitHub by developer “Autumn-27” in July 2026, ARTEX gained rapid adoption, reaching an estimated 1,500–2,000 GitHub stars within 10 weeks."
+    },
+    "fl13": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "Threat Overview of ARTEX Autonomous Penetration Testing Framework"
+    },
+    "fl11": {
+      "doc": "FBI-FLASH-1113",
+      "quote": "Inventory all internet-facing applications, including peripheral systems: partner and supplier portals, mobile backends, employee applications, sales-support systems, legacy services, third-party integrations, and applications created across different business units."
+    }
+  },
+  "voice_labels": {
+    "fact": "문서에 적힌 사실",
+    "official": "미 연방수사국 (FBI)의 말",
+    "explain": "Claro 가 풀어 쓴 설명"
+  },
+  "tools_from": null,
+  "scenes": {
+    "cover": {
+      "title": "FBI가 경고한 AI\n해킹 도구, 누구 작품?",
+      "dek": {
+        "t": "FBI가 11월 13일, ‘ARTEX’라는 AI 해킹 도구를 범죄자들이 쓰고 있다고 경고문을 냈어요. 이 도구는 해커가 만든 걸까요?",
+        "src": [
+          "fl01",
+          "fl02"
+        ],
+        "voice": "fact",
+        "calc": {
+          "11": "NOVEMBER = 11월"
+        }
+      },
+      "meta": {
+        "t": "2026년 11월 13일 발표 · 미국 연방수사국 (FBI)",
+        "src": [
+          "fl01"
+        ],
+        "voice": "fact",
+        "calc": {
+          "11": "NOVEMBER = 11월"
+        }
+      },
+      "hint": {
+        "t": "경고문 한 편을 놓고 짧게 볼게요."
+      },
+      "ask": "해커가 만든 도구인가요?"
+    },
+    "where": {
+      "kicker": "무슨 일인가",
+      "body": [
+        {
+          "t": "ARTEX는 말로 목표를 일러 주면, AI가 알아서 컴퓨터 명령을 만들어 실행하는 도구예요.",
+          "src": [
+            "fl03"
+          ],
+          "voice": "official"
+        },
+        {
+          "t": "FBI는 범죄 집단이 이 도구로 침입의 여러 단계를 자동으로 빠르게 해치우고 있다고 적었어요. 어떤 침입은 3시간이 안 걸려 시스템을 마음대로 다룰 수 있는 권한까지 갔어요.",
+          "src": [
+            "fl02",
+            "fl04"
+          ],
+          "voice": "official",
+          "calc": {
+            "3": "under three hours = 3시간 안"
+          }
+        },
+        {
+          "t": "FBI는 한국 금융기관을 노린 공격으로 약 67,000명의 개인정보가 빠져나갔다고 적었어요.",
+          "src": [
+            "fl10"
+          ],
+          "voice": "official"
+        }
+      ],
+      "unknown": {
+        "t": "어느 기관인지 · 언제인지 · 내 정보가 들어 있는지는 이 문서에 없어요."
+      },
+      "ask": "그럼 만든 사람이 치우면 끝인가요?"
+    },
+    "why": {
+      "kicker": "문서가 말한 것",
+      "title": "만든 사람이 내려도\n도구는 남아 있어요",
+      "lead": {
+        "t": "범죄자들의 악용이 알려진 뒤, 개발자는 10월에 도구를 내렸어요.",
+        "src": [
+          "fl09"
+        ],
+        "voice": "official"
+      },
+      "real_label": "경고문이 적은 것",
+      "real": [
+        {
+          "head": {
+            "t": "그래도 퍼졌어요"
+          },
+          "body": {
+            "t": "여러 사람이 복사한 판, 보관해 둔 사본, 돈 받고 파는 판으로 이어졌어요.",
+            "src": [
+              "fl08"
+            ],
+            "voice": "official"
+          }
+        }
+      ],
+      "verdict": {
+        "t": "그래서 FBI는 이 도구가 지금도 널리 받을 수 있는 상태라고 적었어요.",
+        "src": [
+          "fl07"
+        ],
+        "voice": "official"
+      },
+      "tool_lead": null,
+      "ask": "그럼 어디부터 막나요?"
+    },
+    "keep": {
+      "kicker": "남음",
+      "title": "먼저 점검할 곳은\n인터넷에 열린 서비스",
+      "line": "ARTEX는 만든 사람 말로는 시험용,\nFBI 말로는 범죄자들이 쓰는 도구다.\n한국 금융기관 피해도 그 경고문에 있다.",
+      "advice_label": "FBI가 먼저 하라고 한 일",
+      "advice": {
+        "t": "회사나 기관은 인터넷에 열린 서비스를 빠짐없이 헤아려 보라고 했어요. 협력사 포털 · 모바일 서비스도 함께요.",
+        "src": [
+          "fl11"
+        ],
+        "voice": "official"
+      },
+      "map_note": null,
+      "gain_label": null
+    }
+  },
+  "solve": {
+    "entry": {
+      "first_thought": {
+        "t": "AI 해킹 도구라니, 처음부터 범죄에 쓰려고 해커가 만든 프로그램이라고 생각하기 쉬워요."
+      },
+      "breaker": {
+        "t": "그런데 이 도구는 7월에 누구나 코드를 받아 갈 수 있는 사이트 (GitHub)에 공개됐어요. 개발자는 이 도구를 허락받고 하는 보안 시험에 쓰라고 했대요. 보안 시험은 내 시스템의 약한 곳을 미리 뚫어 보는 일이에요. FBI는 범죄자들이 그 도구를 무기로 삼았다고 적었어요.",
+        "src": [
+          "fl12",
+          "fl06",
+          "fl02"
+        ],
+        "voice": "official",
+        "calc": {
+          "7": "July = 7월"
+        }
+      },
+      "flip": {
+        "label": "뒤집어 보면",
+        "a": "“범죄용으로 만든 해킹 도구”",
+        "op": "≠",
+        "b": "“보안 시험용이라던 도구를 범죄자가 무기로 삼은 것”",
+        "note": {
+          "t": "FBI도 경고문 제목에서 이 도구를 보안 시험 틀이라 불렀어요.",
+          "src": [
+            "fl13"
+          ],
+          "voice": "explain"
+        }
+      },
+      "not_drawn": [
+        "범죄 집단이 누구인지 · 어느 나라 사람들인지 — FBI 경고문 글에서 짚지 않았다. 짐작하지 않는다",
+        "개발자의 정체 · ‘보안 시험용’이라는 말이 사실인지 — 경고문은 개발자가 한 말을 전했을 뿐이다. 확인한 것처럼 쓰지 않는다",
+        "ARTEX 가 어떤 AI 서비스를 붙여 쓰는지 (자체 모델은 없다는 것 포함) · Anthropic Claude 등 회사 이름 — 줄기 밖이라 뺐다",
+        "한국 금융기관이 어디인지 · 어떻게 뚫렸는지 · 지금도 이어지는지 — 문서에 없다",
+        "공급망 공격 (ConnectWise) · IP 주소 · 도메인 같은 침입 흔적 · 공격 단계 표 — 기관 담당자용 자료라 이야기의 줄기가 아니다",
+        "서버 1,600여 곳 · 개발 사이트 별 수 · 사용된 AI 모델별 비중 — 줄기 밖",
+        "언론 기사의 글 · 숫자 — 쓰지 않았다"
+      ],
+      "whose": {
+        "t": "여기까지는 미 연방수사국 (FBI)이 낸 경고문의 말이에요. 개발자의 말도 경고문이 전한 그대로예요. 개인이 따로 할 일은 문서에 적혀 있지 않아요."
+      },
+      "death": false
+    },
+    "plain": {
+      "kind": "flip",
+      "why": "short",
+      "title": "이 도구는 어디서\n나온 걸까요?"
+    }
+  }
+}

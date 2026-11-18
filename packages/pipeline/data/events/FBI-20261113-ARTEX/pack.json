@@ -1,0 +1,30 @@
+{
+  "_what": "today 2026-11-18 소스 팩 목록 — 오늘의 해외 짧은 이야기 (D107). 사건 하나 = 목록 하나. 작업 세션 (Opus 5.5)이 손으로 쓴다. packages/pipeline/src/pack.ts (p2) 가 이 목록에서 같은 폴더의 store.json · store.documents.json · fetch.json 을 쓴다. 사실 · 해석 · 요점은 없다. 주소는 전부 2026-11-18 에 실제로 열어 확인한 것만. 고른 곳: packages/pipeline/data/collect/days/2026-11-18-news/sheet.md W1",
+  "event": {
+    "code": "FBI-20261113-ARTEX",
+    "title": "FBI — FLASH 「Threat Overview of ARTEX Autonomous Penetration Testing Framework」 (FLASH-20261113-001 · 오픈소스 LLM 에이전트 침투 시험 틀 ARTEX 를 범죄자들이 무기로 씀 · 2026-11-13 발표 · 미국 매체 머리는 11-16 ~ 17)",
+    "occurred_at": "2026-11-13",
+    "storyline_code": null,
+    "_gate1": "today-story ① 이 2026-11-18 의 큰 뉴스에서 고르고 도윤이 go (짧은)",
+    "_dates": "FLASH 머리의 날짜 '13 NOVEMBER 2026'. IC3 CSA 목록에도 'Fri, 13 Nov 2026'. Event.occurred_at 은 발표일"
+  },
+  "slots_basis": "today — 짧은 이야기용. 슬롯 표 (P-4)를 돌리지 않는다. 문서를 거는 이름일 뿐이다",
+  "slots": ["무엇을 경고했나", "ARTEX 는 무엇", "얼마나 빨리", "한국 피해", "무엇을 하라고"],
+  "count_terms": ["ARTEX", "three hours", "South Korean", "open-source", "penetration testing", "LLM"],
+  "items": [
+    {
+      "label": "FBI-FLASH-1113",
+      "group": "사건",
+      "title": "Federal Bureau of Investigation — FLASH-20261113-001 「Threat Overview of ARTEX Autonomous Penetration Testing Framework」 (TLP:CLEAR · 13쪽)",
+      "publisher": "ic3.gov",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "slots": ["무엇을 경고했나", "ARTEX 는 무엇", "얼마나 빨리", "한국 피해", "무엇을 하라고"],
+      "why": "이 사건의 1차 — FBI 가 낸 FLASH 전문. ARTEX = 오픈소스 · LLM 으로 움직이는 에이전트 침투 시험 틀 · 2026년 8월부터 범죄자들이 정찰부터 자료 빼내기까지 자동화 · 일부는 처음 목표 잡기부터 관리자 권한까지 3시간 안 · 기술이 적은 사람도 여러 곳을 한꺼번에 · 한국 금융기관 공격으로 약 67,000명 개인정보 유출 · ConnectWise 공급망 · 자체 모델이 없고 외부 LLM (Anthropic Claude · OpenAI GPT · DeepSeek 등)을 붙여 씀 · 공격자 쪽은 중국 모델이 가장 많음 · 개발자 'Autumn-27' 이 7월 공개 · 보안 시험용이라고 밝힘 · 10월 8일 저장소를 내렸으나 복제본 · 상용판으로 퍼짐 · 노출된 콘솔 1,600곳 넘음 · 막는 법 (Mitigations) · 지표 (IOCs). 미 연방 정부 저작물 (17 U.S.C. §105) → git. 각주는 FBI 가 근거로 단 외부 보고서 이름 · 주소 (짧다)",
+      "url_basis": "IC3 'Industry Alerts' 목록 (https://www.ic3.gov/CSA · 2026-11-18 에 둘째 줄 'Threat Overview of ARTEX Autonomous Penetration Testing Framework · Fri, 13 Nov 2026') 의 PDF 주소. 2026-11-18 GET 200 · %PDF-1.7 · 540,485 바이트 · 13쪽. robots.txt (www.ic3.gov) 는 /assets/ · /css/ · /img/ · /ContactFBICyber/ · /PIFSurvey/ 만 막는다",
+      "language": "en",
+      "published_at": "2026-11-13",
+      "published_evidence": "13 NOVEMBER 2026",
+      "published_note": "FLASH 머리의 날짜 줄"
+    }
+  ]
+}

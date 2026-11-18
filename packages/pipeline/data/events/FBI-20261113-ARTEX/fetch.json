@@ -1,0 +1,79 @@
+{
+  "_what": "FBI-20261113-ARTEX 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "FBI-20261113-ARTEX",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.ic3.gov",
+      "url": "https://www.ic3.gov/robots.txt",
+      "fetched_at": "2026-11-18T06:46:19.082Z",
+      "http_status": 200,
+      "sha256": "9d3cb904ecfa10ecf1e7170e0f880214970f6bd86f807b9f38bcf7c78a43da67",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "FBI-FLASH-1113",
+      "source_id": "4f9fb730-711d-4d87-8aac-418c8101469a",
+      "publisher": "ic3.gov",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 에 맞는 규칙 없음 — 된다"
+      },
+      "fetch": {
+        "requested_url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+        "fetched_at": "2026-11-18T06:46:21.400Z",
+        "final_url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "last_modified": "Tue, 17 Nov 2026 17:13:28 GMT",
+        "raw_sha256": "9daa102a5996410d7bf39f828bf101c8434a20312338da3fa8346d9b2e9ef58f",
+        "raw_bytes": 540485,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "a6dd36eb19d1f28c51fcfac83819b20944df71ab55e41da6cc6ce130c45877ab",
+      "text_length": 24242,
+      "pdf_page_starts": [
+        0,
+        2484,
+        5271,
+        6913,
+        8367,
+        10054,
+        11679,
+        12847,
+        15009,
+        17150,
+        19903,
+        20358,
+        21681
+      ],
+      "first_line": "TLP:CLEAR",
+      "rights": "US_FEDERAL_17USC105",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "ARTEX": 37,
+        "three hours": 1,
+        "South Korean": 3,
+        "open-source": 3,
+        "penetration testing": 4,
+        "LLM": 10
+      }
+    }
+  ],
+  "spans": []
+}
