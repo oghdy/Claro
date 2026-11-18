@@ -7,8 +7,8 @@ import type { ShortData } from "../catalog";
 import { CHROME, SHORT_CHROME as C } from "./chrome";
 import { ConceptMap, type NodeState } from "./ConceptMap";
 import { PlainFlipLead } from "./frames/Plain";
-import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
-import { toolOf, type EpisodeData, type T } from "./types";
+import { Ask, EASE, EndArrow, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
+import { toolOf, type EpisodeData, type Exits, type T } from "./types";
 
 // 짧은 이야기 한 편 (UX-7 시안 → F-E2 에서 kit 로 · 실제 주소 /short/<code> 와 시안 /lab/today/short 가 **같은 부품 한 벌**이다 — real 하나로 가른다).
 // 장면 넷: 표지 → 어디가 (뒤집기) → 문서가 말한 것 → 남음. 체험이 없다 — 기본 풀이 "뒤집기만"의 부품을 쓴다.
@@ -29,6 +29,11 @@ export interface ShortParts {
   real?: boolean;
   /** 시안 전용 — 맨 위에 얹는 것 (색 스위치) */
   top?: ReactNode;
+  /**
+   * 실제 화면의 나가는 길 (F-E9 · D148 — kit/types 의 Exits · 긴 이야기와 같은 것). 실제 주소 (Screen.tsx)만 준다: 첫 장의 ‹ 가 exits.home 으로 · 남음 장면의 할 일이 먹색 단추 하나 "다른 이야기 보기" → exits.more (달력).
+   * "처음부터 다시" · "첫 화면으로"를 뺀다 · "내 개념 지도 보기" (지도가 있을 때)는 지도 아래 작은 글 한 줄. 안 주면 지금까지 그대로다 (lab 시안 · /lab/local 미리 보기)
+   */
+  exits?: Exits;
 }
 
 const ORDER: readonly ShortSceneId[] = SHORT_SCENE_IDS;
@@ -118,12 +123,17 @@ function SourceSheet({ item, onClose }: { item: T; onClose: () => void }) {
 }
 
 export function Short(parts: ShortParts) {
-  const { story: S, Art, from, sibling, real = false, top } = parts;
+  const { story: S, Art, from, sibling, real = false, top, exits } = parts;
   // 가리킨 도구 — 가리킨 긴 이야기가 목록에 있을 때만 (없으면 도구 · 지도 없이 선다)
   const TOOLS = useMemo(() => (from ? (S.tools_from?.keys ?? []) : []), [S, from]);
   /** 이 이야기의 지도 = 같은 주제 (긴 이야기)의 지도. "어디서 주웠나"의 말만 이 이야기의 것으로 */
   const mapEp = useMemo<EpisodeData | null>(() => (from && TOOLS.length ? { ...from, map: { ...from.map, where_today: { t: C.where } } } : null), [from, TOOLS]);
-  const home = real ? { href: "/", bar: CHROME.chrome.home, link: CHROME.keep.home } : { href: C.backHref, bar: C.back, link: C.toToday };
+  // 첫 장의 ‹ (와 옛 끝의 돌아가는 글) — 실제 주소는 이야기가 사는 곳으로 (F-E9 exits.home: 가장 새 날 → 시작 화면 · 그 밖 → 달력) · 안 주면 첫 화면 · 시안은 시안의 "오늘"
+  const home = exits
+    ? { href: exits.home, bar: exits.home === "/" ? CHROME.chrome.home : CHROME.chrome.days, link: CHROME.keep.home }
+    : real
+      ? { href: "/", bar: CHROME.chrome.home, link: CHROME.keep.home }
+      : { href: C.backHref, bar: C.back, link: C.toToday };
   const [step, setStep] = useState(0);
   const [asked, setAsked] = useState<readonly string[]>([]);
   const [srcOn, setSrcOn] = useState(false);
@@ -270,23 +280,45 @@ export function Short(parts: ShortParts) {
                 <p>{TOOLS.map((id) => toolOf(from, id).name).join(" · ")}</p>
               </div>
             </motion.div>
-            {c.keep.map_note ? (
-              <motion.p className="ep-p" variants={rise}>
-                {c.keep.map_note}
-              </motion.p>
-            ) : null}
-            {/* 실제 화면은 아직 읽은 기록을 남기지 않는다 — 긴 이야기의 남음 장면과 같은 한 줄 (F-E1) */}
-            {real ? (
-              <motion.p className="ep-p st-notsaved" variants={rise}>
-                {CHROME.keep.notSaved}
-              </motion.p>
-            ) : null}
-            <motion.div variants={rise}>
-              <button type="button" className="ep-map-button" onClick={() => setMapOpen(true)} data-testid="open-map">
-                {C.mapButton}
-                <Arrow />
-              </button>
-            </motion.div>
+            {exits ? (
+              // 실제 화면의 끝 (F-E9 · D148 — 긴 이야기의 끝과 같은 꼴): "내 개념 지도 보기"는 지도 아래 작은 글 한 줄 · "저장되지 않아요"는 작은 회색
+              <>
+                <motion.p className="ep-end-map" variants={rise}>
+                  <button type="button" onClick={() => setMapOpen(true)} data-testid="open-map">
+                    {C.mapButton}
+                    <EndArrow size={15} />
+                  </button>
+                </motion.p>
+                {c.keep.map_note ? (
+                  <motion.p className="ep-p" variants={rise}>
+                    {c.keep.map_note}
+                  </motion.p>
+                ) : null}
+                <motion.p className="ep-end-note" variants={rise}>
+                  {CHROME.keep.notSaved}
+                </motion.p>
+              </>
+            ) : (
+              <>
+                {c.keep.map_note ? (
+                  <motion.p className="ep-p" variants={rise}>
+                    {c.keep.map_note}
+                  </motion.p>
+                ) : null}
+                {/* 실제 화면은 아직 읽은 기록을 남기지 않는다 — 긴 이야기의 남음 장면과 같은 한 줄 (F-E1) */}
+                {real ? (
+                  <motion.p className="ep-p st-notsaved" variants={rise}>
+                    {CHROME.keep.notSaved}
+                  </motion.p>
+                ) : null}
+                <motion.div variants={rise}>
+                  <button type="button" className="ep-map-button" onClick={() => setMapOpen(true)} data-testid="open-map">
+                    {C.mapButton}
+                    <Arrow />
+                  </button>
+                </motion.div>
+              </>
+            )}
           </>
         ) : null}
         {sibling && S.sibling ? (
@@ -297,14 +329,24 @@ export function Short(parts: ShortParts) {
             <Arrow />
           </motion.a>
         ) : null}
-        <motion.div variants={rise}>
-          <button type="button" className="ep-link ep-restart" onClick={() => (setStep(0), setAsked([]))}>
-            {C.restart}
-          </button>
-          <a className="ep-link ep-home" href={home.href} data-testid="to-today">
-            {home.link}
-          </a>
-        </motion.div>
+        {exits ? (
+          // 끝에서 할 일 하나 — 맨 아래 먹색 단추 → 달력 화면 (이 이야기의 날을 골라 둔 채로)
+          <motion.div className="ep-end-foot" variants={rise}>
+            <a className="ep-end-go" href={exits.more} data-testid="end-go">
+              {CHROME.keep.more}
+              <EndArrow />
+            </a>
+          </motion.div>
+        ) : (
+          <motion.div variants={rise}>
+            <button type="button" className="ep-link ep-restart" onClick={() => (setStep(0), setAsked([]))}>
+              {C.restart}
+            </button>
+            <a className="ep-link ep-home" href={home.href} data-testid="to-today">
+              {home.link}
+            </a>
+          </motion.div>
+        )}
       </>
     ),
   };

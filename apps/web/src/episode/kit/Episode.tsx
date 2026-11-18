@@ -6,10 +6,10 @@ import { CHROME } from "./chrome";
 import { ConceptMap, type NodeState } from "./ConceptMap";
 import { LabCard } from "./frames/LabCard";
 import { PlainFlipLead, PlainQuietBody, PlainThreeCards } from "./frames/Plain";
-import { Ask, EASE, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
+import { Ask, EASE, EndArrow, Head, P, Rich, SrcCtx, Txt, rise, stagger } from "./parts";
 import { SHORTS, nextOf, oneLine, realPath, shortPath, unpromised } from "../catalog";
 import { SHELF, hrefOf, labelOf } from "./shelf";
-import { toolOf, type EpisodeData, type ReaderId, type SceneId, type ScreenSlots, type T } from "./types";
+import { toolOf, type EpisodeData, type Exits, type ReaderId, type SceneId, type ScreenSlots, type T } from "./types";
 
 // 한 회차 — 처음부터 끝까지 (공통 뼈대). 넘어가는 방법은 본 화면과 같다 (D26): 한 번에 한 장 · 물음 버튼 하나 · 누른 물음이 다음 장의 머리.
 // 달라진 것은 (1) 회차가 시리즈 안에 있다 (2) 독자가 아는 개념은 접힌다 (3) 끝에 내 개념 지도가 자란다 (D57).
@@ -50,6 +50,12 @@ export interface EpisodeParts {
    * lab 시안은 제 data.ts 에서 준다. 안 주면 아무것도 달라지지 않는다 (지금은 기름값 1화 · 기름값 시안 셋만 준다)
    */
   screen?: ScreenSlots;
+  /**
+   * 실제 화면의 나가는 길 (F-E9 · D148 — kit/types 의 Exits). 실제 주소 (Screen.tsx)만 준다: 첫 장의 ‹ 가 exits.home 으로 · 남음 장면의 할 일이 먹색 단추 하나 "다른 이야기 보기" → exits.more (달력).
+   * 남음 장면에서 "다른 시리즈" · "처음부터 다시" · "첫 화면으로"를 뺀다 · "내 개념 지도 보기"는 지도 아래 작은 글 한 줄 · 다음 화 (번호를 보이는 시리즈)는 단추 아래 조용한 한 줄.
+   * 안 주면 지금까지 그대로다 (lab 시안 · /lab/local 미리 보기)
+   */
+  exits?: Exits;
 }
 
 /**
@@ -565,7 +571,7 @@ function Next({ reader, asked, onAsk, answers, onAnswer }: SceneProps) {
 }
 
 function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
-  const { ep, real = false, numbered = true } = useEp();
+  const { ep, real = false, numbered = true, exits } = useEp();
   const bare = useBare();
   const c = ep.scenes.keep;
   const k = CHROME.keep;
@@ -576,7 +582,7 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
   const fresh = ep.tools.map((x) => x.key).filter((id) => states[id] === "new");
   const old = ep.tools.map((x) => x.key).filter((id) => states[id] === "known");
   const others = SHELF.filter((s) => s.series !== ep.series.code);
-  return (
+  const head = (
     <>
       <Head asked={asked} kicker={c.kicker} title={c.title} />
       <motion.figure className="ep-oneline" variants={rise}>
@@ -606,6 +612,63 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
           </div>
         ) : null}
       </motion.div>
+    </>
+  );
+  const besideLinks = beside.map(({ story }) => (
+    <motion.a key={story.code} className="ep-other" href={shortPath(story)} variants={rise} data-testid={`beside-${story.code}`}>
+      <span>{k.besideLabel}</span>
+      <strong>{oneLine(story.scenes.cover.title)}</strong>
+      <em>{k.besideNote}</em>
+      <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </motion.a>
+  ));
+  if (exits)
+    // 실제 화면의 끝 (F-E9 · D148 — UX-13b 판): 읽은 보람 (한 줄 · 지도 · 주운 개념)은 그대로 · 할 일은 맨 아래 먹색 단추 하나 → 달력 (그날 골라 둠)
+    return (
+      <>
+        {head}
+        {/* 지도는 지도에 딸린 일 — 지도 바로 아래 작은 글 한 줄 (머리 막대의 지도 단추도 그대로 있다) */}
+        <motion.p className="ep-end-map" variants={rise}>
+          <button type="button" onClick={openMap} data-testid="open-map">
+            {k.mapButton}
+            <EndArrow size={15} />
+          </button>
+        </motion.p>
+        {/* 실제 화면은 아직 읽은 기록을 남기지 않는다 — 있는 그대로 (작은 회색) */}
+        <motion.p className="ep-end-note" variants={rise}>
+          {k.notSaved}
+        </motion.p>
+        {besideLinks}
+        <motion.div className="ep-end-foot" variants={rise}>
+          <a className="ep-end-go" href={exits.more} data-testid="end-go">
+            {k.more}
+            <EndArrow />
+          </a>
+          {/* "다음 화" — 번호를 보이는 시리즈에서만 (D88 E-20) · 먹색 단추 아래 조용한 한 줄 (읽던 줄기를 끊지 않게 · 할 일 하나는 그대로 — D148 PM). 목록에 실제로 있으면 그 이야기로 가는 길 */}
+          {bare ? null : next ? (
+            <a className="ep-end-next" href={realPath(next.ep)} data-testid="next-episode">
+              <b>{k.nextTitle}</b>
+              <span>
+                {oneLine(next.ep.scenes.cover.title)} · {next.ep.scenes.cover.episode.t}
+              </span>
+              <EndArrow size={15} />
+            </a>
+          ) : (
+            <p className="ep-end-next" data-testid="next-up">
+              <b>{k.nextTitle}</b>
+              <span>
+                <Txt item={c.next_body} />
+              </span>
+            </p>
+          )}
+        </motion.div>
+      </>
+    );
+  return (
+    <>
+      {head}
       <motion.p className="ep-p" variants={rise}>
         {/* 실제 화면은 아직 읽은 기록을 남기지 않는다 — 지키지 못할 약속 ("다음에 접어 둘게요") 대신 있는 그대로 말한다 */}
         {real ? k.notSaved : k.promise}
@@ -636,16 +699,7 @@ function Keep({ reader, asked, states, openMap, restart }: SceneProps) {
           </p>
         </motion.aside>
       )}
-      {beside.map(({ story }) => (
-        <motion.a key={story.code} className="ep-other" href={shortPath(story)} variants={rise} data-testid={`beside-${story.code}`}>
-          <span>{k.besideLabel}</span>
-          <strong>{oneLine(story.scenes.cover.title)}</strong>
-          <em>{k.besideNote}</em>
-          <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
-            <path d="M4 10h12M11 5l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </motion.a>
-      ))}
+      {besideLinks}
       {others.map((s) => (
         <motion.a key={s.series} className="ep-other" href={hrefOf(s, real)} variants={rise} data-testid={`other-${s.series}`}>
           <span>{k.otherLabel}</span>
@@ -822,8 +876,8 @@ export function Episode(parts: EpisodeParts) {
 
           <header className="ep-bar">
             {real && step === 0 ? (
-              // 실제 화면의 첫 장 — 앞 장이 없다. 그 자리는 첫 화면 (시리즈 목록)으로 가는 길이다
-              <a className="ep-back" href="/" aria-label={c.home} data-testid="bar-home">
+              // 실제 화면의 첫 장 — 앞 장이 없다. 그 자리는 이야기가 사는 곳으로 가는 길이다 (F-E9: 가장 새 날의 이야기 → 시작 화면 · 그 밖 → 달력 화면 — exits.home. 안 주면 첫 화면)
+              <a className="ep-back" href={parts.exits?.home ?? "/"} aria-label={parts.exits && parts.exits.home !== "/" ? c.days : c.home} data-testid="bar-home">
                 <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
                   <path d="M12.5 4 6.5 10l6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

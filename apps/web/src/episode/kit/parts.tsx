@@ -81,3 +81,10 @@ export function Ask({ text, onAsk }: { text: string; onAsk: () => void }) {
     </motion.div>
   );
 }
+
+/** 끝 장면의 화살표 (F-E9 · D148 — UX-13b 판의 단추 화살표 그대로) — 먹색 단추 "다른 이야기 보기" · 작은 글 줄 (지도 · 다음 화) */
+export const EndArrow = ({ size = 18 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M4 10h11M10.5 5.5 15 10l-4.5 4.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);

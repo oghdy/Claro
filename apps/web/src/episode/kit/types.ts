@@ -68,6 +68,17 @@ export interface ScreenSlots {
   burst?: { label: string; quote: T; note: string; box?: boolean };
 }
 
+/**
+ * **실제 화면의 나가는 길** (F-E9 · D148) — 이야기가 사는 곳으로. 실제 주소 (Screen.tsx — 이야기 목록의 줄의 낸 날 `day` 에서)만 준다.
+ *   home  첫 장의 ‹ — 가장 새 날의 이야기면 시작 화면 `/` · 그 밖이면 달력 화면 `/days?d=<그날>` (낸 날이 없는 이야기는 `/days`)
+ *   more  끝 장면의 할 일 하나 — 먹색 단추 "다른 이야기 보기" → 달력 화면 `/days?d=<그날>` (낸 날이 없는 이야기는 `/days`)
+ * **안 주면 지금까지 그대로다** — lab 시안 · `/lab/local` 미리 보기의 끝 (다른 시리즈 · 처음부터 다시 · 첫 화면으로)과 ‹ (`/`)
+ */
+export interface Exits {
+  home: string;
+  more: string;
+}
+
 /** 시안이 그리는 한 회차 = 계약의 회차 (골든 픽스처) + 시안 전용 */
 export type EpisodeData = Episode & LabOnly;
 

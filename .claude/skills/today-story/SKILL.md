@@ -107,7 +107,7 @@ pnpm --filter @claro/web story:check <사건>/<code>
    그림: 같은 시리즈의 묶음 (`OIL_LOOK` …)이 있으면 그것 · **없으면 주지 않는다 — 기본 그림 (PlainLook)이 선다.** 새 표지 그림은 도윤이 그리자고 한 때만 (Fable · 답이 아니라 물음의 그림 · 숫자 · 새 색 0). **지금 있는 줄은 건드리지 않는다.**
 2. 검사 — 전부 지난 뒤에만 push:
    `pnpm -s typecheck` · `pnpm --filter @claro/web exec tsx src/app/lab/episode/check.ts` · `story:check` 다시 · `pnpm -s test` · `python3 scripts/verify-ledger.py` (합이 시작 때와 같다).
-   - e2e 는 그날의 값 (카드 차례 · 맨 위 묶음 · 머리 날짜 · 편 수 · 맨 위 카드 · 지도 장 수 · 뉴스 한 줄 카드)을 **이 목록에서 읽는다** (F-E8 · `apps/web/e2e/stories.ts`) — 한 줄을 맨 위에 더해도 **e2e 를 고칠 일이 없다. e2e 를 고치지 않는다.** 그래도 서면 **멈춘다** (어느 시험이 왜 섰는지 하루 기록에 붙이고 도윤에게). 새 이야기를 맨 위가 아닌 곳에 적어도 선다 ("목록의 차례 = 화면의 차례").
+   - e2e 는 그날의 값 (시작 화면의 오늘 묶음 · 차례 · 머리 날짜 · 편 수 · 달력 화면 `/days` 의 날 · 처음 고른 날 · 이야기 끝 · 첫 장 ‹ 의 달력 주소 · 지도 장 수)을 **이 목록에서 읽는다** (F-E8 · F-E9 · `apps/web/e2e/stories.ts`) — 한 줄을 맨 위에 더해도 **e2e 를 고칠 일이 없다. e2e 를 고치지 않는다.** 그래도 서면 **멈춘다** (어느 시험이 왜 섰는지 하루 기록에 붙이고 도윤에게). 새 이야기를 맨 위가 아닌 곳에 적어도 선다 ("목록의 차례 = 화면의 차례").
    - `logs/frontend` 의 그림이 다시 찍혔으면 그 파일만 하나씩 `git checkout -- <파일>`.
 3. 커밋 (`today <날짜> <code> 올림` · 파일 지정) · push → 1 ~ 2분 뒤 실제 주소 확인: `/` · 새 이야기 주소 · 지난 이야기 주소 하나가 200 · 첫 화면에 새 제목 (`curl … | grep`). 폰 크기로 한 번 더 보려면 `story:shots <사건>/<code> <폴더> --base https://claro-lime-one.vercel.app --path <실제 주소 길>`.
 4. 도윤에게: **실제 주소** · 한 줄.

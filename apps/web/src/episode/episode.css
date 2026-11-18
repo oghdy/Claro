@@ -1403,6 +1403,77 @@ a.ep-back {
   color: var(--ep-muted) !important;
 }
 
+/* ── 실제 화면의 끝 장면 (F-E9 · D148) — UX-13b 판 (/lab/start/end · lab/start/start.css 의 .sp-end-*)의 꼴. 할 일 하나 = 맨 아래 먹색 단추 (폭 가득) "다른 이야기 보기" → 달력 화면.
+   "내 개념 지도 보기"는 지도 바로 아래 작은 글 한 줄 · "저장되지 않아요"는 작은 회색 · 다음 화 (번호를 보이는 시리즈만)는 단추 아래 조용한 한 줄. 색은 종이 토큰뿐 (새 색 없음).
+   실제 주소가 나가는 길 (exits)을 줄 때만 이 꼴이다 — lab 시안 · /lab/local 미리 보기의 끝은 위의 것 그대로 */
+.ep-end-map {
+  display: flex;
+  justify-content: flex-end;
+  margin: -4px 0 12px;
+}
+.ep-end-map button {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  color: var(--ep-ink2) !important;
+}
+.ep-end-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ep-muted);
+}
+.ep-end-foot {
+  margin-top: auto;
+  padding-top: 34px;
+}
+.ep-root a.ep-end-go {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  padding: 0 20px 0 22px;
+  border-radius: 999px;
+  background: var(--ep-ink);
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ep-paper);
+  text-decoration: none;
+}
+.ep-root a.ep-end-go:active {
+  transform: scale(0.98);
+  transition: transform 0.12s var(--ep-ease);
+}
+.ep-end-next {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 16px 2px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ep-muted);
+}
+.ep-end-next b {
+  flex: none;
+  font-weight: 750;
+  color: var(--ep-ink2);
+}
+.ep-root a.ep-end-next {
+  align-items: center;
+  font-weight: 650;
+  color: var(--ep-ink2);
+  text-decoration: none;
+}
+.ep-end-next svg {
+  flex: none;
+  margin-left: auto;
+}
+
 /* ── 지도 */
 .ep-map-series {
   margin-bottom: 6px;

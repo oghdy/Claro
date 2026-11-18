@@ -52,7 +52,7 @@ test("짧은 이야기 미리 보기 — local 에 없으면 파이프라인이 
 });
 
 test("미리 보기는 실제 화면에 새지 않는다 — 첫 화면 · 실제 이야기 화면에 미리 보기 주소 · 띠가 없다", async ({ page }) => {
-  for (const url of ["/", "/s/oil/1", "/short/meta-gallery", "/map"]) {
+  for (const url of ["/", "/days", "/s/oil/1", "/short/meta-gallery", "/map"]) {
     await page.goto(url);
     expect(await page.content(), url).not.toContain("/lab/local");
     await expect(page.getByTestId("lp-bar"), url).toHaveCount(0);

@@ -1,22 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import { paper } from "@claro/tokens";
-import { bundle, hrefOfLine, latestPerSeries, nextOf, numbered, realPath, type Line } from "../episode/catalog";
-import { HOME, countNoun, countWord } from "../episode/home-copy";
-import { HomeLongCard, HomeShortCard } from "../episode/home/cards";
+import { bundle, hrefOfLine, numbered, oneLine, type Line } from "../episode/catalog";
+import { HOME } from "../episode/home-copy";
+import { DAYS, keyOf, monthOf } from "../episode/home/days";
 import { Rich } from "../episode/kit/parts";
-import { Arrow } from "../episode/today/cards";
-import { sharedConcepts } from "../episode/today/concepts";
 import "../episode/episode.css";
-import "../episode/episodes/fomc/fomc.css";
-import "../episode/episodes/pipc/pipc.css";
 import "../episode/today/today.css";
-import "./home.css";
+import "./start.css";
 
-// 첫 화면 = "오늘" (F-E2 · D79 · D86 · D88) — 종이 톤. 이야기들이 한 줄로 놓인다: 긴 이야기 · 짧은 이야기 (무게 둘) · 번호는 둘째 이야기가 실제로 있는 주제에만 · 아래에 개념으로 이어지는 길.
-// 시안 /lab/today (UX-7 · UX-7b — 도윤이 보고 종이를 골랐다)에서 나왔다. **F-E4 (D105 "메인 화면 좀 예쁘게" — 임시 판)부터 카드는 실제 첫 화면의 것이다** (episode/home/cards.tsx — 카드마다 제 그림 · 조용한 꼬리표).
-// 시안의 카드 (episode/today/cards.tsx)는 그대로다. 놓이는 글 · 번호 규칙 · 차례는 같다. 실제 화면에는 색 스위치 · 시안 띠 · 견본 자리가 없다. 색은 종이 토큰 그대로 (D86).
+// 첫 화면 = **시작 화면** (F-E9 · D148 — 도윤 "응 좋아 실제 반영 ㄱㄱ"). UX-13b 판 (/lab/start — "잡스 바이브" D146: 보자마자 무엇인지 · 할 일 하나 · 누를 것은 누를 것처럼)을 옮겼다. 새로 디자인하지 않았다.
+// 있는 것: Claro 표 · 작은 회색 한마디 · 가장 새 날의 이야기 (catalog.bundle 의 맨 위 묶음 — 이야기마다 "이야기 속으로 들어가기 →" · 첫째 먹색 채움 · 둘째부터 먹색 테) ·
+//   문 둘 (지난 이야기 → /days 달력 화면 · 개념 지도 → /map) · 맨 아래 미리보기 한 줄.
+// 뺀 것 (F-E2 ~ F-E7 의 첫 화면에 있던 것): 지난 이야기 카드 목록 (→ 달력 화면) · 이어지는 이야기 (D140) · 개념 지도 먹색 판 (→ 문) · 소개 · 오른쪽 위 "미리보기" 표.
 // **정적이다** — 빌드할 때 이야기 목록 (episode/catalog.tsx)에서 읽어 HTML 에 싣는다. 데이터베이스를 읽지 않는다 · 아무것도 저장하지 않는다 · 독자가 누구인지 묻지 않는다.
-// 이야기 · 시리즈의 글은 골든의 글자 그대로다 (제목의 줄바꿈만 한 줄 제목에서 빈칸으로). 화면의 글은 ../episode/home-copy.ts. 읽는 시간은 내지 않는다 (D82).
+// 이야기 · 시리즈의 글은 파일의 글자 그대로다 (제목의 줄바꿈만 빈칸으로). 화면의 글은 ../episode/home-copy.ts. 읽는 시간은 내지 않는다 (D82).
 // **머리는 날짜를 속이지 않는다** — "오늘의 이야기"는 읽는 그날 (한국 날짜)에 낸 이야기가 있을 때만이다 (아래 TODAY_SCRIPT). 옛 번호 링크 (/?r=<UUID>)는 옛 화면으로 넘긴다 (next.config.ts).
 export const dynamic = "force-static";
 
@@ -35,173 +32,127 @@ const dayTitle = (day: string): string => {
  */
 const TODAY_SCRIPT = `(function(){try{var h=document.currentScript.previousElementSibling;var d=new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Seoul"}).format(new Date());if(h&&h.getAttribute("data-day")===d)h.textContent=${JSON.stringify(HOME.titleToday)}}catch(e){}})()`;
 
-function Cards({ lines, lead }: { lines: readonly Line[]; lead: boolean }) {
+const titleOf = (line: Line): string => oneLine(line.kind === "long" ? line.ep.scenes.cover.title : line.story.scenes.cover.title);
+const codeOf = (line: Line): string => (line.kind === "long" ? line.ep.code : line.story.code);
+
+const Go = ({ size = 18 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M4 10h11M10.5 5.5 15 10l-4.5 4.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/**
+ * 가장 새 날의 이야기 한 편 — 상자 없음. 주제 이름 (회색 · 번호는 번호 화면 규칙을 지난 시리즈에만) · 제목 · 꼬리 (국내 / 해외 · 카테고리 · 긴 이야기) · **들어가기 단추**.
+ * 단추는 이야기마다 하나, 같은 말 · 같은 꼴이다. 첫 이야기만 먹색으로 채운다 (이 화면에서 가장 진한 곳 하나 — 고민되면 이것부터), 둘째부터는 같은 꼴의 테 단추.
+ * 줄 전체가 링크라 어디를 눌러도 들어간다
+ */
+function Story({ line, lead }: { line: Line; lead: boolean }) {
+  const long = line.kind === "long";
+  const series = long ? line.ep.series : line.story.series;
   return (
-    <>
-      {lines.map((line, i) =>
-        line.kind === "long" ? (
-          <HomeLongCard key={line.ep.code} line={line} href={hrefOfLine(line)} lead={lead && i === 0} C={HOME} />
-        ) : (
-          <HomeShortCard key={line.story.code} line={line} href={hrefOfLine(line)} C={HOME} />
-        ),
-      )}
-    </>
+    <li>
+      <a className="sp-story" href={hrefOfLine(line)} data-lead={lead ? "" : undefined} data-kind={line.kind} data-testid={`story-${codeOf(line)}`}>
+        <span className="sp-story-topic">
+          {series.name}
+          {long && numbered(series.code) ? <em>{line.ep.scenes.cover.episode.t}</em> : null}
+        </span>
+        <span className="sp-story-title">{long ? <Rich text={titleOf(line)} /> : titleOf(line)}</span>
+        <span className="sp-story-meta">
+          <span>{line.place}</span>
+          <span>{line.category}</span>
+          {long ? <span>{HOME.long}</span> : null}
+        </span>
+        <span className="sp-story-go" data-testid="go">
+          {HOME.go}
+          <Go />
+        </span>
+      </a>
+    </li>
   );
 }
 
+/** 달력 문의 작은 그림 — 가장 새 날이 든 달의 칸을 점으로 (이야기 있는 날 = 먹색 점). 꾸밈이다 — 읽기 도구에는 숨긴다 */
+function MiniMonth({ days }: { days: readonly string[] }) {
+  const newest = [...days].sort().pop();
+  if (!newest) return <span className="sp-mini" aria-hidden="true" />;
+  const m = monthOf(newest.slice(0, 7));
+  const has = new Set(days.filter((d) => d.startsWith(m.key)).map((d) => Number(d.slice(8))));
+  return (
+    <span className="sp-mini" aria-hidden="true">
+      {Array.from({ length: m.lead }, (_, i) => (
+        <i key={`lead-${i}`} data-lead="" />
+      ))}
+      {Array.from({ length: m.count }, (_, i) => (
+        <i key={i} data-on={has.has(i + 1) ? "" : undefined} />
+      ))}
+    </span>
+  );
+}
+
+/** 개념 지도 문의 작은 그림 — 점 넷과 선 (지도의 꼴). 꾸밈이다 */
+const MiniMap = () => (
+  <svg className="sp-minimap" width="52" height="41" viewBox="0 0 58 46" aria-hidden="true">
+    <path d="M10 33 27 12l21 9M27 12l5 24" />
+    <circle cx="10" cy="33" r="5" />
+    <circle cx="48" cy="21" r="5" />
+    <circle cx="32" cy="36" r="5" />
+    <circle cx="27" cy="12" r="6.5" data-on="" />
+  </svg>
+);
+
 export default function Page() {
   const { day, top, rest } = bundle();
-  const longs = top.filter((x) => x.kind === "long").length;
-  const count = (day ? HOME.count : HOME.countRecent).replace("{n}", countWord(top.length));
-  const tally = HOME.tally.replace("{long}", countNoun(longs)).replace("{short}", countNoun(top.length - longs));
-  // 이어지는 이야기 — 번호를 보이는 시리즈 (긴 이야기가 둘 이상 실제로 있다). 시리즈마다 가장 새 이야기의 줄을 보인다
-  const cont = latestPerSeries().filter((x) => numbered(x.ep.series.code));
-  const concepts = sharedConcepts([...top, ...rest], hrefOfLine);
-  // 개념 지도 맛보기 — 주제 (시리즈)마다 그 이야기가 줍는 개념의 이름 (이야기의 도구 이름 그대로 · /map 의 지도와 같은 목록)
-  const topics = latestPerSeries().map(({ ep }) => ({ code: ep.series.code, name: ep.series.name, tools: ep.tools.map((x) => x.name) }));
+  const days = [...top, ...rest].map((x) => x.day).filter((d): d is string => Boolean(d));
   return (
-    <div className="ep-root td-root hm-root" data-testid="home">
+    <div className="ep-root td-root sp-root" data-testid="home">
       <div className="ep-scroll">
-        <main className="ep-scene td hm">
-          <header className="td-top hm-top">
-            <span className="td-mark hm-mark">
+        <main className="ep-scene td sp">
+          <header className="sp-top">
+            <span className="td-mark sp-mark">
               <span>{HOME.mark}</span>
             </span>
-            <span className="hm-preview">{HOME.previewTag}</span>
+            <p className="sp-tagline">{HOME.line}</p>
           </header>
-          {/* 첫 인상 — 큰 한 줄과 한마디. (머리 h1 은 아래 "최근 이야기"다 — 날짜를 속이지 않는 그 줄) */}
-          <section className="hm-hero">
-            <p className="hm-tagline">
-              <Rich text={HOME.tagline} />
-            </p>
-            <p className="hm-sub">{HOME.sub}</p>
-          </section>
-          <section className="hm-intro">
-            {/* 낸 날이 적힌 이야기가 없으면 "최근 이야기". 있으면 그 날짜 — 읽는 날이 그날이면 스크립트가 "오늘의 이야기"로 (suppressHydrationWarning: 그 글자를 React 가 되돌리지 않게) */}
-            <h1 data-day={day ?? undefined} data-testid="head" suppressHydrationWarning>
-              {day ? dayTitle(day) : HOME.titleRecent}
-            </h1>
-            {day ? <script dangerouslySetInnerHTML={{ __html: TODAY_SCRIPT }} /> : null}
-            <p>
-              {count} <span className="hm-tally">{tally}</span>
-            </p>
-          </section>
 
-          <section className="td-list" aria-label={day ? dayTitle(day) : HOME.titleRecent}>
-            <Cards lines={top} lead={top[0]?.kind === "long"} />
-          </section>
-
-          {rest.length ? (
-            <section className="td-sec" aria-labelledby="td-rest">
-              <h2 id="td-rest" className="td-label hm-restlabel">
-                {HOME.restLabel}
-              </h2>
-              <div className="td-list">
-                <Cards lines={rest} lead={false} />
-              </div>
-            </section>
-          ) : null}
-
-          {cont.length ? (
-            <section className="td-sec hm-cont" aria-labelledby="td-cont">
-              <h2 id="td-cont" className="td-label hm-h2">
-                {HOME.contLabel}
-              </h2>
-              <p className="td-secnote">{HOME.contNote}</p>
-              {cont.map(({ ep }) => {
-                // 다음 이야기 예고 — 달력에 날짜가 있을 때만 (D79 ①) · 그 이야기가 아직 목록에 없을 때만. 골든의 "이어짐" 장면 첫 칸의 글 그대로 (날짜 · 근거가 거기 있다)
-                const coming = nextOf(ep) ? undefined : ep.scenes.next.coming[0];
-                return (
-                  <a key={ep.series.code} className="td-series" href={realPath(ep)} data-testid={`cont-${ep.series.code}`}>
-                    <strong>{ep.series.name}</strong>
-                    <span className="td-series-sub">{ep.series.sub}</span>
-                    {/* 시리즈 줄 — 골든의 track 그대로 (지나온 화 · 지금). "다음 화" 칸은 줄에 놓지 않는다 — 예고는 날짜가 있을 때만 아래에 따로 */}
-                    <ol className="ep-track">
-                      {ep.track
-                        .filter((e) => e.state !== "next")
-                        .map((e) => (
-                          <li key={e.no.t} data-state={e.state}>
-                            <span className="ep-track-dot" aria-hidden="true" />
-                            <span className="ep-track-no">{e.no.t}</span>
-                            <span className="ep-track-title">{e.title.t}</span>
-                          </li>
-                        ))}
-                    </ol>
-                    {coming && /\d+월 \d+일/.test(coming.body.t) ? (
-                      <p className="td-next">
-                        <em>{HOME.contNext}</em>
-                        {coming.body.t}
-                      </p>
-                    ) : null}
-                    <span className="td-series-go">
-                      {ep.scenes.cover.episode.t} {HOME.contGo}
-                      <Arrow />
-                    </span>
-                  </a>
-                );
-              })}
-            </section>
-          ) : null}
-
-          {/* 개념 지도 — Claro 만의 것. 먹색 판 위에 주제마다 줍는 개념의 이름을 미리 보인다 (이름은 이야기의 도구 이름 그대로) */}
-          <section className="td-sec hm-map" aria-labelledby="td-concept">
-            <h2 id="td-concept" className="hm-map-label">
-              {HOME.conceptLabel}
-            </h2>
-            <p className="hm-map-title">
-              <Rich text={HOME.conceptTitle} />
-            </p>
-            <ul className="hm-map-topics">
-              {topics.map((t) => (
-                <li key={t.code}>
-                  <span>{t.name}</span>
-                  <p>
-                    {t.tools.map((n) => (
-                      <b key={n}>{n}</b>
-                    ))}
-                  </p>
-                </li>
+          <section className="sp-today" aria-labelledby="sp-head">
+            <div className="sp-head">
+              {/* 낸 날이 적힌 이야기가 없으면 "최근 이야기". 있으면 그 날짜 — 읽는 날이 그날이면 스크립트가 "오늘의 이야기"로 (suppressHydrationWarning: 그 글자를 React 가 되돌리지 않게) */}
+              <h1 id="sp-head" data-day={day ?? undefined} data-testid="head" suppressHydrationWarning>
+                {day ? dayTitle(day) : HOME.titleRecent}
+              </h1>
+              {day ? <script dangerouslySetInnerHTML={{ __html: TODAY_SCRIPT }} /> : null}
+              <span data-testid="count">{HOME.n.replace("{n}", String(top.length))}</span>
+            </div>
+            <ul className="sp-stories">
+              {top.map((line, i) => (
+                <Story key={keyOf(line)} line={line} lead={i === 0} />
               ))}
             </ul>
-            <p className="hm-map-note">{HOME.conceptNote}</p>
-            {concepts.length ? (
-              <ul className="td-concepts">
-                {concepts.map((g) => (
-                  <li key={g.names.join()}>
-                    {g.stories.map((x, i) => (
-                      <a key={x.path} href={x.path} data-end={i > 0 ? "" : undefined}>
-                        {x.title}
-                      </a>
-                    ))}
-                    <p>
-                      <span>{HOME.conceptBoth}</span>
-                      {g.names.map((n) => (
-                        <b key={n}>{n}</b>
-                      ))}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-            <a className="ep-map-button td-mapgo" href="/map" data-testid="to-map">
-              {HOME.mapGo}
-              <Arrow />
+          </section>
+
+          {/* 문 둘 — 지난 이야기 (달력 화면) · 개념 지도 (/map). 그림 + 이름 + 화살표뿐 */}
+          <nav className="sp-doors" aria-label={HOME.doors}>
+            <a className="sp-door" href={DAYS} data-testid="door-days">
+              <span className="sp-door-art">
+                <MiniMonth days={days} />
+              </span>
+              <strong>{HOME.restLabel}</strong>
+              <span className="sp-door-go">
+                <Go size={16} />
+              </span>
             </a>
-          </section>
+            <a className="sp-door" href="/map" data-testid="door-map">
+              <span className="sp-door-art">
+                <MiniMap />
+              </span>
+              <strong>{HOME.conceptLabel}</strong>
+              <span className="sp-door-go">
+                <Go size={16} />
+              </span>
+            </a>
+          </nav>
 
-          <section className="td-sec hm-about" aria-labelledby="hm-about">
-            <h2 id="hm-about" className="td-label">
-              {HOME.aboutLabel}
-            </h2>
-            <p className="hm-about-lead">{HOME.aboutLead}</p>
-            <ol className="hm-steps">
-              {HOME.aboutSteps.map((x) => (
-                <li key={x}>{x}</li>
-              ))}
-            </ol>
-          </section>
-
-          <p className="td-foot">{HOME.preview}</p>
+          <p className="sp-foot">{HOME.foot}</p>
         </main>
       </div>
     </div>
