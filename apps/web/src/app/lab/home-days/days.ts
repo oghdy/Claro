@@ -46,3 +46,23 @@ export const dayParts = (day: string): { month: number; date: number; weekday: s
   const [y, m, d] = day.split("-").map(Number) as [number, number, number];
   return { month: m, date: d, weekday: "일월화수목금토"[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]! };
 };
+
+/** 달력 한 달 (UX-12d) — 1일 앞의 빈칸 수 (일요일부터) · 그 달의 날 수. 달력의 셈이다 (UTC) */
+export const monthOf = (key: string): { key: string; month: number; lead: number; count: number } => {
+  const [y, m] = key.split("-").map(Number) as [number, number];
+  return { key, month: m, lead: new Date(Date.UTC(y, m - 1, 1)).getUTCDay(), count: new Date(Date.UTC(y, m, 0)).getUTCDate() };
+};
+/** 이야기가 있는 가장 이른 달부터 가장 늦은 달까지 (사이의 빈 달도) — "2026-11" 꼴 · 이른 달이 앞 */
+export const monthKeys = (days: readonly string[]): string[] => {
+  const sorted = [...days].sort();
+  if (!sorted.length) return [];
+  let [y, m] = sorted[0]!.split("-").map(Number) as [number, number];
+  const last = sorted[sorted.length - 1]!.slice(0, 7);
+  const out: string[] = [];
+  for (;;) {
+    const key = `${y}-${String(m).padStart(2, "0")}`;
+    out.push(key);
+    if (key >= last) return out;
+    if (++m > 12) (m = 1), y++;
+  }
+};

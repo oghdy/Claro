@@ -4,7 +4,8 @@ import { HomeLongCard, HomeShortCard } from "../../../episode/home/cards";
 import { Rich } from "../../../episode/kit/parts";
 import { Arrow } from "../../../episode/today/cards";
 import { sharedConcepts } from "../../../episode/today/concepts";
-import { byDay, dayLabel, dayParts, keyOf, sampleWeek, type DayGroup } from "./days";
+import { Calendar, type CalDay } from "./Calendar";
+import { byDay, dayLabel, dayParts, keyOf, monthKeys, monthOf, sampleWeek, type DayGroup } from "./days";
 import "../../../episode/episode.css";
 import "../../../episode/episodes/fomc/fomc.css";
 import "../../../episode/episodes/pipc/pipc.css";
@@ -17,17 +18,27 @@ import "./home-days.css";
 // 다른 것: ① 맨 위의 시안 띠 (가 ↔ 나 · 견본) ② 지난 이야기 = 날짜 머리 + 작은 줄 카드 (가 = 다 펼침 · 나 = 날마다 접힘 — <details> · 자바스크립트 없음).
 // 화면 글 (C)은 시안의 것이다 — 편 수는 숫자로 적는다 (화면이 목록에서 센 수).
 
-export type Variant = "a" | "b" | "c" | "d";
+export type Variant = "a" | "b" | "c" | "d" | "e";
 
 const C = {
   before: "그 전",
   n: "{n}편",
   long: "긴",
   short: "짧은",
-  strip: { a: "시안 가 · 날짜마다 펼침", b: "시안 나 · 날짜마다 접힘", c: "시안 나 · 담백 판", d: "시안 · 날짜 판" },
+  strip: { a: "시안 가 · 날짜마다 펼침", b: "시안 나 · 날짜마다 접힘", c: "시안 나 · 담백 판", d: "시안 · 날짜 판", e: "시안 · 달력 판" },
   month: "{m}월",
   /** 띠의 길 — 가 ↔ 나 (UX-12) · 나 ↔ 담백 판 (UX-12b) · 담백 판 ↔ 날짜 판 (UX-12c) */
-  links: { a: [["b", "나 보기"]], b: [["a", "가 보기"], ["c", "담백 판"]], c: [["b", "나 보기"], ["d", "날짜 판"]], d: [["c", "담백 판"]] },
+  links: { a: [["b", "나 보기"]], b: [["a", "가 보기"], ["c", "담백 판"]], c: [["b", "나 보기"], ["d", "날짜 판"]], d: [["c", "담백 판"], ["e", "달력 판"]], e: [["d", "날짜 판"]] },
+  /** 달력 판 (UX-12d) */
+  cal: {
+    weekdays: ["일", "월", "화", "수", "목", "금", "토"],
+    n: "{n}편",
+    newest: "맨 위에 있는 이야기예요",
+    prev: "앞 달",
+    next: "다음 달",
+    cell: "{day}, 이야기 {n}편",
+    cellNewest: "{day}, 이야기 {n}편, 가장 새 이야기",
+  },
   many: "일주일 쌓인 모습",
   now: "지금 목록으로",
   sample: "견본 — 날이 쌓인 모습",
@@ -245,6 +256,62 @@ function DaysDated({ groups }: { groups: readonly DayGroup[] }) {
   );
 }
 
+/**
+ * 달력 판 (UX-12d · D142 — 도윤 "실제로 달력 모양으로"). 이번 달 7칸 달력 (칸 = 날 숫자 + 이야기가 있으면 점 하나) + 그 아래 고른 날의 이야기 (줄은 담백 판 그대로).
+ * 달력에는 **낸 날이 적힌 이야기 전부**가 선다 — 맨 위 묶음의 날 (가장 새 날 · 테 두른 칸)도. 처음 고른 날은 바로 위 지난 날 (없으면 가장 새 날).
+ * 날 없는 묶음 ("그 전")은 달력에 넣지 않는다 (날짜를 지어내지 않는다) — 달력 아래 접힌 한 줄. 날 고르기는 클라이언트 부품 (./Calendar.tsx)
+ */
+function DaysCalendar({ newest, top, groups }: { newest: string | null; top: readonly Line[]; groups: readonly DayGroup[] }) {
+  const dated = [...(newest ? [{ day: newest, lines: [...top] }] : []), ...groups.filter((g): g is DayGroup & { day: string } => g.day !== null)];
+  const before = groups.find((g) => g.day === null);
+  const rowOf = (line: Line) => {
+    const long = line.kind === "long";
+    const series = long ? line.ep.series : line.story.series;
+    return {
+      href: hrefOfLine(line),
+      code: long ? line.ep.code : line.story.code,
+      title: plain(titleOf(line)),
+      sub: [series.name, ...(long && numbered(series.code) ? [line.ep.scenes.cover.episode.t] : []), ...(long ? [HOME.long] : [])],
+    };
+  };
+  const days: Record<string, CalDay> = Object.fromEntries(dated.map((g) => [g.day, { day: g.day, label: `${dayLabel(g.day)} ${dayParts(g.day).weekday}요일`, rows: g.lines.map(rowOf) }]));
+  const months = monthKeys(dated.map((g) => g.day)).map((k) => ({ ...monthOf(k), title: C.month.replace("{m}", String(monthOf(k).month)) }));
+  const initial = dated.find((g) => g.day !== newest)?.day ?? newest;
+  return (
+    <div className="hf-wrap" data-variant="e">
+      {initial ? <Calendar months={months} days={days} newest={newest} initial={initial} C={C.cal} /> : null}
+      {before ? (
+        <details className="hf-before" data-day="before" data-testid="day">
+          <summary>
+            <h3>{C.before}</h3>
+            <span>{tally(before.lines, false)}</span>
+            <svg className="hc-mark" width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </summary>
+          <ul className="hc-rows">
+            {before.lines.map((line) => {
+              const r = rowOf(line);
+              return (
+                <li key={keyOf(line)}>
+                  <a className="hc-row" href={r.href} data-testid={`row-${r.code}`}>
+                    <span className="hc-row-title">{r.title}</span>
+                    <span className="hc-row-sub">
+                      {r.sub.map((x) => (
+                        <span key={x}>{x}</span>
+                      ))}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </details>
+      ) : null}
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────────────────── 화면
 
 export function HomeDays({ variant, many }: { variant: Variant; many: boolean }) {
@@ -257,7 +324,7 @@ export function HomeDays({ variant, many }: { variant: Variant; many: boolean })
   const count = (day ? HOME.count : HOME.countRecent).replace("{n}", countWord(top.length));
   const tallyTop = HOME.tally.replace("{long}", countNoun(longs)).replace("{short}", countNoun(top.length - longs));
   // 날짜 판 (d)은 "이어지는 이야기" 칸이 없다 (UX-12c · D140 — 도윤 "없는 게 더 이쁠 것 같다")
-  const cont = variant === "d" ? [] : latestPerSeries().filter((x) => numbered(x.ep.series.code));
+  const cont = variant === "d" || variant === "e" ? [] : latestPerSeries().filter((x) => numbered(x.ep.series.code));
   const concepts = sharedConcepts([...top, ...real.rest], hrefOfLine);
   const topics = latestPerSeries().map(({ ep }) => ({ code: ep.series.code, name: ep.series.name, tools: ep.tools.map((x) => x.name) }));
   const here = `/lab/home-days/${variant}`;
@@ -310,7 +377,7 @@ export function HomeDays({ variant, many }: { variant: Variant; many: boolean })
               <h2 id="td-rest" className="td-label hm-restlabel">
                 {HOME.restLabel}
               </h2>
-              {variant === "a" ? <DaysOpen groups={groups} /> : variant === "b" ? <DaysFold groups={groups} /> : variant === "c" ? <DaysPlain groups={groups} /> : <DaysDated groups={groups} />}
+              {variant === "a" ? <DaysOpen groups={groups} /> : variant === "b" ? <DaysFold groups={groups} /> : variant === "c" ? <DaysPlain groups={groups} /> : variant === "d" ? <DaysDated groups={groups} /> : <DaysCalendar newest={day} top={top} groups={groups} />}
             </section>
           ) : null}
 
