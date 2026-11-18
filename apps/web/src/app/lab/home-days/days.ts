@@ -40,3 +40,9 @@ export function sampleWeek(day: string, top: readonly Line[], rest: readonly Lin
 }
 
 export const keyOf = (line: Line): string => `${line.day ?? "-"}:${hrefOfLine(line)}`;
+
+/** 날짜를 칸으로 — 달 · 날 · 요일 (UX-12c). 요일은 그 날짜에서 계산한다 (달력의 날은 시간대와 상관없다 — UTC 로 센다). 지어내는 것 없음 */
+export const dayParts = (day: string): { month: number; date: number; weekday: string } => {
+  const [y, m, d] = day.split("-").map(Number) as [number, number, number];
+  return { month: m, date: d, weekday: "일월화수목금토"[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]! };
+};

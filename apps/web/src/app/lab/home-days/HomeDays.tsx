@@ -4,7 +4,7 @@ import { HomeLongCard, HomeShortCard } from "../../../episode/home/cards";
 import { Rich } from "../../../episode/kit/parts";
 import { Arrow } from "../../../episode/today/cards";
 import { sharedConcepts } from "../../../episode/today/concepts";
-import { byDay, dayLabel, keyOf, sampleWeek, type DayGroup } from "./days";
+import { byDay, dayLabel, dayParts, keyOf, sampleWeek, type DayGroup } from "./days";
 import "../../../episode/episode.css";
 import "../../../episode/episodes/fomc/fomc.css";
 import "../../../episode/episodes/pipc/pipc.css";
@@ -17,16 +17,17 @@ import "./home-days.css";
 // 다른 것: ① 맨 위의 시안 띠 (가 ↔ 나 · 견본) ② 지난 이야기 = 날짜 머리 + 작은 줄 카드 (가 = 다 펼침 · 나 = 날마다 접힘 — <details> · 자바스크립트 없음).
 // 화면 글 (C)은 시안의 것이다 — 편 수는 숫자로 적는다 (화면이 목록에서 센 수).
 
-export type Variant = "a" | "b" | "c";
+export type Variant = "a" | "b" | "c" | "d";
 
 const C = {
   before: "그 전",
   n: "{n}편",
   long: "긴",
   short: "짧은",
-  strip: { a: "시안 가 · 날짜마다 펼침", b: "시안 나 · 날짜마다 접힘", c: "시안 나 · 담백 판" },
-  /** 띠의 길 — 가 ↔ 나 (UX-12) · 나 ↔ 담백 판 (UX-12b) */
-  links: { a: [["b", "나 보기"]], b: [["a", "가 보기"], ["c", "담백 판"]], c: [["b", "나 보기"]] },
+  strip: { a: "시안 가 · 날짜마다 펼침", b: "시안 나 · 날짜마다 접힘", c: "시안 나 · 담백 판", d: "시안 · 날짜 판" },
+  month: "{m}월",
+  /** 띠의 길 — 가 ↔ 나 (UX-12) · 나 ↔ 담백 판 (UX-12b) · 담백 판 ↔ 날짜 판 (UX-12c) */
+  links: { a: [["b", "나 보기"]], b: [["a", "가 보기"], ["c", "담백 판"]], c: [["b", "나 보기"], ["d", "날짜 판"]], d: [["c", "담백 판"]] },
   many: "일주일 쌓인 모습",
   now: "지금 목록으로",
   sample: "견본 — 날이 쌓인 모습",
@@ -188,6 +189,62 @@ function DaysPlain({ groups }: { groups: readonly DayGroup[] }) {
   );
 }
 
+/**
+ * 날짜 판 (UX-12c · D140 — 도윤 "날짜마다 좀 구분 가게 더 예쁘게"). 담백 판의 줄 (제목 + 회색 한 줄)은 그대로고 **날짜가 왼쪽 칸으로 나왔다**:
+ * 큰 날 숫자 + 그 아래 작은 "11월 · 화" (요일은 날짜에서 계산). 그날의 이야기는 오른쪽 칸에 — 날마다 왼쪽 숫자 하나 + 오른쪽 한 덩이.
+ * 펼친 날은 숫자가 먹색, 접힌 날은 회색. 날 없는 묶음 ("그 전")은 숫자 자리에 그 말이 선다. 상자 · 강조색 · 줄마다 꺾쇠 없음 (담백 판 그대로)
+ */
+function DaysDated({ groups }: { groups: readonly DayGroup[] }) {
+  return (
+    <div className="he-days" data-variant="d">
+      {groups.map((g, i) => {
+        const parts = g.day ? dayParts(g.day) : null;
+        return (
+          <details key={g.day ?? "before"} className="he-fold" data-day={g.day ?? "before"} data-testid="day" open={i === 0 && g.day !== null}>
+            <summary>
+              {/* 읽기 도구에는 "11월 17일" 한 덩이로 (머리 h3) — 눈에는 숫자 · 달 · 요일로 */}
+              <h3 className="he-date" aria-label={g.day ? `${dayLabel(g.day)} ${parts!.weekday}요일` : C.before}>
+                {parts ? (
+                  <>
+                    <b>{parts.date}</b>
+                    <small>
+                      {C.month.replace("{m}", String(parts.month))} · {parts.weekday}
+                    </small>
+                  </>
+                ) : (
+                  <i>{C.before}</i>
+                )}
+              </h3>
+              <span className="he-count">{tally(g.lines, false)}</span>
+              <svg className="he-mark" width="16" height="16" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </summary>
+            <ul className="he-rows">
+              {g.lines.map((line) => {
+                const long = line.kind === "long";
+                const series = long ? line.ep.series : line.story.series;
+                return (
+                  <li key={keyOf(line)}>
+                    <a className="he-row" href={hrefOfLine(line)} data-kind={line.kind} data-testid={`row-${long ? line.ep.code : line.story.code}`}>
+                      <span className="he-row-title">{long ? <Rich text={titleOf(line)} /> : titleOf(line)}</span>
+                      <span className="he-row-sub">
+                        <span>{series.name}</span>
+                        {long && numbered(series.code) ? <span>{line.ep.scenes.cover.episode.t}</span> : null}
+                        {long ? <span>{HOME.long}</span> : null}
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </details>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─────────────────────────────────────────────────────────── 화면
 
 export function HomeDays({ variant, many }: { variant: Variant; many: boolean }) {
@@ -199,7 +256,8 @@ export function HomeDays({ variant, many }: { variant: Variant; many: boolean })
   const longs = top.filter((x) => x.kind === "long").length;
   const count = (day ? HOME.count : HOME.countRecent).replace("{n}", countWord(top.length));
   const tallyTop = HOME.tally.replace("{long}", countNoun(longs)).replace("{short}", countNoun(top.length - longs));
-  const cont = latestPerSeries().filter((x) => numbered(x.ep.series.code));
+  // 날짜 판 (d)은 "이어지는 이야기" 칸이 없다 (UX-12c · D140 — 도윤 "없는 게 더 이쁠 것 같다")
+  const cont = variant === "d" ? [] : latestPerSeries().filter((x) => numbered(x.ep.series.code));
   const concepts = sharedConcepts([...top, ...real.rest], hrefOfLine);
   const topics = latestPerSeries().map(({ ep }) => ({ code: ep.series.code, name: ep.series.name, tools: ep.tools.map((x) => x.name) }));
   const here = `/lab/home-days/${variant}`;
@@ -252,7 +310,7 @@ export function HomeDays({ variant, many }: { variant: Variant; many: boolean })
               <h2 id="td-rest" className="td-label hm-restlabel">
                 {HOME.restLabel}
               </h2>
-              {variant === "a" ? <DaysOpen groups={groups} /> : variant === "b" ? <DaysFold groups={groups} /> : <DaysPlain groups={groups} />}
+              {variant === "a" ? <DaysOpen groups={groups} /> : variant === "b" ? <DaysFold groups={groups} /> : variant === "c" ? <DaysPlain groups={groups} /> : <DaysDated groups={groups} />}
             </section>
           ) : null}
 
