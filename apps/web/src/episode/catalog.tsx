@@ -16,6 +16,8 @@
 // 이 파일은 화면 뼈대 (kit/Episode)를 읽지 않는다 — kit/shelf.ts 가 이 목록을 읽기 때문이다 (서로 물리지 않게). 화면은 ./Screen.tsx 가 세운다.
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
+import suneungAlert from "../../../../packages/pipeline/data/events/MOE-20261118-SUNEUNG-ALERT/local/suneung-alert/story.json";
+import aiHackingTool from "../../../../packages/pipeline/data/events/FBI-20261113-ARTEX/local/ai-hacking-tool/story.json";
 import suneungCheating from "../../../../packages/pipeline/data/events/OPC-20261116-EXAM-AI-CHEATING/local/suneung-cheating/story.json";
 import chipRemote from "../../../../packages/pipeline/data/events/BIS-20261116-REMOTE-ACCESS-CHIPS/local/chip-remote/story.json";
 import metaGallery from "../../../../packages/pipeline/data/events/GPDP-20261114-META-GALLERY/shorts/meta-gallery/story.json";
@@ -161,6 +163,11 @@ const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
  * 그래서 병원 짧은 이야기 (골든 fixtures/episode-short-privacy-yeonghun.json — 개인정보 긴 이야기와 같은 발표)는 F-E3 에서 내렸다 → /short/pipc-hospital 은 404. 골든은 그대로고 시안 (/lab/today · /lab/today/short)에만 견본으로 남는다
  */
 export const STORIES: readonly Line[] = [
+  // 11/18 "오늘" (today-story · 도윤 go) — 짧은 이야기 둘 · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트). 국내가 위
+  // 수능일 위급재난문자 (교육부 · 행정안전부 11/18) — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「시험은 어떻게 지켜지나」)
+  short(suneungAlert, { place: "국내", category: "생활", day: "2026-11-18" }),
+  // FBI FLASH — AI 해킹 도구 ARTEX (11/13) — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「AI 해킹은 어떻게 막나」)
+  short(aiHackingTool, { place: "해외", category: "기술", day: "2026-11-18" }),
   // 11/17 "오늘" (today-story · 도윤 go) — 짧은 이야기 둘 · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트). 국내가 위
   // 수능 AI 부정행위 대책 (국무조정실 11/16) — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「시험은 어떻게 지켜지나」)
   short(suneungCheating, { place: "국내", category: "나라와 법", day: "2026-11-17" }),
