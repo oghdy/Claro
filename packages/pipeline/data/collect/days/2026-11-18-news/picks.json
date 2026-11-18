@@ -1,0 +1,25 @@
+{
+  "_what": "today 2026-11-18 '오늘의 큰 뉴스 → 1차 문서' 길에서 고른 둘 (D107 · today-story ①). 작업 세션이 손으로 걸은 기록. 뉴스 기사의 글 · 숫자는 없다 (제목 · 주소 · 요지만 — sheet.md). 구절은 1차 문서의 것만.",
+  "date": "2026-11-18",
+  "window": "2026-11-17 (화) 저녁 ~ 2026-11-18 (수) 오후 · 한국 시각",
+  "picked_by": "today-story 작업 세션 (Opus 5.5) — 제안 → 도윤 go ('둘 다 짧은으로')",
+  "picked_at": "2026-11-18",
+  "candidates": { "domestic": 6, "overseas": 6, "sheet": "sheet.md" },
+  "picked": [
+    {
+      "id": "K1", "where": "국내", "category": "생활", "weight": "짧은", "story_code": "suneung-alert",
+      "title": "내일 수능 아침, 전국 모든 휴대폰에 위급재난문자",
+      "seen_at": "https://news.google.com/rss/search?q=%EC%88%98%EB%8A%A5+%EC%9C%84%EA%B8%89%EC%9E%AC%EB%82%9C%EB%AC%B8%EC%9E%90+when:2d&hl=ko&gl=KR&ceid=KR:ko",
+      "event_code": "MOE-20261118-SUNEUNG-ALERT",
+      "primary": [ { "label": "PR-1118-PDF", "url": "https://www.korea.kr/common/download.do?fileId=198592216&tblKey=GMN", "page_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789715", "rights": "KOGL_TYPE1 (문서 단위 · 3쪽 그림)", "in_git": true } ]
+    },
+    {
+      "id": "W1", "where": "해외", "category": "기술", "weight": "짧은", "story_code": "ai-hacking-tool",
+      "title": "FBI, 누구나 받는 AI 해킹 도구 경고 — 한국 금융사도 피해",
+      "seen_at": "https://news.google.com/rss/search?q=FBI+open-source+AI+tool+cyber+intrusions+when:3d&hl=en-US&gl=US&ceid=US:en",
+      "event_code": "FBI-20261113-ARTEX",
+      "primary": [ { "label": "FBI-FLASH-1113", "url": "https://www.ic3.gov/CSA/2026/261113.pdf", "rights": "US_FEDERAL_17USC105", "in_git": true } ]
+    }
+  ],
+  "tomorrow": [ { "id": "K3", "title": "새만금국제공항 기본계획 2심 취소", "why": "판결문 기다림" } ]
+}

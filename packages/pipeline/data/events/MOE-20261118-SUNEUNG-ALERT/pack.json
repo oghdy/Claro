@@ -1,0 +1,57 @@
+{
+  "_what": "today 2026-11-18 소스 팩 목록 — 오늘의 국내 짧은 이야기 (D107). 사건 하나 = 목록 하나. 작업 세션 (Opus 5.5)이 손으로 쓴다. packages/pipeline/src/pack.ts (p2) 가 이 목록에서 같은 폴더의 store.json · store.documents.json · fetch.json 을 쓴다. 사실 · 해석 · 요점은 없다. 주소는 전부 2026-11-18 에 실제로 열어 확인한 것만. 고른 곳: packages/pipeline/data/collect/days/2026-11-18-news/sheet.md K1",
+  "event": {
+    "code": "MOE-20261118-SUNEUNG-ALERT",
+    "title": "교육부 · 행정안전부 — 수능시험일 (2026-11-19) 위급재난문자 발송 (1차 08시 30분 · 이후 불시 · 수신 거부 불가 · 전 국민 휴대전화 · 시험장에서 스마트기기를 소지하거나 가방에 보관하면 사용하지 않았어도 즉시 부정행위 · 2026-11-18 발표)",
+    "occurred_at": "2026-11-18",
+    "storyline_code": null,
+    "_gate1": "today-story ① 이 2026-11-18 의 큰 뉴스에서 고르고 도윤이 go (짧은)",
+    "_dates": "보도자료의 보도시점 '(온라인, 지면) 2026. 11. 18.(수) 즉시보도'. 문자는 2026-11-19 (수능일). Event.occurred_at 은 발표일"
+  },
+  "slots_basis": "today — 짧은 이야기용. 슬롯 표 (P-4)를 돌리지 않는다. 문서를 거는 이름일 뿐이다",
+  "slots": ["무엇을 하나", "왜", "국민은", "수험생은", "권리 표시"],
+  "count_terms": ["위급재난문자", "08시 30분", "부정행위", "대피", "수신거부", "외국인"],
+  "items": [
+    {
+      "label": "PR-1118-PDF",
+      "group": "사건",
+      "title": "수능시험일 위급재난문자가 발송됩니다 (교육부 · 행정안전부 보도자료 PDF · 3쪽)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198592216&tblKey=GMN",
+      "slots": ["무엇을 하나", "왜", "국민은", "수험생은"],
+      "why": "이 사건의 1차 — 교육부 · 행정안전부 보도자료 전문. 1차 08시 30분 · 이후 불시 추가 · 「재난문자방송 기준 및 운영규정」에 따라 수신거부 불가 · 최대볼륨 (최소 40dB 이상) 10.5초 · 문구 (TEST ALERT) 둘 · 까닭 (초소형카메라 · 스마트기기 AI 부정행위 예방 · 적발) · 감독관 휴대전화는 울리지 않게 · 사용하지 않았더라도 소지 · 가방 보관이면 즉시 부정행위 · 전 국민 · 외국인 (영문 · Emergency Ready App) · 실제 재난이 아니라 대피 등 조치 불필요 · 운전 중 주의 · 두 장관의 말. PDF 3쪽 끝에 공공누리 제1유형 그림 → 이 문서만 git (doc_rights · D69 · D70)",
+      "url_basis": "정책브리핑 보도자료 페이지 (PR-1118 — pressReleaseView.do?newsId=156789715) 의 첨부 PDF 내려받기. 2026-11-18 GET · %PDF-1.6 · 230,475 바이트 · 3쪽. robots.txt (www.korea.kr) 'User-Agent: * Allow: /'",
+      "language": "ko",
+      "published_at": "2026-11-18",
+      "published_evidence": "2026. 11. 18.(수)",
+      "published_note": "보도자료 머리의 보도시점 '(온라인, 지면) 2026. 11. 18.(수) 즉시보도'",
+      "doc_rights": {
+        "rights": "KOGL_TYPE1",
+        "mark": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 정책브리핑 페이지 (PR-1118)에는 글 줄이 보이지 않았다 — 근거는 이 그림. 판정은 PM",
+        "raw_sha256": "a6519b55aff97ec2e8263b75e835b31cb78601b0872b55bfb979253a861d0f5e",
+        "page": 3,
+        "pages": 3,
+        "image": { "name": "Im8", "xref": 46, "width": 335, "height": 129, "filter": "DCTDecode", "stream_sha256": "cebcf344a01480eb8bc64d0b0b209f09ff6ca3fbd616f6c0a57e824141410967" },
+        "where": "본문 끝 (3/3쪽) — 담당 부서 표 둘 아래 한 줄의 오른쪽 끝 (왼쪽 '대한민국 정책브리핑' · 가운데 '대체불가 대한민국' 그림과 나란히 · 쪽 위치 x 448.2–521.2 · y 303.5–331.6 pt). 표시는 이 한 곳",
+        "third_party": "글로는 없음 — 뽑힌 글 전부가 교육부 · 행정안전부의 글 (본문 · 문자 문구 · 장관의 말 · 담당 부서 표). 담당 공무원의 이름 · 사무실 전화가 있다 (보도자료 연락처 — 이미 git 에 있는 다른 보도자료와 같은 꼴)",
+        "seen_by": "today 2026-11-18 작업 세션 (Opus 5.5) — 받은 바이트를 PyMuPDF (MuPDF 1.28.2) 로 열어 쪽마다 그림을 세고 (스트림 바이트 그대로 sha256) 그 그림 (Im8) 과 3쪽 전체 (110dpi) 를 눈으로 봤다 (E3-1b · P-S1 · S-3 과 같은 방법)",
+        "checked_at": "2026-11-18"
+      }
+    },
+    {
+      "label": "PR-1118",
+      "group": "사건",
+      "title": "수능시험일 위급재난문자가 발송됩니다 (정책브리핑 보도자료 게시물 페이지 — 교육부 보도자료 전재)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789715",
+      "slots": ["권리 표시"],
+      "why": "첨부 목록 (hwpx · pdf) 의 근거를 본 기록. 사이트 메뉴 · 인기 뉴스가 섞인 살아 있는 페이지라 캐시에만",
+      "url_basis": "정책브리핑 보도자료 목록 (pressReleaseList.do · 2026-11-18) 에서 나온 줄. 2026-11-18 에 열어 봄. robots.txt 'Allow: /'",
+      "language": "ko",
+      "live": true,
+      "published_at": "2026-11-18",
+      "published_evidence": "2026.11.18",
+      "published_note": "게시물의 날짜. 살아 있는 페이지"
+    }
+  ]
+}
