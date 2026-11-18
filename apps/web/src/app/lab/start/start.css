@@ -1,0 +1,281 @@
+/* UX-13 (D144) — 깔끔한 시작 화면 (/lab/start) + 달력 화면 (/lab/start/days). lab 전용.
+   담백: 먹 + 회색 · 강조색은 Claro 표의 점 하나 · 상자는 문 둘뿐 (테두리 없이 옅은 면) · 나머지는 여백과 가는 선 하나로 가른다.
+   색은 전부 --ep-* (종이 토큰)와 그것을 섞은 것뿐이다. 새 색 없음. 달력 · 줄의 꼴은 ../home-days/home-days.css (.hf-* · .hc-row) 그대로 */
+.sp-root a {
+  color: inherit;
+  text-decoration: none;
+}
+.td.sp {
+  padding-top: calc(18px + env(safe-area-inset-top));
+}
+.td.sp > * {
+  animation-duration: 0.26s;
+  animation-name: sp-rise;
+}
+.td.sp > :nth-child(2) { animation-delay: 0.03s; }
+.td.sp > :nth-child(3) { animation-delay: 0.06s; }
+.td.sp > :nth-child(4) { animation-delay: 0.09s; }
+.td.sp > :nth-child(5) { animation-delay: 0.09s; }
+@keyframes sp-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .td.sp > * { animation: none; }
+}
+
+/* ── 머리 · 한마디 */
+.sp-top {
+  margin-bottom: 28px;
+}
+.sp-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 21px;
+}
+.sp-mark::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ep-accent);
+}
+.sp-preview {
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.3;
+  color: var(--ep-muted);
+}
+.sp-tagline {
+  margin: 0 0 10px;
+  font-size: 31px;
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: -0.04em;
+}
+.sp-sub {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ep-muted);
+}
+
+/* ── 가장 새 날의 이야기 — 상자 없는 글줄 */
+.sp-today {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--ep-rule);
+}
+.sp-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.sp-head h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.sp-head > span {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--ep-muted);
+}
+.sp-stories {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sp-story {
+  display: block;
+  padding: 14px 0 16px;
+}
+.sp-story:active {
+  opacity: 0.6;
+}
+.sp-stories li + li .sp-story {
+  padding-top: 12px;
+}
+.sp-story-topic {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ep-muted);
+}
+.sp-story-topic em {
+  font-style: normal;
+}
+.sp-story-topic em::before {
+  content: "·";
+  margin: 0 5px;
+}
+.sp-story-title {
+  display: block;
+  font-size: 18.5px;
+  font-weight: 700;
+  line-height: 1.38;
+  letter-spacing: -0.03em;
+}
+.sp-story-title strong {
+  font-weight: inherit;
+}
+.sp-story[data-lead] .sp-story-title {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.28;
+  letter-spacing: -0.038em;
+}
+.sp-story-dek {
+  display: block;
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ep-ink2);
+}
+.sp-story-meta {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ep-muted);
+}
+.sp-story-meta span + span::before {
+  content: "·";
+  margin: 0 5px;
+}
+/* 들어가는 말 — 첫 이야기에만. 먹색 알약 하나 (이 화면에서 가장 진한 곳) */
+.sp-story-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 46px;
+  margin-top: 16px;
+  padding: 0 16px 0 18px;
+  border-radius: 999px;
+  background: var(--ep-ink);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ep-paper);
+}
+
+/* ── 문 둘 — 옅은 면 두 칸 (테두리 없음). 그림 · 이름 · 가는 곳 · 화살표 */
+.sp-doors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 22px;
+}
+.sp-door {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 140px;
+  padding: 16px 16px 15px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--ep-ink) 5.5%, var(--ep-paper));
+}
+.sp-door:active {
+  transform: scale(0.98);
+  transition: transform 0.12s var(--ep-ease);
+}
+.sp-door-art {
+  display: flex;
+  align-items: flex-start;
+  height: 50px;
+  margin-bottom: auto;
+}
+.sp-door strong {
+  margin-top: 14px;
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+}
+.sp-door-sub {
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ep-muted);
+}
+.sp-door-go {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  color: var(--ep-muted);
+}
+/* 달력 문의 그림 — 그 달의 칸이 점으로. 이야기 있는 날만 먹색 */
+.sp-mini {
+  display: grid;
+  grid-template-columns: repeat(7, 5px);
+  gap: 4px;
+  padding-top: 2px;
+}
+.sp-mini i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ep-ink) 16%, transparent);
+}
+.sp-mini i[data-lead] {
+  background: none;
+}
+.sp-mini i[data-on] {
+  background: var(--ep-ink);
+}
+.sp-minimap path {
+  fill: none;
+  stroke: color-mix(in srgb, var(--ep-ink) 34%, transparent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.sp-minimap circle {
+  fill: color-mix(in srgb, var(--ep-ink) 5.5%, var(--ep-paper));
+  stroke: color-mix(in srgb, var(--ep-ink) 46%, transparent);
+  stroke-width: 1.6;
+}
+.sp-minimap circle[data-on] {
+  fill: var(--ep-ink);
+  stroke: none;
+}
+.sp-foot {
+  margin: 40px 0 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ep-muted);
+}
+
+/* ── 달력 화면 */
+.td.sp-days {
+  padding-top: 26px;
+}
+.sp-days-title {
+  margin: 0 0 14px;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+}
+.sp-days .hf-before {
+  margin-top: 0;
+}
+.sp-days .hf-before h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+}
+.sp-days .hf-before:not([open]) h2 {
+  font-weight: 650;
+  color: var(--ep-ink2);
+}
