@@ -1,0 +1,80 @@
+{
+  "_what": "MOTIR-20261119-EXPORT-1T 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json. 문서 단위 권리 (발행처는 미확인 · 문서 안에 공공누리 제1유형 표시 — 그 문서에 한해 발행처 행보다 앞선다) 는 document_rights (DATA_MODEL DocumentRights · B-E2 · pack.json doc_rights 에서)",
+  "events": [
+    {
+      "event_id": "dcc366e4-fab2-47e6-9db5-5ba11d7e9643",
+      "code": "MOTIR-20261119-EXPORT-1T",
+      "title": "산업통상부 등 관계부처 — 대한민국 연간 누계 수출액 1조 달러 돌파 (2026-11-19 14시 09분 38초 기준 잠정 집계 · 독일 · 미국 · 중국에 이어 세계 4번째 · 2026-11-19 발표)",
+      "occurred_at": "2026-11-19",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "96e3b39a-9350-4c86-92cb-d1e7abaa801e",
+      "label": "PR-1119-PDF",
+      "title": "(참고자료)수출입과, 대한민국 수출 1조 달러 돌파, 기업이 뛰고 국민이 함께 이룬 성과.pdf (산업통상부 등 관계부처 합동 보도참고자료 · 11쪽 — 본문 5쪽 + 참고 1 · 2)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198593103&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-19",
+      "ingested_at": "2026-11-19"
+    },
+    {
+      "source_id": "2e16f1d4-df47-4afb-8981-a81bd4632841",
+      "label": "PR-1119",
+      "title": "(참고자료)대한민국 수출 1조 달러 돌파, 기업이 뛰고 국민이 함께 이룬 성과 (정책브리핑 보도자료 게시물 페이지 — 산업통상부 보도자료 전재)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789932",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-19",
+      "ingested_at": "2026-11-19"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "korea.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": null,
+      "can_quote": null,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-19",
+      "basis": "권리 미확인 (발행처 단위) — 발행처 단위의 근거를 찾지 못했다. 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1119-PDF. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
+    }
+  ],
+  "document_rights": [
+    {
+      "source_id": "96e3b39a-9350-4c86-92cb-d1e7abaa801e",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "7a7d0f52c6b85510bfe9185d0a46cea1a19d12fbb8c0dfbf5461180af29dcc50",
+        "page": 5,
+        "pages": 11,
+        "image": "Im15 객체 70 · 152×59 · DCTDecode",
+        "image_sha256": "49595a2ac768ce12702e6b3f3fd57d81cc64a07cf93852c6e8990312f37c9c3b",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다 (2 ~ 4 유형이 아니다). 이 파일의 그림은 152×59 (다른 보도자료의 335×129 보다 작다 · 같은 표시). 전재한 정책브리핑 페이지 (PR-1119) 에도 글 줄 '이 자료는 텍스트에 한하여 공공누리 제1유형(출처표시)의 조건에 따라 이용할 수 있습니다.' (S1-a 의 길 — 기록으로만 · 근거는 이 그림). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-19"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

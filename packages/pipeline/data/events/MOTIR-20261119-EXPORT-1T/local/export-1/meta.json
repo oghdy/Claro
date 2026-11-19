@@ -1,0 +1,25 @@
+{
+  "_what": "계약에 없는 손 칸. breakers = 깨는 사실의 구절 키 (풀이 전의 글 · 도구 · 근거에 달리면 안 된다) · ban = 깨는 말 · line = 이야기 목록에 적을 값 (day 는 올리는 세션이 적는다)",
+  "breakers": [
+    "ex.break",
+    "ex.others",
+    "ex.cosmetic",
+    "ex.share",
+    "ex.computer"
+  ],
+  "ban": [
+    "반도체를 (제외|뺀)",
+    "16개 품목",
+    "사상 최대",
+    "역대 최대",
+    "다변화",
+    "선전했",
+    "32\\.6",
+    "9\\.5"
+  ],
+  "line": {
+    "place": "국내",
+    "category": "돈",
+    "unpromised": true
+  }
+}
