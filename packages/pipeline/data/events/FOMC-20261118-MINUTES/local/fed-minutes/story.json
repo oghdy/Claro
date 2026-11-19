@@ -1,0 +1,247 @@
+{
+  "_source": {
+    "what": "짧은 이야기 「미 연준 회의록 공개, 동결 뒤 속내는?」 — 로컬 세션이 손으로 쓴 판 (모델 API 0 · 옛 꼴 ShortStory). 골든이 아니다. 사람 게이트 전에는 내지 않는다",
+    "made_by": "글 로컬 세션 · Sonnet 5.5 (손 · 2026-11-19) · 법 docs/content/story-guide.md · UX-8 ⑥ · 모델 API 0",
+    "event_code": "FOMC-20261118-MINUTES",
+    "picked_from": "packages/pipeline/data/collect/days/2026-11-19-news/sheet.md W1",
+    "documents": "packages/pipeline/data/events/FOMC-20261118-MINUTES/store.documents.json (FOMC-MIN-1028)"
+  },
+  "episode_id": "1866c048-a039-4f94-8345-029dc6ec5c8f",
+  "episode_version": 1,
+  "code": "fed-minutes",
+  "event_ref": "fd0ac6f6-daba-402e-b1e6-3d1a910fc6ac",
+  "weight": "short",
+  "series": {
+    "series_id": "eb108a1e-0b49-47b0-9e97-ca9416ce22c3",
+    "code": "fed-inside",
+    "name": "연준 회의록 읽기",
+    "sub": "결정 뒤에 오간 말을 읽는다"
+  },
+  "sibling": null,
+  "docs": {
+    "FOMC-MIN-1028": {
+      "source_id": "b6f91c9a-783b-46a1-8fbc-03c8684df1e2",
+      "name": "미 연준 (FOMC) 회의록 「Minutes of the Federal Open Market Committee, October 27–28, 2026」 (federalreserve.gov · 2026년 11월 18일 공개)"
+    }
+  },
+  "quotes": {
+    "mn01": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "Last Update: November 18, 2026"
+    },
+    "mn02": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "October 27–28, 2026"
+    },
+    "mn03": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "In support of the Committee's dual-mandate goals, 10 members agreed to maintain the target range for the federal funds rate at 3-3/4 to 4 percent and reaffirmed the FOMC's policy of maintaining ample reserves in the banking system."
+    },
+    "mn04": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "Two members voted against the decision to maintain the target range for the federal funds rate, preferring an increase of 25 basis points in the target range at this meeting."
+    },
+    "mn05": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "With regard to the outlook for monetary policy in the months ahead, almost all participants judged that, under their baseline outlooks for inflation and the labor market, further action to raise the target range for the federal funds rate—broadly consistent with the September Summary of Economic Projections—would likely be appropriate, in order to ensure a timely return of inflation to the 2 percent objective."
+    },
+    "mn06": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "In their consideration of monetary policy at this meeting, most participants expressed support for maintaining the target range for the federal funds rate."
+    },
+    "mn07": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "Many of these participants pointed to benefits in accumulating additional information, which would help in determining the policy stance appropriate to ensure a timely return of inflation to the Committee's 2 percent goal."
+    },
+    "mn11": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "It was agreed that the next meeting of the Committee would be held on Tuesday–Wednesday, December 8–9, 2026."
+    },
+    "mn12": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "Participants remarked that future policy decisions would depend on the incoming data, the evolving outlook, and the balance of risks."
+    },
+    "mn13": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "These participants cited the need to assess the durability of AI-related investment demand, the evolution of financing conditions, the transmission of the September rate increase to the economy, or geopolitical developments."
+    },
+    "mn15": {
+      "doc": "FOMC-MIN-1028",
+      "quote": "Some participants favored an increase of 25 basis points in the target range at this meeting, emphasizing that inflation had remained too high and that they saw few signs of it abating."
+    }
+  },
+  "voice_labels": {
+    "fact": "문서에 적힌 사실",
+    "official": "미 연준 회의록의 말",
+    "explain": "Claro 가 풀어 쓴 설명"
+  },
+  "tools_from": null,
+  "scenes": {
+    "cover": {
+      "title": "미 연준 회의록 공개,\n금리 동결 뒤 속내는?",
+      "dek": {
+        "t": "미국 중앙은행 (연준)이 11월 18일, 10월 회의에서 오간 말을 적은 회의록을 공개했어요. 금리를 그대로 둔 (동결한) 그 회의, 속으로도 이제 올리지 않을 생각이었을까요?",
+        "src": [
+          "mn01",
+          "mn02",
+          "mn03"
+        ],
+        "voice": "fact",
+        "calc": {
+          "11": "November = 11월",
+          "10": "October = 10월"
+        }
+      },
+      "meta": {
+        "t": "2026년 11월 18일 공개 · 10월 27 ~ 28일 회의 · 미국 연방준비제도 (연준)",
+        "src": [
+          "mn01",
+          "mn02"
+        ],
+        "voice": "fact",
+        "calc": {
+          "11": "November = 11월",
+          "10": "October = 10월"
+        }
+      },
+      "hint": {
+        "t": "회의록 한 편을 놓고 짧게 볼게요."
+      },
+      "ask": "회의록엔 뭐라고 적혀 있어요?"
+    },
+    "where": {
+      "kicker": "무슨 일인가",
+      "body": [
+        {
+          "t": "그 회의에서 연준은 금리를 그대로 뒀어요. 위원 10명이 찬성했고, 2명은 올리자며 반대했어요.",
+          "src": [
+            "mn03",
+            "mn04"
+          ],
+          "voice": "official",
+          "calc": {
+            "2": "Two members = 2명"
+          }
+        }
+      ],
+      "unknown": {
+        "t": "한국 금리나 환율에 어떤 영향이 있는지는 회의록에 적혀 있지 않아요."
+      },
+      "ask": "그럼 왜 이번엔 안 올렸대요?"
+    },
+    "why": {
+      "kicker": "문서가 말한 것",
+      "title": "그대로 두며\n지켜보려던 것",
+      "lead": {
+        "t": "대부분의 참석자가 금리를 그대로 두는 데 찬성했어요.",
+        "src": [
+          "mn06"
+        ],
+        "voice": "official"
+      },
+      "real_label": "회의록이 적은 까닭",
+      "real": [
+        {
+          "head": {
+            "t": "정보를 더 모으자"
+          },
+          "body": {
+            "t": "그중 많은 참석자가 정보가 더 쌓이면 알맞은 금리를 정하기 쉽다고 했어요.",
+            "src": [
+              "mn07"
+            ],
+            "voice": "official"
+          }
+        },
+        {
+          "head": {
+            "t": "지켜볼 것"
+          },
+          "body": {
+            "t": "이들은 AI 투자 수요가 얼마나 이어질지, 9월에 올린 금리가 경제에 퍼질지 같은 것을 살펴야 한다고 했어요.",
+            "src": [
+              "mn13"
+            ],
+            "voice": "official",
+            "calc": {
+              "9": "September = 9월"
+            }
+          }
+        }
+      ],
+      "verdict": {
+        "t": "반대로 일부 참석자는 이번에 올리자고 했어요. 물가가 너무 높고 줄어들 기미가 거의 안 보인다고 봤어요.",
+        "src": [
+          "mn15"
+        ],
+        "voice": "official"
+      },
+      "tool_lead": null,
+      "ask": "그럼 다음엔 뭘 보고 정해요?"
+    },
+    "keep": {
+      "kicker": "남음",
+      "title": "다음 회의는 12월,\n결정은 자료에 달렸어요",
+      "line": "참석자 대부분은\n정보를 더 모으려고 그대로 뒀고,\n앞으로 거의 모든 참석자는\n더 올리는 게 맞을 것이라 봤다.",
+      "advice_label": "회의록이 말한 앞날",
+      "advice": {
+        "t": "다음 회의는 12월 8 ~ 9일이에요. 참석자들은 앞으로의 결정이 들어오는 자료와 전망, 위험의 균형에 달렸다고 했어요.",
+        "src": [
+          "mn11",
+          "mn12"
+        ],
+        "voice": "official",
+        "calc": {
+          "12": "December = 12월"
+        }
+      },
+      "map_note": null,
+      "gain_label": null
+    }
+  },
+  "solve": {
+    "entry": {
+      "first_thought": {
+        "t": "금리를 그대로 뒀다는 소식을 들으면, 연준이 이제 올리기를 멈췄다고 생각하기 쉬워요."
+      },
+      "breaker": {
+        "t": "그런데 회의록에는 이렇게 적혀 있어요. 앞으로의 금리를 두고, 거의 모든 참석자가 지금의 물가와 일자리 전망대로라면 금리를 더 올리는 게 맞을 것이라고 판단했어요. 참석자는 표를 던지는 위원에 표 없는 사람까지 더한, 정책을 논의한 사람들이에요.",
+        "src": [
+          "mn05"
+        ],
+        "voice": "official"
+      },
+      "flip": {
+        "label": "뒤집어 보면",
+        "a": "“이번엔 그대로 = 더 안 올린다”",
+        "op": "≠",
+        "b": "“이번엔 그대로여도, 올리는 게 맞다고 본 쪽이 거의 모두”",
+        "note": {
+          "t": "표결은 이번 결정이고, 이 판단은 앞날에 대한 거예요. ‘거의 모든’이 몇 명인지는 회의록에 없어요.",
+          "src": [
+            "mn05"
+          ],
+          "voice": "explain"
+        }
+      },
+      "not_drawn": [
+        "반대한 두 위원의 이름 · 올리자는 쪽 일부 참석자의 수 — 줄기 밖이라 뺐다 (같은 회의의 결정은 이미 「금리 2화」가 다뤘다)",
+        "‘거의 모든’이 몇 명인지 · 올리는 폭 — 회의록에 수가 없다. 짐작하지 않는다",
+        "두어 명이 말한 다음 회의의 더 큰 인상 (조건부) · 몇몇이 시장이 예상한 12월 · 내년 인상이 자기 판단과 대체로 맞는다고 한 말 — 줄기 밖이라 뺐다. 겁주는 말이 될 수 있다",
+        "AI 투자의 물가 위험 (많은 참석자) · AI 관련 빚 (대부분) · AI 쏠림 (몇몇) · 직원의 금융 안정 평가 — 쉰 까닭의 단락이 아니라 뺐다 · 헤지펀드 · 정부 빚 · 사이버 위험도 줄기 밖",
+        "물가 (3.6%) · 일자리 숫자 · 유가와 전쟁 · 관세 — 숫자 더미를 덜었다",
+        "한국 금리 · 환율 · 한국 시장에 미칠 영향 — 회의록에 없다",
+        "언론 기사의 글 · 숫자 — 쓰지 않았다"
+      ],
+      "whose": {
+        "t": "여기까지는 미국 연준이 공개한 회의록의 말이에요."
+      },
+      "death": false
+    },
+    "plain": {
+      "kind": "flip",
+      "why": "short",
+      "title": "그럼 이제\n금리를 안 올릴까요?"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "_what": "today 2026-11-19 '오늘의 큰 뉴스 → 1차 문서' 길에서 고른 둘 (D107 · today-story ①). 작업 세션이 손으로 걸은 기록. 뉴스 기사의 글 · 숫자는 없다 (제목 · 주소 · 요지만 — sheet.md). 구절은 1차 문서의 것만.",
+  "date": "2026-11-19",
+  "window": "2026-11-18 (수) 저녁 ~ 2026-11-19 (목) 저녁 · 한국 시각",
+  "picked_by": "today-story 작업 세션 (Opus 5.5) — 제안 (둘 다 짧은) → 도윤이 '왜 매번 짧음?' → 국내 긴 · 해외 짧은 추천 → 도윤 go",
+  "picked_at": "2026-11-19",
+  "candidates": { "domestic": 5, "overseas": 6, "sheet": "sheet.md" },
+  "picked": [
+    {
+      "id": "K1", "where": "국내", "category": "돈", "weight": "긴", "story_code": "export-1",
+      "title": "한국 수출 1조 달러 돌파 — 무엇으로 채워졌나",
+      "event_code": "MOTIR-20261119-EXPORT-1T",
+      "primary": [ { "label": "PR-1119-PDF", "url": "https://www.korea.kr/common/download.do?fileId=198593103&tblKey=GMN", "page_url": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156789932", "rights": "KOGL_TYPE1 (문서 단위 · 5쪽 그림)", "in_git": true } ]
+    },
+    {
+      "id": "W1", "where": "해외", "category": "돈", "weight": "짧은", "story_code": "fed-minutes",
+      "title": "미 연준 10월 회의록 — 동결했지만 거의 모두가 더 올려야",
+      "event_code": "FOMC-20261118-MINUTES",
+      "primary": [ { "label": "MIN-1028", "url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm", "rights": "US_FEDERAL_17USC105", "in_git": true } ]
+    }
+  ]
+}

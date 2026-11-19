@@ -1,0 +1,49 @@
+{
+  "_what": "FOMC-20261118-MINUTES 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json",
+  "events": [
+    {
+      "event_id": "fd0ac6f6-daba-402e-b1e6-3d1a910fc6ac",
+      "code": "FOMC-20261118-MINUTES",
+      "title": "미 연준 FOMC — 2026년 10월 27 ~ 28일 회의록 공개 (금리 동결 10 대 2 · 거의 모든 참석자가 앞으로 금리를 더 올리는 것이 맞다고 봄 · AI 투자 · 빚을 금융 안정 위험으로 · 2026-11-18 공개)",
+      "occurred_at": "2026-11-18",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "b6f91c9a-783b-46a1-8fbc-03c8684df1e2",
+      "label": "MIN-1028",
+      "title": "Minutes of the Federal Open Market Committee, October 27–28, 2026 (federalreserve.gov · HTML)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-11-18",
+      "ingested_at": "2026-11-19"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "federalreserve.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-19",
+      "basis": "17 U.S.C. §105 — Board of Governors of the Federal Reserve System 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

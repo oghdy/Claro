@@ -1,0 +1,64 @@
+{
+  "_what": "FOMC-20261118-MINUTES 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "FOMC-20261118-MINUTES",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.federalreserve.gov",
+      "url": "https://www.federalreserve.gov/robots.txt",
+      "fetched_at": "2026-11-19T09:15:39.828Z",
+      "http_status": 404,
+      "sha256": null,
+      "error": null,
+      "reading": "4xx — 규칙 없음으로 본다 (RFC 9309 §2.3.1.3)"
+    }
+  ],
+  "documents": [
+    {
+      "label": "MIN-1028",
+      "source_id": "b6f91c9a-783b-46a1-8fbc-03c8684df1e2",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "4xx — 규칙 없음으로 본다 (RFC 9309 §2.3.1.3)"
+      },
+      "fetch": {
+        "requested_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm",
+        "fetched_at": "2026-11-19T09:15:40.442Z",
+        "final_url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html",
+        "last_modified": "Wed, 18 Nov 2026 19:00:12 GMT",
+        "raw_sha256": "2d6c2cc3fd57a7db63f690aa67efee4f52c2c7a3266f1c47d6724ed40a402e6a",
+        "raw_bytes": 124818,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "b0f8eb6eb26d791e70241ec1f235b04084e2694218f27e7c63c648d65855e2c7",
+      "text_length": 50413,
+      "pdf_page_starts": null,
+      "first_line": "Skip to main content",
+      "rights": "US_FEDERAL_17USC105",
+      "text_in": "store.documents.json",
+      "live": true,
+      "same_as_p1": null,
+      "policy_terms": {
+        "raise the target range": 2,
+        "maintaining the target range": 1,
+        "almost all participants": 3,
+        "voted against": 1,
+        "AI": 172
+      }
+    }
+  ],
+  "spans": []
+}

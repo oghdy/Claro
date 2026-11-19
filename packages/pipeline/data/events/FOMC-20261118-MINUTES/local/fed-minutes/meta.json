@@ -1,0 +1,18 @@
+{
+  "breakers": [
+    "mn05"
+  ],
+  "ban": [
+    "거의 모든 참석자",
+    "almost all participants judged",
+    "further action to raise",
+    "더 올리",
+    "더 올려",
+    "맞을 것이"
+  ],
+  "line": {
+    "place": "해외",
+    "category": "돈",
+    "unpromised": true
+  }
+}

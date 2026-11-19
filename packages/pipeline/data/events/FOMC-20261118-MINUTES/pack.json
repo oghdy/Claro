@@ -1,0 +1,31 @@
+{
+  "_what": "today 2026-11-19 소스 팩 목록 — 오늘의 해외 짧은 이야기 (D107). 사건 하나 = 목록 하나. 작업 세션 (Opus 5.5)이 손으로 쓴다. packages/pipeline/src/pack.ts (p2) 가 이 목록에서 같은 폴더의 store.json · store.documents.json · fetch.json 을 쓴다. 사실 · 해석 · 요점은 없다. 주소는 전부 2026-11-19 에 실제로 열어 확인한 것만. 같은 10월 회의의 결정 (FOMC-20261028)은 이미 '금리 2화'로 나가 있다 — 회의록은 11-18 에 새로 나온 문서라 새 사건으로 둔다. 고른 곳: packages/pipeline/data/collect/days/2026-11-19-news/sheet.md W1",
+  "event": {
+    "code": "FOMC-20261118-MINUTES",
+    "title": "미 연준 FOMC — 2026년 10월 27 ~ 28일 회의록 공개 (금리 동결 10 대 2 · 거의 모든 참석자가 앞으로 금리를 더 올리는 것이 맞다고 봄 · AI 투자 · 빚을 금융 안정 위험으로 · 2026-11-18 공개)",
+    "occurred_at": "2026-11-18",
+    "storyline_code": null,
+    "_gate1": "today-story ① 이 2026-11-19 의 큰 뉴스에서 고르고 도윤이 go (짧은)",
+    "_dates": "회의 2026-10-27 ~ 28 · 회의록 공개 2026-11-18 (페이지 끝 날짜 줄 'November 18, 2026'). Event.occurred_at 은 공개일"
+  },
+  "slots_basis": "today — 짧은 이야기용. 슬롯 표 (P-4)를 돌리지 않는다. 문서를 거는 이름일 뿐이다",
+  "slots": ["무엇을 정했나", "앞으로는", "반대한 사람", "AI"],
+  "count_terms": ["raise the target range", "maintaining the target range", "almost all participants", "voted against", "AI"],
+  "items": [
+    {
+      "label": "MIN-1028",
+      "group": "사건",
+      "title": "Minutes of the Federal Open Market Committee, October 27–28, 2026 (federalreserve.gov · HTML)",
+      "publisher": "federalreserve.gov",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20261028.htm",
+      "slots": ["무엇을 정했나", "앞으로는", "반대한 사람", "AI"],
+      "why": "이 사건의 1차 — 10월 회의록 전문. 대부분이 동결을 지지 (정보를 더 모으자 · 9월 인상의 효과를 보자) · 몇은 '아슬아슬한 결정' · 거의 모든 참석자가 앞으로 금리를 더 올리는 것이 맞을 것이라 판단 · 몇은 다음 회의에서 25bp 넘는 인상도 · 10 대 2 (Cook · Hammack 은 25bp 인상을 원함) · 물가는 여전히 높음 · AI 투자 쏠림이 물가 위험 · AI 관련 빚 · 투자 수익 실망 시나리오를 금융 안정 위험으로 · 동결이 물가 의지가 약해졌다는 뜻이 아니라는 메시지를 강조. 미 연방 정부 저작물 (17 U.S.C. §105) → git",
+      "url_basis": "federalreserve.gov FOMC 일정 페이지 (monetarypolicy/fomccalendars.htm) 의 10월 회의 'Minutes' 링크. 2026-11-19 GET 200 · HTML. robots.txt 에 이 경로를 막는 규칙 없음 (FOMC-20261028 팩과 같은 사이트)",
+      "language": "en",
+      "live": true,
+      "published_at": "2026-11-18",
+      "published_evidence": "November 18, 2026",
+      "published_note": "페이지 끝의 날짜 줄 (Last Update). 살아 있는 페이지 (메뉴 · 꼬리말)"
+    }
+  ]
+}
