@@ -16,6 +16,9 @@
 // 이 파일은 화면 뼈대 (kit/Episode)를 읽지 않는다 — kit/shelf.ts 가 이 목록을 읽기 때문이다 (서로 물리지 않게). 화면은 ./Screen.tsx 가 세운다.
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
+import export1 from "../../../../packages/pipeline/data/events/MOTIR-20261119-EXPORT-1T/local/export-1/episode.json";
+import export1Screen from "../../../../packages/pipeline/data/events/MOTIR-20261119-EXPORT-1T/local/export-1/screen.json";
+import fedMinutes from "../../../../packages/pipeline/data/events/FOMC-20261118-MINUTES/local/fed-minutes/story.json";
 import suneungAlert from "../../../../packages/pipeline/data/events/MOE-20261118-SUNEUNG-ALERT/local/suneung-alert/story.json";
 import aiHackingTool from "../../../../packages/pipeline/data/events/FBI-20261113-ARTEX/local/ai-hacking-tool/story.json";
 import suneungCheating from "../../../../packages/pipeline/data/events/OPC-20261116-EXAM-AI-CHEATING/local/suneung-cheating/story.json";
@@ -163,6 +166,11 @@ const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
  * 그래서 병원 짧은 이야기 (골든 fixtures/episode-short-privacy-yeonghun.json — 개인정보 긴 이야기와 같은 발표)는 F-E3 에서 내렸다 → /short/pipc-hospital 은 404. 골든은 그대로고 시안 (/lab/today · /lab/today/short)에만 견본으로 남는다
  */
 export const STORIES: readonly Line[] = [
+  // 11/19 "오늘" (today-story · 도윤 go) — 긴 하나 · 짧은 하나 · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트). 긴 이야기가 위
+  // 수출 1조 달러 돌파 (관계부처 합동 11/19) — 새 시리즈 「한국은 무엇을 수출하나」 1화 · 체험 없는 긴 이야기 (기본 풀이) · 그림은 기본 (PlainLook)
+  long(episodeOf(export1, ["packages/pipeline/data/events/MOTIR-20261119-EXPORT-1T/store.documents.json"]), { place: "국내", category: "돈", day: "2026-11-19", unpromised: true, screen: screenOf(export1Screen) }),
+  // 미 연준 10월 회의록 (11/18 공개) — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「연준 회의록 읽기」 · 같은 회의의 결정은 금리 2화)
+  short(fedMinutes, { place: "해외", category: "돈", day: "2026-11-19" }),
   // 11/18 "오늘" (today-story · 도윤 go) — 짧은 이야기 둘 · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트). 국내가 위
   // 수능일 위급재난문자 (교육부 · 행정안전부 11/18) — 홀로 선 짧은 이야기 (옛 꼴 · 선반 「시험은 어떻게 지켜지나」)
   short(suneungAlert, { place: "국내", category: "생활", day: "2026-11-18" }),
