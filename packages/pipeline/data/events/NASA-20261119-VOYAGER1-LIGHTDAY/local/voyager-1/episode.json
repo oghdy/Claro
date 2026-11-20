@@ -1,0 +1,801 @@
+{
+  "_source": {
+    "what": "로컬 세션 (Sonnet 5.5)이 손으로 쓴 판 — 파이프라인 산출물이 아니다 (모델 API 0)",
+    "event_code": "NASA-20261119-VOYAGER1-LIGHTDAY"
+  },
+  "episode_id": "dee04bd3-ee46-4943-9e18-4fe4567a7cb9",
+  "episode_version": 1,
+  "code": "voyager-1",
+  "event_ref": "98474840-185b-4c1c-a29b-7b310a142166",
+  "series": {
+    "series_id": "2429e94a-d58b-4f66-a04e-ca886f17278a",
+    "code": "voyager",
+    "name": "보이저는 지금 어디쯤",
+    "sub": "빛으로 하루 거리에 있는 탐사선 소식"
+  },
+  "number": 1,
+  "track": [
+    {
+      "no": {
+        "t": "0화",
+        "ui": true
+      },
+      "title": {
+        "t": "지금까지의 이야기"
+      },
+      "state": "past"
+    },
+    {
+      "no": {
+        "t": "1화",
+        "ui": true
+      },
+      "title": {
+        "t": "닿았다는 보이저 1호, 자료는 잘 오고 있을까",
+        "src": [
+          "vy.lead"
+        ]
+      },
+      "state": "now"
+    },
+    {
+      "no": {
+        "t": "다음 화"
+      },
+      "title": {
+        "t": "정해진 다음 이야기는 아직 없어요"
+      },
+      "state": "next"
+    }
+  ],
+  "docs": {
+    "NASA-REL-26-098": {
+      "source_id": "63750c7b-cfc8-479e-ba10-a1b3b7988375",
+      "name": "NASA 보도자료 26-098 · 보이저 1호, 지구에서 1광일에 닿다 (2026년 11월 19일)"
+    }
+  },
+  "quotes": {
+    "vy.lead": {
+      "doc": "NASA-REL-26-098",
+      "quote": "NASA’s Voyager 1 probe, humanity’s farthest-flying spacecraft, has reached one light-day from Earth, after more than 49 years of constant travel."
+    },
+    "vy.date": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Nov 19, 2026"
+    },
+    "vy.lightday": {
+      "doc": "NASA-REL-26-098",
+      "quote": "A light-day is the distance light travels in 24 hours, equaling about 16.1 billion miles (25.9 billion kilometers)."
+    },
+    "vy.ladder": {
+      "doc": "NASA-REL-26-098",
+      "quote": "A ray of sunlight passing Earth takes about 1.3 seconds to reach the Moon, about four hours to reach Neptune, and another 20 hours to reach Voyager 1."
+    },
+    "vy.reach": {
+      "doc": "NASA-REL-26-098",
+      "quote": "On Nov. 18, 2026, Voyager 1 reached one light-day from Earth."
+    },
+    "vy.heard": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Voyager team members at NASA’s Jet Propulsion Laboratory in Southern California, managed by Caltech, heard from the probe 24 hours later, the time it took for the spacecraft’s radio signal traveling at the speed of light to reach Earth, early Thursday."
+    },
+    "vy.break": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Even though the team has not received science and engineering data from Voyager 1 since Nov. 14, the spacecraft is sending what is called a carrier signal, which typically conveys that data to Earth."
+    },
+    "vy.confirm": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Mission engineers used the carrier signal and trajectory calculations to confirm the light-day milestone."
+    },
+    "vy.analyze": {
+      "doc": "NASA-REL-26-098",
+      "quote": "They continue to analyze the issue impacting the science and engineering data."
+    },
+    "vy.launch": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Humanity’s only probes in interstellar space, Voyager 1 and its twin, Voyager 2, launched in 1977 to take advantage of a rare planetary alignment."
+    },
+    "vy.interstellar": {
+      "doc": "NASA-REL-26-098",
+      "quote": "In 2012, Voyager 1 became the first human-made spacecraft to enter interstellar space."
+    },
+    "vy.roundtrip": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Even traveling at the speed of light, signals now take 24 hours to reach the spacecraft and 24 hours to reach us."
+    },
+    "vy.daily": {
+      "doc": "NASA-REL-26-098",
+      "quote": "We listen to Voyager 1 every day and send commands to the spacecraft weekly."
+    },
+    "vy.energy": {
+      "doc": "NASA-REL-26-098",
+      "quote": "The latest energy-saving effort is expected to provide enough power for both spacecraft to keep their current suite of science instruments operating until at least their 50th launch anniversaries next summer."
+    },
+    "vy.v2": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Voyager 2, taking a different trajectory, crossed the boundary in 2018."
+    },
+    "vy.grand": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Managed by JPL, they were only the third and fourth spacecraft to visit Jupiter and Saturn, and the first to return high-resolution imagery, transforming our understanding of these worlds and their moons."
+    },
+    "vy.v2study": {
+      "doc": "NASA-REL-26-098",
+      "quote": "Voyager 2 went on to study the ethereal ice giants, Neptune and Uranus."
+    }
+  },
+  "voice_labels": {
+    "fact": "문서에 적힌 사실",
+    "official": "NASA 가 한 말",
+    "explain": "Claro 가 풀어 쓴 설명"
+  },
+  "tools": [
+    {
+      "key": "lightday",
+      "name": "광일",
+      "short": {
+        "t": "빛이 하루 동안 가는 거리예요. 시간이 아니라 거리를 재는 말이에요.",
+        "voice": "explain"
+      },
+      "body": [
+        {
+          "t": "**광일**은 빛이 24시간 동안 가는 거리예요. 약 259억 km 라고 NASA 는 적었어요.",
+          "src": [
+            "vy.lightday"
+          ],
+          "calc": {
+            "259": "25.9 billion km = 259억 km"
+          },
+          "voice": "fact"
+        }
+      ],
+      "use": {
+        "t": "뉴스의 ‘빛으로 하루’를 거리로 읽을 때 써요.",
+        "voice": "explain"
+      },
+      "basis": []
+    },
+    {
+      "key": "carrier",
+      "name": "반송파",
+      "short": {
+        "t": "우주선이 자료를 실어 보내는 데 쓰는 신호예요.",
+        "voice": "explain"
+      },
+      "body": [
+        {
+          "t": "**반송파**는 보통 자료를 지구로 실어 나르는 신호예요.",
+          "src": [
+            "vy.break"
+          ],
+          "voice": "fact"
+        }
+      ],
+      "use": {
+        "t": "뉴스의 ‘닿았다’가 무엇으로 확인됐는지 읽을 때 써요.",
+        "src": [
+          "vy.confirm"
+        ],
+        "voice": "explain"
+      },
+      "basis": []
+    },
+    {
+      "key": "signal",
+      "name": "신호 시간",
+      "short": {
+        "t": "보이저에 신호가 가고 오는 데 걸리는 시간이에요.",
+        "src": [
+          "vy.roundtrip"
+        ],
+        "voice": "explain"
+      },
+      "body": [
+        {
+          "t": "빛의 속도로 가도, 신호가 보이저에 가는 데 하루, 지구에 오는 데 또 하루가 걸려요.",
+          "src": [
+            "vy.roundtrip"
+          ],
+          "voice": "fact"
+        }
+      ],
+      "use": {
+        "t": "보이저와 주고받는 말이 얼마나 걸리는지 읽을 때 써요.",
+        "src": [
+          "vy.roundtrip"
+        ],
+        "voice": "explain"
+      },
+      "basis": []
+    }
+  ],
+  "pickup": {
+    "tools": [
+      "lightday"
+    ],
+    "aha": [
+      "carrier"
+    ],
+    "next": [
+      "signal"
+    ]
+  },
+  "assembly": {
+    "new": [
+      "cover",
+      "event",
+      "tools",
+      "aha",
+      "next",
+      "keep"
+    ],
+    "follower": [
+      "cover",
+      "event",
+      "tools",
+      "aha",
+      "compare",
+      "next",
+      "keep"
+    ]
+  },
+  "scenes": {
+    "cover": {
+      "episode": {
+        "t": "1화",
+        "ui": true
+      },
+      "title": "닿았다는 보이저 1호,\n자료는 잘 오고 있을까",
+      "dek": {
+        "t": "NASA 가 11월 19일, 보이저 1호가 18일에 지구에서 빛으로 하루 걸리는 거리에 닿았다고 밝혔어요. 그 먼 곳에서 오는 자료는, 지금 잘 오고 있을까요?",
+        "src": [
+          "vy.date",
+          "vy.reach",
+          "vy.lead"
+        ],
+        "calc": {
+          "11": "Nov. = 11월"
+        }
+      },
+      "meta": {
+        "t": "2026년 11월 19일 NASA 발표 · 11월 18일에 닿음",
+        "src": [
+          "vy.date",
+          "vy.reach"
+        ],
+        "calc": {
+          "11": "Nov. = 11월"
+        }
+      },
+      "new_hint": {
+        "t": "처음 읽어도 괜찮아요. 필요한 말은 가는 길에 하나씩 줍게 돼요."
+      },
+      "recap_label": "지난 이야기",
+      "recap": [],
+      "ask_new": "빛으로 하루가 얼마나 먼 거예요?",
+      "ask_follower": "그래서 이번엔 무슨 일이죠?"
+    },
+    "zero": {
+      "kicker": {
+        "t": "0화 · 지금까지의 이야기",
+        "ui": true
+      },
+      "title": {
+        "t": "1977년에 떠나\n49년 넘게 날았어요",
+        "src": [
+          "vy.launch",
+          "vy.lead"
+        ]
+      },
+      "beats": [
+        {
+          "when": {
+            "t": "1977년",
+            "src": [
+              "vy.launch"
+            ]
+          },
+          "head": "떠났어요",
+          "body": {
+            "t": "쌍둥이 보이저 2호와 함께 1977년에 떠났어요.",
+            "src": [
+              "vy.launch"
+            ],
+            "voice": "fact"
+          }
+        },
+        {
+          "when": {
+            "t": "2012년",
+            "src": [
+              "vy.interstellar"
+            ]
+          },
+          "head": "별 사이로",
+          "body": {
+            "t": "2012년에 사람이 만든 우주선으로는 처음으로 별과 별 사이의 공간에 들어갔어요.",
+            "src": [
+              "vy.interstellar"
+            ],
+            "voice": "fact"
+          }
+        },
+        {
+          "when": {
+            "t": "11월 18일",
+            "src": [
+              "vy.reach"
+            ],
+            "calc": {
+              "11": "Nov. = 11월"
+            }
+          },
+          "head": "그리고 지금",
+          "body": {
+            "t": "11월 18일, 지구에서 빛으로 하루 걸리는 거리에 닿았어요.",
+            "src": [
+              "vy.reach"
+            ],
+            "calc": {
+              "11": "Nov. = 11월"
+            },
+            "voice": "fact"
+          }
+        }
+      ],
+      "ask": "그래서 이번엔 무슨 일이죠?"
+    },
+    "event": {
+      "kicker": {
+        "t": "1화 · 오늘의 사건",
+        "ui": true
+      },
+      "title": "빛으로 하루 걸리는\n거리에 닿았어요",
+      "lead": {
+        "t": "보이저 1호는 49년 넘게 날아 이 거리까지 왔어요.",
+        "src": [
+          "vy.lead"
+        ],
+        "voice": "fact"
+      },
+      "figures": [
+        {
+          "who": "빛이 해왕성까지 가는 데",
+          "amount": {
+            "t": "약 4시간",
+            "src": [
+              "vy.ladder"
+            ],
+            "calc": {
+              "4": "four hours (영어 낱말) = 4시간"
+            }
+          },
+          "tag": "해왕성"
+        },
+        {
+          "who": "빛이 보이저 1호까지 가는 데",
+          "amount": {
+            "t": "24시간",
+            "src": [
+              "vy.lightday"
+            ]
+          },
+          "tag": "하루"
+        }
+      ],
+      "figure_note": {
+        "t": "같은 빛이 지구에서 달까지는 약 1.3초면 가요.",
+        "src": [
+          "vy.ladder"
+        ],
+        "voice": "fact"
+      },
+      "quote_label": "NASA 보도자료의 첫 문장",
+      "quote": {
+        "t": "“NASA 의 보이저 1호는, 인류의 우주선 가운데 가장 멀리 날아간 것으로, 49년 넘게 쉬지 않고 여행한 끝에 지구에서 1광일 거리에 닿았다.”",
+        "src": [
+          "vy.lead"
+        ],
+        "voice": "official"
+      },
+      "quote_note": "영어로 된 NASA 보도자료의 문장을 우리말로 옮긴 거예요.",
+      "riddle": [
+        {
+          "t": "그런데 ‘빛으로 하루’는 정확히 무슨 뜻일까요?",
+          "voice": "explain"
+        }
+      ],
+      "ask": "‘빛으로 하루’가 무슨 뜻이에요?"
+    },
+    "tools": {
+      "kicker": "도구 줍기",
+      "title_new": "풀기 전에,\n도구 1개만 챙겨요",
+      "title_follower": "오늘 새로 필요한 도구는\n1개예요",
+      "sub_new": {
+        "t": "뉴스에 나온 ‘빛으로 하루’가 무슨 뜻인지부터 볼게요."
+      },
+      "sub_follower": {
+        "t": "오늘은 처음 줍는 도구예요."
+      },
+      "ask": "그런데 보이저 1호는 지금 어떻게 지내요?"
+    },
+    "aha": {
+      "kicker": "풀이",
+      "real_label": "NASA 가 이어서 적은 것",
+      "real": [
+        {
+          "head": {
+            "t": "신호는 지금도 와요"
+          },
+          "body": {
+            "t": "자료를 실어 나르는 신호는 보이저 1호에서 지금도 오고 있어요.",
+            "src": [
+              "vy.break"
+            ],
+            "voice": "fact"
+          }
+        }
+      ],
+      "verdict": {
+        "t": "자료가 오지 않는 문제는 NASA 팀이 계속 분석하고 있어요.",
+        "src": [
+          "vy.analyze"
+        ],
+        "voice": "official"
+      },
+      "ask_new": "그럼 지금은 어떻게 이야기해요?",
+      "ask_follower": "그럼 지금은 어떻게 이야기해요?"
+    },
+    "compare": {
+      "kicker": "따라온 독자에게만",
+      "title": "보이저 1호와 2호는\n가는 길이 달랐어요",
+      "lead": {
+        "t": "쌍둥이 우주선이지만, 별 사이의 공간에 들어간 때가 달랐어요.",
+        "src": [
+          "vy.interstellar",
+          "vy.v2"
+        ],
+        "voice": "fact"
+      },
+      "cols": [
+        {
+          "t": "보이저 1호",
+          "src": [
+            "vy.lead"
+          ]
+        },
+        {
+          "t": "보이저 2호",
+          "src": [
+            "vy.v2"
+          ]
+        }
+      ],
+      "rows": [
+        {
+          "label": "별 사이의 공간에 들어간 해",
+          "a": {
+            "t": "2012년",
+            "src": [
+              "vy.interstellar"
+            ]
+          },
+          "b": {
+            "t": "2018년",
+            "src": [
+              "vy.v2"
+            ]
+          }
+        },
+        {
+          "label": "찾아간 행성",
+          "a": {
+            "t": "목성 · 토성",
+            "src": [
+              "vy.grand"
+            ]
+          },
+          "b": {
+            "t": "목성 · 토성 · 해왕성 · 천왕성",
+            "src": [
+              "vy.grand",
+              "vy.v2study"
+            ]
+          }
+        }
+      ],
+      "body": [
+        {
+          "t": "2호가 해왕성과 천왕성까지 연구했다고 문서는 적었어요.",
+          "src": [
+            "vy.v2study"
+          ],
+          "voice": "fact"
+        }
+      ],
+      "ask": "그럼 지금은 어떻게 이야기해요?"
+    },
+    "next": {
+      "kicker": "이어짐",
+      "title": "신호 하나가 가는 데\n하루가 걸려요",
+      "lead": {
+        "t": "NASA 프로젝트 매니저는 보이저 1호를 매일 듣고, 명령은 주마다 보낸다고 했어요.",
+        "src": [
+          "vy.daily"
+        ],
+        "voice": "official"
+      },
+      "line": [
+        {
+          "when": {
+            "t": "1977년",
+            "src": [
+              "vy.launch"
+            ]
+          },
+          "what": "떠남",
+          "state": "past"
+        },
+        {
+          "when": {
+            "t": "2012년",
+            "src": [
+              "vy.interstellar"
+            ]
+          },
+          "what": "별 사이의 공간에 들어감",
+          "state": "past"
+        },
+        {
+          "when": {
+            "t": "11월 18일",
+            "src": [
+              "vy.reach"
+            ],
+            "calc": {
+              "11": "Nov. = 11월"
+            }
+          },
+          "what": "빛으로 하루 거리",
+          "state": "now"
+        }
+      ],
+      "here_label": "지금 여기",
+      "tool_lead": "그 말이 오가는 시간을 말 하나로 챙겨요.",
+      "coming_label": "다음 회차가 될 일들",
+      "coming": [
+        {
+          "head": "내년 여름 · 발사 50주년",
+          "body": {
+            "t": "보이저는 내년 여름 발사 50주년을 맞아요.",
+            "src": [
+              "vy.energy"
+            ],
+            "voice": "fact"
+          }
+        }
+      ],
+      "unknown_label": "아직 모르는 것",
+      "unknown": [
+        {
+          "t": "자료가 오지 않는 까닭",
+          "src": [
+            "vy.analyze"
+          ]
+        },
+        {
+          "t": "자료가 다시 오는 때",
+          "src": [
+            "vy.break"
+          ]
+        }
+      ],
+      "unknown_note": {
+        "t": "문서가 말하지 않은 건 우리도 짐작해서 적지 않아요.",
+        "voice": "explain"
+      },
+      "ask": "그래서 오늘 일을 한 줄로 하면요?"
+    },
+    "keep": {
+      "kicker": "남음",
+      "title": "오늘 일은\n한 줄이에요",
+      "line": "NASA 는 보이저 1호가 빛으로 하루 거리에 닿았다고 했지만,\n11월 14일부터 자료는 받지 못하고 있어요.",
+      "next_body": {
+        "t": "다음에 ‘멀리 닿았다’는 소식을 보면, 어디에 있다는 말인지 무엇이 온다는 말인지 한 번 더 읽어 보세요."
+      }
+    }
+  },
+  "solve": {
+    "entry": {
+      "first_thought": {
+        "t": "NASA 가 ‘닿았다’고 했으니, 보이저 1호는 잘 지내고 자료도 잘 보내고 있을 것 같아요.",
+        "src": [
+          "vy.lead"
+        ],
+        "voice": "explain"
+      },
+      "breaker": {
+        "t": "그런데 같은 보도자료에, 팀이 11월 14일부터 과학·공학 자료를 받지 못했다는 문장이 있어요.",
+        "src": [
+          "vy.break"
+        ],
+        "calc": {
+          "11": "Nov. = 11월"
+        },
+        "voice": "fact"
+      },
+      "flip": {
+        "label": "뒤집어 보면",
+        "a": "“닿았다”",
+        "op": "≠",
+        "b": "“자료가 잘 온다”",
+        "note": {
+          "t": "‘닿았다’는 보이저 1호가 **어디쯤 있는지**를 말해요. 그 먼 곳에서 **자료가 오는지**는 따로 봐야 해요.",
+          "src": [
+            "vy.reach",
+            "vy.break"
+          ],
+          "voice": "explain"
+        }
+      },
+      "not_drawn": [
+        "자료가 오지 않는 까닭. 문서는 문제를 분석하고 있다고만 적었다. 고장 · 전기 · 안테나 같은 까닭을 그리지 않는다. 올해 초 장치를 바꾼 일 (vy.swap — 이 판에는 싣지 않았다)과도 잇지 않는다.",
+        "보이저가 위험하다 · 사라졌다는 그림. 문서는 반송파가 오고 있다고 적었다. 겁주는 쪽으로 키우지 않는다.",
+        "‘역사적’ 같은 평가. NASA · JPL 사람들의 감탄은 이야기꾼의 말로 쓰지 않는다 (이 판에는 싣지 않았다).",
+        "자료가 다시 올 때 · 원인이 밝혀질 때. 문서에 없다.",
+        "‘사람이 만든 것 가운데 처음’. 문서는 ‘가장 멀리 날아간 우주선’이라고만 적었다 (빛으로 하루가 처음이라고는 말하지 않았다).",
+        "11월 14일과 18일 사이의 까닭 이음. 칸과 칸 사이에는 차례만 있다.",
+        "마일 · 광년의 수. km 한 군데 (259억)만 쓴다.",
+        "내년 여름 이후에도 장비를 켜 둘 수 있는지 · 보이저 2호의 지금 형편. 문서에 없다. 전기 (원자력 전지 · 해마다 줄어드는 전기)는 자료가 오지 않는 일과 잇는 것으로 읽힐 수 있어 그리지 않는다."
+      ],
+      "whose": {
+        "t": "여기까지는 **NASA 보도자료**에 적힌 말이에요. 자료가 오지 않는 까닭은 NASA 가 분석하는 중이라, 문서에 없어요."
+      },
+      "death": false
+    },
+    "lab": {
+      "title": "보이저 1호 소식을\n넘겨 볼게요",
+      "seen_title": "보이저 1호 소식을\n펼쳐 놓을게요",
+      "setup": [
+        {
+          "t": "NASA 문서에 적힌 일을 차례로 따라가 볼게요.",
+          "src": [
+            "vy.reach"
+          ],
+          "voice": "explain"
+        }
+      ],
+      "frames": [
+        {
+          "kind": "pages",
+          "picture": {
+            "id": "voyager-path",
+            "tool": "lightday"
+          },
+          "label": "보이저 1호 소식의 차례",
+          "cards": [
+            {
+              "id": "reach",
+              "when": {
+                "t": "11월 18일",
+                "src": [
+                  "vy.reach"
+                ],
+                "calc": {
+                  "11": "Nov. = 11월"
+                }
+              },
+              "no_date": null,
+              "head": "빛으로 하루 거리에 닿았어요",
+              "body": {
+                "t": "보이저 1호가 지구에서 빛으로 하루 걸리는 거리에 닿았어요.",
+                "src": [
+                  "vy.reach"
+                ],
+                "calc": {
+                  "11": "Nov. = 11월"
+                },
+                "voice": "fact"
+              },
+              "state": "past",
+              "star": false
+            },
+            {
+              "id": "heard",
+              "when": {
+                "t": "24시간 뒤",
+                "src": [
+                  "vy.heard"
+                ]
+              },
+              "no_date": null,
+              "head": "신호를 들었어요",
+              "body": {
+                "t": "NASA 팀이 보이저의 신호를 들었어요. 신호가 지구까지 오는 데 24시간이 걸렸거든요.",
+                "src": [
+                  "vy.heard"
+                ],
+                "voice": "fact"
+              },
+              "state": "past",
+              "star": false
+            },
+            {
+              "id": "data",
+              "when": {
+                "t": "11월 14일부터",
+                "src": [
+                  "vy.break"
+                ],
+                "calc": {
+                  "11": "Nov. = 11월"
+                }
+              },
+              "no_date": null,
+              "head": "자료는 오지 않았어요",
+              "body": {
+                "t": "NASA 팀은 보이저 1호의 과학·공학 자료를 받지 못하고 있어요. 닿은 건 보이저가 보내는 신호(반송파)와 궤도 계산으로 확인했어요.",
+                "src": [
+                  "vy.break",
+                  "vy.confirm"
+                ],
+                "calc": {
+                  "11": "Nov. = 11월"
+                },
+                "voice": "official"
+              },
+              "state": "now",
+              "star": true
+            }
+          ],
+          "ask": "그 신호에 자료가 실려 왔을까요?",
+          "action": "눌러서 넘기기",
+          "again": "처음부터 다시 넘기기",
+          "caption": {
+            "before": {
+              "t": "맨 위 카드부터 눌러서 넘겨 보세요."
+            },
+            "after": {
+              "t": "소식은 이 차례로 있었어요.",
+              "src": [
+                "vy.reach"
+              ],
+              "voice": "explain"
+            }
+          }
+        }
+      ],
+      "born": {
+        "lead": "이 이야기에서 NASA 가 중요하게 쓴 말을 하나 챙겨요.",
+        "tool": "carrier"
+      }
+    },
+    "plain": {
+      "kind": "flip",
+      "why": null,
+      "title": "‘닿았다’를\n뒤집어 볼게요"
+    }
+  },
+  "map": {
+    "where_today": {
+      "t": "1화에서 주움",
+      "ui": true
+    },
+    "at": {
+      "lightday": [
+        50,
+        24
+      ],
+      "carrier": [
+        28,
+        66
+      ],
+      "signal": [
+        74,
+        70
+      ]
+    },
+    "edges": [],
+    "ghosts": []
+  }
+}

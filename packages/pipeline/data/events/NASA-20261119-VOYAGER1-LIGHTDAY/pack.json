@@ -1,0 +1,31 @@
+{
+  "_what": "today 2026-11-20 소스 팩 목록 — 오늘의 해외 긴 이야기 (D107). 사건 하나 = 목록 하나. 작업 세션 (Opus 5.5)이 손으로 쓴다. packages/pipeline/src/pack.ts (p2) 가 이 목록에서 같은 폴더의 store.json · store.documents.json · fetch.json 을 쓴다. 사실 · 해석 · 요점은 없다. 주소는 전부 2026-11-20 에 실제로 열어 확인한 것만. 고른 곳: packages/pipeline/data/collect/days/2026-11-20-news/sheet.md W1",
+  "event": {
+    "code": "NASA-20261119-VOYAGER1-LIGHTDAY",
+    "title": "NASA — 보이저 1호가 2026-11-18 지구에서 1광일 (빛이 24시간 가는 거리) 떨어진 곳에 닿음 · 사람이 만든 탐사선으로 처음 (Release 26-098 · 2026-11-19 발표)",
+    "occurred_at": "2026-11-19",
+    "storyline_code": null,
+    "_gate1": "today-story ① 이 2026-11-20 의 큰 뉴스에서 고르고 도윤이 go (긴 · 제안대로 — 국내만 바꿈)",
+    "_dates": "도달 2026-11-18 2:16 a.m. PST · 보도자료 'Nov 19, 2026'. Event.occurred_at 은 발표일"
+  },
+  "slots_basis": "today — 긴 이야기용. 슬롯 표 (P-4)를 돌리지 않는다. 문서를 거는 이름일 뿐이다",
+  "slots": ["무엇에 닿았나", "광일이란", "빛으로 잰 거리", "지금 형편", "걸어온 길", "남은 물음"],
+  "count_terms": ["light-day", "Voyager 1", "carrier signal", "interstellar", "1977", "Golden Record"],
+  "items": [
+    {
+      "label": "NASA-REL-26-098",
+      "group": "사건",
+      "title": "NASA News Release 26-098 「NASA's Voyager 1 Makes History Reaching One Light-Day From Earth」 (2026-11-19 · HTML)",
+      "publisher": "nasa.gov",
+      "url": "https://www.nasa.gov/news-release/nasas-voyager-1-makes-history-reaching-one-light-day-from-earth/",
+      "slots": ["무엇에 닿았나", "광일이란", "빛으로 잰 거리", "지금 형편", "걸어온 길", "남은 물음"],
+      "why": "이 사건의 1차 — NASA 보도자료 전문. 49년 넘게 날아 1광일 도달 · 광일 = 빛이 24시간 가는 거리 (약 161억 마일 · 259억 km) · 11/18 2:16 a.m. PST · 24시간 뒤 JPL 이 신호를 받음 · 빛으로 잰 거리 (달 1.3초 · 해왕성 약 4시간 · 보이저까지 20시간 더 · 광년 5.88조 마일) · **11/14 부터 과학 · 공학 자료를 받지 못함 — 반송파 (carrier signal)와 궤도 계산으로 확인 · 문제 분석 중** · 1977 발사 · 목성 · 토성 · 2012 성간 진입 (보이저 2호는 2018) · 시속 약 38,000마일 · 골든 레코드 · 낡은 기계 · 전력 아끼기 · NASA · JPL · Caltech 사람들의 말. 미 연방 정부 저작물 (17 U.S.C. §105) → git",
+      "url_basis": "NASA 새 소식 피드 (https://www.nasa.gov/feed/ · 2026-11-20 의 줄 '19 Nov 2026 | NASA's Voyager 1 Makes History …')의 주소. 2026-11-20 GET 200 · HTML. robots.txt (www.nasa.gov) 'User-agent: * Allow: /'",
+      "language": "en",
+      "live": true,
+      "published_at": "2026-11-19",
+      "published_evidence": "Nov 19, 2026",
+      "published_note": "보도자료 머리의 날짜 줄 (Release 26-098). 살아 있는 쪽 (메뉴 · 추천 글)"
+    }
+  ]
+}

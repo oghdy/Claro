@@ -1,0 +1,49 @@
+{
+  "_what": "NASA-20261119-VOYAGER1-LIGHTDAY 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json",
+  "events": [
+    {
+      "event_id": "98474840-185b-4c1c-a29b-7b310a142166",
+      "code": "NASA-20261119-VOYAGER1-LIGHTDAY",
+      "title": "NASA — 보이저 1호가 2026-11-18 지구에서 1광일 (빛이 24시간 가는 거리) 떨어진 곳에 닿음 · 사람이 만든 탐사선으로 처음 (Release 26-098 · 2026-11-19 발표)",
+      "occurred_at": "2026-11-19",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "63750c7b-cfc8-479e-ba10-a1b3b7988375",
+      "label": "NASA-REL-26-098",
+      "title": "NASA News Release 26-098 「NASA's Voyager 1 Makes History Reaching One Light-Day From Earth」 (2026-11-19 · HTML)",
+      "publisher": "nasa.gov",
+      "url": "https://www.nasa.gov/news-release/nasas-voyager-1-makes-history-reaching-one-light-day-from-earth/",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-11-19",
+      "ingested_at": "2026-11-20"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "nasa.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-20",
+      "basis": "17 U.S.C. §105 — National Aeronautics and Space Administration (NASA) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

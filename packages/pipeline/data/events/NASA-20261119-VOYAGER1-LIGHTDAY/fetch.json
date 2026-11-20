@@ -1,0 +1,65 @@
+{
+  "_what": "NASA-20261119-VOYAGER1-LIGHTDAY 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "NASA-20261119-VOYAGER1-LIGHTDAY",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.nasa.gov",
+      "url": "https://www.nasa.gov/robots.txt",
+      "fetched_at": "2026-11-20T11:01:47.543Z",
+      "http_status": 200,
+      "sha256": "44d72c5ad1a94bb45f25caaba917c39b39b383af3a121b59a5a7e46fbe3ccb05",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "NASA-REL-26-098",
+      "source_id": "63750c7b-cfc8-479e-ba10-a1b3b7988375",
+      "publisher": "nasa.gov",
+      "url": "https://www.nasa.gov/news-release/nasas-voyager-1-makes-history-reaching-one-light-day-from-earth/",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.nasa.gov/news-release/nasas-voyager-1-makes-history-reaching-one-light-day-from-earth/",
+        "fetched_at": "2026-11-20T11:01:47.860Z",
+        "final_url": "https://www.nasa.gov/news-release/nasas-voyager-1-makes-history-reaching-one-light-day-from-earth/",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "837f9ea5c8b72056f67d157169e1ece6fd127a847151595877e36e3423303d52",
+        "raw_bytes": 291592,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "72a6e870fd6de6579c80c208db9f87cc3951818c3be076d3af1cf6470f39b072",
+      "text_length": 13797,
+      "pdf_page_starts": null,
+      "first_line": "Search",
+      "rights": "US_FEDERAL_17USC105",
+      "text_in": "store.documents.json",
+      "live": true,
+      "same_as_p1": null,
+      "policy_terms": {
+        "1977": 2,
+        "light-day": 8,
+        "Voyager 1": 19,
+        "carrier signal": 2,
+        "interstellar": 6,
+        "Golden Record": 1
+      }
+    }
+  ],
+  "spans": []
+}

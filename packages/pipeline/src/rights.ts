@@ -28,6 +28,7 @@ export const US_FEDERAL: Record<string, string> = {
   "centcom.mil": "U.S. Central Command (Department of Defense)",
   "bis.gov": "Bureau of Industry and Security (Department of Commerce)",   // today 2026-11-17 · 도윤 go (멈춤 1)
   "ic3.gov": "Federal Bureau of Investigation — Internet Crime Complaint Center (Department of Justice)",   // today 2026-11-18 · 도윤 go (멈춤 1)
+  "nasa.gov": "National Aeronautics and Space Administration (NASA)",   // today 2026-11-20 · 멈춤 1 에서 말함 (같은 갈래)
 };
 
 // 공공누리 제1유형 — 발행처 → 근거 (그 사이트가 스스로 밝힌 글 그대로. E2-1 이 2026-11-11 저장한 페이지의 꼬리말)

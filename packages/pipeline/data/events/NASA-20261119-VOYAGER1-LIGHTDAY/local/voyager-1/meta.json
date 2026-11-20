@@ -1,0 +1,21 @@
+{
+  "_what": "계약에 없는 손 칸. breakers = 깨는 사실의 구절 키 (풀이 전의 글 · 도구 · 근거에 달리면 안 된다) · ban = 깨는 말 · line = 이야기 목록에 적을 값 (day 는 올리는 세션이 적는다)",
+  "breakers": [
+    "vy.break",
+    "vy.confirm",
+    "vy.analyze"
+  ],
+  "ban": [
+    "반송파",
+    "받지 못",
+    "분석하고",
+    "분석 중",
+    "carrier",
+    "not received"
+  ],
+  "line": {
+    "place": "해외",
+    "category": "과학과 몸",
+    "unpromised": true
+  }
+}
