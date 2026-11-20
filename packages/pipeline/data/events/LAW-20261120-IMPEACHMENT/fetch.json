@@ -1,0 +1,191 @@
+{
+  "_what": "LAW-20261120-IMPEACHMENT 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "LAW-20261120-IMPEACHMENT",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.law.go.kr",
+      "url": "https://www.law.go.kr/robots.txt",
+      "fetched_at": "2026-11-20T11:07:38.142Z",
+      "http_status": 200,
+      "sha256": "bdf6e8d2c4792183feb41f8b1440551715d4564d5156cc74e67c54648d013133",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "CONST",
+      "source_id": "b026f001-b098-4395-88c9-d59a37fa1c9b",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=61603&chrClsCd=010202&efYd=19880225&ancYnChk=0",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=61603&chrClsCd=010202&efYd=19880225&ancYnChk=0",
+        "fetched_at": "2026-11-20T11:01:44.151Z",
+        "final_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=61603&chrClsCd=010202&efYd=19880225&ancYnChk=0",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "e1175b1e706de3962c1001450de0b513f2b4e9243a56269844009b28aa790a23",
+        "raw_bytes": 151961,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "97252d2d3e01f74a278d2b9821848a90fa0d82b15e3cb3780279d054e8113def",
+      "text_length": 18511,
+      "pdf_page_starts": null,
+      "first_line": "대한민국헌법",
+      "rights": "KR_STATUTE",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "탄핵": 11,
+        "소추": 6,
+        "재적의원": 14,
+        "권한행사": 1,
+        "6인": 1,
+        "파면": 4
+      }
+    },
+    {
+      "label": "NAA",
+      "source_id": "4026261b-6989-4a7d-ac9a-3d194e426fce",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289167&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289167&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+        "fetched_at": "2026-11-20T11:01:45.651Z",
+        "final_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289167&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "73c45a86214fad5adf637be147d7760c9d72711da957a841fa311f08270aba5c",
+        "raw_bytes": 571489,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "7f7c3150c211686cbc2a17470888ee48bdc12bad7f945ccbe7c66b465d9d8c7f",
+      "text_length": 89518,
+      "pdf_page_starts": null,
+      "first_line": "국회법",
+      "rights": "KR_STATUTE",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "탄핵": 16,
+        "소추": 27,
+        "재적의원": 18,
+        "권한행사": 0,
+        "6인": 0,
+        "파면": 0
+      }
+    },
+    {
+      "label": "CCA",
+      "source_id": "46f4076a-4b3b-4f8d-aa1b-6b25a48fb238",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=284151&chrClsCd=010202&efYd=20260312&ancYnChk=0",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=284151&chrClsCd=010202&efYd=20260312&ancYnChk=0",
+        "fetched_at": "2026-11-20T11:01:47.100Z",
+        "final_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=284151&chrClsCd=010202&efYd=20260312&ancYnChk=0",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "9d2be18b99414828a154b07efeb257263584e450ceae294ca9feda0ceead81dc",
+        "raw_bytes": 214938,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "bf7c6e87eae1336481b8f1c614092e5791551a95a3fbe0ae9db29e09b4c749fd",
+      "text_length": 29033,
+      "pdf_page_starts": null,
+      "first_line": "헌법재판소법",
+      "rights": "KR_STATUTE",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "탄핵": 18,
+        "소추": 9,
+        "재적의원": 0,
+        "권한행사": 0,
+        "6인": 0,
+        "파면": 5
+      }
+    },
+    {
+      "label": "COA",
+      "source_id": "c1ec9d92-adeb-4e21-9cf2-71c334d078cf",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290233&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290233&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+        "fetched_at": "2026-11-20T11:07:38.403Z",
+        "final_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290233&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "1e930f18bbaf1eca954087eb3b6eb05fdeff7153d4b172f988e0c913a42b550a",
+        "raw_bytes": 350436,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "e15ca6a85ca6499ef6841ee13c3ee5a49635febab11f9d75eb84652aeef0a032",
+      "text_length": 44383,
+      "pdf_page_starts": null,
+      "first_line": "법원조직법",
+      "rights": "KR_STATUTE",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "탄핵": 2,
+        "소추": 0,
+        "재적의원": 0,
+        "권한행사": 0,
+        "6인": 0,
+        "파면": 2
+      }
+    }
+  ],
+  "spans": []
+}

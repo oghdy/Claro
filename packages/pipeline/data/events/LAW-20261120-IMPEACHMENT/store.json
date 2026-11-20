@@ -1,0 +1,82 @@
+{
+  "_what": "LAW-20261120-IMPEACHMENT 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json",
+  "events": [
+    {
+      "event_id": "5e10d617-7890-46b6-b84c-d9a1b5a6b3dd",
+      "code": "LAW-20261120-IMPEACHMENT",
+      "title": "개념 — 법관 (대법원장) 탄핵은 어떻게 진행되나 (헌법 제65조 · 국회법 제11장 · 헌법재판소법 탄핵심판). 오늘의 뉴스 고리: 여당이 2026-11-20 대법원장 탄핵소추를 당론으로 정함 (1차 문서 없음 — 뉴스의 말)",
+      "occurred_at": "2026-11-20",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "b026f001-b098-4395-88c9-d59a37fa1c9b",
+      "label": "CONST",
+      "title": "대한민국헌법 [시행 1988. 2. 25.] [헌법 제10호, 1987. 10. 29., 전부개정]",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=61603&chrClsCd=010202&efYd=19880225&ancYnChk=0",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "1987-10-29",
+      "ingested_at": "2026-11-20"
+    },
+    {
+      "source_id": "4026261b-6989-4a7d-ac9a-3d194e426fce",
+      "label": "NAA",
+      "title": "국회법 [시행 2026. 10. 2.] [법률 제21883호, 2026. 9. 8., 일부개정]",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289167&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-09-08",
+      "ingested_at": "2026-11-20"
+    },
+    {
+      "source_id": "46f4076a-4b3b-4f8d-aa1b-6b25a48fb238",
+      "label": "CCA",
+      "title": "헌법재판소법 [시행 2026. 3. 12.] [법률 제21452호, 2026. 3. 12., 일부개정]",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=284151&chrClsCd=010202&efYd=20260312&ancYnChk=0",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-03-12",
+      "ingested_at": "2026-11-20"
+    },
+    {
+      "source_id": "c1ec9d92-adeb-4e21-9cf2-71c334d078cf",
+      "label": "COA",
+      "title": "법원조직법 [시행 2026. 10. 2.] [법률 제22054호, 2026. 9. 29., 일부개정]",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=290233&chrClsCd=010202&efYd=20261002&ancYnChk=0",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-09-29",
+      "ingested_at": "2026-11-20"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "law.go.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-20",
+      "basis": "저작권법 제7조 (보호받지 못하는 저작물 — 헌법 · 법률 · 조약 · 명령 …) — 국가법령정보센터 (법제처) — 법률 · 대통령령 본문과 별표 · 행정규칙(고시) 본문 → 전문 보관(can_store) · 인용(can_quote) (D53). 나머지 칸은 null — 사이트(국가법령정보센터) 이용약관은 검토하지 않았다 (E2-1)"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}

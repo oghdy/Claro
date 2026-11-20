@@ -1,0 +1,28 @@
+{
+  "_what": "today 2026-11-20 '오늘의 큰 뉴스 → 1차 문서' 길에서 고른 둘 (D107 · today-story ①). 뉴스 기사의 글 · 숫자는 없다 (제목 · 주소 · 요지만 — sheet.md). 구절은 1차 문서의 것만.",
+  "date": "2026-11-20",
+  "window": "2026-11-19 (목) 저녁 ~ 2026-11-20 (금) 저녁 · 한국 시각",
+  "picked_by": "today-story 작업 세션 (Opus 5.5) — 제안 (국내 독감 짧은 · 해외 보이저 긴) → 도윤이 국내를 K2 (대법원장 탄핵 당론)로 바꿈 · 해외는 제안대로",
+  "picked_at": "2026-11-20",
+  "candidates": { "domestic": 5, "overseas": 6, "sheet": "sheet.md" },
+  "picked": [
+    {
+      "id": "K2", "where": "국내", "category": "나라와 법", "weight": "짧은 (개념)", "story_code": "impeachment",
+      "title": "대법원장 탄핵 당론 — 탄핵은 법에서 어떻게 진행되나",
+      "event_code": "LAW-20261120-IMPEACHMENT",
+      "note": "당론 채택 자체는 git 에 둘 1차 문서 없음 (D86 '1차 없음 → 개념으로') · 특검법은 본문 미확인이라 뺌",
+      "primary": [
+        { "label": "CONST", "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=61603&chrClsCd=010202&efYd=19880225&ancYnChk=0", "rights": "KR_STATUTE", "in_git": true },
+        { "label": "NAA", "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289167&chrClsCd=010202&efYd=20261002&ancYnChk=0", "rights": "KR_STATUTE", "in_git": true },
+        { "label": "CCA", "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=284151&chrClsCd=010202&efYd=20260312&ancYnChk=0", "rights": "KR_STATUTE", "in_git": true }
+      ]
+    },
+    {
+      "id": "W1", "where": "해외", "category": "과학과 몸", "weight": "긴", "story_code": "voyager-1",
+      "title": "보이저 1호, 지구에서 '빛으로 하루' 거리에 닿다",
+      "event_code": "NASA-20261119-VOYAGER1-LIGHTDAY",
+      "primary": [ { "label": "NASA-REL-26-098", "url": "https://www.nasa.gov/news-release/nasas-voyager-1-makes-history-reaching-one-light-day-from-earth/", "rights": "US_FEDERAL_17USC105", "in_git": true } ]
+    }
+  ],
+  "not_picked_proposed": [ { "id": "K1", "title": "독감 입원 · 중증 급증 (질병관리청)", "why": "도윤이 K2 로 바꿈 · 1차 (newsId 156790051 · 5쪽 공공누리 그림 확인)는 있다" } ]
+}
