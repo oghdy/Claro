@@ -1,0 +1,65 @@
+{
+  "_what": "today 2026-11-21 소스 팩 목록 — 오늘의 해외 짧은 이야기 (D107). 사건 하나 = 목록 하나. 작업 세션 (Opus 5.5)이 손으로 쓴다. 사실 · 해석 · 요점은 없다. 주소는 전부 2026-11-21 에 실제로 열어 확인한 것만. 고른 곳: packages/pipeline/data/collect/days/2026-11-21-news/sheet.md W1 (도윤이 앤트로픽 상장으로 바꿨다가 원문이 막혀 W1 으로 돌아옴). 의원의 성명 (당파의 말)은 받지 않고 위원회가 공개한 두 문서만",
+  "event": {
+    "code": "HFAC-20261119-H200-LICENSES",
+    "title": "미 하원 외교위원회 — 상무부 산업안보국 (BIS)의 엔비디아 H200 · AMD MI325X 중국 수출 허가 기록을 공개 (2026-11-19 · 50 U.S.C. 4820(h)(2) 의 국익 판단 · 전원 동의). 5월 11일 기준 허가 879,868개 · 허가 줄은 모두 'Approved, not shipped'",
+    "occurred_at": "2026-11-19",
+    "storyline_code": null,
+    "_gate1": "today-story ① 제안 W1 → 도윤이 W3 (앤트로픽 상장)으로 바꿈 → 그 원문이 권리 미확인 · SEC 안내문은 403 → 도윤이 '미 하원 AI 칩 기록으로' 고름",
+    "_dates": "두 문서 머리 '11.19.2026' · 표 머리 'as of May 11, 2026'. Event.occurred_at 은 공개일"
+  },
+  "slots_basis": "today — 짧은 이야기용. 슬롯 표 (P-4)를 돌리지 않는다. 문서를 거는 이름일 뿐이다",
+  "slots": [
+    "무엇을 공개했나",
+    "신청과 허가",
+    "허가와 배송",
+    "위험을 누가 적었나",
+    "남은 것"
+  ],
+  "count_terms": [
+    "covered integrated circuits",
+    "Approved, not shipped",
+    "RWA",
+    "low",
+    "1260H",
+    "May 11, 2026"
+  ],
+  "items": [
+    {
+      "label": "HFAC-SUM",
+      "group": "사건",
+      "title": "House Foreign Affairs Committee 「ECRA Information Disclosure HFAC Summary」 (2026-11-19 · PDF 2쪽)",
+      "publisher": "house.gov",
+      "url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-HFAC-Summary.pdf",
+      "slots": [
+        "무엇을 공개했나",
+        "신청과 허가",
+        "위험을 누가 적었나"
+      ],
+      "why": "위원회의 요약 — 50 U.S.C. 4820(h)(2)(b)(ii) 에 따라 공개 · 5월 11일 기준 신청 3,444,160개 · 허가 21건 879,868개 (알리바바 75,000 · 텐센트 150,000 · 바이두 43,000 · BYD 4,000) · 1260H 목록 회사 · 데이터센터 설치 회사 이름 · **모든 신청서가 빼돌림 위험을 'low'라고 적음** · 대상 칩 = H200 · MI325X (각주). 미 의회 저작물 (17 U.S.C. §105) → git. 각주에 신문 주소 둘 (글은 없음)",
+      "url_basis": "위원회 소수당 쪽 보도 글 (https://democrats-foreignaffairs.house.gov/2026/11/meeks-delivers-remarks-during-hfac-disclosure-of-bis-licenses-of-nvidia-amd-chips-to-china/ · 2026-11-19)의 'The House Foreign Affairs Committee disclosed the following documents' 아래 링크. 2026-11-21 GET 200 (ClaroPipeline 신원) · PDF 2쪽. robots.txt 'Disallow: /wp-admin/' 뿐",
+      "language": "en",
+      "published_at": "2026-11-19",
+      "published_evidence": "11.19.2026",
+      "published_note": "문서 머리 'House Foreign Affairs Committee ECRA Disclosure | 11.19.2026'"
+    },
+    {
+      "label": "HFAC-TBL",
+      "group": "사건",
+      "title": "House Foreign Affairs Committee 「ECRA Information Disclosure of BIS License Decisions」 — H200 License and Equivalent Application Status as of May 11, 2026 (2026-11-19 · PDF 4쪽 · 표)",
+      "publisher": "house.gov",
+      "url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-of-BIS-License-Decisions.pdf",
+      "slots": [
+        "신청과 허가",
+        "허가와 배송",
+        "남은 것"
+      ],
+      "why": "BIS 의 신청 · 결정 표 (날짜 · 수출자 · 받는 회사 · 개수 · 상태 · 칩이 갈 곳) — 허가 줄은 모두 **'Approved, not shipped'** · 그 밖 RWA (반려) · Rejected · Submitted · 끝에 레노버 허가 둘은 중국 밖 제조 · 연구용. 머리의 CUI 표시 (국익 판단 없이는 공개 금지)는 위원회가 국익 판단으로 공개함 (요약 문서). 미 의회 저작물 → git",
+      "url_basis": "위와 같은 보도 글의 두 번째 링크. 2026-11-21 GET 200 · PDF 4쪽",
+      "language": "en",
+      "published_at": "2026-05-11",
+      "published_evidence": "as of May 11, 2026",
+      "published_note": "문서 안의 날짜는 표 머리 'H200 License and Equivalent Application Status as of May 11, 2026' 하나뿐 — BIS 표의 기준일. 공개는 2026-11-19 (파일 이름 '11.19.26-…' · 요약 문서 HFAC-SUM 머리)"
+    }
+  ]
+}

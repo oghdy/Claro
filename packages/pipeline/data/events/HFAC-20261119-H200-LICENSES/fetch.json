@@ -1,0 +1,115 @@
+{
+  "_what": "HFAC-20261119-H200-LICENSES 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "HFAC-20261119-H200-LICENSES",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "democrats-foreignaffairs.house.gov",
+      "url": "https://democrats-foreignaffairs.house.gov/robots.txt",
+      "fetched_at": "2026-11-21T04:51:51.296Z",
+      "http_status": 200,
+      "sha256": "0f6d6725c0ffbe9ba7a217f3c29a4ba7f5173822bed42ab6349139da645950a4",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "HFAC-SUM",
+      "source_id": "080ad4dd-c014-4fc8-99b8-d6ad5486873a",
+      "publisher": "house.gov",
+      "url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-HFAC-Summary.pdf",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 에 맞는 규칙 없음 — 된다"
+      },
+      "fetch": {
+        "requested_url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-HFAC-Summary.pdf",
+        "fetched_at": "2026-11-21T04:51:35.868Z",
+        "final_url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-HFAC-Summary.pdf",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "last_modified": "Thu, 19 Nov 2026 19:21:45 GMT",
+        "raw_sha256": "30561cce2526d35487249219193b94e6785bcec9b86e7e87f13b4bd70b602f27",
+        "raw_bytes": 152276,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "4de5c343fa1d891468aabbb12a424cc0b74da39daa6791135c99cbe263dfe2ed",
+      "text_length": 2856,
+      "pdf_page_starts": [
+        0,
+        2424
+      ],
+      "first_line": "House Foreign Affairs Committee ECRA Disclosure | 11.19.2026",
+      "rights": "US_FEDERAL_17USC105",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "covered integrated circuits": 4,
+        "Approved, not shipped": 0,
+        "RWA": 0,
+        "low": 3,
+        "1260H": 1,
+        "May 11, 2026": 3
+      }
+    },
+    {
+      "label": "HFAC-TBL",
+      "source_id": "3a299d49-f310-40a5-abe4-3c9f5ed3ca35",
+      "publisher": "house.gov",
+      "url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-of-BIS-License-Decisions.pdf",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 에 맞는 규칙 없음 — 된다"
+      },
+      "fetch": {
+        "requested_url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-of-BIS-License-Decisions.pdf",
+        "fetched_at": "2026-11-21T04:51:37.363Z",
+        "final_url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-of-BIS-License-Decisions.pdf",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "last_modified": "Thu, 19 Nov 2026 19:22:09 GMT",
+        "raw_sha256": "5b23b3786b827183a0dbbf1dde347862d8bf682fc5cd73212464a4f04128ce4a",
+        "raw_bytes": 89354,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "870b698e6749220d98f99021245422f241aeb8b058e0668609e01d413606bc95",
+      "text_length": 5174,
+      "pdf_page_starts": [
+        0,
+        1384,
+        2534,
+        3817
+      ],
+      "first_line": "CUI//SP-EXPT This information contains statutorily protected business confidential",
+      "rights": "US_FEDERAL_17USC105",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "covered integrated circuits": 0,
+        "Approved, not shipped": 0,
+        "RWA": 9,
+        "low": 0,
+        "1260H": 0,
+        "May 11, 2026": 1
+      }
+    }
+  ],
+  "spans": []
+}

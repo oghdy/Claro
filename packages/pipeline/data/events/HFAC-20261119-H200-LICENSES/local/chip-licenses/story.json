@@ -1,0 +1,237 @@
+{
+  "_source": {
+    "what": "짧은 이야기 「미국이 AI 칩 중국 수출을 허가했다는데, 갔을까요?」 — 로컬 세션이 손으로 쓴 판 (모델 API 0). 골든이 아니다. 사람 게이트 전에는 내지 않는다",
+    "made_by": "글 로컬 세션 · Sonnet 5.5 (손 · 2026-11-21) · 법 docs/content/story-guide.md · UX-8 ⑥ · 모델 API 0",
+    "event_code": "HFAC-20261119-H200-LICENSES",
+    "picked_from": "packages/pipeline/data/collect/days/2026-11-21-news/sheet.md W1",
+    "documents": "packages/pipeline/data/events/HFAC-20261119-H200-LICENSES/store.documents.json (HFAC-SUM · HFAC-TBL)"
+  },
+  "episode_id": "b4b0d7a2-6c1e-5f43-9a6e-2f7d8c1e5a90",
+  "episode_version": 1,
+  "code": "chip-licenses",
+  "event_ref": "63ded9ac-6090-4ecb-9ac2-2c616ccb5eca",
+  "weight": "short",
+  "series": {
+    "series_id": "e0e764e9-0e23-5c67-a9de-ff04ebed2190",
+    "code": "tech-export",
+    "name": "미국은 AI 칩을 어떻게 막나",
+    "sub": "칩 수출 통제 문서를 읽는다"
+  },
+  "sibling": null,
+  "docs": {
+    "HFAC-SUM": {
+      "source_id": "080ad4dd-c014-4fc8-99b8-d6ad5486873a",
+      "name": "미 하원 외교위원회 「ECRA Information Disclosure HFAC Summary」 (house.gov · 2026년 11월 19일 · 2쪽)"
+    },
+    "HFAC-TBL": {
+      "source_id": "3a299d49-f310-40a5-abe4-3c9f5ed3ca35",
+      "name": "미 하원 외교위원회 「ECRA Information Disclosure of BIS License Decisions」 (house.gov · 2026년 11월 19일 · 표 4쪽)"
+    }
+  },
+  "quotes": {
+    "sum01": {
+      "doc": "HFAC-SUM",
+      "quote": "House Foreign Affairs Committee ECRA Disclosure | 11.19.2026"
+    },
+    "sum02": {
+      "doc": "HFAC-SUM",
+      "quote": "According to a BIS summary provided to the House Foreign Affairs Committee dated\nMay 11, 2026, as of that date, BIS received applications to sell 3,444,160 covered\nintegrated circuitsi to PRC companies."
+    },
+    "sum03": {
+      "doc": "HFAC-SUM",
+      "quote": "BIS approved the export, re-export, or transfer (in-country) of 879,868 covered integrated\ncircuits to PRC companies across 21 license applications, as of May 11, 2026."
+    },
+    "sum04": {
+      "doc": "HFAC-SUM",
+      "quote": "This\nincludes 75,000 for Alibaba, 150,000 for Tencent and its subsidiaries, 43,000 for Baidu,\nand 4,000 for BYD."
+    },
+    "sum05": {
+      "doc": "HFAC-SUM",
+      "quote": "Every NVIDIA and AMD application stated that the proposed transfer posed a\n“low” risk of diversion."
+    },
+    "sum06": {
+      "doc": "HFAC-SUM",
+      "quote": "Covered integrated circuits are the following products: NVIDIA’s H200 and AMD’s MI325X."
+    },
+    "tb01": {
+      "doc": "HFAC-TBL",
+      "quote": "H200 License and Equivalent Application Status as of May 11, 2026"
+    },
+    "tb02": {
+      "doc": "HFAC-TBL",
+      "quote": "12/16/2025 Nvidia Alibaba Group 75,000\nApproved,\nnot shipped\nChina"
+    },
+    "tb03": {
+      "doc": "HFAC-TBL",
+      "quote": "3/10/2026 Nvidia Baidu 43,000\nApproved,\nnot shipped\nChina"
+    },
+    "tb04": {
+      "doc": "HFAC-TBL",
+      "quote": "3/9/2026 AMD UCloud 75,000 Rejected China"
+    },
+    "tb05": {
+      "doc": "HFAC-TBL",
+      "quote": "3/18/2026 Nvidia Meituan 75,000 Submitted China"
+    }
+  },
+  "voice_labels": {
+    "fact": "문서에 적힌 사실",
+    "official": "미 하원 외교위원회가 공개한 문서의 말",
+    "explain": "Claro 가 풀어 쓴 설명"
+  },
+  "tools_from": null,
+  "scenes": {
+    "cover": {
+      "title": "미국이 AI 칩 중국 수출을\n허가했다는데, 갔을까요?",
+      "dek": {
+        "t": "미국 하원 외교위원회가 11월 19일, 미국 정부가 중국 회사에 내 준 엔비디아 · AMD AI 칩 수출 허가 기록을 공개했어요.",
+        "src": [
+          "sum01",
+          "sum06"
+        ],
+        "voice": "fact"
+      },
+      "meta": {
+        "t": "2026년 11월 19일 공개 · 5월 11일 기준 · 미국 하원 외교위원회",
+        "src": [
+          "sum01",
+          "tb01"
+        ],
+        "voice": "fact",
+        "calc": {
+          "5": "May = 5월"
+        }
+      },
+      "hint": {
+        "t": "기록 한 편을 놓고 짧게 볼게요."
+      },
+      "ask": "허가가 몇 개나 났대요?"
+    },
+    "where": {
+      "kicker": "무슨 일인가",
+      "body": [
+        {
+          "t": "상무부 산업안보국이 위원회에 준 요약에 따르면, 5월 11일까지 허가된 칩은 879,868개 (21건)예요.",
+          "src": [
+            "sum03"
+          ],
+          "voice": "official",
+          "calc": {
+            "5": "May = 5월"
+          }
+        },
+        {
+          "t": "알리바바 75,000개, 바이두 43,000개 같은 회사가 들어 있어요. 신청한 칩은 모두 3,444,160개였고요.",
+          "src": [
+            "sum04",
+            "sum02"
+          ],
+          "voice": "official"
+        }
+      ],
+      "unknown": {
+        "t": "허가를 내기까지 상무부가 무엇을 따졌는지는 기록에 없어요."
+      },
+      "ask": "그럼 지금은 어떻게 됐어요?"
+    },
+    "why": {
+      "kicker": "문서가 말한 것",
+      "title": "표가 알려 주는 건\n그날까지예요",
+      "lead": {
+        "t": "지금은 알 수 없어요. 허가된 칩이 그 뒤 보내졌는지는 요약에도 표에도 없어요.",
+        "voice": "explain"
+      },
+      "real_label": "그날 표에 적힌 것",
+      "real": [
+        {
+          "head": {
+            "t": "허가 말고도"
+          },
+          "body": {
+            "t": "‘Rejected’, 곧 거절된 줄도 있고, ‘Submitted’, 곧 신청만 해 둔 줄도 있어요.",
+            "src": [
+              "tb04",
+              "tb05"
+            ],
+            "voice": "official"
+          }
+        }
+      ],
+      "verdict": {
+        "t": "그래서 허가 숫자를 ‘이미 보낸 칩’의 수로 읽을 수는 없어요.",
+        "voice": "explain"
+      },
+      "tool_lead": null,
+      "ask": "그럼 뉴스의 허가 숫자는 어떻게 읽어요?"
+    },
+    "keep": {
+      "kicker": "남음",
+      "title": "허가는 났고,\n그 뒤는 비어 있어요",
+      "line": "허가 879,868개는\n칩이 중국에 갔다는 수가 아니라\n5월 11일 기준 표에서\n아직 보내지 않았던 칩의 수다.",
+      "advice_label": "표의 기준 날",
+      "advice": {
+        "t": "표는 5월 11일 기준이고, 공개는 11월 19일이에요. 뉴스의 허가 숫자를 볼 때는 이 기준 날을 같이 봐요.",
+        "src": [
+          "sum01",
+          "tb01"
+        ],
+        "voice": "explain",
+        "calc": {
+          "5": "May = 5월"
+        }
+      },
+      "map_note": null,
+      "gain_label": null
+    }
+  },
+  "solve": {
+    "entry": {
+      "first_thought": {
+        "t": "허가가 났다니, 그만큼의 AI 칩이 벌써 중국에 건너갔다고 생각하기 쉬워요."
+      },
+      "breaker": {
+        "t": "그런데 위원회가 공개한 표에서 허가된 줄은 21줄 모두 같은 말이 적혀 있어요. 알리바바 75,000개 줄도, 바이두 43,000개 줄도 ‘Approved, not shipped’, 곧 허가는 났지만 아직 보내지 않았다고 되어 있어요.",
+        "src": [
+          "tb02",
+          "tb03",
+          "sum03"
+        ],
+        "voice": "official"
+      },
+      "flip": {
+        "label": "뒤집어 보면",
+        "a": "“허가 879,868개 = 중국에 간 칩”",
+        "op": "≠",
+        "b": "“허가만 난, 아직 안 보낸 칩”",
+        "note": {
+          "t": "표 맨 위의 기준은 5월 11일이에요.",
+          "src": [
+            "tb01"
+          ],
+          "voice": "explain",
+          "calc": {
+            "5": "May = 5월"
+          }
+        }
+      },
+      "not_drawn": [
+        "허가가 났는데 왜 보내지 않았는지 · 누가 멈췄는지 — 문서에 없다 (문서가 말한 것에 '기록에 없다'로). 5월 11일 뒤에 칩이 실제로 보내졌는지 · 지금 중국에 있는지 — 문서에 없다. 있다고도 없다고도 쓰지 않는다 (문서가 말한 것 · 남음에 '기록에 없다'로)",
+        "허가를 내 준 상무부의 이유 · 기준 — 문서에 없다. 회사를 탓하거나 권하지 않는다",
+        "신청서가 적은 위험 'low' — 덜어 냈다. 위원회 글에서 빼돌림 공개 보도를 말한 설치 회사 목록 바로 뒤의 대비 문장이라, 떼어 두면 한쪽으로 기운다 (중립). 맞다 틀리다도 판단하지 않는다",
+        "데이터센터에 설치하는 회사 이름들 · 1260H 목록 (중국 군사 기업 목록) · 빼돌림에 대한 공개 보도 — 줄기 밖이라 뺐다. 이름만 늘어놓으면 탓하는 글이 된다 (중립)",
+        "RWA · Maginfra 등 표의 말뿐인 상태 · 중국 밖 (말레이시아 · 인도네시아 · 태국) 줄 — 표는 RWA 뜻을 풀지 않았다. 짐작해 옮기지 않았다",
+        "레노버가 받은 중국 밖 제조 · 연구용 허가 둘 · 엔비디아가 텐센트에 445,000개를 신청한 일 · 신청이 허가 줄의 합과 겹치는 방식 — 줄기 밖이라 뺐다",
+        "의원 · 정당의 주장 · 평가 — 팩에 없다. 언론 기사의 글 · 숫자 — 쓰지 않았다"
+      ],
+      "whose": {
+        "t": "여기까지는 미국 하원 외교위원회가 공개한 두 문서 — 상무부 산업안보국의 신청 · 결정 기록을 옮긴 요약과 표 — 의 말이에요."
+      },
+      "death": false
+    },
+    "plain": {
+      "kind": "flip",
+      "why": "short",
+      "title": "‘수출 허가’가 났다는 건\n무슨 뜻일까요?"
+    }
+  }
+}

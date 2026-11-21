@@ -1,0 +1,27 @@
+{
+  "_what": "today 2026-11-21 '오늘의 큰 뉴스 → 1차 문서' 길에서 고른 둘 (D107 · today-story ①). 뉴스 기사의 글 · 숫자는 없다 (제목 · 주소 · 요지만 — sheet.md). 구절은 1차 문서의 것만.",
+  "date": "2026-11-21",
+  "window": "2026-11-20 (금) 낮 ~ 2026-11-21 (토) 낮 · 한국 시각",
+  "picked_by": "today-story 작업 세션 (Opus 5.5) — 제안 (국내 재초환 긴 · 해외 하원 AI 칩 허가 기록 짧은) → 도윤이 해외를 W3 (앤트로픽 상장)으로 바꿈 → 회사 투자설명서는 권리 미확인 · SEC 안내문 (investor.gov)은 우리 신원에 403 → 도윤이 W1 으로 돌아옴",
+  "picked_at": "2026-11-21",
+  "candidates": { "domestic": 6, "overseas": 6, "sheet": "sheet.md" },
+  "picked": [
+    {
+      "id": "K1", "where": "국내", "category": "돈", "weight": "긴 (개념)", "story_code": "rebuild-1",
+      "title": "재건축 부담금 (재초환) — 법은 무엇에서 무엇을 빼고 매기나",
+      "event_code": "LAW-20261121-REBUILD-CHARGE",
+      "note": "국토부의 11/19 부과 기한 검토는 1차 문서를 못 찾음 (korea.kr · molit.go.kr) → 법 하나로 개념 이야기 (D86)",
+      "primary": [ { "label": "RCA", "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=277019&chrClsCd=010202&efYd=20251001&ancYnChk=0", "rights": "KR_STATUTE", "in_git": true } ]
+    },
+    {
+      "id": "W1", "where": "해외", "category": "기술", "weight": "짧은", "story_code": "chip-licenses",
+      "title": "미 하원, AI 칩 중국행 허가 기록 공개 — 허가는 났는데 보냈나",
+      "event_code": "HFAC-20261119-H200-LICENSES",
+      "primary": [
+        { "label": "HFAC-SUM", "url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-HFAC-Summary.pdf", "rights": "US_FEDERAL_17USC105", "in_git": true },
+        { "label": "HFAC-TBL", "url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-of-BIS-License-Decisions.pdf", "rights": "US_FEDERAL_17USC105", "in_git": true }
+      ]
+    }
+  ],
+  "not_picked_proposed": [ { "id": "W3", "title": "앤트로픽 나스닥 상장", "why": "도윤이 골랐으나 1차 (424B4 · FWP)는 회사 글 = 권리 미확인 · 대신할 SEC 안내문 (investor.gov)은 403 — 우회하지 않음. 이해 충돌도 있음 (쓰는 모델의 회사)" } ]
+}

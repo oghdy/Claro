@@ -1,0 +1,60 @@
+{
+  "_what": "HFAC-20261119-H200-LICENSES 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json",
+  "events": [
+    {
+      "event_id": "63ded9ac-6090-4ecb-9ac2-2c616ccb5eca",
+      "code": "HFAC-20261119-H200-LICENSES",
+      "title": "미 하원 외교위원회 — 상무부 산업안보국 (BIS)의 엔비디아 H200 · AMD MI325X 중국 수출 허가 기록을 공개 (2026-11-19 · 50 U.S.C. 4820(h)(2) 의 국익 판단 · 전원 동의). 5월 11일 기준 허가 879,868개 · 허가 줄은 모두 'Approved, not shipped'",
+      "occurred_at": "2026-11-19",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "080ad4dd-c014-4fc8-99b8-d6ad5486873a",
+      "label": "HFAC-SUM",
+      "title": "House Foreign Affairs Committee 「ECRA Information Disclosure HFAC Summary」 (2026-11-19 · PDF 2쪽)",
+      "publisher": "house.gov",
+      "url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-HFAC-Summary.pdf",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-11-19",
+      "ingested_at": "2026-11-21"
+    },
+    {
+      "source_id": "3a299d49-f310-40a5-abe4-3c9f5ed3ca35",
+      "label": "HFAC-TBL",
+      "title": "House Foreign Affairs Committee 「ECRA Information Disclosure of BIS License Decisions」 — H200 License and Equivalent Application Status as of May 11, 2026 (2026-11-19 · PDF 4쪽 · 표)",
+      "publisher": "house.gov",
+      "url": "https://democrats-foreignaffairs.house.gov/wp-content/uploads/2026/11/11.19.26-ECRA-Information-Disclosure-of-BIS-License-Decisions.pdf",
+      "kind": "PRIMARY",
+      "language": "en",
+      "published_at": "2026-05-11",
+      "ingested_at": "2026-11-21"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "house.gov",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-21",
+      "basis": "17 U.S.C. §105 — U.S. House of Representatives (Committee on Foreign Affairs) 는 미국 연방 정부다. 연방 정부의 저작물에는 저작권이 없다 → 전문 보관(can_store) · 인용(can_quote). 나머지 칸은 이 근거가 직접 말하지 않아 null (검토 안 함). 문서 안에 든 제3자의 글(예: 기자회견의 기자 질문)은 따로 보지 않았다 (P-1)"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}
