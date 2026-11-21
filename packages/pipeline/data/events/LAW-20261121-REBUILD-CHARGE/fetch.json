@@ -1,0 +1,65 @@
+{
+  "_what": "LAW-20261121-REBUILD-CHARGE 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "LAW-20261121-REBUILD-CHARGE",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.law.go.kr",
+      "url": "https://www.law.go.kr/robots.txt",
+      "fetched_at": "2026-11-21T04:48:59.993Z",
+      "http_status": 200,
+      "sha256": "bdf6e8d2c4792183feb41f8b1440551715d4564d5156cc74e67c54648d013133",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "RCA",
+      "source_id": "83466f10-3fcf-4a94-92f7-64d37edffbbb",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=277019&chrClsCd=010202&efYd=20251001&ancYnChk=0",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=277019&chrClsCd=010202&efYd=20251001&ancYnChk=0",
+        "fetched_at": "2026-11-21T04:49:00.356Z",
+        "final_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=277019&chrClsCd=010202&efYd=20251001&ancYnChk=0",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "text/html;charset=UTF-8",
+        "last_modified": null,
+        "raw_sha256": "a5b208fc5f8b637fd6f50b0db652dbb2d8fc358a6763c0c0087fe7f79de89d03",
+        "raw_bytes": 155783,
+        "error": null
+      },
+      "kind": "HTML",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "091c6248a3bdda6e6e745eacdf1a1990ac1c63bafad5ccfeb5c311a9fe9a8948",
+      "text_length": 25990,
+      "pdf_page_starts": null,
+      "first_line": "재건축초과이익 환수에 관한 법률 ( 약칭: 재건축이익환수법 )",
+      "rights": "KR_STATUTE",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "재건축부담금": 108,
+        "초과이익": 25,
+        "정상주택가격상승분": 6,
+        "개발비용": 7,
+        "8천만원": 9,
+        "부과율": 2
+      }
+    }
+  ],
+  "spans": []
+}

@@ -1,0 +1,49 @@
+{
+  "_what": "LAW-20261121-REBUILD-CHARGE 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json",
+  "events": [
+    {
+      "event_id": "b3a769fa-58f6-4aed-b671-8d3c6b0067cb",
+      "code": "LAW-20261121-REBUILD-CHARGE",
+      "title": "개념 — 재건축부담금 (재건축초과이익 환수)은 어떻게 매기나 (재건축초과이익 환수에 관한 법률 제7조 부과기준 · 제12조 부과율 · 제14조의2 감경 · 제15조 결정 · 부과). 오늘의 뉴스 고리: 부담금 예정액 통지 · 부과 기한 검토 (1차 문서 없음 — 뉴스의 말)",
+      "occurred_at": "2026-11-21",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "83466f10-3fcf-4a94-92f7-64d37edffbbb",
+      "label": "RCA",
+      "title": "재건축초과이익 환수에 관한 법률 [시행 2025. 10. 1.] [법률 제21065호, 2025. 10. 1., 타법개정]",
+      "publisher": "law.go.kr",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=277019&chrClsCd=010202&efYd=20251001&ancYnChk=0",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2025-10-01",
+      "ingested_at": "2026-11-21"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "law.go.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-21",
+      "basis": "저작권법 제7조 (보호받지 못하는 저작물 — 헌법 · 법률 · 조약 · 명령 …) — 국가법령정보센터 (법제처) — 법률 · 대통령령 본문과 별표 · 행정규칙(고시) 본문 → 전문 보관(can_store) · 인용(can_quote) (D53). 나머지 칸은 null — 사이트(국가법령정보센터) 이용약관은 검토하지 않았다 (E2-1)"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}
