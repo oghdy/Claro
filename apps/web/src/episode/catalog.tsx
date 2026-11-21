@@ -16,6 +16,9 @@
 // 이 파일은 화면 뼈대 (kit/Episode)를 읽지 않는다 — kit/shelf.ts 가 이 목록을 읽기 때문이다 (서로 물리지 않게). 화면은 ./Screen.tsx 가 세운다.
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
+import rebuild1 from "../../../../packages/pipeline/data/events/LAW-20261121-REBUILD-CHARGE/local/rebuild-1/episode.json";
+import rebuild1Screen from "../../../../packages/pipeline/data/events/LAW-20261121-REBUILD-CHARGE/local/rebuild-1/screen.json";
+import chipLicenses from "../../../../packages/pipeline/data/events/HFAC-20261119-H200-LICENSES/local/chip-licenses/story.json";
 import voyager1 from "../../../../packages/pipeline/data/events/NASA-20261119-VOYAGER1-LIGHTDAY/local/voyager-1/episode.json";
 import voyager1Screen from "../../../../packages/pipeline/data/events/NASA-20261119-VOYAGER1-LIGHTDAY/local/voyager-1/screen.json";
 import impeachment from "../../../../packages/pipeline/data/events/LAW-20261120-IMPEACHMENT/local/impeachment/story.json";
@@ -169,6 +172,11 @@ const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
  * 그래서 병원 짧은 이야기 (골든 fixtures/episode-short-privacy-yeonghun.json — 개인정보 긴 이야기와 같은 발표)는 F-E3 에서 내렸다 → /short/pipc-hospital 은 404. 골든은 그대로고 시안 (/lab/today · /lab/today/short)에만 견본으로 남는다
  */
 export const STORIES: readonly Line[] = [
+  // 11/21 "오늘" (today-story · 도윤 go) — 긴 하나 · 짧은 하나 · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트). 긴 이야기가 위
+  // 재건축 부담금 (11/21 뉴스 · 1차 없음) — 개념 긴 이야기 · 재건축초과이익 환수법 하나 · 새 시리즈 「재건축 부담금은 어떻게 매겨요」 1화 · 넘겨 보기 체험 · 그림은 기본 (PlainLook)
+  long(episodeOf(rebuild1, ["packages/pipeline/data/events/LAW-20261121-REBUILD-CHARGE/store.documents.json"]), { place: "국내", category: "돈", day: "2026-11-21", unpromised: true, screen: screenOf(rebuild1Screen) }),
+  // 미 하원 외교위 AI 칩 중국행 허가 기록 공개 (11/19) — 짧은 이야기 · 선반 「미국은 AI 칩을 어떻게 막나」 (chip-remote 와 같은 선반)
+  short(chipLicenses, { place: "해외", category: "기술", day: "2026-11-21" }),
   // 11/20 "오늘" (today-story · 도윤 go) — 긴 하나 · 짧은 하나 · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트). 긴 이야기가 위
   // 보이저 1호 1광일 (NASA 11/19) — 새 시리즈 「보이저는 지금 어디쯤」 1화 · 넘겨 보기 체험 · 그림은 기본 (PlainLook)
   long(episodeOf(voyager1, ["packages/pipeline/data/events/NASA-20261119-VOYAGER1-LIGHTDAY/store.documents.json"]), { place: "해외", category: "과학과 몸", day: "2026-11-20", unpromised: true, screen: screenOf(voyager1Screen) }),
