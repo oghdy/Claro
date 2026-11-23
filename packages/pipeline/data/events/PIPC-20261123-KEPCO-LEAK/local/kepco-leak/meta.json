@@ -1,0 +1,16 @@
+{
+  "_what": "계약에 없는 손 칸 (L-1). breakers = 깨는 사실의 구절 키 · ban = 깨는 말 · line = 목록의 값. day 는 올리는 세션이 적는다",
+  "breakers": [
+    "pp03"
+  ],
+  "ban": [
+    "한전ON",
+    "전자조달",
+    "SRM"
+  ],
+  "line": {
+    "place": "국내",
+    "category": "생활",
+    "unpromised": true
+  }
+}

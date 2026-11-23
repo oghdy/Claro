@@ -1,0 +1,69 @@
+{
+  "_what": "PIPC-20261123-KEPCO-LEAK 의 소스 팩 — 계약 모양 (DATA_MODEL §1). packages/pipeline/src/pack.ts 가 pack.json 에서 쓴다 — 손으로 고치지 않는다. 골든(fixtures/)이 아니다. 사실 · 해석 · 요점은 아직 없다 (P-3 이후). 원문 전문은 store.documents.json · 가져온 기록은 fetch.json. 문서 단위 권리 (발행처는 미확인 · 문서 안에 공공누리 제1유형 표시 — 그 문서에 한해 발행처 행보다 앞선다) 는 document_rights (DATA_MODEL DocumentRights · B-E2 · pack.json doc_rights 에서)",
+  "events": [
+    {
+      "event_id": "cb02871c-a480-4e67-8d4c-c24659038b0b",
+      "code": "PIPC-20261123-KEPCO-LEAK",
+      "title": "개인정보보호위원회 — 한전 개인정보 유출사고 조사 착수 (2026-11-23) · 한전이 11/22 18시경 신고 · 한전ON 고객정보 (65만 여명) · 전자조달시스템 (SRM) 이용자 정보 (87만 여명) · 초동대응반 현장점검",
+      "occurred_at": "2026-11-23",
+      "storyline_id": null
+    }
+  ],
+  "storylines": [],
+  "storyline_versions": [],
+  "sources": [
+    {
+      "source_id": "15c7ba2e-7bc9-4d03-83ae-03f1cfec60d7",
+      "label": "PR-1123-PDF",
+      "title": "개인정보위, 한전 개인정보 유출사고 조사 착수 (개인정보보호위원회 보도자료 PDF · 2쪽)",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198594801&tblKey=GMN",
+      "kind": "PRIMARY",
+      "language": "ko",
+      "published_at": "2026-11-23",
+      "ingested_at": "2026-11-23"
+    }
+  ],
+  "source_documents": [],
+  "source_registry": [
+    {
+      "source": "korea.kr",
+      "access_method": "공개 웹 페이지 — HTTP GET (P-2 파이프라인 · robots.txt 확인)",
+      "can_ingest": null,
+      "can_store": null,
+      "can_quote": null,
+      "can_transform": null,
+      "commercial_use": null,
+      "attribution_required": null,
+      "terms_url": null,
+      "last_reviewed_at": "2026-11-23",
+      "basis": "권리 미확인 (발행처 단위) — 발행처 단위의 근거를 찾지 못했다. 이 행의 can_* 은 발행처 단위라 null 그대로 — 발행처 단위로 넓히지 않는다 (D69). 문서 안에 공공누리 제1유형 (출처표시) 그림을 본 문서는 그 문서에 한해 문서 단위 행이 이 행보다 앞선다 (store.json document_rights — DATA_MODEL DocumentRights · D70 · B-E2): PR-1123-PDF. 본 것 (받은 바이트 · 쪽 · 그림 · 그림 해시) 은 그 행의 basis · 쪽 안의 자리 · 본 방법 · 제3자 글을 본 것은 pack.json 의 doc_rights. 그 밖의 이 발행처 문서 (표시가 없거나 보지 않은 것 — 게시물 · 일정 페이지 …) 는 전문을 git 밖 캐시에만 · git 에는 서지 · 해시 · span 만"
+    }
+  ],
+  "document_rights": [
+    {
+      "source_id": "15c7ba2e-7bc9-4d03-83ae-03f1cfec60d7",
+      "rights": "KOGL_TYPE1",
+      "can_store": true,
+      "can_quote": true,
+      "can_transform": true,
+      "commercial_use": true,
+      "attribution_required": true,
+      "basis": {
+        "bytes_sha256": "40d23b13ddc659f55ef616bfe25a32acfea990d3d055647b2ff54cff23b9d617",
+        "page": 2,
+        "pages": 2,
+        "image": "Im7 객체 39 · 167×64 · DCTDecode",
+        "image_sha256": "30fd9bd9851fbef6d2f77cef7b68359263042491db86c7b7dbfbad8786cda851",
+        "seen": "공공누리 제1유형 그림 — 'OPEN' 과 칸 하나 (사람 모양 · '출처표시') · 아래 띠 '공공누리 공공저작물 자유이용허락'. 상업용금지 · 변경금지 칸이 없다. 근거는 PDF 안의 이 그림 (PS1-a). 판정은 PM"
+      },
+      "last_reviewed_at": "2026-11-23"
+    }
+  ],
+  "facts": [],
+  "fact_sources": [],
+  "claims": [],
+  "goals": [],
+  "bridges": [],
+  "slot_checks": []
+}
