@@ -1,0 +1,17 @@
+{
+  "_what": "today 2026-11-22 '오늘의 큰 뉴스 → 1차 문서' 길에서 고른 것 (D107 · today-story ①). 하루 늦게 2026-11-23 에 만듦. 뉴스 기사의 글 · 숫자는 없다 (제목 · 주소 · 요지만 — sheet.md). 구절은 1차 문서의 것만.",
+  "date": "2026-11-22",
+  "window": "2026-11-21 (토) 낮 ~ 2026-11-22 (일) 밤 · 한국 시각",
+  "picked_by": "today-story 작업 세션 (Opus 5.5) — 제안 (국내 시장안정조치 짧은 · 해외 쉼) → 도윤 '국내 한 편만'",
+  "picked_at": "2026-11-23",
+  "candidates": { "domestic": 5, "overseas": 5, "sheet": "sheet.md" },
+  "picked": [
+    {
+      "id": "K1", "where": "국내", "category": "돈", "weight": "짧은", "story_code": "market-fund",
+      "title": "정부 긴급 시장상황점검회의 — 증안펀드는 가동이 아니라 가동 준비 착수",
+      "event_code": "MOEF-20261122-MARKET-FUND",
+      "primary": [ { "label": "PR-1122-PDF", "url": "https://www.korea.kr/common/download.do?fileId=198594230&tblKey=GMN", "rights": "KOGL_TYPE1 (doc_rights · 2쪽 Im6)", "in_git": true } ]
+    }
+  ],
+  "not_picked_proposed": [ { "id": "W1", "title": "미 육군 아이오와 납 먼지 폭파 연기", "why": "미룬 일의 1차 문서 없음 · 재난 결 — 해외는 쉼 (D84)" } ]
+}
