@@ -16,6 +16,7 @@
 // 이 파일은 화면 뼈대 (kit/Episode)를 읽지 않는다 — kit/shelf.ts 가 이 목록을 읽기 때문이다 (서로 물리지 않게). 화면은 ./Screen.tsx 가 세운다.
 import type { ComponentType } from "react";
 import { parseEpisode, parseShortStory, type ShortStory } from "@claro/contract";
+import marketFund from "../../../../packages/pipeline/data/events/MOEF-20261122-MARKET-FUND/local/market-fund/story.json";
 import rebuild1 from "../../../../packages/pipeline/data/events/LAW-20261121-REBUILD-CHARGE/local/rebuild-1/episode.json";
 import rebuild1Screen from "../../../../packages/pipeline/data/events/LAW-20261121-REBUILD-CHARGE/local/rebuild-1/screen.json";
 import chipLicenses from "../../../../packages/pipeline/data/events/HFAC-20261119-H200-LICENSES/local/chip-licenses/story.json";
@@ -172,6 +173,9 @@ const HAND: readonly EpisodeData[] = [DELIVERY, FOMC, PIPC];
  * 그래서 병원 짧은 이야기 (골든 fixtures/episode-short-privacy-yeonghun.json — 개인정보 긴 이야기와 같은 발표)는 F-E3 에서 내렸다 → /short/pipc-hospital 은 404. 골든은 그대로고 시안 (/lab/today · /lab/today/short)에만 견본으로 남는다
  */
 export const STORIES: readonly Line[] = [
+  // 11/22 "오늘" (today-story · 도윤 go · 11/23 에 하루 늦게) — 짧은 하나 (해외는 쉼 · D84) · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트)
+  // 정부 긴급 시장상황점검회의 (재정경제부 11/22) — 짧은 이야기 · 새 선반 「시장이 흔들릴 때 정부는」 · 공공누리 제1유형 (문서 단위)
+  short(marketFund, { place: "국내", category: "돈", day: "2026-11-22" }),
   // 11/21 "오늘" (today-story · 도윤 go) — 긴 하나 · 짧은 하나 · 로컬 세션 (Sonnet 씀 · Opus 편집자 · Fable 폰 게이트). 긴 이야기가 위
   // 재건축 부담금 (11/21 뉴스 · 1차 없음) — 개념 긴 이야기 · 재건축초과이익 환수법 하나 · 새 시리즈 「재건축 부담금은 어떻게 매겨요」 1화 · 넘겨 보기 체험 · 그림은 기본 (PlainLook)
   long(episodeOf(rebuild1, ["packages/pipeline/data/events/LAW-20261121-REBUILD-CHARGE/store.documents.json"]), { place: "국내", category: "돈", day: "2026-11-21", unpromised: true, screen: screenOf(rebuild1Screen) }),
