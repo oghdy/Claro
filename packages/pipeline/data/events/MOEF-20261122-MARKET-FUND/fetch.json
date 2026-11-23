@@ -1,0 +1,68 @@
+{
+  "_what": "MOEF-20261122-MARKET-FUND 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "MOEF-20261122-MARKET-FUND",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.korea.kr",
+      "url": "https://www.korea.kr/robots.txt",
+      "fetched_at": "2026-11-23T07:33:10.575Z",
+      "http_status": 200,
+      "sha256": "98d411637ae27a333b95d03c7b691eae06992f5d0d061ff6e3a77ffaace7ebf8",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "PR-1122-PDF",
+      "source_id": "e7010171-923a-4a83-a1b1-54e7f418cc2e",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198594230&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198594230&tblKey=GMN",
+        "fetched_at": "2026-11-23T07:33:11.184Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198594230&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "0c1d8c5e1b15e7f9de90faa9c176ec1e932287bee28d2ef2e91fd0f073789c6b",
+        "raw_bytes": 195425,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "96e408f6daa0a3f81c437d2055e7a55646005b1a5dfd25108e54d0a466c59f69",
+      "text_length": 2074,
+      "pdf_page_starts": [
+        0,
+        893
+      ],
+      "first_line": "보도시점 배포시 배포 2026.11.22(일) 16:30",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "증권시장안정펀드": 1,
+        "준비작업": 2,
+        "자기주식": 2,
+        "공매도": 2,
+        "컨틴전시 플랜": 1,
+        "3개월": 2
+      }
+    }
+  ],
+  "spans": []
+}
