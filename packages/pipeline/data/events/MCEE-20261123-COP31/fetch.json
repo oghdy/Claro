@@ -1,0 +1,80 @@
+{
+  "_what": "MCEE-20261123-COP31 를 가져온 기록 (pack.ts 가 쓴다 — 손으로 고치지 않는다). 계약 타입이 아니다 — 파이프라인의 기록이다. 해시 · 가져온 주소 · 때 · 뽑은 방법은 계약 SourceDocument 의 칸에도 있다 (W-4 P1-a — 검사가 둘을 댄다). 여기에만 있는 것: robots · HTTP 상태 · 받은 바이트의 해시 · 못 가져온 까닭",
+  "event": "MCEE-20261123-COP31",
+  "user_agent": "ClaroPipeline/0.1 (source archiving for fact checks; +https://github.com/oghdy/Claro)",
+  "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+  "robots_rules": "p2-robots/1 (RFC 9309 — 가장 긴 규칙 · 같으면 Allow · 4xx 는 허용 · 5xx 는 막힘)",
+  "position_unit": "코드 포인트 (Unicode scalar)",
+  "hash": "sha256(UTF-8(SourceDocument.text))",
+  "robots": [
+    {
+      "host": "www.korea.kr",
+      "url": "https://www.korea.kr/robots.txt",
+      "fetched_at": "2026-11-23T08:17:54.882Z",
+      "http_status": 200,
+      "sha256": "98d411637ae27a333b95d03c7b691eae06992f5d0d061ff6e3a77ffaace7ebf8",
+      "error": null,
+      "reading": "규칙을 읽었다"
+    }
+  ],
+  "documents": [
+    {
+      "label": "COP31-KR",
+      "source_id": "a655c34d-89f2-42f1-813d-8d4f2a8d2ca8",
+      "publisher": "korea.kr",
+      "url": "https://www.korea.kr/common/download.do?fileId=198594563&tblKey=GMN",
+      "status": "STORED",
+      "why": null,
+      "robots": {
+        "ok": true,
+        "why": "robots.txt 규칙 \"Allow: /\""
+      },
+      "fetch": {
+        "requested_url": "https://www.korea.kr/common/download.do?fileId=198594563&tblKey=GMN",
+        "fetched_at": "2026-11-23T08:17:55.526Z",
+        "final_url": "https://www.korea.kr/common/download.do?fileId=198594563&tblKey=GMN",
+        "redirected": false,
+        "http_status": 200,
+        "content_type": "application/x-download",
+        "last_modified": null,
+        "raw_sha256": "c817a057e5fe2ad447fac2cf8ad1b697a393a95b511c0822512d4ae16f5f828a",
+        "raw_bytes": 301531,
+        "error": null
+      },
+      "kind": "PDF",
+      "extractor": "p1-extract/1 (htmlparser2 12.0.0 · pdfjs-dist 6.4.299)",
+      "text_sha256": "d738b07d510a64814999f10092d93623dceff247ae262b1c1aae826dc4a7dfbc",
+      "text_length": 13870,
+      "pdf_page_starts": [
+        0,
+        885,
+        1941,
+        2976,
+        4111,
+        5168,
+        6178,
+        7269,
+        8332,
+        9495,
+        10583,
+        11597,
+        12745
+      ],
+      "first_line": "- 1 -",
+      "rights": "KOGL_TYPE1",
+      "text_in": "store.documents.json",
+      "live": false,
+      "same_as_p1": null,
+      "policy_terms": {
+        "대표결정문": 3,
+        "채택": 15,
+        "불발": 2,
+        "적응": 21,
+        "정의로운 전환": 13,
+        "기후재원": 8,
+        "화석연료": 2
+      }
+    }
+  ],
+  "spans": []
+}
