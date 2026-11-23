@@ -149,9 +149,11 @@ test("첫 화면 = 시작 화면 (F-E9 · UX-13b 판) — 가장 새 날의 이�
   // (지난 이야기의 제목 — 그날 이야기와 글자가 같은 제목은 빼고 본다)
   const restTitles = REST.filter((x) => !TOP.some((t) => t.title === x.title)).map((x) => x.title);
   for (const gone of [HOME.contLabel, HOME.contNote, HOME.conceptTitle, HOME.mapGo, HOME.aboutLead, HOME.sub, GONE.scenes.cover.title, ...restTitles]) expect(seen, `없다: ${gone}`).not.toContain(flat(gone));
-  // 작은 회색 한마디 · 맨 아래 미리보기 한 줄 — 화면 글이 "매일"을 약속하지 않는다 · 읽는 시간을 내지 않는다 (D82)
+  // 작은 회색 한마디 — 화면 글이 "매일"을 약속하지 않는다 · 읽는 시간을 내지 않는다 (D82)
   await expect(page.locator(".sp-tagline")).toHaveText(HOME.line);
-  await expect(page.locator(".sp-foot")).toHaveText(HOME.foot);
+  // 맨 아래 미리보기 한 줄은 없다 (F-E10 · D150 — 도윤 "미리보기 문구 빼줘") — 첫 화면 어디에도 "미리보기" 글자가 없다 (HTML 째로 본다 — 메타 · OG 포함)
+  await expect(page.locator(".sp-foot")).toHaveCount(0);
+  expect(html, "첫 화면 HTML 에 미리보기 없음").not.toContain("미리보기");
   expect(await page.getByTestId("home").innerText()).not.toMatch(/매일|날마다 (새 이야기가 )?(올라와요|내요|만나요)/);
   expect(await page.getByTestId("home").innerText()).not.toMatch(/\d+\s*분/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "가로로 넘치지 않는다").toBe(true);

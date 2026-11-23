@@ -232,10 +232,3 @@
   fill: var(--ep-ink);
   stroke: none;
 }
-.sp-foot {
-  margin: auto 0 0;
-  padding-top: 28px;
-  font-size: 12.5px;
-  line-height: 1.6;
-  color: var(--ep-muted);
-}
